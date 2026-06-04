@@ -1,0 +1,247 @@
+import { useEffect, useState } from 'react';
+import {
+  X, MapPin, Clock, BookOpen, Heart, MessageCircle, Bookmark, Share2,
+} from 'lucide-react';
+import { postsService } from '../../services/smartTravel.service';
+import CommentsSection from './CommentsSection';
+import type { FeedPost } from '../../utils/feedUtils';
+import {
+  getPostFullBody,
+  getPostImages,
+  getRoutePointsFromPost,
+  getPostDetailTitle,
+  getPostDetailSubtitle,
+  parsePostPayload,
+  estimateReadTime,
+} from '../../utils/feedUtils';
+import JourneyRouteMap from '../Map/JourneyRouteMap';
+import { routePointRoleLabel, type RoutePoint } from '../../types/route';
+import {
+  PostDetailMetaRow,
+  PostDetailTags,
+  PostDetailItinerary,
+  PostDetailTips,
+} from './PostDetailJourneySections';
+
+interface Props {
+  post: FeedPost | null;
+  onClose: () => void;
+  labels: {
+    close: string;
+    readTime: string;
+    likes: string;
+    comments: string;
+  };
+}
+
+export default function PostDetailModal({ post, onClose, labels }: Props) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [saved, setSaved] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+
+  useEffect(() => {
+    if (!post) return;
+    setLiked(!!post.isLiked);
+    setLikeCount(post.likes);
+    setSaved(!!post.isBookmarked);
+    setCommentCount(post.comments);
+  }, [post]);
+
+  useEffect(() => {
+    if (!post) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [post, onClose]);
+
+  const handleLike = async () => {
+    if (!post) return;
+    try {
+      const res = await postsService.toggleLike(post.id);
+      setLiked(res.liked);
+      setLikeCount(prev => res.liked ? prev + 1 : Math.max(0, prev - 1));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (!post) return;
+    try {
+      const res = await postsService.toggleBookmark(post.id);
+      setSaved(res.bookmarked);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!post) return null;
+
+  const payload = parsePostPayload(post);
+  const body = getPostFullBody(post);
+  const images = getPostImages(post);
+  const routePts: RoutePoint[] = getRoutePointsFromPost(post);
+  const readTime =
+    post.displayType !== 'social' && 'readTime' in post
+      ? post.readTime
+      : estimateReadTime(body, payload?.excerpt ?? '', payload?.headline ?? '');
+  const title = getPostDetailTitle(post);
+  const subtitle = getPostDetailSubtitle(post);
+  const showSubtitle = subtitle && subtitle !== body.trim();
+  const hasItinerary = (payload?.days?.length ?? 0) > 0;
+  const hasTips = (payload?.tips?.filter(t => t.content?.trim()).length ?? 0) > 0;
+
+  return (
+    <div
+      className="post-detail-backdrop"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        className="post-detail-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="post-detail-title"
+        onClick={e => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="post-detail-close"
+          aria-label={labels.close}
+        >
+          <X size={20} />
+        </button>
+
+        {images.length > 0 && (
+          <div className={`post-detail-hero ${images.length > 1 ? 'post-detail-hero--grid' : ''}`}>
+            {images.map((src, i) => (
+              <img key={`${src}-${i}`} src={src} alt="" className="post-detail-hero-img" loading="lazy" />
+            ))}
+          </div>
+        )}
+
+        <div className="post-detail-body">
+          <div className="flex items-center gap-3 mb-4">
+            <img
+              src={post.author.avatar}
+              alt={post.author.name}
+              className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/40"
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-[var(--text-primary)]">{post.author.name}</span>
+                {post.author.verified && (
+                  <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] text-white font-bold">✓</span>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--text-muted)] mt-0.5">
+                <span className="flex items-center gap-1"><Clock size={10} />{post.date}</span>
+                <span>·</span>
+                <span className="flex items-center gap-1"><BookOpen size={10} />{readTime}</span>
+                <span>·</span>
+                <span className="flex items-center gap-1 text-[var(--gold)]">
+                  <MapPin size={10} />{post.destination.replace(/^📍\s*/, '')}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {post.displayType !== 'social' && 'category' in post && (
+            <span className="inline-block mb-3 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30">
+              {post.category}
+            </span>
+          )}
+
+          <h2 id="post-detail-title" className="font-editorial text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-snug mb-3">
+            {title}
+          </h2>
+
+          {showSubtitle && (
+            <p className="text-sm text-[var(--text-secondary)] font-medium mb-4 border-l-2 border-[var(--gold)] pl-3">
+              {subtitle}
+            </p>
+          )}
+
+          {payload && <PostDetailMetaRow payload={payload} />}
+          {payload?.tags && payload.tags.length > 0 && <PostDetailTags tags={payload.tags} />}
+
+          {body && (
+            <div className="post-detail-content prose-feed text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap mt-4">
+              {body}
+            </div>
+          )}
+
+          {routePts.length >= 1 && (
+            <div className="post-detail-route mt-6">
+              <h3 className="post-detail-section-title mb-2">
+                <MapPin size={16} className="text-[var(--gold)]" />
+                Tuyến đường đề xuất
+                {routePts.length >= 2 && (
+                  <span className="post-detail-section-count">{routePts.length} điểm</span>
+                )}
+              </h3>
+              <div className="space-y-2 mb-3">
+                {routePts.map((p, i) => (
+                  <div key={p.id} className="flex gap-2 p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+                    <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? 'bg-emerald-500 text-white' : 'bg-[var(--gold)] text-black'}`}>
+                      {i === 0 ? '▶' : i + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-[var(--gold)] uppercase">{routePointRoleLabel(i, routePts.length)}</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
+                      {p.address && p.address !== p.name && (
+                        <p className="text-[11px] text-[var(--text-muted)] leading-snug">{p.address}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <JourneyRouteMap points={routePts} interactive={false} height="300px" />
+            </div>
+          )}
+
+          {hasItinerary && payload && <PostDetailItinerary days={payload.days} />}
+          {hasTips && payload && <PostDetailTips tips={payload.tips} />}
+
+          <div className="flex items-center gap-4 mt-6 pt-4 border-t border-[var(--border-subtle)] text-sm text-[var(--text-muted)]">
+            <button
+              type="button"
+              onClick={handleLike}
+              className={`flex items-center gap-1.5 hover:text-rose-400 transition-colors ${liked ? 'text-rose-400 font-bold' : ''}`}
+            >
+              <Heart size={16} className={liked ? 'fill-current' : ''} />
+              {likeCount.toLocaleString()} {labels.likes}
+            </button>
+            <span className="flex items-center gap-1.5">
+              <MessageCircle size={16} />
+              {commentCount} {labels.comments}
+            </span>
+            <button
+              type="button"
+              onClick={handleBookmark}
+              className={`flex items-center gap-1.5 hover:text-amber-500 transition-colors ${saved ? 'text-amber-400 font-bold' : ''}`}
+            >
+              <Bookmark size={16} className={saved ? 'fill-current' : ''} />
+              Đã lưu
+            </button>
+            <button type="button" className="ml-auto p-2 rounded-full hover:bg-[var(--bg-elevated)] transition-colors">
+              <Share2 size={16} />
+            </button>
+          </div>
+
+          <div className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+            <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
