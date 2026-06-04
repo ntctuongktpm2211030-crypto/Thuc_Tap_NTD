@@ -19,6 +19,9 @@ import AuthPage from './features/auth/AuthPage';
 // ─── Page imports ──────────────────────────────────────────
 import SocialFeedPage from './features/feed/SocialFeedPage';
 import BlogPage from './features/blog/BlogPage';
+import ExploreArticlePage from './features/blog/ExploreArticlePage';
+import ExploreHandbookPage from './features/blog/ExploreHandbookPage';
+import EditPostPage from './features/posts/EditPostPage';
 import CreateStoryPage from './features/stories/CreateStoryPage';
 import CultureFoodGuidePage from './features/guide/CultureFoodGuidePage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -418,7 +421,11 @@ function App() {
   // Trang auth = fullscreen standalone, không cần navbar/footer
   const isAuthPage = location.pathname === '/auth';
   const isCreateJourneyPage = location.pathname === '/journeys/create';
-  const isFullscreenCreate = isCreateJourneyPage;
+  const isEditPostPage = /^\/posts\/[^/]+\/edit$/.test(location.pathname);
+  const isExploreReader =
+    location.pathname.startsWith('/explore/post/') ||
+    location.pathname.startsWith('/explore/cam-nang/');
+  const isFullscreenCreate = isCreateJourneyPage || isEditPostPage || isExploreReader;
   if (isAuthPage) {
     return (
       <Routes>
@@ -618,7 +625,10 @@ function App() {
         <Routes>
           <Route path="/" element={<SocialFeedPage />} />
           <Route path="/explore" element={<BlogPage />} />
+          <Route path="/explore/post/:id" element={<ExploreArticlePage />} />
+          <Route path="/explore/cam-nang/:type" element={<ExploreHandbookPage />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/posts/:id/edit" element={<ProtectedRoute><EditPostPage /></ProtectedRoute>} />
           <Route path="/map" element={<MapDashboard />} />
           <Route path="/trips" element={<TripPlanner />} />
           <Route path="/guide/culture-food" element={<CultureFoodGuidePage />} />

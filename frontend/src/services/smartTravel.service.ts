@@ -41,6 +41,15 @@ export interface Post {
     email: string;
     profile?: { fullName: string; avatarUrl?: string | null } | null;
   };
+  likes?: {
+    id: string;
+    createdAt: string;
+    user: {
+      id: string;
+      email: string;
+      profile?: { fullName: string; avatarUrl?: string | null } | null;
+    };
+  }[];
   _count?: { likes: number; comments: number; bookmarks: number };
   isLiked?: boolean;
   isBookmarked?: boolean;
@@ -48,6 +57,7 @@ export interface Post {
 export interface Comment {
   id: string; content: string; createdAt: string;
   author: { profile?: { fullName: string; avatarUrl?: string } };
+  replies?: Comment[];
 }
 export interface Destination {
   id: string; name: string; description?: string; latitude: number; longitude: number;

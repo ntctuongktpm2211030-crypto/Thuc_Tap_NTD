@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import {
   X, MapPin, Clock, BookOpen, Heart, MessageCircle, Bookmark, Share2,
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
 import CommentsSection from './CommentsSection';
 import type { FeedPost } from '../../utils/feedUtils';
@@ -26,6 +28,7 @@ import {
 interface Props {
   post: FeedPost | null;
   onClose: () => void;
+  onPostUpdated?: (postId: string, likesCount: number, commentsCount: number, isLiked: boolean) => void;
   labels: {
     close: string;
     readTime: string;
@@ -34,11 +37,21 @@ interface Props {
   };
 }
 
-export default function PostDetailModal({ post, onClose, labels }: Props) {
+export default function PostDetailModal({ post, onClose, onPostUpdated, labels }: Props) {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [saved, setSaved] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
+  const [likers, setLikers] = useState<{ id: string; name: string; avatar?: string }[]>([]);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 2500);
+  };
 
   useEffect(() => {
     if (!post) return;
@@ -46,6 +59,25 @@ export default function PostDetailModal({ post, onClose, labels }: Props) {
     setLikeCount(post.likes);
     setSaved(!!post.isBookmarked);
     setCommentCount(post.comments);
+    setLikers([]);
+  }, [post]);
+
+  useEffect(() => {
+    if (!post) return;
+    postsService.get(post.id)
+      .then(data => {
+        if (data.likes) {
+          const list = data.likes.map((l: any) => ({
+            id: l.user.id,
+            name: l.user.profile?.fullName || l.user.email.split('@')[0],
+            avatar: l.user.profile?.avatarUrl || undefined
+          }));
+          setLikers(list);
+        }
+      })
+      .catch(err => {
+        console.error("Failed to fetch full post details:", err);
+      });
   }, [post]);
 
   useEffect(() => {
@@ -61,12 +93,50 @@ export default function PostDetailModal({ post, onClose, labels }: Props) {
     };
   }, [post, onClose]);
 
+  // Propagate commentCount changes back to parent
+  useEffect(() => {
+    if (onPostUpdated && post) {
+      onPostUpdated(post.id, likeCount, commentCount, liked);
+    }
+  }, [commentCount]);
+
   const handleLike = async () => {
     if (!post) return;
+    if (!isAuthenticated) {
+      showToast('Bạn cần đăng nhập để thích bài viết!');
+      return;
+    }
     try {
       const res = await postsService.toggleLike(post.id);
-      setLiked(res.liked);
-      setLikeCount(prev => res.liked ? prev + 1 : Math.max(0, prev - 1));
+      const isNowLiked = res.liked;
+      setLiked(isNowLiked);
+      
+      setLikeCount(prev => {
+        const newCount = isNowLiked ? prev + 1 : Math.max(0, prev - 1);
+        if (onPostUpdated) {
+          onPostUpdated(post.id, newCount, commentCount, isNowLiked);
+        }
+        return newCount;
+      });
+
+      // Update likers list immediately
+      if (isNowLiked) {
+        if (user) {
+          const currentLiker = {
+            id: user.id,
+            name: user.fullName || user.email.split('@')[0],
+            avatar: user.avatarUrl
+          };
+          setLikers(prev => {
+            if (prev.some(l => l.id === user.id)) return prev;
+            return [...prev, currentLiker];
+          });
+        }
+      } else {
+        if (user) {
+          setLikers(prev => prev.filter(l => l.id !== user.id));
+        }
+      }
     } catch (err) {
       console.error(err);
     }
@@ -74,9 +144,16 @@ export default function PostDetailModal({ post, onClose, labels }: Props) {
 
   const handleBookmark = async () => {
     if (!post) return;
+    if (!isAuthenticated) {
+      showToast('Bạn cần đăng nhập để lưu bài viết!');
+      return;
+    }
     try {
       const res = await postsService.toggleBookmark(post.id);
       setSaved(res.bookmarked);
+      if (onPostUpdated) {
+        onPostUpdated(post.id, likeCount, commentCount, liked);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -237,11 +314,49 @@ export default function PostDetailModal({ post, onClose, labels }: Props) {
             </button>
           </div>
 
+          {/* Likers section */}
+          {likers.length > 0 && (
+            <div className="mt-4 p-3 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] animate-fade-in">
+              <p className="text-xs font-bold text-[var(--text-secondary)] mb-2 flex items-center gap-1.5">
+                <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" /> Đã thích bởi ({likers.length})
+              </p>
+              <div className="flex flex-wrap gap-2 items-center">
+                {likers.map((liker) => (
+                  <div
+                    key={liker.id}
+                    className="flex items-center gap-1.5 bg-[var(--bg-surface)] hover:bg-[var(--bg-overlay)] px-2.5 py-1 rounded-full border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] transition-colors cursor-pointer group"
+                    title={liker.name}
+                  >
+                    {liker.avatar ? (
+                      <img
+                        src={liker.avatar}
+                        alt=""
+                        className="w-5 h-5 rounded-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 text-white flex items-center justify-center font-bold text-[10px]">
+                        {liker.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="font-semibold">{liker.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="mt-8 border-t border-[var(--border-subtle)] pt-6">
             <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-4 right-4 z-[999999] bg-black/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[var(--gold)]/30 shadow-lg shadow-black/50 animate-fade-in">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

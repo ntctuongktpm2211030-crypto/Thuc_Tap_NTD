@@ -26,6 +26,12 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
 
   // Track liked comments locally (for UI state)
   const [likedComments, setLikedComments] = useState<Record<string, boolean>>({});
+  const [toastMessage, setToastMessage] = useState('');
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 2500);
+  };
 
   const loadComments = async () => {
     setLoading(true);
@@ -114,6 +120,10 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   };
 
   const toggleLikeComment = (commentId: string) => {
+    if (!isAuthenticated) {
+      showToast('Bạn cần đăng nhập để thích bình luận!');
+      return;
+    }
     setLikedComments(prev => ({
       ...prev,
       [commentId]: !prev[commentId]
@@ -212,6 +222,10 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                       <button
                         type="button"
                         onClick={() => {
+                          if (!isAuthenticated) {
+                            showToast('Bạn cần đăng nhập để phản hồi bình luận!');
+                            return;
+                          }
                           setActiveReplyId(activeReplyId === c.id ? null : c.id);
                           setReplyText('');
                         }}
@@ -305,6 +319,13 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
           })
         )}
       </div>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-4 right-4 z-[999999] bg-black/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[var(--gold)]/30 shadow-lg shadow-black/50 animate-fade-in">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

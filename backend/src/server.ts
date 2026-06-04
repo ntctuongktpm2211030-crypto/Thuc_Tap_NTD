@@ -48,6 +48,16 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+import { autoSeed } from './config/seed';
+
+// Call auto-seed on startup
+autoSeed().then(() => {
+  server.listen(PORT, () => {
+    console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Failed to auto-seed database:', err);
+  server.listen(PORT, () => {
+    console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+  });
 });

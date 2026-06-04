@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -150,6 +151,7 @@ model Post {
   tripId     String?
   locationId String?
   createdAt  DateTime   @default(now())
+  deletedAt  DateTime?
   
   author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   trip       Trip?      @relation(fields: [tripId], references: [id], onDelete: SetNull)

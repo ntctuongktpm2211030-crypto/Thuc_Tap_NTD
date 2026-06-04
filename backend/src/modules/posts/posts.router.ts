@@ -4,6 +4,19 @@ import { requireAuth, optionalAuth, AuthRequest } from '../auth/auth.middleware'
 
 const router = Router();
 
+function extractBodyText(content: string): string {
+  try {
+    const parsed = JSON.parse(content);
+    if (parsed && typeof parsed === 'object') {
+      return String(parsed.body || parsed.content || '').trim();
+    }
+  } catch {
+    // Ignore, treat as plain text
+  }
+  return content.trim();
+}
+
+
 // ─────────────────────────────────────────────────────────
 // GET /api/v1/posts  — paginated feed of posts
 // ─────────────────────────────────────────────────────────
@@ -11,7 +24,22 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { page = '1', limit = '10', q } = req.query as Record<string, string>;
 
-    const where: any = {};
+    // Permanently delete posts trashed more than 15 days ago
+    const fifteenDaysAgo = new Date();
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    try {
+      await prisma.post.deleteMany({
+        where: {
+          deletedAt: {
+            lt: fifteenDaysAgo
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Failed to clean up expired trashed posts:', err);
+    }
+
+    const where: any = { deletedAt: null };
     if (q) {
       where.content = { contains: q, mode: 'insensitive' };
     }
@@ -75,8 +103,8 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.get('/:id', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const post = await prisma.post.findUnique({
-      where: { id: req.params.id },
+    const post = await prisma.post.findFirst({
+      where: { id: req.params.id, deletedAt: null },
       include: {
         author: { include: { profile: true } },
         comments: {
@@ -89,6 +117,15 @@ router.get('/:id', optionalAuth, async (req: AuthRequest, res: Response) => {
             }
           },
           orderBy: { createdAt: 'desc' },
+        },
+        likes: {
+          include: {
+            user: {
+              include: {
+                profile: true
+              }
+            }
+          }
         },
         _count: { select: { likes: true, bookmarks: true } },
       },
@@ -129,6 +166,11 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'content is required.' });
     }
 
+    const bodyText = extractBodyText(content);
+    if (bodyText.length < 10) {
+      return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
+    }
+
     const post = await prisma.post.create({
       data: {
         authorId: req.user!.sub,
@@ -159,7 +201,10 @@ router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
     if (!post) return res.status(404).json({ error: 'Post not found.' });
     if (post.authorId !== req.user!.sub) return res.status(403).json({ error: 'Access denied.' });
 
-    await prisma.post.delete({ where: { id: req.params.id } });
+    await prisma.post.update({
+      where: { id: req.params.id },
+      data: { deletedAt: new Date() }
+    });
     return res.status(204).send();
   } catch (err) {
     console.error('[posts/DELETE /:id]', err);
@@ -222,16 +267,25 @@ router.post('/:id/bookmark', requireAuth, async (req: AuthRequest, res: Response
 // ─────────────────────────────────────────────────────────
 router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { content, mediaUrls } = req.body;
+    const { content, mediaUrls, tripId, locationId } = req.body;
     const post = await prisma.post.findUnique({ where: { id: req.params.id } });
     if (!post) return res.status(404).json({ error: 'Post not found.' });
     if (post.authorId !== req.user!.sub) return res.status(403).json({ error: 'Access denied.' });
+
+    if (content !== undefined) {
+      const bodyText = extractBodyText(content);
+      if (bodyText.length < 10) {
+        return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
+      }
+    }
 
     const updatedPost = await prisma.post.update({
       where: { id: req.params.id },
       data: {
         content: content !== undefined ? content : post.content,
         mediaUrls: mediaUrls !== undefined ? mediaUrls : post.mediaUrls,
+        tripId: tripId !== undefined ? tripId : post.tripId,
+        locationId: locationId !== undefined ? locationId : post.locationId,
       },
       include: {
         author: { include: { profile: true } },

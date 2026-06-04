@@ -22,7 +22,7 @@ router.get('/platform', async (_req: Request, res: Response) => {
     ] = await Promise.all([
       prisma.user.count(),
       prisma.trip.count(),
-      prisma.post.count(),
+      prisma.post.count({ where: { deletedAt: null } }),
       prisma.checkIn.count(),
       prisma.destination.count(),
       prisma.aIHistory.count(),
@@ -109,6 +109,7 @@ router.get('/social-graph', async (_req: Request, res: Response) => {
 
     // Most liked posts
     const topPosts = await prisma.post.findMany({
+      where: { deletedAt: null },
       include: {
         author: { include: { profile: true } },
         _count: { select: { likes: true, comments: true } },

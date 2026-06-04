@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { X, ImagePlus, MapPin, Send, Navigation, Trash2, Loader2 } from 'lucide-react';
 import type { RootState } from '../../store';
 import LocationMapPicker from '../Map/LocationMapPicker';
 import { validateImage, createPreviewUrl, revokePreviewUrl, resolveMediaUrl } from '../../utils/mediaUtils';
-import { reverseGeocode } from '../../utils/geocodeUtils';
+import { reverseGeocode, searchPlaces } from '../../utils/geocodeUtils';
+import type { PlaceSearchResult } from '../../utils/geocodeUtils';
 import { saveUserProfileCache } from '../../utils/feedPostStorage';
 import { postsService } from '../../services/smartTravel.service';
 
@@ -50,6 +51,45 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
   const [formError, setFormError] = useState('');
   const [publishing, setPublishing] = useState(false);
 
+  const [searchResults, setSearchResults] = useState<PlaceSearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
+  const skipSearchRef = useRef(false);
+
+  // Debounced location search
+  useEffect(() => {
+    if (skipSearchRef.current) {
+      skipSearchRef.current = false;
+      return;
+    }
+
+    if (!location.trim() || location.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const results = await searchPlaces(location);
+        setSearchResults(results);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setSearching(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [location]);
+
+  const handleSelectSuggestion = (item: PlaceSearchResult) => {
+    skipSearchRef.current = true;
+    setLocation(item.name || item.displayName);
+    setLatitude(item.lat);
+    setLongitude(item.lng);
+    setSearchResults([]);
+  };
+
   const reset = () => {
     photos.forEach(revokePreviewUrl);
     setText('');
@@ -93,17 +133,16 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
     setLongitude(loc.lng);
     setGeocoding(true);
     const name = await reverseGeocode(loc.lat, loc.lng);
-    if (name) setLocation(name);
+    if (name) {
+      skipSearchRef.current = true;
+      setLocation(name);
+    }
     setGeocoding(false);
   };
 
   const handlePublish = async () => {
     if (text.trim().length < MIN_CONTENT) {
       setFormError(labels.needContent);
-      return;
-    }
-    if (photos.length === 0) {
-      setFormError(labels.needPhoto);
       return;
     }
     setFormError('');
@@ -264,12 +303,34 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
                   {showMap ? labels.hideMap : labels.showMap}
                 </button>
               </div>
-              <input
-                value={location}
-                onChange={e => setLocation(e.target.value)}
-                placeholder={labels.locationHint}
-                className="quick-compose-input"
-              />
+              <div className="relative">
+                <input
+                  value={location}
+                  onChange={e => setLocation(e.target.value)}
+                  placeholder={labels.locationHint}
+                  className="quick-compose-input w-full pr-8"
+                />
+                {searching && (
+                  <div className="absolute right-3 top-3.5 text-[var(--text-muted)]">
+                    <Loader2 size={14} className="animate-spin" />
+                  </div>
+                )}
+                {searchResults.length > 0 && (
+                  <div className="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl shadow-lg z-30 divide-y divide-[var(--border-subtle)]">
+                    {searchResults.map((item, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSelectSuggestion(item)}
+                        className="w-full text-left px-4 py-2.5 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-overlay)] hover:text-[var(--text-primary)] transition-colors flex flex-col gap-0.5"
+                      >
+                        <span className="font-semibold text-[var(--text-primary)]">{item.name}</span>
+                        <span className="text-[10px] text-[var(--text-muted)] truncate">{item.displayName}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               {geocoding && (
                 <p className="text-[11px] text-[var(--text-muted)] mt-1 flex items-center gap-1">
                   <Loader2 size={12} className="animate-spin" /> Đang lấy tên địa điểm…

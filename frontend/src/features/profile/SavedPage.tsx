@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Bookmark, Clock, MapPin, ExternalLink, Heart, MessageCircle, Trash2, ArrowLeft } from 'lucide-react';
+import { Bookmark, ExternalLink, Heart, MessageCircle, Trash2, ArrowLeft } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { postsService, Post } from '../../services/smartTravel.service';
 import { mapApiPostsToFeed } from '../../utils/apiPostMapper';
@@ -8,7 +8,7 @@ import { FeedPost } from '../../utils/feedUtils';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 
 export default function SavedPage() {
-  const { t, lang } = useLang();
+  const { lang } = useLang();
   const vi = lang === 'vi';
 
   const [savedPosts, setSavedPosts] = useState<Post[]>([]);

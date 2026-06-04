@@ -5,9 +5,9 @@ import { useLang } from '../../contexts/LanguageContext';
 import { useRequireAuth } from '../../hooks/useRequireAuth';
 import type { RootState } from '../../store';
 import {
-  Heart, MessageCircle, Bookmark, Share2, MoreHorizontal,
+  Heart, MessageCircle, Bookmark,
   MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
-  Send, Flame, Globe,
+  Flame, Globe,
 } from 'lucide-react';
 import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
 import { FEED_POSTS, COMPANION_CANDIDATES, MOCK_STORIES } from '../../data/feedData';
@@ -23,6 +23,7 @@ import {
   getPostPreviewText,
   isPostTruncatedOnFeed,
   type FeedPost,
+  type FeedPostBase,
   type HeroFeedPost,
   type MagazineFeedPost,
   type SocialFeedPost,
@@ -30,15 +31,29 @@ import {
   type CompanionSuggestion,
 } from '../../utils/feedUtils';
 import { loadUserProfileCache } from '../../utils/feedPostStorage';
-import { postsService } from '../../services/smartTravel.service';
-import { mapApiPostsToFeed } from '../../utils/apiPostMapper';
+import { syncToggleBookmark, syncToggleLike } from '../../utils/postEngagement';
+import { postsService, socialService } from '../../services/smartTravel.service';
+import { mapApiPostsToFeed, mapApiPostToFeedPost } from '../../utils/apiPostMapper';
 import { loadUserStories } from '../../utils/storyStorage';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import FeedCardShell from '../../components/feed/FeedCardShell';
-import CommentsSection from '../../components/feed/CommentsSection';
 import PostMenuDropdown from '../../components/feed/PostMenuDropdown';
+import AuthorFollowButton from '../../components/feed/AuthorFollowButton';
+import LikersModal from '../../components/feed/LikersModal';
+import PostEngagementBlock from '../../components/feed/PostEngagementBlock';
+import { truncateWithEllipsis } from '../../utils/truncateText';
 
 const stopCardClick = (e: React.MouseEvent) => e.stopPropagation();
+
+type EngagementPatch = Partial<Pick<FeedPostBase, 'isLiked' | 'likes' | 'isBookmarked'>>;
+
+type CardSocialProps = {
+  currentUserId?: string;
+  followingIds: Set<string>;
+  onFollowChange: (authorId: string, following: boolean) => void;
+  requireAuth: (returnPath: string) => boolean;
+  onEngagementChange?: (postId: string, patch: EngagementPatch) => void;
+};
 
 // ──────────────────────────────────────────────────────────
 // HERO CARD
@@ -49,25 +64,39 @@ const HeroCard = ({
   readMoreLabel,
   onPostDeleted,
   onPostUpdated,
+  currentUserId,
+  followingIds,
+  onFollowChange,
+  requireAuth,
+  onEngagementChange,
 }: {
   post: HeroFeedPost;
   onOpen: () => void;
   readMoreLabel: string;
   onPostDeleted?: (postId: string) => void;
-  onPostUpdated?: (postId: string, newContent: string) => void;
-}) => {
+  onPostUpdated?: (updatedPost: any) => void;
+} & CardSocialProps) => {
   const [liked, setLiked] = useState(!!post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likes);
   const [saved, setSaved] = useState(!!post.isBookmarked);
+  const [likersOpen, setLikersOpen] = useState(false);
   const { preview } = getPostPreviewText(post);
   const showReadMore = isPostTruncatedOnFeed(post);
 
+  useEffect(() => {
+    setLiked(!!post.isLiked);
+    setLikeCount(post.likes);
+    setSaved(!!post.isBookmarked);
+  }, [post.id, post.isLiked, post.likes, post.isBookmarked]);
+
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleLike(post.id);
-      setLiked(res.liked);
-      setLikeCount(prev => res.liked ? prev + 1 : Math.max(0, prev - 1));
+      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      setLiked(next.liked);
+      setLikeCount(next.likes);
+      onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
     }
@@ -75,9 +104,11 @@ const HeroCard = ({
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleBookmark(post.id);
-      setSaved(res.bookmarked);
+      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      setSaved(next.bookmarked);
+      onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
     }
@@ -108,9 +139,7 @@ const HeroCard = ({
           <Bookmark size={15} className={saved ? 'text-amber-400 fill-current' : 'text-white'} />
         </button>
         <PostMenuDropdown
-          postId={post.id}
-          postAuthorId={post.authorId || ''}
-          postContent={post.body || ''}
+          post={post}
           onPostDeleted={onPostDeleted}
           onPostUpdated={onPostUpdated}
         />
@@ -127,8 +156,15 @@ const HeroCard = ({
           <div className="flex items-center gap-2.5">
             <img src={post.author.avatar} alt={post.author.name} className="w-9 h-9 rounded-full border-2 border-white/40 object-cover" />
             <div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-sm font-bold text-white">{post.author.name}</span>
+                <AuthorFollowButton
+                  authorId={post.authorId}
+                  currentUserId={currentUserId}
+                  isFollowing={post.authorId ? followingIds.has(post.authorId) : true}
+                  onFollowChange={onFollowChange}
+                  requireAuth={requireAuth}
+                />
                 {post.author.verified && <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] font-bold text-white">✓</span>}
               </div>
               <div className="flex items-center gap-2 text-[11px] text-gray-400">
@@ -143,7 +179,13 @@ const HeroCard = ({
             <button type="button" onClick={handleLike}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-full backdrop-blur-md border text-sm font-semibold transition-all ${liked ? 'bg-rose-500/20 border-rose-500/60 text-rose-300' : 'bg-black/40 border-white/20 text-white/80 hover:bg-rose-500/10'}`}>
               <Heart size={14} className={liked ? 'fill-current' : ''} />
-              {likeCount}
+            </button>
+            <button
+              type="button"
+              onClick={e => { e.stopPropagation(); if (likeCount > 0) setLikersOpen(true); }}
+              className="px-2.5 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-sm font-semibold text-white/80 hover:bg-black/60 transition-all"
+            >
+              {likeCount.toLocaleString()}
             </button>
             <button type="button" onClick={onOpen} className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-sm font-semibold text-white/80 hover:bg-black/60 transition-all">
               <MessageCircle size={14} /> {post.comments}
@@ -151,6 +193,7 @@ const HeroCard = ({
           </div>
         </div>
       </div>
+      <LikersModal postId={likersOpen ? post.id : null} likeCount={likeCount} onClose={() => setLikersOpen(false)} />
     </FeedCardShell>
   );
 };
@@ -164,25 +207,39 @@ const MagazineCard = ({
   readMoreLabel,
   onPostDeleted,
   onPostUpdated,
+  currentUserId,
+  followingIds,
+  onFollowChange,
+  requireAuth,
+  onEngagementChange,
 }: {
   post: MagazineFeedPost;
   onOpen: () => void;
   readMoreLabel: string;
   onPostDeleted?: (postId: string) => void;
-  onPostUpdated?: (postId: string, newContent: string) => void;
-}) => {
+  onPostUpdated?: (updatedPost: any) => void;
+} & CardSocialProps) => {
   const [liked, setLiked] = useState(!!post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likes);
   const [saved, setSaved] = useState(!!post.isBookmarked);
+  const [likersOpen, setLikersOpen] = useState(false);
   const { preview } = getPostPreviewText(post);
   const showReadMore = isPostTruncatedOnFeed(post);
 
+  useEffect(() => {
+    setLiked(!!post.isLiked);
+    setLikeCount(post.likes);
+    setSaved(!!post.isBookmarked);
+  }, [post.id, post.isLiked, post.likes, post.isBookmarked]);
+
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleLike(post.id);
-      setLiked(res.liked);
-      setLikeCount(prev => res.liked ? prev + 1 : Math.max(0, prev - 1));
+      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      setLiked(next.liked);
+      setLikeCount(next.likes);
+      onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
     }
@@ -190,9 +247,11 @@ const MagazineCard = ({
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleBookmark(post.id);
-      setSaved(res.bookmarked);
+      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      setSaved(next.bookmarked);
+      onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
     }
@@ -218,9 +277,7 @@ const MagazineCard = ({
         {/* Dropdown menu overlay top-right */}
         <div className="absolute top-3 right-3 z-10" onClick={stopCardClick}>
           <PostMenuDropdown
-            postId={post.id}
-            postAuthorId={post.authorId || ''}
-            postContent={post.excerpt || post.body || ''}
+            post={post}
             onPostDeleted={onPostDeleted}
             onPostUpdated={onPostUpdated}
           />
@@ -245,8 +302,15 @@ const MagazineCard = ({
           <img src={post.author.avatar} alt={post.author.name}
             className="w-8 h-8 rounded-full object-cover border-2 border-transparent bg-gradient-to-br from-[var(--gold)] to-violet-500 p-0.5 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <span className="text-xs font-bold text-[var(--text-primary)] truncate">{post.author.name}</span>
+              <AuthorFollowButton
+                authorId={post.authorId}
+                currentUserId={currentUserId}
+                isFollowing={post.authorId ? followingIds.has(post.authorId) : true}
+                onFollowChange={onFollowChange}
+                requireAuth={requireAuth}
+              />
               {post.author.verified && <span className="w-3.5 h-3.5 bg-sky-500 rounded-full flex items-center justify-center text-[8px] text-white font-bold flex-shrink-0">✓</span>}
             </div>
             <div className="text-[10px] text-[var(--text-muted)] flex items-center gap-1">
@@ -257,23 +321,20 @@ const MagazineCard = ({
       </div>
       </FeedCardShell>
 
-      {/* Reaction bar */}
-      <div className="flex items-center gap-1 pt-2 border-t border-[var(--border-subtle)] px-4 pb-4" onClick={stopCardClick}>
-          <button type="button" onClick={handleLike}
-            className={`reaction-btn flex-1 justify-center ${liked ? 'liked' : ''}`}>
-            <Heart size={13} className={liked ? 'fill-current' : ''} />
-            <span className="hidden sm:inline">{likeCount}</span>
-          </button>
-          <button type="button" onClick={onOpen} className="reaction-btn flex-1 justify-center">
-            <MessageCircle size={13} />
-            <span className="hidden sm:inline">{post.comments}</span>
-          </button>
-          <button type="button" onClick={handleBookmark}
-            className={`reaction-btn flex-1 justify-center ${saved ? 'bookmarked' : ''}`}>
-            <Bookmark size={13} className={saved ? 'fill-current' : ''} />
-            <span className="hidden sm:inline">{saved ? 'Đã lưu' : 'Lưu'}</span>
-          </button>
+      <div className="border-t border-[var(--border-subtle)]" onClick={stopCardClick}>
+        <PostEngagementBlock
+          postId={post.id}
+          likeCount={likeCount}
+          commentCount={post.comments}
+          liked={liked}
+          saved={saved}
+          onLike={handleLike}
+          onBookmark={handleBookmark}
+          onOpenDetail={onOpen}
+          onOpenLikers={() => likeCount > 0 && setLikersOpen(true)}
+        />
       </div>
+      <LikersModal postId={likersOpen ? post.id : null} likeCount={likeCount} onClose={() => setLikersOpen(false)} />
     </div>
   );
 };
@@ -287,27 +348,40 @@ const SocialPostCard = ({
   readMoreLabel,
   onPostDeleted,
   onPostUpdated,
+  currentUserId,
+  followingIds,
+  onFollowChange,
+  requireAuth,
+  onEngagementChange,
 }: {
   post: SocialFeedPost;
   onOpen: () => void;
   readMoreLabel: string;
   onPostDeleted?: (postId: string) => void;
-  onPostUpdated?: (postId: string, newContent: string) => void;
-}) => {
+  onPostUpdated?: (updatedPost: any) => void;
+} & CardSocialProps) => {
   const [liked, setLiked] = useState(!!post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likes);
   const [saved, setSaved] = useState(!!post.isBookmarked);
-  const [showComment, setShowComment] = useState(false);
-  const [commentCount, setCommentCount] = useState(post.comments);
+  const [commentCount] = useState(post.comments);
+  const [likersOpen, setLikersOpen] = useState(false);
   const { preview } = getPostPreviewText(post);
   const showReadMore = isPostTruncatedOnFeed(post);
 
+  useEffect(() => {
+    setLiked(!!post.isLiked);
+    setLikeCount(post.likes);
+    setSaved(!!post.isBookmarked);
+  }, [post.id, post.isLiked, post.likes, post.isBookmarked]);
+
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleLike(post.id);
-      setLiked(res.liked);
-      setLikeCount(prev => res.liked ? prev + 1 : Math.max(0, prev - 1));
+      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      setLiked(next.liked);
+      setLikeCount(next.likes);
+      onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
     }
@@ -315,9 +389,11 @@ const SocialPostCard = ({
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!requireAuth('/')) return;
     try {
-      const res = await postsService.toggleBookmark(post.id);
-      setSaved(res.bookmarked);
+      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      setSaved(next.bookmarked);
+      onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
     }
@@ -338,21 +414,32 @@ const SocialPostCard = ({
             )}
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-[var(--text-primary)]">{post.author.name}</span>
+              <AuthorFollowButton
+                authorId={post.authorId}
+                currentUserId={currentUserId}
+                isFollowing={post.authorId ? followingIds.has(post.authorId) : true}
+                onFollowChange={onFollowChange}
+                requireAuth={requireAuth}
+              />
             </div>
-            <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5">
-              <Clock size={10} /> {post.date}
-              <span>·</span>
-              <MapPin size={10} className="text-[var(--gold)]" />
-              <span className="text-[var(--gold)] font-medium">{post.destination.replace('📍 ', '')}</span>
+            <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5 min-w-0 max-w-[min(100%,14rem)] sm:max-w-xs">
+              <Clock size={10} className="flex-shrink-0" />
+              <span className="flex-shrink-0 whitespace-nowrap">{post.date}</span>
+              <span className="flex-shrink-0">·</span>
+              <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" />
+              <span
+                className="text-[var(--gold)] font-medium truncate min-w-0"
+                title={post.destination.replace(/^📍\s*/, '')}
+              >
+                {truncateWithEllipsis(post.destination.replace(/^📍\s*/, ''), 26)}
+              </span>
             </div>
           </div>
         </div>
         <PostMenuDropdown
-          postId={post.id}
-          postAuthorId={post.authorId || ''}
-          postContent={post.content || ''}
+          post={post}
           onPostDeleted={onPostDeleted}
           onPostUpdated={onPostUpdated}
         />
@@ -382,45 +469,21 @@ const SocialPostCard = ({
       )}
       </FeedCardShell>
 
-      {/* Stats */}
-      <div className="px-4 pt-3 pb-1 flex items-center justify-between text-[11px] text-[var(--text-muted)]" onClick={stopCardClick}>
-        <span className="flex items-center gap-1">
-          <span className="inline-flex items-center justify-center w-4 h-4 bg-rose-500 rounded-full">
-            <Heart size={9} className="text-white fill-white" />
-          </span>
-          {likeCount.toLocaleString()} lượt thích
-        </span>
-        <span>{commentCount} bình luận</span>
+      <div onClick={stopCardClick}>
+        <PostEngagementBlock
+          postId={post.id}
+          likeCount={likeCount}
+          commentCount={commentCount}
+          liked={liked}
+          saved={saved}
+          onLike={handleLike}
+          onBookmark={handleBookmark}
+          onOpenDetail={onOpen}
+          onOpenLikers={() => likeCount > 0 && setLikersOpen(true)}
+        />
       </div>
 
-      {/* Reaction bar */}
-      <div className="reaction-bar" onClick={stopCardClick}>
-        <button type="button" onClick={handleLike}
-          className={`reaction-btn flex-1 justify-center gap-2 ${liked ? 'liked' : ''}`}>
-          <Heart size={15} className={liked ? 'fill-current' : ''} />
-          <span className="text-xs">{liked ? 'Đã thích' : 'Thích'}</span>
-        </button>
-        <button type="button" onClick={() => setShowComment(!showComment)}
-          className="reaction-btn flex-1 justify-center gap-2">
-          <MessageCircle size={15} />
-          <span className="text-xs">Bình luận</span>
-        </button>
-        <button type="button" onClick={handleBookmark}
-          className={`reaction-btn flex-1 justify-center gap-2 ${saved ? 'bookmarked' : ''}`}>
-          <Bookmark size={15} className={saved ? 'fill-current' : ''} />
-          <span className="text-xs">{saved ? 'Đã lưu' : 'Lưu'}</span>
-        </button>
-        <button className="reaction-btn justify-center gap-2 px-3">
-          <Share2 size={15} />
-        </button>
-      </div>
-
-      {/* Comment input */}
-      {showComment && (
-        <div className="px-4 pb-4 pt-2 border-t border-[var(--border-subtle)]" onClick={stopCardClick}>
-          <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
-        </div>
-      )}
+      <LikersModal postId={likersOpen ? post.id : null} likeCount={likeCount} onClose={() => setLikersOpen(false)} />
     </div>
   );
 };
@@ -660,8 +723,9 @@ function renderFeedPost(
   post: MagazineFeedPost | SocialFeedPost,
   onOpen: (p: FeedPost) => void,
   readMoreLabel: string,
+  socialProps: CardSocialProps,
   onPostDeleted?: (postId: string) => void,
-  onPostUpdated?: (postId: string, newContent: string) => void,
+  onPostUpdated?: (updatedPost: any) => void,
 ) {
   if (post.displayType === 'magazine') {
     return (
@@ -672,6 +736,7 @@ function renderFeedPost(
         readMoreLabel={readMoreLabel}
         onPostDeleted={onPostDeleted}
         onPostUpdated={onPostUpdated}
+        {...socialProps}
       />
     );
   }
@@ -683,6 +748,7 @@ function renderFeedPost(
       readMoreLabel={readMoreLabel}
       onPostDeleted={onPostDeleted}
       onPostUpdated={onPostUpdated}
+      {...socialProps}
     />
   );
 }
@@ -691,6 +757,7 @@ export default function SocialFeedPage() {
   const { t } = useLang();
   const { requireAuth } = useRequireAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const user = useSelector((s: RootState) => s.auth.user);
   const [activeFilter, setActiveFilter] = useState('all');
   const [detailPost, setDetailPost] = useState<FeedPost | null>(null);
@@ -702,7 +769,7 @@ export default function SocialFeedPage() {
   const [feedLoading, setFeedLoading] = useState(false);
   const [feedError, setFeedError] = useState('');
   const [sidebarTick, setSidebarTick] = useState(0);
-  const [hasReset, setHasReset] = useState(false);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
 
   const openPost = (post: FeedPost) => setDetailPost(post);
   const closePost = () => setDetailPost(null);
@@ -744,26 +811,39 @@ export default function SocialFeedPage() {
   };
 
   const handlePostPublished = () => {
-    setHasReset(true);
     void loadFeedFromApi();
     setSidebarTick(n => n + 1);
+  };
+
+  const handleFollowChange = (authorId: string, following: boolean) => {
+    setFollowingIds(prev => {
+      const next = new Set(prev);
+      if (following) next.add(authorId);
+      else next.delete(authorId);
+      return next;
+    });
   };
 
   const handlePostDeleted = (deletedId: string) => {
     setApiPosts(prev => prev.filter(p => p.id !== deletedId));
   };
 
-  const handlePostUpdated = (updatedId: string, newContent: string) => {
-    setApiPosts(prev => prev.map(p => {
-      if (p.id === updatedId) {
-        if (p.displayType === 'social') {
-          return { ...p, content: newContent };
-        } else {
-          return { ...p, body: newContent, excerpt: newContent.slice(0, 140) };
-        }
-      }
-      return p;
-    }));
+  const handlePostUpdated = (updatedPost: any) => {
+    const mapped = mapApiPostToFeedPost(updatedPost);
+    if (!mapped) return;
+    setApiPosts(prev => prev.map(p => p.id === mapped.id ? mapped : p));
+  };
+
+  const handleEngagementChange = (postId: string, patch: EngagementPatch) => {
+    setApiPosts(prev => prev.map(p => (p.id === postId ? { ...p, ...patch } : p)));
+  };
+
+  const cardSocialProps: CardSocialProps = {
+    currentUserId: user?.id,
+    followingIds,
+    onFollowChange: handleFollowChange,
+    requireAuth,
+    onEngagementChange: handleEngagementChange,
   };
 
   const composeLabels = {
@@ -798,18 +878,34 @@ export default function SocialFeedPage() {
     return story.user.split(' ')[0];
   };
   useEffect(() => {
-    if (hasReset) {
-      void loadFeedFromApi();
-    } else {
-      setFeedLoading(false);
-    }
+    void loadFeedFromApi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasReset, location.pathname, location.key]);
+  }, [location.pathname, location.key]);
+
+  useEffect(() => {
+    const state = location.state as { refreshFeed?: boolean } | null;
+    if (!state?.refreshFeed) return;
+    void loadFeedFromApi();
+    navigate(location.pathname, { replace: true, state: {} });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!user?.id) {
+      setFollowingIds(new Set());
+      return;
+    }
+    socialService
+      .getFollowing(user.id)
+      .then((list: { id: string }[]) => setFollowingIds(new Set(list.map(u => u.id))))
+      .catch(() => setFollowingIds(new Set()));
+  }, [user?.id]);
 
   const allPosts = useMemo(() => {
-    const apiIds = new Set(apiPosts.map(p => p.id));
-    const seedPosts = FEED_POSTS.filter(p => !apiIds.has(p.id));
-    return [...apiPosts, ...seedPosts];
+    if (apiPosts.length > 0) {
+      return apiPosts;
+    }
+    return FEED_POSTS;
   }, [apiPosts]);
 
   const myPostCount = useMemo(() => {
@@ -827,7 +923,6 @@ export default function SocialFeedPage() {
     { key: 'adventure', label: t('feed.filter.adventure'), icon: FILTER_ICONS.adventure },
     { key: 'food',      label: t('feed.filter.food'),      icon: FILTER_ICONS.food },
     { key: 'luxury',    label: t('feed.filter.luxury'),    icon: FILTER_ICONS.luxury },
-    { key: 'budget',    label: t('feed.filter.budget'),    icon: FILTER_ICONS.budget },
   ];
 
   return (
@@ -835,6 +930,9 @@ export default function SocialFeedPage() {
       <PostDetailModal
         post={detailPost}
         onClose={closePost}
+        onPostUpdated={(postId, likesCount, commentsCount, isLiked) => {
+          setApiPosts(prev => prev.map(p => p.id === postId ? { ...p, likes: likesCount, comments: commentsCount, isLiked } : p));
+        }}
         labels={{
           close: t('feed.close'),
           readTime: '',
@@ -923,44 +1021,12 @@ export default function SocialFeedPage() {
                 </button>
               );})}
             </div>
-            {hasReset && (
-              <button
-                type="button"
-                onClick={() => void loadFeedFromApi()}
-                className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:border-[var(--gold)]/50 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer animate-fade-in"
-              >
-                Reset / Làm mới
-              </button>
-            )}
           </div>
 
-          {!hasReset && (
-            <div className="surface-elevated p-8 text-center space-y-4 rounded-2xl border border-[var(--border-subtle)] animate-fade-in">
-              <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 text-[var(--gold)] flex items-center justify-center mx-auto animate-pulse">
-                <Bookmark size={20} />
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-[var(--text-primary)]">
-                  Đang tải bài đăng… khi nào tôi reset thì mới tải
-                </p>
-                <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
-                  SmartTravel tối ưu hóa băng thông. Vui lòng bấm nút Làm mới/Reset để đồng bộ dữ liệu bài viết mới nhất.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setHasReset(true)}
-                className="btn-gold px-6 py-2.5 text-xs font-bold inline-flex items-center gap-1.5 hover:scale-105 transition-all shadow-md cursor-pointer"
-              >
-                Reset / Làm mới
-              </button>
-            </div>
-          )}
-
-          {hasReset && feedLoading && (
+          {feedLoading && (
             <p className="text-center text-sm text-[var(--text-muted)] py-6">Đang tải bài đăng…</p>
           )}
-          {hasReset && !feedLoading && feedError && (
+          {!feedLoading && feedError && (
             <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
               {feedError}
               <button type="button" onClick={() => void loadFeedFromApi()} className="ml-2 underline text-rose-200">
@@ -970,31 +1036,31 @@ export default function SocialFeedPage() {
           )}
 
           {/* Hero — kiểu Minh Quân (Editor's Pick, ảnh full) */}
-          {hasReset && !feedLoading && hero && (
+          {!feedLoading && hero && (
             <HeroCard
               post={hero}
               onOpen={() => openPost(hero)}
               readMoreLabel={readMoreLabel}
               onPostDeleted={handlePostDeleted}
               onPostUpdated={handlePostUpdated}
+              {...cardSocialProps}
             />
           )}
 
           {/* Feed — magazine (Sarah Miller) + social (Linh Trần) */}
-          {hasReset && (
-            <div className="space-y-4">
-              {!feedLoading && feed.length === 0 && !feedError && (
-                <p className="text-center text-sm text-[var(--text-muted)] py-8">Chưa có bài đăng — hãy chia sẻ hành trình đầu tiên!</p>
-              )}
-              {feed.map(post => renderFeedPost(
-                post as MagazineFeedPost | SocialFeedPost,
-                openPost,
-                readMoreLabel,
-                handlePostDeleted,
-                handlePostUpdated
-              ))}
-            </div>
-          )}
+          <div className="space-y-4">
+            {!feedLoading && feed.length === 0 && !feedError && (
+              <p className="text-center text-sm text-[var(--text-muted)] py-8">Chưa có bài đăng — hãy chia sẻ hành trình đầu tiên!</p>
+            )}
+            {feed.map(post => renderFeedPost(
+              post as MagazineFeedPost | SocialFeedPost,
+              openPost,
+              readMoreLabel,
+              cardSocialProps,
+              handlePostDeleted,
+              handlePostUpdated,
+            ))}
+          </div>
 
           {/* Load more */}
           <button className="w-full py-3.5 rounded-xl text-sm font-semibold border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] hover:bg-[var(--gold-glow)] transition-all">
