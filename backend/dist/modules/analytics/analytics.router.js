@@ -16,7 +16,7 @@ router.get('/platform', async (_req, res) => {
         const [totalUsers, totalTrips, totalPosts, totalCheckins, totalDestinations, totalAiHistory, totalFollowers, totalComments,] = await Promise.all([
             db_1.default.user.count(),
             db_1.default.trip.count(),
-            db_1.default.post.count(),
+            db_1.default.post.count({ where: { deletedAt: null } }),
             db_1.default.checkIn.count(),
             db_1.default.destination.count(),
             db_1.default.aIHistory.count(),
@@ -99,6 +99,7 @@ router.get('/social-graph', async (_req, res) => {
         });
         // Most liked posts
         const topPosts = await db_1.default.post.findMany({
+            where: { deletedAt: null },
             include: {
                 author: { include: { profile: true } },
                 _count: { select: { likes: true, comments: true } },
@@ -126,15 +127,12 @@ router.get('/gis-heatmap', async (_req, res) => {
             orderBy: { createdAt: 'desc' },
             take: 500,
         });
-        // Return coordinate + weight array for heatmap rendering
-        const heatmapData = checkinsWithCoords
-            .filter((c) => c.destination)
-            .map((c) => ({
-            lat: c.destination.latitude,
-            lng: c.destination.longitude,
-            name: c.destination.name,
-            weight: 1,
-        }));
+        const heatmapData = checkinsWithCoords.map((c) => ({
+            lat: c.latitude ?? c.destination?.latitude,
+            lng: c.longitude ?? c.destination?.longitude,
+            name: c.destination?.name || c.title || 'Check-in',
+            weight: (c.rating || 1) * 1.5,
+        })).filter((p) => p.lat != null && p.lng != null);
         return res.json(heatmapData);
     }
     catch (err) {

@@ -179,6 +179,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
         tripId: tripId || null,
         locationId: locationId || null,
       },
+
       include: {
         author: { include: { profile: true } },
         _count: { select: { likes: true, comments: true } },

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const app_1 = __importDefault(require("./app"));
+const io_1 = require("./socket/io");
 const PORT = process.env.PORT || 5000;
 const server = http_1.default.createServer(app_1.default);
 // Bind Socket.io Server to the http server
@@ -15,12 +16,22 @@ const io = new socket_io_1.Server(server, {
         methods: ['GET', 'POST'],
     },
 });
+(0, io_1.setSocketServer)(io);
 // Event-driven WebSocket Manager
 io.on('connection', (socket) => {
     console.log(`Socket Client Connected: ${socket.id}`);
-    // User online heartbeat
+    socket.on('location:join', (userId) => {
+        if (userId)
+            socket.join(`user:${userId}`);
+        socket.broadcast.emit('friend:online', { userId, socketId: socket.id });
+    });
+    socket.on('location:leave', (userId) => {
+        if (userId)
+            socket.leave(`user:${userId}`);
+        socket.broadcast.emit('location:leave', { userId });
+    });
     socket.on('ping_location', (data) => {
-        // Broadcast user location to friends/subscribers
+        socket.broadcast.emit('location:update', data);
         socket.broadcast.emit('friend_location_updated', data);
     });
     // Collaborative trip editing room coordination
@@ -43,6 +54,15 @@ io.on('connection', (socket) => {
         console.log(`Socket Client Disconnected: ${socket.id}`);
     });
 });
-server.listen(PORT, () => {
-    console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+const seed_1 = require("./config/seed");
+// Call auto-seed on startup
+(0, seed_1.autoSeed)().then(() => {
+    server.listen(PORT, () => {
+        console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+    });
+}).catch(err => {
+    console.error('Failed to auto-seed database:', err);
+    server.listen(PORT, () => {
+        console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+    });
 });

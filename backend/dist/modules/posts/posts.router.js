@@ -6,14 +6,43 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const db_1 = __importDefault(require("../../config/db"));
 const auth_middleware_1 = require("../auth/auth.middleware");
+const geo_utils_1 = require("../map/geo-utils");
+const map_service_1 = require("../map/map.service");
 const router = (0, express_1.Router)();
+function extractBodyText(content) {
+    try {
+        const parsed = JSON.parse(content);
+        if (parsed && typeof parsed === 'object') {
+            return String(parsed.body || parsed.content || '').trim();
+        }
+    }
+    catch {
+        // Ignore, treat as plain text
+    }
+    return content.trim();
+}
 // ─────────────────────────────────────────────────────────
 // GET /api/v1/posts  — paginated feed of posts
 // ─────────────────────────────────────────────────────────
 router.get('/', auth_middleware_1.optionalAuth, async (req, res) => {
     try {
         const { page = '1', limit = '10', q } = req.query;
-        const where = {};
+        // Permanently delete posts trashed more than 15 days ago
+        const fifteenDaysAgo = new Date();
+        fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+        try {
+            await db_1.default.post.deleteMany({
+                where: {
+                    deletedAt: {
+                        lt: fifteenDaysAgo
+                    }
+                }
+            });
+        }
+        catch (err) {
+            console.error('Failed to clean up expired trashed posts:', err);
+        }
+        const where = { deletedAt: null };
         if (q) {
             where.content = { contains: q, mode: 'insensitive' };
         }
@@ -72,8 +101,8 @@ router.get('/', auth_middleware_1.optionalAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.get('/:id', auth_middleware_1.optionalAuth, async (req, res) => {
     try {
-        const post = await db_1.default.post.findUnique({
-            where: { id: req.params.id },
+        const post = await db_1.default.post.findFirst({
+            where: { id: req.params.id, deletedAt: null },
             include: {
                 author: { include: { profile: true } },
                 comments: {
@@ -86,6 +115,15 @@ router.get('/:id', auth_middleware_1.optionalAuth, async (req, res) => {
                         }
                     },
                     orderBy: { createdAt: 'desc' },
+                },
+                likes: {
+                    include: {
+                        user: {
+                            include: {
+                                profile: true
+                            }
+                        }
+                    }
                 },
                 _count: { select: { likes: true, bookmarks: true } },
             },
@@ -118,10 +156,17 @@ router.get('/:id', auth_middleware_1.optionalAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { content, mediaUrls, tripId, locationId } = req.body;
+        const { content, mediaUrls, tripId, locationId, latitude, longitude, destinationId, } = req.body;
         if (!content) {
             return res.status(400).json({ error: 'content is required.' });
         }
+        const bodyText = extractBodyText(content);
+        if (bodyText.length < 10) {
+            return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
+        }
+        const geo = (0, geo_utils_1.extractPostGeo)(content);
+        const postLat = latitude ?? geo?.latitude ?? null;
+        const postLng = longitude ?? geo?.longitude ?? null;
         const post = await db_1.default.post.create({
             data: {
                 authorId: req.user.sub,
@@ -129,13 +174,28 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
                 mediaUrls: mediaUrls || [],
                 tripId: tripId || null,
                 locationId: locationId || null,
+                latitude: postLat,
+                longitude: postLng,
+                destinationId: destinationId || null,
             },
             include: {
                 author: { include: { profile: true } },
+                destination: true,
                 _count: { select: { likes: true, comments: true } },
             },
         });
-        return res.status(201).json(post);
+        if (!postLat || !postLng) {
+            await (0, map_service_1.syncPostCoordinates)(post.id, content);
+        }
+        const refreshed = await db_1.default.post.findUnique({
+            where: { id: post.id },
+            include: {
+                author: { include: { profile: true } },
+                destination: true,
+                _count: { select: { likes: true, comments: true } },
+            },
+        });
+        return res.status(201).json(refreshed || post);
     }
     catch (err) {
         console.error('[posts/POST /]', err);
@@ -152,7 +212,10 @@ router.delete('/:id', auth_middleware_1.requireAuth, async (req, res) => {
             return res.status(404).json({ error: 'Post not found.' });
         if (post.authorId !== req.user.sub)
             return res.status(403).json({ error: 'Access denied.' });
-        await db_1.default.post.delete({ where: { id: req.params.id } });
+        await db_1.default.post.update({
+            where: { id: req.params.id },
+            data: { deletedAt: new Date() }
+        });
         return res.status(204).send();
     }
     catch (err) {
@@ -213,17 +276,25 @@ router.post('/:id/bookmark', auth_middleware_1.requireAuth, async (req, res) => 
 // ─────────────────────────────────────────────────────────
 router.put('/:id', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { content, mediaUrls } = req.body;
+        const { content, mediaUrls, tripId, locationId } = req.body;
         const post = await db_1.default.post.findUnique({ where: { id: req.params.id } });
         if (!post)
             return res.status(404).json({ error: 'Post not found.' });
         if (post.authorId !== req.user.sub)
             return res.status(403).json({ error: 'Access denied.' });
+        if (content !== undefined) {
+            const bodyText = extractBodyText(content);
+            if (bodyText.length < 10) {
+                return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
+            }
+        }
         const updatedPost = await db_1.default.post.update({
             where: { id: req.params.id },
             data: {
                 content: content !== undefined ? content : post.content,
                 mediaUrls: mediaUrls !== undefined ? mediaUrls : post.mediaUrls,
+                tripId: tripId !== undefined ? tripId : post.tripId,
+                locationId: locationId !== undefined ? locationId : post.locationId,
             },
             include: {
                 author: { include: { profile: true } },
