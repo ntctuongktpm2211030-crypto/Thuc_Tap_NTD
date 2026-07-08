@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { postsService, Comment } from '../../services/smartTravel.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Send, Reply, Clock } from 'lucide-react';
+import { Send, Reply, Clock, MessageCircle } from 'lucide-react';
+
 
 interface CommentsSectionProps {
   postId: string;
@@ -180,15 +181,33 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
           </div>
         </form>
       ) : (
-        <div className="text-center py-2 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl">
-          <p className="text-xs text-[var(--text-muted)]">Bạn cần đăng nhập để bình luận.</p>
+        <div className="flex gap-2 items-center mt-2 opacity-75">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-8 h-8 rounded-full bg-[#b0b3b8] flex-shrink-0"
+          >
+            <circle cx="12" cy="10" r="4.5" fill="#FFFFFF" />
+            <path
+              d="M12 16C8.5 16 5.5 18.5 5 22H19C18.5 18.5 15.5 16 12 16Z"
+              fill="#FFFFFF"
+            />
+          </svg>
+          <div className="flex-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl px-4 py-2.5 text-xs text-[var(--text-muted)] cursor-not-allowed select-none">
+            Bạn cần đăng nhập để bình luận...
+          </div>
         </div>
       )}
 
       {/* Comments List */}
-      <div className="space-y-4 max-h-[450px] overflow-y-auto pr-1 scrollbar-thin">
+      <div className="comments-section-list space-y-4 pr-1">
         {comments.length === 0 && !loading ? (
-          <p className="text-xs text-[var(--text-muted)] text-center py-4">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+          <div className="flex flex-col items-center justify-center py-8 text-center bg-[var(--bg-elevated)]/30 border border-dashed border-[var(--border-subtle)] rounded-2xl p-4">
+            <MessageCircle className="w-8 h-8 text-[var(--text-muted)] mb-2 opacity-50" />
+            <p className="text-xs font-semibold text-[var(--text-secondary)]">Chưa có bình luận nào</p>
+            <p className="text-[11px] text-[var(--text-muted)] mt-0.5">Hãy là người đầu tiên chia sẻ cảm nghĩ của bạn!</p>
+          </div>
         ) : (
           comments.map(c => {
             const isLiked = likedComments[c.id] || false;

@@ -278,10 +278,10 @@ export interface CompanionSuggestion {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Phiêu Lưu': 'bg-violet-500',
-  'Ẩm Thực': 'bg-amber-500',
-  'Văn Hóa': 'bg-sky-500',
-  'Sang Trọng': 'bg-rose-500',
+  'Phiêu Lưu': 'bg-blue-600',
+  'Ẩm Thực': 'bg-blue-600',
+  'Văn Hóa': 'bg-blue-600',
+  'Sang Trọng': 'bg-blue-600',
 };
 
 /** Chuẩn hóa địa điểm để đếm (bỏ emoji, lấy tên chính) */
@@ -436,7 +436,7 @@ export function formatFollowers(n: number): string {
 }
 
 export function getCategoryColor(category: string): string {
-  return CATEGORY_COLORS[category] ?? 'bg-indigo-500';
+  return CATEGORY_COLORS[category] ?? 'bg-blue-600';
 }
 
 /** Nhãn danh mục từ id form hành trình → nhãn feed */

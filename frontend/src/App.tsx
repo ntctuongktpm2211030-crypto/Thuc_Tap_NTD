@@ -344,7 +344,7 @@ const AdminDashboard = () => {
             <div key={i} className="space-y-1">
               <div className="flex justify-between text-xs font-semibold"><span className="text-[var(--text-secondary)]">{item.name}</span><span className="text-[var(--text-muted)]">{item.rate}%</span></div>
               <div className="w-full h-1.5 bg-[var(--bg-elevated)] rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[var(--gold)] to-amber-500 rounded-full transition-all duration-1000" style={{ width: `${item.rate}%` }} />
+                <div className="h-full bg-gradient-to-r from-[var(--gold)] to-blue-700 rounded-full transition-all duration-1000" style={{ width: `${item.rate}%` }} />
               </div>
             </div>
           ))}
@@ -444,11 +444,11 @@ function App() {
       <header className="nav-magazine">
 
         {/* ── TOP BAR ── */}
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 h-[64px] flex items-center gap-3">
+        <div className="max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-10 h-[64px] flex items-center gap-3">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 group" onClick={() => setMobileOpen(false)}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--gold)] via-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-all group-hover:scale-105">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--gold)] via-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all group-hover:scale-105">
               <span className="text-white font-black text-sm tracking-tight">ST</span>
             </div>
             <div className="hidden sm:block">
@@ -457,8 +457,11 @@ function App() {
             </div>
           </Link>
 
-          {/* Search */}
-          <div className={`flex-1 max-w-lg hidden md:block transition-all duration-200 ${searchFocused ? 'max-w-xl' : ''}`}>
+          {/* Left spacer — centers search bar */}
+          <div className="flex-1 hidden md:block" />
+
+          {/* Search — centered */}
+          <div className={`w-full max-w-md lg:max-w-lg hidden md:block transition-all duration-200 ${searchFocused ? 'max-w-xl' : ''}`}>
             <div className="relative">
               <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
               <input
@@ -478,11 +481,11 @@ function App() {
             </div>
           </div>
 
-          {/* Spacer */}
-          <div className="flex-1 md:hidden" />
+          {/* Right spacer — pushes actions to far right */}
+          <div className="flex-1" />
 
           {/* Right Actions */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
 
             {/* Language Pill */}
             <div className="hidden sm:flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
@@ -532,7 +535,7 @@ function App() {
                 </Link>
                 <Link
                   to="/auth"
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[var(--gold)] to-amber-500 text-xs font-bold text-black hover:shadow-lg hover:shadow-amber-500/25 transition-all hover:scale-105"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[var(--gold)] to-blue-700 text-xs font-bold text-white hover:shadow-lg hover:shadow-blue-600/25 transition-all hover:scale-105"
                 >
                   {t('nav.joinFree')}
                 </Link>
@@ -549,7 +552,7 @@ function App() {
 
         {/* ── CATEGORY NAV BAR ── */}
         <div className="border-t border-[var(--border-subtle)]">
-          <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 hidden md:flex items-center gap-1 h-[46px] overflow-x-auto">
+          <div className="max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-10 hidden md:flex items-center gap-1 h-[46px] overflow-x-auto">
             {navItems.map(({ to, label, Icon }) => {
               const active = isActive(to);
               return (
@@ -647,7 +650,7 @@ function App() {
       <footer className="border-t border-[var(--border-subtle)] py-8 bg-[var(--bg-surface)]">
         <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-[var(--gold)] to-amber-600 flex items-center justify-center text-[10px] font-bold text-black">ST</div>
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-[var(--gold)] to-blue-700 flex items-center justify-center text-[10px] font-bold text-white">ST</div>
             <span className="font-editorial text-sm text-[var(--text-secondary)]">{t('footer.thesis')}</span>
           </div>
           <div className="text-[10px] text-[var(--text-muted)] flex gap-4">

@@ -56,7 +56,7 @@ export default function UserMenuDropdown({ onLogout }: UserMenuDropdownProps) {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-amber-600 flex items-center justify-center text-xs font-black text-black flex-shrink-0">
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-blue-700 flex items-center justify-center text-xs font-black text-white flex-shrink-0">
           {user.avatarUrl ? (
             <img src={user.avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
           ) : (

@@ -16,9 +16,9 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Load from localStorage or default to dark
+    // Load from localStorage or default to light
     const saved = localStorage.getItem('st-theme') as Theme | null;
-    return saved ?? 'dark';
+    return saved ?? 'light';
   });
 
   useEffect(() => {
