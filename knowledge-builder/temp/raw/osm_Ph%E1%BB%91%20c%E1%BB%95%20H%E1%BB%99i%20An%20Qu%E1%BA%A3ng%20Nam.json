@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Phố cổ Hội An Quảng Nam",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Đài Kỷ Niệm Danh Nhân Chí Sĩ Quảng Nam, Trần Hưng Đạo, An Hội, Phố cổ Hội An, Phường Hội An, Hội An, Thành phố Đà Nẵng, 64000, Việt Nam",
+      "latitude": 15.8791656,
+      "longitude": 108.323789,
+      "class": "historic",
+      "type": "memorial"
+    }
+  ]
+}

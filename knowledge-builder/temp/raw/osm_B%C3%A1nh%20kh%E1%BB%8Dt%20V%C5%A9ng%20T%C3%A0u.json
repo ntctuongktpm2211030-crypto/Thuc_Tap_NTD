@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bánh khọt Vũng Tàu",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Bánh khọt Bà Hai, 42, Trần Đồng, Khu phố 13, Phường Vũng Tàu, Thành phố Hồ Chí Minh, 78207, Việt Nam",
+      "latitude": 10.3441152,
+      "longitude": 107.0814524,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Cô Nhỏ - Bánh Khọt, Bánh Căn, Bánh Xèo, Nguyễn Bỉnh Khiêm, Khu phố 9, Phường Vũng Tàu, Thành phố Hồ Chí Minh, 78207, Việt Nam",
+      "latitude": 10.3416515,
+      "longitude": 107.0818887,
+      "class": "amenity",
+      "type": "fast_food"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Bánh Khọt 368 (40k), Lê Lai, Khu phố 18, Phường Vũng Tàu, Thành phố Hồ Chí Minh, 78207, Việt Nam",
+      "latitude": 10.3474509,
+      "longitude": 107.0791012,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

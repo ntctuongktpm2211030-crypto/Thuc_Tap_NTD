@@ -230,6 +230,29 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
       return res.json({ liked: false });
     } else {
       await prisma.like.create({ data: { postId, userId } });
+
+      try {
+        const post = await prisma.post.findUnique({
+          where: { id: postId }
+        });
+        const liker = await prisma.user.findUnique({
+          where: { id: userId },
+          include: { profile: true }
+        });
+        if (post && post.authorId !== userId) {
+          const likerName = liker?.profile?.fullName || 'Ai đó';
+          await prisma.notification.create({
+            data: {
+              recipientId: post.authorId,
+              type: 'like',
+              content: `${likerName} đã thích bài viết của bạn.`,
+            },
+          });
+        }
+      } catch (err) {
+        console.error('Failed to create like notification:', err);
+      }
+
       return res.json({ liked: true });
     }
   } catch (err) {
@@ -341,6 +364,38 @@ router.post('/:id/comments', requireAuth, async (req: AuthRequest, res: Response
       },
       include: { author: { include: { profile: true } } },
     });
+
+    try {
+      const post = await prisma.post.findUnique({
+        where: { id: req.params.id }
+      });
+      const commenterName = comment.author.profile?.fullName || 'Ai đó';
+
+      if (parentId) {
+        const parentComment = await prisma.comment.findUnique({
+          where: { id: parentId }
+        });
+        if (parentComment && parentComment.authorId !== req.user!.sub) {
+          await prisma.notification.create({
+            data: {
+              recipientId: parentComment.authorId,
+              type: 'comment',
+              content: `${commenterName} đã trả lời bình luận của bạn.`,
+            }
+          });
+        }
+      } else if (post && post.authorId !== req.user!.sub) {
+        await prisma.notification.create({
+          data: {
+            recipientId: post.authorId,
+            type: 'comment',
+            content: `${commenterName} đã bình luận về bài viết của bạn.`,
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Failed to create comment notification:', err);
+    }
 
     return res.status(201).json(comment);
   } catch (err) {

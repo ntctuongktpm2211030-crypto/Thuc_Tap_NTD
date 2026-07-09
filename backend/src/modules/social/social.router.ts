@@ -41,7 +41,7 @@ router.get('/profile/:userId', async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.put('/profile', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { fullName, bio, avatarUrl, homeLocation, phoneNumber } = req.body;
+    const { fullName, bio, avatarUrl, coverUrl, homeLocation, phoneNumber } = req.body;
 
     const updated = await prisma.profile.update({
       where: { userId: req.user!.sub },
@@ -49,6 +49,7 @@ router.put('/profile', requireAuth, async (req: AuthRequest, res: Response) => {
         fullName: fullName ?? undefined,
         bio: bio ?? undefined,
         avatarUrl: avatarUrl ?? undefined,
+        coverUrl: coverUrl ?? undefined,
         homeLocation: homeLocation ?? undefined,
         phoneNumber: phoneNumber ?? undefined,
       },

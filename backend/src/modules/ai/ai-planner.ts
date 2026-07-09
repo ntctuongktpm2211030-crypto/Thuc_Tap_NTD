@@ -102,21 +102,25 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
   }
 
   try {
+    const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
+    const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+
     // Standard fetch to OpenAI API v1 Chat Completions
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Lightweight, cost-efficient for schema parsing
+        model: modelName, // Custom endpoint model or default
         messages: [
           { role: 'system', content: buildSystemPrompt() },
           { role: 'user', content: buildUserPrompt(params) },
         ],
         temperature: 0.7,
         response_format: { type: 'json_object' },
+        max_tokens: 3000,
       }),
     });
 

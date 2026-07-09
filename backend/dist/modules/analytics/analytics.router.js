@@ -127,12 +127,15 @@ router.get('/gis-heatmap', async (_req, res) => {
             orderBy: { createdAt: 'desc' },
             take: 500,
         });
-        const heatmapData = checkinsWithCoords.map((c) => ({
-            lat: c.latitude ?? c.destination?.latitude,
-            lng: c.longitude ?? c.destination?.longitude,
-            name: c.destination?.name || c.title || 'Check-in',
-            weight: (c.rating || 1) * 1.5,
-        })).filter((p) => p.lat != null && p.lng != null);
+        // Return coordinate + weight array for heatmap rendering
+        const heatmapData = checkinsWithCoords
+            .filter((c) => c.destination)
+            .map((c) => ({
+            lat: c.destination.latitude,
+            lng: c.destination.longitude,
+            name: c.destination.name,
+            weight: 1,
+        }));
         return res.json(heatmapData);
     }
     catch (err) {

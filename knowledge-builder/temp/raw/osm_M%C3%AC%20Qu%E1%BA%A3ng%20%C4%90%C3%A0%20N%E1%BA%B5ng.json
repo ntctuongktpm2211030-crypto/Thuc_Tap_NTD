@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Mì Quảng Đà Nẵng",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Mi quang, Phạm Văn Đồng, Xã Núi Thành, Thành phố Đà Nẵng, Việt Nam",
+      "latitude": 15.4291301,
+      "longitude": 108.6602277,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bánh mì Sài Gòn",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Bánh Mì Sài Gòn, 4, Rue Saint-Roch, Lausanne, District de Lausanne, Vaud, 1002, Schweiz/Suisse/Svizzera/Svizra",
+      "latitude": 46.5244362,
+      "longitude": 6.6290701,
+      "class": "amenity",
+      "type": "fast_food"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Bánh MÌ Sài Gòn, 37, Đường Nguyễn Khang, Trung Kính Thượng, Kẻ Giàn (Trung Kính), Phường Yên Hòa, Thành phố Hà Nội, 11312, Việt Nam",
+      "latitude": 21.0162986,
+      "longitude": 105.8033308,
+      "class": "amenity",
+      "type": "fast_food"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "bánh mì sài gòn, 34, Phố Văn Hội, Phường Đông Ngạc, Thành phố Hà Nội, 11909, Việt Nam",
+      "latitude": 21.0798973,
+      "longitude": 105.7728536,
+      "class": "amenity",
+      "type": "fast_food"
+    }
+  ]
+}

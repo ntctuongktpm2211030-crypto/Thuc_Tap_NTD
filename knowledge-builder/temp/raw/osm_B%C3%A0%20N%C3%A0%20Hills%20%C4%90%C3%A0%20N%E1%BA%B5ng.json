@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bà Nà Hills Đà Nẵng",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Sun World Bà Nà Hills, Wine Cellar, Xã Bà Nà, Thành phố Đà Nẵng, Việt Nam",
+      "latitude": 15.9958569,
+      "longitude": 107.9890712,
+      "class": "tourism",
+      "type": "theme_park"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Sân Golf Bà Nà Hills, 602, Xã Bà Nà, Thành phố Đà Nẵng, Việt Nam",
+      "latitude": 16.0214287,
+      "longitude": 108.0540633,
+      "class": "highway",
+      "type": "bus_stop"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Bãi đỗ xe Bà Nà Hills, 602, Xã Bà Nà, Thành phố Đà Nẵng, Việt Nam",
+      "latitude": 16.0258471,
+      "longitude": 108.0362621,
+      "class": "highway",
+      "type": "bus_stop"
+    }
+  ]
+}

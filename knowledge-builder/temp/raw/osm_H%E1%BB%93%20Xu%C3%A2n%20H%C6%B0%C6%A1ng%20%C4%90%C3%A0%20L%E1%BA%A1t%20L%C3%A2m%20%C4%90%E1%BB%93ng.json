@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Hồ Xuân Hương Đà Lạt Lâm Đồng",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Hồ Xuân Hương, Phường Xuân Hương - Đà Lạt, Đà Lạt, Tỉnh Lâm Đồng, Việt Nam",
+      "latitude": 11.9450803,
+      "longitude": 108.4487222,
+      "class": "water",
+      "type": "reservoir"
+    }
+  ]
+}

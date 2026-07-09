@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Mũi Né Phan Thiết Bình Thuận",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Centara Mirage Resort Mui Ne, Huỳnh Thúc Kháng, Phường Phan Thiết, Tỉnh Lâm Đồng, Việt Nam",
+      "latitude": 10.9468964,
+      "longitude": 108.2686757,
+      "class": "tourism",
+      "type": "hotel"
+    }
+  ]
+}

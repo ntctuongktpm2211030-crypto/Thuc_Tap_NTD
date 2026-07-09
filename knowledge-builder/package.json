@@ -1,0 +1,28 @@
+{
+  "name": "knowledge-builder",
+  "version": "1.0.0",
+  "description": "Offline data crawling and RAG training data sync pipeline",
+  "main": "dist/sync.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "sync": "ts-node src/sync.ts",
+    "bulk-sync": "ts-node src/bulk-sync.ts",
+    "import-json": "ts-node src/import-json.ts",
+    "generate-camau": "ts-node src/generate-camau-data.ts",
+    "clean-db": "ts-node src/clean-db.ts",
+    "reset-db": "ts-node src/reset-db.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "openai": "^4.47.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "prisma": "^5.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

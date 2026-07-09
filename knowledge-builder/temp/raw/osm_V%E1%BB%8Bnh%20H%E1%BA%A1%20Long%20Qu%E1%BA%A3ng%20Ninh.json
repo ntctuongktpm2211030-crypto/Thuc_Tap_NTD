@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Vịnh Hạ Long Quảng Ninh",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Vịnh Hạ Long, Hạ Long, Tỉnh Quảng Ninh, Việt Nam",
+      "latitude": 20.9084384,
+      "longitude": 107.0682782,
+      "class": "natural",
+      "type": "bay"
+    }
+  ]
+}

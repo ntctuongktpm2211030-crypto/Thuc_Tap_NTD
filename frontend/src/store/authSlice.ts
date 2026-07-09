@@ -10,6 +10,7 @@ interface AuthUser {
   fullName: string;
   role: string;
   avatarUrl?: string;
+  coverUrl?: string;
 }
 
 interface AuthState {
@@ -43,6 +44,21 @@ export const loginThunk = createAsyncThunk(
       return res.user;
     } catch (err: any) {
       const message = err.response?.data?.error || 'Login failed. Please check your credentials.';
+      return rejectWithValue(message);
+    }
+  }
+);
+
+/** Google Login thunk — calls backend with idToken, stores tokens, returns user */
+export const loginGoogleThunk = createAsyncThunk(
+  'auth/loginGoogle',
+  async (idToken: string, { rejectWithValue }) => {
+    try {
+      const res = await authService.loginWithGoogle(idToken);
+      authService.saveSession(res);
+      return res.user;
+    } catch (err: any) {
+      const message = err.response?.data?.error || 'Google login failed. Please try again.';
       return rejectWithValue(message);
     }
   }
@@ -97,6 +113,22 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(loginThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
+
+    // GOOGLE LOGIN
+    builder
+      .addCase(loginGoogleThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginGoogleThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload as AuthUser;
+        state.isAuthenticated = true;
+      })
+      .addCase(loginGoogleThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

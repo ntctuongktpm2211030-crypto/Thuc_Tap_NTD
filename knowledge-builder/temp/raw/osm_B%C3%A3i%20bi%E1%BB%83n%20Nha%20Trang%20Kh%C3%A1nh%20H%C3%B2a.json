@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bãi biển Nha Trang Khánh Hòa",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Nha Trang, Phường Nha Trang, Nha Trang, Tỉnh Khánh Hòa, Việt Nam",
+      "latitude": 12.2363052,
+      "longitude": 109.1979116,
+      "class": "natural",
+      "type": "beach"
+    }
+  ]
+}

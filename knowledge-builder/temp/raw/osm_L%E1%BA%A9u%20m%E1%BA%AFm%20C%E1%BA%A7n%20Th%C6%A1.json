@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Lẩu mắm Cần Thơ",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Lẩu mẳm, Trần Hoàng Na, Phường Tân An, Thành phố Cần Thơ, 94000, Việt Nam",
+      "latitude": 10.0162058,
+      "longitude": 105.7605943,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

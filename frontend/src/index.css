@@ -3,7 +3,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+@import "@astryxdesign/theme-neutral/theme.css";
 /* =========================================================
    SMARTTRAVEL — Premium Design System v2
    Rich jewel tones × Warm Gold × Glassmorphism
@@ -52,28 +54,28 @@
 }
 
 /* =========================================================
-   LIGHT MODE
+   LIGHT MODE (Refined Premium Editorial)
    ========================================================= */
 [data-theme="light"] {
-  --bg-primary:       #f4f6fb;
-  --bg-surface:       #ffffff;
-  --bg-elevated:      #edf0f7;
-  --bg-overlay:       #e2e7f3;
-  --bg-glass:         rgba(255,255,255,0.75);
+  --bg-primary:       #fcfbfa;   /* warm editorial soft cream */
+  --bg-surface:       #ffffff;   /* pure white card backgrounds */
+  --bg-elevated:      #f5f3f0;   /* soft sand elevated panel */
+  --bg-overlay:       #eae7e2;   /* warm hover overlay */
+  --bg-glass:         rgba(255, 255, 255, 0.82);
 
-  --border-subtle:    rgba(0,0,0,0.06);
-  --border-normal:    rgba(0,0,0,0.12);
+  --border-subtle:    rgba(60, 45, 30, 0.06);   /* warm sepia border hint */
+  --border-normal:    rgba(60, 45, 30, 0.12);   /* subtle sepia line */
 
-  --text-primary:     #111827;
-  --text-secondary:   #374151;
-  --text-muted:       #9ca3af;
+  --text-primary:     #1c1a17;   /* deep charcoal brown for high readability */
+  --text-secondary:   #4e4a43;   /* soft slate brown for body text */
+  --text-muted:       #969084;   /* muted sepia-gray for helper text */
   --text-inverse:     #ffffff;
 
-  --gold:             #d97706;
-  --gold-dark:        #b45309;
-  --gold-light:       #f59e0b;
-  --gold-glow:        rgba(217, 119, 6, 0.12);
-  --gold-glow-strong: rgba(217, 119, 6, 0.25);
+  --gold:             #c28c38;   /* premium ochre gold */
+  --gold-dark:        #94681f;   /* rich bronze */
+  --gold-light:       #e5be7d;   /* light champagne */
+  --gold-glow:        rgba(194, 140, 56, 0.08);
+  --gold-glow-strong: rgba(194, 140, 56, 0.2);
 }
 
 /* =========================================================
@@ -1754,6 +1756,7 @@ body::before {
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1907,100 +1910,132 @@ body::before {
   padding: 20px; border-radius: 16px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-
-/* Facebook-style profile */
 .fb-profile {
   min-height: 100vh;
-  background: #f0f2f5;
-  margin: 0 -0px;
+  background: var(--bg-primary);
+  margin: 0;
 }
 .fb-profile-cover-wrap {
   position: relative;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  height: 280px;
-  background: #e4e6eb;
+  height: 320px;
+  background: var(--bg-elevated);
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.1);
 }
 @media (max-width: 768px) {
-  .fb-profile-cover-wrap { height: 200px; }
+  .fb-profile-cover-wrap { height: 200px; border-radius: 0; }
 }
 .fb-profile-cover {
   width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.fb-profile-cover-wrap:hover .fb-profile-cover {
+  transform: scale(1.02);
 }
 .fb-profile-cover-edit {
-  position: absolute; bottom: 16px; right: 16px;
+  position: absolute; bottom: 20px; right: 20px;
   display: flex; align-items: center; gap: 6px;
-  padding: 8px 14px; border-radius: 8px;
-  background: rgba(255,255,255,0.95);
-  border: none; font-size: 0.8rem; font-weight: 600;
-  color: #050505; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  padding: 10px 18px; border-radius: 12px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--text-primary); cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+.fb-profile-cover-edit:hover {
+  background: var(--bg-surface);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: scale(1.04);
 }
 .fb-profile-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 32px;
+  padding: 0 24px 48px;
 }
 .fb-profile-header {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 16px 24px;
-  margin-top: -56px;
-  padding-bottom: 16px;
+  gap: 24px 32px;
+  margin-top: 24px;
+  padding-bottom: 24px;
   position: relative;
   z-index: 2;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .fb-profile-avatar-wrap {
   position: relative;
   flex-shrink: 0;
 }
 .fb-profile-avatar {
-  width: 140px; height: 140px;
+  width: 150px; height: 150px;
   border-radius: 50%;
-  border: 4px solid #fff;
+  border: 4px solid var(--bg-primary);
   background: linear-gradient(135deg, var(--gold), #d4824b);
   display: flex; align-items: center; justify-content: center;
   font-size: 3rem; font-weight: 800; color: #000;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+}
+.fb-profile-avatar:hover {
+  transform: scale(1.02);
 }
 @media (max-width: 768px) {
   .fb-profile-avatar { width: 100px; height: 100px; font-size: 2rem; }
-  .fb-profile-header { margin-top: -40px; }
+  .fb-profile-header { margin-top: 12px; }
 }
 .fb-profile-avatar img {
   width: 100%; height: 100%; object-fit: cover;
 }
 .fb-profile-avatar-edit {
   position: absolute; bottom: 8px; right: 8px;
-  width: 36px; height: 36px; border-radius: 50%;
-  background: #e4e6eb; border: 2px solid #fff;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--bg-elevated); border: 2.5px solid var(--bg-primary);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: #050505;
+  cursor: pointer; color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+.fb-profile-avatar-edit:hover {
+  background: var(--bg-overlay);
+  color: var(--gold);
+  transform: scale(1.1);
 }
 .fb-profile-header-main {
   flex: 1; min-width: 200px;
   padding-top: 12px;
 }
 .fb-profile-name {
-  font-size: 1.75rem; font-weight: 700;
-  color: #050505; line-height: 1.2;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem; font-weight: 800;
+  color: var(--text-primary); line-height: 1.2;
 }
 @media (max-width: 768px) {
-  .fb-profile-name { font-size: 1.35rem; }
+  .fb-profile-name { font-size: 1.6rem; }
 }
 .fb-profile-friends {
-  font-size: 0.9rem; color: #65676b; margin-top: 4px;
+  font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;
+  font-weight: 500;
+}
+.fb-profile-friends strong {
+  color: var(--text-primary);
 }
 .fb-profile-location {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 0.85rem; color: #65676b; margin-top: 4px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;
+  font-weight: 500;
 }
 .fb-profile-actions {
-  display: flex; flex-wrap: wrap; gap: 8px;
+  display: flex; flex-wrap: wrap; gap: 12px;
   margin-left: auto;
   padding-top: 8px;
 }
@@ -2009,48 +2044,65 @@ body::before {
 }
 .fb-profile-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 16px; border-radius: 8px;
-  font-size: 0.875rem; font-weight: 600;
+  padding: 10px 20px; border-radius: 12px;
+  font-size: 0.875rem; font-weight: 700;
   text-decoration: none; border: none; cursor: pointer;
-  transition: filter 0.15s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .fb-profile-btn--primary {
-  background: #1877f2; color: #fff;
+  background: var(--grad-gold); color: #000;
 }
-.fb-profile-btn--primary:hover { filter: brightness(1.05); }
+.fb-profile-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--gold-glow-strong);
+}
 .fb-profile-btn--secondary {
-  background: #e4e6eb; color: #050505;
+  background: var(--bg-elevated); color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
 }
-.fb-profile-btn--secondary:hover { background: #d8dadf; }
+.fb-profile-btn--secondary:hover {
+  background: var(--bg-overlay);
+  border-color: var(--border-normal);
+  transform: translateY(-2px);
+}
 
 .fb-profile-tabs {
-  display: flex; gap: 0;
-  border-bottom: 1px solid #ced0d4;
-  background: #fff;
-  border-radius: 8px 8px 0 0;
+  display: flex; gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
   overflow-x: auto;
-  margin-top: 8px;
+  margin-top: 12px;
+  padding-bottom: 2px;
 }
 .fb-profile-tab {
-  padding: 14px 20px;
-  font-size: 0.9rem; font-weight: 600;
-  color: #65676b;
+  padding: 14px 24px;
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text-muted);
   background: transparent; border: none;
   border-bottom: 3px solid transparent;
   cursor: pointer; white-space: nowrap;
-  margin-bottom: -1px;
+  transition: all 0.2s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 8px 8px 0 0;
 }
-.fb-profile-tab:hover { background: #f0f2f5; }
+.fb-profile-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
 .fb-profile-tab--active {
-  color: #1877f2;
-  border-bottom-color: #1877f2;
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: var(--gold-glow);
 }
 
 .fb-profile-body {
   display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 16px;
-  margin-top: 16px;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  margin-top: 24px;
   align-items: start;
 }
 @media (max-width: 900px) {
@@ -2062,167 +2114,234 @@ body::before {
 }
 
 .fb-profile-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  padding: 16px;
-  margin-bottom: 16px;
+  background: var(--bg-surface);
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+.fb-profile-card:hover {
+  border-color: var(--border-normal);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
 .fb-profile-card-title {
-  font-size: 1.05rem; font-weight: 700;
-  color: #050505;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 800;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 .fb-profile-card-head {
   display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
 }
 .fb-profile-see-all {
-  font-size: 0.8rem; font-weight: 600;
-  color: #1877f2; background: none; border: none;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--gold); background: none; border: none;
   cursor: pointer; text-decoration: none;
+  transition: color 0.2s ease;
 }
-.fb-profile-see-all:hover { text-decoration: underline; }
+.fb-profile-see-all:hover {
+  color: var(--gold-light);
+  text-decoration: underline;
+}
 .fb-profile-intro-text {
-  font-size: 0.9rem; color: #050505;
-  line-height: 1.45; margin-bottom: 12px;
+  font-size: 0.9rem; color: var(--text-secondary);
+  line-height: 1.55; margin-bottom: 16px;
+  font-style: italic;
 }
 .fb-profile-intro-list {
-  list-style: none; padding: 0; margin: 0 0 12px;
-  display: flex; flex-direction: column; gap: 10px;
+  list-style: none; padding: 0; margin: 0 0 16px;
+  display: flex; flex-direction: column; gap: 12px;
 }
 .fb-profile-intro-list li {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 0.85rem; color: #050505;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.88rem; color: var(--text-primary);
+  font-weight: 500;
 }
-.fb-profile-intro-list li svg { color: #65676b; flex-shrink: 0; }
+.fb-profile-intro-list li svg { color: var(--gold); flex-shrink: 0; }
 .fb-profile-link-btn {
   display: block; width: 100%; text-align: center;
-  padding: 8px; border-radius: 8px;
-  background: #e4e6eb; font-size: 0.85rem; font-weight: 600;
-  color: #050505; text-decoration: none;
+  padding: 10px; border-radius: 12px;
+  background: var(--bg-elevated); font-size: 0.85rem; font-weight: 700;
+  color: var(--text-primary); text-decoration: none;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s ease;
 }
-.fb-profile-link-btn:hover { background: #d8dadf; }
+.fb-profile-link-btn:hover {
+  background: var(--bg-overlay);
+  border-color: var(--border-normal);
+  color: var(--gold);
+}
 
 .fb-profile-photo-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 8px;
 }
 .fb-profile-photo-grid--large {
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 8px;
 }
 @media (min-width: 640px) {
   .fb-profile-photo-grid--large { grid-template-columns: repeat(4, 1fr); }
 }
 .fb-profile-photo-cell {
-  aspect-ratio: 1; border-radius: 4px; overflow: hidden;
-  padding: 0; border: none; cursor: pointer; background: #e4e6eb;
+  aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+  padding: 0; border: none; cursor: pointer; background: var(--bg-elevated);
+  transition: transform 0.2s ease;
+}
+.fb-profile-photo-cell:hover {
+  transform: scale(1.04);
 }
 .fb-profile-photo-cell img {
   width: 100%; height: 100%; object-fit: cover;
 }
 
 .fb-profile-friends-sub {
-  font-size: 0.8rem; color: #65676b; margin-bottom: 12px;
+  font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;
+  font-weight: 500;
 }
 .fb-profile-friends-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 12px;
 }
 .fb-profile-friend {
   text-align: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+.fb-profile-friend:hover {
+  transform: translateY(-2px);
 }
 .fb-profile-friend img {
   width: 100%; aspect-ratio: 1; object-fit: cover;
-  border-radius: 6px; display: block;
+  border-radius: 12px; display: block;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 .fb-profile-friend span {
-  font-size: 0.72rem; font-weight: 600;
-  color: #050505; margin-top: 4px; display: block;
+  font-size: 0.75rem; font-weight: 700;
+  color: var(--text-secondary); margin-top: 6px; display: block;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.fb-profile-friend:hover span {
+  color: var(--gold);
 }
 
 .fb-profile-compose-top {
-  display: flex; align-items: center; gap: 10px;
-  padding-bottom: 12px;
+  display: flex; align-items: center; gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .fb-profile-compose-avatar {
-  width: 40px; height: 40px; border-radius: 50%;
+  width: 42px; height: 42px; border-radius: 50%;
   background: linear-gradient(135deg, var(--gold), #d4824b);
   display: flex; align-items: center; justify-content: center;
   font-weight: 800; color: #000; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .fb-profile-compose-input {
-  flex: 1; padding: 10px 16px;
+  flex: 1; padding: 12px 20px;
   border-radius: 999px;
-  background: #f0f2f5;
-  border: none; font-size: 0.9rem;
-  color: #050505; outline: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle); font-size: 0.9rem;
+  color: var(--text-primary); outline: none;
+  transition: all 0.2s ease;
 }
-.fb-profile-compose-input::placeholder { color: #65676b; }
+.fb-profile-compose-input:hover {
+  border-color: var(--border-normal);
+  background: var(--bg-overlay);
+}
+.fb-profile-compose-input:focus {
+  border-color: var(--gold);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+.fb-profile-compose-input::placeholder { color: var(--text-muted); }
 .fb-profile-compose-actions {
   display: flex; gap: 8px;
   padding-top: 12px;
-  border-top: 1px solid #e4e6eb;
+  border-top: 1px solid var(--border-subtle);
 }
 .fb-profile-compose-action {
   flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 8px; border-radius: 8px; border: none; background: transparent;
-  font-size: 0.85rem; font-weight: 600; color: #65676b;
+  padding: 8px; border-radius: 10px; border: none; background: transparent;
+  font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.fb-profile-compose-action:hover { background: #f0f2f5; }
+.fb-profile-compose-action:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
 
 .fb-profile-post-head {
   display: flex; justify-content: space-between; align-items: flex-start;
   margin-bottom: 12px;
 }
 .fb-profile-post-author {
-  display: flex; gap: 10px; align-items: center;
+  display: flex; gap: 12px; align-items: center;
 }
 .fb-profile-post-name {
-  font-size: 0.9rem; font-weight: 700; color: #050505;
+  font-size: 0.95rem; font-weight: 700; color: var(--text-primary);
 }
 .fb-profile-post-time {
-  font-size: 0.75rem; color: #65676b;
+  font-size: 0.75rem; color: var(--text-muted);
 }
 .fb-profile-post-more {
-  padding: 6px; border-radius: 50%; border: none; background: transparent;
-  color: #65676b; cursor: pointer;
+  padding: 8px; border-radius: 50%; border: none; background: transparent;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.2s ease;
 }
-.fb-profile-post-more:hover { background: #f0f2f5; }
+.fb-profile-post-more:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
 .fb-profile-post-content {
-  font-size: 0.95rem; color: #050505; line-height: 1.4;
+  font-size: 0.95rem; color: var(--text-primary); line-height: 1.5;
   margin-bottom: 12px; white-space: pre-wrap;
 }
 .fb-profile-post-image {
-  border-radius: 0; margin: 0 -16px 12px;
+  border-radius: 12px; margin: 0 0 12px;
   max-height: 480px; object-fit: cover;
+  width: 100%;
 }
 .fb-profile-post-gallery {
-  display: grid; gap: 2px; margin: 0 -16px 12px;
+  display: grid; gap: 8px; margin: 0 0 12px;
 }
 .fb-profile-post-gallery--2 { grid-template-columns: 1fr 1fr; }
 .fb-profile-post-gallery img {
-  width: 100%; aspect-ratio: 1; object-fit: cover;
+  width: 100%; aspect-ratio: 1.5; object-fit: cover;
+  border-radius: 12px;
 }
 .fb-profile-post-stats {
   display: flex; justify-content: space-between;
-  padding: 10px 0; font-size: 0.8rem; color: #65676b;
-  border-bottom: 1px solid #e4e6eb;
+  padding: 10px 0; font-size: 0.8rem; color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  font-weight: 500;
 }
 .fb-profile-post-actions {
-  display: flex; padding-top: 4px;
+  display: flex; padding-top: 6px;
+  gap: 8px;
 }
 .fb-profile-post-actions button {
   flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 8px; border: none; background: transparent;
-  font-size: 0.85rem; font-weight: 600; color: #65676b;
-  border-radius: 4px; cursor: pointer;
+  padding: 10px; border: none; background: transparent;
+  font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);
+  border-radius: 10px; cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.fb-profile-post-actions button:hover { background: #f0f2f5; }
+.fb-profile-post-actions button:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}ofile-post-actions button:hover { background: #f0f2f5; }
 
 @layer utilities {
   .text-balance   { text-wrap: balance; }
@@ -2239,6 +2358,7 @@ body::before {
   .truncate-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -2246,6 +2366,7 @@ body::before {
   .truncate-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -2966,7 +3087,7 @@ body::before {
   border-color: var(--gold);
   box-shadow: 0 0 0 2px var(--gold-glow);
 }
-.quick-compose-section { }
+
 .quick-compose-label {
   display: flex;
   align-items: center;
@@ -3896,6 +4017,7 @@ body::before {
   color: #475569;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -4750,4 +4872,51 @@ body::before {
 }
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out both;
+}
+
+/* Glassmorphic Leaflet Popups */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 16px !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-glass) !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* Custom Marker Cluster styles */
+.marker-cluster-small {
+  background-color: rgba(212, 175, 55, 0.4) !important;
+}
+.marker-cluster-small div {
+  background-color: rgba(212, 175, 55, 0.8) !important;
+  color: black !important;
+  font-weight: 800 !important;
+}
+.marker-cluster-medium {
+  background-color: rgba(245, 158, 11, 0.4) !important;
+}
+.marker-cluster-medium div {
+  background-color: rgba(245, 158, 11, 0.8) !important;
+  color: black !important;
+  font-weight: 800 !important;
+}
+.marker-cluster-large {
+  background-color: rgba(239, 68, 68, 0.4) !important;
+}
+.marker-cluster-large div {
+  background-color: rgba(239, 68, 68, 0.8) !important;
+  color: white !important;
+  font-weight: 800 !important;
 }

@@ -1,0 +1,22 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bãi Sau Vũng Tàu Bà Rịa Vũng Tàu",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "New Tokyo massage Hotel Vũng Tàu, 65, Thùy Vân, Bãi Sau, Vũng Tàu, Thành phố Hồ Chí Minh, 78000, Việt Nam",
+      "latitude": 10.3319385,
+      "longitude": 107.088859,
+      "class": "shop",
+      "type": "massage"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Chung cư Vũng Tàu Melody, Võ Thị Sáu, Khu phố 7, Vũng Tàu, Thành phố Hồ Chí Minh, 78207, Việt Nam",
+      "latitude": 10.3377331,
+      "longitude": 107.0861695,
+      "class": "building",
+      "type": "apartments"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Hồ Hoàn Kiếm Hà Nội",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Hồ Hoàn Kiếm, Phường Hoàn Kiếm, Thành phố Hà Nội, 11024, Việt Nam",
+      "latitude": 21.0288313,
+      "longitude": 105.8525357,
+      "class": "water",
+      "type": "lake"
+    }
+  ]
+}

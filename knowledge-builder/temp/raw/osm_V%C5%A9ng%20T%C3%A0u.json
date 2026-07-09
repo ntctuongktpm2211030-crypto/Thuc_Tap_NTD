@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Vũng Tàu",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Vũng Tàu, Thành phố Hồ Chí Minh, 78207, Việt Nam",
+      "latitude": 10.3478994,
+      "longitude": 107.0744665,
+      "class": "place",
+      "type": "city"
+    }
+  ]
+}

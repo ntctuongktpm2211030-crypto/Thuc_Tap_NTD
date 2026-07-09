@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Phở bò Hà Nội",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Phở bò, 46, Phố Trần Nhân Tông, Phường Hai Bà Trưng, Thành phố Hà Nội, 11626, Việt Nam",
+      "latitude": 21.017111,
+      "longitude": 105.8487503,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Phở bò, Phố Thái Thịnh, Thịnh Quang, Phường Đống Đa, Thành phố Hà Nội, 11527, Việt Nam",
+      "latitude": 21.0117973,
+      "longitude": 105.8174393,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Pho Bo, Phố Hàng Da, Khu phố cổ, Phường Hoàn Kiếm, Thành phố Hà Nội, 11024, Việt Nam",
+      "latitude": 21.0309929,
+      "longitude": 105.8465291,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

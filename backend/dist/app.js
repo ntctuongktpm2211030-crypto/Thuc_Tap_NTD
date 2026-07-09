@@ -14,7 +14,10 @@ const map_router_1 = __importDefault(require("./modules/map/map.router"));
 const recommendations_router_1 = __importDefault(require("./modules/recommendations/recommendations.router"));
 const social_router_1 = __importDefault(require("./modules/social/social.router"));
 const analytics_router_1 = __importDefault(require("./modules/analytics/analytics.router"));
-const destinations_router_1 = __importDefault(require("./modules/destinations/destinations.router"));
+const chatbot_router_1 = __importDefault(require("./modules/chatbot/routes/chatbot.router"));
+const itinerary_router_1 = __importDefault(require("./modules/itinerary/routes/itinerary.router"));
+const recommendation_router_1 = __importDefault(require("./modules/recommendations/routes/recommendation.router"));
+const travel_history_router_1 = __importDefault(require("./modules/travel-history/routes/travel-history.router"));
 const app = (0, express_1.default)();
 // ─── Global Middleware ───
 app.use((0, cors_1.default)({
@@ -48,8 +51,14 @@ app.use('/api/v1/recommendations', recommendations_router_1.default);
 app.use('/api/v1/social', social_router_1.default);
 // Analytics: platform stats, AI usage, GIS heatmap, trip trends
 app.use('/api/v1/analytics', analytics_router_1.default);
-// Destination hubs: /destination/:slug knowledge pages
-app.use('/api/v1/destinations', destinations_router_1.default);
+// Chatbot: Core AI Conversation + AI Memory
+app.use('/api/v1/chatbot', chatbot_router_1.default);
+// Itinerary: Itineraries + Days + Activities
+app.use('/api/v1/itineraries', itinerary_router_1.default);
+// Recommendations (User Custom): Add + Update + Delete + List
+app.use('/api/v1/user-recommendations', recommendation_router_1.default);
+// Travel History: Visited Locations + Dates + Ratings + Costs
+app.use('/api/v1/travel-history', travel_history_router_1.default);
 // ─── 404 Handler ─────────────────────────────────────────
 app.use((_req, res) => {
     res.status(404).json({
