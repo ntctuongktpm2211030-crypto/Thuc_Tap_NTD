@@ -100,7 +100,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { destination, durationDays, dailyBudget, interests, travelStyle } = req.body;
+    const { destination, durationDays, dailyBudget, currency, interests, travelStyle } = req.body;
 
     if (!destination || !durationDays) {
       return res.status(400).json({ error: 'destination and durationDays are required.' });
@@ -111,6 +111,7 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
       destination,
       durationDays: Number(durationDays),
       dailyBudget: Number(dailyBudget) || 100,
+      currency: currency || 'USD',
       interests: interests || [],
       travelStyle: travelStyle || 'Adventure',
     });

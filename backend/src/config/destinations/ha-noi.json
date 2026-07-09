@@ -1,0 +1,56 @@
+[
+  {
+    "province": "Hà Nội",
+    "title": "Hồ Hoàn Kiếm",
+    "content": "Hồ nước ngọt tự nhiên nằm ở trung tâm thủ đô Hà Nội, check-in đền Ngọc Sơn.",
+    "category": "attraction",
+    "latitude": 21.028511,
+    "longitude": 105.804817,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Hà Nội",
+    "title": "Lăng Chủ tịch Hồ Chí Minh",
+    "content": "Nơi đặt di hài của Chủ tịch Hồ Chí Minh vĩ đại.",
+    "category": "attraction",
+    "latitude": 21.0368,
+    "longitude": 105.8346,
+    "costEstimate": 0
+  },
+  {
+    "province": "Hà Nội",
+    "title": "Văn Miếu - Quốc Tử Giám",
+    "content": "Trường đại học đầu tiên của Việt Nam, tôn vinh truyền thống hiếu học.",
+    "category": "attraction",
+    "latitude": 21.0293,
+    "longitude": 105.8359,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Hà Nội",
+    "title": "Chùa Một Cột",
+    "content": "Ngôi chùa có kiến trúc độc đáo tựa như một đóa sen mọc lên từ mặt nước.",
+    "category": "attraction",
+    "latitude": 21.0358,
+    "longitude": 105.8331,
+    "costEstimate": 0
+  },
+  {
+    "province": "Hà Nội",
+    "title": "Phở bò Gia Truyền Bát Đàn",
+    "content": "Quán phở lâu đời chuẩn vị phở bò truyền thống Hà Nội.",
+    "category": "restaurant",
+    "latitude": 21.0321,
+    "longitude": 105.8475,
+    "costEstimate": 55000
+  },
+  {
+    "province": "Hà Nội",
+    "title": "Bún chả Hương Liên (Bun Cha Obama)",
+    "content": "Quán bún chả nổi tiếng từng được Tổng thống Obama ghé thăm.",
+    "category": "restaurant",
+    "latitude": 21.0185,
+    "longitude": 105.8542,
+    "costEstimate": 70000
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "province": "Hà Giang",
+    "title": "Cổng trời Quản Bạ",
+    "content": "Điểm dừng chân ngắm cảnh đèo mây và Núi Đôi Cô Tiên tròn trịa.",
+    "category": "attraction",
+    "latitude": 23.0163,
+    "longitude": 104.9833,
+    "costEstimate": 0
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Cột cờ Quốc gia Lũng Cú",
+    "content": "Điểm cực Bắc thiêng liêng của Việt Nam với lá cờ rộng 54m2.",
+    "category": "attraction",
+    "latitude": 23.3792,
+    "longitude": 105.3156,
+    "costEstimate": 25000
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Đèo Mã Pí Lèng",
+    "content": "Một trong tứ đại đỉnh đèo Việt Nam, ngắm hẻm vực Tu Sản và sông Nho Quế.",
+    "category": "attraction",
+    "latitude": 22.8021,
+    "longitude": 105.4182,
+    "costEstimate": 0
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Dinh thự Vua Mèo (Nhà Vương)",
+    "content": "Công trình kiến trúc độc đáo của vua Mèo Vương Chính Đức xây bằng đá và gỗ thông đá.",
+    "category": "attraction",
+    "latitude": 23.2625,
+    "longitude": 105.2583,
+    "costEstimate": 20000
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Phố cổ Đồng Văn",
+    "content": "Khu phố cổ trình tường mái ngói âm dương thanh bình giữa cao nguyên đá.",
+    "category": "attraction",
+    "latitude": 23.2789,
+    "longitude": 105.3582,
+    "costEstimate": 0
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Bánh cuốn nước xương Bà Hà",
+    "content": "Bánh cuốn nóng hổi ăn kèm bát nước ninh xương đậm đà ngọt lịm.",
+    "category": "restaurant",
+    "latitude": 23.2792,
+    "longitude": 105.3591,
+    "costEstimate": 40000
+  },
+  {
+    "province": "Hà Giang",
+    "title": "Quán ăn lẩu gà đen Đồng Văn",
+    "content": "Lẩu gà đen đặc sản thịt chắc thơm ngon ăn kèm rau cải mèo vùng cao.",
+    "category": "restaurant",
+    "latitude": 23.2785,
+    "longitude": 105.3579,
+    "costEstimate": 120000
+  }
+]

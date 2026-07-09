@@ -27,6 +27,7 @@ export interface TravelPreferences {
 }
 export interface AIGeneratePayload {
   destination: string; durationDays: number; dailyBudget: number;
+  currency?: string;
   interests: string[]; travelStyle: string;
 }
 export interface Waypoint { id: string; name: string; latitude: number; longitude: number; }

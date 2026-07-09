@@ -1,0 +1,74 @@
+[
+  {
+    "province": "Cần Thơ",
+    "title": "Bến Ninh Kiều",
+    "content": "Biểu tượng của Tây Đô, công viên ven sông thoáng mát ngắm sông Hậu.",
+    "category": "attraction",
+    "latitude": 10.033333,
+    "longitude": 105.783333,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chợ nổi Cái Răng",
+    "content": "Chợ nổi bán nông sản nhộn nhịp đặc trưng của miền Tây sông nước lúc bình minh.",
+    "category": "attraction",
+    "latitude": 10.0055,
+    "longitude": 105.7461,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu du lịch sinh thái Cồn Sơn",
+    "content": "Trải nghiệm xem cá lóc bay, dạo vườn trái cây và làm bánh dân gian.",
+    "category": "attraction",
+    "latitude": 10.0782,
+    "longitude": 105.7333,
+    "costEstimate": 50000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Vườn cò Bằng Lăng",
+    "content": "Sân chim tự nhiên lớn, ngắm hàng ngàn cánh cò bay lượn về tổ.",
+    "category": "attraction",
+    "latitude": 10.2524,
+    "longitude": 105.5182,
+    "costEstimate": 20000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà cổ Bình Thủy",
+    "content": "Ngôi nhà cổ kiến trúc Pháp - Hoa độc đáo tuổi đời hơn 100 năm.",
+    "category": "attraction",
+    "latitude": 10.0758,
+    "longitude": 105.7292,
+    "costEstimate": 20000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Bánh cống Cô Út Cần Thơ",
+    "content": "Bánh cống chiên giòn rụm với đậu xanh và tôm, ăn kèm rau sống.",
+    "category": "restaurant",
+    "latitude": 10.0345,
+    "longitude": 105.7812,
+    "costEstimate": 50000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lò hủ tiếu truyền thống Quê Tôi",
+    "content": "Thử món pizza hủ tiếu chiên giòn rụm độc đáo.",
+    "category": "restaurant",
+    "latitude": 10.0092,
+    "longitude": 105.7382,
+    "costEstimate": 70000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Lẩu mắm Dạ Lý",
+    "content": "Quán lẩu mắm lâu đời, đậm đà ăn kèm hàng chục loại rau đồng nội.",
+    "category": "restaurant",
+    "latitude": 10.0381,
+    "longitude": 105.7892,
+    "costEstimate": 150000
+  }
+]

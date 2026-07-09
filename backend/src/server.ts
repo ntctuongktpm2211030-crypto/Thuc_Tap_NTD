@@ -1,6 +1,23 @@
 import http from 'http';
 import { Server } from 'socket.io';
 import app from './app';
+import fs from 'fs';
+import path from 'path';
+
+// Redirect console logs to a file for headless debugging
+const logFile = path.resolve(__dirname, '../backend_console.log');
+const originalWrite = process.stdout.write;
+const originalErrWrite = process.stderr.write;
+
+process.stdout.write = function(chunk: any, encoding?: any, callback?: any): boolean {
+  try { fs.appendFileSync(logFile, chunk); } catch(e) {}
+  return originalWrite.call(process.stdout, chunk, encoding, callback);
+};
+process.stderr.write = function(chunk: any, encoding?: any, callback?: any): boolean {
+  try { fs.appendFileSync(logFile, chunk); } catch(e) {}
+  return originalErrWrite.call(process.stderr, chunk, encoding, callback);
+};
+
 
 const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
@@ -49,15 +66,19 @@ io.on('connection', (socket) => {
 });
 
 import { autoSeed } from './config/seed';
+import { runGeocodingPipeline } from './scripts/extract-and-geocode';
 
-// Call auto-seed on startup
-autoSeed().then(() => {
-  server.listen(PORT, () => {
-    console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+// Call geocoding pipeline and auto-seed on startup
+runGeocodingPipeline()
+  .then(() => autoSeed())
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to start server components:', err);
+    server.listen(PORT, () => {
+      console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+    });
   });
-}).catch(err => {
-  console.error('Failed to auto-seed database:', err);
-  server.listen(PORT, () => {
-    console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
-  });
-});

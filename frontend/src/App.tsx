@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { TRIP_ACTIVITY_ICONS } from './config/modernIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import LeafletMap, { MapLocation } from './components/Map/LeafletMap';
+import MapLibreMap, { MapLocation } from './components/Map/MapLibreMap';
 import { logout } from './store/authSlice';
 import { tripsService, socialService, mapService, Waypoint } from './services/smartTravel.service';
 import type { RootState, AppDispatch } from './store';
@@ -404,7 +404,7 @@ const MapDashboard = () => {
         )}
 
         <div className="h-[520px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-subtle)]">
-          <LeafletMap
+          <MapLibreMap
             center={selectedCenter}
             zoom={13}
             locations={locations}
@@ -472,9 +472,11 @@ const MapDashboard = () => {
 // 2. AI TRIP PLANNER
 // ──────────────────────────────────────────────────────────
 const TripPlanner = () => {
+  const { lang, t } = useLang();
   const [destination, setDestination] = useState('Ha Giang');
-  const [days, setDays] = useState(3);
-  const [budget, setBudget] = useState(150);
+  const [days, setDays] = useState<number | ''>(3);
+  const [budget, setBudget] = useState<number | ''>(150);
+  const [currency, setCurrency] = useState<'USD' | 'VND'>('USD');
   const [style, setStyle] = useState('Adventure');
   const [interests, setInterests] = useState<string[]>(['nature', 'culture']);
   const [loading, setLoading] = useState(false);
@@ -486,24 +488,33 @@ const TripPlanner = () => {
     setInterests(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val]);
 
   const handleGenerate = async () => {
+    if (!destination || days === '' || budget === '') return;
     setLoading(true); setOptimized(false); setAiError(null);
     try {
-      const result = await tripsService.aiGenerate({ destination, durationDays: days, dailyBudget: budget, interests, travelStyle: style });
+      const result = await tripsService.aiGenerate({
+        destination,
+        durationDays: Number(days),
+        dailyBudget: Number(budget),
+        currency,
+        interests,
+        travelStyle: style
+      });
       setItinerary(result);
     } catch {
-      setAiError('AI endpoint unavailable — showing sample itinerary.');
+      const isVi = lang === 'vi';
+      setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
       setItinerary({
-        destination, totalEstimatedCost: budget * days * 0.75, currency: 'USD',
+        destination, totalEstimatedCost: Number(budget) * Number(days) * 0.75, currency,
         days: [
-          { dayIndex: 1, dateIndex: 'Day 1: Arrival & First Impressions', activities: [
-            { timeSlot: '09:00 - 11:00', activityName: `${destination} Welcome Walk`, estimatedCost: 0, category: 'attraction', notes: 'Settle in, explore the town center' },
-            { timeSlot: '12:00 - 13:30', activityName: 'Local Street Food Lunch', estimatedCost: 8, category: 'restaurant', notes: 'Try local specialties at the market' },
-            { timeSlot: '15:00 - 18:00', activityName: 'Main Landmark Visit', estimatedCost: 20, category: 'attraction', notes: 'Iconic viewpoint or heritage site' },
+          { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan nhẹ nhàng' : 'Day 1: Arrival & First Impressions', activities: [
+            { timeSlot: '09:00 - 11:00', activityName: isVi ? `Đi dạo chào đón tại ${destination}` : `${destination} Welcome Walk`, estimatedCost: Number(budget) * 0.15, category: 'attraction', notes: isVi ? 'Ổn định chỗ ở, đi dạo khám phá trung tâm' : 'Settle in, explore the town center' },
+            { timeSlot: '12:00 - 13:30', activityName: isVi ? 'Ăn trưa ẩm thực đường phố' : 'Local Street Food Lunch', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thử các món ăn đặc sản tại chợ địa phương' : 'Try local specialties at the market' },
+            { timeSlot: '15:00 - 18:00', activityName: isVi ? 'Tham quan danh thắng chính' : 'Main Landmark Visit', estimatedCost: Number(budget) * 0.35, category: 'attraction', notes: isVi ? 'Điểm ngắm cảnh biểu tượng hoặc di sản' : 'Iconic viewpoint or heritage site' },
           ]},
-          { dayIndex: 2, dateIndex: 'Day 2: Cultural Deep Dive', activities: [
-            { timeSlot: '08:00 - 09:30', activityName: 'Morning Heritage Walk', estimatedCost: 15, category: 'attraction', notes: 'Guided tour of historic quarter' },
-            { timeSlot: '12:30 - 14:00', activityName: 'Cooking Class Lunch', estimatedCost: 35, category: 'restaurant', notes: 'Learn to cook traditional dishes' },
-            { timeSlot: '16:00 - 18:00', activityName: 'Sunset Viewpoint', estimatedCost: 5, category: 'attraction', notes: 'Best photo spot in the area' },
+          { dayIndex: 2, dateIndex: isVi ? 'Ngày 2: Trải nghiệm văn hóa sâu sắc' : 'Day 2: Cultural Deep Dive', activities: [
+            { timeSlot: '08:00 - 09:30', activityName: isVi ? 'Đi bộ tìm hiểu di sản buổi sáng' : 'Morning Heritage Walk', estimatedCost: Number(budget) * 0.2, category: 'attraction', notes: isVi ? 'Tour có hướng dẫn viên tại khu lịch sử' : 'Guided tour of historic quarter' },
+            { timeSlot: '12:30 - 14:00', activityName: isVi ? 'Ăn trưa học nấu ăn' : 'Cooking Class Lunch', estimatedCost: Number(budget) * 0.35, category: 'restaurant', notes: isVi ? 'Học cách nấu các món ăn truyền thống' : 'Learn to cook traditional dishes' },
+            { timeSlot: '16:00 - 18:00', activityName: isVi ? 'Ngắm hoàng hôn' : 'Sunset Viewpoint', estimatedCost: Number(budget) * 0.1, category: 'attraction', notes: isVi ? 'Điểm chụp ảnh đẹp nhất trong vùng' : 'Best photo spot in the area' },
           ]},
         ]
       });
@@ -551,39 +562,99 @@ const TripPlanner = () => {
 
   const getCategoryIcon = (category: string) => TRIP_ACTIVITY_ICONS[category] ?? MapPin;
 
+  const formatCost = (amount: any) => {
+    if (amount === undefined || amount === null) {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const strVal = String(amount).trim().toLowerCase();
+    if (strVal === 'free' || strVal === 'mien phi' || strVal === 'miễn phí' || strVal === '0' || strVal === '') {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const num = Number(amount);
+    if (isNaN(num)) {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const curr = itinerary?.currency || currency;
+    if (curr === 'VND') {
+      return `${Math.round(num).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US')} đ`;
+    }
+    return `$${Math.round(num)}`;
+  };
+
+  const styleOptions = [
+    { value: 'Adventure', label: lang === 'vi' ? 'Phiêu lưu' : 'Adventure' },
+    { value: 'Cultural Exploration', label: lang === 'vi' ? 'Khám phá văn hoá' : 'Cultural Exploration' },
+    { value: 'Leisure & Food', label: lang === 'vi' ? 'Nghỉ dưỡng & Ẩm thực' : 'Leisure & Food' },
+    { value: 'Luxury Wellness', label: lang === 'vi' ? 'Sang trọng' : 'Luxury Wellness' },
+    { value: 'Budget Backpacker', label: lang === 'vi' ? 'Tiết kiệm' : 'Budget Backpacker' },
+  ];
+
   return (
     <div className="p-5 max-w-screen-xl mx-auto space-y-6">
       <div>
-        <p className="font-ui text-xs font-bold uppercase tracking-widest text-gold mb-2">AI-Powered Planning</p>
-        <h1 className="headline-xl">Smart Travel Planner</h1>
-        <p className="text-[var(--text-secondary)] mt-2">Generate personalized itineraries optimized with TSP routing & GPT-4o intelligence.</p>
+        <p className="font-ui text-xs font-bold uppercase tracking-widest text-gold mb-2">{lang === 'vi' ? 'Lập kế hoạch bằng AI' : 'AI-Powered Planning'}</p>
+        <h1 className="headline-xl">{t('planner.heading')}</h1>
+        <p className="text-[var(--text-secondary)] mt-2">{t('planner.subtitle')}</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="surface-elevated p-6 space-y-5 h-fit">
-          <h3 className="font-ui text-sm font-bold text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-3">Itinerary Parameters</h3>
+          <h3 className="font-ui text-sm font-bold text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-3">
+            {lang === 'vi' ? 'Thông số hành trình' : 'Itinerary Parameters'}
+          </h3>
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Destination</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.destination')}</label>
             <input type="text" value={destination} onChange={e => setDestination(e.target.value)}
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {[['Days', days, setDays, 1, 15], ['Budget/Day ($)', budget, setBudget, 10, 2000]].map(([label, val, setter, min, max]: any) => (
-              <div key={label} className="space-y-1.5">
-                <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{label}</label>
-                <input type="number" value={val} onChange={e => setter(Number(e.target.value))} min={min} max={max}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.days')}</label>
+              <input type="number" value={days === '' ? '' : days} onChange={e => { const val = e.target.value; setDays(val === '' ? '' : Number(val)); }} min={1} max={15}
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
+                {lang === 'vi' ? `Ngân sách/ngày` : `Budget/Day`}
+              </label>
+              <div className="relative flex items-center">
+                <input 
+                  type="number" 
+                  value={budget === '' ? '' : budget} 
+                  onChange={e => {
+                    const val = e.target.value;
+                    setBudget(val === '' ? '' : Number(val));
+                  }} 
+                  min={1} 
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg pl-3 pr-20 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" 
+                />
+                <div className="absolute right-1.5 flex gap-0.5 bg-slate-900 border border-slate-700/60 p-0.5 rounded-md">
+                  <button 
+                    type="button"
+                    onClick={() => setCurrency('USD')}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${currency === 'USD' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 hover:text-white'}`}
+                  >
+                    USD
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setCurrency('VND')}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${currency === 'VND' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 hover:text-white'}`}
+                  >
+                    VND
+                  </button>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Travel Style</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.style')}</label>
             <select value={style} onChange={e => setStyle(e.target.value)}
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]">
-              {['Adventure', 'Cultural Exploration', 'Leisure & Food', 'Luxury Wellness', 'Budget Backpacker'].map(s => <option key={s}>{s}</option>)}
+              {styleOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
           </div>
           <div className="space-y-2">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Interests</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.interests')}</label>
             <div className="flex flex-wrap gap-2">
               {['nature', 'culture', 'food', 'hiking', 'photography', 'history'].map(tag => (
                 <button key={tag} type="button" onClick={() => toggleInterest(tag)}
@@ -594,7 +665,7 @@ const TripPlanner = () => {
             </div>
           </div>
           <button onClick={handleGenerate} disabled={loading} className="btn-gold w-full py-3 text-sm disabled:opacity-60">
-            {loading ? <><Loader2 size={14} className="animate-spin inline" /> Consulting AI...</> : <><Bot size={14} className="inline" /> Generate Smart Itinerary</>}
+            {loading ? <><Loader2 size={14} className="animate-spin inline mr-1.5" /> {t('planner.generating')}</> : <><Bot size={14} className="inline mr-1.5" /> {t('planner.generate')}</>}
           </button>
         </div>
 
@@ -604,19 +675,19 @@ const TripPlanner = () => {
             <div className="space-y-6">
               <div className="surface-elevated p-5 flex justify-between items-center">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Predicted Trip Cost</p>
-                  <span className="text-3xl font-bold text-gold">${Math.round(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
-                  <span className="text-sm text-[var(--text-muted)] ml-2">USD ±10%</span>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('planner.cost')}</p>
+                  <span className="text-3xl font-bold text-gold">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
+                  <span className="text-sm text-[var(--text-muted)] ml-2">({itinerary.currency || currency} ±10%)</span>
                 </div>
                 <button onClick={runRouteOptimization}
                   className={`px-5 py-2.5 text-xs font-bold rounded-lg border transition-all ${optimized ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'btn-gold border-transparent'}`}>
-                  {optimized ? <><Check size={12} className="inline" /> TSP Optimized</> : <><Zap size={12} className="inline" /> Optimize Route</>}
+                  {optimized ? <><Check size={12} className="inline mr-1" /> {t('planner.optimized')}</> : <><Zap size={12} className="inline mr-1" /> {t('planner.optimize')}</>}
                 </button>
               </div>
               {itinerary.days.map((d: any) => (
                 <div key={d.dayIndex || d.day} className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="badge-category">Day {d.dayIndex || d.day}</span>
+                    <span className="badge-category">{lang === 'vi' ? 'Ngày' : 'Day'} {d.dayIndex || d.day}</span>
                     <h3 className="headline-md">{d.dateIndex || d.title}</h3>
                   </div>
                   <div className="relative border-l-2 border-[var(--border-subtle)] ml-3 pl-6 space-y-3">
@@ -632,7 +703,7 @@ const TripPlanner = () => {
                                 {act.activityName || act.name}
                               </h4>
                             </div>
-                            <span className="text-sm font-bold text-gold">${act.estimatedCost || act.cost}</span>
+                            <span className="text-sm font-bold text-gold">{formatCost(act.estimatedCost || act.cost)}</span>
                           </div>
                           <p className="text-xs text-[var(--text-secondary)]">{act.notes || act.note}</p>
                           <span className="badge-category-outline text-[9px] uppercase tracking-wider px-2 py-0.5 rounded">{act.category}</span>
@@ -646,8 +717,8 @@ const TripPlanner = () => {
           ) : (
             <div className="surface-elevated p-16 text-center space-y-4">
               <Plane size={48} className="mx-auto text-[var(--gold)] opacity-60" strokeWidth={1.5} />
-              <h3 className="headline-md">Your Itinerary Awaits</h3>
-              <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">Configure your trip parameters and let our AI craft a personalized journey optimized for your style and budget.</p>
+              <h3 className="headline-md">{t('planner.noItinerary')}</h3>
+              <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">{t('planner.noItinerarySub')}</p>
             </div>
           )}
         </div>

@@ -105,6 +105,8 @@ export const TRIP_ACTIVITY_ICONS: Record<string, LucideIcon> = {
   attraction: Landmark,
   restaurant: Utensils,
   hotel: Hotel,
+  nature: Leaf,
+  festival: Flame,
 };
 
 export const JOURNEY_STEPS: { id: number; label: string; icon: LucideIcon }[] = [
