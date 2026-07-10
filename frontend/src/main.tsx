@@ -7,6 +7,10 @@ import { store } from './store';
 import App from './App';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LangProvider } from './contexts/LanguageContext';
+
+// Import Mapbox styles for geocoding and routes
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 import './index.css';
 
 const queryClient = new QueryClient({

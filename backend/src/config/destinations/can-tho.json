@@ -1,74 +1,767 @@
 [
   {
     "province": "Cần Thơ",
-    "title": "Bến Ninh Kiều",
-    "content": "Biểu tượng của Tây Đô, công viên ven sông thoáng mát ngắm sông Hậu.",
-    "category": "attraction",
-    "latitude": 10.033333,
-    "longitude": 105.783333,
-    "costEstimate": 0
-  },
-  {
-    "province": "Cần Thơ",
     "title": "Chợ nổi Cái Răng",
-    "content": "Chợ nổi bán nông sản nhộn nhịp đặc trưng của miền Tây sông nước lúc bình minh.",
+    "content": "Chợ nổi Cái Răng nằm trên sông Cái Răng, thuộc quận Cái Răng, cách trung tâm thành phố Cần Thơ khoảng 6 km. Đây là một trong những chợ nổi bán sỉ lớn và nổi tiếng nhất vùng đồng bằng sông Cửu Long, mang đậm nét văn hóa sông nước miệt vườn Nam Bộ. Chợ hoạt động từ tờ mờ sáng, sầm uất nhất là khoảng 5 đến 7 giờ sáng với hàng trăm ghe xuồng tụ họp giao thương nông sản. Điểm độc đáo tại đây là những cây 'bẹo' treo sản phẩm cần bán ở đầu ghe để người mua dễ nhận biết từ xa. Du khách đến đây có thể thuê tàu từ bến Ninh Kiều để trải nghiệm cảm giác lênh đênh trên sóng nước, thưởng thức bữa sáng với món hủ tiếu lắc, uống cà phê kho trên ghe và mua trái cây tươi ngon hái trực tiếp từ vườn. Thời điểm lý tưởng nhất để tham quan là vào mùa khô từ tháng 12 đến tháng 4 năm sau.",
     "category": "attraction",
-    "latitude": 10.0055,
-    "longitude": 105.7461,
-    "costEstimate": 80000
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
   },
   {
     "province": "Cần Thơ",
-    "title": "Khu du lịch sinh thái Cồn Sơn",
-    "content": "Trải nghiệm xem cá lóc bay, dạo vườn trái cây và làm bánh dân gian.",
+    "title": "Bến Ninh Kiều",
+    "content": "Bến Ninh Kiều, hiện nay còn được gọi là Công viên Ninh Kiều, tọa lạc ngay ngã ba sông Hậu và sông Cần Thơ, thuộc địa bàn phường Tân An, quận Ninh Kiều. Đây là biểu tượng du lịch lâu đời và là niềm tự hào của người dân đất Tây Đô. Công viên bến Ninh Kiều có diện tích rộng lớn, được quy hoạch khang trang với hàng cây xanh rợp bóng mát, bờ kè kiên cố uốn lượn ven sông và nổi bật là bức tượng đài Chủ tịch Hồ Chí Minh bằng đồng uy nghi cao 7,2 mét. Từ bến Ninh Kiều, du khách có thể phóng tầm mắt ngắm nhìn cầu Cần Thơ hùng vĩ, đón làn gió mát rượi từ sông Hậu buông xuống. Về đêm, toàn bộ khu vực bến Ninh Kiều lung linh ánh đèn chiếu sáng, tấp nập du khách dạo bộ, tham quan chợ đêm và trải nghiệm ăn tối du thuyền sang trọng trên sông.",
     "category": "attraction",
-    "latitude": 10.0782,
-    "longitude": 105.7333,
-    "costEstimate": 50000
-  },
-  {
-    "province": "Cần Thơ",
-    "title": "Vườn cò Bằng Lăng",
-    "content": "Sân chim tự nhiên lớn, ngắm hàng ngàn cánh cò bay lượn về tổ.",
-    "category": "attraction",
-    "latitude": 10.2524,
-    "longitude": 105.5182,
-    "costEstimate": 20000
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
   },
   {
     "province": "Cần Thơ",
     "title": "Nhà cổ Bình Thủy",
-    "content": "Ngôi nhà cổ kiến trúc Pháp - Hoa độc đáo tuổi đời hơn 100 năm.",
+    "content": "Nhà cổ Bình Thủy nằm trên đường Bùi Hữu Nghĩa, thuộc phường Bình Thủy, quận Bình Thủy, thành phố Cần Thơ. Được xây dựng từ năm 1870 bởi gia tộc họ Dương, ngôi nhà này là một trong số ít những dinh thự cổ còn nguyên vẹn mang kiến trúc giao thoa Đông - Tây độc đáo bậc nhất Nam Bộ. Ngôi nhà có năm gian hai chái, nền cao bó vỉa bằng đá xanh nguyên khối, mái lợp ngói âm dương rêu phong cổ kính. Kiến trúc bên ngoài mang phong cách cung điện Pháp tân cổ điển với các ô cửa vòm thanh lịch, các họa tiết trang trí phù điêu bằng xi măng tinh xảo. Tuy nhiên, không gian bên trong nhà lại mang đậm nét văn hóa tâm linh truyền thống Việt Nam với gian thờ uy nghiêm sơn son thếp vàng, hệ thống hoành phi câu đối chạm khắc gỗ tinh vi cổ xưa. Nơi đây từng được chọn làm bối cảnh chính cho nhiều bộ phim nổi tiếng quốc tế như Người tình (L'Amant).",
     "category": "attraction",
-    "latitude": 10.0758,
-    "longitude": 105.7292,
-    "costEstimate": 20000
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
   },
   {
     "province": "Cần Thơ",
-    "title": "Bánh cống Cô Út Cần Thơ",
-    "content": "Bánh cống chiên giòn rụm với đậu xanh và tôm, ăn kèm rau sống.",
-    "category": "restaurant",
-    "latitude": 10.0345,
-    "longitude": 105.7812,
-    "costEstimate": 50000
+    "title": "Chùa Ông Cần Thơ",
+    "content": "Chùa Ông, tên chính thức là Quảng Triệu Hội Quán, tọa lạc tại đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều, ngay đối diện bờ sông bến Ninh Kiều sầm uất. Ngôi chùa được cộng đồng người gốc Hoa bang Quảng Đông xây dựng từ thế kỷ 19, là di tích lịch sử kiến trúc nghệ thuật cấp quốc gia mang đậm phong cách kiến trúc đền miếu Trung Hoa nguyên bản. Ngôi chùa nổi bật ngay từ xa với những mảng tường gạch đỏ cam rực rỡ, mái ngói âm dương có gắn nhiều bức tượng gốm sứ chạm khắc đề tài tiên nhân, rồng phượng tinh vi. Bên trong chánh điện trang nghiêm bao phủ bởi khói hương nghi ngút từ những vòng nhang lớn treo trên trần nhà, thờ các vị thần tiêu biểu như Quan Thánh Đế Quân và Thiên Hậu Thánh Mẫu. Chùa mở cửa đón khách tham quan dâng hương lễ Phật miễn phí quanh năm, lưu ý giữ trang phục lịch sự tôn nghiêm.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
   },
   {
     "province": "Cần Thơ",
-    "title": "Lò hủ tiếu truyền thống Quê Tôi",
-    "content": "Thử món pizza hủ tiếu chiên giòn rụm độc đáo.",
-    "category": "restaurant",
-    "latitude": 10.0092,
-    "longitude": 105.7382,
-    "costEstimate": 70000
+    "title": "Thiền viện Trúc Lâm Phương Đông",
+    "content": "Thiền viện Trúc Lâm Phương Đông tọa lạc tại ấp Nhơn Mỹ, xã Mỹ Khánh, huyện Phong Điền, cách trung tâm thành phố Cần Thơ khoảng 15 km. Đây là một trong những công trình tôn giáo thuộc hệ phái Phật giáo Trúc Lâm lớn nhất vùng Tây Nam Bộ, sở hữu khuôn viên rộng hơn 4 ha tĩnh mịch xanh mát. Kiến trúc thiền viện mô phỏng theo phong cách chùa cổ thời Lý - Trần truyền thống với mái ngói cong lợp rêu phong, các kết cấu khung cột bằng gỗ lim vững chãi chịu lực vững vàng. Quần thể công viên tâm linh bao gồm chánh điện trang nghiêm, tháp chuông uy nghi thờ đại hồng chung đúc đồng, lầu trống và khu nhà tổ thanh tịnh. Không gian bao quanh lộng gió mát rượi thanh tịnh với vườn cây hoa cảnh trong lành giúp du khách trút bỏ muôn vàn lo toan mệt mỏi mệt nhọc cuộc sống đời thường, mở cửa đón phật tử vãn cảnh miễn phí.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
   },
   {
     "province": "Cần Thơ",
-    "title": "Quán Lẩu mắm Dạ Lý",
-    "content": "Quán lẩu mắm lâu đời, đậm đà ăn kèm hàng chục loại rau đồng nội.",
+    "title": "Bảo tàng Cần Thơ",
+    "content": "Bảo tàng Cần Thơ tọa lạc tại số 1 đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều, thành phố Cần Thơ. Với không gian trưng bày rộng lớn gần 3.000 mét vuông, bảo tàng lưu giữ và tái hiện toàn bộ chặng đường lịch sử hình thành, đấu tranh cách mạng oanh liệt cùng những nét văn hóa đa dạng lâu đời độc sắc của ba dân tộc Kinh, Hoa, Khmer sinh sống trên địa bàn đất cực Nam. Bảo tàng hiện trưng bày hàng ngàn tài liệu hiện vật quý giá từ các công cụ khảo cổ thuộc văn hóa Óc Eo cổ xưa, mô hình làng nghề gốm gạch thủ công, trang phục nhạc cụ cổ truyền đến các kỷ vật chiến tranh hào hùng thời kháng chiến chống Pháp Mỹ cứu nước. Các gian phòng trưng bày sắp xếp khoa học trực quan giúp sinh viên học sinh du khách dễ tiếp thu kiến thức bản địa, mở cửa vào ngày tuần trừ thứ Hai.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cầu đi bộ Ninh Kiều",
+    "content": "Cầu đi bộ Ninh Kiều, thường được người dân địa phương và du khách gọi thân thuộc là Cầu Tình Yêu, uốn lượn mềm mại bắc qua con rạch Khai Luông nối liền bến Ninh Kiều sầm uất với cồn Cái Khế thuộc quận Ninh Kiều. Cây cầu có chiều dài khoảng 200 mét, bề mặt rộng rãi lót đá hoa cương sạch đẹp thanh lịch mang lối thiết kế hiện đại uốn lượn hình chữ S mềm mại Việt Nam. Điểm nhấn nổi bật trên cầu là hai đài hoa sen khổng lồ thiết kế chiếu sáng tinh tế vươn cao tạo không gian dạo mát tuyệt vời. Khi màn đêm buông xuống, toàn bộ hệ thống đèn LED đổi màu rực rỡ hoạt động làm sáng rực rỡ cả một vùng sông nước lấp lánh lung linh huyền ảo, thu hút đông đảo giới trẻ người dân và khách du lịch tới tản bộ hóng gió sông hít thở khí lành sạch chụp ảnh nghệ thuật sống ảo sống động.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Đình Bình Thủy",
+    "content": "Đình Bình Thủy, tên chữ là Long Tuyền Cổ Miếu, tọa lạc trên đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy. Đây là một công trình kiến trúc tín ngưỡng thành hoàng làng có niên đại lâu đời từ thế kỷ 19 và đã được công nhận xếp hạng di tích lịch sử văn hóa cấp quốc gia tiêu biểu. Đình Bình Thủy mang phong cách kiến trúc truyền thống Nam Bộ đặc sắc kết hợp tinh tế hoa văn trang trí kiểu Pháp thời thuộc địa với mái ngói âm dương nhiều tầng chồng xếp, nóc đình gắn phù điêu lưỡng long chầu nguyệt đúc gốm tinh xảo. Bên trong đình không gian linh thiêng thờ Thành hoàng Bổn cảnh có công khai khang mở cõi che chở làng xã bờ cõi bình an yên vui thịnh vượng ấm no. Đình là nơi diễn ra các lễ hội Kỳ yên thượng điền hạ điền long trọng trang nghiêm quy tụ hàng vạn người dân trẩy hội.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pôthi Sômrôn",
+    "content": "Chùa Pôthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn, thành phố Cần Thơ. Ngôi chùa có tuổi đời hơn hai trăm năm lịch sử cổ kính xưa cũ, là trung tâm tôn giáo sinh hoạt tinh thần ý nghĩa vô cùng thiêng liêng quan trọng của đồng bào dân tộc Khmer vùng Tây Nam Bộ. Kiến trúc chùa mang nét rực rỡ trang trọng đặc trưng Phật giáo Nam tông Khmer với cổng tam quan tháp nhọn cao vút chạm khắc hoa văn Angkor tinh vi sắc sảo, chánh điện sơn màu vàng óng ả bắt mắt mái cong vút xếp chồng. Khuôn viên chùa rộng mát được che chở bao bọc bởi những cây thốt nốt già và cây sômrôn cổ thụ quanh năm rợp bóng râm mát đem lại không khí trong lành thanh tịnh tĩnh lặng tuyệt đối xua tan căng thẳng lo toan. Chùa là địa điểm trẩy hội tưng bừng dịp tết Chôl Chnăm Thmây Ok Om Bok.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng nghề bánh tráng Thuận Hưng",
+    "content": "Làng nghề bánh tráng Thuận Hưng thuộc địa bàn phường Thuận Hưng, quận Thốt Nốt, thành phố Cần Thơ, có lịch sử hình thành lâu đời hơn hai thế kỷ phát triển rực rỡ và đã được bộ Văn hóa công nhận di sản văn hóa phi vật thể quốc gia. Làng nghề nổi tiếng khắp cả nước với các sản phẩm bánh tráng thủ công tinh xảo thơm ngon dẻo dai bùi béo bùi từ bánh tráng ngọt, bánh tráng mặn đến bánh tráng nem giòn rụm ngọt dịu. Đến thăm làng bánh du khách sẽ được tận mắt chứng kiến quy trình làm bánh vô cùng công phu khéo léo tỉ mỉ từ khâu chọn gạo xay bột mịn tráng mỏng trên nồi hấp lò đất đến công đoạn mang phơi nắng tự nhiên trên các vỉ tre dài thẳng tắp tạo nên những mảng màu sắc thanh bình miệt vườn thôn quê tuyệt đẹp, có thể tự tay làm bánh thử nghiệm giá rẻ.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Phật Học Cần Thơ",
+    "content": "Chùa Phật Học tọa lạc tại số 11 đại lộ Hòa Bình, ngay trung tâm phường Tân An, quận Ninh Kiều. Đây là một ngôi chùa Phật giáo Bắc tông uy nghi bề thế bậc nhất Cần Thơ với tòa kiến trúc chánh điện cao tới 5 tầng tráng lệ uy nghiêm vươn cao vút giữa lòng thành phố sầm uất. Ngôi chùa được xây dựng từ giữa thế kỷ 20 mộc mạc cổ kính, qua các đợt đại trùng tu nay sở hữu vẻ đẹp mỹ thuật hiện đại kết hợp đường nét hoa văn đền chùa cổ truyền Việt Nam tinh tế tráng lệ. Mỗi tầng lầu của chùa thờ tự các pho tượng Phật Bồ Tát trang nghiêm nghi ngút khói hương tỏa mùi thơm thanh khiết thiêng liêng quanh năm thanh tịnh. Chùa là trung tâm hoạt động phật sự lớn thường xuyên tổ chức các buổi thuyết giảng đạo pháp làm thiện nguyện cứu giúp người nghèo khổ mở cửa tự do đón tiếp mọi người ghé thăm hành hương cầu an lành.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 11
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà thờ Chánh tòa Cần Thơ",
+    "content": "Nhà thờ Chánh tòa Cần Thơ tọa lạc tại số 14 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều. Đây là công trình kiến trúc Công giáo có quy mô lớn và cổ kính nhất thành phố Tây Đô, là nhà thờ chính tòa của giáo phận Cần Thơ rộng lớn. Được xây dựng từ cuối thế kỷ 19 dưới thời thuộc địa Pháp, ngôi nhà thờ mang đậm dấu ấn phong cách kiến trúc Gothic phương Tây thanh lịch cổ điển tráng lệ uy nghi nổi bật tháp chuông vút nhọn vươn cao rực rỡ sắc màu, các cửa sổ vòm chắp lắp kính màu rực rỡ khắc họa tranh câu chuyện kinh thánh linh thiêng trang trọng. Không gian bên trong thánh điện rộng bao la tôn nghiêm chịu lực bằng hệ thống hàng cột lớn kiên cố, mang lại cảm giác thánh thót nhẹ dịu thanh thản cho giáo dân du khách vào cầu nguyện hành lễ nghe giảng thánh kinh hành đạo, lưu ý trang phục lịch sự.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 14
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu di tích lịch sử Giàn Gừa",
+    "content": "Khu di tích lịch sử Giàn Gừa tọa lạc tại ấp Nhơn Khánh, xã Nhơn Nghĩa, huyện Phong Điền, tỉnh Cần Thơ. Đây là một di tích lịch sử cách mạng kết hợp thắng cảnh tự nhiên sinh thái hoang sơ độc đáo hiếm có của cả vùng đất cực Nam. Điểm nhấn kinh ngạc làm du khách sững sờ chính là giàn gừa nguyên sinh có tuổi đời cổ thụ hơn 150 năm phát triển đan xen rậm rạp tạo thành mạng lưới rễ cọc kèo cột chằng chịt bò trườn phủ bóng mát rợp râm mát kín một khoảng diện tích rộng lớn gần 3.000 mét vuông che mát ánh nắng mặt trời chiếu xuống. Nơi đây từng là căn cứ hoạt động liên lạc bí mật của quân và dân ta thời kỳ chống Pháp Mỹ hào hùng oanh liệt hiểm trở hiểm nguy bảo an lực lượng giải phóng quân. Khu di tích có miếu thờ Bà Thượng Động Cố Hỷ linh thiêng cầu tài lộc sức khỏe cho người dân, mở cửa đón du khách miễn phí tự do.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Nam Nhã",
+    "content": "Chùa Nam Nhã, hay còn gọi là Chùa Minh Sư, tọa lạc trên đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy. Ngôi chùa được xây dựng từ cuối thế kỷ 19 mộc mạc cổ kính, ban đầu thuộc giáo phái Minh Sư cổ truyền, sau này gắn liền lịch sử hào hùng tráng lệ phong trào yêu nước chống Pháp Đông Du yêu nước cách mạng miền Nam Việt Nam. Kiến trúc chùa mang nét đẹp hài hòa mộc mạc Đông Tây giao thoa đặc sắc với tường gạch cổ kính xám tro, cửa vòm cong thanh lịch Pháp kết hợp bài trí chánh điện gian thờ tôn nghiêm sơn son thếp vàng truyền thống Á Đông. Khuôn viên chùa tĩnh mịch xanh mát ngợp bóng mát cây kiểng quý hoa sứ cổ thụ tỏa hương thơm dịu ngào ngạt lộng gió mát mẻ từ dòng sông Bình Thủy thổi vào thơ mộng lãng mạn bình yên thư thái đầu óc, mở cửa tự do đón khách tham quan miễn phí.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn TTC Hotel Cần Thơ",
+    "content": "Khách sạn TTC Hotel Cần Thơ tọa lạc tại số 2 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều, sở hữu vị trí đắc địa đắt giá bậc nhất ngay sát bờ kè bến Ninh Kiều sầm uất lộng gió mát rượi quanh năm. Khách sạn đạt tiêu chuẩn 4 sao cao cấp hiện đại sang trọng nổi bật tòa nhà cao tầng sắc tím thanh lịch dịu dàng tinh tế rực rỡ sắc màu cờ hoa về đêm lộng lẫy lung linh. Các phòng nghỉ nghỉ dưỡng tại TTC được thiết kế rộng rãi khang trang sạch sẽ ngăn nắp lau dọn hằng ngày trang bị đầy đủ tivi thông minh, điều hòa mát nhanh sâu, minibar tiện lợi bồn tắm nằm cao cấp và đặc biệt ô cửa kính ban công hướng tầm nhìn bao quát view sông Hậu thơ mộng ngắm cầu Cần Thơ lãng mạn vô cùng đắt giá. Khách sạn cung cấp hồ bơi ngoài trời mát mẻ sạch đẹp, nhà hàng ẩm thực buffet bữa sáng ngon miệng đa dạng món Á Âu chu đáo.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 2
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Victoria Cần Thơ Resort",
+    "content": "Victoria Cần Thơ Resort tọa lạc tại phường Cái Khế, quận Ninh Kiều, là khu nghỉ dưỡng resort đạt tiêu chuẩn 4 sao cao cấp mang phong cách kiến trúc thuộc địa Pháp cổ điển lãng mạn sang trọng hàng đầu đất Tây Đô Cần Thơ. Nằm ẩn mình biệt lập yên tĩnh xanh mát bên bờ sông Hậu hiền hòa lộng gió mát rượi rộng lớn bao la, resort mang cấu trúc những tòa biệt thự thấp tầng thanh lịch màu sơn trắng ngà mái ngói đỏ ẩn hiện dưới những bóng râm tán cây cổ thụ quanh năm rợp bóng mát xanh mát thảm cỏ cỏ sạch đẹp thanh bình mát mẻ trong lành dễ chịu vô cùng thư thái đầu óc. Các phòng ốc trang bị nội thất gỗ quý cao cấp đệm ngủ mềm mại ban công thoáng gió sông trong lành giúp du khách tận hưởng kỳ nghỉ trọn vẹn tuyệt hảo trốn nóng. Resort có hai hồ bơi ngoài trời mát mẻ spa chăm sóc sức khỏe nhà hàng ẩm thực Tây Nam Bộ chu đáo.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Muong Thanh Luxury Can Tho Hotel",
+    "content": "Muong Thanh Luxury Can Tho Hotel tọa lạc tại khu cồn Cái Khế, phường Cái Khế, quận Ninh Kiều, thành phố Cần Thơ. Đây là tòa nhà khách sạn đạt tiêu chuẩn 5 sao sang trọng đẳng cấp cao tầng quy mô lớn nhất nhì vùng đồng bằng sông Cửu Long vươn cao vút nổi bật kiến trúc khối hiện đại bề thế tráng lệ lung linh lộng lẫy ánh đèn màu sắc rực rỡ khi đêm xuống sầm uất. Khách sạn cung cấp hàng trăm căn phòng ngủ nghỉ dưỡng cao cấp thiết kế bài trí tinh tế sang trọng quý phái đầy đủ các trang thiết bị tiện nghi đạt chuẩn quốc tế mang lại không gian lưu trú thoải mái tuyệt đối cho giới thương gia đi công tác và khách du lịch nghỉ ngơi. Tại Mường Thanh du khách được đặc quyền trải nghiệm hồ bơi ngoài trời xanh mát làn nước trong veo sạch sẽ, trung tâm spa thư giãn đẳng cấp phòng gym hiện đại chu đáo tận tình.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Azerai Cần Thơ",
+    "content": "Azerai Cần Thơ là khu nghỉ dưỡng siêu sang đẳng cấp 5 sao quốc tế biệt lập tọa lạc hoàn toàn trên cồn Ấu xanh mướt mát mẻ uốn quanh uốn lượn dòng sông Hậu thuộc quận Cái Răng, được ví như 'ốc đảo bình yên thanh tịnh' tuyệt mỹ bậc nhất đất Tây Đô Cần Thơ mến khách thân thiện. Resort mang ngôn ngữ thiết kế kiến trúc đương đại tối giản sang trọng kết hợp tinh tế hài hòa chất liệu tự nhiên mộc mạc mây tre gỗ đá bản địa tôn vinh nét sinh thái sinh động miệt vườn sông nước Nam Bộ. Các phòng ngủ biệt thự villa sở hữu không gian mở rộng bao la hồ bơi riêng biệt lập che chở bao bọc bởi những rặng cây di sản cây cổ thụ um tùm rợp bóng râm mát rượi mát lành dễ chịu vô cùng thư thái tâm hồn giải tỏa áp lực mệt mỏi căng thẳng cuộc sống xô bồ ngoài kia náo nhiệt ồn ào sầm uất sầm uất thành thị, đưa đón bằng tàu thuyền độc quyền từ bến Ninh Kiều.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Nesta Cần Thơ",
+    "content": "Khách sạn Nesta Cần Thơ tọa lạc tại số 9C đường Trần Phú, phường Cái Khế, quận Ninh Kiều, nằm ngay bên bờ sông Hậu lộng gió mát mẻ mát lành mang không gian nghỉ ngơi thư giãn trong lành dễ chịu vô cùng cho khách hàng khi ghé qua. Khách sạn đạt tiêu chuẩn 3 sao cộng hiện đại sạch sẽ khang trang thanh lịch nổi bật phong cách thiết kế hiện đại tối giản tinh tế trẻ trung sang trọng lịch sự ngăn nắp, hệ thống phòng ốc sạch đẹp được lau dọn vệ sinh hằng ngày ngăn nắp tinh tươm khang trang đầy đủ tivi led kết nối internet mạng wifi, tủ lạnh minibar điều hòa mát nhanh sâu êm ái sâu sắc nhà vệ sinh khép kín khang trang sạch đẹp vòi sen đầy đủ cho du khách nghỉ ngơi an tâm tuyệt đối tiết kiệm chi phí túi tiền phải chăng phù hợp. Nesta Hotel có nhà hàng phục vụ món điểm tâm ăn sáng ngon miệng phong phú đa dạng món ngon Á Âu sảnh chờ lịch sự chu đáo.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Can Tho Eco Resort",
+    "content": "Can Tho Eco Resort tọa lạc tại quốc lộ 61C, xã Nhơn Nghĩa, huyện Phong Điền, cách trung tâm thành phố Cần Thơ khoảng 10 km. Đây là một khu nghỉ dưỡng sinh thái miệt vườn xanh mát trù phú tuyệt đẹp sở hữu không gian rộng lớn bao la ngập tràn thảm xanh cỏ mát bóng râm cây ăn quả rợp bóng cây cổ thụ mát mẻ râm mát trong lành không khí sạch vô cùng dễ chịu sảng khoái đầu óc tâm hồn giải tỏa căng thẳng áp lực cuộc sống xô bồ đô thị ồn ào náo nhiệt sầm uất bên ngoài kia náo động. Khu resort xây dựng theo mô hình những ngôi nhà mái lá chòi lá nhà sàn gỗ tre nứa mộc mạc đồng quê Nam Bộ mộc mạc cổ kính xưa cũ nhưng bài trí bên trong vô cùng khang trang sạch sẽ hiện đại đầy đủ các trang thiết bị tiện nghi cao cấp đạt chuẩn nghỉ ngơi tuyệt hảo cho gia đình nhỏ bạn bè thân thiết dã ngoại cắm trại trốn nóng cuối tuần vui vẻ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Vườn trái cây Mỹ Khánh",
+    "content": "Vườn trái cây Mỹ Khánh nằm trong khuôn viên Làng du lịch Mỹ Khánh, số 335 lộ Vòng Cung, xã Mỹ Khánh, huyện Phong Điền. Đây là một trong những vựa trái cây sinh thái miệt vườn có quy mô lớn sầm uất hoành tráng lâu đời và nổi tiếng nhất Cần Thơ sở hữu đất đai bồi đắp phù sa màu mỡ sông nước hữu tình quanh năm xanh tốt xanh tươi trù phú quả ngọt lành trái tươi sạch sẽ ngon miệng. Mùa du lịch cao điểm thu hoạch chín rộ diễn ra tưng bừng nhộn nhịp khoảng tháng 5 đến tháng 8 hàng năm khi các rặng hàng cây ăn quả đồng loạt chín rộ măng cụt, chôm chôm, sầu riêng, dâu hạ châu vạt trái sai trĩu cành bóng râm mát rượi rợp bóng cây xanh. Du khách đến đây có thể tự tay hái quả thưởng thức tại vườn tươi ngọt lịm ngọt thanh mát mẻ, chèo xuồng nhỏ đò dọc các rạch nước mát trong lành hít thở khí sạch đồng quê bình yên thư thái đầu óc giải tỏa áp lực căng thẳng mệt mỏi.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng du lịch sinh thái Ông Đề",
+    "content": "Làng du lịch sinh thái Ông Đề tọa lạc tại tổ 26, ấp Mỹ Ái, xã Mỹ Khánh, huyện Phong Điền, thành phố Cần Thơ. Đây là điểm đến dã ngoại vui chơi giải trí ngoài trời cực kỳ hot thu hút đông đảo giới trẻ học sinh sinh viên cơ quan đoàn thể tới tham gia teambuilding liên hoan cuối tuần thư giãn tinh thần thoải mái vui vẻ nhộn nhịp rộn vang tiếng cười. Khu sinh thái được thiết kế mang đậm phong cách miệt vườn đồng quê Nam Bộ mộc mạc thôn quê với bờ rạch nước mát bóng râm rặng hàng tre tre xanh mát rợp bóng cây ăn quả xanh tươi trong lành mát mẻ quanh năm không khí sạch dễ chịu vô cùng sảng khoái. Du khách đến đây được thay trang phục áo bà ba truyền thống mộc mạc tham gia vô số trò chơi dân gian sông nước độc đáo vui nhộn như chèo xuồng ba lá đi cầu khỉ thăng bằng tát mương bắt cá lóc đồng và thưởng thức lẩu cua đồng đậm đà ngon tuyệt.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cồn Sơn Cần Thơ",
+    "content": "Cồn Sơn là một dải đất cù lao xanh mát trù phú nằm giữa lòng dòng sông Hậu hiền hòa lộng gió thuộc địa bàn phường Bùi Hữu Nghĩa, quận Bình Thủy, thành phố Cần Thơ. Vùng đất cù lao này nổi tiếng với mô hình du lịch sinh thái cộng đồng nông nghiệp miệt vườn đậm chất Nam Bộ mộc mạc hiếu khách thân thiện mến khách tự nhiên hoang sơ chưa bị đô thị hóa thương mại phá vỡ. Bao bọc bao quanh bởi dòng nước sông phù sa màu mỡ, cồn Sơn sở hữu những vựa vườn trái cây quanh năm quả ngọt trĩu cành bóng râm mát rượi không khí sạch mát lành trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người xua mệt nhọc cuộc sống. Đến với cồn Sơn du khách được trải nghiệm chèo xuồng tham quan bè cá nổi lướt sóng, xem màn biểu diễn cá lóc bay nhảy độc đáo kỳ thú, tự tay làm các món bánh dân gian truyền thống ngon miệng ngọt ngào cùng các nghệ nhân làng nghề.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Vịt nấu chao Thành Giao",
+    "content": "Quán Vịt nấu chao Thành Giao tọa lạc tại số 1/8 đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều, là địa chỉ ẩm thực quen thuộc nổi tiếng trứ danh chuyên phục vụ món vịt nấu chao - món ăn đặc sản đậm chất Nam Bộ được công nhận là món ngon tiêu biểu Việt Nam làm say lòng đông đảo thực khách nghệ sĩ nổi tiếng du khách muôn nơi khi ghé thăm đất Tây Đô Cần Thơ thèm hương vị ngon miệng ngất ngây vị giác khi thưởng thức cùng bạn bè thân thiết gia đình ấm cúng. Nồi lẩu vịt mang ra nóng hổi bốc khói nghi ngút nghi ngút khói tỏa hương thơm nồng nàn quyến rũ đặc trưng từ chao đỏ chao trắng thượng hạng nấu đượm thịt gà vịt thả vườn săn chắc thịt dai ngon ngọt lịm chín mềm béo ngậy m mặn mằn mằn vừa vặn ngọt mặn chua cay nồng nàn sả ớt sền sệt nước lèo sóng sánh ngậy béo khoai môn bùi thơm ăn kèm bún mì sợi rau xanh sạch huyết vịt ngon ngắt. Quán sạch mát phục vụ cực nhanh.",
     "category": "restaurant",
-    "latitude": 10.0381,
-    "longitude": 105.7892,
-    "costEstimate": 150000
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Nem nướng Thanh Vân Cần Thơ",
+    "content": "Quán Nem nướng Thanh Vân nằm tại số 14 đường đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều, là địa chỉ ẩm thực lâu đời lâu năm vô cùng nổi tiếng chuyên phục vụ món nem nướng mang chuẩn phong vị đặc sản Cần Thơ thơm ngon đậm đà làm xiêu lòng bao thế hệ thực khách cư dân địa phương lẫn khách du lịch phương xa mỗi buổi chiều tối mát mẻ đói bụng thèm bữa ăn cuốn cuốn ngon miệng chất lượng cao giá bình dân phải chăng phù hợp túi tiền mọi người dân khi ghé thăm trung tâm sầm uất. Những xiên nem được làm từ thịt heo tươi giã nhuyễn tẩm ướp gia vị tỏi tiêu đậm đà mật ong nướng vàng giòn cháy cạnh trên bếp than hồng đỏ rực tỏa hương thơm phức quyến rũ nức mũi xộc thẳng vào vị giác thực khách ăn kèm đĩa bánh hỏi trắng mềm dẻo dai bùi sợi nhỏ, bánh tráng cuốn rổ rau sống rừng đa dạng xà lách chuối chát xoài xanh tươi sạch hẹ thơm ngon chấm tương xay đậu phộng đặc sánh béo ngậy.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 14
+  },
+  {
+    "province": "Bình Dương",
+    "title": "Quán Bánh xèo 7 Tới Cần Thơ",
+    "content": "Quán Bánh xèo 7 Tới tọa lạc trên đường Hoàng Quốc Việt, phường An Bình, quận Ninh Kiều, là địa chỉ ẩm thực đồng quê vô cùng nổi tiếng chuyên phục vụ món bánh xèo mang hương vị miệt vườn Nam Bộ thơm ngon giòn rụm béo ngậy ngọt lịm thịt săn chắc làm say lòng đông đảo thực khách khi ghé qua thưởng thức bữa trưa chiều tối ngon miệng giòn tan thơm phức lừng không gian vị giác chấm nước mắm chua ngọt pha tỏi ớt băm kẹo kẹo đậm đà vị ngon ngất ngây cuốn rau sống rừng đa dạng sạch sẽ như xà lách cải bắp hoa chuối dưa leo khế chua xoài xanh thanh mát sạch lòng sạch dạ khi thưởng thức miếng ngon giòn rụm bùi thơm béo ngậy bùi. Chiếc bánh xèo đổ mỏng vỏ ngoài chiên vàng giòn rụm cháy cạnh ráo dầu không ngấy béo bùi hạt gạo dẻo thơm nguyên chất, nhân đầy đặn củ hũ dừa tôm sông thịt ba chỉ vịt băm nhuyễn xào hành mỡ béo ngậy hành hoa thơm ngon. Quán có không gian sân vườn rộng rãi sạch sẽ phục vụ nhanh nhẹn vui vẻ.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình Bình Thủy",
+    "content": "Lễ hội Kỳ yên Đình Bình Thủy được tổ chức long trọng trang nghiêm quy mô lớn hoành tráng hàng năm vào các ngày giữa tháng 4 âm lịch (Thượng điền) và tháng 12 âm lịch (Hạ điền) tại ngôi đình cổ Long Tuyền thuộc phường Bình Thủy, quận Bình Thủy, thành phố Cần Thơ. Đây là một trong những lễ hội đình làng văn hóa tâm linh tín ngưỡng truyền thống lâu đời lớn bậc nhất miền Tây Nam Bộ thu hút hàng vạn lượt người dân phật tử du khách phương xa quần tụ về tham gia trẩy hội náo nhiệt rực rỡ sắc màu cờ hoa đèn lồng lộng lẫy rộn rã tiếng trống hội vang vang cả một vùng sông nước. Lễ hội diễn ra trang nghiêm nghiêm cẩn các nghi thức tế cúng cổ truyền tế lễ ban tế tự bục lão làng áo dài khăn đóng truyền thống như Lễ Thỉnh Sắc, Lễ Túc Yết, Lễ Chánh Tế nhằm tạ ơn Thành hoàng làng bảo an bờ cõi che chở làng xã bình an yên vui đời sống người dân ấm no thịnh vượng hạnh phúc phát đạt.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Bánh dân gian Nam Bộ",
+    "content": "Lễ hội Bánh dân gian Nam Bộ là sự kiện văn hóa ẩm thực du lịch thường niên quy mô lớn cấp quốc gia được tổ chức tưng bừng nhộn nhịp tại trung tâm quận Ninh Kiều, thành phố Cần Thơ vào khoảng tháng 3 hoặc tháng 4 âm lịch hàng năm (dịp giỗ tổ Hùng Vương), thu hút hàng vạn lượt du khách trong ngoài nước đổ về tham quan thưởng thức trải nghiệm nét độc đáo mỹ nghệ dân gian. Lễ hội quy tụ hàng trăm gian hàng nghệ nhân làm bánh truyền thống đến từ khắp các tỉnh thành vùng đồng bằng sông Cửu Long cùng tranh tài trình diễn khéo léo tỉ mỉ chế biến vô số loại bánh dân dã dẻo thơm ngọt ngào đậm đà sắc màu như bánh xèo khổng lồ bánh tét lá cẩm bánh da lợn bánh bò thốt nốt bánh ít trần thơm lừng đánh thức mọi giác quan vị giác thực khách tham gia. Không gian ngày hội rộn ràng tiếng nhạc biểu diễn đờn ca tài tử trò chơi dân gian sông nước vui nhộn náo nhiệt.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pơthi Sômrôn Ô Môn Cần Thơ",
+    "content": "Chùa Pơthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn, thành phố Cần Thơ. Ngôi chùa được xây dựng vào khoảng thế kỷ 18 cổ kính nguyên bản, là di tích lịch sử kiến trúc nghệ thuật cấp quốc gia mang đậm nét văn hóa tâm linh tôn giáo Phật giáo Nam tông Khmer đặc sắc truyền thống vùng đồng bằng sông Cửu Long. Kiến trúc chùa nổi bật tráng lệ tôn nghiêm vươn cao tháp nhọn cổng tam quan trang trí điêu khắc tinh xảo phù điêu hình tượng rồng thần Angkor, chánh điện sơn tông màu vàng óng chủ đạo lộng lẫy uy nghi bài trí các pho tượng Phật cổ kính nghi ngút khói hương nghi ngút. Khuôn viên chùa rộng lớn bóng râm cây xanh mát mẻ ngợp bóng mát cây thốt nốt già cổ thụ râm mát trong lành khí sạch tĩnh lặng giúp phật tử du khách thập phương vãn cảnh lễ Phật bình an thư thái đầu óc tâm hồn tránh xa lo toan cuộc sống, chùa mở cửa đón tiếp khách tự do miễn phí.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún tôm khô Cái Răng chợ lớn cô Ba",
+    "content": "Quán Bún tôm khô Cái Răng cô Ba nằm gần khu vực chợ Cái Răng, quận Cái Răng, là địa chỉ ẩm thực bình dân trứ danh vô cùng nổi tiếng chuyên phục vụ món bún tôm khô - món ăn đặc sản sáng mộc mạc làm nên thương hiệu ẩm thực sông nước Cần Thơ độc đáo ngọt thanh đậm đà khó cưỡng làm xiêu lòng bao thế hệ thực khách địa phương mỗi buổi sáng tờ mờ sương sầm uất. Bát bún mang ra nóng hổi bốc khói nghi ngút tỏa mùi thơm nức mũi quyến rũ váng dầu hạt điều màu cam đỏ bắt mắt hành tỏi phi béo ngậy, nước lèo ninh cốt từ xương ống heo và tôm khô loại một ngọt đậm đà ngọt mặn vừa miệng thanh thanh mằn mằn ngon ngất vị giác. Nhân bát bún đầy đặn bao gồm bún sợi nhỏ mềm mịn, đĩa tôm khô xào hành mỡ béo bùi dai ngọt săn chắc thịt xíu mại mềm thơm huyết heo mướt mịn tóp mỡ chiên giòn rụm ăn kèm đĩa rau sống tươi sạch giá đỗ chua cay chanh ớt ngon tuyệt hảo. Phục vụ nhanh nhẹn giá rất rẻ phải chăng sinh viên.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Iris Hotel Cần Thơ",
+    "content": "Iris Hotel Cần Thơ tọa lạc tại số 224 đường 30 Tháng 4, phường Xuân Khánh, quận Ninh Kiều, vị trí giao thông vô cùng thuận tiện nằm sát trung tâm thương mại Vincom Xuân Khánh sầm uất nhộn nhịp. Khách sạn đạt tiêu chuẩn 4 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tân cổ điển tinh tế sang trọng quý phái, sở hữu hệ thống phòng ốc khang trang rộng rãi sạch sẽ dọn dẹp vệ sinh hằng ngày ngăn nắp tinh tươm khang trang trang bị đầy đủ các trang thiết bị tiện nghi cao cấp đạt chuẩn quốc tế tốt phục vụ sinh hoạt nghỉ ngơi như tivi led truyền hình cáp mạng thông minh, minibar điều hòa mát nhanh sâu êm ái nhà vệ sinh khép kín sạch đẹp bồn tắm nằm nằm massage thư giãn tuyệt hảo cho khách hàng thương gia công tác du lịch nghỉ dưỡng an tâm. Iris Hotel có hồ bơi sân thượng tuyệt đẹp ngắm toàn cảnh thành phố lung linh về đêm, nhà hàng buffet ngon miệng chu đáo.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 224
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rừng tràm sinh thái Lung Ngọc Hoàng",
+    "content": "Mặc dù phần lớn diện tích thuộc tỉnh Hậu Giang lân cận, nhưng khu vực vùng đệm sinh thái rừng tràm trải dài giáp ranh huyện Phụng Hiệp kết nối trực tiếp giao thông thủy bộ huyện Phong Điền, thành phố Cần Thơ, tạo nên một khu sinh thái thiên nhiên ngập nước hoang sơ ngút ngàn xanh mát rợp bóng của ngút ngàn rặng hàng cây tràm già bạt ngàn xanh tốt quanh năm mang lại lá phổi xanh khổng lồ điều hòa không khí trong lành sạch sẽ thoáng mát mát mẻ quanh năm dễ chịu vô cùng cho du khách dã ngoại trốn nóng cuối tuần giải tỏa áp lực mệt mỏi căng thẳng lo toan cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào. Cánh rừng tràm rậm rạp hệ rễ cọc kèo vững chãi lòng đất phù sa tạo không gian trú ẩn sinh sống phong phú đa dạng của hàng ngàn loài chim nước cò vạc diệc rùa rắn ba ba cá đồng đẻ ong mật rừng rộn rã tiếng hót líu lo, du khách đi xuồng vỏ lãi len lỏi lướt sóng ngắm phong cảnh hoang dã chụp ảnh nghệ thuật dã ngoại vui vẻ.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đua thuyền rồng truyền thống sông Hậu Cần Thơ",
+    "content": "Lễ hội Đua thuyền rồng truyền thống trên sông Hậu được tổ chức tưng bừng long trọng hàng năm vào dịp lễ hội văn hóa thể thao ngày hội lớn địa phương tại khu vực phố đi bộ kè sông bến Ninh Kiều, quận Ninh Kiều, thành phố Cần Thơ, là sự kiện thể thao nước náo nhiệt rộn ràng sắc màu bậc nhất thu hút hàng vạn người dân cộng đồng cư dân và khách du lịch đứng kín bờ sông hò reo cổ vũ nồng nhiệt cuồng nhiệt sôi động rộn vang tiếng trống hội vang rền cả một vùng sông nước bao la rộng mở. Giải đua quy tụ hàng chục đội thuyền rồng mạnh lực lượng trai tráng đến từ các quận huyện trong tỉnh và các tỉnh bạn vùng đồng bằng sông Cửu Long cùng tranh tài quyết liệt trên đường đua sóng nước vung chèo nhịp nhàng mạnh mẽ quyết tâm đưa thuyền về đích giành thắng lợi vẻ vang chúc mừng ngày hội quê hương. Lễ hội thể hiện tinh thần thượng võ đoàn kết rèn luyện sức khỏe bền bỉ dẻo dai cha ông vùng sông nước.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Long Tuyền Cần Thơ",
+    "content": "Đình thần Long Tuyền, tên gọi cổ xưa của Đình Bình Thủy, tọa lạc trên trục đường đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy, thành phố Cần Thơ. Đây là công trình kiến trúc cổ kính tâm linh có giá trị lịch sử văn hóa lâu đời lâu năm tiêu biểu đã được công nhận xếp hạng di tích lịch sử nghệ thuật cấp quốc gia đặc biệt quan trọng ý nghĩa đối với xứ đất Tây Đô Cần Thơ. Ngôi đình thờ vị Thành hoàng Bổn cảnh có công bảo an bờ cõi lập làng che chở giang sơn làng xã yên vui bình an đời sống nhân dân ấm no hạnh phúc thịnh vượng phát đạt gặt hái tốt đẹp. Kiến trúc đình mang đậm dấu ấn phong cách đình làng cổ xưa truyền thống Nam Bộ ba gian hai chái chịu lực vững chãi bằng khung cột gỗ lim to lớn kiên cố bên trong trang nghiêm lộng lẫy hoành phi câu đối sơn son thếp vàng chạm khắc điêu khắc rồng phượng vô cùng sắc nét tinh xảo mỹ thuật xưa, đình mở cửa miễn phí chiêm bái hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Ốc tiêu nướng nước mắm tiêu xanh Quê Nhà Cần Thơ",
+    "content": "Quán Ốc tiêu nướng tiêu xanh Quê Nhà nằm trên đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều, là địa chỉ ẩm thực vỉa hè sân vườn vô cùng nổi tiếng chuyên phục vụ món ốc bươu nướng tiêu xanh - món ăn đặc sản ăn vặt nhậu đồng quê trứ danh làm say lòng đông đảo giới trẻ cánh mày râu thực khách sành ăn mỗi buổi chiều tối mát mẻ lộng gió mát rượi khi tụ họp liên hoan bạn bè ăn ngon miệng ngất ngây vị giác khi thưởng thức giá phải chăng phù hợp túi tiền. Những con ốc bươu đồng béo múp được làm sạch sẽ hấp sơ rồi đặt lên bếp than than hồng nướng chín vàng, chan nước sốt gia vị nước mắm cốt sả ớt đường tiêu xanh cay nồng nàn kẹo sệt trực tiếp vào miệng ốc đang sôi sùng sục bốc khói nghi ngút tỏa mùi thơm phức quyến rũ nức mũi xộc thẳng vào vị giác thực khách ăn thịt ốc giòn sần sật dai ngon ngọt thịt quyện vị mặn mằn mằn ngọt cay nồng ấm bụng ngày lạnh se lạnh ngon tuyệt hảo ngắt. Phục vụ nhanh nhẹn chu đáo.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Fortuneland Hotel Cần Thơ",
+    "content": "Khách sạn Fortuneland Hotel tọa lạc tại số 141 đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều, nằm ngay trung tâm trung tâm sầm uất ăn chơi giải trí mua sắm sầm uất bậc nhất của thành phố Tây Đô Cần Thơ giúp du khách giao thông thuận tiện đi lại nhanh chóng thuận lợi tối đa. Khách sạn đạt tiêu chuẩn 4 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tân cổ điển tinh tế sang trọng bề thế tráng lệ lung linh sắc màu ánh đèn led khi đêm xuống nhộn nhịp. Fortuneland cung cấp hệ thống phòng nghỉ phòng ngủ rộng rãi thoáng mát được dọn dẹp lau chùi quét tước vệ sinh hằng ngày ngăn nắp ngăn nắp tinh tươm khang trang trang bị đầy đủ các trang thiết bị tiện nghi cao cấp đạt chuẩn quốc tế tốt phục vụ nghỉ dưỡng nghỉ ngơi như tivi led thông minh truyền hình cáp mạng wifi tốc độ cao, tủ lạnh điều hòa mát nhanh sâu bồn tắm nằm khép kín sạch đẹp, khách sạn có hồ bơi ngoài trời mát mẻ sạch sẽ chu đáo.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 141
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Ấu sông Hậu Cần Thơ",
+    "content": "Cồn Ấu là một dải cù lao xanh mướt mát mẻ rộng lớn hoang sơ nằm trải dài giữa dòng sông Hậu hiền hòa lộng gió đối diện bến Ninh Kiều thuộc địa phận quận Cái Răng, thành phố Cần Thơ. Vùng đất cù lao sông này được bao bọc che chở bảo bọc bởi dòng nước sông phù sa màu mỡ quanh năm phù sa bồi đắp bồi tụ nên sở hữu thảm rừng sinh thái cây xanh tự nhiên um tùm rợp bóng cây cổ thụ vạt vườn cây ăn quả quanh năm trĩu quả ngọt lành măng cụt, chôm chôm xanh tươi mang lại bầu không khí trong lành sạch sẽ thoáng mát mát mẻ quanh năm vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người thư thái giải tỏa áp lực mệt mỏi căng thẳng lo toan cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào sầm uất náo động. Nơi đây là điểm đến du lịch sinh thái nghỉ dưỡng dã ngoại lý tưởng tuyệt hảo với các chòi lá nhỏ ven sông hóng gió sông thổi mát rượi ngắm nhìn cầu Cần Thơ hùng vĩ phía xa lãng mạn nên thơ tuyệt mỹ mở cửa tự do cắm trại.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới An Ô Môn",
+    "content": "Lễ hội cúng đình Thới An được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 15, mùng 16 tháng 11 âm lịch tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn, thành phố Cần Thơ, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời có ý nghĩa tinh thần sâu sắc thiêng liêng vô cùng quan trọng đối với toàn thể cộng đồng người dân cư dân địa phương nơi đây. Lễ hội diễn ra trang nghiêm nghiêm cẩn nhằm mục đích cúng tế tạ ơn thần linh Thành hoàng làng đã phù hộ che chở bảo an bờ cõi xóm làng bình an yên vui hạnh phúc đời sống nhân dân ấm no thịnh vượng phát đạt phát tài bước vào năm mới sản xuất nông nghiệp thuận lợi hanh thông gặt hái bội thu. Nghi thức cúng tế truyền thống cổ xưa tế lễ được ban tế tự bục lão làng thực hiện trang nghiêm tiếng nhạc lễ trầm hùng cổ kính nghiêm trang, phần hội sôi nổi thu hút đông đảo bà con xem hát tuồng cổ truyền thâu đêm gắn kết thắt chặt nghĩa tình cộng đồng.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Khám lớn Cần Thơ",
+    "content": "Khám lớn Cần Thơ tọa lạc tại số 8 đường Ngô Gia Tự, phường Tân An, quận Ninh Kiều, thành phố Cần Thơ. Đây là di tích lịch sử cách mạng cấp quốc gia có ý nghĩa vô cùng thiêng liêng giáo dục truyền thống sâu sắc ghi dấu chặng đường đấu tranh gian khổ oanh liệt bất khuất anh dũng của các chiến sĩ yêu nước cách mạng miền Nam yêu nước Việt Nam. Được thực dân Pháp xây dựng từ cuối thế kỷ 19 mộc mạc cổ kính dưới mô hình nhà tù kiên cố chật hẹp giam giữ tra tấn tàn bạo man rợ hàng ngàn đồng chí chiến sĩ ta, nơi đây từng chứng kiến lòng yêu nước trung kiên kiên cường bất khuất của các anh hùng liệt sĩ trước họng súng hung bạo địch. Hiện nay khu di tích được trùng tu bảo tồn giữ gìn cẩn thận bao gồm các phòng giam phục dựng bằng tượng sáp sinh động, tháp canh cao vút tường đá bao quanh khép kín nhà trưng bày tài liệu hình ảnh kỷ vật lịch sử giá trị, mở cửa đón du khách học tập miễn phí.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún mắm miền Tây nước lèo đậm đà cô mười Cần Thơ",
+    "content": "Quán Bún mắm cô mười nằm trên đường Trần Việt Châu, phường An Hòa, quận Ninh Kiều, là địa chỉ ẩm thực đồng quê vô cùng nổi tiếng chuyên phục vụ món bún mắm nấu nước lèo mang đậm chuẩn phong vị sông nước miền Tây thơm ngon đậm đà làm say lòng đông đảo thực khách sành ăn người dân địa phương học sinh sinh viên dập dìu ghé qua thưởng thức mỗi buổi chiều tối mát mẻ đói bụng cần bát bún nóng hổi chất lượng no bụng bổ dưỡng giá bình dân phải chăng phù hợp túi tiền. Bát bún mắm mang ra bốc khói nghi ngút nghi ngút khói tỏa hương thơm nồng nàn quyến rũ đặc trưng của cốt mắm cá linh mắm cá sặc thượng hạng ninh kỹ cùng xương heo ống ngọt thanh tự nhiên béo ngậy vừa vặn ngọt mặn chua cay mằn mằn ngon tuyệt vị giác. Nhân đầy đặn bao gồm bún sợi to dẻo mềm, tôm sông ngọt thịt săn chắc bóc vỏ, mực tươi quay giòn khoanh heo quay da giòn rụm cà tím ngậy béo chả lụa chả cá dai thơm ăn kèm rổ rau sống đồng nội phong phú. Quán phục vụ nhanh nhẹn sạch sẽ.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Linh Phương Luxury Cần Thơ",
+    "content": "Khách sạn Linh Phương Luxury tọa lạc tại số 55-57 đường Trần Ngọc Quế, phường Xuân Khánh, quận Ninh Kiều, vị trí trung tâm sầm uất năng động gần các trường đại học trung tâm thương mua sắm giúp khách hàng dễ dàng tiếp cận các khu ăn uống vui chơi giải trí đi lại nhanh chóng thuận tiện giao thông. Khách sạn đạt tiêu chuẩn 3 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tối giản tinh tế sang trọng quý phái lịch sự, hệ thống phòng nghỉ phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp ngăn nắp tinh tươm khang trang sạch đẹp trang bị đầy đủ tivi led thông minh truyền hình cáp internet mạng wifi tốc độ cao, điều hòa làm mát nhanh sâu êm ái, tủ lạnh minibar lớn và nhà vệ sinh khép kín sạch sẽ có nước nóng lạnh đầy đủ bồn tắm đứng vòi sen phục vụ chu đáo tận tình an tâm tuyệt đối tiết kiệm chi phí túi tiền phải chăng phù hợp. Lễ tân phục vụ chu đáo thân thiện.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 56
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Ô Môn Cần Thơ",
+    "content": "Rạch sông Ô Môn chảy hiền hòa uốn lượn qua bờ địa phận quận Ô Môn, thành phố Cần Thơ, là một khu sinh thái sông nước tự nhiên hoang sơ sở hữu dòng nước sông lững lờ phù sa uốn quanh uốn khúc qua các xóm làng thôn quê rặng hàng tre tre xanh xanh tươi vạt vườn cây ăn quả trù phú quanh năm xanh tốt mang lại cảnh quan thiên nhiên trong lành yên bình tĩnh lặng đồng quê miệt vườn tuyệt hảo lý tưởng cho du khách dã ngoại trốn nóng giải tỏa căng thẳng lo toan cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào sầm uất náo động lộng gió mát rượi quanh năm gió sông thổi lộng lẫy mát mẻ. Du khách đến đây có thể thuê chiếc thuyền nhỏ xuồng ba lá chèo dọc rạch nước ngắm nhìn phong cảnh làng quê mộc mạc nghe chim hót líu lo rộn rã đón bình minh sớm ngắm hoàng hôn buông xuống mặt sông lãng mạn nên thơ tuyệt mỹ, câu cá giải trí bên chòi lá nhỏ và thưởng thức lẩu mắm đồng quê đậm đà cùng bè bạn gia đình. Địa điểm tự do miễn phí.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Bình Thủy Thượng Điền",
+    "content": "Lễ hội cúng đình Bình Thủy Thượng Điền được tổ chức long trọng trang nghiêm hoành tráng hàng năm vào các ngày rằm mùng 12, 13, 14 tháng 4 âm lịch tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời lớn quy mô nhất vùng Đông Nam miền Tây Nam Bộ thu hút hàng vạn lượt người dân phật tử cộng đồng cư dân muôn nơi về thắp hương dâng lễ cầu nguyện quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui hạnh phúc ấm no đời sống người dân ấm no thịnh vượng phát đạt phát tài gặt hái bội thu tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn trang trọng được ban tế tự bục lão làng áo dài khăn đóng truyền thống thực hiện bài bản cổ xưa truyền lại như Lễ Thỉnh Sắc thần tuần du phố phường, Lễ Túc Yết cúng tế tôn nghiêm trong tiếng nhạc lễ trầm hùng cổ kính nghiêm trang kính cẩn. Phần hội náo nhiệt vui múa lân.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Mộ thủ khoa Bùi Hữu Nghĩa",
+    "content": "Khu di tích mộ Thủ khoa Bùi Hữu Nghĩa tọa lạc trên đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy, thành phố Cần Thơ. Đây là di tích lịch sử văn hóa cấp quốc gia có ý nghĩa tinh thần thiêng liêng giáo dục truyền thống yêu nước lòng tự hào sâu sắc ghi dấu nơi yên nghỉ cuối cùng của nhà thơ yêu nước vị quan thanh liêm lỗi lạc bậc nhất Nam Bộ thời nhà Nguyễn thế kỷ 19 - Thủ khoa Bùi Hữu Nghĩa. Khu di tích được xây dựng tôn tạo khang trang bề thế trong khuôn viên rộng nhiều bóng mát cây xanh cổ thụ rợp bóng mát mẻ râm mát trang nghiêm tĩnh lặng, nổi bật chánh điện nhà thờ uy nghi bài trí pho tượng đồng nhà thơ cùng các bức hoành phi liễn đối chạm khắc gỗ tinh xảo ghi danh công đức tấm lòng yêu nước vì nước vì dân của ông trước cường quyền thực dân Pháp. Nơi đây đón tiếp đông đảo sinh viên học sinh du khách đến dâng hương tri ân cúng kiếng tìm hiểu văn hóa lịch sử cội nguồn, mở cửa đón tiếp tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bánh cống sườn non Cô Út Cần Thơ",
+    "content": "Quán Bánh cống Cô Út nằm tại số 86/4 đường Lý Tự Trọng, phường An Cư, quận Ninh Kiều, là địa chỉ ẩm thực bình dân ngon trứ danh chuyên phục vụ món bánh cống - món ăn vặt đặc sản mang đậm phong cách ẩm thực Khmer Nam Bộ thơm ngon giòn rụm béo ngậy làm say lòng đông đảo thực khách học sinh sinh viên giới trẻ địa phương mỗi buổi chiều xế bụng đói thèm món ăn giòn ngon đậm đà chất lượng giá rẻ phải chăng phù hợp túi tiền mọi người dân khi ghé thăm trung tâm sầm uất Cần Thơ. Chiếc bánh cống được chiên vàng giòn rụm trong những chiếc khuôn cống nhôm đúc deep dầu chiên ngập mỡ ráo dầu không ngấy béo bùi, vỏ bánh làm từ tinh bột gạo nếp đậu xanh dẻo thơm dẻo quánh giòn tan, phần nhân đầy đặn ngập tràn bao gồm thịt heo băm xào đậm đà, đậu xanh hấp mềm bùi béo ngọt bùi béo ngậy và phủ lên trên mặt là một hai con tôm sông ngọt thịt tươi nguyên vỏ chiên giòn thơm phức lừng. Bánh cống ăn kèm nước mắm chua ngọt tỏi ớt dưa góp và rổ rau sống tươi sạch.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 4
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Holiday One Hotel Cần Thơ",
+    "content": "Khách sạn Holiday One Hotel tọa lạc tại số 59-61-63-65 đường Phạm Ngọc Thạch, phường Cái Khế, quận Ninh Kiều, vị trí trung tâm sầm uất sầm uất nằm ngay sát khu hội chợ triển lãm quốc tế cồn Cái Khế nhộn nhịp. Khách sạn đạt tiêu chuẩn 4 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại cổ điển kết hợp phong cách châu Âu tinh tế sang trọng quý phái bề thế tráng lệ lung linh lộng lẫy đèn hoa ánh sáng màu sắc rực rỡ khi đêm về sầm uất. Holiday One cung cấp hệ thống phòng nghỉ phòng ngủ rộng rãi thoáng mát sạch sẽ được dọn dẹp quét tước vệ sinh hằng ngày ngăn nắp tinh tươm khang trang sạch đẹp trang bị đầy đủ các trang thiết bị tiện nghi cao cấp đạt chuẩn quốc tế tốt phục vụ nghỉ ngơi sinh hoạt giải trí như tivi led thông minh truyền hình cáp mạng wifi tốc độ cao, điều hòa mát nhanh sâu minibar tiện lợi bồn tắm nằm khép kín sạch sẽ bồn tắm nằm massage thư giãn hồ bơi sân thượng ngoài trời.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 64
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Khương sông Hậu Cần Thơ",
+    "content": "Cồn Khương là một dải cù lao xanh mướt mát mẻ rộng lớn trù phú nằm trải dài bên bờ bờ sông Hậu thuộc địa phận phường Cái Khế, quận Ninh Kiều, thành phố Cần Thơ, được ví như 'khu biệt thự đảo xanh thiên đường' cao cấp bậc nhất xứ Tây Đô sầm uất nhộn nhịp. Vùng đất cù lao sông này được che chở bao bọc bảo bọc bởi dòng nước sông phù sa màu mỡ phù sa bồi đắp quanh năm xanh tươi tốt tươi nên sở hữu cảnh quan sinh thái thiên nhiên vô cùng trong lành mát mẻ thoáng mát mát mẻ quanh năm không khí sạch dễ chịu vô cùng thư thái đầu óc tâm hồn con người tránh xa căng thẳng áp lực mệt mỏi cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào náo động. Cồn Khương được quy hoạch khang trang văn minh hiện đại xen kẽ những vạt vườn cây ăn quả trái ngọt trĩu cành bóng râm mát rượi rợp bóng mát râm mát rặng hàng dừa xanh tươi tốt, thảm cỏ cỏ sạch đẹp lý tưởng tổ chức dạo bộ hóng gió sông thổi mát rượi chụp ảnh sống ảo check-in đẹp đẽ.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới Bình Ninh Kiều",
+    "content": "Lễ hội cúng đình Thới Bình được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 2, mùng 3 tháng 4 âm lịch tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều, thành phố Cần Thơ, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn tinh thần sâu sắc thiêng liêng vô cùng quan trọng đối với toàn thể cộng đồng người dân địa phương nơi đây sầm uất. Lễ hội diễn ra trang nghiêm nghiêm cẩn nhằm tạ ơn Thành hoàng làng đã phù hộ độ trì bảo an bờ cõi che chở làng xã bình an yên vui cuộc sống nhân dân ấm no hạnh phúc phát đạt thịnh vượng phát tài gặt hái bội thu bước vào năm mới sản xuất nông nghiệp tốt tươi hanh thông. Các nghi thức cúng tế cổ truyền tế lễ nghiêm cẩn trang trọng được ban tế tự bục lão làng thực hiện trang nghiêm tiếng nhạc lễ trầm hùng cổ kính nghiêm trang bài bản, phần hội náo nhiệt vui tươi hát bội cải lương cổ truyền thâu đêm thắt chặt nghĩa cộng đồng đoàn kết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ hội hội Quảng Triệu",
+    "content": "Chùa cổ hội hội Quảng Triệu, tên gọi hành chính chính thức khác của Chùa Ông Cần Thơ, tọa lạc tại số 32 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều. Đây là công trình kiến trúc cổ kính đền miếu tín ngưỡng tâm linh có niên đại lâu đời từ thế kỷ 19 đã được bộ Văn hóa công nhận xếp hạng di tích lịch sử kiến trúc nghệ thuật cấp quốc gia đặc biệt quan trọng tiêu biểu. Chùa được cộng đồng người bang Quảng Đông di cư lập nghiệp xây dựng khang trang tôn thờ Quan Thánh Đế Quân đức tính trung nghĩa chính trực giữ nước an dân che chở thương nhân bình an phát lộc. Kiến trúc chùa mang phong cách nghệ thuật miếu đền Trung Hoa nguyên bản rực rỡ tường gạch đỏ cam mái lợp ngói âm dương thanh lịch cẩn gốm sứ tượng phượng rồng điêu khắc chạm trổ vô cùng sắc nét tinh xảo tráng lệ uy nghiêm trang trọng, bên trong nghi ngút vòng hương khói thơm ngào ngạt thanh khiết thiêng liêng mở cửa tự do đón khách hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 32
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu khô sa tế bò viên mực nhảy cô Lan Cà Mau",
+    "content": "Quán Hủ tiếu khô cô Lan nằm trên đường đề thám, phường An Cư, quận Ninh Kiều, là địa chỉ ẩm thực bình dân vô cùng nổi tiếng chuyên phục vụ món hủ tiếu khô trộn nước sốt sa tế cay nồng đậm đà thơm ngon giòn rụm béo ngậy làm xiêu lòng đông đảo thực khách giới trẻ học sinh sinh viên địa phương khi tìm món ăn tối sầm uất ngon miệng ngất ngây vị giác khi thưởng thức chất lượng cao giá rẻ phải chăng phù hợp túi tiền mọi người dân khi ghé thăm con phố ẩm thực sầm uất đề thám Cần Thơ. Bát hủ tiếu mang ra phục vụ nóng hổi bốc khói nghi ngút thơm lừng hương vị nước sốt độc quyền kẹo sệt chua cay ngọt mặn mằn mằn vừa vặn hành tỏi phi thơm béo ngậy kích thích vị giác cực mạnh khi trộn đều sợi hủ tiếu dai mềm dẻo ngon trắng ngần. Nhân đầy đặn bao gồm thịt bò tái tươi mềm mọng thịt ngọt lịm chắc dai gân bò giòn sật bò viên dai giòn bùi béo ngậy và khoanh mực ống tươi luộc chín tới giòn sần sật ăn kèm rau sống hẹ tươi tươi sạch. Quán sạch mát phục vụ cực nhanh.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Anh Dao Mekong 2 Hotel Cần Thơ",
+    "content": "Khách sạn Anh Dao Mekong 2 Hotel tọa lạc tại số 8 đường Lý Thường Kiệt, phường Tân An, quận Ninh Kiều, sở hữu vị trí đắc địa đắt giá ngay trung tâm trái tim sầm uất của thành phố Tây Đô Cần Thơ cách bến Ninh Kiều chợ đêm phố đi bộ chỉ vài phút đi bộ dạo bước thảnh thơi vô cùng thuận tiện dễ dàng cho khách hàng đi du lịch khám phá hành trình ăn uống vui chơi giải trí đi lại nhanh chóng thuận lợi giao thông nhanh nhẹn. Khách sạn đạt tiêu chuẩn 3 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tối giản tinh tế trẻ trung sang trọng lịch sự ngăn nắp khang trang sạch đẹp, hệ thống phòng ốc phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm trang bị đầy đủ tivi led thông minh kết nối internet truyền hình cáp mạng wifi điều hòa mát nhanh sâu minibar tiện lợi nhà vệ sinh khép kín sạch đẹp vòi sen chu đáo phục vụ an tâm tiết kiệm chi phí túi tiền phải chăng.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây lê lộc Phong Điền Cần Thơ",
+    "content": "Vườn trái cây lê lộc tọa lạc tại phường Ba Láng, quận Cái Răng kết nối trục lộ giao thông Phong Điền, thành phố Cần Thơ, là một khu sinh thái miệt vườn cây ăn trái trù phú tươi xanh tuyệt đẹp sở hữu không gian đậm chất làng quê Nam Bộ mộc mạc thôn quê sông nước hữu tình phù sa màu mỡ sông bồi đắp quanh năm tốt tươi xanh tươi quanh năm trĩu quả trái ngọt lành tươi sạch ngon ngọt bổ dưỡng. Khu vườn rộng lớn rợp bóng mát mẻ thoáng mát mát mẻ quanh năm không khí sạch trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người tránh xa mệt mỏi lo toan căng thẳng cuộc sống xô bồ thành thị ngoài kia náo nhiệt ồn ào sầm uất. Du khách đến đây được thảnh thơi dạo bước đi bộ dưới bóng râm rợp bóng mát râm mát rặng cây ăn quả chôm chôm, măng cụt, sầu riêng dâu hạ châu vạt trái chín mọng tự tay hái thưởng thức vị ngọt lịm ngọt thanh thơm ngon mát lòng mát dạ, chèo xuồng ba lá dọc rạch rạch nước trong veo mát lạnh vui vẻ cuối tuần dã ngoại.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Thượng Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Thượng Điền được tổ chức long trọng trang nghiêm hoành tráng hàng năm vào các ngày mùng 12, 13, 14 tháng 4 âm lịch tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời lớn quy mô nhất vùng miền Tây Nam Bộ thu hút hàng vạn lượt người dân phật tử cộng đồng cư dân muôn nơi về thắp hương dâng lễ cầu nguyện quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui hạnh phục ấm no đời sống người dân ấm no thịnh vượng phát đạt phát tài gặt hái bội thu tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn trang trọng được ban tế tự bục lão làng áo dài khăn đóng truyền thống thực hiện bài bản cổ xưa truyền lại như Lễ Thỉnh Sắc thần tuần du phố phường, Lễ Túc Yết cúng tế tôn nghiêm trong tiếng nhạc lễ trầm hùng cổ kính nghiêm trang kính cẩn. Phần hội náo nhiệt vui múa lân sư rồng hò reo.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ Hội Linh Cần Thơ",
+    "content": "Chùa Hội Linh, hay còn gọi là Hội Linh Cổ Tự, tọa lạc tại đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy, thành phố Cần Thơ. Ngôi chùa được xây dựng vào đầu thế kỷ 20 mộc mạc cổ kính trải qua nhiều thăng trầm lịch sử vĩ đại cách mạng, đã được xếp hạng công nhận di tích lịch sử văn hóa cấp quốc gia ý nghĩa thiêng liêng tự hào. Chùa thuộc hệ phái Phật giáo Bắc tông trang nghiêm cổ kính mang lối kết cấu kiến trúc truyền thống chùa cổ Việt Nam với mái ngói lưu ly âm dương chồng xếp nhiều tầng, trên nóc trang trí lưỡng long chầu nguyệt đúc điêu khắc tinh xảo tráng lệ uy nghiêm. Bên trong chánh điện trang nghiêm linh thiêng bài trí tôn nghiêm các pho tượng Phật cổ kính khói hương nghi ngút quanh năm thanh tịnh thanh nghiêm tỏa mùi thơm thanh khiết thiêng liêng. Khuôn viên chùa rộng mát rợp bóng cây xanh hoa kiểng bồ đề cổ thụ che mát giúp phật tử du khách tĩnh tâm thư thái đầu óc, mở cửa tự do hành hương.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún riêu cua giò heo gạch cua đặc sản cô sen Cần Thơ",
+    "content": "Quán Bún riêu cua cô sen nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy, là địa chỉ ẩm thực bình dân ngon trứ danh chuyên phục vụ món bún riêu cua đồng giò heo sườn non mang đậm hương vị truyền thống thơm ngon ngọt thanh đậm đà làm say lòng đông đảo thực khách sành ăn người dân địa phương học sinh sinh viên dập dìu ghé qua mỗi buổi sáng chiều tối đói bụng thèm bát bún nóng hổi bốc khói chất lượng no bụng bổ dưỡng giá bình dân phải chăng phù hợp túi tiền mọi người. Bát bún riêu mang ra phục vụ nóng hổi bốc khói nghi ngút nổi bật với nước dùng lẩu thanh ngọt đậm đà từ cua đồng đồng xay nhuyễn nguyên chất chưng gạch béo ngậy đúc tảng riêu cua béo mướt mềm ngọt có màu đỏ cam bắt mắt cà chua chưng hành phi thơm phức lừng không gian vị giác kích thích mạnh mẽ khi thưởng thức. Nhân đầy đặn gồm khoanh giò heo ninh mềm béo ngậy dẻo thịt ngọt ngon, huyết heo mướt mịn đậu hũ chiên xốp thấm vị ăn kèm đĩa rau sống tươi sạch.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Tây Đô Hotel Cần Thơ",
+    "content": "Khách sạn Tây Đô Hotel tọa lạc tại số 61 đường Ngô Quyền, phường Tân An, quận Ninh Kiều, sở hữu vị trí giao thông trung tâm sầm uất của thành phố cổ Cần Thơ nằm gần các khu mua sắm chợ truyền thống trung tâm hành chính giúp du khách dễ dàng đi lại tiếp cận nhanh chóng thuận lợi tối đa khi đến đây du lịch đi công tác ngắn ngày nghỉ ngơi tiện lợi thoải mái ấm cúng chi phí tiết kiệm phải chăng phù hợp túi tiền mọi người dân. Khách sạn đạt tiêu chuẩn 3 sao hiện đại sạch sẽ khang trang thanh lịch thiết kế mang phong cách kiến trúc đơn giản hiện đại tối giản lịch sự gọn gàng ấm áp, hệ thống phòng ốc phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm khang trang trang bị đầy đủ tivi truyền hình cáp màn hình phẳng kết nối wifi internet mạng tốc độ cao, tủ lạnh minibar lớn điều hòa làm mát nhanh sâu êm ái sâu sắc nhà vệ sinh khép kín sạch đẹp nước nóng lạnh vòi sen chu đáo hỗ trợ phục vụ. Lễ tân phục vụ trực ban nhiệt tình.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 61
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cò Bằng Lăng Thốt Nốt",
+    "content": "Vườn cò Bằng Lăng tọa lạc tại thới bình, phường Thuận An, quận Thốt Nốt, thành phố Cần Thơ, cách trung tâm thành phố Tây Đô khoảng 45 km về hướng tây bắc. Đây là một khu bảo tồn sinh thái tự nhiên sân chim lớn sầm uất hoành tráng lâu đời và nổi tiếng nhất vùng đồng bằng sông Cửu Long sở hữu không gian sinh thái thiên nhiên ngập nước hoang sơ tuyệt mỹ rộng hơn 1,5 ha rợp bóng bóng mát râm mát rặng cây tre xanh rợp rặng cây bằng lăng đại ngàn bạt ngàn tốt tươi quanh năm tạo thành ngôi nhà chung tuyệt hảo lý tưởng che chở bảo bọc cho hàng vạn cá thể đàn chim hoang dã làm tổ sinh sống trú ẩn tấp nập sầm uất sinh động. Đến thăm sân chim du khách được ngắm nhìn khung cảnh thiên nhiên kỳ thú vô cùng kinh ngạc khi hàng ngàn đàn cò trắng cò xám cò lửa điệc vạc bay lượn rợp trời gọi bầy đáp cánh xuống rặng cây rực rỡ buổi chiều tà hoàng hôn rực rỡ lộng gió mát mẻ trong lành khí sạch bình yên thư thái tâm hồn đầu óc xua mệt nhọc cuộc sống thành thị ngoài kia.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Hạ Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Hạ Điền được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 14, mùng 15 tháng 12 âm lịch tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn sâu đậm sâu sắc đối với toàn thể cộng đồng người dân địa phương nơi đây gặt hái thành công mùa màng cuối năm tạ ơn thần linh. Lễ hội diễn ra trang nghiêm nhằm mục đích tế tạ ơn Thành hoàng làng đã phù hộ độ trì che chở cho quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui đời sống ấm no hạnh phúc phát đạt bước vào năm mới sản xuất tốt gặt hái bội thu tài lộc hanh thông thịnh vượng ấm cúng. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn như Lễ Thỉnh Sắc thần cúng tế tôn nghiêm trong tiếng nhạc lễ trầm hùng cổ kính trang trọng cổ xưa truyền lại nghiêm trang kính cẩn bài bản, phần hội náo nhiệt vui hát tuồng cổ truyền phục vụ nhân dân thâu đêm gắn kết thắt chặt tình nghĩa.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Cơ quan Đặc ủy Hậu Giang Cần Thơ",
+    "content": "Di tích Cơ quan Đặc ủy Hậu Giang tọa lạc tại số 26 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều, thành phố Cần Thơ. Đây là di tích lịch sử cách mạng cấp quốc gia có ý nghĩa vô cùng thiêng liêng giáo dục truyền thống cách mạng yêu nước sâu sắc ghi dấu nơi đặt tổng hành dinh chỉ huy bí mật đầu tiên của ban chấp hành Đặc ủy Đảng Cộng sản Việt Nam vùng Hậu Giang thời kỳ kháng chiến chống thực dân Pháp xâm lược hào hùng oanh liệt vĩ đại. Tại ngôi nhà cổ kiến trúc mộc mạc đơn sơ bằng gỗ lợp mái ngói cổ kính ẩn mình giữa lòng phố thị che chở bảo an nơi đây các cán bộ tiền bối kiên trung đã đưa ra quyết định chiến lược bẻ gãy cứ điểm đồn bốt địch lãnh đạo phong trào cách mạng miền Nam giành thắng lợi vẻ vang tự hào. Khu di tích được bảo tồn nguyên trạng cẩn thận bày trí bên trong nhiều tài liệu hình ảnh hiện vật kỷ vật bản đồ lịch sử sống động, mở cửa đón tiếp sinh viên học sinh du khách tham quan tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cháo lòng Cái Tắc lòng thập cẩm ngon cô Ba",
+    "content": "Quán Cháo lòng Cái Tắc cô Ba nằm trên quốc lộ 1A, đoạn gần giáp ranh thành phố Cần Thơ là địa chỉ ẩm thực bình dân đồng quê vô cùng nổi tiếng chuyên phục vụ món cháo lòng thập cẩm mang chuẩn hương vị cháo lòng Cái Tắc trứ danh thơm ngon béo ngậy đậm đà làm say lòng đông đảo thực khách người dân địa phương giới tài xế học sinh sinh viên dập dìu ghé qua thưởng thức mỗi buổi sáng sớm tối se lạnh đói bụng thèm bát cháo nóng hổi bốc khói chất lượng no bụng bổ dưỡng giá rẻ bình dân phải chăng phù hợp túi tiền mọi người. Bát cháo lòng mang ra nóng hổi bốc khói nghi ngút tỏa mùi hương thơm nức mũi nồng nàn quyến rũ đặc trưng từ hạt gạo nếp rang thơm nở bung đều dẻo mịn ninh cùng nước súp cốt xương heo ống nhừ và huyết heo tạo màu nâu sẫm ngọt lịm đậm đà ngọt mặn vừa vặn mằn mằn ngon tuyệt hảo. Phần nhân đầy đặn xếp đầy lòng heo thập cẩm dồi trường chiên giòn tim gan luộc chín giòn sật sật béo ngậy rắc hành lá ngò rí tiêu cay nồng ấm bụng.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều, sở hữu vị trí đắc địa đắt giá ngay góc vòng xoay bến Ninh Kiều lộng gió mát rượi trung tâm sầm uất của thành phố Tây Đô Cần Thơ cách chợ đêm phố đi bộ bến tàu du thuyền chỉ vài bước chân vô cùng thuận tiện dễ dàng cho khách hàng đi du lịch công tác ngắn dài ngày nghỉ ngơi thoải mái an tâm đi lại nhanh chóng thuận lợi giao thông nhanh nhẹn. Khách sạn đạt tiêu chuẩn 3 sao cộng hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tối giản tinh tế sang trọng lịch sự ngăn nắp, hệ thống phòng ốc phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm trang bị đầy đủ tivi thông minh màn hình phẳng kết nối internet mạng wifi điều hòa mát nhanh sâu minibar tiện lợi bồn tắm nằm khép kín sạch đẹp vòi sen chu đáo hỗ trợ phục vụ ăn sáng buffet ngon miệng nhà hàng sân thượng lộng gió ngắm sông tuyệt đẹp view đắt.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây chín hồng Phong Điền Cần Thơ",
+    "content": "Vườn trái cây chín hồng tọa lạc tại ấp Mỹ Nhơn, xã Mỹ Khánh, huyện Phong Điền, thành phố Cần Thơ, là một khu sinh thái nông nghiệp miệt vườn cây ăn trái trù phú tươi xanh tuyệt đẹp sở hữu không gian rộng lớn bao la đậm đà sắc màu sắc phong cảnh đồng quê Nam Bộ mộc mạc thôn quê phù sa sông bồi đắp màu mỡ quanh năm tươi tốt quả ngọt lành trái tươi sạch sẽ ngon ngọt bổ dưỡng mát lòng mát dạ. Khu vườn rợp bóng mát mẻ thoáng mát mát mẻ quanh năm không khí sạch trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người tránh xa căng thẳng áp lực mệt mỏi cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào sầm uất náo động lộng gió mát mẻ. Du khách đến đây được thảnh thơi dạo bước đi bộ dưới bóng râm rợp bóng mát râm mát rặng cây dâu hạ châu vạt trái chín mọng vàng ruộm rủ chùm sát đất chôm chôm, măng cụt, sầu riêng tươi ngon tự tay hái thưởng thức ngọt lịm thơm ngon ngon miệng, chèo xuồng ba lá dọc rạch rạch nước trong veo dã ngoại.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đền thờ Vua Hùng Cần Thơ",
+    "content": "Lễ hội Đền thờ Vua Hùng được tổ chức long trọng trang nghiêm quy mô lớn hoành tráng hàng năm vào các ngày mùng 8 đến mùng 10 tháng 3 âm lịch (trọng tâm là ngày mùng 10 chính lễ giỗ tổ) tại Khu Đền thờ Vua Hùng quận Bình Thủy, thành phố Cần Thơ. Đây là sự kiện văn hóa tâm linh tín ngưỡng cấp quốc gia ý nghĩa thiêng liêng vô cùng quan trọng thể hiện truyền thống đạo lý uống nước nhớ nguồn hướng về nguồn cội dân tộc Việt Nam vĩ đại hào hùng hướng về đất tổ trung kiên thu hút hàng vạn lượt người dân phật tử đồng bào cư dân muôn nơi đổ về dâng hương kính lễ cầu nguyện bình an may mắn sức khỏe thịnh vượng ấm no hạnh phúc phát đạt quê hương giang sơn thái bình ấm cúng. Nghi thức đại lễ diễn ra trang nghiêm nghiêm cẩn kính cẩn bài bản diễu hành dâng hương kiệu hoa sặc sỡ nhạc lễ trầm hùng trang trọng cổ kính uy nghiêm tôn nghiêm, phần hội sôi nổi nhiều trò chơi dân gian hội thi làm bánh chưng gói bánh tét bánh giầy đặc sắc náo nhiệt rộn ràng.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Đền thờ Thủ khoa Bùi Hữu Nghĩa Cần Thơ",
+    "content": "Đền thờ Bùi Hữu Nghĩa, di tích nằm trong quần thể Khu mộ di tích Thủ khoa Bùi Hữu Nghĩa tọa lạc trên đường đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy, thành phố Cần Thơ. Đây là công trình kiến trúc tín ngưỡng tâm linh cổ kính có giá trị lịch sử văn hóa lâu đời lâu năm tiêu biểu đã được bộ Văn hóa công nhận xếp hạng di tích lịch sử cấp quốc gia đặc biệt ý nghĩa thiêng liêng đối với người dân đất Tây Đô tự hào ghi danh công đức sự nghiệp cuộc đời vị quan thanh liêm nhà thơ yêu nước lớn Nam Bộ thế kỷ 19. Đền thờ xây dựng khang trang bề thế kết cấu chữ Tam truyền thống mái lợp ngói âm dương rêu phong cổ kính nội thất trang nghiêm chánh điện thờ tự bức tượng đồng uy nghi của cụ hoành phi câu đối chạm trổ điêu khắc gỗ tinh xảo sơn son thếp vàng rực rỡ sắc màu trang trọng nghiêm cẩn nghi ngút vòng hương khói tỏa hương thơm thanh khiết thiêng liêng quanh năm thanh tịnh thanh nghiêm, mở cửa tự do đón phật tử du khách thập phương chiêm bái tri ân.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún chả Hà Nội hương vị phố cổ ngon chuẩn vị",
+    "content": "Quán Bún chả Hà Nội phố cổ nằm trên đường Nguyễn Văn Cừ kéo dài, phường An Khánh, quận Ninh Kiều, là địa chỉ ẩm thực quen thuộc vô cùng nổi tiếng chuyên phục vụ món bún chả mang chuẩn phong vị nguyên bản đất Hà Thành thơm ngon đậm đà làm xiêu lòng đông đảo thực khách mê đặc sản món Bắc tại Cần Thơ mỗi buổi trưa chiều đói bụng thèm suất cơm tấm bún ăn ngon miệng ngất ngây vị giác khi thưởng thức chất lượng cao sạch sẽ lịch sự ngăn nắp giá cả phải chăng phù hợp túi tiền mọi người dân học sinh sinh viên văn phòng công sở. Một suất bún chả đầy đặn ngập tràn tại quán mang ra hấp dẫn nổi bật với bát nước chấm dưa góp đu đủ xanh cà rốt giòn sật ấm nóng tỏa mùi hương thơm lừng quyến rũ nức mũi xộc thẳng vào vị giác thả đầy chả viên băm nhỏ thịt dải nướng cháy cạnh thơm phức được tẩm ướp gia vị tỏi hành mật ong tiêu đậm đà nướng đều tay trên bếp than hồng than đỏ rực ăn kèm đĩa bún sợi nhỏ mềm mịn trắng ngần rổ rau sống tươi sạch xà lách kinh giới húng láng tươi xanh mát lòng hạp.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Hạnh Phúc Hotel Cần Thơ",
+    "content": "Khách sạn Hạnh Phúc Hotel tọa lạc tại số 75-77-79 đường Nguyễn An Ninh, phường Tân An, quận Ninh Kiều, sở hữu vị trí giao thông trung tâm sầm uất của thành phố cổ Cần Thơ nằm gần bến Ninh Kiều chợ đêm phố đi bộ giúp du khách dễ dàng đi lại tiếp cận mua sắm ăn uống vui chơi giải trí đi lại nhanh chóng thuận tiện giao thông nhanh nhẹn ngắn dài ngày công tác du lịch nghỉ ngơi tiện lợi thoải mái ấm cúng với chi phí tiết kiệm phải chăng phù hợp túi tiền mọi người dân khi đến đất cực Nam. Khách sạn đạt tiêu chuẩn 3 sao hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tối giản tinh tế trẻ trung lịch sự ngăn nắp khang trang sạch đẹp, hệ thống phòng ốc phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm trang bị đầy đủ tivi led màn hình phẳng kết nối internet truyền hình cáp mạng wifi điều hòa làm mát nhanh sâu minibar tiện lợi nhà vệ sinh khép kín khang trang nước nóng vòi sen phục vụ tốt.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 78
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn dâu hạ châu Phong Điền Cần Thơ",
+    "content": "Vườn dâu hạ châu trải dài trên diện tích rộng lớn tại các xã thuộc huyện Phong Điền, thành phố Cần Thơ, là một khu sinh thái thiên nhiên nông nghiệp miệt vườn đặc trưng trù phú xanh tươi tuyệt đẹp sở hữu rặng hàng cây dâu hạ châu quý hiếm trứ danh đặc sản nổi tiếng ngon ngọt lịm thơm ngon ngọt thanh mà không nơi nào sánh bằng đất Phong Điền phù sa màu mỡ sông nước hữu tình bồi đắp bồi tụ quanh năm xanh tươi tốt tươi quả ngọt lành tươi sạch tươi ngon ngọt bùi mát lòng mát dạ. Khu vườn rộng bao la rợp bóng mát mẻ thoáng mát mát mẻ quanh năm không khí sạch trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người tránh xa căng thẳng áp lực mệt mỏi cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào sầm uất náo động lộng gió mát mẻ. Du khách đến đây mùa chín rộ khoảng tháng 6 đến tháng 9 được chiêm ngưỡng khung cảnh trĩu quả bóng râm rợp bóng mát chùm dâu chín vàng ruộm treo lủng lẳng từ thân cây sát đất tự tay hái thưởng thức ngon ngọt bổ dưỡng.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 6
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 15, mùng 16 tháng 11 âm lịch tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn, thành phố Cần Thơ, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn sâu đậm sâu sắc đối với toàn thể cộng đồng người dân địa phương bờ cõi xóm làng nơi đây. Lễ hội diễn ra trang nghiêm nhằm mục đích tạ ơn Thành hoàng làng đã phù hộ độ trì che chở cho quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui đời sống ấm no hạnh phúc phát đạt bước vào mùa vụ mới sản xuất hanh thông tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn như Lễ Túc Yết, Lễ Xây Chầu được ban tế tự bục lão làng thực hiện trang nghiêm nghiêm cẩn bài bản trong tiếng nhạc lễ trầm hùng cổ kính trang trọng cổ xưa truyền lại. Phần hội náo nhiệt vui tươi thu hút đông đảo bà con xem hát bội cổ truyền thâu đêm gắn kết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn, thành phố Cần Thơ, là một công trình kiến trúc tín ngưỡng cổ kính có giá trị lịch sử văn hóa lâu đời lâu năm tiêu biểu đã được công nhận xếp hạng di tích lịch sử nghệ thuật cấp quốc gia đặc biệt quan trọng ý nghĩa thiêng liêng đối với địa phương xóm làng đất Tây Đô Cần Thơ. Ngôi đình thờ vị Thành hoàng Bổn cảnh có công khai hoang lập làng bảo hộ làng xã yên vui bình an, được xây dựng theo lối bố cục kiến trúc truyền thống đình làng Nam Bộ xưa ba gian hai chái chịu lực vững chãi bằng hệ thống khung cột gỗ quý lớn kiên cố vững vàng qua năm tháng. Bên trong chánh điện trang nghiêm lộng lẫy lưu giữ nhiều bức bao lam hoành phi câu đối sơn son thếp vàng chạm khắc hình rồng phượng tinh xảo sắc nét thể hiện kỹ nghệ điêu khắc gỗ bậc thầy mỹ thuật xưa của cha ông ta. Đình thần Thới An mở cửa đón khách tham quan chiêm bái tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu mực ống tươi mực nhảy Cái Răng",
+    "content": "Quán Hủ tiếu mực tươi Cái Răng nằm trên đường Ba Láng, quận Cái Răng, là địa chỉ ẩm thực bình dân vô cùng nổi tiếng chuyên phục vụ món hủ tiếu mực tươi hải sản mang chuẩn hương vị ngọt thanh đậm đà giòn rụm béo ngậy ngon ngọt thịt săn chắc làm say lòng đông đảo thực khách người dân địa phương học sinh sinh viên mỗi buổi sáng tối đói bụng thèm tô bún hủ tiếu nóng hổi bốc khói chất lượng no bụng bổ dưỡng giá rẻ bình dân phải chăng phù hợp túi tiền mọi người dân khi ghé thăm quận Cái Răng Cần Thơ. Bát hủ tiếu mang ra nóng hổi bốc khói nghi ngút nổi bật với nước dùng phở súp được ninh nấu kỹ lưỡng nguyên chất từ xương heo ống lọc trong suốt và mực khô loại một tạo vị ngọt thanh thanh tự nhiên m mặn mằn mằn vừa miệng béo ngậy hành phi tóp mỡ rắc ngò thơm tiêu cay nồng nàn kích thích vị giác cực mạnh khi thưởng thức. Nhân đầy đặn xếp đầy khoanh mực ống tươi roi rói vừa luộc chín tới giòn sần sật ngọt lịm thịt dai chả cá dai thơm trứng cút béo ngậy rau hẹ tươi.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Mekong Logis Homestay Cần Thơ",
+    "content": "Mekong Logis Homestay tọa lạc tại số 188 đường ba láng, phường Ba Láng, quận Cái Răng, thành phố Cần Thơ, nằm ẩn mình yên tĩnh xanh mát bên rạch sông nhỏ hiền hòa lộng gió mát rượi mang mô hình lưu trú căn hộ homestay nhà vườn đậm chất sinh thái mộc mạc đồng quê Nam Bộ mến khách chu đáo thân thiện nhiệt tình tối đa hỗ trợ khách du lịch trải nghiệm cuộc sống người dân bản địa cực kỳ thú vị tuyệt hảo. Homestay thiết kế theo lối những ngôi nhà mái ngói gạch thô mộc mạc cổ xưa nhưng bài trí bên trong vô cùng khang trang sạch sẽ ngăn nắp lau dọn vệ sinh hằng ngày ngăn nắp tinh tươm, trang bị đầy đủ tivi màn hình phẳng điều hòa điều hòa mát nhanh sâu wifi miễn phí tốc độ cao giường đệm mềm mại và nhà vệ sinh khép kín khang trang nước nóng lạnh đầy đủ sạch đẹp cho khách hàng nghỉ dưỡng an tâm. Tại đây du khách được sử dụng miễn phí xe đạp dạo quanh đường làng nhỏ rợp cây xanh mát hít thở khí sạch quê ngon miệng.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả ba cống Bình Thủy Cần Thơ",
+    "content": "Vườn cây ăn quả ba cống tọa lạc tại phường Long Tuyền, quận Bình Thủy, thành phố Cần Thơ, là một khu sinh thái miệt vườn cây ăn trái trù phú tươi xanh tuyệt đẹp sở hữu diện tích rộng rộng lớn bao la đậm chất Nam Bộ mộc mạc thôn quê sông nước phù sa màu mỡ sông bồi đắp quanh năm xanh tốt xanh tươi quanh năm trĩu quả trái ngọt lành tươi sạch ngon ngọt ngọt lịm bổ dưỡng mát lòng mát dạ cho du khách dã ngoại trốn nóng cuối tuần giải tỏa mệt mỏi căng thẳng lo toan cuộc sống. Khu vườn rộng lớn rợp bóng mát mẻ thoáng mát mát mẻ quanh năm không khí sạch trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người tránh xa cuộc sống xô bồ thành thị ngoài kia náo nhiệt ồn ào. Du khách đến đây được thảnh thơi đi dạo bộ dưới bóng râm rợp bóng mát râm mát rặng cây vú sữa hoàng kim chín vàng ngọt bùi chôm chôm, măng cụt sầu riêng mận an phước tự tay hái thưởng thức ngon ngọt đậm đà thơm phức lừng không gian vị giác và chèo xuồng ba lá dọc rạch rạch nước trong veo.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới Bình được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 2, mùng 3 tháng 4 âm lịch tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều, thành phố Cần Thơ, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn sâu đậm sâu sắc đối với toàn thể cộng đồng người dân địa phương bờ cõi xóm làng nơi đây. Lễ hội diễn ra trang nghiêm nhằm mục đích tạ ơn Thành hoàng làng đã phù hộ độ trì che chở cho quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui đời sống ấm no hạnh phúc phát đạt bước vào mùa vụ mới sản xuất hanh thông tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn như Lễ Thỉnh Sắc, Lễ Túc Yết được ban tế tự bục lão làng thực hiện trang nghiêm nghiêm cẩn bài bản trong tiếng nhạc lễ trầm hùng cổ kính trang trọng cổ xưa truyền lại. Phần hội náo nhiệt vui tươi thu hút đông đảo bà con xem hát bội cổ truyền thâu đêm gắn kết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Đình thần Thới Bình tọa lạc tại phường Thới Bình, quận Ninh Kiều, thành phố Cần Thơ, là một công trình kiến trúc tín ngưỡng cổ kính có giá trị lịch sử văn hóa lâu đời lâu năm tiêu biểu đã được công nhận xếp hạng di tích lịch sử nghệ thuật cấp quốc gia đặc biệt quan trọng ý nghĩa thiêng liêng đối với địa phương xóm làng đất Tây Đô Cần Thơ. Ngôi đình thờ vị Thành hoàng Bổn cảnh có công khai hoang lập làng bảo hộ làng xã yên vui bình an, được xây dựng theo lối bố cục kiến trúc truyền thống đình làng Nam Bộ xưa ba gian hai chái chịu lực vững chãi bằng hệ thống khung cột gỗ quý lớn kiên cố vững vàng qua năm tháng. Bên trong chánh điện trang nghiêm lộng lẫy lưu giữ nhiều bức bao lam hoành phi câu đối sơn son thếp vàng chạm khắc hình rồng phượng tinh xảo sắc nét thể hiện kỹ nghệ điêu khắc gỗ bậc thầy mỹ thuật xưa của cha ông ta. Đình thần Thới Bình mở cửa đón khách tham quan chiêm bái tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cơm tấm sườn bì chả nướng than hồng cô Diễm Cần Thơ",
+    "content": "Quán Cơm tấm cô Diễm nằm trên đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều, là địa chỉ ẩm thực ăn sáng vô cùng nổi tiếng sầm uất nhộn nhịp chuyên phục vụ món cơm tấm sườn nướng mang đậm chuẩn phong vị Nam Bộ ngọt mặn đậm đà hấp dẫn thơm phức lừng làm say lòng đông đảo thực khách người dân văn phòng địa phương học sinh sinh viên dập dìu ghé qua mỗi buổi sáng đói bụng cần nạp năng lượng chất lượng cao ngon miệng ngất ngây vị giác khi thưởng thức giá rẻ bình dân phải chăng phù hợp túi tiền mọi người. Đĩa cơm tấm tại quán mang ra bắt mắt quyến rũ nổi bật với cơm tấm hạt gạo tơi xốp dẻo thơm, bên trên đặt một miếng sườn cốt lết heo lớn tẩm ướp gia vị mật ong nước mắm đậm đà tỏi ớt băm theo công thức gia truyền nướng chín vàng đều cháy cạnh xèo xèo trên bếp than hồng đỏ rực tỏa mùi hương phức ngậy béo thịt sườn mềm ngọt mọng nước luộc không khô dai ăn kèm chả trứng hấp béo bùi bì heo thính mỡ hành ngò đĩa đồ chua dưa góp thanh mát nước mắm chua ngọt pha sệt kẹo cay xé lưỡi ngon tuyệt hảo.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Green House Hotel Cần Thơ",
+    "content": "Khách sạn Green House Hotel tọa lạc tại số 39 đường Nguyễn Anh Ninh, phường Tân An, quận Ninh Kiều, sở hữu vị trí giao thông vô cùng đắc địa đắt giá ngay sát trái tim sầm uất bến Ninh Kiều phố đi bộ chợ đêm Cần Thơ cách công viên tượng đài Bác chỉ vài bước chân thảnh thơi dạo bước dạo bộ vô cùng tiện lợi dễ dàng tiếp cận mọi khu ăn uống ẩm thực sầm uất vui chơi giải trí đi lại nhanh chóng thuận lợi giao thông nhanh nhẹn ngắn dài ngày công tác du lịch nghỉ ngơi tiện lợi thoải mái ấm cúng với chi phí tiết kiệm giá rẻ phải chăng phù hợp túi tiền mọi người dân khi đến Tây Đô. Khách sạn đạt tiêu chuẩn 2 sao hiện đại sạch sẽ khang trang thanh lịch thiết kế hiện đại tối giản gọn gàng ngăn nắp khang trang sạch đẹp, phòng nghỉ thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm trang bị đầy đủ tivi truyền hình cáp led màn hình phẳng điều hòa làm mát nhanh sâu wifi miễn phí nhà vệ sinh khép kín vòi sen có nước nóng đầy đủ chu đáo hỗ trợ phục vụ tốt.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả gia bảo Phong Điền Cần Thơ",
+    "content": "Vườn cây ăn quả gia bảo tọa lạc tại xã Nhơn Nghĩa, huyện Phong Điền, thành phố Cần Thơ, là một khu sinh thái nông nghiệp miệt vườn cây ăn trái trù phú xanh tươi tuyệt đẹp sở hữu diện tích rộng rộng lớn bao la đậm chất đồng quê Nam Bộ mộc mạc thôn quê phù sa sông nước bồi đắp màu mỡ quanh năm tốt tươi quả ngọt lành trái tươi sạch sẽ tươi ngon ngọt lịm bổ dưỡng mát lòng mát dạ cho du khách dã ngoại trốn nóng cuối tuần thư giãn tinh thần thoải mái giải tỏa áp lực căng thẳng lo toan cuộc sống thành thị xô bồ ngoài kia náo nhiệt. Khu vườn rộng lớn rợp bóng mát mẻ thoáng mát mát mẻ quanh năm không khí sạch trong lành vô cùng dễ chịu sảng khoái đầu óc tâm hồn con người tránh xa cuộc sống xô bồ ngoài kia. Du khách đến đây được thảnh thơi đi dạo bộ dưới bóng râm rợp bóng mát râm mát rặng cây nhãn xuồng cùi dày béo ngọt chôm chôm, măng cụt sầu riêng mãng cầu xiêm tự tay hái thưởng thức ngon ngọt đậm đà thơm phức lừng không gian vị giác và chèo xuồng ba lá dọc rạch.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 15, mùng 16 tháng 11 âm lịch tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn, thành phố Cần Thơ, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn sâu đậm sâu sắc đối với toàn thể cộng đồng người dân địa phương bờ cõi xóm làng nơi đây. Lễ hội diễn ra trang nghiêm nhằm mục đích tạ ơn Thành hoàng làng đã phù hộ độ trì che chở cho quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui đời sống ấm no hạnh phúc phát đạt bước vào mùa vụ mới sản xuất hanh thông tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn như Lễ Túc Yết, Lễ Xây Chầu được ban tế tự bục lão làng thực hiện trang nghiêm nghiêm cẩn bài bản trong tiếng nhạc lễ trầm hùng cổ kính trang trọng cổ xưa truyền lại. Phần hội náo nhiệt vui tươi thu hút đông đảo bà con xem hát bội cổ truyền thâu đêm gắn kết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn, thành phố Cần Thơ, là một công trình kiến trúc tín ngưỡng cổ kính có giá trị lịch sử văn hóa lâu đời lâu năm tiêu biểu đã được công nhận xếp hạng di tích lịch sử nghệ thuật cấp quốc gia đặc biệt quan trọng ý nghĩa thiêng liêng đối với địa phương xóm làng đất Tây Đô Cần Thơ. Ngôi đình thờ vị Thành hoàng Bổn cảnh có công khai hoang lập làng bảo hộ làng xã yên vui bình an, được xây dựng theo lối bố cục kiến trúc truyền thống đình làng Nam Bộ xưa ba gian hai chái chịu lực vững chãi bằng hệ thống khung cột gỗ quý lớn kiên cố vững vàng qua năm tháng. Bên trong chánh điện trang nghiêm lộng lẫy lưu giữ nhiều bức bao lam hoành phi câu đối sơn son thếp vàng chạm khắc hình rồng phượng tinh xảo sắc nét thể hiện kỹ nghệ điêu khắc gỗ bậc thầy mỹ thuật xưa của cha ông ta. Đình thần Thới An mở cửa đón khách tham quan chiêm bái tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Phở bò tái lăn gầu giòn béo ngậy chín nạc hương vị Bắc cô Lan",
+    "content": "Quán Phở bò gia truyền cô Lan nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy, là địa chỉ ẩm thực phở bò vô cùng nổi tiếng chuyên phục vụ món phở bò tái lăn mang đậm chuẩn phong vị cổ truyền đất Hà Thành thơm ngon ngọt thanh béo ngậy mằn mằn đậm đà làm say lòng đông đảo thực khách sành ăn người dân địa phương mỗi buổi sáng tối đói bụng thèm tô phở nóng bốc khói nghi ngút chất lượng cao thơm ngon ngất ngây vị giác khi thưởng thức cùng bạn bè người thân ấm cúng giá bình dân phải chăng phù hợp túi tiền mọi người dân. Bát phở bốc khói mang ra phục vụ nóng hổi bốc khói nghi ngút nổi bật với nước phở nước lèo được ninh nấu suốt 24 giờ từ xương ống bò béo ngậy lọc trong suốt tạo vị ngọt thanh dịu không ngấy thơm phức nức mùi hương gừng nướng quế hồi sả tiêu cay nồng nàn kích thích mạnh mẽ. Phần nhân đầy đặn gồm bánh phở dẻo mềm mịn, thịt bò tươi phi hành tỏi áp chảo nhanh tay trên lửa lớn tái lăn xèo xèo ngọt thịt dai mềm thơm nức lòng gầu bò luộc giòn rắc hành hoa. Quán ăn sạch phục vụ nhanh.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Luxury Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Luxury Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều, sở hữu vị trí đắc địa đắt giá ngay góc vòng xoay bến Ninh Kiều lộng gió mát rượi trung tâm sầm uất của thành phố Tây Đô Cần Thơ cách chợ đêm phố đi bộ bến tàu du thuyền chỉ vài bước chân vô cùng thuận tiện dễ dàng cho khách hàng đi du lịch công tác ngắn dài ngày nghỉ ngơi thoải mái an tâm đi lại nhanh chóng thuận lợi giao thông nhanh nhẹn. Khách sạn đạt tiêu chuẩn 3 sao cộng hiện đại sạch sẽ khang trang thanh lịch mang phong cách thiết kế kiến trúc hiện đại tối giản tinh tế sang trọng lịch sự ngăn nắp, hệ thống phòng ốc phòng ngủ rộng rãi thoáng mát dọn dẹp hằng ngày ngăn nắp tinh tươm trang bị đầy đủ tivi thông minh màn hình phẳng kết nối internet mạng wifi điều hòa mát nhanh sâu minibar tiện lợi bồn tắm nằm khép kín sạch đẹp vòi sen chu đáo hỗ trợ phục vụ ăn sáng buffet ngon miệng nhà hàng sân thượng lộng gió ngắm sông tuyệt đẹp view đắt.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Bình Thủy Cần Thơ",
+    "content": "Rạch sông Bình Thủy chảy hiền hòa uốn lượn qua bờ địa phận quận Bình Thủy, thành phố Cần Thơ, là một khu sinh thái sông nước tự nhiên hoang sơ sở hữu dòng nước sông lững lờ phù sa uốn quanh uốn khúc qua các xóm làng thôn quê rặng hàng tre tre xanh xanh tươi vạt vườn cây ăn quả trù phú quanh năm xanh tốt mang lại cảnh quan thiên nhiên trong lành yên bình tĩnh lặng đồng quê miệt vườn tuyệt hảo lý tưởng cho du khách dã ngoại trốn nóng giải tỏa căng thẳng lo toan cuộc sống thành thị xô bồ ngoài kia náo nhiệt ồn ào sầm uất náo động lộng gió mát rượi quanh năm gió sông thổi lộng lẫy mát mẻ. Du khách đến đây có thể thuê chiếc thuyền nhỏ xuồng ba lá chèo dọc rạch nước ngắm nhìn phong cảnh làng quê mộc mạc nghe chim hót líu lo rộn rã đón bình minh sớm ngắm hoàng hôn buông xuống mặt sông lãng mạn nên thơ tuyệt mỹ, câu cá giải trí bên chòi lá nhỏ và thưởng thức đặc sản lẩu vịt nấu chao đậm đà cùng bè bạn gia đình. Địa điểm tự do miễn phí.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Uyên Hưng được tổ chức long trọng trang nghiêm hàng năm vào các ngày mùng 15, mùng 16 tháng 3 âm lịch tại Đình thần Uyên Hưng thuộc thị xã Bến Cát, là một ngày hội làng văn hóa tín ngưỡng tâm linh truyền thống lâu đời ghi dấu ấn sâu đậm sâu sắc đối với toàn thể cộng đồng người dân địa phương bờ cõi xóm làng nơi đây. Lễ hội diễn ra trang nghiêm nhằm mục đích tạ ơn Thành hoàng làng đã phù hộ độ trì che chở cho quốc thái dân an mưa thuận gió hòa làng xã bình an yên vui đời sống ấm no hạnh phúc phát đạt bước vào mùa vụ mới sản xuất hanh thông tốt đẹp. Chuỗi nghi thức tế cúng cổ truyền tế lễ nghiêm cẩn như Lễ Túc Yết, Lễ Xây Chầu được ban tế tự bục lão làng thực hiện trang nghiêm nghiêm cẩn bài bản trong tiếng nhạc lễ trầm hùng cổ kính trang trọng cổ xưa truyền lại. Phần hội náo nhiệt vui tươi thu hút đông đảo bà con xem hát bội cổ truyền thâu đêm gắn kết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Đình thần Uyên Hưng tọa lạc tại thị xã Bến Cát, tỉnh Bình Dương, là một công trình kiến trúc tín ngưỡng cổ kính có giá trị lịch sử văn hóa lâu đời tiêu biểu đã được công nhận xếp hạng di tích lịch sử nghệ thuật cấp quốc gia đặc biệt quan trọng đối với địa phương. Ngôi đình thờ vị Thành hoàng Bổn cảnh có công khai hoang lập làng bảo hộ làng xã yên vui bình an, được xây dựng theo lối bố cục kiến trúc truyền thống đình làng Nam Bộ xưa ba gian hai chái chịu lực vững chãi bằng hệ thống khung cột gỗ quý lớn kiên cố vững vàng qua năm tháng. Bên trong chánh điện trang nghiêm lộng lẫy lưu giữ nhiều bức bao lam hoành phi câu đối sơn son thếp vàng chạm khắc hình rồng phượng tinh xảo sắc nét thể hiện kỹ nghệ điêu khắc gỗ bậc thầy mỹ thuật xưa của cha ông ta. Đình thần Uyên Hưng mở cửa đón khách tham quan chiêm bái tự do miễn phí hằng ngày.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu Nam Vang nước lèo ngọt thanh chuẩn vị gia truyền cô Út Cần Thơ",
+    "content": "Quán Hủ tiếu Nam Vang cô Út nằm trên đường Nguyễn Văn Cừ, phường An Hòa, quận Ninh Kiều, là địa chỉ ẩm thực ăn sáng vô cùng nổi tiếng chuyên phục vụ món hủ tiếu Nam Vang thơm ngon đậm đà mang chuẩn phong vị đặc sản làm say lòng đông đảo thực khách sành ăn mỗi buổi sáng đói bụng cần bát hủ tiếu nóng hổi chất lượng no bụng bổ dưỡng giá bình dân phải chăng phù hợp túi tiền mọi người dân học sinh sinh viên văn phòng công sở. Bát hủ tiếu mang ra đầy đặn quyến rũ nổi bật với nước súp được ninh từ xương ống heo lọc trong suốt ngọt thanh đậm đà hoặc sốt trộn khô kẹo ngọt mặn vừa vặn béo hành mỡ phi vàng thơm phức lừng không gian vị giác kích thích mạnh mẽ khi thưởng thức vị ngọt mặn mằn mằn ngon ngất ngây. Phần nhân đầy đặn bao gồm tôm sông ngọt thịt tươi bóc vỏ, gan heo xắt mỏng luộc chín tới giòn sật, thịt băm nhuyễn xào thơm đậm vị trứng cút béo ngậy rắc tóp mỡ hành mỡ ăn kèm rổ rau sống cần tây giá đỗ tươi sạch sẽ. Quán sạch mát phục vụ cực nhanh chóng chu đáo.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
   }
 ]
