@@ -155,6 +155,120 @@ export async function autoSeed() {
       });
     }
 
+    // 3. Create or Update Mock Destinations
+    const destinationsToSeed = [
+      {
+        id: 'dest-1',
+        name: 'Hồ Hoàn Kiếm',
+        description: 'Hồ nước ngọt tự nhiên nằm ở trung tâm thành phố Hà Nội.',
+        latitude: 21.028511,
+        longitude: 105.804817,
+        category: 'attraction',
+        averageRating: 4.8,
+        address: 'Hàng Trống, Hoàn Kiếm, Hà Nội, Việt Nam',
+        openingHours: '24/7'
+      },
+      {
+        id: 'dest-2',
+        name: 'Lăng Chủ tịch Hồ Chí Minh',
+        description: 'Nơi đặt thi hài của Chủ tịch Hồ Chí Minh.',
+        latitude: 21.0368,
+        longitude: 105.8346,
+        category: 'attraction',
+        averageRating: 4.9,
+        address: 'Hùng Vương, Điện Biên, Ba Đình, Hà Nội, Việt Nam',
+        openingHours: '07:30 - 10:30'
+      },
+      {
+        id: 'dest-3',
+        name: 'Văn Miếu - Quốc Tử Giám',
+        description: 'Trường đại học đầu tiên của Việt Nam.',
+        latitude: 21.0293,
+        longitude: 105.8359,
+        category: 'attraction',
+        averageRating: 4.7,
+        address: '58 Quốc Tử Giám, Văn Miếu, Đống Đa, Hà Nội, Việt Nam',
+        openingHours: '08:00 - 17:00'
+      },
+      {
+        id: 'dest-4',
+        name: 'Nhà hát Lớn Hà Nội',
+        description: 'Công trình kiến trúc lâu đời và tiêu biểu tại trung tâm Hà Nội.',
+        latitude: 21.0242,
+        longitude: 105.8562,
+        category: 'attraction',
+        averageRating: 4.6,
+        address: '1 Tràng Tiền, Phan Chu Trinh, Hoàn Kiếm, Hà Nội, Việt Nam',
+        openingHours: '09:00 - 17:00'
+      },
+      {
+        id: 'dest-5',
+        name: 'Cầu Vàng (Golden Bridge)',
+        description: 'Cầu đi bộ nổi tiếng tại khu du lịch Bà Nà Hills, Đà Nẵng.',
+        latitude: 15.9984,
+        longitude: 107.9972,
+        category: 'attraction',
+        averageRating: 4.9,
+        address: 'Hòa Vang, Đà Nẵng, Việt Nam',
+        openingHours: '08:00 - 18:00'
+      }
+    ];
+
+    for (const d of destinationsToSeed) {
+      await prisma.destination.upsert({
+        where: { id: d.id },
+        update: {
+          name: d.name,
+          description: d.description,
+          latitude: d.latitude,
+          longitude: d.longitude,
+          category: d.category,
+          averageRating: d.averageRating,
+          address: d.address,
+          openingHours: d.openingHours
+        },
+        create: d
+      });
+    }
+
+    // 4. Create or Update Check-Ins
+    const checkinsToSeed = [
+      {
+        id: 'checkin-1',
+        userId: users['Minh Quân Nguyễn'],
+        destinationId: 'dest-1',
+        note: 'Dạo quanh bờ hồ buổi sáng thật trong lành!',
+        createdAt: new Date(Date.now() - 3600000)
+      },
+      {
+        id: 'checkin-2',
+        userId: users['Linh Trần'],
+        destinationId: 'dest-2',
+        note: 'Tham quan lăng Bác trang nghiêm quá.',
+        createdAt: new Date(Date.now() - 7200000)
+      },
+      {
+        id: 'checkin-3',
+        userId: users['Tom Vũ'],
+        destinationId: 'dest-3',
+        note: 'Kiến trúc cổ kính rất đẹp mắt.',
+        createdAt: new Date(Date.now() - 10800000)
+      }
+    ];
+
+    for (const c of checkinsToSeed) {
+      await prisma.checkIn.upsert({
+        where: { id: c.id },
+        update: {
+          userId: c.userId,
+          destinationId: c.destinationId,
+          note: c.note,
+          createdAt: c.createdAt
+        },
+        create: c
+      });
+    }
+
     console.log('🌿 Database auto-seeding completed successfully.');
   } catch (err) {
     console.error('❌ Error during auto-seed:', err);

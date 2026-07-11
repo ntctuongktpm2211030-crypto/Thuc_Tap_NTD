@@ -5,10 +5,11 @@ import {
   Mail, Lock, User, Eye, EyeOff, ArrowRight,
   Check, AlertCircle, Plane, MapPin, Globe, ChevronLeft,
 } from 'lucide-react';
-import { loginThunk, registerThunk, clearError } from '../../store/authSlice';
+import { loginThunk, registerThunk, clearError, loginGoogleThunk } from '../../store/authSlice';
 import type { RootState, AppDispatch } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
+import { loginGoogle } from '../../config/firebase';
 
 // ──────────────────────────────────────────────────────────────
 // BACKGROUND SLIDES — travel imagery carousel
@@ -142,10 +143,10 @@ const PasswordStrength = ({ password }: { password: string }) => {
 // ──────────────────────────────────────────────────────────────
 // GOOGLE SIGN-IN BUTTON
 // ──────────────────────────────────────────────────────────────
-const GoogleButton = ({ label }: { label: string }) => (
+const GoogleButton = ({ label, onClick }: { label: string; onClick?: () => void }) => (
   <button
     type="button"
-    onClick={() => alert('Google OAuth chưa được cấu hình — cần thiết lập Google Client ID trong backend.')}
+    onClick={onClick}
     className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-[var(--border-normal)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] hover:border-[var(--gold)] transition-all text-sm font-semibold text-[var(--text-primary)] group"
   >
     {/* Google SVG logo */}
@@ -283,6 +284,22 @@ export default function AuthPage() {
     }
   }, [isAuthenticated, user, navigate, redirectTo]);
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await loginGoogle();
+      const idToken = await result.user.getIdToken();
+      const res = await dispatch(loginGoogleThunk(idToken));
+      if (loginGoogleThunk.fulfilled.match(res)) {
+        navigate(redirectTo, { replace: true });
+      }
+    } catch (err: any) {
+      console.error('Google Auth Error:', err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        alert('Đăng nhập Google thất bại: ' + (err.message || err));
+      }
+    }
+  };
+
   // Clear Redux error on mode switch
   const switchMode = (m: 'login' | 'register') => {
     setMode(m);
@@ -407,7 +424,7 @@ export default function AuthPage() {
           {mode === 'login' && (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               {/* Google */}
-              <GoogleButton label="Đăng nhập với Google" />
+              <GoogleButton label="Đăng nhập với Google" onClick={handleGoogleLogin} />
               <Divider label="hoặc đăng nhập với" />
 
               <Input
@@ -472,7 +489,7 @@ export default function AuthPage() {
           {mode === 'register' && (
             <form onSubmit={handleRegisterSubmit} className="space-y-4">
               {/* Google */}
-              <GoogleButton label="Đăng ký với Google" />
+              <GoogleButton label="Đăng ký với Google" onClick={handleGoogleLogin} />
               <Divider label="hoặc đăng ký với email" />
 
               <Input

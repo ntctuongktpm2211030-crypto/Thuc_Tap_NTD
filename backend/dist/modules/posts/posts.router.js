@@ -6,8 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const db_1 = __importDefault(require("../../config/db"));
 const auth_middleware_1 = require("../auth/auth.middleware");
-const geo_utils_1 = require("../map/geo-utils");
-const map_service_1 = require("../map/map.service");
 const router = (0, express_1.Router)();
 function extractBodyText(content) {
     try {
@@ -156,7 +154,7 @@ router.get('/:id', auth_middleware_1.optionalAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { content, mediaUrls, tripId, locationId, latitude, longitude, destinationId, } = req.body;
+        const { content, mediaUrls, tripId, locationId } = req.body;
         if (!content) {
             return res.status(400).json({ error: 'content is required.' });
         }
@@ -164,9 +162,6 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
         if (bodyText.length < 10) {
             return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
         }
-        const geo = (0, geo_utils_1.extractPostGeo)(content);
-        const postLat = latitude ?? geo?.latitude ?? null;
-        const postLng = longitude ?? geo?.longitude ?? null;
         const post = await db_1.default.post.create({
             data: {
                 authorId: req.user.sub,
@@ -174,28 +169,13 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
                 mediaUrls: mediaUrls || [],
                 tripId: tripId || null,
                 locationId: locationId || null,
-                latitude: postLat,
-                longitude: postLng,
-                destinationId: destinationId || null,
             },
             include: {
                 author: { include: { profile: true } },
-                destination: true,
                 _count: { select: { likes: true, comments: true } },
             },
         });
-        if (!postLat || !postLng) {
-            await (0, map_service_1.syncPostCoordinates)(post.id, content);
-        }
-        const refreshed = await db_1.default.post.findUnique({
-            where: { id: post.id },
-            include: {
-                author: { include: { profile: true } },
-                destination: true,
-                _count: { select: { likes: true, comments: true } },
-            },
-        });
-        return res.status(201).json(refreshed || post);
+        return res.status(201).json(post);
     }
     catch (err) {
         console.error('[posts/POST /]', err);
@@ -239,6 +219,28 @@ router.post('/:id/like', auth_middleware_1.requireAuth, async (req, res) => {
         }
         else {
             await db_1.default.like.create({ data: { postId, userId } });
+            try {
+                const post = await db_1.default.post.findUnique({
+                    where: { id: postId }
+                });
+                const liker = await db_1.default.user.findUnique({
+                    where: { id: userId },
+                    include: { profile: true }
+                });
+                if (post && post.authorId !== userId) {
+                    const likerName = liker?.profile?.fullName || 'Ai đó';
+                    await db_1.default.notification.create({
+                        data: {
+                            recipientId: post.authorId,
+                            type: 'like',
+                            content: `${likerName} đã thích bài viết của bạn.`,
+                        },
+                    });
+                }
+            }
+            catch (err) {
+                console.error('Failed to create like notification:', err);
+            }
             return res.json({ liked: true });
         }
     }
@@ -348,6 +350,38 @@ router.post('/:id/comments', auth_middleware_1.requireAuth, async (req, res) => 
             },
             include: { author: { include: { profile: true } } },
         });
+        try {
+            const post = await db_1.default.post.findUnique({
+                where: { id: req.params.id }
+            });
+            const commenterName = comment.author.profile?.fullName || 'Ai đó';
+            if (parentId) {
+                const parentComment = await db_1.default.comment.findUnique({
+                    where: { id: parentId }
+                });
+                if (parentComment && parentComment.authorId !== req.user.sub) {
+                    await db_1.default.notification.create({
+                        data: {
+                            recipientId: parentComment.authorId,
+                            type: 'comment',
+                            content: `${commenterName} đã trả lời bình luận của bạn.`,
+                        }
+                    });
+                }
+            }
+            else if (post && post.authorId !== req.user.sub) {
+                await db_1.default.notification.create({
+                    data: {
+                        recipientId: post.authorId,
+                        type: 'comment',
+                        content: `${commenterName} đã bình luận về bài viết của bạn.`,
+                    }
+                });
+            }
+        }
+        catch (err) {
+            console.error('Failed to create comment notification:', err);
+        }
         return res.status(201).json(comment);
     }
     catch (err) {

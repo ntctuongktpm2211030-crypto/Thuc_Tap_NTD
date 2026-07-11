@@ -7,6 +7,7 @@ const express_1 = require("express");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../../config/db"));
+const firebase_1 = require("../../config/firebase");
 const router = (0, express_1.Router)();
 // ─────────────────────────────────────────────────────────
 // HELPERS
@@ -51,6 +52,8 @@ router.post('/register', async (req, res) => {
                 id: user.id,
                 email: user.email,
                 fullName: user.profile?.fullName,
+                avatarUrl: user.profile?.avatarUrl,
+                coverUrl: user.profile?.coverUrl,
                 role: user.role,
             },
             accessToken,
@@ -91,6 +94,7 @@ router.post('/login', async (req, res) => {
                 email: user.email,
                 fullName: user.profile?.fullName,
                 avatarUrl: user.profile?.avatarUrl,
+                coverUrl: user.profile?.coverUrl,
                 role: user.role,
             },
             accessToken,
@@ -161,6 +165,7 @@ router.get('/me', async (req, res) => {
             isVerified: user.isVerified,
             fullName: user.profile?.fullName,
             avatarUrl: user.profile?.avatarUrl,
+            coverUrl: user.profile?.coverUrl,
             bio: user.profile?.bio,
             homeLocation: user.profile?.homeLocation,
             preferences: user.preferences,
@@ -169,6 +174,79 @@ router.get('/me', async (req, res) => {
     }
     catch (err) {
         console.error('[auth/me]', err);
+        return res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+// ─────────────────────────────────────────────────────────
+// POST /api/v1/auth/google
+// ─────────────────────────────────────────────────────────
+router.post('/google', async (req, res) => {
+    try {
+        const { idToken } = req.body;
+        if (!idToken) {
+            return res.status(400).json({ error: 'idToken is required.' });
+        }
+        if (!process.env.FIREBASE_PROJECT_ID) {
+            console.error('[Firebase] FIREBASE_PROJECT_ID is not configured in backend .env');
+            return res.status(500).json({ error: 'Google authentication is not configured on the server.' });
+        }
+        // Verify Firebase ID token
+        let decodedToken;
+        try {
+            decodedToken = await firebase_1.firebaseAuth.verifyIdToken(idToken);
+        }
+        catch (err) {
+            console.error('[Firebase] verifyIdToken failed:', err.message);
+            return res.status(401).json({ error: 'Invalid or expired Google auth token.' });
+        }
+        const { email, name, picture } = decodedToken;
+        if (!email) {
+            return res.status(400).json({ error: 'Email not provided by Google account.' });
+        }
+        // Find or create user
+        let user = await db_1.default.user.findUnique({
+            where: { email },
+            include: { profile: true },
+        });
+        if (!user) {
+            // Generate a secure random password since passwordHash is required in schema
+            const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+            const passwordHash = await bcryptjs_1.default.hash(randomPassword, 12);
+            // Create new user & profile
+            user = await db_1.default.user.create({
+                data: {
+                    email,
+                    passwordHash,
+                    isVerified: true, // Google email is verified
+                    profile: {
+                        create: {
+                            fullName: name || email.split('@')[0],
+                            avatarUrl: picture || null,
+                        },
+                    },
+                },
+                include: { profile: true },
+            });
+        }
+        // Generate tokens for app session
+        const accessToken = signAccessToken(user.id, user.role);
+        const refreshToken = signRefreshToken(user.id);
+        return res.status(200).json({
+            message: 'Google login successful.',
+            user: {
+                id: user.id,
+                email: user.email,
+                fullName: user.profile?.fullName,
+                avatarUrl: user.profile?.avatarUrl,
+                coverUrl: user.profile?.coverUrl,
+                role: user.role,
+            },
+            accessToken,
+            refreshToken,
+        });
+    }
+    catch (err) {
+        console.error('[auth/google]', err);
         return res.status(500).json({ error: 'Internal server error.' });
     }
 });

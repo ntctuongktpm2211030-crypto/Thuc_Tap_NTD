@@ -98,7 +98,7 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.post('/ai-generate', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { destination, durationDays, dailyBudget, interests, travelStyle } = req.body;
+        const { destination, durationDays, dailyBudget, currency, interests, travelStyle } = req.body;
         if (!destination || !durationDays) {
             return res.status(400).json({ error: 'destination and durationDays are required.' });
         }
@@ -107,6 +107,7 @@ router.post('/ai-generate', auth_middleware_1.requireAuth, async (req, res) => {
             destination,
             durationDays: Number(durationDays),
             dailyBudget: Number(dailyBudget) || 100,
+            currency: currency || 'USD',
             interests: interests || [],
             travelStyle: travelStyle || 'Adventure',
         });

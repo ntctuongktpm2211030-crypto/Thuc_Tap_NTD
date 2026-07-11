@@ -1,0 +1,533 @@
+[
+  {
+    "province": "An Giang",
+    "title": "Miếu Bà Chúa Xứ Núi Sam",
+    "content": "Tọa lạc dưới chân núi Sam, thuộc Phường Núi Sam, TP. Châu Đốc. Đây là trung tâm hành hương tâm linh lớn và linh thiêng bậc nhất Nam Bộ. Ngôi miếu có kiến trúc dạng tháp hoa sen, mái tam cấp lợp ngói đại màu xanh ngọc. Hàng năm có hàng triệu lượt khách đổ về đây cầu bình an, may mắn, đặc biệt sầm uất vào mùa lễ hội vía Bà.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Quán Bún Cá Văn",
+    "content": "Tọa lạc tại số 105 Phan Đình Phùng, Phường Châu Phú B, TP. Châu Đốc. Đây là địa chỉ bún cá Châu Đốc chuẩn vị gia truyền được người dân địa phương vô cùng yêu thích. Tô bún đậm đà ngập thịt cá lóc bông vàng ươm nghệ tươi, nước dùng nấu kèm ngải bún tạo mùi vị đặc trưng không lẫn vào đâu được.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Victoria Châu Đốc Hotel",
+    "content": "Khách sạn 4 sao mang phong cách kiến trúc thuộc địa Pháp cổ kính tọa lạc tại số 1 Lê Lợi, Phường Châu Phú B, TP. Châu Đốc. Nằm ngay ngã ba sông Hậu, khách sạn có tầm nhìn tuyệt đẹp ra làng bè nổi và cuộc sống sông nước miền Tây. Tiện ích bao gồm hồ bơi ngoài trời sát mép sông và nhà hàng phục vụ ẩm thực Á - Âu sang trọng.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu du lịch sinh thái rừng tràm Trà Sư",
+    "content": "Khu vực trung tâm đón khách nằm tại xã Văn Giáo, Thị xã Tịnh Biên. Tại đây có xây dựng chiếc cầu tre xuyên rừng dài nhất Việt Nam đạt kỷ lục Guiness, cho phép du khách đi bộ trực tiếp dưới tán rừng tràm cổ thụ mát rượi, ngắm nhìn cận cảnh bèo tai tượng xanh ngắt và các loài hoa tràm nở trắng.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Lễ hội Vía Bà Chúa Xứ Núi Sam",
+    "content": "Lễ hội cấp quốc gia diễn ra từ ngày 22 đến 27 tháng 4 Âm lịch hàng năm tại Miếu Bà Chúa Xứ, TP. Châu Đốc. Sự kiện văn hóa tâm linh này bao gồm các nghi lễ trang nghiêm như lễ Tắm Bà, lễ Túc Yết, lễ Xây Chầu kết hợp các hoạt động nghệ thuật múa lân, hát bội rộn ràng, thu hút đông đảo khách thập phương hành hương về dự.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 22
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Tây An (Tây An Cổ Tự)",
+    "content": "Ngôi chùa cổ nằm ngay chân núi Sam, thuộc đường Vòng Núi Sam, Phường Núi Sam, TP. Châu Đốc. Chùa nổi bật với kiến trúc giao thoa độc đáo giữa nét chùa cổ Việt Nam và nghệ thuật đền đài Ấn Độ, có mái vòm hình củ hành rực rỡ. Nơi đây đã được xếp hạng là Di tích lịch sử kiến trúc nghệ thuật cấp quốc gia.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Lăng Thoại Ngọc Hầu",
+    "content": "Còn gọi là Sơn Lăng, tọa lạc bên sườn núi Sam, Phường Núi Sam, TP. Châu Đốc. Đây là công trình kiến trúc cổ kính nguyên vẹn thời nhà Nguyễn, nơi an nghỉ của danh tướng Thoại Ngọc Hầu cùng hai vị phu nhân. Khu lăng mộ toát lên vẻ uy nghiêm với bức tường thành bằng đá ong dày và các văn bia lịch sử quý giá.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Phước Điền (Chùa Hang Châu Đốc)",
+    "content": "Ngôi chùa lấp ló bên sườn núi Sam ở độ cao hàng trăm mét, thuộc Phường Núi Sam, TP. Châu Đốc. Đường lên chùa gồm nhiều bậc thang đá quanh co. Chùa có khuôn viên thanh tịnh với nhiều am hang đá tự nhiên sâu thẳm thờ Phật. Từ sân chùa, bạn có thể phóng tầm mắt ngắm nhìn toàn cảnh cánh đồng lúa bao la giáp biên giới.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu du lịch Núi Cấm (Thiên Cấm Sơn)",
+    "content": "Ngọn núi cao và hùng vĩ nhất trong vùng Bảy Núi, thuộc xã An Hảo, Thị xã Tịnh Biên. Núi Cấm có khí hậu mát mẻ quanh năm, được ví như Đà Lạt của miền Tây. Du khách có thể lên núi bằng cáp treo hiện đại để tham quan các công trình kỷ lục như tượng Phật Di Lặc khổng lồ trên đỉnh núi, chùa Phật Lớn và chùa Vạn Linh.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Vạn Linh Núi Cấm",
+    "content": "Tọa lạc ở độ cao hơn 700m trên đỉnh Núi Cấm, thuộc xã An Hảo, Thị xã Tịnh Biên. Ngôi chùa nổi tiếng với Bảo tháp Quan Âm Các gồm 9 tầng, cao 35m uy nghiêm sừng sững bên bờ hồ Thủy Liêm. Không gian chùa lúc nào cũng mờ ảo trong sương mù, mang lại cảm giác tĩnh mịch, thanh tịnh tuyệt đối cho khách hành hương.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Phật Lớn Núi Cấm",
+    "content": "Ngôi chùa cổ kính nằm bên bờ hồ Thủy Liêm trên đỉnh Núi Cấm, xã An Hảo, Thị xã Tịnh Biên. Chùa sở hữu pho tượng Phật Di Lặc màu trắng tinh khôi ngồi uy nghiêm, cao 33,6m, đạt kỷ lục tượng Phật Di Lặc trên đỉnh núi lớn nhất châu Á. Nơi đây là điểm check-in và chiêm bái không thể bỏ qua khi lên Thất Sơn.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Hồ Thủy Liêm",
+    "content": "Hồ nước nhân tạo tuyệt đẹp nằm ngay trung tâm đỉnh Núi Cấm, thuộc xã An Hảo, Thị xã Tịnh Biên. Mặt hồ phẳng lặng, nước xanh ngắt, soi bóng tháp chùa Vạn Linh và tượng Phật Di Lặc khổng lồ. Xung quanh hồ là những lối đi bộ trồng nhiều hoa lá mát mẻ, tạo nên một cảnh quan phong thủy hữu tình hữu cảnh.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Hồ Tà Pạ",
+    "content": "Được mệnh danh là 'Tuyệt Tình Cốc' của miền Tây, nằm trên đồi Tà Pạ, xã Núi Tô, huyện Tri Tôn. Đây là hồ nước nhân tạo hình thành từ quá trình khai thác đá trước đây. Nước hồ trong vắt nhìn thấu đáy, có màu xanh ngọc bích kỳ ảo thay đổi theo độ sâu và thời tiết. Bao quanh hồ là những vách đá dựng đứng hoang sơ.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Tà Pạ (Chùa Chưn Num)",
+    "content": "Ngôi chùa Phật giáo Nam tông Khmer độc đáo nằm trên đỉnh đồi Tà Pạ, xã Núi Tô, huyện Tri Tôn. Chùa được xây dựng bằng đá granite, lấp ló sau những tán cây cổ thụ. Kiến trúc chùa mang đậm nét văn hóa Khmer với mái vòm nhọn, tượng thần Kây No và các bức phù điêu tinh xảo. Từ đây ngắm đồng ruộng bên dưới rất đẹp.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Búng Bình Thiên Lớn",
+    "content": "Phân khu mặt nước hồ rộng lớn nhất thuộc hệ thống Búng Bình Thiên, xã Nhơn Hội, huyện An Phú. Mặt hồ rộng mênh mông phẳng lặng như gương. Nơi đây có quần thể cư dân làng chăm sông nước sinh sống hiền hòa quanh hồ, tạo nên nét chấm phá văn hóa sinh thái miệt vườn biên giới vô cùng độc đáo.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu di tích Óc Eo Thoại Sơn",
+    "content": "Nằm dưới chân núi Sập, thuộc thị trấn Núi Sập, huyện Thoại Sơn. Khu di tích khảo cổ học nền văn hóa Phù Nam cổ xưa lớn nhất vùng Đông Nam Á cổ đại. Du khách ghé thăm được chiêm ngưỡng nền móng gạch cổ nguyên vẹn ngàn năm tuổi lâu đời mang giá trị nhân loại nhân văn sâu sắc.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu du lịch Núi Sập (Hồ Ông Thoại)",
+    "content": "Nằm tại thị trấn Núi Sập, huyện Thoại Sơn. Nơi đây vốn là mỏ đá cũ được cải tạo thành khu lòng hồ nhân tạo tuyệt đẹp với những đảo đá nhỏ, cầu đúc uốn lượn mang tên Thoại Ngọc Hầu để tưởng nhớ công ơn đào kênh Thoại Hà. Du khách đến đây có thể chèo thuyền đạp vịt, vãn cảnh non nước thanh bình.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Cột Dây Thép Chợ Mới",
+    "content": "Di tích lịch sử cách mạng cấp quốc gia nằm tại xã Long Điền A, huyện Chợ Mới. Đây là nơi cắm lá cờ Đảng Cộng sản Việt Nam đầu tiên tại tỉnh An Giang vào năm 1930 trên đỉnh cột thép cao. Nơi đây hiện đã được xây dựng thành công viên tưởng niệm trang nghiêm để giáo dục truyền thống cách mạng địa phương.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Làng Chăm Đa Phước",
+    "content": "Nằm bên kia sông Hậu, thuộc huyện An Phú (ngay sát cầu Cồn Tiên đi vào). Đến đây, du khách sẽ được tìm hiểu đời sống văn hóa đặc sắc của người Chăm Hồi giáo (Islam), chiêm ngưỡng các ngôi nhà sàn bằng gỗ độc đáo, xem nghệ nhân dệt thổ cẩm truyền thống và thưởng thức bánh truyền thống như bánh hah.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Cù lao Giêng",
+    "content": "Vùng đất cù lao trù phú nổi giữa sông Tiền, bao gồm 3 xã của huyện Chợ Mới. Cù lao Giêng nổi tiếng với lịch sử lâu đời, là nơi tập trung nhiều công trình tôn giáo cổ xưa mang kiến trúc Pháp độc đáo như Thánh đường cù lao Giêng, Tu viện Phanxicô, chùa Phước Minh cùng các vườn cây ăn trái quanh năm sum suê.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Tu viện Phanxicô Cù lao Giêng",
+    "content": "Khu quần thể tu viện cổ kính có khuôn viên tuyệt đẹp nằm tại xã Tấn Mỹ, huyện Chợ Mới. Được xây dựng từ thế kỷ XIX mang phong cách kiến trúc Gothic Pháp lãng mạn hoài cổ. Tu viện lấp ló dưới những hàng cây cổ thụ bóng mát râm, có các hành lang vòm uốn lượn cổ kính mang màu sắc thời gian mờ ảo.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu lưu niệm Chủ tịch Tôn Đức Thắng",
+    "content": "Di tích quốc gia đặc biệt nằm trên cù lao Ông Hổ, xã Mỹ Hòa Hưng, TP. Long Xuyên. Quần thể bao gồm ngôi nhà sàn gỗ mộc mạc nơi Bác Tôn sinh trưởng thời thơ ấu, đền thờ uy nghiêm thiết kế theo kiểu đình làng Nam Bộ và nhà trưng bày lưu giữ nhiều hiện vật, tư liệu quý giá về cuộc đời hoạt động cách mạng của Bác.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Cơm Tấm Cây Điệp Lý Tự Trọng",
+    "content": "Tọa lạc tại số 67 Lý Tự Trọng, Phường Mỹ Long, TP. Long Xuyên. Đây là quán ăn cơm tấm nhuyễn Long Xuyên đông khách bậc nhất. Đĩa cơm bốc khói với thịt khìa thái mỏng bùi ngậy, trứng kho cắt sợi dưa muống chua ngọt giòn sật nêm nước mắm kẹo ngọt ngào béo thơm mỡ hành ngập tràn.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Gà Đốt Lá Chúc Ô Thum Tri Tôn",
+    "content": "Nằm ven lòng bờ hồ Ô Thum, xã Ô Lâm, huyện Tri Tôn. Món đặc sản vùng cao bảy núi trừng danh nướng đốt trong lòng nồi gang kín với sả ớt tươi thơm nức lòng tinh dầu lá chúc rừng cay nồng đượm. Thịt gà đồi dai ngọt chắc nịch chấm muối ớt chanh chúc ngon tuyệt đỉnh.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Quán Bò Bảy Món Tư Thiêng Núi Sam",
+    "content": "Nằm dọc Quốc lộ 91, gần khu vực Vòng Núi Sam, TP. Châu Đốc. Nhà hàng sân vườn rộng mát chuyên các món thịt bò bảy núi tươi ngon roi rói. Thực khách có thể thưởng thức món lòng bò luộc sả chấm mắm nêm, bò nướng lụi than hoa béo thơm ngọt lịm đậm vị mộc mạc đặc trưng.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Xôi Phồng Chợ Mới",
+    "content": "Món ăn đặc sản nghệ thuật nằm tại các quán ăn ven sông huyện Chợ Mới. Nếp dẻo sau khi đồ chín được quết nhuyễn cùng đậu xanh và gia vị rồi chiên ngập dầu trên chảo lớn. Người thợ khéo léo xoay đều cho đến khi khối nếp phồng to như quả bóng màu vàng ươm giòn rụm, bên trong rỗng ruột, ăn kèm thịt gà quay thơm phức.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Bánh Bò Thốt Nốt Út Dứt Châu Đốc",
+    "content": "Nằm tại số 13 Nguyễn Trãi, Phường Châu Phú A, TP. Châu Đốc. Tiệm bánh đặc sản gia truyền lâu năm làm từ lòng đường thốt nốt nguyên chất Thất Sơn. Bánh bò nướng chín xốp mềm màu vàng nghệ béo ngậy vị nước cốt dừa và thơm nức lòng hương thốt nốt mộc mạc đặc trưng.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Quán Bò Leo Núi Trường Nhựt",
+    "content": "Tọa lạc tại khu vực thị xã Tân Châu, An Giang. Bò leo núi là món ăn độc đáo của vùng biên. Thịt bò phi lê xắt dày được ướp với trứng gà tươi và sữa, sau đó nướng trên một chiếc vỉ gang đặc biệt hình ngọn núi nhô cao, phía trên đỉnh đặt một cục mỡ heo lớn. Thịt chín mềm ngọt, cuốn bánh tráng rau rừng chấm mắm pro-hốc.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Tung Lò Mò Châu Phong AnaLy",
+    "content": "Nằm tại xã Châu Phong, Thị xã Tân Châu. Cơ sở sản xuất kinh doanh món lạp xưởng bò người Chăm truyền thống chuẩn vị Hồi giáo Halal an toàn sạch sẽ. Món ăn lạp xưởng bò phơi nắng tự nhiên đem nướng than hoa thơm nức lòng vị chua ngọt béo ngậy độc đáo lạ miệng cuốn hút.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Cháo Bò Tri Tôn Thu Thủy quán",
+    "content": "Nằm ngay trung tâm thị trấn Tri Tôn, huyện Tri Tôn. Quán ăn sáng dân dã lâu đời phục vụ món cháo lòng bò cỏ Thất Sơn ngọt nước sền sệt bổ dưỡng bổ ích. Tô cháo lòng nóng hổi đầy ắp tim gan phèo phổi bò giòn sần sật nêm kèm chút lá chúc thái sợi thơm nức lòng quyến rũ thực khách.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Gỏi Đu Đủ Đâm Rina Tri Tôn",
+    "content": "Tọa lạc gần chân đồi đền Tà Pạ, xã Ô Lâm, huyện Tri Tôn. Địa chỉ ăn vặt gỏi đu đủ đâm giã tay cối gỗ kiểu Campuchia siêu cay bắt vị thu hút đông giới trẻ phượt thủ. Sợi đu đủ giòn rụm đượm vị mắm ba khía chua chanh ngọt đường thốt nốt ăn kèm xiên nướng than nóng hổi.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Bến Đá Núi Sam Hotel",
+    "content": "Khách sạn nằm ngay chân núi Sam, thuộc đường Vòng Núi Sam, Phường Núi Sam, TP. Châu Đốc. Khách sạn có khuôn viên rộng rãi dưới những tán cây xanh mát, phòng nghỉ sạch sẽ trang nhã, vị trí đắc địa vô cùng thuận tiện cho các đoàn khách đi hành hương miếu Bà Chúa Xứ và tham quan cụm di tích núi Sam.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "An Giang",
+    "title": "Dong Xuyen Hotel",
+    "content": "Khách sạn 3 sao lâu đời nằm ngay trung tâm kinh tế sầm uất tại số 19 Tôn Đức Thắng, Phường Mỹ Bình, TP. Long Xuyên. Khách sạn sở hữu tòa nhà cao tầng hiện đại, hệ thống phòng ốc ấm cúng, nhà hàng tầng thượng ngắm toàn cảnh thành phố Long Xuyên và dòng sông Hậu hiền hòa về đêm.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000
+  },
+  {
+    "province": "An Giang",
+    "title": "Nhà Mồ Di Tích Ba Chúc Tri Tôn",
+    "content": "Tọa lạc tại thị trấn Ba Chúc, huyện Tri Tôn. Chứng tích lịch sử chiến tranh quốc gia đặc biệt ghi dấu tội ác diệt chủng tàn bạo của Pol Pot thời chiến biên giới tây nam gian khổ. Công trình nhà mồ hình bông sen trắng úp ngược tôn nghiêm lưu giữ bảo tồn hài cốt các nạn nhân xấu số.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Khu di tích lịch sử cách mạng Đồi Tức Dụp",
+    "content": "Nằm sát dãy núi Cô Tô, xã An Tức, huyện Tri Tôn. Căn cứ cách mạng lịch sử anh hùng vang dội của quân dân ta ngầm sâu dưới lòng hệ thống hang đá lớn hiểm trở kiên cố kiên cường. Ngọn đồi lưu giữ trưng bày nhiều vũ khí xe tăng kỷ niệm chiến tranh oanh liệt hào hùng.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Núi Cô Tô (Phụng Hoàng Sơn)",
+    "content": "Ngọn núi hoang sơ cao lớn thuộc xã Núi Tô, huyện Tri Tôn. Núi Cô Tô mang vẻ đẹp kỳ vĩ của những vách đá khổng lồ. Trên núi có biểu tượng chữ 'AN GIANG' khổng lồ có thể nhìn thấy từ xa. Du khách có thể leo núi bằng xe ôm của người dân địa phương lên vồ Hội ngắm hoàng hôn buông xuống những cánh đồng lúa Tri Tôn tuyệt đẹp.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Hồ Ô Thum",
+    "content": "Hồ nước ngọt nhân tạo nằm yên bình dưới chân núi Cô Tô, thuộc xã Ô Lâm, huyện Tri Tôn. Hồ nước phẳng lặng được bao bọc bởi đồi núi trập trùng tạo nên không khí vô cùng mát mẻ, trong lành. Nơi đây nổi tiếng là thủ phủ ẩm thực của món gà đốt lá chúc ngon trứ danh, thu hút hàng ngàn phượt thủ check-in.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Hang Tịnh Biên (Chùa lầu Thanh Tuyền)",
+    "content": "Ngôi chùa ẩn mình trong hang đá tự nhiên thuộc địa phận xã An Phú, Thị xã Tịnh Biên. Căn điện thờ chính nằm sâu bên trong lòng một hang đá rộng lớn râm mát quanh năm. Khuôn viên chùa bên ngoài được xây dựng các tầng lầu gỗ ngắm cảnh sơn thủy Thất Sơn trập trùng lộng gió vô cùng thanh tịnh.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Đại Tự Kim Tiên Tịnh Biên",
+    "content": "Tọa lạc tại xã An Phú, Thị xã Tịnh Biên. Ngôi đại tự bề thế nguy nga tráng lệ bậc nhất vùng bảy núi nổi bật nhờ bức tượng Phật A Di Đà màu vàng khổng lồ cao vút uy nghiêm ngự trị trên mái chánh điện lộng lẫy võng lọng. Sân chùa rộng rãi gió núi thổi lồng lộng thanh mát thanh tịnh.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Lễ hội Đua Bò Bảy Núi",
+    "content": "Lễ hội thể thao dân gian độc đáo của đồng bào dân tộc Khmer diễn ra vào dịp lễ Đôn-ta (khoảng cuối tháng 8, đầu tháng 9 Âm lịch hàng năm). Địa điểm luân phiên tổ chức tại các huyện Tri Tôn hoặc Tịnh Biên. Các cặp bò kéo bừa sẽ lao vun vút trên những sân ruộng ngập nước đầy bùn trong tiếng cổ vũ reo hò cuồng nhiệt.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Hồ Latina vách đá granite",
+    "content": "Nằm dưới chân núi Cấm hùng vĩ thuộc địa phận huyện Tri Tôn. Hồ nước nhân tạo hoang sơ nổi tiếng trong giới phượt bụi nhờ có bức tường vách đá granite khổng lồ xám xịt dựng đứng ngay mép hồ nước trong vắt phẳng lặng phẳng lì, bối cảnh chụp ảnh concept ma mị chất lừ độc đáo.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Làng Lụa Lãnh Mỹ A Tân Châu",
+    "content": "Tọa lạc tại Thị xã Tân Châu. Nơi sản sinh ra loại tơ lụa huyền thoại Lãnh Mỹ A đen tuyền bóng mượt tự nhiên nhờ nhuộm nước quả mặc nưa rừng giã tay thủ công truyền thống gia truyền lâu năm. Điểm tham quan tìm hiểu văn hóa nghệ thuật dệt nhuộm vải tơ tằm độc đáo có một không hai.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Giồng Thành Di Tích Quốc Gia",
+    "content": "Tọa lạc tại xã Long Sơn, Thị xã Tân Châu. Ngôi chùa cổ mang tên Long Sơn Tự gắn liền lịch sử cách mạng yêu nước thiêng liêng, nơi cụ phó bảng Nguyễn Sinh Sắc từng lưu trú hoạt động yêu nước truyền bá tư tưởng cách mạng. Kiến trúc chùa cổ kính hài hòa trang nghiêm thanh tịnh.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Hùng Cường Hotel",
+    "content": "Khách sạn hiện đại nằm tại số 96 Đống Đa, Phường Châu Phú A, TP. Châu Đốc. Khách sạn có vị trí trung tâm vô cùng thuận tiện khi nằm sát chợ Châu Đốc và bến tàu du lịch. Phòng ốc trang trí tiện nghi hiện đại, view nhìn thẳng ra ngã ba sông nơi giao thương sầm uất bè nổi vô cùng nhộn nhịp.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 96
+  },
+  {
+    "province": "An Giang",
+    "title": "Đình thần Mỹ Phước Long Xuyên",
+    "content": "Ngôi đình cổ nằm ngay trung tâm Phường Mỹ Long, TP. Long Xuyên. Đây là nơi thờ phụng tôn kính các bậc tiền nhân có công khai hoang lập ấp vùng đất Long Xuyên trù phú xưa. Đình giữ được nguyên vẹn kiến trúc gỗ truyền thống với mái ngói chồng diềm, nội điện lộng lẫy võng lọng sơn son thếp vàng.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Nhà thờ Chánh tòa Long Xuyên",
+    "content": "Thánh đường lớn nằm tại số 9 Nguyễn Huệ, Phường Mỹ Long, TP. Long Xuyên. Nhà thờ nổi bật giữa lòng thành phố với kiến trúc hiện đại độc đáo, điểm nhấn là tháp chuông cao vút mang hình dáng hai bàn tay chắp lại hướng thẳng lên trời cầu nguyện và tượng đài Đức Mẹ uy nghiêm trong khuôn viên rộng.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chợ Nổi Long Xuyên sông Hậu",
+    "content": "Nằm trên đoạn sông Hậu gần bến phà Ô Môi, Phường Mỹ Long, TP. Long Xuyên. Chợ họp từ 5h sáng tấp nập thuyền bè giao thương mua bán các mặt hàng nông sản miền Tây như khóm, khoai khoai, dưa hấu. Trải nghiệm ngồi ghe nhỏ bồng bềnh ăn tô bún riêu nóng hổi trên sông vô cùng thú vị mộc mạc.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Bảo tàng tỉnh An Giang",
+    "content": "Tọa lạc tại số 11 Tôn Đức Thắng, Phường Mỹ Bình, TP. Long Xuyên. Bảo tàng có kiến trúc khuôn viên vườn hoa rộng mát, trưng bày hàng ngàn tài liệu hiện vật lịch sử quý giá qua các thời kỳ kháng chiến, các cổ vật thuộc nền văn hóa Óc Eo cổ xưa và hiện vật về đời sống văn hóa 4 dân tộc Kinh, Khmer, Chăm, Hoa.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Công viên Nguyễn Du Long Xuyên",
+    "content": "Khu công viên xanh mát uốn lượn ven lòng hồ nước ngọt nằm tại Phường Mỹ Bình, TP. Long Xuyên. Đây được mệnh danh là lá phổi xanh của thành phố với hàng cây cổ thụ rợp bóng, không khí mát mẻ thổi từ sông Hậu vào. Địa điểm lý tưởng để người dân đi dạo bộ tập thể dục đón bình minh.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Lẩu Trâu Kiều Thu",
+    "content": "Nằm tại số 122 Phó Đức Chính, Phường Mỹ Phước, TP. Long Xuyên. Quán ăn nổi tiếng trứ danh chuyên các món về thịt trâu. Món lẩu trâu ở đây được lòng thực khách nhờ nước dùng hầm xương ngọt đậm đà gia vị bắc, thịt trâu tươi xắt lát mỏng nhúng tái mềm ngọt chớ không dai, ăn cùng các loại rau đồng.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Hải sản Mộc Miên Long Xuyên",
+    "content": "Nhà hàng ẩm thực sân vườn hiện đại nằm trên đường Trần Hưng Đạo, TP. Long Xuyên. Quán có không gian rộng rãi, trang trí nhiều mảng xanh tre nứa ấm cúng. Thực đơn đa dạng từ các món hải sản tươi sống bắt tại hồ đến các đặc sản đồng quên Nam Bộ như cá lóc nướng trui, lẩu mắm cá linh mùa nước nổi.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Chè Bưởi An Giang Huế Miền Tây",
+    "content": "Quán chè ăn vặt lâu đời nằm gần bờ hồ Nguyễn Du, Phường Mỹ Bình, TP. Long Xuyên. Món chè bưởi ở đây nổi tiếng nhờ cùi bưởi được sơ chế khéo léo loại bỏ hoàn toàn vị đắng, giòn sần sật bọc bột năng trong suốt, nấu cùng đậu xanh bùi béo và rưới ngập lớp nước cốt dừa đặc quánh thơm phức.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000
+  },
+  {
+    "province": "An Giang",
+    "title": "Núi Nước (Thủy Đài Sơn)",
+    "content": "Một ngọn núi nhỏ độc đáo nằm trong hệ thống Bảy Núi, thuộc thị trấn Ba Chúc, huyện Tri Tôn. Dù là ngọn núi thấp nhất nhưng núi Nước mang vẻ đẹp kỳ vĩ giữa cánh đồng bằng phẳng bao la. Vào mùa nước nổi, ngọn núi đứng trơ trọi giữa biển nước mênh mông như một hòn đảo xanh, trên đỉnh núi có ngôi chùa Linh Bửu cổ kính.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Núi Két Anh Vũ Sơn Tịnh Biên",
+    "content": "Ngọn núi đá hoang sơ độc đáo thuộc xã Thới Sơn, Thị xã Tịnh Biên. Điểm nhấn thiên nhiên kỳ thú là khối đá khổng lồ hình dáng mỏ chim két vươn cao chênh vênh giữa nền trời xanh. Đường leo bậc thang đá mát rượi dưới tán rừng tràm cổ thụ ẩn hiện nhiều am cốc tâm linh.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  },
+  {
+    "province": "An Giang",
+    "title": "Chùa Cổ Thới Sơn Bửu Sơn Kỳ Hương",
+    "content": "Tọa lạc tại xã Thới Sơn, Thị xã Tịnh Biên. Ngôi chùa lịch sử tâm linh gắn liền giáo phái Bửu Sơn Kỳ Hương do Đức Phật Thầy Tây An lập nên từ thế kỷ XIX thời khai hoang bảy núi. Kiến trúc chùa đơn sơ mộc mạc mang màu sắc tâm linh huyền bí cổ kính trầm mặc uy nghiêm.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Kênh Vĩnh Tế",
+    "content": "Công trình kênh đào lịch sử vĩ đại chạy dọc biên giới Việt Nam - Campuchia, nối liền Châu Đốc với Hà Tiên. Kênh do danh tướng Thoại Ngọc Hầu chỉ huy đào thủ công bằng sức người thời nhà Nguyễn. Dòng kênh ngày nay có giá trị to lớn về thủy lợi giao thương và là tuyến đường giao thông sông nước lịch sử.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Thánh Đường Jamiul Azhar Châu Phong",
+    "content": "Tọa lạc tại xã Châu Phong, Thị xã Tân Châu. Một trong những thánh đường Hồi giáo lớn và lâu đời nhất tại Việt Nam. Công trình lộng lẫy với hai tông màu trắng và xanh ngọc chủ đạo, những tháp vòm củ hành tinh xảo và khu nghĩa trang cổ kính của các tín đồ, tạo nên bối cảnh chụp ảnh tráng lệ.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Làng Nghề Thổ Cẩm Châu Phong",
+    "content": "Nằm ven dòng sông Hậu thuộc địa phận xã Châu Phong, Thị xã Tân Châu. Làng nghề dệt tay thủ công truyền thống lâu đời lâu năm của nghệ nhân người Chăm An Giang. Du khách đến đây được tận mắt xem công đoạn quay sợi dệt khăn rằn thổ cẩm tinh xảo tinh tế mua làm quà lưu niệm ý nghĩa.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000
+  },
+  {
+    "province": "An Giang",
+    "title": "Thượng Uyển Vườn Sinh Thái Hồng Sơn",
+    "content": "Nằm tại địa phận huyện Châu Thành, An Giang. Đây là khu sinh thái miệt vườn du lịch mới mở với mảng xanh bao la rộng lớn hàng hecta đồng cỏ hoa lá rực rỡ nhiệt đới. Thiết kế các cây cầu tre uốn lượn quanh hồ sen mát mẻ, là tọa độ dã ngoại check-in sinh thái lãng mạn lôi cuốn.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0
+  }
+]

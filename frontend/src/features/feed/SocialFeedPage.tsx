@@ -505,14 +505,8 @@ const SocialPostCard = ({
 
 function UserAvatar({ user, size = 'md' }: { user: { fullName?: string; avatarUrl?: string } | null; size?: 'sm' | 'md' | 'lg' }) {
   const sz = size === 'lg' ? 'w-16 h-16 text-xl' : size === 'sm' ? 'w-10 h-10 text-sm' : 'w-11 h-11 text-sm';
-  if (user?.avatarUrl) {
-    return <img src={user.avatarUrl} alt="" className={`${sz.split(' ').slice(0, 2).join(' ')} rounded-full object-cover ring-2 ring-[var(--border-normal)] flex-shrink-0`} />;
-  }
-  return (
-    <div className={`${sz} rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white flex-shrink-0`}>
-      {user?.fullName?.charAt(0).toUpperCase() || '?'}
-    </div>
-  );
+  const avatarUrl = user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  return <img src={avatarUrl} alt="" className={`${sz.split(' ').slice(0, 2).join(' ')} rounded-full object-cover ring-2 ring-[var(--border-normal)] flex-shrink-0`} />;
 }
 
 // ──────────────────────────────────────────────────────────
@@ -584,13 +578,7 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
           <div className="absolute top-4 right-10 w-5 h-5 rounded-full bg-violet-500/20 animate-float" style={{ animationDelay: '1s' }} />
         </div>
         <div className="profile-mini-avatar">
-          {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt="" className="w-full h-full object-cover rounded-full" />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center text-xl font-bold text-white rounded-full">
-              {user?.fullName?.charAt(0).toUpperCase() || '?'}
-            </div>
-          )}
+          <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover rounded-full" />
         </div>
         <div className="pt-9 pb-4 px-4">
           <h4 className="font-bold text-[var(--text-primary)] truncate">{displayName}</h4>

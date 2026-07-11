@@ -6,7 +6,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const app_1 = __importDefault(require("./app"));
-const io_1 = require("./socket/io");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+// Redirect console logs to a file for headless debugging
+const logFile = path_1.default.resolve(__dirname, '../backend_console.log');
+const originalWrite = process.stdout.write;
+const originalErrWrite = process.stderr.write;
+process.stdout.write = function (chunk, encoding, callback) {
+    try {
+        fs_1.default.appendFileSync(logFile, chunk);
+    }
+    catch (e) { }
+    return originalWrite.call(process.stdout, chunk, encoding, callback);
+};
+process.stderr.write = function (chunk, encoding, callback) {
+    try {
+        fs_1.default.appendFileSync(logFile, chunk);
+    }
+    catch (e) { }
+    return originalErrWrite.call(process.stderr, chunk, encoding, callback);
+};
 const PORT = process.env.PORT || 5000;
 const server = http_1.default.createServer(app_1.default);
 // Bind Socket.io Server to the http server
@@ -16,22 +35,12 @@ const io = new socket_io_1.Server(server, {
         methods: ['GET', 'POST'],
     },
 });
-(0, io_1.setSocketServer)(io);
 // Event-driven WebSocket Manager
 io.on('connection', (socket) => {
     console.log(`Socket Client Connected: ${socket.id}`);
-    socket.on('location:join', (userId) => {
-        if (userId)
-            socket.join(`user:${userId}`);
-        socket.broadcast.emit('friend:online', { userId, socketId: socket.id });
-    });
-    socket.on('location:leave', (userId) => {
-        if (userId)
-            socket.leave(`user:${userId}`);
-        socket.broadcast.emit('location:leave', { userId });
-    });
+    // User online heartbeat
     socket.on('ping_location', (data) => {
-        socket.broadcast.emit('location:update', data);
+        // Broadcast user location to friends/subscribers
         socket.broadcast.emit('friend_location_updated', data);
     });
     // Collaborative trip editing room coordination
@@ -55,13 +64,17 @@ io.on('connection', (socket) => {
     });
 });
 const seed_1 = require("./config/seed");
-// Call auto-seed on startup
-(0, seed_1.autoSeed)().then(() => {
+const extract_and_geocode_1 = require("./scripts/extract-and-geocode");
+// Call geocoding pipeline and auto-seed on startup
+(0, extract_and_geocode_1.runGeocodingPipeline)()
+    .then(() => (0, seed_1.autoSeed)())
+    .then(() => {
     server.listen(PORT, () => {
         console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
     });
-}).catch(err => {
-    console.error('Failed to auto-seed database:', err);
+})
+    .catch(err => {
+    console.error('Failed to start server components:', err);
     server.listen(PORT, () => {
         console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
     });

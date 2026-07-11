@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bánh tráng nướng Đà Lạt",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Bánh Tráng Nướng, Tô Hiến Thành, Ấp Tân Lạc, Đà Lạt, Phường Xuân Hương - Đà Lạt, Tỉnh Lâm Đồng, 66116, Việt Nam",
+      "latitude": 11.9282016,
+      "longitude": 108.4452215,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Banh Trang Nuong, 61, Nguyễn Văn Trỗi, Ấp Võ Tánh, Xuân Hương, Đà Lạt, Phường Xuân Hương - Đà Lạt, Tỉnh Lâm Đồng, 66100, Việt Nam",
+      "latitude": 11.9462815,
+      "longitude": 108.4357833,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Banh Trang Nuong, Nguyễn Văn Trỗi, Ấp Võ Tánh, Xuân Hương, Đà Lạt, Phường Xuân Hương - Đà Lạt, Tỉnh Lâm Đồng, 66100, Việt Nam",
+      "latitude": 11.9484399,
+      "longitude": 108.4372586,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

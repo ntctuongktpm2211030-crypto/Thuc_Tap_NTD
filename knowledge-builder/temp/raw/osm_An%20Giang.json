@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "An Giang",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Tỉnh An Giang, Việt Nam",
+      "latitude": 10.3188672,
+      "longitude": 105.0432488,
+      "class": "boundary",
+      "type": "administrative"
+    }
+  ]
+}

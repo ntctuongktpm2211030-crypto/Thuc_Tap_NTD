@@ -43,13 +43,14 @@ router.get('/profile/:userId', async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.put('/profile', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { fullName, bio, avatarUrl, homeLocation, phoneNumber } = req.body;
+        const { fullName, bio, avatarUrl, coverUrl, homeLocation, phoneNumber } = req.body;
         const updated = await db_1.default.profile.update({
             where: { userId: req.user.sub },
             data: {
                 fullName: fullName ?? undefined,
                 bio: bio ?? undefined,
                 avatarUrl: avatarUrl ?? undefined,
+                coverUrl: coverUrl ?? undefined,
                 homeLocation: homeLocation ?? undefined,
                 phoneNumber: phoneNumber ?? undefined,
             },

@@ -14,7 +14,17 @@ const map_router_1 = __importDefault(require("./modules/map/map.router"));
 const recommendations_router_1 = __importDefault(require("./modules/recommendations/recommendations.router"));
 const social_router_1 = __importDefault(require("./modules/social/social.router"));
 const analytics_router_1 = __importDefault(require("./modules/analytics/analytics.router"));
-const destinations_router_1 = __importDefault(require("./modules/destinations/destinations.router"));
+const chatbot_router_1 = __importDefault(require("./modules/chatbot/routes/chatbot.router"));
+const itinerary_router_1 = __importDefault(require("./modules/itinerary/routes/itinerary.router"));
+const recommendation_router_1 = __importDefault(require("./modules/recommendations/routes/recommendation.router"));
+const travel_history_router_1 = __importDefault(require("./modules/travel-history/routes/travel-history.router"));
+const favorite_food_router_1 = __importDefault(require("./modules/favorite-foods/routes/favorite-food.router"));
+const saved_place_router_1 = __importDefault(require("./modules/saved-places/routes/saved-place.router"));
+const feedback_router_1 = __importDefault(require("./modules/feedback/routes/feedback.router"));
+const tool_call_router_1 = __importDefault(require("./modules/tool-calls/routes/tool-call.router"));
+const cache_router_1 = __importDefault(require("./modules/cache/routes/cache.router"));
+const agent_router_1 = __importDefault(require("./modules/ai-agents/routes/agent.router"));
+const rag_router_1 = __importDefault(require("./modules/rag/routes/rag.router"));
 const app = (0, express_1.default)();
 // ─── Global Middleware ───
 app.use((0, cors_1.default)({
@@ -33,6 +43,59 @@ app.get('/health', (_req, res) => {
         environment: process.env.NODE_ENV,
     });
 });
+app.get('/restart', (_req, res) => {
+    res.status(200).json({ message: 'Restarting backend server...' });
+    setTimeout(() => {
+        process.exit(0);
+    }, 500);
+});
+const fs_1 = __importDefault(require("fs"));
+app.get('/clean-json', (_req, res) => {
+    try {
+        const filePath = 'd:/Thuc_Tap_NDT/knowledge-builder/import-data-camau.json';
+        const rawData = fs_1.default.readFileSync(filePath, 'utf-8');
+        const data = JSON.parse(rawData);
+        function removeAccents(str) {
+            return str
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D');
+        }
+        const keywords = [
+            'phú quốc', 'phụ quốc', 'hòn khô', 'cô tô', 'núi cấm', 'núi sam', 'núi mây',
+            'cáp treo', 'thác', 'đèo', 'lặn biển', 'trường sa', 'hoàng sa', 'ngọc điểm',
+            'ngũ hành', 'trà sư', 'tắm biển'
+        ];
+        const cleanData = data.filter((item) => {
+            const titleClean = removeAccents(item.title.toLowerCase());
+            const contentClean = removeAccents(item.content.toLowerCase());
+            const hasBadKeyword = keywords.some(term => {
+                const termClean = removeAccents(term.toLowerCase());
+                return titleClean.includes(termClean) || contentClean.includes(termClean);
+            });
+            if (hasBadKeyword)
+                return false;
+            if (titleClean.includes('nui') || /\bnui\b/i.test(contentClean)) {
+                if (!titleClean.includes('an giang') && !contentClean.includes('an giang') && !contentClean.includes('hon khoai') && !contentClean.includes('hon da bac')) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        const deletedCount = data.length - cleanData.length;
+        fs_1.default.writeFileSync(filePath, JSON.stringify(cleanData, null, 2), 'utf-8');
+        res.status(200).json({
+            status: 'success',
+            originalCount: data.length,
+            cleanCount: cleanData.length,
+            deletedCount
+        });
+    }
+    catch (err) {
+        res.status(500).json({ status: 'failed', error: err.message });
+    }
+});
 // ─── API Routes ───────────────────────────────────────────
 // Authentication: register / login / refresh / me
 app.use('/api/v1/auth', auth_router_1.default);
@@ -48,8 +111,28 @@ app.use('/api/v1/recommendations', recommendations_router_1.default);
 app.use('/api/v1/social', social_router_1.default);
 // Analytics: platform stats, AI usage, GIS heatmap, trip trends
 app.use('/api/v1/analytics', analytics_router_1.default);
-// Destination hubs: /destination/:slug knowledge pages
-app.use('/api/v1/destinations', destinations_router_1.default);
+// Chatbot: Core AI Conversation + AI Memory
+app.use('/api/v1/chatbot', chatbot_router_1.default);
+// Itinerary: Itineraries + Days + Activities
+app.use('/api/v1/itineraries', itinerary_router_1.default);
+// Recommendations (User Custom): Add + Update + Delete + List
+app.use('/api/v1/user-recommendations', recommendation_router_1.default);
+// Travel History: Visited Locations + Dates + Ratings + Costs
+app.use('/api/v1/travel-history', travel_history_router_1.default);
+// Favorite Foods: Food Name + Region + Description + Rating
+app.use('/api/v1/favorite-foods', favorite_food_router_1.default);
+// Saved Places: Place Name + Category + Coordinates + Address + Image
+app.use('/api/v1/saved-places', saved_place_router_1.default);
+// Feedback: AI Chat Messages Rating & Comments
+app.use('/api/v1/feedback', feedback_router_1.default);
+// ToolCall: AI Chatbot Tool Usage Logs
+app.use('/api/v1/tool-calls', tool_call_router_1.default);
+// Cache: Place, Food and Blog API Caching (TTL-based)
+app.use('/api/v1/cache', cache_router_1.default);
+// AI Agent: Multi-agent execution (Strategy & DI Pattern)
+app.use('/api/v1/ai-agents', agent_router_1.default);
+// RAG: Retrieval-Augmented Generation (Embeddings + Vector Storage + Retriever + Prompt Builder)
+app.use('/api/v1/rag', rag_router_1.default);
 // ─── 404 Handler ─────────────────────────────────────────
 app.use((_req, res) => {
     res.status(404).json({

@@ -13,7 +13,7 @@ import { postsService } from '../../services/smartTravel.service';
 import type { RootState } from '../../store';
 import {
   validateImage, validateVideo, createPreviewUrl, revokePreviewUrl,
-  resolveMediaUrl, MAX_PHOTOS, MAX_VIDEOS,
+  resolveMediaUrl, MAX_PHOTOS, MAX_VIDEOS, cleanDeadBlobUrls,
 } from '../../utils/mediaUtils';
 
 const DRAFT_KEY = 'smarttravel_post_draft';
@@ -56,13 +56,17 @@ function buildPostContent(data: PostFormData) {
 }
 
 function saveDraft(data: PostFormData) {
-  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(data)); return true; } catch { return false; }
+  try {
+    const cleaned = cleanDeadBlobUrls(data);
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(cleaned));
+    return true;
+  } catch { return false; }
 }
 
 function loadDraft(): PostFormData | null {
   try {
     const raw = localStorage.getItem(DRAFT_KEY);
-    return raw ? JSON.parse(raw) : null;
+    return raw ? cleanDeadBlobUrls(JSON.parse(raw)) : null;
   } catch { return null; }
 }
 

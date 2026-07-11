@@ -1,0 +1,14 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Chợ nổi Cái Răng Cần Thơ",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Chợ nổi Cái Răng, Nguyễn Việt Dũng, Phường Cái Răng, Thành phố Cần Thơ, 94908, Việt Nam",
+      "latitude": 10.0023957,
+      "longitude": 105.7443925,
+      "class": "amenity",
+      "type": "marketplace"
+    }
+  ]
+}

@@ -926,7 +926,7 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
           <div className="relative">
             <Calendar size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input type="date" value={data.startDate} onChange={e => onChange({ startDate: e.target.value })}
-              className="input-premium pl-9 text-sm" />
+              className="input-premium pl-10 text-sm" />
           </div>
         </div>
         <div>
@@ -934,7 +934,7 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
           <div className="relative">
             <Calendar size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input type="date" value={data.endDate} onChange={e => onChange({ endDate: e.target.value })}
-              className="input-premium pl-9 text-sm" />
+              className="input-premium pl-10 text-sm" />
           </div>
         </div>
       </div>
@@ -954,19 +954,22 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
       <div>
         <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngân sách tổng</label>
         <div className="flex gap-2">
-          <div className="relative flex-1">
-            <DollarSign size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+          <div className="input-premium flex items-center p-0 gap-0 overflow-hidden focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all w-full">
+            <div className="pl-3 text-[var(--text-muted)] flex-shrink-0 flex items-center justify-center">
+              <DollarSign size={15} />
+            </div>
             <input type="number" value={data.budget} onChange={e => onChange({ budget: e.target.value })}
               placeholder="5,000,000"
-              className="input-premium pl-9 text-sm" />
+              className="w-full bg-transparent border-none outline-none py-3 pl-2 pr-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]" />
+            <div className="h-6 w-[1px] bg-slate-300 dark:bg-slate-700 flex-shrink-0"></div>
+            <select value={data.currency} onChange={e => onChange({ currency: e.target.value })}
+              className="bg-transparent border-none outline-none py-3 pl-3 pr-8 text-sm text-[var(--text-primary)] w-28 cursor-pointer flex-shrink-0">
+              <option value="VND">VND ₫</option>
+              <option value="USD">USD $</option>
+              <option value="JPY">JPY ¥</option>
+              <option value="EUR">EUR €</option>
+            </select>
           </div>
-          <select value={data.currency} onChange={e => onChange({ currency: e.target.value })}
-            className="input-premium w-28 text-sm">
-            <option value="VND">VND ₫</option>
-            <option value="USD">USD $</option>
-            <option value="JPY">JPY ¥</option>
-            <option value="EUR">EUR €</option>
-          </select>
         </div>
       </div>
 

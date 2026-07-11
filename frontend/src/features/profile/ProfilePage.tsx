@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
   MoreHorizontal, Globe, Briefcase, GraduationCap, Image as ImageIcon,
+  Bell
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
-import type { RootState } from '../../store';
-
-const COVER_IMAGE = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1400&q=80';
+import type { RootState, AppDispatch } from '../../store';
+import { setUser } from '../../store/authSlice';
+import { socialService } from '../../services/smartTravel.service';
 
 const MY_POSTS = [
   {
@@ -48,10 +49,11 @@ const FRIENDS_PREVIEW = [
   { name: 'Hương Ngô', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=80&q=80' },
 ];
 
-type TabId = 'posts' | 'about' | 'photos' | 'trips';
+type TabId = 'posts' | 'about' | 'photos' | 'trips' | 'notifications';
 
 export default function ProfilePage() {
   const { t, lang } = useLang();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((s: RootState) => s.auth.user);
   const vi = lang === 'vi';
   const [activeTab, setActiveTab] = useState<TabId>('posts');
@@ -59,46 +61,83 @@ export default function ProfilePage() {
 
   if (!user) return null;
 
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [following, setFollowing] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      socialService.getFollowing(user.id)
+        .then(data => {
+          if (Array.isArray(data)) setFollowing(data);
+        })
+        .catch(err => console.error('Get following failed:', err));
+
+      socialService.notifications()
+        .then(data => {
+          if (Array.isArray(data)) setNotifications(data);
+        })
+        .catch(err => console.error('Get notifications failed:', err));
+    }
+  }, [user]);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64 = reader.result as string;
+      try {
+        await socialService.updateProfile({ avatarUrl: base64 });
+        dispatch(setUser({ ...user, avatarUrl: base64 }));
+      } catch (err) {
+        console.error('Update avatar failed:', err);
+        alert(vi ? 'Cập nhật ảnh đại diện thất bại' : 'Failed to update avatar');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await socialService.markAllRead();
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    } catch (err) {
+      console.error('Mark all read failed:', err);
+    }
+  };
+
   const tabs: { id: TabId; label: string }[] = [
     { id: 'posts', label: t('profile.tab.posts') },
     { id: 'about', label: t('profile.tab.about') },
     { id: 'photos', label: t('profile.tab.photos') },
     { id: 'trips', label: t('profile.tab.trips') },
+    { id: 'notifications', label: vi ? 'Thông báo' : 'Notifications' },
   ];
 
   const statFriends = 128;
   const statFollowers = 342;
 
   return (
-    <div className="fb-profile">
-      {/* Cover */}
-      <div className="fb-profile-cover-wrap">
-        <img src={COVER_IMAGE} alt="" className="fb-profile-cover" />
-        <button type="button" className="fb-profile-cover-edit">
-          <Camera size={14} /> {vi ? 'Chỉnh ảnh bìa' : 'Edit cover'}
-        </button>
-      </div>
+    <div className="fb-profile pt-6">
 
       <div className="fb-profile-container">
         {/* Header: avatar + info + actions */}
         <div className="fb-profile-header">
           <div className="fb-profile-avatar-wrap">
             <div className="fb-profile-avatar">
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="" />
-              ) : (
-                user.fullName?.charAt(0).toUpperCase()
-              )}
+              <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" />
             </div>
-            <button type="button" className="fb-profile-avatar-edit" aria-label="Edit avatar">
+            <label htmlFor="avatar-upload" className="fb-profile-avatar-edit cursor-pointer" aria-label="Edit avatar">
               <Camera size={14} />
-            </button>
+              <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+            </label>
           </div>
 
           <div className="fb-profile-header-main">
             <h1 className="fb-profile-name">{user.fullName}</h1>
             <p className="fb-profile-friends">
-              <strong>{statFriends}</strong> {vi ? 'bạn bè' : 'friends'} · <strong>{statFollowers}</strong> {vi ? 'người theo dõi' : 'followers'}
+              <strong>{following.length > 0 ? following.length : statFriends}</strong> {vi ? 'đang theo dõi' : 'following'} · <strong>{statFollowers}</strong> {vi ? 'người theo dõi' : 'followers'}
             </p>
             <p className="fb-profile-location">
               <MapPin size={14} /> {vi ? 'Hà Nội, Việt Nam' : 'Hanoi, Vietnam'}
@@ -168,17 +207,33 @@ export default function ProfilePage() {
 
             <div className="fb-profile-card">
               <div className="fb-profile-card-head">
-                <h3 className="fb-profile-card-title">{vi ? 'Bạn bè' : 'Friends'}</h3>
+                <h3 className="fb-profile-card-title">{vi ? 'Đang theo dõi' : 'Following'}</h3>
                 <Link to="/profile/following" className="fb-profile-see-all">{vi ? 'Xem tất cả' : 'See all'}</Link>
               </div>
-              <p className="fb-profile-friends-sub">{statFriends} {vi ? 'người bạn' : 'friends'}</p>
+              <p className="fb-profile-friends-sub">
+                {following.length > 0 ? following.length : statFriends} {vi ? 'người' : 'people'}
+              </p>
               <div className="fb-profile-friends-grid">
-                {FRIENDS_PREVIEW.map(f => (
-                  <div key={f.name} className="fb-profile-friend">
-                    <img src={f.avatar} alt={f.name} />
-                    <span>{f.name.split(' ').pop()}</span>
-                  </div>
-                ))}
+                {following.length > 0 ? (
+                  following.slice(0, 6).map(f => {
+                    const profileData = f.following?.profile || f;
+                    const avatarUrl = profileData.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+                    const name = profileData.fullName || f.name || '';
+                    return (
+                      <div key={f.id} className="fb-profile-friend">
+                        <img src={avatarUrl} alt={name} />
+                        <span>{name.split(' ').pop()}</span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  FRIENDS_PREVIEW.map(f => (
+                    <div key={f.name} className="fb-profile-friend">
+                      <img src={f.avatar} alt={f.name} />
+                      <span>{f.name.split(' ').pop()}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </aside>
@@ -282,6 +337,52 @@ export default function ProfilePage() {
                 <Link to="/journeys/create" className="btn-gold inline-flex mt-4 px-6 py-2.5 text-sm">
                   {vi ? 'Tạo hành trình đầu tiên' : 'Create your first journey'}
                 </Link>
+              </div>
+            )}
+
+            {activeTab === 'notifications' && (
+              <div className="fb-profile-card">
+                <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
+                  <h3 className="fb-profile-card-title">{vi ? 'Thông báo gần đây' : 'Recent Notifications'}</h3>
+                  {notifications.some(n => !n.isRead) && (
+                    <button
+                      type="button"
+                      onClick={handleMarkAllRead}
+                      className="text-xs font-bold text-[var(--gold)] hover:underline"
+                    >
+                      {vi ? 'Đánh dấu tất cả đã đọc' : 'Mark all as read'}
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-3">
+                  {notifications.length === 0 ? (
+                    <p className="text-center text-sm text-[var(--text-muted)] py-8">
+                      {vi ? 'Không có thông báo nào.' : 'No notifications.'}
+                    </p>
+                  ) : (
+                    notifications.map(notif => (
+                      <div
+                        key={notif.id}
+                        className={`flex items-start gap-3.5 p-4 rounded-xl transition-all ${
+                          notif.isRead ? 'opacity-70 bg-transparent' : 'bg-[var(--gold-glow)]/15 border-l-3 border-[var(--gold)]'
+                        }`}
+                      >
+                        <div className="mt-0.5 p-2 rounded-xl bg-[var(--bg-elevated)] text-[var(--gold)]">
+                          <Bell size={16} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[var(--text-primary)] font-medium leading-relaxed">{notif.content}</p>
+                          <p className="text-[10px] text-[var(--text-muted)] mt-1.5">
+                            {new Date(notif.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             )}
           </main>

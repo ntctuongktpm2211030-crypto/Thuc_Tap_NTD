@@ -160,13 +160,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
       {/* Write Comment Form */}
       {isAuthenticated ? (
         <form onSubmit={handleAddComment} className="flex gap-2 items-start mt-2">
-          {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white text-xs flex-shrink-0">
-              {user?.fullName?.charAt(0).toUpperCase() || '?'}
-            </div>
-          )}
+          <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
           <div className="flex-1 flex items-center bg-[var(--bg-elevated)] border border-[var(--border-subtle)] focus-within:border-[var(--gold)] rounded-2xl px-3 transition-colors">
             <input
               type="text"
@@ -215,13 +209,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
               <div key={c.id} className="space-y-2 group/comment relative">
                 {/* Main Parent Comment */}
                 <div className="flex gap-2 items-start relative z-10">
-                  {c.author.profile?.avatarUrl ? (
-                    <img src={c.author.profile.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white text-xs flex-shrink-0">
-                      {c.author.profile?.fullName?.charAt(0).toUpperCase() || '?'}
-                    </div>
-                  )}
+                  <img src={c.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
                   <div className="flex-1">
                     <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                       <p className="font-bold text-[var(--text-primary)] text-xs mb-0.5">{c.author.profile?.fullName || 'Người dùng'}</p>
@@ -270,13 +258,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                         {/* Horizontal branch line from vertical thread to child avatar */}
                         <div className="absolute left-[-25px] top-[14px] w-[20px] h-[1.5px] bg-[var(--border-subtle)]" />
                         
-                        {reply.author.profile?.avatarUrl ? (
-                          <img src={reply.author.profile.avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
-                        ) : (
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white text-xs flex-shrink-0">
-                            {reply.author.profile?.fullName?.charAt(0).toUpperCase() || '?'}
-                          </div>
-                        )}
+                        <img src={reply.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
                         <div className="flex-1">
                           <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-1.5 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                             <p className="font-bold text-[var(--text-primary)] text-[11px] mb-0.5">{reply.author.profile?.fullName || 'Người dùng'}</p>
@@ -303,13 +285,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                       {/* Horizontal branch line for reply box */}
                       <div className="absolute left-[-25px] top-[14px] w-[20px] h-[1.5px] bg-[var(--border-subtle)]" />
                       
-                      {user?.avatarUrl ? (
-                        <img src={user.avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white text-xs flex-shrink-0">
-                          {user?.fullName?.charAt(0).toUpperCase() || '?'}
-                        </div>
-                      )}
+                      <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
                       <div className="flex-1 flex items-center bg-[var(--bg-elevated)] border border-[var(--border-subtle)] focus-within:border-[var(--gold)] rounded-2xl px-3 transition-colors">
                         <input
                           type="text"

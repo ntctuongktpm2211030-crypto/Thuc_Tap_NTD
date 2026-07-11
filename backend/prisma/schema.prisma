@@ -2,13 +2,15 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
 }
 
 enum UserRole {
@@ -38,6 +40,14 @@ model User {
   notifications        Notification[]
   aiHistories          AIHistory[]
   liveLocation         Location?          @relation("UserLiveLocation")
+  chatbotConversations ChatConversation[]
+  aiMemory             AIMemory?
+  itineraries          Itinerary[]
+  userRecommendations  UserRecommendation[]
+  travelHistories      TravelHistory[]
+  favoriteFoods        FavoriteFood[]
+  savedPlaces          SavedPlace[]
+  aiFeedbacks          AIFeedback[]
   
   // Self-referencing many-to-many for followers
   followers            Follower[]         @relation("Following")
@@ -50,7 +60,6 @@ model User {
   // New model relationships
   journeys             Journey[]
   locationHistory      LocationHistory[]
-  savedPlaces          SavedPlace[]
   organizedEvents      Event[]            @relation("EventOrganizer")
   eventAttendances     EventAttendee[]
   travelerMatchesUser  TravelerMatch[]    @relation("TravelerMatchUser")
@@ -64,6 +73,7 @@ model Profile {
   userId       String   @unique
   fullName     String
   avatarUrl    String?
+  coverUrl     String?
   bio          String?
   phoneNumber  String?
   homeLocation String?
@@ -147,7 +157,6 @@ model Destination {
   activities    TripActivity[]
   checkIns      CheckIn[]
   recommendations Recommendation[]
-  savedPlaces   SavedPlace[]
   events        Event[]
 
   // Compound index to speed up spatial bounding box searches
@@ -398,24 +407,6 @@ model LocationHistory {
 }
 
 // ═══════════════════════════════════════════════════════════
-// SAVED PLACE — User's personal saved/bookmarked destinations
-// ═══════════════════════════════════════════════════════════
-model SavedPlace {
-  id            String      @id @default(uuid())
-  userId        String
-  destinationId String
-  collectionName String     @default("Favorites") // user-defined collections
-  note          String?
-  createdAt     DateTime    @default(now())
-
-  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, destinationId])
-  @@index([userId])
-}
-
-// ═══════════════════════════════════════════════════════════
 // EVENT — Local events, festivals, meetups at destinations
 // ═══════════════════════════════════════════════════════════
 model Event {
@@ -480,3 +471,242 @@ model TravelerMatch {
   @@index([matchedUserId])
   @@index([compatScore])
 }
+
+model ChatConversation {
+  id        String        @id @default(uuid())
+  userId    String
+  title     String?       @default("New Conversation")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([userId])
+}
+
+model ChatMessage {
+  id             String               @id @default(uuid())
+  conversationId String
+  role           String               // "user", "assistant", "system"
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  conversation   ChatConversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  versions       ChatMessageVersion[]
+  feedback       AIFeedback?
+  toolCalls      ToolCall[]
+
+  @@index([conversationId])
+}
+
+model ChatMessageVersion {
+  id        String      @id @default(uuid())
+  messageId String
+  content   String
+  version   Int         // 1, 2, 3, etc.
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  message   ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+}
+
+model AIMemory {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  travelPreferences String[] // sở thích du lịch (e.g. "phượt", "nghỉ dưỡng")
+  favoriteFoods     String[] // món ăn yêu thích
+  budget            String?  // ngân sách (e.g. "thấp", "trung bình", "cao")
+  transportation    String[] // phương tiện di chuyển (e.g. "xe máy", "máy bay")
+  favoriteLocations String[] // địa điểm yêu thích
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Itinerary {
+  id          String         @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  days        ItineraryDay[]
+
+  @@index([userId])
+}
+
+model ItineraryDay {
+  id          String              @id @default(uuid())
+  itineraryId String
+  dayIndex    Int                 // Day 1, Day 2, etc.
+  date        DateTime?
+  itinerary   Itinerary           @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  activities  ItineraryActivity[]
+
+  @@index([itineraryId])
+}
+
+model ItineraryActivity {
+  id             String       @id @default(uuid())
+  itineraryDayId String
+  title          String
+  description    String?
+  startTime      String?      // e.g., "09:00"
+  endTime        String?      // e.g., "11:00"
+  location       String?
+  cost           Float?       @default(0.0)
+  day            ItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
+
+  @@index([itineraryDayId])
+}
+
+model UserRecommendation {
+  id        String   @id @default(uuid())
+  userId    String
+  location  String   // địa điểm đề xuất
+  priority  String   // độ ưu tiên (e.g., "high", "medium", "low")
+  reason    String?  // lý do gợi ý
+  type      String   // loại gợi ý (e.g., "destination", "food", "activity")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model TravelHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  location  String   // địa điểm đã đi
+  time      DateTime // thời gian
+  rating    String?  // đánh giá
+  cost      Float    @default(0.0) // chi phí
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model FavoriteFood {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String   // tên món ăn
+  region      String?  // khu vực (ví dụ: Miền Bắc, Hà Nội, v.v.)
+  description String?  // mô tả
+  rating      Float?   // điểm đánh giá (0 - 5)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model SavedPlace {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String   // tên địa điểm
+  category  String   // loại địa điểm (e.g. restaurant, hotel, attraction)
+  latitude  Float    // vĩ độ (để vẽ bản đồ)
+  longitude Float    // kinh độ (để vẽ bản đồ)
+  address   String?  // địa chỉ
+  imageUrl  String?  // hình ảnh đại diện hoặc hình ảnh địa điểm
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AIFeedback {
+  id        String      @id @default(uuid())
+  userId    String
+  messageId String      @unique // 1-1 relationship: mỗi tin nhắn AI chỉ có tối đa 1 feedback
+  rating    Int         // điểm đánh giá (e.g. 1-5 hoặc 1: thumbs up, -1: thumbs down)
+  comment   String?     // ý kiến đóng góp
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([messageId])
+}
+
+model ToolCall {
+  id        String      @id @default(uuid())
+  messageId String
+  toolName  String      // tên tool AI đã dùng (e.g. Maps, Weather, v.v.)
+  input     String      // thông tin đầu vào gửi tới tool
+  output    String?     // kết quả phản hồi từ tool
+  status    String      // trạng thái chạy tool (e.g. "success", "failed")
+  createdAt DateTime    @default(now())
+  message   ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+}
+
+model PlaceCache {
+  key       String   @id // khóa tìm kiếm cache (ví dụ: "lat_lng:21.02_105.85" hoặc "query:ha-noi")
+  value     String   // dữ liệu JSON của địa điểm được cache
+  expiresAt DateTime // thời gian hết hạn
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FoodCache {
+  key       String   @id // khóa tìm kiếm cache (ví dụ: "query:pho-bo" hoặc "region:ha-noi")
+  value     String   // dữ liệu JSON của món ăn được cache
+  expiresAt DateTime // thời gian hết hạn
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogCache {
+  key       String   @id // khóa tìm kiếm cache (ví dụ: "topic:du-lich-ha-giang")
+  value     String   // dữ liệu JSON của blog được cache
+  expiresAt DateTime // thời gian hết hạn
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model KnowledgeContent {
+  id        String              @id @default(uuid())
+  title     String
+  body      String              // nội dung văn bản tri thức gốc (1 content)
+  category  String              // loại tri thức (e.g. culture, festival, food, history, destination)
+  questions KnowledgeQuestion[]
+  answers   KnowledgeAnswer[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@index([category])
+}
+
+model KnowledgeQuestion {
+  id              String                       @id @default(uuid())
+  contentId       String
+  questionText    String                       // nội dung câu hỏi mẫu (nhiều question)
+  embeddingOpenAI Unsupported("vector(1536)")? // Lưu trữ vector embedding OpenAI
+  embeddingLocal  Unsupported("vector(128)")?  // Lưu trữ vector embedding Local
+  createdAt       DateTime                     @default(now())
+  updatedAt       DateTime                     @updatedAt
+
+  content         KnowledgeContent             @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([contentId])
+}
+
+model KnowledgeAnswer {
+  id         String           @id @default(uuid())
+  contentId  String
+  answerText String           // nội dung đáp án mẫu (nhiều đáp án)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  content    KnowledgeContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([contentId])
+}
+

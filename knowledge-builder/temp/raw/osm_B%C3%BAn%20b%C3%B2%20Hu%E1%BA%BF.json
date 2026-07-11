@@ -1,0 +1,30 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Bún bò Huế",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Bún bò Huế, 4909, 17 Avenue SE, Forest Lawn Industrial, Calgary, Alberta, T2A 0V5, Canada",
+      "latitude": 51.0367165,
+      "longitude": -113.9631822,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Bún Bò Huế, 2871, Senter Road, San Jose, Santa Clara County, California, 95111, United States",
+      "latitude": 37.2986744,
+      "longitude": -121.839412,
+      "class": "amenity",
+      "type": "restaurant"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Bún Bò Huế, Delta Court, Little Saigon, San Jose, Santa Clara County, California, 95122, United States",
+      "latitude": 37.3301366,
+      "longitude": -121.8563326,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

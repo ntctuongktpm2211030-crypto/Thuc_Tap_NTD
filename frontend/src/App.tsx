@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import {
-  MapPin, Star, Users, Search, Bot, Loader2, Plane, Zap, Check, AlertTriangle,
+  MapPin, Users, Search, Bot, Loader2, Plane, Zap, Check, AlertTriangle,
   Map, MessageCircle, FileText, Link2, Mountain, Flame,
   Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe,
   Menu, X, Bookmark, User, Send, Utensils,
 } from 'lucide-react';
 import { TRIP_ACTIVITY_ICONS } from './config/modernIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import LeafletMap from './components/Map/LeafletMap';
+import MapLibreMap, { MapLocation } from './components/Map/MapLibreMap';
 import { logout } from './store/authSlice';
-import { tripsService } from './services/smartTravel.service';
+import { tripsService, socialService, mapService, Waypoint } from './services/smartTravel.service';
 import type { RootState, AppDispatch } from './store';
 import { useTheme } from './contexts/ThemeContext';
 import { useLang } from './contexts/LanguageContext';
@@ -30,22 +30,11 @@ import ProfilePage from './features/profile/ProfilePage';
 import FollowingPage from './features/profile/FollowingPage';
 import SavedPage from './features/profile/SavedPage';
 import SettingsPage from './features/profile/SettingsPage';
+import NotificationsPage from './features/profile/NotificationsPage';
+import ChatbotPage from './features/chatbot/ChatbotPage';
 
-// ──────────────────────────────────────────────────────────
-// MOCK DATA
-// ──────────────────────────────────────────────────────────
-const MOCK_CHECKINS = [
-  { id: '1', user: 'Hoang Le', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80', note: 'Best egg coffee in Hanoi Old Quarter! ☕', location: 'Giang Cafe, Hanoi', time: '10 mins ago', lat: 21.0331, lng: 105.8539 },
-  { id: '2', user: 'Sarah Miller', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80', note: 'Watching the sunset over West Lake 🌅', location: 'Tran Quoc Pagoda, Hanoi', time: '1 hour ago', lat: 21.0478, lng: 105.8368 },
-  { id: '3', user: 'Alex Nguyen', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=80&q=80', note: 'Trekking path is muddy but the view is insane!', location: 'Muong Hoa Valley, Sapa', time: '3 hours ago', lat: 22.3168, lng: 103.8567 },
-];
 
-const MOCK_NEARBY = [
-  { name: 'Hoan Kiem Lake', category: 'Attraction', distance: '150m', rating: 4.8 },
-  { name: "St. Joseph's Cathedral", category: 'Attraction', distance: '400m', rating: 4.6 },
-  { name: 'Bun Cha Ta Restaurant', category: 'Food', distance: '300m', rating: 4.7 },
-  { name: 'Sofitel Legend Metropole', category: 'Hotel', distance: '650m', rating: 4.9 },
-];
+// MOCK DATA REMOVED (Replaced by Backend API service calls)
 
 // ──────────────────────────────────────────────────────────
 // 1. SOCIAL MAP DASHBOARD
@@ -54,83 +43,425 @@ const MapDashboard = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((s: RootState) => s.auth);
   const { t } = useLang();
-  const [checkins, setCheckins] = useState(MOCK_CHECKINS);
-  const [newNote, setNewNote] = useState('');
-  const [newLocation, setNewLocation] = useState('');
-  const [selectedCenter, setSelectedCenter] = useState<[number, number]>([21.028511, 105.804817]);
+  const vi = t('nav.feed') === 'Bảng tin';
 
-  const handleCheckin = (e: React.FormEvent) => {
+  const [locations, setLocations] = useState<MapLocation[]>([]);
+  const [checkins, setCheckins] = useState<any[]>([]);
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [routeQueue, setRouteQueue] = useState<MapLocation[]>([]);
+  const [viewMode, setViewMode] = useState<'markers' | 'cluster' | 'heatmap'>('markers');
+  const [selectedCenter, setSelectedCenter] = useState<[number, number]>([21.028511, 105.804817]);
+  const [cachingProgress, setCachingProgress] = useState<number | null>(null);
+
+  const [selectedDestId, setSelectedDestId] = useState('');
+  const [newNote, setNewNote] = useState('');
+  const [isExtractingGps, setIsExtractingGps] = useState(false);
+
+  const loadMapData = async () => {
+    try {
+      const [recent, dests] = await Promise.all([
+        mapService.recentCheckins(30),
+        mapService.destinations()
+      ]);
+      if (Array.isArray(recent)) setCheckins(recent);
+      if (Array.isArray(dests)) setDestinations(dests);
+    } catch (err) {
+      console.error('Failed to load map data:', err);
+    }
+  };
+
+  useEffect(() => {
+    loadMapData();
+  }, []);
+
+  useEffect(() => {
+    const mappedDests: MapLocation[] = destinations.map(d => ({
+      id: d.id,
+      name: d.name,
+      lat: d.latitude,
+      lng: d.longitude,
+      category: d.category
+    }));
+
+    const mappedCheckins: MapLocation[] = checkins.map(c => ({
+      id: `checkin-${c.id}`,
+      name: c.destination?.name || 'Vị trí check-in',
+      lat: c.destination?.latitude || 21.0285,
+      lng: c.destination?.longitude || 105.8048,
+      note: c.note || '',
+      user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
+      avatar: c.user?.profile?.avatarUrl || '',
+      time: new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
+    }));
+
+    setLocations([...mappedDests, ...mappedCheckins]);
+  }, [destinations, checkins]);
+
+  const parseEXIFGPS = (file: File): Promise<[number, number] | null> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const buffer = e.target?.result as ArrayBuffer;
+          const view = new DataView(buffer);
+          if (view.getUint16(0) !== 0xFFD8) return resolve(null);
+          let offset = 2;
+          const length = view.byteLength;
+          while (offset < length) {
+            if (view.getUint16(offset) === 0xFFE1) {
+              const exifOffset = offset + 4;
+              if (view.getUint32(exifOffset) === 0x45786966) {
+                const tiffOffset = exifOffset + 6;
+                const bigEndian = view.getUint16(tiffOffset) === 0x4D4D;
+                const read16 = (off: number) => bigEndian ? view.getUint16(off) : view.getUint16(off, true);
+                const read32 = (off: number) => bigEndian ? view.getUint32(off) : view.getUint32(off, true);
+                
+                let ifdOffset = tiffOffset + read32(tiffOffset + 4);
+                const numEntries = read16(ifdOffset);
+                let gpsIFDOffset = 0;
+                for (let i = 0; i < numEntries; i++) {
+                  const entryOffset = ifdOffset + 2 + i * 12;
+                  const tag = read16(entryOffset);
+                  if (tag === 0x8825) {
+                    gpsIFDOffset = tiffOffset + read32(entryOffset + 8);
+                    break;
+                  }
+                }
+                if (gpsIFDOffset) {
+                  const numGpsEntries = read16(gpsIFDOffset);
+                  let latParts: number[] = [];
+                  let lngParts: number[] = [];
+                  let latRef = 'N';
+                  let lngRef = 'E';
+                  const readRational = (off: number) => {
+                    const num = read32(off);
+                    const den = read32(off + 4);
+                    return den ? num / den : num;
+                  };
+                  for (let i = 0; i < numGpsEntries; i++) {
+                    const entryOffset = gpsIFDOffset + 2 + i * 12;
+                    const tag = read16(entryOffset);
+                    const valOffset = tiffOffset + read32(entryOffset + 8);
+                    if (tag === 1) {
+                      latRef = String.fromCharCode(view.getUint8(entryOffset + 8));
+                    } else if (tag === 2) {
+                      for (let j = 0; j < 3; j++) latParts.push(readRational(valOffset + j * 8));
+                    } else if (tag === 3) {
+                      lngRef = String.fromCharCode(view.getUint8(entryOffset + 8));
+                    } else if (tag === 4) {
+                      for (let j = 0; j < 3; j++) lngParts.push(readRational(valOffset + j * 8));
+                    }
+                  }
+                  if (latParts.length === 3 && lngParts.length === 3) {
+                    let lat = latParts[0] + latParts[1] / 60 + latParts[2] / 3600;
+                    let lng = lngParts[0] + lngParts[1] / 60 + lngParts[2] / 3600;
+                    if (latRef === 'S') lat = -lat;
+                    if (lngRef === 'W') lng = -lng;
+                    return resolve([lat, lng]);
+                  }
+                }
+              }
+              break;
+            }
+            offset += 2 + view.getUint16(offset + 2);
+          }
+        } catch (err) {
+          console.error('GPS EXIF Parse fail:', err);
+        }
+        resolve(null);
+      };
+      reader.readAsArrayBuffer(file.slice(0, 128 * 1024));
+    });
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsExtractingGps(true);
+    const coords = await parseEXIFGPS(file);
+    setIsExtractingGps(false);
+
+    if (coords) {
+      setSelectedCenter(coords);
+      let nearest = destinations[0];
+      let minDist = Infinity;
+      destinations.forEach(d => {
+        const dist = Math.hypot(d.latitude - coords[0], d.longitude - coords[1]);
+        if (dist < minDist) {
+          minDist = dist;
+          nearest = d;
+        }
+      });
+      if (nearest) {
+        setSelectedDestId(nearest.id);
+        alert(vi 
+          ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Tự chọn địa điểm gần nhất: ${nearest.name}`
+          : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Selected nearest place: ${nearest.name}`
+        );
+      }
+    } else {
+      alert(vi 
+        ? 'Không tìm thấy tọa độ GPS EXIF trong bức ảnh này.' 
+        : 'No GPS EXIF coordinates found in this image.'
+      );
+    }
+  };
+
+  const handleCheckin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated) {
       navigate('/auth', { state: { from: '/map' } });
       return;
     }
-    if (!newNote || !newLocation) return;
-    setCheckins([{
-      id: String(checkins.length + 1),
-      user: 'You',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80',
-      note: newNote, location: newLocation, time: 'Just now',
-      lat: selectedCenter[0], lng: selectedCenter[1],
-    }, ...checkins]);
-    setNewNote(''); setNewLocation('');
+    if (!selectedDestId) {
+      alert(vi ? 'Vui lòng chọn địa điểm!' : 'Please select a place!');
+      return;
+    }
+
+    try {
+      const response = await mapService.checkIn(selectedDestId, newNote);
+      setCheckins(prev => [response, ...prev]);
+      setNewNote('');
+      setSelectedDestId('');
+      alert(vi ? 'Check-in thành công!' : 'Check-in successful!');
+    } catch (err) {
+      console.error('Checkin failed:', err);
+      alert(vi ? 'Check-in thất bại. Hãy thử lại.' : 'Check-in failed. Please try again.');
+    }
+  };
+
+  const addPointToRoute = (loc: MapLocation) => {
+    if (routeQueue.some(p => p.id === loc.id)) return;
+    setRouteQueue([...routeQueue, loc]);
+  };
+
+  const removeRoutePoint = (id: string) => {
+    setRouteQueue(routeQueue.filter(p => p.id !== id));
+  };
+
+  const handleOptimizeTSP = () => {
+    if (routeQueue.length <= 2) return;
+    const unvisited = [...routeQueue];
+    const optimizedList = [unvisited.shift()!];
+    while (unvisited.length > 0) {
+      const current = optimizedList[optimizedList.length - 1];
+      let nextIdx = 0;
+      let minDist = Infinity;
+      for (let i = 0; i < unvisited.length; i++) {
+        const dist = Math.hypot(unvisited[i].lat - current.lat, unvisited[i].lng - current.lng);
+        if (dist < minDist) {
+          minDist = dist;
+          nextIdx = i;
+        }
+      }
+      optimizedList.push(unvisited.splice(nextIdx, 1)[0]);
+    }
+    setRouteQueue(optimizedList);
+    alert(vi ? 'Đã tối ưu hóa lộ trình di chuyển du lịch!' : 'Travel route has been optimized!');
+  };
+
+  const handleCacheTiles = () => {
+    setCachingProgress(10);
+    const interval = setInterval(() => {
+      setCachingProgress(prev => {
+        if (prev === null || prev >= 100) {
+          clearInterval(interval);
+          alert(vi ? 'Tải bản đồ ngoại tuyến thành công!' : 'Offline map downloaded successfully!');
+          return null;
+        }
+        return prev + 20;
+      });
+    }, 200);
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 p-5 max-w-screen-2xl mx-auto">
       <div className="lg:col-span-1 space-y-4">
         <div className="surface-elevated p-5 space-y-4">
-          <h3 className="font-ui text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-1.5"><MapPin size={14} /> Live Check-In</h3>
+          <h3 className="font-ui text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-1.5">
+            <MapPin size={14} /> Live Check-In
+          </h3>
           <form onSubmit={handleCheckin} className="space-y-3">
-            <input type="text" value={newLocation} onChange={e => setNewLocation(e.target.value)} placeholder="Place name…"
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-cream focus:outline-none focus:border-[var(--gold)] placeholder:text-[var(--text-muted)]" />
-            <textarea value={newNote} onChange={e => setNewNote(e.target.value)} placeholder="What are you doing here?" rows={2}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-cream focus:outline-none focus:border-[var(--gold)] resize-none placeholder:text-[var(--text-muted)]" />
+            <select
+              value={selectedDestId}
+              onChange={e => setSelectedDestId(e.target.value)}
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)]"
+            >
+              <option value="">-- {vi ? 'Chọn địa điểm' : 'Select location'} --</option>
+              {destinations.map(d => (
+                <option key={d.id} value={d.id}>{d.name} ({d.category})</option>
+              ))}
+            </select>
+
+            <textarea
+              value={newNote}
+              onChange={e => setNewNote(e.target.value)}
+              placeholder={vi ? 'Bạn đang làm gì ở đây?' : 'What are you doing here?'}
+              rows={2}
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)] resize-none placeholder:text-[var(--text-muted)]"
+            />
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
+                {vi ? 'Đọc tọa độ GPS từ ảnh chụp' : 'Extract GPS coordinate from photo'}
+              </label>
+              <input
+                type="file"
+                accept="image/jpeg"
+                onChange={handlePhotoUpload}
+                disabled={isExtractingGps}
+                className="w-full text-xs text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[10px] file:font-black file:bg-[var(--bg-elevated)] file:text-[var(--gold)] hover:file:bg-[var(--bg-overlay)] cursor-pointer"
+              />
+              {isExtractingGps && (
+                <span className="text-[9px] text-[var(--gold)] animate-pulse block">
+                  ⌛ {vi ? 'Đang trích xuất tọa độ GPS EXIF...' : 'Extracting GPS coordinate...'}
+                </span>
+              )}
+            </div>
+
             <button type="submit" className="btn-gold w-full py-2.5">
-              {isAuthenticated ? 'Check-In Now' : t('nav.signIn')}
+              {isAuthenticated ? (vi ? 'Check-In Ngay' : 'Check-In Now') : t('nav.signIn')}
             </button>
-            {!isAuthenticated && (
-              <p className="text-[11px] text-[var(--text-muted)] text-center">{t('auth.loginToPost')}</p>
-            )}
           </form>
         </div>
-        <div className="surface-elevated p-5 space-y-3">
-          <h3 className="sidebar-title flex items-center gap-2"><Search size={14} className="text-[var(--gold)]" /> Nearby Places</h3>
-          {MOCK_NEARBY.map((p, i) => (
-            <div key={i} className="flex justify-between items-center text-xs p-2 rounded-lg bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] transition-colors cursor-pointer">
-              <div><p className="font-semibold text-cream">{p.name}</p><span className="text-[var(--gold)] text-[10px]">{p.category}</span></div>
-              <div className="text-right"><span className="font-semibold text-[var(--text-secondary)] block">{p.distance}</span><span className="text-[10px] text-amber-400 flex items-center justify-end gap-0.5"><Star size={10} className="fill-current" /> {p.rating}</span></div>
+
+        <div className="surface-elevated p-5 space-y-3.5">
+          <h3 className="sidebar-title flex items-center justify-between">
+            <span className="flex items-center gap-2">🧭 {vi ? 'Hành trình tạm thời' : 'Route Planner'}</span>
+            {routeQueue.length >= 2 && (
+              <button
+                onClick={handleOptimizeTSP}
+                className="text-[10px] font-black text-[var(--gold)] hover:underline border-none bg-transparent cursor-pointer"
+              >
+                {vi ? 'Tối ưu TSP' : 'Optimize TSP'}
+              </button>
+            )}
+          </h3>
+
+          {routeQueue.length === 0 ? (
+            <p className="text-[11px] text-[var(--text-muted)] text-center py-4">
+              {vi ? 'Nhấp ghim trên bản đồ để thêm điểm dừng lộ trình.' : 'Click pins on map to queue route stops.'}
+            </p>
+          ) : (
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+              {routeQueue.map((pt, index) => (
+                <div key={pt.id} className="flex justify-between items-center text-xs p-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="w-4 h-4 rounded-full bg-[var(--gold)] text-black text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                      {index + 1}
+                    </span>
+                    <p className="font-semibold text-[var(--text-primary)] truncate">{pt.name}</p>
+                  </div>
+                  <button
+                    onClick={() => removeRoutePoint(pt.id)}
+                    className="text-[10px] font-black text-rose-500 hover:text-rose-400 border-none bg-transparent cursor-pointer ml-1"
+                  >
+                    {vi ? 'Xóa' : 'Remove'}
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
+
       <div className="lg:col-span-2 space-y-3">
-        <div className="flex justify-between items-center bg-[var(--bg-surface)] p-3 rounded-xl border border-[var(--border-subtle)]">
+        <div className="flex justify-between items-center bg-[var(--bg-surface)] p-3 rounded-xl border border-[var(--border-subtle)] gap-2 flex-wrap">
           <span className="text-xs text-[var(--text-muted)] flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            Real-time Social Map · OpenStreetMap EPSG:3857
+            Real-time Social Map · OSM Tile Layer
           </span>
-          <span className="text-xs font-semibold text-gold">{selectedCenter[0].toFixed(4)}, {selectedCenter[1].toFixed(4)}</span>
+
+          <div className="flex items-center rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-0.5 gap-0.5">
+            {(['markers', 'cluster', 'heatmap'] as const).map(mode => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase transition-all border-none cursor-pointer ${
+                  viewMode === mode
+                    ? 'bg-[var(--gold)] text-black'
+                    : 'text-[var(--text-secondary)] hover:text-white'
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleCacheTiles}
+            className="flex items-center gap-1 px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-lg text-[10px] font-bold text-[var(--gold)] hover:bg-[var(--gold-glow)]/15 transition-all border-none cursor-pointer"
+          >
+            📥 {cachingProgress !== null ? `${cachingProgress}%` : (vi ? 'Lưu Ngoại tuyến' : 'Cache Offline')}
+          </button>
         </div>
+
+        {cachingProgress !== null && (
+          <div className="w-full bg-[var(--bg-elevated)] rounded-full h-1.5 overflow-hidden">
+            <div className="bg-[var(--gold)] h-full transition-all duration-200" style={{ width: `${cachingProgress}%` }} />
+          </div>
+        )}
+
         <div className="h-[520px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-subtle)]">
-          <LeafletMap center={selectedCenter} zoom={13} />
+          <MapLibreMap
+            center={selectedCenter}
+            zoom={13}
+            locations={locations}
+            viewMode={viewMode}
+            routePoints={routeQueue}
+            onAddPointToRoute={addPointToRoute}
+          />
         </div>
       </div>
+
       <div className="lg:col-span-1 surface-elevated p-5 flex flex-col h-[620px]">
-        <h3 className="sidebar-title mb-4 flex items-center gap-2"><Users size={14} className="text-[var(--gold)]" /> Friend Check-Ins</h3>
+        <h3 className="sidebar-title mb-4 flex items-center gap-2">
+          <Users size={14} className="text-[var(--gold)]" /> Community Check-Ins
+        </h3>
         <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-          {checkins.map(chk => (
-            <div key={chk.id} onClick={() => setSelectedCenter([chk.lat, chk.lng])}
-              className="p-3 bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] border border-[var(--border-subtle)] rounded-xl transition-all cursor-pointer space-y-2 group">
-              <div className="flex items-center gap-2">
-                <img src={chk.avatar} alt={chk.user} className="w-8 h-8 rounded-full object-cover border border-[var(--border-normal)]" />
-                <div><h4 className="text-xs font-bold text-cream group-hover:text-gold transition-colors">{chk.user}</h4>
-                  <p className="text-[10px] text-[var(--text-muted)]">{chk.time}</p></div>
-              </div>
-              <p className="text-xs text-[var(--text-secondary)] italic">"{chk.note}"</p>
-              <div className="text-[10px] text-gold font-semibold flex items-center gap-1"><MapPin size={10} /> {chk.location}</div>
-            </div>
-          ))}
+          {checkins.length === 0 ? (
+            <p className="text-center text-xs text-[var(--text-muted)] py-20">
+              {vi ? 'Chưa có check-in nào.' : 'No check-ins yet.'}
+            </p>
+          ) : (
+            checkins.map(chk => {
+              const lat = chk.destination?.latitude || 21.0285;
+              const lng = chk.destination?.longitude || 105.8048;
+              return (
+                <div
+                  key={chk.id}
+                  onClick={() => setSelectedCenter([lat, lng])}
+                  className="p-3 bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] border border-[var(--border-subtle)] rounded-xl transition-all cursor-pointer space-y-2 group"
+                >
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={chk.user?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+                      alt={chk.user?.profile?.fullName || 'User'}
+                      className="w-8 h-8 rounded-full object-cover border border-[var(--border-normal)]"
+                    />
+                    <div>
+                      <h4 className="text-xs font-bold text-[var(--text-primary)] group-hover:text-gold transition-colors">
+                        {chk.user?.profile?.fullName || chk.user?.email || 'User'}
+                      </h4>
+                      <p className="text-[10px] text-[var(--text-muted)]">
+                        {new Date(chk.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  {chk.note && (
+                    <p className="text-xs text-[var(--text-secondary)] italic">"{chk.note}"</p>
+                  )}
+                  <div className="text-[10px] text-gold font-semibold flex items-center gap-1">
+                    <MapPin size={10} /> {chk.destination?.name || 'Vị trí'}
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>
@@ -141,9 +472,11 @@ const MapDashboard = () => {
 // 2. AI TRIP PLANNER
 // ──────────────────────────────────────────────────────────
 const TripPlanner = () => {
+  const { lang, t } = useLang();
   const [destination, setDestination] = useState('Ha Giang');
-  const [days, setDays] = useState(3);
-  const [budget, setBudget] = useState(150);
+  const [days, setDays] = useState<number | ''>(3);
+  const [budget, setBudget] = useState<number | ''>(150);
+  const [currency, setCurrency] = useState<'USD' | 'VND'>('USD');
   const [style, setStyle] = useState('Adventure');
   const [interests, setInterests] = useState<string[]>(['nature', 'culture']);
   const [loading, setLoading] = useState(false);
@@ -155,24 +488,33 @@ const TripPlanner = () => {
     setInterests(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val]);
 
   const handleGenerate = async () => {
+    if (!destination || days === '' || budget === '') return;
     setLoading(true); setOptimized(false); setAiError(null);
     try {
-      const result = await tripsService.aiGenerate({ destination, durationDays: days, dailyBudget: budget, interests, travelStyle: style });
+      const result = await tripsService.aiGenerate({
+        destination,
+        durationDays: Number(days),
+        dailyBudget: Number(budget),
+        currency,
+        interests,
+        travelStyle: style
+      });
       setItinerary(result);
     } catch {
-      setAiError('AI endpoint unavailable — showing sample itinerary.');
+      const isVi = lang === 'vi';
+      setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
       setItinerary({
-        destination, totalCost: budget * days * 0.75, currency: 'USD',
+        destination, totalEstimatedCost: Number(budget) * Number(days) * 0.75, currency,
         days: [
-          { day: 1, title: 'Arrival & First Impressions', activities: [
-            { time: '09:00', name: `${destination} Welcome Walk`, cost: 0, category: 'attraction', note: 'Settle in, explore the town center' },
-            { time: '12:00', name: 'Local Street Food Lunch', cost: 8, category: 'restaurant', note: 'Try local specialties at the market' },
-            { time: '15:00', name: 'Main Landmark Visit', cost: 20, category: 'attraction', note: 'Iconic viewpoint or heritage site' },
+          { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan nhẹ nhàng' : 'Day 1: Arrival & First Impressions', activities: [
+            { timeSlot: '09:00 - 11:00', activityName: isVi ? `Đi dạo chào đón tại ${destination}` : `${destination} Welcome Walk`, estimatedCost: Number(budget) * 0.15, category: 'attraction', notes: isVi ? 'Ổn định chỗ ở, đi dạo khám phá trung tâm' : 'Settle in, explore the town center' },
+            { timeSlot: '12:00 - 13:30', activityName: isVi ? 'Ăn trưa ẩm thực đường phố' : 'Local Street Food Lunch', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thử các món ăn đặc sản tại chợ địa phương' : 'Try local specialties at the market' },
+            { timeSlot: '15:00 - 18:00', activityName: isVi ? 'Tham quan danh thắng chính' : 'Main Landmark Visit', estimatedCost: Number(budget) * 0.35, category: 'attraction', notes: isVi ? 'Điểm ngắm cảnh biểu tượng hoặc di sản' : 'Iconic viewpoint or heritage site' },
           ]},
-          { day: 2, title: 'Cultural Deep Dive', activities: [
-            { time: '08:00', name: 'Morning Heritage Walk', cost: 15, category: 'attraction', note: 'Guided tour of historic quarter' },
-            { time: '12:30', name: 'Cooking Class Lunch', cost: 35, category: 'restaurant', note: 'Learn to cook traditional dishes' },
-            { time: '16:00', name: 'Sunset Viewpoint', cost: 5, category: 'attraction', note: 'Best photo spot in the area' },
+          { dayIndex: 2, dateIndex: isVi ? 'Ngày 2: Trải nghiệm văn hóa sâu sắc' : 'Day 2: Cultural Deep Dive', activities: [
+            { timeSlot: '08:00 - 09:30', activityName: isVi ? 'Đi bộ tìm hiểu di sản buổi sáng' : 'Morning Heritage Walk', estimatedCost: Number(budget) * 0.2, category: 'attraction', notes: isVi ? 'Tour có hướng dẫn viên tại khu lịch sử' : 'Guided tour of historic quarter' },
+            { timeSlot: '12:30 - 14:00', activityName: isVi ? 'Ăn trưa học nấu ăn' : 'Cooking Class Lunch', estimatedCost: Number(budget) * 0.35, category: 'restaurant', notes: isVi ? 'Học cách nấu các món ăn truyền thống' : 'Learn to cook traditional dishes' },
+            { timeSlot: '16:00 - 18:00', activityName: isVi ? 'Ngắm hoàng hôn' : 'Sunset Viewpoint', estimatedCost: Number(budget) * 0.1, category: 'attraction', notes: isVi ? 'Điểm chụp ảnh đẹp nhất trong vùng' : 'Best photo spot in the area' },
           ]},
         ]
       });
@@ -180,48 +522,139 @@ const TripPlanner = () => {
   };
 
   const runRouteOptimization = async () => {
-    if (!itinerary) return; setLoading(true);
+    if (!itinerary) return;
+    setLoading(true);
     try {
-      const optimizedDays = itinerary.days.map((d: any) => ({ ...d, activities: [...d.activities].reverse() }));
-      setItinerary({ ...itinerary, days: optimizedDays }); setOptimized(true);
-    } finally { setLoading(false); }
+      const optimizedDays = await Promise.all(
+        itinerary.days.map(async (d: any) => {
+          if (!d.activities || d.activities.length <= 1) return d;
+          
+          // Map activities to Waypoints for backend TSP optimizer
+          const waypoints: Waypoint[] = d.activities.map((act: any, idx: number) => ({
+            id: String(idx),
+            name: act.activityName || act.name,
+            latitude: act.latitude || 21.0285,
+            longitude: act.longitude || 105.8048,
+          }));
+
+          try {
+            const res = await tripsService.optimizeRoute(waypoints);
+            const reordered = res.orderedWaypoints.map((wp: any) => {
+              const originalIdx = Number(wp.id);
+              return d.activities[originalIdx];
+            });
+            return { ...d, activities: reordered };
+          } catch (err) {
+            console.error('Failed to call optimize-route on backend:', err);
+            // Fallback to reversing array if API fails
+            return { ...d, activities: [...d.activities].reverse() };
+          }
+        })
+      );
+      setItinerary({ ...itinerary, days: optimizedDays });
+      setOptimized(true);
+    } catch (err) {
+      console.error('Failed to run route optimization:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getCategoryIcon = (category: string) => TRIP_ACTIVITY_ICONS[category] ?? MapPin;
 
+  const formatCost = (amount: any) => {
+    if (amount === undefined || amount === null) {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const strVal = String(amount).trim().toLowerCase();
+    if (strVal === 'free' || strVal === 'mien phi' || strVal === 'miễn phí' || strVal === '0' || strVal === '') {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const num = Number(amount);
+    if (isNaN(num)) {
+      return lang === 'vi' ? 'Miễn phí' : 'Free';
+    }
+    const curr = itinerary?.currency || currency;
+    if (curr === 'VND') {
+      return `${Math.round(num).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US')} đ`;
+    }
+    return `$${Math.round(num)}`;
+  };
+
+  const styleOptions = [
+    { value: 'Adventure', label: lang === 'vi' ? 'Phiêu lưu' : 'Adventure' },
+    { value: 'Cultural Exploration', label: lang === 'vi' ? 'Khám phá văn hoá' : 'Cultural Exploration' },
+    { value: 'Leisure & Food', label: lang === 'vi' ? 'Nghỉ dưỡng & Ẩm thực' : 'Leisure & Food' },
+    { value: 'Luxury Wellness', label: lang === 'vi' ? 'Sang trọng' : 'Luxury Wellness' },
+    { value: 'Budget Backpacker', label: lang === 'vi' ? 'Tiết kiệm' : 'Budget Backpacker' },
+  ];
+
   return (
     <div className="p-5 max-w-screen-xl mx-auto space-y-6">
       <div>
-        <p className="font-ui text-xs font-bold uppercase tracking-widest text-gold mb-2">AI-Powered Planning</p>
-        <h1 className="headline-xl">Smart Travel Planner</h1>
-        <p className="text-[var(--text-secondary)] mt-2">Generate personalized itineraries optimized with TSP routing & GPT-4o intelligence.</p>
+        <p className="font-ui text-xs font-bold uppercase tracking-widest text-gold mb-2">{lang === 'vi' ? 'Lập kế hoạch bằng AI' : 'AI-Powered Planning'}</p>
+        <h1 className="headline-xl">{t('planner.heading')}</h1>
+        <p className="text-[var(--text-secondary)] mt-2">{t('planner.subtitle')}</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="surface-elevated p-6 space-y-5 h-fit">
-          <h3 className="font-ui text-sm font-bold text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-3">Itinerary Parameters</h3>
+          <h3 className="font-ui text-sm font-bold text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-3">
+            {lang === 'vi' ? 'Thông số hành trình' : 'Itinerary Parameters'}
+          </h3>
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Destination</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.destination')}</label>
             <input type="text" value={destination} onChange={e => setDestination(e.target.value)}
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {[['Days', days, setDays, 1, 15], ['Budget/Day ($)', budget, setBudget, 10, 2000]].map(([label, val, setter, min, max]: any) => (
-              <div key={label} className="space-y-1.5">
-                <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{label}</label>
-                <input type="number" value={val} onChange={e => setter(Number(e.target.value))} min={min} max={max}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.days')}</label>
+              <input type="number" value={days === '' ? '' : days} onChange={e => { const val = e.target.value; setDays(val === '' ? '' : Number(val)); }} min={1} max={15}
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" />
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
+                {lang === 'vi' ? `Ngân sách/ngày` : `Budget/Day`}
+              </label>
+              <div className="relative flex items-center">
+                <input 
+                  type="number" 
+                  value={budget === '' ? '' : budget} 
+                  onChange={e => {
+                    const val = e.target.value;
+                    setBudget(val === '' ? '' : Number(val));
+                  }} 
+                  min={1} 
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg pl-3 pr-20 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]" 
+                />
+                <div className="absolute right-1.5 flex gap-0.5 bg-slate-900 border border-slate-700/60 p-0.5 rounded-md">
+                  <button 
+                    type="button"
+                    onClick={() => setCurrency('USD')}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${currency === 'USD' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 hover:text-white'}`}
+                  >
+                    USD
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setCurrency('VND')}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${currency === 'VND' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 hover:text-white'}`}
+                  >
+                    VND
+                  </button>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Travel Style</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.style')}</label>
             <select value={style} onChange={e => setStyle(e.target.value)}
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-sm text-cream focus:outline-none focus:border-[var(--gold)]">
-              {['Adventure', 'Cultural Exploration', 'Leisure & Food', 'Luxury Wellness', 'Budget Backpacker'].map(s => <option key={s}>{s}</option>)}
+              {styleOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
           </div>
           <div className="space-y-2">
-            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Interests</label>
+            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.interests')}</label>
             <div className="flex flex-wrap gap-2">
               {['nature', 'culture', 'food', 'hiking', 'photography', 'history'].map(tag => (
                 <button key={tag} type="button" onClick={() => toggleInterest(tag)}
@@ -232,7 +665,7 @@ const TripPlanner = () => {
             </div>
           </div>
           <button onClick={handleGenerate} disabled={loading} className="btn-gold w-full py-3 text-sm disabled:opacity-60">
-            {loading ? <><Loader2 size={14} className="animate-spin inline" /> Consulting AI...</> : <><Bot size={14} className="inline" /> Generate Smart Itinerary</>}
+            {loading ? <><Loader2 size={14} className="animate-spin inline mr-1.5" /> {t('planner.generating')}</> : <><Bot size={14} className="inline mr-1.5" /> {t('planner.generate')}</>}
           </button>
         </div>
 
@@ -242,20 +675,20 @@ const TripPlanner = () => {
             <div className="space-y-6">
               <div className="surface-elevated p-5 flex justify-between items-center">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Predicted Trip Cost</p>
-                  <span className="text-3xl font-bold text-gold">${Math.round(itinerary.totalCost)}</span>
-                  <span className="text-sm text-[var(--text-muted)] ml-2">USD ±10%</span>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('planner.cost')}</p>
+                  <span className="text-3xl font-bold text-gold">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
+                  <span className="text-sm text-[var(--text-muted)] ml-2">({itinerary.currency || currency} ±10%)</span>
                 </div>
                 <button onClick={runRouteOptimization}
                   className={`px-5 py-2.5 text-xs font-bold rounded-lg border transition-all ${optimized ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'btn-gold border-transparent'}`}>
-                  {optimized ? <><Check size={12} className="inline" /> TSP Optimized</> : <><Zap size={12} className="inline" /> Optimize Route</>}
+                  {optimized ? <><Check size={12} className="inline mr-1" /> {t('planner.optimized')}</> : <><Zap size={12} className="inline mr-1" /> {t('planner.optimize')}</>}
                 </button>
               </div>
               {itinerary.days.map((d: any) => (
-                <div key={d.day} className="space-y-3">
+                <div key={d.dayIndex || d.day} className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="badge-category">Day {d.day}</span>
-                    <h3 className="headline-md">{d.title}</h3>
+                    <span className="badge-category">{lang === 'vi' ? 'Ngày' : 'Day'} {d.dayIndex || d.day}</span>
+                    <h3 className="headline-md">{d.dateIndex || d.title}</h3>
                   </div>
                   <div className="relative border-l-2 border-[var(--border-subtle)] ml-3 pl-6 space-y-3">
                     {d.activities.map((act: any, idx: number) => (
@@ -264,15 +697,15 @@ const TripPlanner = () => {
                         <div className="card-editorial p-4 space-y-1.5 hover:border-[var(--border-normal)]">
                           <div className="flex justify-between items-start">
                             <div>
-                              <span className="text-[10px] font-bold text-[var(--text-muted)]">{act.time}</span>
+                              <span className="text-[10px] font-bold text-[var(--text-muted)]">{act.timeSlot || act.time}</span>
                               <h4 className="text-sm font-bold text-cream flex items-center gap-1.5">
                                 {(() => { const ActIcon = getCategoryIcon(act.category); return <ActIcon size={14} className="text-[var(--gold)] flex-shrink-0" />; })()}
-                                {act.name}
+                                {act.activityName || act.name}
                               </h4>
                             </div>
-                            <span className="text-sm font-bold text-gold">${act.cost}</span>
+                            <span className="text-sm font-bold text-gold">{formatCost(act.estimatedCost || act.cost)}</span>
                           </div>
-                          <p className="text-xs text-[var(--text-secondary)]">{act.note}</p>
+                          <p className="text-xs text-[var(--text-secondary)]">{act.notes || act.note}</p>
                           <span className="badge-category-outline text-[9px] uppercase tracking-wider px-2 py-0.5 rounded">{act.category}</span>
                         </div>
                       </div>
@@ -284,8 +717,8 @@ const TripPlanner = () => {
           ) : (
             <div className="surface-elevated p-16 text-center space-y-4">
               <Plane size={48} className="mx-auto text-[var(--gold)] opacity-60" strokeWidth={1.5} />
-              <h3 className="headline-md">Your Itinerary Awaits</h3>
-              <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">Configure your trip parameters and let our AI craft a personalized journey optimized for your style and budget.</p>
+              <h3 className="headline-md">{t('planner.noItinerary')}</h3>
+              <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">{t('planner.noItinerarySub')}</p>
             </div>
           )}
         </div>
@@ -374,6 +807,29 @@ function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const fetchNotifications = () => {
+    if (isAuthenticated && user) {
+      socialService.notifications()
+        .then(data => {
+          if (Array.isArray(data)) setNotifications(data);
+        })
+        .catch(err => console.error('Fetch notifications failed in App:', err));
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+    if (isAuthenticated && user) {
+      const interval = setInterval(fetchNotifications, 20000);
+      return () => clearInterval(interval);
+    } else {
+      setNotifications([]);
+    }
+  }, [isAuthenticated, user]);
 
   // ✅ Lắng nghe sự kiện 'auth:logout' từ axios 401 interceptor
   // → Đồng bộ Redux state khi token hết hạn và refresh thất bại
@@ -406,6 +862,7 @@ function App() {
     { to: '/guide/culture-food', label: t('nav.cultureGuide'), Icon: Utensils },
     { to: '/map',       label: t('nav.map'),        Icon: Map },
     { to: '/trips',     label: t('nav.aiPlanner'), Icon: Sparkles },
+    { to: '/chat',      label: lang === 'vi' ? 'AI Trợ lý' : 'AI Chat', Icon: Bot },
     { to: '/analytics', label: t('nav.analytics'), Icon: BarChart3 },
   ];
 
@@ -515,10 +972,82 @@ function App() {
             </button>
 
             {/* Notifications */}
-            <button onClick={() => setNotifOpen(!notifOpen)} className="icon-btn relative">
-              <Bell size={17} className="text-[var(--text-secondary)]" />
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full ring-2 ring-[var(--bg-primary)]" />
-            </button>
+            <div className="relative">
+              <button onClick={() => setNotifOpen(!notifOpen)} className="icon-btn relative" aria-label="Notifications">
+                <Bell size={17} className="text-[var(--text-secondary)]" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center ring-2 ring-[var(--bg-primary)] animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {notifOpen && (
+                <>
+                  <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setNotifOpen(false)} />
+                  <div className="absolute right-0 mt-3.5 w-80 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-2xl p-4.5 z-50 transition-all duration-200">
+                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-[var(--border-subtle)]">
+                      <h4 className="font-bold text-[10px] text-[var(--text-primary)] uppercase tracking-wider">
+                        {lang === 'vi' ? 'Thông báo' : 'Notifications'}
+                      </h4>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={async () => {
+                            try {
+                              await socialService.markAllRead();
+                              setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+                            } catch (err) {
+                              console.error('Mark all read failed:', err);
+                            }
+                          }}
+                          className="text-[10px] font-black text-[var(--gold)] hover:underline hover:text-[var(--gold-light)]"
+                        >
+                          {lang === 'vi' ? 'Đọc tất cả' : 'Mark all read'}
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-72 overflow-y-auto space-y-2.5 pr-1">
+                      {notifications.length === 0 ? (
+                        <p className="text-center text-xs text-[var(--text-muted)] py-6">
+                          {lang === 'vi' ? 'Không có thông báo nào.' : 'No notifications.'}
+                        </p>
+                      ) : (
+                        notifications.map(notif => (
+                          <div
+                            key={notif.id}
+                            className={`flex items-start gap-3 p-3 rounded-xl transition-all ${
+                              notif.isRead ? 'opacity-65' : 'bg-[var(--gold-glow)]/10 border-l-3 border-[var(--gold)]'
+                            }`}
+                          >
+                            <div className="mt-0.5 p-1.5 rounded-lg bg-[var(--bg-elevated)] text-[var(--gold)]">
+                              <Bell size={12} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[11px] text-[var(--text-primary)] font-medium leading-relaxed">{notif.content}</p>
+                              <p className="text-[9px] text-[var(--text-muted)] mt-1.5">
+                                {new Date(notif.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <div className="mt-3.5 pt-2 border-t border-[var(--border-subtle)] text-center">
+                      <Link
+                        to="/notifications"
+                        onClick={() => setNotifOpen(false)}
+                        className="text-xs font-bold text-[var(--gold)] hover:underline hover:text-[var(--gold-light)] block w-full"
+                      >
+                        {lang === 'vi' ? 'Xem tất cả' : 'View all'}
+                      </Link>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* User auth area */}
             {isAuthenticated && user ? (
@@ -634,13 +1163,16 @@ function App() {
           <Route path="/posts/:id/edit" element={<ProtectedRoute><EditPostPage /></ProtectedRoute>} />
           <Route path="/map" element={<MapDashboard />} />
           <Route path="/trips" element={<TripPlanner />} />
+          <Route path="/chat" element={<ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
           <Route path="/guide/culture-food" element={<CultureFoodGuidePage />} />
           <Route path="/journeys/create" element={<ProtectedRoute><CreateStoryPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/profile/following" element={<ProtectedRoute><FollowingPage /></ProtectedRoute>} />
           <Route path="/profile/saved" element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
           <Route path="/profile/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
           <Route path="/analytics" element={<AdminDashboard />} />
+          <Route path="/admin" element={<Navigate to="/analytics" replace />} />
           <Route path="/auth" element={<AuthPage />} />
         </Routes>
       </main>

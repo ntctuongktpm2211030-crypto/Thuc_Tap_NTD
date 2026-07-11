@@ -1,5 +1,6 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
-import L from 'leaflet';
+import { useEffect, useRef, useState } from 'react';
+import Map, { Source, Layer, Marker, NavigationControl } from 'react-map-gl/maplibre';
+import maplibregl from 'maplibre-gl';
 import type { RoutePoint } from '../../types/route';
 import { newRoutePoint, routePointRole } from '../../types/route';
 import { reverseGeocodeFull } from '../../utils/geocodeUtils';
@@ -8,29 +9,30 @@ import { fetchRoadRoute } from '../../utils/routeUtils';
 const ROUTE_COLOR = '#e8a838';
 const MAX_POINTS = 12;
 
-function pointIcon(
-  index: number,
-  total: number,
-  active: boolean,
-): L.DivIcon {
-  const role = routePointRole(index, total);
-  const cls =
-    role === 'start'
-      ? 'route-marker-icon route-marker-icon--start'
-      : role === 'end'
-        ? 'route-marker-icon route-marker-icon--end'
-        : `route-marker-icon ${active ? 'route-marker-icon--active' : ''}`;
-  const label = role === 'start' ? '▶' : role === 'end' ? '◆' : String(index + 1);
-  return L.divIcon({
-    className: 'route-marker-icon-wrap',
-    html: `<div class="${cls}">${label}</div>`,
-    iconSize: [34, 34],
-    iconAnchor: [17, 34],
-  });
-}
+const STREET_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 
-const STREET_TILES = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-const SAT_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+const SATELLITE_STYLE: any = {
+  version: 8,
+  sources: {
+    'satellite-tiles': {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+      ],
+      tileSize: 256,
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }
+  },
+  layers: [
+    {
+      id: 'satellite-layer',
+      type: 'raster',
+      source: 'satellite-tiles',
+      minzoom: 0,
+      maxzoom: 19
+    }
+  ]
+};
 
 interface Props {
   points: RoutePoint[];
@@ -49,177 +51,243 @@ export default function JourneyRouteMap({
   className = '',
   height = '320px',
 }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const streetLayerRef = useRef<L.TileLayer | null>(null);
-  const satLayerRef = useRef<L.TileLayer | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
-  const polylineRef = useRef<L.Polyline | null>(null);
-  const onChangeRef = useRef(onPointsChange);
-  const pointsRef = useRef(points);
-  const [mapStyle, setMapStyle] = useState<'street' | 'satellite'>('street');
+  const mapRef = useRef<any>(null);
+  const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | '3d'>('street');
   const [routing, setRouting] = useState(false);
+  const [roadCoords, setRoadCoords] = useState<[number, number][] | null>(null);
 
-  useEffect(() => {
-    onChangeRef.current = onPointsChange;
-  }, [onPointsChange]);
+  const [viewState, setViewState] = useState({
+    latitude: 16.0544,
+    longitude: 108.2022,
+    zoom: 6,
+    pitch: 0,
+    bearing: 0,
+  });
 
+  // Fetch road route from OSRM when points change
   useEffect(() => {
-    pointsRef.current = points;
+    let active = true;
+    const loadRoute = async () => {
+      if (points.length < 2) {
+        setRoadCoords(null);
+        return;
+      }
+      setRouting(true);
+      const coords = await fetchRoadRoute(points);
+      if (active) {
+        setRoadCoords(coords);
+        setRouting(false);
+      }
+    };
+    void loadRoute();
+    return () => {
+      active = false;
+    };
   }, [points]);
 
-  const drawRoute = useCallback(async (map: L.Map, pts: RoutePoint[], canEdit: boolean) => {
-    markersRef.current.forEach(m => m.remove());
-    markersRef.current = [];
-    if (polylineRef.current) {
-      polylineRef.current.remove();
-      polylineRef.current = null;
-    }
-
-    pts.forEach((pt, idx) => {
-      const marker = L.marker([pt.lat, pt.lng], {
-        icon: pointIcon(idx, pts.length, pt.id === highlightId),
-        draggable: canEdit,
-      }).addTo(map);
-
-      marker.bindPopup(
-        `<strong>${idx === 0 ? 'Vị trí bắt đầu' : idx === pts.length - 1 && pts.length > 1 ? 'Điểm kết thúc' : `Điểm ${idx + 1}`}</strong><br/>${pt.address || pt.name}`,
-        { maxWidth: 280 },
-      );
-
-      if (canEdit) {
-        marker.on('dragend', async () => {
-          const pos = marker.getLatLng();
-          const geo = await reverseGeocodeFull(pos.lat, pos.lng);
-          const next = pointsRef.current.map(p =>
-            p.id === pt.id
-              ? {
-                  ...p,
-                  lat: pos.lat,
-                  lng: pos.lng,
-                  name: geo.name || p.name,
-                  address: geo.address || p.address,
-                }
-              : p,
-          );
-          onChangeRef.current?.(next);
-        });
-      }
-
-      markersRef.current.push(marker);
-    });
-
-    if (pts.length >= 2) {
-      setRouting(true);
-      const roadCoords = await fetchRoadRoute(pts);
-      setRouting(false);
-      const lineCoords = roadCoords ?? pts.map(p => [p.lat, p.lng] as [number, number]);
-      polylineRef.current = L.polyline(lineCoords, {
-        color: ROUTE_COLOR,
-        weight: 5,
-        opacity: 0.9,
-        lineJoin: 'round',
-      }).addTo(map);
-    }
-
-    if (pts.length === 1) {
-      map.setView([pts[0].lat, pts[0].lng], 15);
-    } else if (pts.length >= 2) {
-      const bounds = L.latLngBounds(pts.map(p => [p.lat, p.lng] as L.LatLngExpression));
-      map.fitBounds(bounds, { padding: [48, 48], maxZoom: 14 });
-    }
-  }, [highlightId]);
-
+  // Fit map bounds when points change
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    const map = mapRef.current?.getMap();
+    if (!map || points.length === 0) return;
 
-    const map = L.map(containerRef.current, { zoomControl: true }).setView([16.0544, 108.2022], 6);
-    mapRef.current = map;
-
-    streetLayerRef.current = L.tileLayer(STREET_TILES, {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 20,
-    }).addTo(map);
-
-    satLayerRef.current = L.tileLayer(SAT_TILES, {
-      attribution: '&copy; Esri',
-      maxZoom: 19,
-    });
-
-    if (interactive) {
-      map.on('click', async (e: L.LeafletMouseEvent) => {
-        const current = pointsRef.current;
-        if (current.length >= MAX_POINTS) return;
-        const geo = await reverseGeocodeFull(e.latlng.lat, e.latlng.lng);
-        const pt = newRoutePoint(
-          geo.name || `Điểm ${current.length + 1}`,
-          e.latlng.lat,
-          e.latlng.lng,
-          geo.address,
-        );
-        onChangeRef.current?.([...current, pt]);
+    if (points.length === 1) {
+      map.easeTo({
+        center: [points[0].lng, points[0].lat],
+        zoom: 14,
+        duration: 800,
       });
+    } else if (points.length >= 2) {
+      let minLng = points[0].lng;
+      let maxLng = points[0].lng;
+      let minLat = points[0].lat;
+      let maxLat = points[0].lat;
+
+      points.forEach(p => {
+        if (p.lng < minLng) minLng = p.lng;
+        if (p.lng > maxLng) maxLng = p.lng;
+        if (p.lat < minLat) minLat = p.lat;
+        if (p.lat > maxLat) maxLat = p.lat;
+      });
+
+      map.fitBounds(
+        [[minLng, minLat], [maxLng, maxLat]],
+        { padding: 48, maxZoom: 14, duration: 800 }
+      );
+    }
+  }, [points]);
+
+  const handleMapClick = async (e: any) => {
+    if (!interactive) return;
+    if (points.length >= MAX_POINTS) return;
+    
+    // Prevent adding points if user clicks on a marker
+    const target = e.originalEvent?.target as HTMLElement;
+    if (target && target.closest('.route-marker-icon-wrap')) {
+      return;
     }
 
-    return () => {
-      map.remove();
-      mapRef.current = null;
-      streetLayerRef.current = null;
-      satLayerRef.current = null;
-      markersRef.current = [];
-      polylineRef.current = null;
-    };
-  }, [interactive]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    const street = streetLayerRef.current;
-    const sat = satLayerRef.current;
-    if (!map || !street || !sat) return;
-    if (mapStyle === 'satellite') {
-      map.removeLayer(street);
-      if (!map.hasLayer(sat)) sat.addTo(map);
-    } else {
-      map.removeLayer(sat);
-      if (!map.hasLayer(street)) street.addTo(map);
+    const { lng, lat } = e.lngLat;
+    setRouting(true);
+    try {
+      const geo = await reverseGeocodeFull(lat, lng);
+      const pt = newRoutePoint(
+        geo.name || `Điểm ${points.length + 1}`,
+        lat,
+        lng,
+        geo.address
+      );
+      onPointsChange?.([...points, pt]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRouting(false);
     }
-  }, [mapStyle]);
+  };
 
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    void drawRoute(map, points, interactive);
-  }, [points, interactive, drawRoute, highlightId]);
+  const handleMarkerDragEnd = async (ptId: string, e: any) => {
+    if (!interactive) return;
+    const { lng, lat } = e.lngLat;
+    setRouting(true);
+    try {
+      const geo = await reverseGeocodeFull(lat, lng);
+      const next = points.map(p =>
+        p.id === ptId
+          ? {
+              ...p,
+              lat,
+              lng,
+              name: geo.name || p.name,
+              address: geo.address || p.address,
+            }
+          : p
+      );
+      onPointsChange?.(next);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRouting(false);
+    }
+  };
+
+  // Convert coordinate format for MapLibre LineString GeoJSON
+  const lineCoords = roadCoords
+    ? roadCoords.map(([lat, lng]) => [lng, lat])
+    : points.map(p => [p.lng, p.lat]);
+
+  const routeGeoJSON: any = {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'LineString',
+      coordinates: lineCoords,
+    },
+  };
 
   return (
     <div
       className={`journey-route-map relative rounded-2xl overflow-hidden border border-[var(--border-subtle)] ${className}`}
       style={{ height }}
     >
-      <div ref={containerRef} className="w-full h-full z-0" />
-      <div className="absolute top-3 right-3 z-[400] flex gap-1">
+      <Map
+        ref={mapRef}
+        mapLib={maplibregl}
+        {...viewState}
+        onMove={(evt: any) => setViewState(evt.viewState)}
+        onClick={handleMapClick}
+        mapStyle={mapStyle === 'satellite' ? SATELLITE_STYLE : STREET_STYLE}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <NavigationControl position="top-left" showCompass={false} />
+
+        {/* Draw Route Line */}
+        {points.length >= 2 && (
+          <Source id="route-source" type="geojson" data={routeGeoJSON}>
+            <Layer
+              id="route-line"
+              type="line"
+              layout={{
+                'line-join': 'round',
+                'line-cap': 'round',
+              }}
+              paint={{
+                'line-color': ROUTE_COLOR,
+                'line-width': 5,
+                'line-opacity': 0.9,
+              }}
+            />
+          </Source>
+        )}
+
+        {/* Draw Markers */}
+        {points.map((pt, idx) => {
+          const role = routePointRole(idx, points.length);
+          const label = role === 'start' ? '▶' : role === 'end' ? '◆' : String(idx + 1);
+          const active = pt.id === highlightId;
+          const cls = role === 'start'
+            ? 'route-marker-icon route-marker-icon--start'
+            : role === 'end'
+              ? 'route-marker-icon route-marker-icon--end'
+              : `route-marker-icon ${active ? 'route-marker-icon--active' : ''}`;
+
+          return (
+            <Marker
+              key={pt.id}
+              longitude={pt.lng}
+              latitude={pt.lat}
+              draggable={interactive}
+              onDragEnd={(e: any) => handleMarkerDragEnd(pt.id, e)}
+              anchor="bottom"
+            >
+              <div className="route-marker-icon-wrap" style={{ cursor: interactive ? 'grab' : 'pointer' }}>
+                <div className={cls}>{label}</div>
+              </div>
+            </Marker>
+          );
+        })}
+      </Map>
+
+      {/* Layer selector */}
+      <div className="absolute top-3 right-3 z-10 flex gap-1 bg-slate-900/80 backdrop-blur-md border border-slate-700/60 p-1 rounded-xl shadow-lg">
         <button
           type="button"
-          onClick={() => setMapStyle('street')}
+          onClick={() => {
+            setMapStyle('street');
+            setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+          }}
           className={`journey-map-style-btn ${mapStyle === 'street' ? 'journey-map-style-btn--active' : ''}`}
         >
           Bản đồ
         </button>
         <button
           type="button"
-          onClick={() => setMapStyle('satellite')}
+          onClick={() => {
+            setMapStyle('satellite');
+            setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+          }}
           className={`journey-map-style-btn ${mapStyle === 'satellite' ? 'journey-map-style-btn--active' : ''}`}
         >
           Vệ tinh
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setMapStyle('3d');
+            setViewState(prev => ({ ...prev, pitch: 60, bearing: -20 }));
+          }}
+          className={`journey-map-style-btn ${mapStyle === '3d' ? 'journey-map-style-btn--active' : ''}`}
+        >
+          3D
+        </button>
       </div>
+
       {routing && (
-        <div className="absolute top-3 left-3 z-[400] bg-black/65 text-white text-[11px] px-3 py-1.5 rounded-full">
+        <div className="absolute top-3 left-3 z-10 bg-black/65 text-white text-[11px] px-3 py-1.5 rounded-full">
           Đang tính tuyến đường…
         </div>
       )}
+
       {interactive && (
-        <div className="absolute bottom-3 left-3 right-3 z-[400] flex flex-wrap gap-2 pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-3 z-10 flex flex-wrap gap-2 pointer-events-none">
           <span className="bg-black/65 backdrop-blur-sm text-white text-[11px] px-3 py-1.5 rounded-full">
             ▶ Xanh = bắt đầu · Nhấn map thêm điểm · Tuyến theo đường thực
           </span>
@@ -230,8 +298,9 @@ export default function JourneyRouteMap({
           )}
         </div>
       )}
+
       {!interactive && points.length >= 1 && (
-        <div className="absolute bottom-3 left-3 z-[400] bg-black/65 backdrop-blur-sm text-white text-[11px] font-bold px-3 py-1.5 rounded-full pointer-events-none">
+        <div className="absolute bottom-3 left-3 z-10 bg-black/65 backdrop-blur-sm text-white text-[11px] font-bold px-3 py-1.5 rounded-full pointer-events-none">
           {points.length >= 2 ? `Hành trình · ${points.length} điểm · tuyến thực tế` : 'Vị trí bắt đầu'}
         </div>
       )}

@@ -27,6 +27,7 @@ export interface TravelPreferences {
 }
 export interface AIGeneratePayload {
   destination: string; durationDays: number; dailyBudget: number;
+  currency?: string;
   interests: string[]; travelStyle: string;
 }
 export interface Waypoint { id: string; name: string; latitude: number; longitude: number; }
@@ -74,6 +75,9 @@ export const authService = {
 
   login: (payload: LoginPayload) =>
     apiClient.post<AuthResponse>('/auth/login', payload).then(r => r.data),
+
+  loginWithGoogle: (idToken: string) =>
+    apiClient.post<AuthResponse>('/auth/google', { idToken }).then(r => r.data),
 
   refreshToken: (refreshToken: string) =>
     apiClient.post<{ accessToken: string }>('/auth/refresh', { refreshToken }).then(r => r.data),
@@ -205,7 +209,7 @@ export const socialService = {
   getProfile: (userId: string) =>
     apiClient.get(`/social/profile/${userId}`).then(r => r.data),
 
-  updateProfile: (data: { fullName?: string; bio?: string; avatarUrl?: string; homeLocation?: string }) =>
+  updateProfile: (data: { fullName?: string; bio?: string; avatarUrl?: string; coverUrl?: string; homeLocation?: string }) =>
     apiClient.put('/social/profile', data).then(r => r.data),
 
   toggleFollow: (targetUserId: string) =>
@@ -229,3 +233,100 @@ export const socialService = {
   searchUsers: (q: string) =>
     apiClient.get('/social/search', { params: { q } }).then(r => r.data),
 };
+
+// ─────────────────────────────────────────────────────────
+// CHATBOT & AI MEMORY
+// ─────────────────────────────────────────────────────────
+export interface ChatMessageVersion {
+  id: string;
+  content: string;
+  version: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface ToolCall {
+  id: string;
+  toolName: string;
+  input: string;
+  output?: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AIFeedback {
+  id: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  createdAt: string;
+  versions: ChatMessageVersion[];
+  feedback?: AIFeedback | null;
+  toolCalls?: ToolCall[];
+}
+
+export interface ChatConversation {
+  id: string;
+  title?: string;
+  createdAt: string;
+  updatedAt: string;
+  messages?: ChatMessage[];
+}
+
+export interface AIMemory {
+  id: string;
+  userId: string;
+  travelPreferences: string[];
+  favoriteFoods: string[];
+  budget?: string | null;
+  transportation: string[];
+  favoriteLocations: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const chatbotService = {
+  getConversations: () =>
+    apiClient.get<ChatConversation[]>('/chatbot/conversations').then(r => r.data),
+
+  getConversation: (id: string) =>
+    apiClient.get<ChatConversation>(`/chatbot/conversations/${id}`).then(r => r.data),
+
+  createConversation: (title?: string) =>
+    apiClient.post<ChatConversation>('/chatbot/conversations', { title }).then(r => r.data),
+
+  sendMessage: (conversationId: string, content: string) =>
+    apiClient.post<{ userMessage: ChatMessage; assistantMessage: ChatMessage }>(
+      `/chatbot/conversations/${conversationId}/messages`,
+      { content }
+    ).then(r => r.data),
+
+  regenerateResponse: (messageId: string) =>
+    apiClient.post<ChatMessage>(`/chatbot/messages/${messageId}/regenerate`).then(r => r.data),
+
+  getMemory: () =>
+    apiClient.get<AIMemory>('/chatbot/memory').then(r => r.data),
+
+  saveMemory: (data: Partial<AIMemory>) =>
+    apiClient.post<AIMemory>('/chatbot/memory', data).then(r => r.data),
+
+  deleteMemory: () =>
+    apiClient.delete('/chatbot/memory').then(r => r.data),
+};
+
+// ─────────────────────────────────────────────────────────
+// FEEDBACK
+// ─────────────────────────────────────────────────────────
+export const feedbackService = {
+  create: (data: { messageId: string; rating: number; comment?: string }) =>
+    apiClient.post('/feedback', data).then(r => r.data),
+
+  update: (id: string, data: { rating: number; comment?: string }) =>
+    apiClient.put(`/feedback/${id}`, data).then(r => r.data),
+};
+

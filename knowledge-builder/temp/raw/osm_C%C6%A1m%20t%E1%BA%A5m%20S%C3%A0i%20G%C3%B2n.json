@@ -1,0 +1,22 @@
+{
+  "source": "OpenStreetMap",
+  "query": "Cơm tấm Sài Gòn",
+  "results": [
+    {
+      "source": "OpenStreetMap",
+      "name": "Cơm tấm Sài Gòn, 75/3, Trần Hưng Đạo, An Hội, Phố cổ Hội An, Phường Hội An, Hội An, Thành phố Đà Nẵng, 64000, Việt Nam",
+      "latitude": 15.8799797,
+      "longitude": 108.3272155,
+      "class": "shop",
+      "type": "variety_store"
+    },
+    {
+      "source": "OpenStreetMap",
+      "name": "Cơm tấm Sài Gòn, Phố Nguyễn Bỉnh Trục, Giang Liễu, Phường Phương Liễu, Tỉnh Bắc Ninh, Việt Nam",
+      "latitude": 21.1602409,
+      "longitude": 106.1251291,
+      "class": "amenity",
+      "type": "restaurant"
+    }
+  ]
+}

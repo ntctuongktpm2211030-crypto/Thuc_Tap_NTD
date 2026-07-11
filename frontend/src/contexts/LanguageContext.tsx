@@ -167,7 +167,7 @@ const translations = {
     'analytics.aiMetrics':'AI System Metrics',
 
     // Footer
-    'footer.built': 'React 19 · Leaflet · Express · Supabase · GPT-4o · Socket.io',
+    'footer.built': 'React 19 · MapLibre · Express · Supabase · GPT-4o · Socket.io',
     'footer.thesis': 'SmartTravel — Graduation Thesis 2026',
   },
 
@@ -331,7 +331,7 @@ const translations = {
     'analytics.aiMetrics':'Chỉ số hệ thống AI',
 
     // Footer
-    'footer.built': 'React 19 · Leaflet · Express · Supabase · GPT-4o · Socket.io',
+    'footer.built': 'React 19 · MapLibre · Express · Supabase · GPT-4o · Socket.io',
     'footer.thesis': 'SmartTravel — Đồ án tốt nghiệp 2026',
   },
 } as const;

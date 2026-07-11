@@ -81,12 +81,28 @@ async function serializeDraftMedia<T extends Record<string, unknown>>(data: T): 
   return next as T;
 }
 
+export function cleanDeadBlobUrls(data: any): any {
+  if (!data || typeof data !== 'object') return data;
+  const copy = { ...data };
+  if (typeof copy.coverImage === 'string' && copy.coverImage.startsWith('blob:')) {
+    copy.coverImage = '';
+  }
+  if (Array.isArray(copy.photos)) {
+    copy.photos = copy.photos.filter((p: any) => typeof p === 'string' && !p.startsWith('blob:'));
+  }
+  if (Array.isArray(copy.videos)) {
+    copy.videos = copy.videos.filter((v: any) => typeof v === 'string' && !v.startsWith('blob:'));
+  }
+  return copy;
+}
+
 /** Lưu nháp kèm bước hiện tại (đồng bộ — dùng khi thoát trang gấp) */
 export function saveJourneyDraft(data: unknown, step = 1) {
   try {
+    const cleaned = cleanDeadBlobUrls(data);
     const envelope: JourneyDraftEnvelope = {
       step,
-      data,
+      data: cleaned,
       updatedAt: Date.now(),
     };
     localStorage.setItem(DRAFT_KEY, JSON.stringify(envelope));
@@ -108,7 +124,8 @@ export async function saveJourneyDraftAsync(step: number, data: object): Promise
     localStorage.setItem(DRAFT_KEY, JSON.stringify(envelope));
     return true;
   } catch {
-    return saveJourneyDraft(data, step);
+    const cleaned = cleanDeadBlobUrls(data);
+    return saveJourneyDraft(cleaned, step);
   }
 }
 
@@ -123,13 +140,15 @@ export function loadJourneyDraftEnvelope<T>(): JourneyDraftEnvelope<T> | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed === 'object' && 'data' in parsed) {
+      const cleaned = cleanDeadBlobUrls(parsed.data);
       return {
         step: Math.min(5, Math.max(1, Number(parsed.step) || 1)),
-        data: parsed.data as T,
+        data: cleaned as T,
         updatedAt: parsed.updatedAt ?? Date.now(),
       };
     }
-    return { step: 1, data: parsed as T, updatedAt: Date.now() };
+    const cleaned = cleanDeadBlobUrls(parsed);
+    return { step: 1, data: cleaned as T, updatedAt: Date.now() };
   } catch {
     return null;
   }
