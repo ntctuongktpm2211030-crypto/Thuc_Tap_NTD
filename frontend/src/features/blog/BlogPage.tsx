@@ -187,7 +187,7 @@ function mapApiToExplorePost(raw: {
       id: toExplorePostId(raw.id),
       author: raw.author.profile?.fullName || raw.author.email.split('@')[0],
       handle: `@${raw.author.email.split('@')[0]}`,
-      avatar: raw.author.profile?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80',
+      avatar: raw.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
       verified: false,
       title: payload.headline || payload.title || body.slice(0, 60) || 'Bài viết mới',
       excerpt: payload.excerpt || body.slice(0, 160),
@@ -370,7 +370,7 @@ export default function BlogPage() {
   return (
     <div className="explore-page explore-page--magazine">
       <header className="explore-hero">
-        <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-16 space-y-8">
+        <div className="relative container-wide py-12 sm:py-16 space-y-8">
           <div className="text-center space-y-4 max-w-2xl mx-auto">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
               <Sparkles size={14} className="text-amber-500" /> SmartTravel Magazine
@@ -400,44 +400,64 @@ export default function BlogPage() {
         </div>
       </header>
 
-      <div className="explore-page__body max-w-6xl mx-auto px-4 py-8 sm:py-10">
-        <section className="grid sm:grid-cols-2 gap-4 mb-10">
-          <Link
-            to="/explore/cam-nang/am-thuc"
-            className="explore-handbook-banner explore-handbook-banner--food group"
-          >
-            <Utensils size={28} className="text-amber-600 mb-2" />
-            <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-amber-800">
-              {foodHandbook.title}
-            </h2>
-            <p className="text-xs text-slate-600 mt-1 line-clamp-2">{foodHandbook.intro}</p>
-            <span className="text-xs font-bold text-amber-700 mt-3 flex items-center gap-1">
-              Đọc cẩm nang <ArrowRight size={12} />
-            </span>
-          </Link>
-          <Link
-            to="/explore/cam-nang/van-hoa"
-            className="explore-handbook-banner explore-handbook-banner--culture group"
-          >
-            <Landmark size={28} className="text-violet-600 mb-2" />
-            <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-violet-800">
-              {cultureHandbook.title}
-            </h2>
-            <p className="text-xs text-slate-600 mt-1 line-clamp-2">{cultureHandbook.intro}</p>
-            <span className="text-xs font-bold text-violet-700 mt-3 flex items-center gap-1">
-              Đọc cẩm nang <ArrowRight size={12} />
-            </span>
-          </Link>
-        </section>
+      <div className="explore-page__body container-wide py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
+          
+          {/* LEFT SIDEBAR: Explore Filters */}
+          <aside className="space-y-4">
+            <div className="sticky top-[120px] space-y-4">
+              <ExploreFiltersPanel
+                filters={filters}
+                onChange={patchFilters}
+                onReset={() => setFilters(DEFAULT_EXPLORE_FILTERS)}
+                locating={locating}
+                onUseMyLocation={handleUseMyLocation}
+                resultCount={filteredPosts.length}
+                totalCount={posts.length}
+              />
+            </div>
+          </aside>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
-          <div className="lg:col-span-8 space-y-8">
+          {/* CENTER COLUMN: Banners and Main Feed */}
+          <main className="min-w-0 space-y-4">
+            {/* Top Handbook Banners */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Link
+                to="/explore/cam-nang/am-thuc"
+                className="explore-handbook-banner explore-handbook-banner--food group"
+              >
+                <Utensils size={28} className="text-amber-600 mb-2" />
+                <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-amber-800">
+                  {foodHandbook.title}
+                </h2>
+                <p className="text-xs text-slate-600 mt-1 line-clamp-2">{foodHandbook.intro}</p>
+                <span className="text-xs font-bold text-amber-700 mt-3 flex items-center gap-1">
+                  Đọc cẩm nang <ArrowRight size={12} />
+                </span>
+              </Link>
+              <Link
+                to="/explore/cam-nang/van-hoa"
+                className="explore-handbook-banner explore-handbook-banner--culture group"
+              >
+                <Landmark size={28} className="text-violet-600 mb-2" />
+                <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-violet-800">
+                  {cultureHandbook.title}
+                </h2>
+                <p className="text-xs text-slate-600 mt-1 line-clamp-2">{cultureHandbook.intro}</p>
+                <span className="text-xs font-bold text-violet-700 mt-3 flex items-center gap-1">
+                  Đọc cẩm nang <ArrowRight size={12} />
+                </span>
+              </Link>
+            </section>
+
+            {/* Hero Post */}
             {heroPost && (
               <HeroPostCard post={heroPost} onOpenDetail={openPost} />
             )}
 
+            {/* List of articles grouped by categories */}
             {listPosts.length > 0 ? (
-              <div className="space-y-10">
+              <div className="space-y-6">
                 {cultureFoodPosts.length > 0 && (
                   <section>
                     <h2 className="blog-article-list__heading flex items-center gap-2 mb-4">
@@ -454,16 +474,13 @@ export default function BlogPage() {
                         />
                       ))}
                     </div>
-                    {cultureFoodPosts.length > EXPLORE_LIST_PREVIEW && (
+                    {cultureFoodPosts.length > EXPLORE_LIST_PREVIEW && !showAllCulture && (
                       <button
                         type="button"
-                        onClick={() => setShowAllCulture(v => !v)}
+                        onClick={() => setShowAllCulture(true)}
                         className="explore-show-more-btn mt-4"
                       >
-                        {showAllCulture
-                          ? 'Thu gọn'
-                          : `Xem thêm ${cultureFoodPosts.length - EXPLORE_LIST_PREVIEW} bài`}
-                        <ArrowRight size={14} className={showAllCulture ? 'rotate-90' : ''} />
+                        Xem thêm văn hóa & ẩm thực
                       </button>
                     )}
                   </section>
@@ -471,9 +488,10 @@ export default function BlogPage() {
 
                 {otherPosts.length > 0 && (
                   <section>
-                    {cultureFoodPosts.length > 0 && (
-                      <h2 className="blog-article-list__heading mb-4">Hành trình & khám phá</h2>
-                    )}
+                    <h2 className="blog-article-list__heading flex items-center gap-2 mb-4">
+                      <Trophy size={14} className="text-teal-600" />
+                      Hành trình & trải nghiệm
+                    </h2>
                     <div className="blog-article-list">
                       {visibleOther.map(post => (
                         <BlogArticleCard
@@ -484,97 +502,87 @@ export default function BlogPage() {
                         />
                       ))}
                     </div>
-                    {otherPosts.length > EXPLORE_LIST_PREVIEW && (
+                    {otherPosts.length > EXPLORE_LIST_PREVIEW && !showAllOther && (
                       <button
                         type="button"
-                        onClick={() => setShowAllOther(v => !v)}
+                        onClick={() => setShowAllOther(true)}
                         className="explore-show-more-btn mt-4"
                       >
-                        {showAllOther
-                          ? 'Thu gọn'
-                          : `Xem thêm ${otherPosts.length - EXPLORE_LIST_PREVIEW} bài`}
-                        <ArrowRight size={14} className={showAllOther ? 'rotate-90' : ''} />
+                        Xem thêm hành trình & trải nghiệm
                       </button>
                     )}
                   </section>
                 )}
               </div>
             ) : (
-              !heroPost && (
-                <div className="text-center py-20 text-slate-500">
-                  <p className="font-semibold text-lg">Không tìm thấy bài viết</p>
-                  <p className="text-sm mt-1">Thử đổi từ khóa hoặc danh mục khác.</p>
-                </div>
-              )
+              <p className="text-center text-sm text-[var(--text-muted)] py-8">Chưa tìm thấy bài viết nào phù hợp.</p>
             )}
-          </div>
+          </main>
 
-          <aside className="lg:col-span-4 space-y-6">
-            <ExploreFiltersPanel
-              filters={filters}
-              onChange={patchFilters}
-              onReset={() => setFilters(DEFAULT_EXPLORE_FILTERS)}
-              locating={locating}
-              onUseMyLocation={handleUseMyLocation}
-              resultCount={filteredPosts.length}
-              totalCount={posts.length}
-            />
-
-            <div className="explore-sidebar-card space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">Chủ đề hot</h3>
-              <div className="flex flex-wrap gap-2">
-                {TRENDING_TAGS.map(tag => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => setSearchQuery(tag)}
-                    className="text-[11px] font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-100 px-3 py-1.5 rounded-lg transition-colors"
-                  >
-                    #{tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="explore-sidebar-card space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                <Users size={14} className="text-violet-500" /> Nhà văn đề xuất
-              </h3>
-              {SUGGESTED_TRAVELLERS.map(t => (
-                <div key={t.handle} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <img src={t.avatar} alt="" className="w-10 h-10 rounded-full object-cover ring-2 ring-violet-100" />
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold text-slate-800 truncate">{t.name}</p>
-                      <p className="text-[11px] text-slate-500">{t.posts} bài viết</p>
-                    </div>
-                  </div>
-                  <button type="button" className="text-[10px] font-bold text-violet-700 border border-violet-200 px-2.5 py-1 rounded-lg hover:bg-violet-50 flex-shrink-0">
-                    Theo dõi
-                  </button>
+          {/* RIGHT SIDEBAR: Extra Travel Info Widgets */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-[120px] space-y-4">
+              
+              {/* Hot Topics tag list */}
+              <div className="explore-sidebar-card space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">Chủ đề hot</h3>
+                <div className="flex flex-wrap gap-2">
+                  {TRENDING_TAGS.map(tag => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => setSearchQuery(tag)}
+                      className="text-[11px] font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      #{tag}
+                    </button>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className="explore-sidebar-card bg-gradient-to-br from-amber-50 to-orange-50 border-amber-100">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">Cộng đồng</h3>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                {[
-                  { n: '12K+', l: 'Bài viết', c: 'text-amber-700' },
-                  { n: '4.9K', l: 'Thành viên', c: 'text-teal-700' },
-                  { n: '1K+', l: 'Điểm đến', c: 'text-violet-700' },
-                ].map(s => (
-                  <div key={s.l} className="bg-white/70 rounded-xl py-3 border border-white">
-                    <div className={`text-sm font-extrabold ${s.c}`}>{s.n}</div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">{s.l}</div>
+              {/* Recommended travelers */}
+              <div className="explore-sidebar-card space-y-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--gold)] flex items-center gap-1.5">
+                  <Users size={14} className="text-[var(--gold)]" /> Nhà văn đề xuất
+                </h3>
+                {SUGGESTED_TRAVELLERS.map(t => (
+                  <div key={t.handle} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <img src={t.avatar} alt="" className="w-10 h-10 rounded-full object-cover ring-2 ring-violet-100" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-slate-800 truncate">{t.name}</p>
+                        <p className="text-[11px] text-slate-500">{t.posts} bài viết</p>
+                      </div>
+                    </div>
+                    <button type="button" className="text-[10px] font-bold text-violet-700 border border-violet-200 px-2.5 py-1 rounded-lg hover:bg-violet-50 flex-shrink-0">
+                      Theo dõi
+                    </button>
                   </div>
                 ))}
               </div>
+
+              {/* Community stats */}
+              <div className="explore-sidebar-card bg-gradient-to-br from-amber-50 to-orange-50 border-amber-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--gold)] mb-3">Cộng đồng</h3>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  {[
+                    { n: '12K+', l: 'Bài viết', c: 'text-amber-700' },
+                    { n: '4.9K', l: 'Thành viên', c: 'text-teal-700' },
+                    { n: '1K+', l: 'Điểm đến', c: 'text-violet-700' },
+                  ].map(s => (
+                    <div key={s.l} className="bg-white/70 rounded-xl py-3 border border-white">
+                      <div className={`text-sm font-extrabold ${s.c}`}>{s.n}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </aside>
+
         </div>
       </div>
-
     </div>
   );
 }

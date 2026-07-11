@@ -565,7 +565,7 @@ body::before {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--gold);
   margin-bottom: 12px;
 }
 
@@ -3962,8 +3962,8 @@ body::before {
 /* ── Explore / blog (light) ── */
 .explore-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #fff7ed 0%, #ffffff 28%, #f0fdfa 55%, #faf5ff 100%);
-  color: #1e293b;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
 }
 .explore-hero {
   position: relative;
@@ -3981,8 +3981,8 @@ body::before {
   pointer-events: none;
 }
 .explore-card {
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.07);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-normal);
   border-radius: 1.25rem;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
@@ -3993,8 +3993,8 @@ body::before {
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
 }
 .explore-sidebar-card {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(15, 23, 42, 0.07);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-normal);
   border-radius: 1.25rem;
   padding: 1.25rem;
   box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
@@ -4013,9 +4013,9 @@ body::before {
   box-shadow: 0 4px 12px var(--gold-glow-strong);
 }
 .explore-pill--idle {
-  background: #fff;
-  border-color: #e2e8f0;
-  color: #64748b;
+  background: var(--bg-surface);
+  border-color: var(--border-normal);
+  color: var(--text-muted);
 }
 .explore-pill--idle:hover {
   border-color: var(--gold-light);
@@ -4023,12 +4023,12 @@ body::before {
 }
 .explore-search {
   width: 100%;
-  background: #fff;
-  border: 1.5px solid #e2e8f0;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-normal);
   border-radius: 1rem;
   padding: 0.875rem 1rem 0.875rem 2.75rem;
   font-size: 0.9rem;
-  color: #0f172a;
+  color: var(--text-primary);
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -4057,8 +4057,8 @@ body::before {
 .blog-article {
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-normal);
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
@@ -4117,16 +4117,16 @@ body::before {
   font-size: clamp(1.25rem, 2.2vw, 1.65rem);
   font-weight: 700;
   line-height: 1.25;
-  color: #0f172a;
+  color: var(--text-primary);
   transition: color 0.2s;
 }
 .blog-article:hover .blog-article__title {
-  color: #0d9488;
+  color: var(--gold);
 }
 .blog-article__dek {
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #475569;
+  color: var(--text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -4135,8 +4135,8 @@ body::before {
 }
 .blog-article__byline {
   font-size: 0.75rem;
-  color: #64748b;
-  border-top: 1px solid #f1f5f9;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 0.75rem;
   margin-top: auto;
   display: flex;
@@ -4171,9 +4171,9 @@ body::before {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #64748b;
+  color: var(--gold);
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-subtle);
 }
 
 /* Explore magazine layout (navbar clearance on md+) */
@@ -4309,18 +4309,17 @@ body::before {
   gap: 0.5rem;
   width: 100%;
   justify-content: center;
-  padding: 0.75rem 1.25rem;
-  border-radius: 1rem;
-  font-size: 0.8125rem;
+  padding: 1rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  color: #0d9488;
-  background: linear-gradient(135deg, #f0fdfa, #fff);
-  border: 1.5px solid #99f6e4;
-  transition: all 0.2s ease;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
 }
 .explore-show-more-btn:hover {
-  background: #ccfbf1;
-  border-color: #2dd4bf;
+  color: var(--gold);
 }
 
 /* Handbook pages */
@@ -5044,4 +5043,24 @@ body::before {
   background-color: rgba(239, 68, 68, 0.8) !important;
   color: white !important;
   font-weight: 800 !important;
+}
+
+/* Feed Post Detail Modal Single Column Overrides */
+.post-detail-panel--single-column {
+  max-width: 720px !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  display: block !important;
+}
+
+.post-detail-panel--single-column .post-detail-body-scrollable {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .post-detail-panel--single-column .post-detail-body-scrollable {
+    padding: 1.75rem 2.25rem;
+  }
 }

@@ -37,7 +37,7 @@ export default function ExploreHandbookPage() {
   return (
     <div className="explore-page explore-handbook-page min-h-screen">
       <header className={`explore-handbook-hero ${accent.hero}`}>
-        <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+        <div className="container-wide py-4 sm:py-6">
           <Link
             to="/explore"
             className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 mb-6"
@@ -93,7 +93,7 @@ export default function ExploreHandbookPage() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8 pb-16">
+      <div className="container-wide py-4 sm:py-6 pb-16">
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />

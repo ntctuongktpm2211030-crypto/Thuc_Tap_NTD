@@ -611,7 +611,7 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
 
       {/* Stats card */}
       <div className="feature-strip text-center space-y-2 animate-fade-in">
-        <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Cộng đồng</div>
+        <div className="text-xs font-bold text-[var(--gold)] uppercase tracking-widest">Cộng đồng</div>
         <div className="grid grid-cols-3 gap-2">
           {[['10K+', 'Thành viên', 'text-amber-400'], ['500+', 'Điểm đến', 'text-teal-400'], ['50K+', 'Bài viết', 'text-violet-400']].map(([n, l, c]) => (
             <div key={l} className="bg-[var(--bg-elevated)] rounded-xl p-2">
@@ -1064,7 +1064,7 @@ export default function SocialFeedPage() {
           </div>
 
           {/* Load more */}
-          <button className="w-full py-3.5 rounded-xl text-sm font-semibold border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] hover:bg-[var(--gold-glow)] transition-all">
+          <button className="w-full py-4 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--gold)] transition-colors flex items-center justify-center gap-1">
             {t('feed.loadMore')} ↓
           </button>
         </main>

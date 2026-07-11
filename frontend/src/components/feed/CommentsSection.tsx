@@ -26,7 +26,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   const [replyText, setReplyText] = useState('');
 
   // Track liked comments locally (for UI state)
-  const [likedComments, setLikedComments] = useState<Record<string, boolean>>({});
+  const [likedComments, setLikedComments] = useState<Record<string, 'like' | 'love' | 'haha' | null>>({});
   const [toastMessage, setToastMessage] = useState('');
 
   const showToast = (msg: string) => {
@@ -120,14 +120,14 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
     }
   };
 
-  const toggleLikeComment = (commentId: string) => {
+  const handleReactionSelect = (commentId: string, reaction: 'like' | 'love' | 'haha' | null) => {
     if (!isAuthenticated) {
-      showToast('Bạn cần đăng nhập để thích bình luận!');
+      showToast('Bạn cần đăng nhập để tương tác!');
       return;
     }
     setLikedComments(prev => ({
       ...prev,
-      [commentId]: !prev[commentId]
+      [commentId]: prev[commentId] === reaction ? null : reaction
     }));
   };
 
@@ -204,28 +204,73 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
           </div>
         ) : (
           comments.map(c => {
-            const isLiked = likedComments[c.id] || false;
+            const currentReaction = likedComments[c.id] || null;
             return (
               <div key={c.id} className="space-y-2 group/comment relative">
                 {/* Main Parent Comment */}
                 <div className="flex gap-2 items-start relative z-10">
                   <img src={c.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
                   <div className="flex-1">
-                    <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
+                    <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                       <p className="font-bold text-[var(--text-primary)] text-xs mb-0.5">{c.author.profile?.fullName || 'Người dùng'}</p>
                       <p className="whitespace-pre-wrap break-all leading-normal text-xs">{c.content}</p>
+                      {currentReaction && (
+                        <span className="absolute -bottom-1.5 -right-1.5 flex items-center bg-white dark:bg-slate-700 border border-[var(--border-subtle)] rounded-full px-1.5 py-0.5 shadow-sm text-[10px] scale-90 z-20">
+                          {currentReaction === 'like' && '👍'}
+                          {currentReaction === 'love' && '❤️'}
+                          {currentReaction === 'haha' && '😂'}
+                        </span>
+                      )}
                     </div>
 
                     {/* Action buttons */}
                     <div className="flex items-center gap-3 text-[10px] text-[var(--text-muted)] mt-1 ml-2">
                       <span className="flex items-center gap-0.5"><Clock size={9} />{formatDate(c.createdAt)}</span>
-                      <button
-                        type="button"
-                        onClick={() => toggleLikeComment(c.id)}
-                        className={`hover:text-[var(--gold)] transition-colors font-bold ${isLiked ? 'text-[var(--gold)]' : ''}`}
-                      >
-                        Thích
-                      </button>
+                      <div className="relative group inline-block">
+                        <button
+                          type="button"
+                          onClick={() => handleReactionSelect(c.id, currentReaction ? null : 'like')}
+                          className={`hover:text-[var(--gold)] transition-colors font-bold flex items-center gap-0.5 ${
+                            currentReaction === 'like' ? 'text-blue-500 font-bold' :
+                            currentReaction === 'love' ? 'text-rose-500 font-extrabold' :
+                            currentReaction === 'haha' ? 'text-amber-500 font-extrabold' : ''
+                          }`}
+                        >
+                          {currentReaction === 'like' ? 'Thích' :
+                           currentReaction === 'love' ? 'Yêu thích' :
+                           currentReaction === 'haha' ? 'Haha' : 'Thích'}
+                        </button>
+                        
+                        {/* Hover Reactions Panel with transparent bridge to prevent hover loss */}
+                        <div className="absolute bottom-full left-0 pb-2 hidden group-hover:flex z-30 animate-fade-in">
+                          <div className="flex items-center gap-2.5 bg-white dark:bg-slate-800 border border-[var(--border-subtle)] rounded-full px-3 py-2 shadow-xl whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleReactionSelect(c.id, 'like')}
+                              className="hover:scale-125 transition-transform duration-100 text-base"
+                              title="Thích"
+                            >
+                              👍
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleReactionSelect(c.id, 'love')}
+                              className="hover:scale-125 transition-transform duration-100 text-base"
+                              title="Yêu thích"
+                            >
+                              ❤️
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleReactionSelect(c.id, 'haha')}
+                              className="hover:scale-125 transition-transform duration-100 text-base"
+                              title="Haha"
+                            >
+                              😂
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                       <button
                         type="button"
                         onClick={() => {
@@ -252,7 +297,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                   )}
 
                   {c.replies && c.replies.map(reply => {
-                    const isReplyLiked = likedComments[reply.id] || false;
+                    const replyReaction = likedComments[reply.id] || null;
                     return (
                       <div key={reply.id} className="flex gap-2 items-start animate-fade-in relative z-10">
                         {/* Horizontal branch line from vertical thread to child avatar */}
@@ -260,19 +305,64 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                         
                         <img src={reply.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
                         <div className="flex-1">
-                          <div className="bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-1.5 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
+                          <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-1.5 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                             <p className="font-bold text-[var(--text-primary)] text-[11px] mb-0.5">{reply.author.profile?.fullName || 'Người dùng'}</p>
                             <p className="whitespace-pre-wrap break-all leading-normal text-xs">{reply.content}</p>
+                            {replyReaction && (
+                              <span className="absolute -bottom-1.5 -right-1.5 flex items-center bg-white dark:bg-slate-700 border border-[var(--border-subtle)] rounded-full px-1.5 py-0.5 shadow-sm text-[9px] scale-90 z-20">
+                                {replyReaction === 'like' && '👍'}
+                                {replyReaction === 'love' && '❤️'}
+                                {replyReaction === 'haha' && '😂'}
+                              </span>
+                            )}
                           </div>
                           <div className="flex items-center gap-3 text-[10px] text-[var(--text-muted)] mt-0.5 ml-2">
                             <span className="flex items-center gap-0.5"><Clock size={8} />{formatDate(reply.createdAt)}</span>
-                            <button
-                              type="button"
-                              onClick={() => toggleLikeComment(reply.id)}
-                              className={`hover:text-[var(--gold)] transition-colors font-bold ${isReplyLiked ? 'text-[var(--gold)]' : ''}`}
-                            >
-                              Thích
-                            </button>
+                            <div className="relative group inline-block">
+                              <button
+                                type="button"
+                                onClick={() => handleReactionSelect(reply.id, replyReaction ? null : 'like')}
+                                className={`hover:text-[var(--gold)] transition-colors font-bold flex items-center gap-0.5 ${
+                                  replyReaction === 'like' ? 'text-blue-500 font-bold' :
+                                  replyReaction === 'love' ? 'text-rose-500 font-extrabold' :
+                                  replyReaction === 'haha' ? 'text-amber-500 font-extrabold' : ''
+                                }`}
+                              >
+                                {replyReaction === 'like' ? 'Thích' :
+                                 replyReaction === 'love' ? 'Yêu thích' :
+                                 replyReaction === 'haha' ? 'Haha' : 'Thích'}
+                              </button>
+                              
+                              {/* Hover Reactions Panel with transparent bridge to prevent hover loss */}
+                              <div className="absolute bottom-full left-0 pb-2 hidden group-hover:flex z-30 animate-fade-in">
+                                <div className="flex items-center gap-2.5 bg-white dark:bg-slate-800 border border-[var(--border-subtle)] rounded-full px-3 py-2 shadow-xl whitespace-nowrap">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleReactionSelect(reply.id, 'like')}
+                                    className="hover:scale-125 transition-transform duration-100 text-base"
+                                    title="Thích"
+                                  >
+                                    👍
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleReactionSelect(reply.id, 'love')}
+                                    className="hover:scale-125 transition-transform duration-100 text-base"
+                                    title="Yêu thích"
+                                  >
+                                    ❤️
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleReactionSelect(reply.id, 'haha')}
+                                    className="hover:scale-125 transition-transform duration-100 text-base"
+                                    title="Haha"
+                                  >
+                                    😂
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
