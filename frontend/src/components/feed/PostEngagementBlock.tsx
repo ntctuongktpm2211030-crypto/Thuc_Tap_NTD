@@ -27,44 +27,68 @@ export default function PostEngagementBlock({
 }: PostEngagementBlockProps) {
   return (
     <>
-      <div className="post-engagement-stats">
-        <button
-          type="button"
-          onClick={e => {
-            e.stopPropagation();
-            if (likeCount > 0) onOpenLikers?.();
-          }}
-          className="post-engagement-stats__likes"
-        >
-          <span className="post-engagement-stats__like-icon" aria-hidden>
-            <Heart size={9} className="text-white fill-white" />
-          </span>
-          <span>{likeCount.toLocaleString()} lượt thích</span>
-        </button>
-        <button type="button" onClick={e => { e.stopPropagation(); onOpenDetail(); }} className="post-engagement-stats__comments">
-          {commentCount} bình luận
-        </button>
+      <div className="flex items-center justify-between p-3 px-4 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] rounded-b-2xl">
+        {/* Left: Like button & count */}
+        <div className="flex items-center gap-2 group/like">
+          <button
+            type="button"
+            onClick={onLike}
+            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+              liked ? 'bg-rose-500 hover:bg-rose-600 scale-105' : 'bg-rose-500/10 hover:bg-rose-500/20 hover:scale-105'
+            }`}
+            title={liked ? 'Bỏ thích' : 'Thích'}
+          >
+            <Heart size={10} className={liked ? 'text-white fill-white' : 'text-rose-500'} />
+          </button>
+          <button
+            type="button"
+            onClick={e => {
+              e.stopPropagation();
+              if (likeCount > 0) onOpenLikers?.();
+            }}
+            className={`font-semibold transition-colors hover:underline ${
+              liked ? 'text-rose-600' : 'text-slate-600 dark:text-slate-400 hover:text-rose-500'
+            }`}
+            disabled={likeCount === 0}
+          >
+            {likeCount.toLocaleString()} lượt thích
+          </button>
+        </div>
+
+        {/* Right: Comment, Save, Share */}
+        <div className="flex items-center gap-4 sm:gap-5">
+          <button
+            type="button"
+            onClick={e => { e.stopPropagation(); onOpenDetail(); }}
+            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors group/comment"
+          >
+            <MessageCircle size={14} className="text-blue-500 transition-colors" />
+            <span>{commentCount} bình luận</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onBookmark}
+            className={`flex items-center gap-1.5 font-semibold transition-colors group/save ${
+              saved ? 'text-amber-600' : 'text-slate-600 dark:text-slate-400 hover:text-amber-600'
+            }`}
+          >
+            <Bookmark size={14} className={`text-amber-500 ${saved ? 'fill-current' : ''} transition-colors`} />
+            <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={e => e.stopPropagation()}
+            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-emerald-600 transition-colors group/share"
+          >
+            <Share2 size={14} className="text-emerald-500 transition-colors" />
+            <span>Chia sẻ</span>
+          </button>
+        </div>
       </div>
 
       <FeedCommentsPreview postId={postId} onOpenDetail={onOpenDetail} />
-
-      <div className="reaction-bar">
-        <button type="button" onClick={onLike} className={`reaction-btn flex-1 justify-center gap-2 ${liked ? 'liked' : ''}`}>
-          <Heart size={15} className={liked ? 'fill-current' : ''} />
-          <span className="text-xs">{liked ? 'Đã thích' : 'Thích'}</span>
-        </button>
-        <button type="button" onClick={e => { e.stopPropagation(); onOpenDetail(); }} className="reaction-btn flex-1 justify-center gap-2">
-          <MessageCircle size={15} />
-          <span className="text-xs">Bình luận</span>
-        </button>
-        <button type="button" onClick={onBookmark} className={`reaction-btn flex-1 justify-center gap-2 ${saved ? 'bookmarked' : ''}`}>
-          <Bookmark size={15} className={saved ? 'fill-current' : ''} />
-          <span className="text-xs">{saved ? 'Đã lưu' : 'Lưu'}</span>
-        </button>
-        <button type="button" className="reaction-btn justify-center gap-2 px-3" onClick={e => e.stopPropagation()}>
-          <Share2 size={15} />
-        </button>
-      </div>
     </>
   );
 }

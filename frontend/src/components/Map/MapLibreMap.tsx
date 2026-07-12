@@ -68,7 +68,7 @@ const createPopupContent = (loc: MapLocation, vi: boolean) => {
   const headerHtml = isCheckin
     ? `
       <div class="flex items-center gap-2">
-        <img src="${loc.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=40&q=40'}" class="w-8 h-8 rounded-full object-cover border border-slate-700" />
+        <img src="${loc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="w-8 h-8 rounded-full object-cover border border-slate-700" />
         <div>
           <h4 class="text-xs font-black text-white leading-none">${loc.user}</h4>
           ${timeStr}

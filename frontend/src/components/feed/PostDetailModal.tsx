@@ -25,6 +25,87 @@ import {
   PostDetailTips,
 } from './PostDetailJourneySections';
 
+function InstagramCarousel({ images }: { images: string[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  if (!images || images.length === 0) return null;
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.min(images.length - 1, prev + 1));
+  };
+
+  return (
+    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-sm group/carousel mt-4">
+      {/* Images wrapper */}
+      <div 
+        className="flex w-full h-full transition-transform duration-300 ease-out"
+        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+      >
+        {images.map((src, i) => (
+          <img
+            key={`${src}-${i}`}
+            src={src}
+            alt=""
+            className="w-full h-full object-cover flex-shrink-0"
+            loading="lazy"
+          />
+        ))}
+      </div>
+
+      {/* Navigation arrows overlay */}
+      {images.length > 1 && activeIndex > 0 && (
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/75 transition-all opacity-0 group-hover/carousel:opacity-100 z-10"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+      )}
+
+      {images.length > 1 && activeIndex < images.length - 1 && (
+        <button
+          type="button"
+          onClick={handleNext}
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/75 transition-all opacity-0 group-hover/carousel:opacity-100 z-10"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      )}
+
+      {/* Dots indicators */}
+      {images.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveIndex(i);
+              }}
+              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                i === activeIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface Props {
   post: FeedPost | null;
   onClose: () => void;
@@ -182,7 +263,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
       onClick={onClose}
     >
       <div
-        className="post-detail-panel"
+        className="post-detail-panel post-detail-panel--single-column"
         role="dialog"
         aria-modal="true"
         aria-labelledby="post-detail-title"
@@ -197,46 +278,43 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           <X size={20} />
         </button>
 
-        {images.length > 0 && (
-          <div className={`post-detail-hero ${images.length > 1 ? 'post-detail-hero--grid' : ''}`}>
-            {images.map((src, i) => (
-              <img key={`${src}-${i}`} src={src} alt="" className="post-detail-hero-img" loading="lazy" />
-            ))}
-          </div>
-        )}
-
-        <div className="post-detail-body">
-          <div className="flex items-center gap-3 mb-4">
-            <img
-              src={post.author.avatar}
-              alt={post.author.name}
-              className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/40"
-            />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-[var(--text-primary)]">{post.author.name}</span>
-                {post.author.verified && (
-                  <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] text-white font-bold">✓</span>
-                )}
-              </div>
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--text-muted)] mt-0.5">
-                <span className="flex items-center gap-1"><Clock size={10} />{post.date}</span>
-                <span>·</span>
-                <span className="flex items-center gap-1"><BookOpen size={10} />{readTime}</span>
-                <span>·</span>
-                <span className="flex items-center gap-1 text-[var(--gold)]">
-                  <MapPin size={10} />{post.destination.replace(/^📍\s*/, '')}
-                </span>
+        <div className="post-detail-body-scrollable">
+          
+          {/* Header section (Author profile, check-in, metadata) */}
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <img
+                src={post.author.avatar}
+                alt={post.author.name}
+                className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/40 flex-shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-[var(--text-primary)] text-sm sm:text-base">{post.author.name}</span>
+                  {post.author.verified && (
+                    <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] text-white font-bold">✓</span>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--text-muted)] mt-0.5">
+                  <span className="flex items-center gap-1"><Clock size={10} />{post.date}</span>
+                  <span>·</span>
+                  <span className="flex items-center gap-1"><BookOpen size={10} />{readTime}</span>
+                  <span>·</span>
+                  <span className="flex items-center gap-1 text-[var(--gold)] font-medium">
+                    <MapPin size={10} />{post.destination.replace(/^📍\s*/, '')}
+                  </span>
+                </div>
               </div>
             </div>
+
+            {post.displayType !== 'social' && 'category' in post && (
+              <span className="flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30">
+                {post.category}
+              </span>
+            )}
           </div>
 
-          {post.displayType !== 'social' && 'category' in post && (
-            <span className="inline-block mb-3 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30">
-              {post.category}
-            </span>
-          )}
-
+          {/* Title and Subtitle */}
           <h2 id="post-detail-title" className="font-editorial text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-snug mb-3">
             {title}
           </h2>
@@ -250,12 +328,19 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           {payload && <PostDetailMetaRow payload={payload} />}
           {payload?.tags && payload.tags.length > 0 && <PostDetailTags tags={payload.tags} />}
 
+          {/* Post Content */}
           {body && (
             <div className="post-detail-content prose-feed text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap mt-4">
               {body}
             </div>
           )}
 
+          {/* Post Images Instagram-style Carousel */}
+          {images.length > 0 && (
+            <InstagramCarousel images={images} />
+          )}
+
+          {/* Map & Route points */}
           {routePts.length >= 1 && (
             <div className="post-detail-route mt-6">
               <h3 className="post-detail-section-title mb-2">
@@ -288,30 +373,55 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           {hasItinerary && payload && <PostDetailItinerary days={payload.days} />}
           {hasTips && payload && <PostDetailTips tips={payload.tips} />}
 
-          <div className="flex items-center gap-4 mt-6 pt-4 border-t border-[var(--border-subtle)] text-sm text-[var(--text-muted)]">
+          {/* Interactions bar (Screenshot 2 style layout) */}
+          <div className="flex items-center justify-between border-t border-b border-[var(--border-subtle)] py-3 px-1 mt-6">
+            {/* Left: Like Action & Count */}
             <button
               type="button"
               onClick={handleLike}
-              className={`flex items-center gap-1.5 hover:text-rose-400 transition-colors ${liked ? 'text-rose-400 font-bold' : ''}`}
+              className="flex items-center gap-2 text-xs font-bold text-[var(--text-primary)] hover:text-rose-500 transition-colors"
             >
-              <Heart size={16} className={liked ? 'fill-current' : ''} />
-              {likeCount.toLocaleString()} {labels.likes}
+              <span className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                liked ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-500/10 text-[var(--text-secondary)]'
+              }`}>
+                <Heart size={16} className={liked ? 'fill-current' : ''} />
+              </span>
+              <span>{likeCount.toLocaleString()} {labels.likes}</span>
             </button>
-            <span className="flex items-center gap-1.5">
-              <MessageCircle size={16} />
-              {commentCount} {labels.comments}
-            </span>
-            <button
-              type="button"
-              onClick={handleBookmark}
-              className={`flex items-center gap-1.5 hover:text-amber-500 transition-colors ${saved ? 'text-amber-400 font-bold' : ''}`}
-            >
-              <Bookmark size={16} className={saved ? 'fill-current' : ''} />
-              Đã lưu
-            </button>
-            <button type="button" className="ml-auto p-2 rounded-full hover:bg-[var(--bg-elevated)] transition-colors">
-              <Share2 size={16} />
-            </button>
+
+            {/* Right: Comments, Save (Bookmark), Share */}
+            <div className="flex items-center gap-4 sm:gap-5 text-xs font-bold text-[var(--text-secondary)]">
+              {/* Comment Count */}
+              <span className="flex items-center gap-2 text-[var(--text-secondary)]">
+                <MessageCircle size={16} className="text-blue-500" />
+                <span>{commentCount} {labels.comments}</span>
+              </span>
+
+              {/* Bookmark (Save) */}
+              <button
+                type="button"
+                onClick={handleBookmark}
+                className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors ${
+                  saved ? 'text-[var(--gold)]' : ''
+                }`}
+              >
+                <Bookmark size={16} className={`text-amber-500 ${saved ? 'fill-current' : ''}`} />
+                <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
+              </button>
+
+              {/* Share link copying */}
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
+                }}
+                className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+              >
+                <Share2 size={16} className="text-emerald-500" />
+                <span>Chia</span>
+              </button>
+            </div>
           </div>
 
           {/* Likers section */}
@@ -345,6 +455,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
             </div>
           )}
 
+          {/* Comments Section */}
           <div className="mt-8 border-t border-[var(--border-subtle)] pt-6">
             <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
           </div>

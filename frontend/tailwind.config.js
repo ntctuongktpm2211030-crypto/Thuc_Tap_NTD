@@ -21,18 +21,18 @@ export default {
           900: '#0c4a6e',
           950: '#0c1a26',
         },
-        // Warm gold accent — luxury travel editorial
+        // Primary Blue brand scale - mapped to gold to prevent layout class breaks
         gold: {
-          50:  '#fefce8',
-          100: '#fef9c3',
-          200: '#fef08a',
-          300: '#fde047',
-          400: '#facc15',
-          500: '#e8b86d',   // brand gold
-          600: '#c99b50',
-          700: '#a37928',
-          800: '#875d1e',
-          900: '#713f12',
+          50:  '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#2563eb',   // brand Primary Blue
+          600: '#1d4ed8',
+          700: '#1e40af',
+          800: '#1e3a8a',
+          900: '#172554',
         },
         // Editorial surface scale
         surface: {
@@ -67,7 +67,7 @@ export default {
         },
       },
       backgroundImage: {
-        'gold-gradient': 'linear-gradient(135deg, #e8b86d, #c99b50)',
+        'gold-gradient': 'linear-gradient(135deg, #2563eb, #1d4ed8)',
         'editorial-hero': 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 40%, transparent 100%)',
       },
     },

@@ -291,7 +291,7 @@ export default function EditPostModal({ post, open, onClose, onPostUpdated }: Pr
             type="button"
             onClick={handleUpdateSubmit}
             disabled={saving || !form.content.trim()}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[var(--gold)] to-amber-500 text-black hover:shadow-lg hover:shadow-amber-500/25 transition-all flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/25 transition-all flex items-center gap-1.5"
           >
             {saving && <Loader2 size={12} className="animate-spin" />}
             Lưu thay đổi

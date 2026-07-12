@@ -126,11 +126,7 @@ export default function ProfilePage() {
         <div className="fb-profile-header">
           <div className="fb-profile-avatar-wrap">
             <div className="fb-profile-avatar">
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="" />
-              ) : (
-                user.fullName?.charAt(0).toUpperCase()
-              )}
+              <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" />
             </div>
             <label htmlFor="avatar-upload" className="fb-profile-avatar-edit cursor-pointer" aria-label="Edit avatar">
               <Camera size={14} />
@@ -221,7 +217,7 @@ export default function ProfilePage() {
                 {following.length > 0 ? (
                   following.slice(0, 6).map(f => {
                     const profileData = f.following?.profile || f;
-                    const avatarUrl = profileData.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80';
+                    const avatarUrl = profileData.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
                     const name = profileData.fullName || f.name || '';
                     return (
                       <div key={f.id} className="fb-profile-friend">

@@ -197,12 +197,12 @@ const LeftPanel = () => {
       {/* Top: Logo */}
       <div className="relative z-10 p-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--gold)] to-amber-600 flex items-center justify-center shadow-lg">
-            <span className="text-black font-black text-sm">ST</span>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--gold)] to-blue-700 flex items-center justify-center shadow-lg">
+            <span className="text-white font-black text-sm">ST</span>
           </div>
           <div>
             <span className="font-editorial text-white font-bold text-lg leading-none block">SmartTravel</span>
-            <span className="text-[10px] text-amber-300 font-semibold tracking-widest uppercase">AI × Social × Map</span>
+            <span className="text-[10px] text-blue-300 font-semibold tracking-widest uppercase">AI × Social × Map</span>
           </div>
         </Link>
       </div>
@@ -472,7 +472,7 @@ export default function AuthPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-amber-500 text-black font-bold text-sm hover:shadow-xl hover:shadow-amber-500/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isLoading ? (
                   <><span className="animate-spin">⏳</span> {t('auth.loading')}</>
@@ -580,7 +580,7 @@ export default function AuthPage() {
               <button
                 type="submit"
                 disabled={isLoading || !agreed}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-amber-500 text-black font-bold text-sm hover:shadow-xl hover:shadow-amber-500/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isLoading ? (
                   <><span className="animate-spin">⏳</span> {t('auth.loading')}</>

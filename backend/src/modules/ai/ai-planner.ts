@@ -729,7 +729,7 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
     totalEstimatedCost: params.totalBudget * 0.75,
     currency: params.currency || 'USD',
     days,
-  });
+  }, params.destination);
 }
 
 function generateFallbackRegenerate(params: AIRegeneratePartParams): AIItineraryResponse {

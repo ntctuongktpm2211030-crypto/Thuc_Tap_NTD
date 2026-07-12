@@ -11,7 +11,7 @@ import {
 } from './feedUtils';
 
 const DEFAULT_AVATAR =
-  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80';
+  'https://cdn.pixabay.com/photo-2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80';

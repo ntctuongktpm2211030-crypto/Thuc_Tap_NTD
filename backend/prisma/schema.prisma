@@ -57,6 +57,14 @@ model User {
   conversations        Conversation[]     @relation("ConversationParticipants")
   messages             Message[]
 
+  // New model relationships
+  journeys             Journey[]
+  locationHistory      LocationHistory[]
+  organizedEvents      Event[]            @relation("EventOrganizer")
+  eventAttendances     EventAttendee[]
+  travelerMatchesUser  TravelerMatch[]    @relation("TravelerMatchUser")
+  travelerMatchesTarget TravelerMatch[]   @relation("TravelerMatchTarget")
+
   @@index([email])
 }
 
@@ -149,6 +157,7 @@ model Destination {
   activities    TripActivity[]
   checkIns      CheckIn[]
   recommendations Recommendation[]
+  events        Event[]
 
   // Compound index to speed up spatial bounding box searches
   @@index([latitude, longitude])
@@ -311,6 +320,156 @@ model AIHistory {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+// ═══════════════════════════════════════════════════════════
+// JOURNEY — A travel story / blog-style trip journal
+// ═══════════════════════════════════════════════════════════
+model Journey {
+  id            String         @id @default(uuid())
+  userId        String
+  title         String
+  description   String?
+  coverImageUrl String?
+  isPublic      Boolean        @default(true)
+  status        String         @default("draft") // "draft", "active", "completed"
+  startDate     DateTime?
+  endDate       DateTime?
+  totalDistance  Float          @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routes        Route[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════════════════
+// ROUTE — A specific route/path within a Journey
+// ═══════════════════════════════════════════════════════════
+model Route {
+  id            String       @id @default(uuid())
+  journeyId     String
+  name          String
+  description   String?
+  transportMode String       @default("walking") // "walking", "driving", "cycling", "transit"
+  distanceKm    Float        @default(0)
+  durationMin   Int          @default(0)
+  color         String       @default("#D4A843") // hex color for map polyline
+  createdAt     DateTime     @default(now())
+
+  journey       Journey      @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  points        RoutePoint[]
+
+  @@index([journeyId])
+}
+
+// ═══════════════════════════════════════════════════════════
+// ROUTE POINT — Individual GPS waypoint on a Route
+// ═══════════════════════════════════════════════════════════
+model RoutePoint {
+  id            String   @id @default(uuid())
+  routeId       String
+  latitude      Float
+  longitude     Float
+  altitude      Float?
+  sequenceOrder Int
+  timestamp     DateTime @default(now())
+  note          String?
+  photoUrl      String?
+
+  route         Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@index([routeId])
+  @@index([latitude, longitude])
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOCATION HISTORY — Historical GPS breadcrumbs for a user
+// ═══════════════════════════════════════════════════════════
+model LocationHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  latitude  Float
+  longitude Float
+  accuracy  Float?   // GPS accuracy in meters
+  speed     Float?   // m/s
+  heading   Float?   // degrees
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([latitude, longitude])
+}
+
+// ═══════════════════════════════════════════════════════════
+// EVENT — Local events, festivals, meetups at destinations
+// ═══════════════════════════════════════════════════════════
+model Event {
+  id            String      @id @default(uuid())
+  title         String
+  description   String?
+  coverImageUrl String?
+  destinationId String?
+  latitude      Float
+  longitude     Float
+  startDate     DateTime
+  endDate       DateTime?
+  category      String      // "festival", "meetup", "tour", "workshop", "cultural"
+  maxAttendees  Int?
+  currentCount  Int         @default(0)
+  organizerId   String
+  isPublic      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  organizer     User         @relation("EventOrganizer", fields: [organizerId], references: [id], onDelete: Cascade)
+  attendees     EventAttendee[]
+
+  @@index([latitude, longitude])
+  @@index([startDate])
+  @@index([category])
+  @@index([organizerId])
+}
+
+model EventAttendee {
+  id        String   @id @default(uuid())
+  eventId   String
+  userId    String
+  status    String   @default("going") // "going", "interested", "maybe"
+  createdAt DateTime @default(now())
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRAVELER MATCH — AI-based traveler compatibility matching
+// ═══════════════════════════════════════════════════════════
+model TravelerMatch {
+  id              String   @id @default(uuid())
+  userId          String
+  matchedUserId   String
+  compatScore     Float    // 0.0 - 1.0 similarity score
+  matchReasons    String[] // ["similar_interests", "same_destination", "overlap_dates"]
+  status          String   @default("suggested") // "suggested", "accepted", "declined"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation("TravelerMatchUser", fields: [userId], references: [id], onDelete: Cascade)
+  matchedUser     User     @relation("TravelerMatchTarget", fields: [matchedUserId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, matchedUserId])
+  @@index([userId])
+  @@index([matchedUserId])
+  @@index([compatScore])
 }
 
 model ChatConversation {
@@ -550,14 +709,4 @@ model KnowledgeAnswer {
 
   @@index([contentId])
 }
-
-
-
-
-
-
-
-
-
-
 

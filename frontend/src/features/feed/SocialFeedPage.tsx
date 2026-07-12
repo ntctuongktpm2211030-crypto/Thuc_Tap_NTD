@@ -127,17 +127,13 @@ const HeroCard = ({
       {/* Category pill top-left */}
       <div className="absolute top-4 left-4 flex gap-2">
         <span className="badge-category text-[11px] shadow-lg">{post.category}</span>
-        <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/90 text-[11px] font-semibold px-3 py-1 rounded-full border border-white/20">
-          <MapPin size={10} /> {post.destination.replace(/^📍\s*/, '')}
+        <span className="flex items-center gap-1.5 bg-white border border-slate-200/80 text-slate-700 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
+          <MapPin size={11} className="text-blue-500" /> {post.destination.replace(/^📍\s*/, '')}
         </span>
       </div>
 
       {/* Top-right actions */}
       <div className="absolute top-4 right-4 flex gap-2 z-10" onClick={stopCardClick}>
-        <button type="button" onClick={handleBookmark}
-          className={`w-9 h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all ${saved ? 'bg-amber-500/20 border-amber-500/60' : 'bg-black/40 border-white/20 hover:bg-black/60'}`}>
-          <Bookmark size={15} className={saved ? 'text-amber-400 fill-current' : 'text-white'} />
-        </button>
         <PostMenuDropdown
           post={post}
           onPostDeleted={onPostDeleted}
@@ -175,20 +171,38 @@ const HeroCard = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <button type="button" onClick={handleLike}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-full backdrop-blur-md border text-sm font-semibold transition-all ${liked ? 'bg-rose-500/20 border-rose-500/60 text-rose-300' : 'bg-black/40 border-white/20 text-white/80 hover:bg-rose-500/10'}`}>
-              <Heart size={14} className={liked ? 'fill-current' : ''} />
+          <div className="flex items-center gap-1.5" onClick={stopCardClick}>
+            <button
+              type="button"
+              onClick={handleLike}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border text-xs font-bold transition-all ${
+                liked
+                  ? 'bg-rose-50 border-rose-200 text-rose-500 shadow-sm'
+                  : 'bg-white border-slate-200/80 text-slate-700 hover:bg-slate-50 shadow-sm'
+              }`}
+            >
+              <Heart size={13} className={liked ? 'fill-current text-rose-500' : 'text-rose-500'} />
+              <span>{likeCount.toLocaleString()}</span>
             </button>
             <button
               type="button"
-              onClick={e => { e.stopPropagation(); if (likeCount > 0) setLikersOpen(true); }}
-              className="px-2.5 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-sm font-semibold text-white/80 hover:bg-black/60 transition-all"
+              onClick={onOpen}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/80 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm transition-all"
             >
-              {likeCount.toLocaleString()}
+              <MessageCircle size={13} className="text-blue-500" />
+              <span>{post.comments}</span>
             </button>
-            <button type="button" onClick={onOpen} className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-sm font-semibold text-white/80 hover:bg-black/60 transition-all">
-              <MessageCircle size={14} /> {post.comments}
+            <button
+              type="button"
+              onClick={handleBookmark}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border text-xs font-bold transition-all ${
+                saved
+                  ? 'bg-amber-50 border border-amber-200 text-amber-500 shadow-sm'
+                  : 'bg-white border-slate-200/80 text-slate-700 hover:bg-slate-50 shadow-sm'
+              }`}
+            >
+              <Bookmark size={13} className={saved ? 'fill-current text-amber-500' : 'text-amber-500'} />
+              <span>Lưu</span>
             </button>
           </div>
         </div>
@@ -269,7 +283,7 @@ const MagazineCard = ({
         <img src={post.image} alt={post.headline} className="card-medium-image" loading="lazy" />
         {/* Category overlay on image */}
         <div className="absolute top-3 left-3">
-          <span className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold text-white shadow-lg ${post.categoryColor || 'bg-indigo-500'}`}>
+          <span className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold text-white shadow-lg ${post.categoryColor || 'bg-blue-600'}`}>
             {post.category}
           </span>
         </div>
@@ -491,14 +505,8 @@ const SocialPostCard = ({
 
 function UserAvatar({ user, size = 'md' }: { user: { fullName?: string; avatarUrl?: string } | null; size?: 'sm' | 'md' | 'lg' }) {
   const sz = size === 'lg' ? 'w-16 h-16 text-xl' : size === 'sm' ? 'w-10 h-10 text-sm' : 'w-11 h-11 text-sm';
-  if (user?.avatarUrl) {
-    return <img src={user.avatarUrl} alt="" className={`${sz.split(' ').slice(0, 2).join(' ')} rounded-full object-cover ring-2 ring-[var(--border-normal)] flex-shrink-0`} />;
-  }
-  return (
-    <div className={`${sz} rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center font-bold text-white flex-shrink-0`}>
-      {user?.fullName?.charAt(0).toUpperCase() || '?'}
-    </div>
-  );
+  const avatarUrl = user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  return <img src={avatarUrl} alt="" className={`${sz.split(' ').slice(0, 2).join(' ')} rounded-full object-cover ring-2 ring-[var(--border-normal)] flex-shrink-0`} />;
 }
 
 // ──────────────────────────────────────────────────────────
@@ -529,7 +537,7 @@ const ComposeBox = ({ onOpenCompose }: { onOpenCompose: () => void }) => {
           {isAuthenticated ? t('feed.composePlaceholder') : t('auth.loginToPost')}
         </button>
         <button onClick={goCreateJourney}
-          className="hidden sm:flex items-center gap-1.5 px-4 py-3 rounded-full text-xs font-bold bg-gradient-to-r from-[var(--gold)] to-amber-500 text-black hover:shadow-lg hover:shadow-amber-500/25 transition-all whitespace-nowrap">
+          className="hidden sm:flex items-center gap-1.5 px-4 py-3 rounded-full text-xs font-bold bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/25 transition-all whitespace-nowrap">
           <Sparkles size={14} /> {t('feed.shareJourney')}
         </button>
       </div>
@@ -568,15 +576,9 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
           {/* Animated orbs */}
           <div className="absolute top-2 right-4 w-8 h-8 rounded-full bg-[var(--gold)]/20 animate-float" style={{ animationDelay: '0s' }} />
           <div className="absolute top-4 right-10 w-5 h-5 rounded-full bg-violet-500/20 animate-float" style={{ animationDelay: '1s' }} />
-          <div className="profile-mini-avatar overflow-hidden">
-            {user?.avatarUrl ? (
-              <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[var(--gold)] to-violet-500 flex items-center justify-center text-xl font-bold text-white">
-                {user?.fullName?.charAt(0).toUpperCase() || '?'}
-              </div>
-            )}
-          </div>
+        </div>
+        <div className="profile-mini-avatar">
+          <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover rounded-full" />
         </div>
         <div className="pt-9 pb-4 px-4">
           <h4 className="font-bold text-[var(--text-primary)] truncate">{displayName}</h4>
@@ -609,7 +611,7 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
 
       {/* Stats card */}
       <div className="feature-strip text-center space-y-2 animate-fade-in">
-        <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Cộng đồng</div>
+        <div className="text-xs font-bold text-[var(--gold)] uppercase tracking-widest">Cộng đồng</div>
         <div className="grid grid-cols-3 gap-2">
           {[['10K+', 'Thành viên', 'text-amber-400'], ['500+', 'Điểm đến', 'text-teal-400'], ['50K+', 'Bài viết', 'text-violet-400']].map(([n, l, c]) => (
             <div key={l} className="bg-[var(--bg-elevated)] rounded-xl p-2">
@@ -701,11 +703,10 @@ const RightSidebar = ({
       <div className="sidebar-section animate-fade-in">
         <p className="sidebar-title">{t('sidebar.topics')}</p>
         <div className="flex flex-wrap gap-1.5">
-          {['#HaGiang', '#SapaLoop', '#HoiAn', '#StreetFood', '#BudgetTravel', '#VietnamVibes', '#OffBeatAsia', '#NightMarket'].map((tag, i) => {
-            const colors = ['badge-indigo', 'badge-teal', 'badge-violet', 'badge-rose', 'badge-teal', 'badge-indigo', 'badge-violet', 'badge-rose'];
+          {['#HaGiang', '#SapaLoop', '#HoiAn', '#StreetFood', '#BudgetTravel', '#VietnamVibes', '#OffBeatAsia', '#NightMarket'].map((tag) => {
             return (
               <span key={tag}
-                className={`badge-destination ${colors[i % colors.length]} cursor-pointer hover:scale-105 transition-transform text-[11px] px-2.5 py-1 rounded-full`}>
+                className="badge-destination badge-gold cursor-pointer hover:scale-105 transition-transform text-[11px] px-2.5 py-1 rounded-full">
                 {tag}
               </span>
             );
@@ -953,7 +954,7 @@ export default function SocialFeedPage() {
         onPublished={handlePostPublished}
         labels={composeLabels}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_268px] xl:grid-cols-[280px_1fr_288px] gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
 
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block" key={sidebarTick}>
@@ -1013,7 +1014,7 @@ export default function SocialFeedPage() {
                 <button key={f.key} onClick={() => setActiveFilter(f.key)}
                   className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${
                     activeFilter === f.key
-                      ? 'bg-gradient-to-r from-[var(--gold)] to-amber-500 text-black shadow-lg shadow-amber-500/25'
+                      ? 'bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white shadow-lg shadow-blue-600/25'
                       : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)]/50 hover:text-[var(--gold)]'
                   }`}>
                   <FIcon size={14} strokeWidth={2} />
@@ -1063,7 +1064,7 @@ export default function SocialFeedPage() {
           </div>
 
           {/* Load more */}
-          <button className="w-full py-3.5 rounded-xl text-sm font-semibold border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] hover:bg-[var(--gold-glow)] transition-all">
+          <button className="w-full py-4 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--gold)] transition-colors flex items-center justify-center gap-1">
             {t('feed.loadMore')} ↓
           </button>
         </main>
