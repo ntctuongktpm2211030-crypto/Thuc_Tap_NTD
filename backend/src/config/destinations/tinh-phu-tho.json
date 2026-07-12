@@ -6,7 +6,8 @@
     "category": "attraction",
     "latitude": 16.3185396,
     "longitude": 107.5003178,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Phương Lâm, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -15,7 +16,8 @@
     "category": "nature",
     "latitude": 20.884047,
     "longitude": 105.3694992,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Thung Nai, Huyện Cao Phong, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -24,7 +26,8 @@
     "category": "attraction",
     "latitude": 20.6537082,
     "longitude": 105.0722738,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Chiềng Châu, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -33,7 +36,8 @@
     "category": "nature",
     "latitude": 10.6974439,
     "longitude": 105.3864841,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Phường Thái Bình, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -42,7 +46,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Thung Nai, Huyện Cao Phong, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -51,7 +56,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 35
+    "costEstimate": 35,
+    "address": "Xã Hạ Bì, Huyện Kim Bôi, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -60,7 +66,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Thái Bình, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -69,7 +76,8 @@
     "category": "nature",
     "latitude": 20.917808,
     "longitude": 105.440221,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Dân Hòa, Huyện Kỳ Sơn, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -78,7 +86,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -87,7 +96,8 @@
     "category": "hotel",
     "latitude": 20.6541303,
     "longitude": 105.0668357,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Mai Châu, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -96,7 +106,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tân Lạc, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -105,7 +116,8 @@
     "category": "nature",
     "latitude": 21.0799208,
     "longitude": 105.9807154,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Liên Sơn, Huyện Lương Sơn, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -114,7 +126,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Cao Phong, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -123,7 +136,8 @@
     "category": "attraction",
     "latitude": 20.6748221,
     "longitude": 105.1041022,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Phú Cường, Huyện Tân Lạc, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -132,7 +146,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -141,7 +156,8 @@
     "category": "nature",
     "latitude": 20.3162835,
     "longitude": 105.6176593,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lạc Thủy, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -150,7 +166,8 @@
     "category": "restaurant",
     "latitude": 20.2139457,
     "longitude": 105.9338022,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -159,7 +176,8 @@
     "category": "nature",
     "latitude": 11.3414976,
     "longitude": 106.7294295,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lạc Thủy, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -168,7 +186,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Mai Châu, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -177,7 +196,8 @@
     "category": "nature",
     "latitude": 11.8997573,
     "longitude": 108.3476138,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -186,7 +206,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Phương Lâm, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -195,7 +216,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Phú Lão, Huyện Lạc Thủy, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -204,7 +226,8 @@
     "category": "nature",
     "latitude": 20.404631,
     "longitude": 105.372641,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tự Do, Huyện Lạc Sơn, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -213,7 +236,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -222,7 +246,8 @@
     "category": "attraction",
     "latitude": 21.1260273,
     "longitude": 106.1569655,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Cao Phong, Huyện Cao Phong, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -231,7 +256,8 @@
     "category": "hotel",
     "latitude": 20.82839,
     "longitude": 105.3362854,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Phương Lâm, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -240,7 +266,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -249,7 +276,8 @@
     "category": "nature",
     "latitude": 20.2516861,
     "longitude": 105.970358,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ngòi Hoa, Huyện Tân Lạc, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -258,7 +286,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Mai Châu, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -267,7 +296,8 @@
     "category": "attraction",
     "latitude": 9.9561966,
     "longitude": 105.8455839,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Mai Châu, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -276,7 +306,8 @@
     "category": "attraction",
     "latitude": 20.6522494,
     "longitude": 104.9646795,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Xăm Khoè, Huyện Mai Châu, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -285,7 +316,8 @@
     "category": "attraction",
     "latitude": 21.022077,
     "longitude": 105.8534795,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Xuân Sơn, Huyện Lương Sơn, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -294,7 +326,8 @@
     "category": "nature",
     "latitude": 21.1806623,
     "longitude": 105.4454328,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Yên Bình, Huyện Lương Sơn, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -303,7 +336,8 @@
     "category": "hotel",
     "latitude": 20.8106741,
     "longitude": 105.3255048,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Phương Lâm, Thành phố Hòa Bình, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -312,7 +346,8 @@
     "category": "hotel",
     "latitude": 16.0436238,
     "longitude": 108.2496571,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Vĩnh Tiến, Huyện Kim Bôi, Tỉnh Hòa Bình"
   },
   {
     "province": "Hòa Bình",
@@ -321,7 +356,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Thung Nai, Huyện Cao Phong, Tỉnh Hòa Bình"
   },
   {
     "province": "Phú Thọ",
@@ -330,7 +366,8 @@
     "category": "attraction",
     "latitude": 21.6147084,
     "longitude": 105.155587,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hy Cương, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -339,7 +376,8 @@
     "category": "nature",
     "latitude": 21.1202059,
     "longitude": 104.9479697,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -348,7 +386,8 @@
     "category": "festival",
     "latitude": 20.9524535,
     "longitude": 105.9802375,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Khu di tích lịch sử Đền Hùng, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -357,7 +396,8 @@
     "category": "attraction",
     "latitude": 21.3763826,
     "longitude": 105.3238952,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hiền Lương, Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -366,7 +406,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -375,7 +416,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -384,7 +426,8 @@
     "category": "restaurant",
     "latitude": 11.3740428,
     "longitude": 106.7864442,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -393,7 +436,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -402,7 +446,8 @@
     "category": "attraction",
     "latitude": 21.3726326,
     "longitude": 105.3862043,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hùng Lô, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -411,7 +456,8 @@
     "category": "attraction",
     "latitude": 21.3164568,
     "longitude": 105.3961531,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -420,7 +466,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Trung Nghĩa, Huyện Thanh Thủy, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -429,7 +476,8 @@
     "category": "nature",
     "latitude": 21.243084,
     "longitude": 105.6946362,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -438,7 +486,8 @@
     "category": "restaurant",
     "latitude": 10.7765184,
     "longitude": 106.6563046,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -447,7 +496,8 @@
     "category": "festival",
     "latitude": 21.3007538,
     "longitude": 105.1349604,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -456,7 +506,8 @@
     "category": "attraction",
     "latitude": 20.9702239,
     "longitude": 105.9920304,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hùng Lô, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -465,7 +516,8 @@
     "category": "hotel",
     "latitude": 21.3202712,
     "longitude": 105.4006869,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -474,7 +526,8 @@
     "category": "nature",
     "latitude": 20.8279471,
     "longitude": 105.3395277,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Vườn quốc gia Xuân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -483,7 +536,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -492,7 +546,8 @@
     "category": "attraction",
     "latitude": 10.230421,
     "longitude": 103.9574562,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Bạch Hạc, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -501,7 +556,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hùng Lô, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -510,7 +566,8 @@
     "category": "attraction",
     "latitude": 21.3063481,
     "longitude": 105.6033084,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -519,7 +576,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Thủy, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -528,7 +586,8 @@
     "category": "attraction",
     "latitude": 10.7900154,
     "longitude": 106.6335997,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -537,7 +596,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -546,7 +606,8 @@
     "category": "attraction",
     "latitude": 21.3478354,
     "longitude": 105.471243,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Thanh Ba, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -555,7 +616,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -564,7 +626,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -573,7 +636,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tam Nông, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -582,7 +646,8 @@
     "category": "attraction",
     "latitude": 20.9218816,
     "longitude": 105.8427142,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Cẩm Khê, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -591,7 +656,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Ba, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -600,7 +666,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -609,7 +676,8 @@
     "category": "attraction",
     "latitude": 21.29616,
     "longitude": 105.6289111,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Khu di tích quốc gia đặc biệt Đền Hùng, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -618,7 +686,8 @@
     "category": "nature",
     "latitude": 21.1951345,
     "longitude": 105.1502667,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -627,7 +696,8 @@
     "category": "attraction",
     "latitude": 10.8072479,
     "longitude": 106.6653971,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -636,7 +706,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -645,7 +716,8 @@
     "category": "festival",
     "latitude": 10.9404136,
     "longitude": 106.5163196,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -654,7 +726,8 @@
     "category": "attraction",
     "latitude": 9.6026521,
     "longitude": 105.9661718,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -663,7 +736,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -672,7 +746,8 @@
     "category": "attraction",
     "latitude": 13.9463304,
     "longitude": 109.2357369,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -681,7 +756,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -690,7 +766,8 @@
     "category": "attraction",
     "latitude": 11.0570148,
     "longitude": 106.6943117,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -699,7 +776,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -708,7 +786,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -717,7 +796,8 @@
     "category": "attraction",
     "latitude": 21.3007538,
     "longitude": 105.1349604,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hiền Lương, Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -726,7 +806,8 @@
     "category": "restaurant",
     "latitude": 10.7966788,
     "longitude": 106.6649293,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -735,7 +816,8 @@
     "category": "hotel",
     "latitude": 16.474324,
     "longitude": 107.5716632,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -744,7 +826,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Cẩm Khê, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -753,7 +836,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Thủy, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -762,7 +846,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Khu di tích quốc gia đặc biệt Đền Hùng, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -771,7 +856,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -780,7 +866,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -789,7 +876,8 @@
     "category": "festival",
     "latitude": 21.2206685,
     "longitude": 105.5850178,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hùng Lô, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -798,7 +886,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -807,7 +896,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tân Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -816,7 +906,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -825,7 +916,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -834,7 +926,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hạ Hòa, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -843,7 +936,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -852,7 +946,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -861,7 +956,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -870,7 +966,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Cẩm Khê, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -879,7 +976,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hùng Lô, Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -888,7 +986,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -897,7 +996,8 @@
     "category": "restaurant",
     "latitude": 10.5937405,
     "longitude": 107.0581861,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Việt Trì, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -906,7 +1006,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -915,7 +1016,8 @@
     "category": "festival",
     "latitude": 21.3007538,
     "longitude": 105.1349604,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -924,7 +1026,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Thanh Sơn, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -933,7 +1036,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -942,7 +1046,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Cẩm Khê, Tỉnh Phú Thọ"
   },
   {
     "province": "Phú Thọ",
@@ -951,7 +1056,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Lâm Thao, Tỉnh Phú Thọ"
   },
   {
     "province": "Vĩnh Phúc",
@@ -960,7 +1066,8 @@
     "category": "attraction",
     "latitude": 21.4546863,
     "longitude": 105.6448651,
-    "costEstimate": 4
+    "costEstimate": 4,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -969,7 +1076,8 @@
     "category": "attraction",
     "latitude": 21.3080002,
     "longitude": 105.5926359,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -978,16 +1086,18 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Thiền viện Trúc Lâm Tây Thiên",
-    "content": "Thiền viện Trúc Lâm Tây Thiên là một trong những thiền viện lớn nhất và được xây dựng bề thế nhất của dòng thiền Trúc Lâm tại Việt Nam, nằm ngay cạnh khu di tích danh thắng Tây Thiên. Công trình được xây dựng trên nền của một ngôi chùa cổ có tên là Thiên Ân Thiền Tự, mang đậm nét kiến trúc Phật giáo đương đại nhưng vẫn giữ được sự hài hòa với không gian thiên nhiên xung quanh. Toà chính điện có chiều cao ấn tượng, bên trong thờ tượng Phật Tổ bằng đá thạch anh lớn, xung quanh là các bức phù điêu chạm khắc tinh xảo tái hiện cuộc đời Đức Phật. Khuôn viên thiền viện rộng lớn bao gồm nhà tổ, nhà khách, lầu chuông, lầu trống và thư viện lưu trữ hàng ngàn kinh sách Phật pháp. Nằm ẩn mình giữa rừng thông bạt ngàn trên sườn núi cao, nơi đây mang lại không gian thanh tịnh tuyệt đối, giúp du khách rũ bỏ mọi ưu phiền của cuộc sống thường nhật. Thiền viện thường xuyên tổ chức các khóa tu mùa hè cho học sinh, sinh viên và mở cửa đón khách tham quan cúng bái quanh năm.",
+    "content": "Thiền viện Trúc Lâm Tây Thiên là một trong những thiền viện lớn nhất và được xây dựng bề thế nhất của dòng thiền Trúc Lâm tại Việt Nam, nằm ngay cạnh khu di tích danh thắng Tây Thiên. Công trình được xây dựng trên nền của một ngôi chùa cổ có tên là Thiên Ân Thiền Tự, mang đậm nét kiến trúc Phật giáo đương đại nhưng vẫn giữ được sự hài hòa với không gian thiên nhiên xung quanh. Toà chính điện có chiều cao ấn tượng, bên trong thờ tượng Phật Tổ bằng đá thạch anh lớn, xung quanh là các bức phù diêu chạm khắc tinh xảo tái hiện cuộc đời Đức Phật. Khuôn viên thiền viện rộng lớn bao gồm nhà tổ, nhà khách, lầu chuông, lầu trống và thư viện lưu trữ hàng ngàn kinh sách Phật pháp. Nằm ẩn mình giữa rừng thông bạt ngàn trên sườn núi cao, nơi đây mang lại không gian thanh tịnh tuyệt đối, giúp du khách rũ bỏ mọi ưu phiền của cuộc sống thường nhật. Thiền viện thường xuyên tổ chức các khóa tu mùa hè cho học sinh, sinh viên và mở cửa đón khách tham quan cúng bái quanh năm.",
     "category": "attraction",
     "latitude": 21.4661928,
     "longitude": 105.5862312,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -996,7 +1106,8 @@
     "category": "attraction",
     "latitude": 13.8990322,
     "longitude": 108.9913034,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Tam Sơn, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1005,7 +1116,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Hương Canh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1014,7 +1126,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Mê Linh, TP. Hà Nội (Giáp ranh Tỉnh Vĩnh Phúc)"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1023,7 +1136,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đồng Tĩnh, Huyện Tam Dương, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1032,7 +1146,8 @@
     "category": "attraction",
     "latitude": 21.2546273,
     "longitude": 105.4894592,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Thổ Tang, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1041,7 +1156,8 @@
     "category": "attraction",
     "latitude": 21.235653,
     "longitude": 105.6832334,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Định Trung, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1050,7 +1166,8 @@
     "category": "attraction",
     "latitude": 21.3080973,
     "longitude": 105.6142166,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Khai Quang, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1059,7 +1176,8 @@
     "category": "attraction",
     "latitude": 21.305748,
     "longitude": 105.593006,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1068,7 +1186,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1077,7 +1196,8 @@
     "category": "attraction",
     "latitude": 21.3035252,
     "longitude": 105.6216006,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tam Hồng, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1086,7 +1206,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Yên Lạc, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1095,7 +1216,8 @@
     "category": "attraction",
     "latitude": 21.6669364,
     "longitude": 106.5935738,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Lý Nhân, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1104,7 +1226,8 @@
     "category": "attraction",
     "latitude": 15.877712,
     "longitude": 108.3009146,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Thanh Lãng, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1113,7 +1236,8 @@
     "category": "attraction",
     "latitude": 21.4536351,
     "longitude": 106.6409849,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Yên Lạc, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1122,7 +1246,8 @@
     "category": "attraction",
     "latitude": 10.0046764,
     "longitude": 105.767409,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Ngô Quyền, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1131,7 +1256,8 @@
     "category": "attraction",
     "latitude": 21.4555615,
     "longitude": 105.6405106,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1140,7 +1266,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1149,7 +1276,8 @@
     "category": "attraction",
     "latitude": 21.4403303,
     "longitude": 105.5733781,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1158,7 +1286,8 @@
     "category": "restaurant",
     "latitude": 21.4561052,
     "longitude": 105.6441129,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1167,7 +1296,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1176,7 +1306,8 @@
     "category": "restaurant",
     "latitude": 21.4578244,
     "longitude": 105.6456684,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1185,7 +1316,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1194,7 +1326,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1203,7 +1336,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1212,7 +1346,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1221,7 +1356,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1230,7 +1366,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1239,7 +1376,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1248,7 +1386,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Khai Quang, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1257,7 +1396,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1266,7 +1406,8 @@
     "category": "hotel",
     "latitude": 21.3317225,
     "longitude": 105.7130123,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Ngọc Thanh, TP. Phúc Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1275,7 +1416,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1284,7 +1426,8 @@
     "category": "hotel",
     "latitude": 21.1808171,
     "longitude": 105.4877873,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Vĩnh Thịnh, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1293,7 +1436,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1302,7 +1446,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1311,7 +1456,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1320,7 +1466,8 @@
     "category": "nature",
     "latitude": 21.5288833,
     "longitude": 105.5848265,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1329,7 +1476,8 @@
     "category": "nature",
     "latitude": 21.3317225,
     "longitude": 105.7130123,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ngọc Thanh, TP. Phúc Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1338,7 +1486,8 @@
     "category": "nature",
     "latitude": 21.3059249,
     "longitude": 105.5994905,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1347,7 +1496,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1356,7 +1506,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1365,7 +1516,8 @@
     "category": "nature",
     "latitude": 21.6648345,
     "longitude": 105.2393183,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Minh Quang, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1374,7 +1526,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 15
+    "costEstimate": 15,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1383,7 +1536,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Lựu, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1392,7 +1546,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tam Hồng, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1401,7 +1556,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bàn Giản, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1410,7 +1566,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 9
+    "costEstimate": 9,
+    "address": "Phường Phúc Thắng, TP. Phúc Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1419,16 +1576,18 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Chùa Tích Sơn",
-    "content": "Chùa Tích Sơn tọa lạc tại phường Tích Sơn, thành phố Vĩnh Yên, là một trong những ngôi chùa cổ kính bậc nhất có lịch sử gắn liền với sự hình thành của vùng đất Vĩnh Yên cổ xưa. Được xây dựng từ thời nhà Lý, ngôi chùa cổ mang đậm dấu ấn kiến trúc Phật giáo thời Lê - Nguyễn với mái ngói đao cong rêu phong phủ kín, tường xây bằng gạch chỉ mộc mạc và hệ thống cột gỗ chịu lực lớn vững chãi. Trải qua bao thăng trầm lịch sử chiến tranh, chùa Tích Sơn hiện nay vẫn bảo tồn được một hệ thống tượng Phật cổ bằng đồng và gỗ vô cùng quý giá có giá trị nghệ thuật điêu khắc đỉnh cao. Khuôn viên chùa tuy nằm trong lòng đô thị nhưng rất yên bình tĩnh mịch với những cây đại cổ thụ tỏa bóng mát quanh năm. Đây không chỉ là nơi sinh hoạt tôn giáo tâm linh quan trọng của phật tử địa phương mà còn là điểm tham quan lịch sử văn hóa giàu giá trị cho du khách.",
+    "content": "Chùa Tích Sơn tọa lạc tại phường Tích Sơn, thành phố Vĩnh Yên, là một trung tâm Phật giáo lớn và là điểm du lịch tâm linh nổi bật của tỉnh Vĩnh Phúc. Ngôi chùa được xây dựng từ thời nhà Lý (thế kỷ 11), ban đầu là một am nhỏ do các bậc cao tăng dựng lên để tu hành, sau này được trùng tu và mở rộng quy mô vô cùng tráng lệ như hiện nay. Cấu trúc chùa bao gồm tam quan, chính điện, nhà tổ, bảo tháp và hành lang la hán với hàng trăm pho tượng được chế tác tinh xảo. Điểm nhấn ấn tượng tại chùa Tích Sơn là kiến trúc cổ kính lâu đời và khuôn viên rộng rãi, rợp bóng mát của các hàng cây cổ thụ, hồ nước thả hoa sen hoa súng tạo không gian thanh tịnh tuyệt đối. Vào các ngày tuần rằm, mùng một và đặc biệt là dịp Tết Nguyên Đán, chùa đón hàng vạn phật tử đến cầu bình an, may mắn cho gia đình.",
     "category": "attraction",
     "latitude": 21.1547374,
     "longitude": 105.4833295,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Tích Sơn, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1437,7 +1596,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1446,16 +1606,18 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hải Lựu, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Đền Mẫu Sinh Tây Thiên",
-    "content": "Đền Mẫu Sinh tọa lạc tại xã Minh Quang, huyện Tam Đảo, là ngôi đền nằm trong quần thể di tích danh thắng tâm linh Tây Thiên. Theo thần phả lịch sử ghi lại, đền Mẫu Sinh chính là nơi thân mẫu đã sinh hạ ra Quốc Mẫu Tây Thiên Lăng Thị Tiêu vĩ đại. Ngôi đền có kiến trúc mộc mạc cổ kính tọa lạc trên một khu đất bằng phẳng cao ráo dưới chân dãy núi Tam Đảo hùng vĩ, bao quanh bởi những rặng cây um túm cổ thụ. Không gian nơi đây vô cùng trang nghiêm thanh tịnh. Trong đền còn lưu giữ được hòn đá cổ tương truyền chính là nơi Mẫu sinh ra và nhiều cổ vật hoành phi câu đối quý hiếm. Hàng năm vào dịp đầu xuân, du khách thập phương khi hành hương về Tây Thiên thường ghé thăm đền Mẫu Sinh đầu tiên để làm lễ tạ ơn đấng sinh thành, cầu mong sức khỏe, bình an và lòng hiếu thảo cho con cháu trong gia đình.",
+    "content": "Đền Mẫu Sinh tọa lạc tại xã Minh Quang, huyện Tam Đảo, là ngôi đền nằm trong quần thể di tích danh thắng tâm linh Tây Thiên. Theo thần phả lịch sử ghi lại, đền Mẫu Sinh chính là nơi thân mẫu đã sinh hạ ra Quốc Mẫu Tây Thiên Lăng Thị Tiêu vĩ đại. Ngôi đền có kiến trúc mộc mạc cổ kính tọa lạc trên một khu đất bằng phẳng cao ráo dưới chân dãy núi Tam Đảo hùng vĩ, bao quanh bởi những rặng cây um tùm cổ thụ. Không gian nơi đây vô cùng trang nghiêm thanh tịnh. Trong đền còn lưu giữ được hòn đá cổ tương truyền chính là nơi Mẫu sinh ra và nhiều cổ vật hoành phi câu đối quý hiếm. Hàng năm vào dịp đầu xuân, du khách thập phương khi hành hương về Tây Thiên thường ghé thăm đền Mẫu Sinh đầu tiên để làm lễ tạ ơn đấng sinh thành, cầu mong sức khỏe, bình an và lòng hiếu thảo cho con cháu trong gia đình.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Minh Quang, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1464,7 +1626,8 @@
     "category": "attraction",
     "latitude": 20.3298145,
     "longitude": 105.8729676,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Gia Khánh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1473,7 +1636,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1482,7 +1646,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1491,7 +1656,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1500,7 +1666,8 @@
     "category": "nature",
     "latitude": 21.4527791,
     "longitude": 105.4479,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Vân Trục, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1509,7 +1676,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Định, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1518,7 +1686,8 @@
     "category": "attraction",
     "latitude": 21.040553,
     "longitude": 105.8190101,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Bồ Sao, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1527,7 +1696,8 @@
     "category": "restaurant",
     "latitude": 10.7503791,
     "longitude": 106.6468454,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1536,7 +1706,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Ngô Quyền, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1545,7 +1716,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ngọc Thanh, TP. Phúc Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1554,34 +1726,38 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 10
+    "costEstimate": 10,
+    "address": "Xã Văn Quán, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Đình Hương Canh",
-    "content": "Đình Hương Canh là một kiệt tác kiến trúc nghệ thuật chạm khắc gỗ cổ kính tọa lạc tại thị trấn Hương Canh, huyện Bình Xuyên. Đây là ngôi đình cổ tiêu biểu thuộc cụm ba ngôi đình cổ Hương Canh nổi tiếng vùng Kinh Bắc xưa, được xây dựng vào khoảng thế kỷ 17-18 thời hậu Lê thờ các vị hoàng tử con vua Ngô Quyền. Đình mang kiến trúc chữ Công bề thế vững chãi với mái ngói vảy rêu phong cổ kính đao cong vút. Điểm đỉnh cao của đình Hương Canh chính là nghệ thuật chạm đục bong lau trên gỗ lim cực kỳ tinh xảo điệu nghệ của các nghệ nhân xưa. Các bức điêu khắc tái hiện chân thực sống động cảnh sinh hoạt dân gian ngày hội như hội đấu vật, đi săn, bơi chải thuyền và các hình tượng linh vật long ly quy phụng. Di tích đã được xếp hạng quốc gia đặc biệt thu hút nhiều kiến trúc sư du khách thưởng lãm.",
+    "content": "Đình Hương Canh là một kiệt tác kiến trúc nghệ thuật chạm khắc gỗ cổ kính tọa lạc tại thị trấn Hương Canh, huyện Bình Xuyên. Đây là ngôi đình cổ tiêu biểu thuộc cụm ba ngôi đình cổ Hương Canh nổi tiếng vùng Kinh Bắc xưa, được xây dựng vào khoảng thế kỷ 17-18 thời hậu Lê thờ các vị hoàng tử con vua Ngô Quyền. Đình mang kiến trúc chữ Công bề thế vững chãi với mái ngói vảy rêu phong cổ kính đao cong vút. Điểm đỉnh cao của đình Hương Canh chính là nghệ thuật chạm đục bong lau trên gỗ lim cực kỳ tinh xảo điệu nghệ của các nghệ nhân xưa. Các bức điêu khắc tái hiện chân thực sống động cảnh sinh hoạt dân gian ngày hội như hội đấu vật, đi săn, bơi chải thuyền và các hình tượng linh vật long, ly, quy, phụng. Di tích đã được xếp hạng quốc gia đặc biệt thu hút nhiều kiến trúc sư du khách thưởng lãm.",
     "category": "attraction",
     "latitude": 21.2997734,
     "longitude": 105.6283211,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Hương Canh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Nhà hàng Gà Ngon Vĩnh Yên",
-    "content": "Nhà hàng Gà Ngon nằm trên đại lộ Tôn Đức Thắng, thành phố Vĩnh Yên, là địa chỉ ẩm thực bình dân lý tưởng chuyên về các món gà thả vườn chính hiệu. Không gian quán được thiết kế mộc mạc, sạch sẽ thoáng mát đem lại cảm giác thoải mái cho thực khách dùng bữa ăn. Thực đơn của nhà hàng tập trung chế biến các món ăn từ gà ta tuyển chọn kỹ lưỡng như gà luộc chấm muối ớt chanh truyền thống, gà rang gừng thơm nồng, gà bó xôi chiên giòn rụm béo ngậy và canh miến lòng mề gà nóng hổi. Thịt gà của quán chắc ngọt dai thơm tự nhiên chứ không bị bở mỡ. Phong cách phục vụ của nhân viên quán rất thân thiện, nhanh nhẹn đáp ứng nhanh các yêu cầu của thực khách. Mức giá thành các món ăn vô cùng hợp lý phải chăng phù hợp với túi tiền của học sinh sinh viên người lao động.",
+    "content": "Nhà hàng Gà Ngon nằm trên đại lộ Tôn Đức Thắng, thành phố Vĩnh Yên, là địa chỉ ẩm thực bình dân lý tưởng chuyên về các món gà thả đồi chính hiệu. Không gian quán được thiết kế mộc mạc, sạch sẽ thoáng mát đem lại cảm giác thoải mái cho thực khách dùng bữa ăn. Thực đơn của nhà hàng tập trung chế biến các món ăn từ gà ta tuyển chọn kỹ lưỡng như gà luộc chấm muối ớt chanh truyền thống, gà rang gừng thơm nồng, gà bó xôi chiên giòn rụm béo ngậy và canh miến lòng mề gà nóng hổi. Thịt gà của quán chắc ngọt dai thơm tự nhiên chứ không bị bở mỡ. Phong cách phục vụ của nhân viên quán rất thân thiện, nhanh nhẹn đáp ứng nhanh các yêu cầu của thực khách. Mức giá cả các món ăn vô cùng bình dân hợp túi tiền.",
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Khách sạn Sông Hồng Thủ Đô Vĩnh Yên",
-    "content": "Khách sạn Sông Hồng Thủ Đô tọa lạc tại số 189 đường Lam Sơn, phường Tích Sơn, thành phố Vĩnh Yên, là khu khách sạn nghỉ dưỡng 4 sao quy mô lớn uy tín bậc nhất tỉnh Vĩnh Phúc. Khách sạn sở hữu tòa nhà kiến trúc bề thế hiện đại cùng hệ thống biệt thự sang trọng tọa lạc bên bờ hồ Đầm Vạc xanh mát lộng gió. Hệ thống phòng nghỉ tại đây được trang bị đầy đủ nội thất cao cấp sang trọng hiện đại cùng ban công view hồ dạo bộ tuyệt đẹp. Khách sạn cung cấp chuỗi tiện ích đẳng cấp dịch vụ khép kín gồm hồ bơi ngoài trời xanh mát, hệ thống sân tennis hiện đại tiêu chuẩn quốc tế, khu spa massage thư giãn trị liệu xông hơi và hệ thống nhà hàng hội nghị tiệc cưới sức chứa lớn món ăn ngon miệng phong phú Á Âu. Đây là địa điểm nghỉ ngơi tin cậy cao cấp của nhiều đoàn khách.",
+    "content": "Khách sạn Sông Hồng Thủ Đô tọa lạc tại số 189 đường Lam Sơn, phường Tích Sơn, thành phố Vĩnh Yên, là khu khách sạn nghỉ dưỡng 4 sao quy mô lớn uy tín bậc nhất tỉnh Vĩnh Phúc. Khách sạn sở hữu tòa nhà kiến trúc bề thế hiện đại cùng hệ thống biệt thự sang trọng tọa lạc bên bờ hồ Đầm Vạc xanh mát lộng gió. Hệ thống phòng nghỉ tại đây được trang bị đầy đủ nội thất cao cấp sang trọng hiện đại cùng ban công view hồ dạo bộ tuyệt đẹp. Khách sạn cung cấp chuỗi tiện ích đẳng cấp dịch vụ khép kín gồm hồ bơi ngoài trời xanh mát, hệ thống 4 sân tennis hiện đại tiêu chuẩn quốc tế, khu spa massage thư giãn trị liệu xông hơi và hệ thống nhà hàng hội nghị tiệc cưới sức chứa lớn món ăn ngon miệng phong phú Á Âu. Đây là địa điểm nghỉ ngơi tin cậy cao cấp của nhiều đoàn khách.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 189
+    "costEstimate": 189,
+    "address": "Phường Tích Sơn, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1590,7 +1766,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1599,7 +1776,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Định Trung, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1608,7 +1786,8 @@
     "category": "attraction",
     "latitude": 21.4472456,
     "longitude": 105.574349,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1617,25 +1796,28 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Nha Trang Hotel Tam Đảo",
-    "content": "Nha Trang Hotel Tam Đảo tọa lạc tại khu phố 1, trung tâm thị trấn Tam Đảo, là lựa chọn lưu trú lý tưởng cho du khách muốn tìm kiếm phòng nghỉ tiện nghi giá cả phải chăng hợp lý gần quảng trường. Khách sạn cung cấp hệ thống phòng nghỉ đa dạng sạch sẽ ngăn nắp được trang bị tivi, wifi tốc độ cao, bình nóng lạnh ổn định phục vụ mùa đông se lạnh núi cao. Nhiều phòng của khách sạn có ban công cửa sổ góc nhìn rộng hướng ra sườn đồi xanh rợp cây bóng mát lộng gió thổi mát. Nhân viên phục vụ của khách sạn vô cùng cởi mở nhiệt tình hiếu khách, hỗ trợ du khách các thông tin du lịch bản địa, dịch vụ cho thuê xe máy đi phượt an toàn thuận tiện. Khách sạn còn có nhà hàng nhỏ tại tầng trệt phục vụ ăn sáng các món ăn nhanh tiện lợi cho du khách khởi hành ngày mới tham quan vui vẻ.",
+    "content": "Nha Trang Hotel Tam Đảo tọa lạc tại khu phố 1, trung tâm thị trấn Tam Đảo, là lựa chọn lưu trú lý tưởng cho du khách muốn tìm kiếm phòng nghỉ tiện nghi giá cả phải chăng hợp lý gần quảng trường. Khách sạn cung cấp hệ thống phòng nghỉ đa dạng sạch sẽ ngăn nắp được trang bị tivi, wifi tốc độ cao, bình nóng lạnh ổn định phục vụ mùa đông se lạnh núi cao. Nhiều phòng của khách sạn có ban công cửa sổ góc nhìn rộng hướng ra sườn đồi xanh rợp cây bóng mát lộng gió thổi mát mát mẻ đem lại không gian thư giãn tuyệt vời cho du khách. Nhân viên phục vụ của khách sạn vô cùng cởi mở nhiệt tình hiếu khách, hỗ trợ du khách các thông tin du lịch bản địa, dịch vụ cho thuê xe máy đi phượt an toàn thuận tiện. Khách sạn còn có nhà hàng nhỏ tại tầng trệt phục vụ ăn sáng các món ăn nhanh tiện lợi cho du khách khởi hành ngày mới tham quan vui vẻ.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Suối Bạc Tây Thiên",
-    "content": "Suối Bạc là dòng suối tự nhiên uốn lượn mềm mại len lỏi chảy qua các khe đá vách núi thuộc quần thể di tích danh thắng Tây Thiên, huyện Tam Đảo. Dòng suối bắt nguồn từ những mạch nước ngầm trên đỉnh núi cao của dãy Tam Đảo chảy xuống, nước suối quanh năm trong vắt mát lạnh soi rõ từng viên sỏi nhỏ dưới đáy suối chảy uốn lượn. Sở dĩ gọi là suối Bạc vì khi dòng nước chảy qua các vách đá ghềnh đá dốc đứng tung bọt nước trắng xóa lấp lánh như những sợi bạc lấp lánh dưới ánh nắng chiếu qua tán lá rừng nguyên sinh rậm rạp. Dọc hai bên bờ suối là thảm thực vật rừng nguyên sinh xanh mát rợp bóng cây cùng nhiều loài hoa dại nở rực rỡ sắc màu thơ mộng. Du khách đi bộ dọc suối Bạc có thể dừng chân nghỉ ngơi ngâm chân mát lạnh nghe tiếng nước chảy róc rách hòa tiếng chim rừng hót líu lo thư thái.",
+    "content": "Suối Bạc là dòng suối tự nhiên uốn lượn mềm mại len lỏi chảy qua các khe đá vách núi thuộc quần thể di tích danh thắng tâm linh Tây Thiên, huyện Tam Đảo. Dòng suối bắt nguồn từ những mạch nước ngầm trên đỉnh núi cao của dãy Tam Đảo chảy xuống, nước suối quanh năm trong vắt mát lạnh soi rõ từng viên sỏi nhỏ dưới đáy suối chảy uốn lượn. Sở dĩ gọi là suối Bạc vì khi dòng nước chảy qua các vách đá ghềnh đá dốc đứng tung bọt nước trắng xóa lấp lánh như những sợi bạc lấp lánh dưới ánh nắng chiếu qua tán lá rừng nguyên sinh rậm rạp. Dọc hai bên bờ suối là thảm thực vật rừng nguyên sinh xanh mát rợp bóng cây cùng nhiều loài hoa dại nở rực rỡ sắc màu thơ mộng. Du khách đi bộ dọc suối Bạc có thể dừng chân nghỉ ngơi ngâm chân mát lạnh nghe tiếng nước chảy róc rách hòa tiếng chim rừng hót líu lo thư thái.",
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1644,7 +1826,8 @@
     "category": "festival",
     "latitude": 21.2206685,
     "longitude": 105.5850178,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Thanh Lãng, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1653,7 +1836,8 @@
     "category": "attraction",
     "latitude": 21.1123247,
     "longitude": 105.4397834,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1662,7 +1846,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1671,7 +1856,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1680,7 +1866,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1689,7 +1876,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 20
+    "costEstimate": 20,
+    "address": "Thị trấn Thổ Tang, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1698,7 +1886,8 @@
     "category": "attraction",
     "latitude": 21.4161556,
     "longitude": 105.6219551,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hồ Sơn, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1707,16 +1896,18 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Khách sạn Mela Tam Đảo",
-    "content": "Khách sạn Mela Tam Đảo tọa lạc ngay tại trung tâm khu du lịch thị trấn Tam Đảo, là khách sạn tiêu chuẩn 3 sao mang đậm phong cách kiến trúc biệt thự cổ kính châu Âu lãng mạn. Khách sạn nổi bật với mảng tường ốp gạch trần màu đỏ ấm áp kết hợp ban công gỗ cổ điển lãng mạn view thung lũng sương mù tuyệt đẹp thơ mộng. Mela cung cấp hệ thống phòng nghỉ đa dạng ấm cúng đầy đủ tiện nghi thiết yếu máy sưởi ấm, tivi, bình nóng lạnh hoạt động tốt phục vụ du khách chu đáo. Khách sạn sở hữu hồ bơi ngoài trời view sườn núi thoáng đãng mát mẻ, khu vực nhà hàng phục vụ các món ăn đặc sản ngọn su su xào gà đồi nướng thơm phức tuyệt vời ngon miệng ngon miệng. Sự phục vụ chu đáo tận tình của nhân viên là điểm sáng lưu giữ chân nhiều du khách nghỉ dưỡng thoải mái.",
+    "content": "Khách sạn Mela Tam Đảo tọa lạc ngay tại trung tâm khu du lịch thị trấn Tam Đảo, là khách sạn tiêu chuẩn 3 sao mang đậm phong cách kiến trúc biệt thự cổ kính châu Âu lãng mạn. Khách sạn nổi bật với mảng tường ốp gạch trần màu đỏ ấm áp kết hợp ban công gỗ cổ điển lãng mạn view thung lũng sương mù tuyệt đẹp thơ mộng. Mela cung cấp hệ thống phòng nghỉ đa dạng ấm cúng đầy đủ tiện nghi thiết yếu máy sưởi ấm, tivi, bình nóng lạnh hoạt động tốt phục vụ du khách chu đáo tuyệt vời ngon miệng ngon miệng. Sự phục vụ chu đáo tận tình của nhân viên là điểm sáng lưu giữ chân nhiều du khách nghỉ dưỡng thoải mái.",
     "category": "hotel",
     "latitude": 21.4531516,
     "longitude": 105.6451796,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1725,16 +1916,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Lễ hội đình hương canh",
-    "content": "Lễ hội đình Hương Canh được tổ chức trang trọng hàng năm từ ngày mùng 2 đến ngày mùng 5 tháng Giêng âm lịch tại cụm đình cổ Hương Canh, thị trấn Hương Canh, huyện Bình Xuyên. Lễ hội nhằm tưởng nhớ công đức của các vị hoàng tử con vua Ngô Quyền có công đánh giặc giữ nước bảo vệ bờ cõi bờ cõi giang sơn vĩ đại. Phần lễ diễn ra vô cùng tôn nghiêm trang trọng với nghi thức rước kiệu thánh liên làng hoành tráng bề thế khói hương nghi ngút tiếng trống đình vang rộn rã cúng tế cầu an đầu năm mới tốt lành thịnh vượng. Phần hội diễn ra vô cùng sôi nổi hào hứng thu hút hàng vạn người xem cổ vũ với hội thi bơi chải thuyền truyền thống rượt đuổi gay cấn trên sông ngòi quê hương, giải đấu vật tự do, kéo co nam nữ tranh tài kịch tính vui tươi phấn khởi.",
+    "content": "Lễ hội đình Hương Canh được tổ chức trang trọng hàng năm từ ngày mùng 2 đến ngày mùng 5 tháng Giêng âm lịch tại cụm đình cổ Hương Canh, thị trấn Hương Canh, huyện Bình Xuyên. Lễ hội nhằm tưởng nhớ công đức của các vị hoàng tử con vua Ngô Quyền có công lớn đánh giặc giữ nước bảo vệ bờ cõi bờ cõi giang sơn vĩ đại. Phần lễ diễn ra vô cùng tôn nghiêm trang trọng với nghi thức rước kiệu thánh liên làng hoành tráng bề thế khói hương nghi ngút tiếng trống đình vang rộn rã cúng tế cầu an đầu năm mới tốt lành thịnh vượng. Phần hội diễn ra vô cùng sôi nổi hào hứng thu hút hàng vạn người xem cổ vũ với hội thi bơi chải thuyền truyền thống rượt đuổi gay cấn trên sông ngòi quê hương, giải đấu vật tự do, kéo co nam nữ tranh tài kịch tính vui tươi phấn khởi.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 2
+    "costEstimate": 2,
+    "address": "Thị trấn Hương Canh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1743,7 +1936,8 @@
     "category": "attraction",
     "latitude": 20.2558099,
     "longitude": 105.9749439,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tiên Lữ, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1752,7 +1946,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1761,7 +1956,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1770,16 +1966,18 @@
     "category": "nature",
     "latitude": 21.4527791,
     "longitude": 105.4479,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Vân Trục, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Lễ hội đền thờ chử đồng tử",
-    "content": "Lễ hội đền thờ Chử Đồng Tử diễn ra trang trọng từ ngày mùng 10 đến ngày 12 tháng Giêng âm lịch tại đền thờ Chử Đồng Tử, xã Đồng Tĩnh, huyện Tam Dương. Lễ hội mang giá trị văn hóa tâm linh sâu sắc tưởng nhớ tôn vinh công đức vị Đức Thánh Chử Đồng Tử cùng công chúa Tiên Dung có công truyền dạy nghề nông nghiệp thương mại y học cứu giúp nhân dân ổn định cuộc sống từ ngàn xưa. Phần lễ tổ chức trang nghiêm tôn kính kính cẩn với nghi thức rước nước thiêng từ sông Hồng về đình đền làm lễ tế thần dâng hương hoa lễ vật kính tế cầu bình an thịnh vượng gia đình sức khỏe mùa màng tốt tươi. Phần hội tưng bừng sôi động với hội thi chọi gà dân gian truyền thống, đấu vật tự do thể hiện tinh thần thượng võ, kéo co vui nhộn sinh động và các buổi hát giao duyên quan họ mộc mạc thắt chặt tình làng.",
+    "content": "Lễ hội đền thờ Chử Đồng Tử diễn ra trang trọng từ ngày mùng 10 đến ngày 12 tháng Giêng âm lịch tại đền thờ Chử Đồng Tử, xã Đồng Tĩnh, huyện Tam Dương. Lễ hội mang giá trị văn hóa tâm linh sâu sắc tưởng nhớ tôn vinh công đức vị Đức Thánh Chử Đồng Tử cùng công chúa Tiên Dung có công truyền dạy nghề nông nghiệp thương mại y học cứu giúp nhân dân ổn định cuộc sống từ ngàn xưa. Phần lễ tổ chức trang nghiêm tôn kính kính cẩn với nghi thức rước nước thiêng từ sông Hồng về đình đền làm lễ tế thần dâng hương hoa vật phẩm kính tế cầu bình an thịnh vượng gia đình sức khỏe mùa màng tốt tươi. Phần hội tưng bừng sôi động với hội thi chọi gà dân gian truyền thống, đấu vật tự do thể hiện tinh thần thượng võ, kéo co vui nhộn sinh động và các buổi hát giao duyên quan họ mộc mạc thắt chặt tình làng.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 10
+    "costEstimate": 10,
+    "address": "Xã Đồng Tĩnh, Huyện Tam Dương, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1788,7 +1986,8 @@
     "category": "attraction",
     "latitude": 21.2676948,
     "longitude": 105.6556291,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Hương Canh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1797,7 +1996,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1806,7 +2006,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1815,7 +2016,8 @@
     "category": "nature",
     "latitude": 21.0404509,
     "longitude": 105.818574,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Minh Quang, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1824,7 +2026,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bàn Giản, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1833,7 +2036,8 @@
     "category": "attraction",
     "latitude": 21.0233044,
     "longitude": 105.778479,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Thanh Lãng, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1842,7 +2046,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1851,7 +2056,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1860,16 +2066,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Lễ hội đền thờ ngô tướng công",
-    "content": "Lễ hội đền thờ Ngô Tướng Công được tổ chức trọng thể định kỳ hàng năm từ ngày mùng 9 đến ngày 11 tháng Giêng âm lịch tại di tích đền thờ Ngô Tướng Công, phường Phúc Thắng, thành phố Phúc Yên. Lễ hội mang ý nghĩa lịch sử văn hóa sâu sắc tưởng nhớ công ơn vĩ đại vị anh hùng dân tộc Ngô Miễn có công lớn giúp vua đánh giặc ngoại xâm bảo vệ giang sơn đất nước và khai hoang lập ấp lập làng ổn định cuộc sống nhân dân địa phương từ xa xưa triều đại phong kiến. Phần lễ diễn ra trang nghiêm kính cẩn với nghi thức đọc chúc văn ca ngợi công đức, tế xuân đầu năm và dâng hương hoa vật phẩm bái tế cầu mong quốc thái dân an gia đình thịnh vượng may mắn tốt lành. Phần hội diễn ra sôi động tưng bừng thu hút đông đảo người dân tham gia thi gói bánh chưng nhanh khéo, kéo co tự do vui vẻ náo nhiệt.",
+    "content": "Lễ hội đền thờ Ngô Tướng Công được tổ chức trọng thể định kỳ hàng năm từ ngày mùng 9 đến ngày 11 tháng Giêng âm lịch tại di tích đền thờ Ngô Tướng Công, phường Phúc Thắng, thành phố Phúc Yên. Lễ hội mang ý nghĩa lịch sử văn hóa sâu sắc tưởng nhớ công ơn vĩ đại vị anh hùng dân tộc Ngô Miễn có công lớn giúp vua Hồ Quý Ly đánh giặc Chiêm Thành giữ gìn biên cương và có công khai hoang lập ấp lập làng ổn định cuộc sống nhân dân địa phương từ xa xưa triều đại phong kiến. Phần lễ diễn ra trang nghiêm kính cẩn với nghi thức đọc chúc văn ca ngợi công đức, tế xuân đầu năm và dâng hương hoa vật phẩm bái tế cầu mong quốc thái dân an gia đình thịnh vượng may mắn tốt lành. Phần hội diễn ra sôi động tưng bừng thu hút đông đảo người dân tham gia thi gói bánh chưng nhanh khéo, kéo co tự do vui vẻ náo nhiệt.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 9
+    "costEstimate": 9,
+    "address": "Phường Phúc Thắng, TP. Phúc Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1878,7 +2086,8 @@
     "category": "attraction",
     "latitude": 21.1608412,
     "longitude": 105.4525998,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1887,16 +2096,18 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Khách sạn Hoa Hồng Tam Đảo",
-    "content": "Khách sạn Hoa Hồng Tam Đảo tọa lạc tại khu phố 1, trung tâm thị trấn Tam Đảo, là địa điểm lưu trú bình dân sạch sẽ khang trang thích hợp cho du khách đi phượt gia đình nghỉ ngơi cuối tuần tiết kiệm chi phí hợp lý. Khách sạn cung cấp các phòng nghỉ tiện nghi thiết yếu sạch sẽ ngăn nắp trang bị đầy đủ tivi, wifi internet miễn phí, bình nóng lạnh ổn định phục vụ chu đáo tận tình cho du khách nghỉ ngơi thư giãn thoải mái. Nhiều phòng nghỉ của khách sạn có cửa sổ view thoáng nhìn ra sườn đồi xanh rợp bóng mát mát mẻ lộng gió ngàn núi thổi mát dịu dễ chịu đem lại không gian nghỉ ngơi yên tĩnh bình yên. Chủ nhà và nhân viên khách sạn vô cùng thân thiện cởi mở hiếu khách, hỗ trợ du khách nhiệt tình dịch vụ cho thuê xe máy leo dốc an toàn tiện lợi tư vấn ăn uống đặc sản giá cả bình dân không chặt chém.",
+    "content": "Khách sạn Hoa Hồng Tam Đảo tọa lạc tại khu phố 1, trung tâm thị trấn Tam Đảo, là địa điểm lưu trú bình dân sạch sẽ khang trang thích hợp cho du khách đi phượt gia đình nghỉ dưỡng cuối tuần tiết kiệm chi phí hợp lý. Khách sạn cung cấp các phòng nghỉ tiện nghi thiết yếu sạch sẽ ngăn nắp trang bị đầy đủ tivi, wifi internet miễn phí, bình nóng lạnh ổn định phục vụ chu đáo tận tình cho du khách nghỉ ngơi thư giãn thoải mái. Nhiều phòng nghỉ của khách sạn có cửa sổ view thoáng nhìn ra sườn đồi xanh rợp bóng mát mát mẻ lộng gió ngàn núi thổi mát dịu dễ chịu đem lại không gian nghỉ ngơi yên tĩnh bình yên. Chủ nhà và nhân viên khách sạn vô cùng thân thiện cởi mở hiếu khách, hỗ trợ du khách nhiệt tình dịch vụ cho thuê xe máy leo dốc an toàn tiện lợi tư vấn ăn uống đặc sản giá cả bình dân không chặt chém.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1905,7 +2116,8 @@
     "category": "nature",
     "latitude": 10.7621381,
     "longitude": 106.6883249,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Trung Mỹ, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1914,7 +2126,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Lựu, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1923,7 +2136,8 @@
     "category": "attraction",
     "latitude": 21.4035508,
     "longitude": 105.610193,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đức Bác, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1932,7 +2146,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1941,16 +2156,18 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Thác suối Bạc Tam Đảo",
-    "content": "Thác suối Bạc nằm uốn lượn sâu trong thung lũng vách đá núi thuộc trung tâm khu du lịch thị trấn núi cao Tam Đảo, là ngọn thác tự nhiên hùng vĩ tuyệt đẹp hoang sơ thơ mộng của tỉnh Vĩnh Phúc. Ngọn thác bắt nguồn từ mạch nước ngầm trên đỉnh cao núi dãy Tam Đảo đổ xuống qua các vách đá đứng sừng sững gồ ghề tuôn trào dòng nước trong vắt mát lạnh tung bọt trắng xóa lấp lánh như sợi bạc dưới ánh nắng mặt trời chiếu rọi qua rặng cây rừng xua tan đi nóng bức mệt mỏi đường xa dốc cao hành trình. Để xuống chân thác tham quan du khách đi bộ chinh phục hàng trăm bậc đá dốc đứng rêu phong bao bọc bởi tán rừng rậm rạp um túm mát mẻ lộng gió reo vui. Dưới chân thác dòng suối nông mát rượi cho du khách ngâm chân thư giãn tinh thần nghe tiếng thác nước đổ ào ào vang dội bản nhạc thiên nhiên hùng vĩ tuyệt vời.",
+    "content": "Thác suối Bạc nằm uốn lượn sâu trong thung lũng vách đá núi thuộc trung tâm khu du lịch thị trấn núi cao Tam Đảo, là ngọn thác tự nhiên hùng vĩ tuyệt đẹp hoang sơ thơ mộng của tỉnh Vĩnh Phúc. Ngọn thác bắt nguồn từ mạch nước ngầm trên đỉnh cao núi dãy Tam Đảo đổ xuống qua các vách đá đứng sừng sững gồ ghề tuôn trào dòng nước trong vắt mát lạnh tung bọt trắng xóa lấp lánh như sợi bạc dưới ánh nắng mặt trời chiếu rọi qua rặng cây rừng xua tan đi nóng bức mệt mỏi đường xa dốc cao hành trình. Để xuống chân thác tham quan du khách đi bộ chinh phục hàng trăm bậc đá dốc đứng rêu phong bao bọc bởi tán rừng rậm rạp um tùm mát mẻ lộng gió reo vui. Dưới chân thác dòng suối nông mát rượi cho du khách ngâm chân thư giãn tinh thần nghe tiếng thác nước đổ ào ào vang dội bản nhạc thiên nhiên hùng vĩ tuyệt vời.",
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1959,7 +2176,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tam Hồng, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1968,16 +2186,18 @@
     "category": "attraction",
     "latitude": 21.040989,
     "longitude": 105.8191907,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Tam Sơn, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
     "title": "Nhà hàng Buffet Sen Vĩnh Yên",
-    "content": "Nhà hàng Buffet Sen nằm trên đường Lê Hồng Phong, phường Khai Quang, thành phố Vĩnh Yên, là địa chỉ ẩm thực buffet lẩu nướng và hải sản cao cấp sang trọng hiện đại rất được yêu thích tại Vĩnh Phúc. Quán thiết kế không gian rộng lớn phong cách kiến trúc châu Âu hiện đại lộng lẫy lấp lánh ánh đèn chùm pha lê sang trọng hệ thống bàn ghế đệm da lịch sự êm ái mát mẻ phòng vip khép kín riêng tư yên tĩnh. Thực đơn buffet của Sen vô cùng phong phú đa dạng với hơn 100 món ăn tinh tế từ hải sản tươi sống cua ghẹ bề bề tôm sú mực ống nướng nướng hấp chấm sốt cay nồng, quầy thịt bò Mỹ ba chỉ bò nướng xèo xèo thơm nức, các món ăn sushi ẩm thực Nhật Bản tinh tế, món ăn truyền thống Việt Nam dân dã ngon miệng cùng quầy đồ tráng miệng bánh ngọt kem tươi chè phong phú đa dạng sạch sẽ phục vụ tốt.",
+    "content": "Nhà hàng Buffet Sen nằm trên đường Lê Hồng Phong, phường Khai Quang, thành phố Vĩnh Yên, là địa chỉ ẩm thực buffet lẩu nướng và hải sản cao cấp sang trọng hiện đại rất được yêu thích tại Vĩnh Phúc. Quán thiết kế không gian rộng lớn phong cách kiến trúc châu Âu hiện đại lộng lẫy với tone màu trắng vàng chủ đạo cùng hệ thống đèn chùm pha lê chiếu sáng lấp lánh lung linh. Thực đơn buffet của Sen vô cùng phong phú đa dạng với hơn 100 món ăn tinh tế từ hải sản tươi sống cua ghẹ bề bề tôm sú mực ống nướng nướng hấp chấm sốt cay nồng, quầy thịt bò Mỹ ba chỉ bò nướng xèo xèo thơm nức, các món ăn sushi ẩm thực Nhật Bản tinh tế, món ăn truyền thống Việt Nam dân dã ngon miệng cùng quầy đồ tráng miệng bánh ngọt kem tươi chè phong phú đa dạng sạch sẽ phục vụ tốt.",
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Phường Khai Quang, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1986,7 +2206,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -1995,7 +2216,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2004,97 +2226,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 8
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đền Thính Yên Lạc",
-    "content": "Đền Thính, hay còn có tên gọi lịch sử là Bắc Cung Đền, tọa lạc trang nghiêm tại xã Tam Hồng, huyện Yên Lạc, là di tích lịch sử văn hóa kiến trúc nghệ thuật cấp quốc gia đặc biệt linh thiêng uy nghi của tỉnh Vĩnh Phúc. Ngôi đền cổ thờ phụng Tản Viên Sơn Thánh Vị Thánh Cả trong hệ thống Tứ bất tử tín ngưỡng tâm linh dân gian Việt Nam người có công cai quản núi sông dạy dân trị thủy sản xuất nông nghiệp cuộc sống thái bình. Đền Thính mang kiến trúc thời Lê Nguyễn bề thế uy nghiêm vững chãi với tam quan uy nghi sừng sững, sân đền rộng rãi rợp bóng mát cây đa cổ thụ rễ dài rủ xuống rêu phong phủ đầy cổ kính thanh tịnh tôn nghiêm. Trong hậu cung đền lưu giữ tượng Đức Thánh bằng đồng đúc tinh xảo uy nghi cùng nhiều cổ vật bình gốm hoành phi câu đối sắc phong triều đại quý hiếm. Đền đón hàng vạn khách hành hương.",
-    "category": "attraction",
-    "latitude": 21.2830739,
-    "longitude": 105.5427129,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu nướng Seoul Go Vĩnh Yên",
-    "content": "Nhà hàng Lẩu nướng Seoul Go nằm trên con phố sầm uất Nguyễn Tất Thành, thành phố Vĩnh Yên, là trung tâm ẩm thực lẩu nướng buffet mang đậm phong cách nướng lẩu xứ sở Kim Chi Hàn Quốc hiện đại trẻ trung hấp dẫn. Quán sở hữu thiết kế không gian rộng rãi trang trí decor hiện đại tinh tế hệ thống bếp nướng không khói hiện đại sạch sẽ lịch sự bàn ghế gỗ nệm da êm ái phòng vip máy lạnh khép kín khang trang phù hợp ăn uống liên hoan gặp gỡ nhóm bạn gia đình đầm ấm vui vẻ thoải mái. Thực đơn của Seoul Go vô cùng đa dạng món ăn thịt ba chỉ bò Mỹ tẩm sốt đậm đà nướng chín vàng đều béo ngậy ăn kèm panchan kim chi rau cải tươi cuốn mắm Hàn Quốc cay nồng tuyệt ngon ngọt thịt mềm mại, nồi lẩu hai ngăn chua cay thái và lẩu nấm thanh ngọt nước húp nóng hổi. Nhân viên quán phục vụ nhiệt tình nhanh nhẹn chu đáo phục vụ tốt.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Chân Mây Hotel Tam Đảo",
-    "content": "Khách sạn Chân Mây Hotel Tam Đảo tọa lạc tại khu phố 1, vị trí sườn đồi dốc cao đắc địa gần sát vách quảng trường trung tâm thị trấn Tam Đảo, mang đến không gian lưu trú ấm cúng tiện nghi sạch sẽ giá cả hợp lý bình dân cho du khách nghỉ dưỡng du lịch vui chơi. Chân Mây Hotel cung cấp hệ thống phòng nghỉ khang trang sạch sẽ thiết kế mộc mạc trang nhã trang bị đầy đủ trang thiết bị tivi, wifi internet miễn phí tốc độ ổn định, bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái. Nhiều phòng nghỉ của khách sạn sở hữu thiết kế ban công cửa sổ rộng nhìn hướng thẳng ra thung lũng mây phủ sương mờ mây bay bồng bềnh lộng gió núi thổi mát mát mẻ chụp ảnh check-in sống ảo kỷ niệm đẹp đẽ tuyệt vời thơ mộng. Nhân viên khách sạn nhiệt tình cởi mở hiếu khách chu đáo.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Vĩnh Thành Lập Thạch",
-    "content": "Hồ Vĩnh Thành nằm yên bình trên địa bàn xã Vĩnh Thành, huyện Lập Thạch, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp hoang sơ tĩnh mịch êm ả của vùng đồi núi trung du đất tỉnh Vĩnh Phúc. Hồ được bao bọc quanh bởi hệ thống những rặng đồi đất thấp xanh mướt trồng nhiều cây xanh bóng mát rợp tán lá lộng gió quanh năm thổi mát trong lành mát mẻ mát dịu dễ chịu vô cùng thanh bình yên tĩnh thơ mộng lãng mạn. Mặt nước hồ Vĩnh Thành quanh năm xanh trong suốt phẳng lặng êm đềm như một tấm gương khổng lồ in bóng mây trời trong xanh rực rỡ ánh nắng tạo nên cảnh sắc thiên nhiên hoang sơ nguyên bản tuyệt đối thích hợp lý tưởng cho các hoạt động cắm trại dã ngoại tự túc ngoài trời dã ngoại picnic câu cá thư giãn giải trí cuối tuần của nhóm bạn trẻ trốn phố thị.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội làng nức yên lạc",
-    "content": "Lễ hội làng Nức được tổ chức vô cùng vui tươi tưng bừng hàng năm vào ngày mùng 4 tháng Giêng âm lịch đầu xuân tại đình làng Nức, xã Bình Định, huyện Yên Lạc. Đây là ngày hội mở màn chào xuân truyền thống mang đậm bản sắc văn hóa nông nghiệp lúa nước cư dân đồng bằng trung du cổ xưa nhằm tế cúng thành hoàng làng thần nông nghiệp cầu xin năm mới tốt lành mưa thuận gió hòa mùa màng bội thu tốt tươi gia súc đầy chuồng gia đình bình an sức khỏe hạnh phúc thịnh vượng. Phần lễ tổ chức trang nghiêm tôn kính nghi thức tịch điền xuống đồng cày ruộng đầu năm của lão nông uy tín mở đất lấy may mắn hanh thông sản xuất. Phần hội diễn ra sôi nổi náo nhiệt trên bãi đất trống rộn tiếng cười tiếng trống vang với hội thi đấu vật truyền thống thể hiện sức khỏe nam giới, kéo co nam nữ, đập niêu đất giải trí chọi gà.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Chùa Thiên Ân Tây Thiên",
-    "content": "Chùa Thiên Ân tọa lạc trang nghiêm cổ kính trên sườn núi ngọn Thạch Bàn thuộc quần thể di tích danh thắng danh lam tâm linh Tây Thiên, huyện Tam Đảo. Đây là một ngôi chùa cổ có lịch sử xây dựng lâu đời từ nền móng cổ xưa triều đại phong kiến, nơi các bậc cao tăng dựng am tu hành thiền định Phật pháp hướng thiện cứu giúp chúng sinh tinh thần tôn giáo. Chùa Thiên Ân mang đậm nét kiến trúc truyền thống chùa cổ Bắc Bộ rêu phong cổ kính với mái ngói đỏ phai màu đao đao cong uốn lượn, khuôn viên chùa tĩnh lặng rợp bóng mát cây thông kim rặng tre xanh quanh năm lộng gió núi thổi mát mẻ trong lành mát dịu thanh tịnh tuyệt đối chốn thiền môn. Trong chính điện chùa lưu giữ hệ thống tượng Phật bằng gỗ cổ xưa quý giá khói hương nghi ngút trang nghiêm thanh tịnh. Phật tử hành hương về chùa tìm thấy sự an yên tự tại thanh thản tâm hồn.",
-    "category": "attraction",
-    "latitude": 10.0301432,
-    "longitude": 105.7756698,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu nướng phụng hoàng Vĩnh Yên",
-    "content": "Nhà hàng Lẩu nướng Phụng Hoàng nằm trên đại lộ Tôn Đức Thắng, thành phố Vĩnh Yên, là địa chỉ ẩm thực chuyên phục vụ lẩu nướng buffet bình dân chất lượng ngon miệng được đông đảo người dân học sinh sinh viên địa phương yêu thích lựa chọn dùng bữa ăn liên hoan hội họp vui vẻ. Quán thiết kế không gian rộng rãi mộc mạc sạch sẽ thoáng mát bàn ghế gỗ lim sắp xếp khang trang lịch sự hệ thống hút khói âm tiện lợi thoải mái ăn uống không lo khói bụi ám mùi thức ăn đồ uống. Thực đơn của Phụng Hoàng đa dạng món ăn từ thịt ba chỉ bò Mỹ tẩm sốt BBQ đậm đà nướng xèo xèo thơm nức da giòn béo ngậy ngọt thịt mềm mại ngọt lịm ăn kèm kim chi cay nồng rau cải tươi cuốn chấm sốt, nồi lẩu thái chua cay đậm vị húp nóng hổi ngọt nước thơm ngon tuyệt vời. Phục vụ nhanh nhẹn chu đáo vui vẻ giá cả bình dân rất rẻ.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Ciao Bella Homestay Tam Đảo",
-    "content": "Ciao Bella Homestay Tam Đảo tọa lạc tại khu phố 2, thị trấn Tam Đảo, là căn homestay mang phong cách kiến trúc Địa Trung Hải độc đáo tươi sáng trẻ trung cực kỳ được giới trẻ săn đón yêu thích lựa chọn check-in lưu trú nghỉ dưỡng du lịch cuối tuần thoải mái gần gũi thiên nhiên. Homestay nổi bật với mảng tường sơn màu trắng xanh coban rực rỡ tươi mát kết hợp ban công rộng cửa sổ vòm đón ánh nắng mặt trời tự nhiên lộng gió núi thổi mát mát mẻ trong lành dễ chịu vô cùng lãng mạn thơ mộng tuyệt đẹp sống ảo chụp ảnh kỷ niệm tuyệt vời góc nhìn view núi thung lũng sương mờ mây bay bồng bềnh bạt ngàn cây xanh cỏ hoa. Các phòng nghỉ tại Ciao Bella sạch sẽ trang bị tivi, wifi, bình nóng lạnh đầy đủ tiện nghi thiết yếu phục vụ chu đáo, khoảng sân nướng BBQ ngoài trời vui vẻ đầm ấm ấm áp.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 1200000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ điều hòa Nam Vĩnh Yên",
-    "content": "Hồ điều hòa Nam Vĩnh Yên nằm ở vị trí trung tâm cửa ngõ phía Nam khu đô thị sinh thái Nam Vĩnh Yên, thành phố Vĩnh Yên, là công trình mặt nước hồ nhân tạo quy mô lớn đóng vai trò lá phổi xanh điều hòa không khí mát mẻ cho toàn bộ khu vực đô thị phát triển hiện đại văn minh của tỉnh Vĩnh Phúc. Hồ sở hữu diện tích mặt nước rộng lớn trong xanh tĩnh lặng quanh năm êm đềm phẳng lặng lộng gió thổi mát dịu trong lành mát mẻ dễ chịu. Xung quanh bờ hồ điều hòa được quy hoạch đồng bộ khang trang xây dựng tuyến đường dạo bộ rộng rãi rợp bóng cây xanh bãi cỏ mịn màng công viên cảnh quan thảm hoa rực rỡ sắc màu tuyệt đẹp thơ mộng lãng mạn. Đây là địa điểm lý tưởng yêu thích hàng ngày của cư dân du khách đến đi bộ thể dục dạo mát ngắm hoàng hôn rực rỡ buông xuống lấp lánh mặt nước thư giãn tinh thần.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội làng văn quán lập thạch",
-    "content": "Lễ hội làng Văn Quán được tổ chức vô cùng trang trọng tưng bừng định kỳ hàng năm từ ngày mùng 10 đến ngày 12 tháng Giêng âm lịch đầu xuân tại đình làng Văn Quán, xã Văn Quán, huyện Lập Thạch. Lễ hội mang nét văn hóa tâm linh sâu sắc truyền thống của cư dân vùng trung du Bắc Bộ nhằm tưởng nhớ phụng thờ công đức to lớn của các vị thành hoàng làng có công lập làng khai hoang lập ấp dạy dân nghề nông nghiệp lúa nước trồng dâu nuôi tằm dệt vải ổn định cuộc sống ấm no hạnh phúc thịnh vượng. Phần lễ diễn ra trang nghiêm kính cẩn nghi thức rước nước thiêng, rước bánh giầy khổng lồ tế thần dâng hương hoa kính tế cầu năm mới tốt lành gia đình bình an sức khỏe tốt lộc tài hanh thông. Phần hội diễn ra sôi nổi náo nhiệt hội thi bơi chải chèo thuyền truyền thống rượt đuổi kịch tính trên sông ngòi quê hương vang rộn trống đình.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 10
+    "costEstimate": 8,
+    "address": "Xã Bồ Sao, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2103,304 +2236,38 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Yên Lạc, Huyện Yên Lạc, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu nướng cua đồng Vĩnh Yên",
-    "content": "Nhà hàng Lẩu nướng Cua Đồng nằm trên đường Lý Thường Kiệt, thành phố Vĩnh Yên, là địa chỉ ẩm thực đồng quê dân dã ngon miệng cực kỳ đông khách nổi tiếng với món lẩu riêu cua bắp bò chính hiệu đậm đà hương vị quê hương xứ sở Kinh Bắc. Quán thiết kế không gian mộc mạc rộng rãi sạch sẽ thoáng mát bàn ghế tre gỗ đơn giản mộc mạc đem lại cảm giác gần gũi thân thiện ấm cúng cho thực khách ăn uống ẩm thực đầm ấm gia đình liên hoan bạn bè vui vẻ thoải mái. Món ăn chủ đạo làm nên thương hiệu của quán chính là lẩu riêu cua đồng với làn gạch cua đặc dày béo ngậy ngọt nước thơm nức mũi nhúng kèm thịt ba chỉ bò bắp bò tươi rói giòn sần sật, sườn sụn non heo dạ dày và đĩa rau mồng tơi rau muống hoa chuối tươi xanh mướt chấm mắm tôm chuẩn vị tuyệt vời ngon miệng giá cả bình dân phải chăng rất rẻ.",
+    "title": "Nhà hàng Lẩu nướng Seoul Go Vĩnh Yên",
+    "content": "Nhà hàng Lẩu nướng Seoul Go nằm trên con phố sầm uất Nguyễn Tất Thành, thành phố Vĩnh Yên, là trung tâm ẩm thực lẩu nướng buffet mang đậm phong cách nướng lẩu xứ sở Kim Chi Hàn Quốc hiện đại trẻ trung hấp dẫn. Quán sở hữu thiết kế không gian rộng rãi trang trí decor hiện đại tinh tế hệ thống bếp nướng không khói hiện đại sạch sẽ lịch sự bàn ghế gỗ nệm da êm ái phòng vip máy lạnh khép kín khang trang phù hợp ăn uống liên hoan gặp gỡ nhóm bạn gia đình đầm ấm vui vẻ thoải mái. Thực đơn của Seoul Go vô cùng đa dạng món ăn thịt ba chỉ bò Mỹ tẩm sốt đậm đà nướng chín vàng đều béo ngậy ăn kèm panchan kim chi rau cải tươi cuốn mắm Hàn Quốc cay nồng tuyệt ngon ngọt thịt mềm mại, nồi lẩu hai ngăn chua cay thái và lẩu nấm thanh ngọt nước húp nóng hổi. Nhân viên quán phục vụ nhiệt tình nhanh nhẹn chu đáo phục vụ tốt.",
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
-    "title": "Khách sạn Ánh Dương Hotel Tam Đảo",
-    "content": "Khách sạn Ánh Dương Hotel Tam Đảo tọa lạc tại khu phố 1, vị trí sườn đồi cao thoáng đãng gần kề trung tâm thị trấn Tam Đảo, mang lại không gian lưu trú nghỉ ngơi tiện nghi sạch sẽ bình dân giá rẻ hợp lý cho du khách đi phượt gia đình nghỉ dưỡng cuối tuần thoải mái. Ánh Dương Hotel cung cấp phòng nghỉ khang trang sạch sẽ thiết kế tối giản trang nhã trang bị đầy đủ tivi, wifi tốc độ cao miễn phí ổn định, điều hòa bình nóng lạnh phục vụ tốt chăn đệm sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt. Nhiều phòng nghỉ của khách sạn có thiết kế cửa sổ ban công rộng nhìn hướng ra cánh rừng thông xanh mát lộng gió núi thổi mát mát mẻ trong lành dễ chịu ngắm mây mù phủ trắng thung lũng mây bay thơ mộng tuyệt đẹp chụp ảnh check-in sống ảo kỷ niệm đẹp đẽ. Nhân viên phục vụ khách sạn vô cùng vui vẻ.",
+    "title": "Khách sạn Chân Mây Hotel Tam Đảo",
+    "content": "Khách sạn Chân Mây Hotel Tam Đảo tọa lạc tại khu phố 1, vị trí sườn đồi dốc cao đắc địa gần sát vách quảng trường trung tâm thị trấn Tam Đảo, mang đến không gian lưu trú ấm cúng tiện nghi sạch sẽ giá cả lý bình dân cho du khách nghỉ dưỡng du lịch vui chơi. Chân Mây Hotel cung cấp hệ thống phòng nghỉ khang trang sạch sẽ thiết kế mộc mạc trang nhã trang bị đầy đủ trang thiết bị tivi, wifi internet miễn phí tốc độ ổn định, bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt nhất. Nhiều phòng nghỉ của khách sạn sở hữu thiết kế ban công cửa sổ rộng nhìn hướng thẳng ra thung lũng mây phủ sương mờ mây bay bồng bềnh lộng gió núi thổi mát mát mẻ chụp ảnh check-in sống ảo kỷ niệm đẹp đẽ tuyệt vời thơ mộng. Nhân viên khách sạn nhiệt tình cởi mở hiếu khách chu đáo.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Đảo, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
-    "title": "Hồ Làng Hà Lập Thạch",
-    "content": "Hồ Làng Hà nằm yên bình trên địa bàn xã Hồ Sơn, huyện Lập Thạch, là hồ nước ngọt nhân tạo thủy lợi nhỏ mang vẻ đẹp hoang sơ tự nhiên thanh bình yên ả của vùng đồi núi trung du đất tỉnh Vĩnh Phúc. Hồ được bao bọc quanh bởi hệ thống những rặng đồi đất thấp trồng nhiều cây xanh bóng mát rợp tán lá xanh tươi quanh năm lộng gió núi thổi mát mát mẻ trong lành mát dịu dễ chịu vô cùng thanh bình yên tĩnh thơ mộng lãng mạn. Mặt nước hồ Làng Hà quanh năm xanh trong suốt phẳng lặng êm đềm như một tấm gương khổng lồ in bóng mây trời trong xanh rực rỡ ánh nắng chiếu rọi tạo nên cảnh sắc thiên nhiên hoang sơ nguyên bản tuyệt đối thích hợp lý tưởng cho các hoạt động cắm trại dã ngoại tự túc ngoài trời picnic câu cá thư giãn giải trí cuối tuần của nhóm bạn trẻ trốn phố thị ồn ào đông đúc.",
+    "title": "Hồ Vĩnh Thành Lập Thạch",
+    "content": "Hồ Vĩnh Thành nằm yên bình trên địa bàn xã Vĩnh Thành, huyện Lập Thạch, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp hoang sơ tĩnh mịch êm ả của vùng đồi núi trung du đất tỉnh Vĩnh Phúc. Hồ được bao bọc quanh bởi hệ thống những rặng đồi đất thấp xanh mướt trồng nhiều cây xanh bóng mát rợp tán lá lộng gió quanh năm thổi mát trong lành mát mẻ mát dịu dễ chịu vô cùng thanh bình yên tĩnh thơ mộng lãng mạn. Mặt nước hồ Vĩnh Thành quanh năm xanh trong suốt phẳng lặng êm đềm như một tấm gương khổng lồ in bóng mây trời trong xanh rực rỡ ánh nắng tạo nên cảnh sắc thiên nhiên hoang sơ nguyên bản tuyệt đối thích hợp lý tưởng cho các hoạt động cắm trại dã ngoại tự túc ngoài trời dã ngoại picnic câu cá thư giãn giải trí cuối tuần của nhóm bạn trẻ trốn phố thị ồn ào đông đúc tìm sự thư thái tâm hồn trọn vẹn.",
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội đình thanh lãng bình xuyên",
-    "content": "Lễ hội đình Thanh Lãng được tổ chức vô cùng trang trọng tưng bừng hàng năm vào ngày mùng 10 tháng Giêng âm lịch đầu xuân tại đình làng Thanh Lãng, thị trấn Thanh Lãng, huyện Bình Xuyên. Lễ hội mang nét sinh hoạt văn hóa tâm linh tôn vinh giá trị lao động sáng tạo sâu sắc truyền thống của cư dân làng nghề nhằm tưởng nhớ phụng thờ công đức to lớn của vị thành hoàng làng người tổ nghề mộc chạm khắc gỗ mỹ nghệ truyền thống lâu đời của địa phương ổn định cuộc sống ấm no hạnh phúc phát triển thịnh vượng nghệ thuật. Phần lễ diễn ra trang nghiêm kính cẩn nghi thức dâng hương tế tổ nghề chạm trổ, trưng bày tác phẩm gỗ điêu khắc tinh xảo khéo léo đầu xuân kính dâng cầu may mắn sức khỏe tài lộc hanh thông nghề nghiệp phát đạt. Phần hội diễn ra sôi nổi náo nhiệt thi kéo co, chọi gà giải trí đập niêu đất vui vẻ hát chèo.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Chùa Sơn Đình",
-    "content": "Chùa Sơn Đình tọa lạc tại xã Sơn Đình, huyện Lập Thạch, là một di tích cổ danh lam cổ tự có cảnh quan hoang sơ thanh bình bề dày lịch sử lâu đời của vùng trung du Vĩnh Phúc. Ngôi chùa cổ được xây dựng trên một ngọn đồi đất cao ráo, bao quanh bởi những rừng cây xanh mát bạt ngàn thẳng tắp quanh năm lộng gió núi thổi trong lành mát mẻ. Cấu trúc chùa Sơn Đình mang đậm nét truyền thống kiến trúc Phật giáo chùa cổ Bắc Bộ rêu phong cổ kính mái ngói đỏ đao cong uốn lượn thanh thoát vững chãi với tam quan, tiền đường và thượng điện gắn kết bố cục chữ Đinh chắc chắn bền vững. Trong chùa lưu giữ nhiều pho tượng Phật cổ bằng gỗ quý sơn son thếp vàng chế tác tinh xảo điệu nghệ có giá trị nghệ thuật điêu khắc đỉnh cao cùng hệ thống bia đá văn bia ghi lại lịch sử thăng trầm. Đây là điểm du lịch tâm linh tịnh tâm quen thuộc.",
-    "category": "attraction",
-    "latitude": 21.3274512,
-    "longitude": 105.6015415,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu Cá Kèo Vĩnh Yên",
-    "content": "Nhà hàng Lẩu Cá Kèo nằm trên con phố sầm uất Nguyễn Tất Thành, thành phố Vĩnh Yên, là địa chỉ ẩm thực mang đậm hương vị ẩm thực miền Tây Nam Bộ sông nước độc đáo ngon miệng thu hút đông đảo thực khách địa phương sành ăn thay đổi khẩu vị. Quán thiết kế không gian rộng rãi mộc mạc sạch sẽ thoáng mát bài trí bàn ghế gỗ lim trang nhã thanh lịch hệ thống điều hòa khang trang phục vụ tốt mang lại sự thoải mái gần gũi ấm cúng cho thực khách ăn uống ẩm thực liên hoan đầm ấm gia đình bạn bè vui vẻ. Món ăn chủ đạo làm nên thương hiệu của quán chính là lẩu cá kèo với những con cá kèo tươi sống bơi lội thả trực tiếp vào nồi nước lẩu chua chua cay cay nấu lá giang đậm đà hương vị thơm nức mũi ngọt thịt mềm mại ăn kèm rau muống chẻ, rau nhút, bông điên điển chấm nước mắm me cay nồng tuyệt vời ngon miệng giá bình dân.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Hướng Dương Hotel Tam Đảo",
-    "content": "Khách sạn Hướng Dương Hotel Tam Đảo tọa lạc tại khu phố 1, vị trí sườn đồi dốc cao lộng gió gần sát vách trung tâm thị trấn Tam Đảo, mang đến không gian nghỉ ngơi lưu trú khang trang sạch sẽ đầy đủ tiện nghi thiết yếu giá cả bình dân hợp lý phải chăng cho du khách nghỉ dưỡng du lịch vui chơi giải trí cuối tuần thoải mái. Hướng Dương Hotel cung cấp phòng nghỉ sạch sẽ ngăn nắp thiết kế hiện đại trang nhã trang bị đầy đủ tivi, wifi internet miễn phí tốc độ ổn định, bình nóng lạnh hoạt động tốt chăn đệm sạch sẽ ấm áp phục vụ du khách chu đáo thư giãn thoải mái tốt nhất. Nhiều phòng của khách sạn có thiết kế cửa sổ rộng góc nhìn view hướng ra sườn núi thung lũng sương mù mây phủ mờ ảo huyền lãng mạn lộng gió núi thổi mát mát mẻ chụp ảnh check-in kỷ niệm sống ảo đẹp đẽ. Nhân viên cởi mở mến khách.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đồi thông Ngọc Thanh Phúc Yên",
-    "content": "Đồi thông Ngọc Thanh nằm trên địa bàn xã Ngọc Thanh, thành phố Phúc Yên, sát bên bờ khu vực hồ nước Đại Lải thơ mộng lộng gió, được ví như lá phổi xanh khổng lồ hoang sơ tươi mát của vùng đất trung du Vĩnh Phúc. Cánh đồi thấp trồng hàng ngàn cây thông kim thẳng tắp bạt ngàn quanh năm xanh mướt vi vu reo vui trong gió ngàn núi thổi vào, tạo nên một không gian thiên nhiên vô cùng lãng mạn trong lành mát mẻ dễ chịu thơ mộng hoang sơ nguyên bản tuyệt đối. Ánh nắng mặt trời len lỏi xuyên qua tán thông lá kim chiếu xuống thảm cỏ xanh mướt tạo nên cảnh sắc lung linh ảo huyền thơ mộng, là địa điểm lý tưởng vô cùng yêu thích lựa chọn của giới trẻ cư dân đến dã ngoại camping cắm trại ngoài trời tự túc tổ chức tiệc nướng BBQ cuối tuần chụp ảnh check-in sống ảo phong cách thiên nhiên tuyệt đẹp.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội đình thổ tang vĩnh tường",
-    "content": "Lễ hội đình Thổ Tang được tổ chức vô cùng trọng thể hoành tráng hàng năm bắt đầu từ ngày mùng 20 đến ngày 22 tháng Giêng âm lịch đầu xuân tại di tích đình Thổ Tang, thị trấn Thổ Tang, huyện Vĩnh Tường. Lễ hội mang nét đẹp sinh hoạt văn hóa tâm linh lịch sử sâu sắc truyền thống lâu đời của nhân dân vùng đất thương mại sầm uất nhằm tưởng nhớ phụng thờ tôn vinh công đức vĩ đại vị anh hùng tướng quân Phùng Lộc Hộ có công lớn đánh giặc giữ yên giang sơn đất nước bờ cõi thời nhà Trần giúp dân ổn định cuộc sống. Phần lễ diễn ra vô cùng trang nghiêm tôn kính nghi thức rước kiệu thánh liên khu phố hoành tráng bề thế khói hương nghi ngút trống chiêng đánh vang rộn rã thu hút hàng vạn người dâng hương cầu tài lộc buôn bán hanh thông hưng thịnh vượng gia đình bình an sức khỏe tốt lành. Phần hội sôi động với thi đấu vật tự do.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 20
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đình Khai Quang",
-    "content": "Đình Khai Quang tọa lạc tại phường Khai Quang, thành phố Vĩnh Yên, là một di tích lịch sử văn hóa cổ kính mang giá trị kiến trúc nghệ thuật truyền thống độc đáo lâu đời của địa phương. Ngôi đình cổ thờ phụng vị thành hoàng làng có công lớn giúp dân dẹp giặc giữ yên xóm làng khai hoang lập ấp phát triển sản xuất nông nghiệp ổn định cuộc sống thái bình thịnh vượng định cư từ ngàn xưa triều phong kiến phong tặng sắc phong. Đình Khai Quang mang kiến trúc mộc mạc rêu phong cổ kính với mái ngói đỏ đao cong thanh thoát, hệ khung vì kèo gỗ lim vững chắc chịu lực tốt được đục đẽo chạm nổi hoa văn rồng cuốn vân mây mềm mại khéo léo tài hoa sinh động. Không gian đình tôn nghiêm tĩnh mịch ẩn mình dưới tán cây đa cổ thụ rợp bóng mát khoảng sân rộng khang trang mát mẻ đem lại sự thanh thản bình an tâm hồn cho nhân dân bái tế.",
-    "category": "attraction",
-    "latitude": 10.7924801,
-    "longitude": 106.6939783,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Gà Chọi Ba Vì Vĩnh Yên",
-    "content": "Nhà hàng Gà Chọi Ba Vì nằm trên đại lộ Tôn Đức Thắng, thành phố Vĩnh Yên, là địa chỉ ẩm thực quen thuộc chuyên phục vụ các món ăn ngon chế biến từ thịt gà chọi chính hiệu tươi sống hấp dẫn nhiều thực khách sành ăn địa phương tụ tập liên hoan. Quán thiết kế không gian rộng rãi mộc mạc sạch sẽ thoáng mát bàn ghế gỗ lim sắp xếp ngăn nắp khang trang phục vụ tốt mang lại sự thoải mái gần gũi thân thiện ấm cúng cho thực khách ăn uống ẩm thực đầm ấm gia đình liên hoan bạn bè vui vẻ thoải mái. Thực đơn nhà hàng vô cùng phong phú món ăn ngon từ gà chọi ta tuyển chọn kỹ thịt chắc da dày giòn sần sật không bở mỡ như gà chọi xào lăn cay nồng thơm nức mũi ngọt thịt, gà chọi hấp lá chanh giữ vị ngọt thơm tự nhiên, da gà bóp thấu chua ngọt giòn rụm và canh xương hầm khoai sọ bổ dưỡng nóng hổi ngon miệng giá bình dân.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Hồng Nhung Hotel Vĩnh Yên",
-    "content": "Khách sạn Hồng Nhung Hotel tọa lạc tại đường Nguyễn Tất Thành, phường Khai Quang, thành phố Vĩnh Yên, là địa điểm lưu trú tiêu chuẩn 3 sao khang trang hiện đại nằm ở trung tâm sầm uất thuận tiện đi lại làm việc du lịch công tác của tỉnh Vĩnh Phúc. Hồng Nhung Hotel cung cấp hệ thống phòng nghỉ lưu trú rộng rãi sạch sẽ ngăn nắp thiết kế hiện đại thanh lịch trang nhã trang bị đầy đủ điều hòa, tivi màn hình phẳng lớn, wifi internet tốc độ cao miễn phí ổn định và phòng tắm vách kính bình nóng lạnh phục vụ tốt phục vụ du khách chu đáo thoải mái nhất. Khách sạn sở hữu khu vực nhà hàng nhỏ tại tầng trệt phục vụ buffet ăn sáng ngon miệng đa dạng món ăn nhanh tiện lợi, dịch vụ giặt là nhanh chóng và bãi đỗ xe ô tô rộng rãi an toàn có bảo vệ trực chu đáo nhiệt tình hiếu khách thân thiện.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Rộc Lập Thạch",
-    "content": "Hồ Rộc nằm yên bình trên địa bàn xã Xuân Lôi, huyện Lập Thạch, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp hoang sơ tĩnh mịch thanh bình ả của vùng đồi núi trung du đất tỉnh Vĩnh Phúc. Hồ được bao bọc quanh bởi hệ thống những rặng đồi đất thấp xanh mướt trồng nhiều cây xanh bóng mát rợp tán lá lộng gió quanh năm thổi mát trong lành mát mẻ mát dịu dễ chịu vô cùng thanh bình yên tĩnh thơ mộng lãng mạn. Mặt nước hồ Rộc quanh năm xanh trong suốt phẳng lặng êm đềm như một tấm gương khổng lồ in bóng mây trời trong xanh rực rỡ ánh nắng tạo nên cảnh sắc thiên nhiên hoang sơ nguyên bản tuyệt đối thích hợp lý tưởng cho các hoạt động cắm trại dã ngoại tự túc ngoài trời dã ngoại picnic câu cá thư giãn giải trí cuối tuần của nhóm bạn trẻ trốn phố thị ồn ào đông đúc tìm sự thư thái tâm hồn trọn vẹn.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội đình hương canh bình xuyên",
-    "content": "Lễ hội đình Hương Canh được tổ chức vô cùng trang trọng hoành tráng hàng năm từ ngày mùng 2 đến ngày mùng 5 tháng Giêng âm lịch đầu xuân tại cụm di tích đình cổ Hương Canh, thị trấn Hương Canh, huyện Bình Xuyên. Lễ hội mang nét đẹp sinh hoạt văn hóa tâm linh lịch sử sâu sắc truyền thống lâu đời của cư dân làng gốm làng mộc cổ xưa nhằm tưởng nhớ phụng thờ tôn vinh công đức vĩ đại các vị hoàng tử con vua Ngô Quyền có công lớn đánh giặc giữ yên giang sơn bờ cõi đất nước bảo vệ quê hương an cư lạc nghiệp. Phần lễ diễn ra vô cùng trang nghiêm tôn kính nghi thức rước kiệu thánh hoành tráng liên làng bề thế khói hương nghi ngút tiếng trống chiêng trống đình đánh vang rộn rã thu hút hàng vạn người dâng hương cầu an lành sức khỏe may mắn gia đình bình an tốt lành thịnh vượng. Phần hội diễn ra sôi nổi hào hứng thi bơi chải.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 2
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đình Gia Khánh",
-    "content": "Đình Gia Khánh tọa lạc tại xã Gia Khánh, huyện Bình Xuyên, là một di tích lịch sử văn hóa cổ kính mang nét kiến trúc truyền thống mộc mạc lâu đời của vùng đất trung du Bắc Bộ tỉnh Vĩnh Phúc. Ngôi đình cổ thờ phụng vị anh hùng thành hoàng làng có công lớn đánh giặc bảo vệ bờ cõi biên cương giang sơn xóm làng cứu giúp nhân dân ổn định sản xuất nông nghiệp cuộc sống phát triển thịnh vượng từ ngàn xưa triều phong kiến phong tặng sắc phong ghi nhận đức độ. Đình Gia Khánh mang kiến trúc rêu phong cổ kính mái ngói đỏ phai màu đao đao cong uốn lượn sừng sững dưới tán lá rộng cây đa cổ thụ tỏa bóng mát mát mẻ rợp sân đình khang trang sạch sẽ rộng rãi lộng gió. Các mảng vì kèo lim gỗ được đục chạm trổ tinh xảo hoa văn mây lá rồng bay sinh động khéo léo. Hàng năm lễ hội diễn ra vào tháng giêng cầu bình an sức khỏe tốt lành.",
-    "category": "attraction",
-    "latitude": 21.3170936,
-    "longitude": 105.6162475,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Cá Tầm Vua Vĩnh Yên",
-    "content": "Nhà hàng Cá Tầm Vua nằm trên tuyến đường chiến lược Nguyễn Tất Thành, thành phố Vĩnh Yên, là địa chỉ ẩm thực hải sản chuyên sâu về cá tầm tươi sống độc đáo ngon miệng thu hút đông đảo thực khách sành ăn lựa chọn dùng tiệc liên hoan tiếp khách sang trọng lịch sự. Quán thiết kế không gian rộng rãi khang trang phong cách kiến trúc hiện đại thanh lịch trang nhã bàn ghế gỗ lim cao cấp hệ thống phòng ăn máy lạnh riêng tư yên tĩnh mát mẻ đem lại sự thoải mái hài lòng tối đa cho thực khách ăn uống ẩm thực vui vẻ thoải mái. Cá tầm tại nhà hàng được nuôi thả bể kính tươi sống bắt chế biến trực tiếp bảo đảm ngọt thịt dai giòn sần sật béo ngậy tự nhiên lôi cuốn làm nên thương hiệu như cá tầm nướng riềng mẻ thơm nức lòng cháy cạnh, cá tầm hấp xì dầu ngọt thơm, lẩu cá tầm chua cay húp nóng hổi tuyệt ngon. Phục vụ chuyên nghiệp chu đáo.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Yên Lạc Hotel Vĩnh Phúc",
-    "content": "Khách sạn Yên Lạc Hotel tọa lạc tại trung tâm thị trấn Yên Lạc, huyện Yên Lạc, là địa điểm lưu trú tiện nghi khang trang hiện đại tiêu chuẩn bình dân sạch sẽ phục vụ tốt cho du khách nhân viên công tác thương mại tại khu vực làng nghề phát triển của huyện. Yên Lạc Hotel cung cấp hệ thống phòng nghỉ lưu trú sạch sẽ ngăn nắp thiết kế hiện đại thanh lịch tông màu ấm áp trang bị đầy đủ tivi, wifi internet miễn phí tốc độ cao ổn định, điều hòa bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt nhất. Khách sạn hỗ trợ khách hàng dịch vụ gọi xe taxi dịch vụ giặt là nhanh chóng thuận tiện, bãi đỗ xe ô tô xe máy rộng rãi an toàn ngay trong khuôn viên có bảo vệ trực chu đáo nhiệt tình hiếu khách cởi mở niềm nở.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Định Trung Vĩnh Yên",
-    "content": "Hồ Định Trung nằm yên bình trên địa bàn phường Định Trung, thành phố Vĩnh Yên, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp yên ả trong lành thanh bình giữa lòng khu đô thị dân cư đang phát triển khang trang của tỉnh Vĩnh Phúc. Hồ sở hữu diện tích mặt nước trong xanh phẳng lặng quanh năm êm đềm lộng gió núi đồi thổi mát dịu trong lành mát mẻ dễ chịu vô cùng thơ mộng lãng mạn. Xung quanh bờ hồ Định Trung được quy hoạch xây dựng tuyến đường dạo bộ khang trang sạch sẽ rợp bóng cây xanh bãi cỏ công viên cảnh quan thảm hoa nhỏ xinh xắn tuyệt đẹp, là địa điểm lý tưởng vô cùng yêu thích hàng ngày của cư dân địa phương đến đi bộ thể dục dạo mát hít thở không khí trong lành ngắm hoàng hôn rực rỡ buông xuống lấp lánh mặt nước hồ tĩnh lặng xua tan đi mệt mỏi áp lực công việc thường nhật trọn vẹn.",
-    "category": "nature",
-    "latitude": 21.3191844,
-    "longitude": 105.5890796,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội đền thờ chử đồng tử tam dương",
-    "content": "Lễ hội đền thờ Chử Đồng Tử được tổ chức vô cùng trang trọng thành kính hàng năm từ ngày mùng 10 đến ngày mùng 12 tháng Giêng âm lịch đầu xuân tại di tích đền thờ Chử Đồng Tử, xã Đồng Tĩnh, huyện Tam Dương. Lễ hội mang ý nghĩa tâm linh lịch sử văn hóa sâu sắc truyền thống lâu đời cư dân nông nghiệp lúa nước đồng bằng trung du Bắc Bộ nhằm tưởng nhớ phụng thờ tôn vinh công đức vĩ đại vị Đức Thánh Chử Đồng Tử cùng công chúa Tiên Dung có công lớn truyền dạy nghề làm ruộng trồng lúa, thương mại buôn bán y học chữa bệnh cứu giúp nhân dân ổn định cuộc sống ấm no hạnh phúc thịnh vượng an cư lập nghiệp từ ngàn xưa triều phong kiến. Phần lễ diễn ra trang nghiêm kính cẩn nghi thức rước nước thiêng từ sông Hồng dâng hương hoa vật phẩm tế thần cầu may mắn sức khỏe tốt mùa màng tốt tươi gia đình bình an thịnh vượng tốt lành.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 10
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đình Định Trung",
-    "content": "Đình Định Trung tọa lạc tại phường Định Trung, thành phố Vĩnh Yên, là di tích lịch sử văn hóa cổ kính mang giá trị kiến trúc nghệ thuật truyền thống mộc mạc lâu đời của địa phương. Ngôi đình cổ thờ phụng vị anh hùng thành hoàng làng có công lớn giúp dân dẹp giặc giữ yên xóm làng khai hoang lập ấp ổn định sản xuất nông nghiệp cuộc sống phát triển thịnh vượng bình an thái bình định cư từ ngàn xưa triều phong kiến ban tặng sắc phong ghi nhận đức độ vĩ đại. Đình Định Trung mang kiến trúc rêu phong cổ kính mái ngói đỏ phai màu đao đao cong uốn lượn thanh thoát sừng sững dưới tán lá rộng cây đa cổ thụ tỏa bóng mát mát mẻ rợp sân đình khang trang sạch sẽ rộng rãi lộng gió. Các mảng vì kèo lim gỗ được đục chạm trổ tinh xảo hoa văn mây lá rồng bay sinh động khéo léo tài hoa. Lễ hội diễn ra tháng giêng cầu bình an.",
-    "category": "attraction",
-    "latitude": 20.7787388,
-    "longitude": 105.6815473,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Cá Sông Lô Vĩnh Yên",
-    "content": "Nhà hàng Cá Sông Lô nằm trên đường Lý Thường Kiệt, thành phố Vĩnh Yên, là địa chỉ ẩm thực chuyên sâu về cá sông tươi sống đánh bắt tự nhiên từ dòng sông Lô lịch sử trứ danh độc đáo ngon miệng hấp dẫn đông thực khách sành ăn địa phương lựa chọn dùng bữa ăn gia đình liên hoan bạn bè đầm ấm vui vẻ thoải mái. Quán thiết kế không gian rộng rãi mộc mạc sạch sẽ thoáng mát bàn ghế gỗ lim thanh lịch khang trang phục vụ tốt đem lại sự thoải mái gần gũi thân thiện ấm cúng cho thực khách ăn uống ẩm thực. Thực đơn nhà hàng vô cùng phong phú món ăn ngon từ cá sông tự nhiên cá lăng cá nheo cá ngạnh thịt chắc ngọt thơm ngon không tanh bở mỡ chế biến khéo léo như cá lăng nướng riềng mẻ thơm nức mũi ngọt thịt cháy cạnh da giòn, lẩu cá nheo chua cay đậm đà nước húp nóng hổi và lòng cá xào dưa giòn ngọt tuyệt ngon giá bình dân.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn vĩnh tường hotel vĩnh phúc",
-    "content": "Khách sạn Vĩnh Tường Hotel tọa lạc tại trung tâm thị trấn Vĩnh Tường, huyện Vĩnh Tường, là địa điểm lưu trú tiện nghi khang trang hiện đại tiêu chuẩn bình dân sạch sẽ phục vụ tốt cho du khách nhân viên công tác làm việc thương mại kinh doanh tại khu vực giao thương sầm uất giàu truyền thống của huyện. Vĩnh Tường Hotel cung cấp hệ thống phòng nghỉ lưu trú sạch sẽ ngăn nắp thiết kế hiện đại thanh lịch tông màu ấm áp trang bị đầy đủ tivi, wifi internet miễn phí tốc độ cao ổn định, điều hòa bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt nhất. Khách sạn hỗ trợ khách hàng dịch vụ gọi xe taxi dịch vụ giặt là nhanh chóng thuận tiện, bãi đỗ xe ô tô xe máy rộng rãi an toàn ngay trong khuôn viên có bảo vệ trực chu đáo nhiệt tình hiếu khách cởi mở.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Hoàng Đan Lập Thạch",
-    "content": "Hồ Hoàng Dan nằm yên bình trên địa bàn xã Hoàng Dan, huyện Lập Thạch, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp hoang sơ tĩnh mịch thanh bình yên ả của vùng đồi núi trung du đất tỉnh Vĩnh Phúc. Hồ được bao bọc quanh bởi hệ thống những rặng đồi đất thấp xanh mướt trồng nhiều cây xanh bóng mát rợp tán lá lộng gió quanh năm thổi mát trong lành mát mẻ mát dịu dễ chịu vô cùng thanh bình yên tĩnh thơ mộng lãng mạn. Mặt nước hồ Hoàng Dan quanh năm xanh trong suốt phẳng lặng êm đềm như một tấm gương khổng lồ in bóng mây trời trong xanh rực rỡ ánh nắng tạo nên cảnh sắc thiên nhiên hoang sơ nguyên bản tuyệt đối thích hợp lý tưởng cho các hoạt động cắm trại dã ngoại tự túc ngoài trời dã ngoại picnic câu cá thư giãn giải trí cuối tuần của nhóm bạn trẻ trốn phố thị ồn ào đông đúc tìm sự thư thái tâm hồn trọn vẹn.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội cướp phết bàn giản lập thạch",
-    "content": "Lễ hội cướp phết bàn giản được tổ chức vô cùng náo nhiệt cuồng nhiệt hàng năm vào ngày mùng 7 tháng Giêng âm lịch đầu xuân tại đình làng xã Bàn Giản, huyện Lập Thạch. Đây là lễ hội cổ độc đáo mang đậm tinh thần thượng võ mạnh mẽ và khát vọng phồn thực nông nghiệp lúa nước lâu đời truyền thống gắn liền tích bốn vị tướng thời vua Hùng dựng nước có công dẹp giặc tổ chức trò chơi cướp phết rèn luyện sức khỏe quân sĩ bảo vệ giang sơn bờ cõi xóm làng. Quả phết chúc đẽo tròn từ gốc tre già sơn đỏ làm lễ vật tế thần thành hoàng long trọng trước khi mang ra sân bãi cát rộng lớn tranh tài. Khi hiệu lệnh vang lên hàng trăm thanh niên trai tráng khỏe mạnh lao vào tranh giành quả phết lấy lộc may mắn tốt lành đầu xuân trong tiếng trống đánh vang rộn rã reo hò cổ vũ cuồng nhiệt vang động cả vùng dân làng chật kín khán đài náo động.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đình Tích Sơn",
-    "content": "Đình Tích Sơn tọa lạc tại phường Tích Sơn, thành phố Vĩnh Yên, là di tích lịch sử văn hóa cổ kính mang giá trị kiến trúc nghệ thuật truyền thống lâu đời của địa phương nằm cạnh chùa cổ Tích Sơn danh tiếng. Ngôi đình cổ thờ phụng vị thành hoàng làng anh hùng có công lớn dẹp giặc giữ yên xóm làng lập ấp phát triển nông nghiệp sản xuất ổn định cuộc sống nhân dân thái bình thịnh vượng từ ngàn xưa triều phong kiến sắc phong ban tặng. Đình Tích Sơn mang kiến trúc rêu phong cổ kính mái ngói đỏ phai màu đao đao cong uốn lượn thanh thoát sừng sững dưới tán lá rộng cây đa cổ thụ tỏa bóng mát mát mẻ rợp sân đình khang trang sạch sẽ rộng rãi lộng gió. Các cấu kiện vì kèo lim gỗ được đục chạm trổ tinh xảo hoa văn mây lá rồng bay sinh động khéo léo tài hoa. Hàng năm lễ hội diễn ra vào tháng giêng cầu bình an sức khỏe tài lộc.",
-    "category": "attraction",
-    "latitude": 21.1395429,
-    "longitude": 105.9416768,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu nướng K-BBQ Vĩnh Yên",
-    "content": "Nhà hàng Lẩu nướng K-BBQ nằm trên đại lộ Tôn Đức Thắng, thành phố Vĩnh Yên, là địa chỉ ẩm thực buffet lẩu nướng mang đậm phong cách nướng lẩu đường phố Hàn Quốc hiện đại trẻ trung rất thu hút đông giới trẻ thực khách địa phương lựa chọn ăn uống tiệc tùng. Quán thiết kế không gian rộng rãi hiện đại trang trí decor sinh động bắt mắt hệ thống hút khói âm hiện đại sạch sẽ thơm tho không lo ám mùi đồ ăn thức uống thoải mái tự tin vui vẻ. Thực đơn buffet của K-BBQ vô cùng phong phú đa dạng với đầy đủ các loại thịt ba chỉ bò Mỹ chọn lọc tẩm ướp sốt Hàn Quốc đậm đà nướng xèo xèo thơm nức mũi ngọt thịt mềm mại béo ngậy ăn kèm kim chi cay giòn cuộn rau xà lách tươi ngon tuyệt vời ngon miệng ngọt lịm. Ngoài ra quán còn phục vụ lẩu kim chi chua cay, lẩu nấm thanh ngọt nước húp nóng hổi. Phục vụ chu đáo tận tình giá cả hợp lý.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Phúc Yên Hotel Vĩnh Phúc",
-    "content": "Khách sạn Phúc Yên Hotel tọa lạc tại trung tâm thành phố Phúc Yên, là địa điểm lưu trú tiện nghi khang trang hiện đại tiêu chuẩn bình dân sạch sẽ phục vụ tốt cho du khách nhân viên công tác làm việc thương mại công nghiệp tại khu đô thị phát triển sầm uất gần hồ Đại Lải của tỉnh. Phúc Yên Hotel cung cấp hệ thống phòng nghỉ lưu trú sạch sẽ ngăn nắp thiết kế hiện đại thanh lịch tông màu ấm áp trang bị đầy đủ tivi, wifi internet miễn phí tốc độ cao ổn định, điều hòa bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt nhất. Khách sạn hỗ trợ khách hàng dịch vụ gọi xe taxi dịch vụ giặt là nhanh chóng thuận tiện, bãi đỗ xe ô tô xe máy rộng rãi an toàn ngay trong khuôn viên có bảo vệ trực chu đáo nhiệt tình hiếu khách cởi mở niềm nở.",
-    "category": "hotel",
-    "latitude": 21.3021277,
-    "longitude": 105.5940001,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Yên Lạc Vĩnh Phúc",
-    "content": "Hồ Yên Lạc nằm yên bình trên địa bàn thị trấn Yên Lạc, huyện Yên Lạc, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp yên ả trong lành thanh bình giữa lòng khu vực đô thị làng nghề đang phát triển khang trang của tỉnh Vĩnh Phúc. Hồ sở hữu diện tích mặt nước trong xanh phẳng lặng quanh năm êm đềm lộng gió đồi thổi mát dịu trong lành mát mẻ dễ chịu vô cùng thơ mộng lãng mạn. Xung quanh bờ hồ Yên Lạc được quy hoạch xây dựng tuyến đường dạo bộ khang trang sạch sẽ rợp bóng cây xanh bãi cỏ công viên cảnh quan thảm hoa nhỏ xinh xắn tuyệt đẹp, là địa điểm lý tưởng vô cùng yêu thích hàng ngày của cư dân địa phương đến đi bộ thể dục dạo mát hít thở không khí trong lành ngắm hoàng hôn rực rỡ buông xuống lấp lánh mặt nước hồ tĩnh lặng xua tan đi mệt mỏi áp lực công việc thường nhật trọn vẹn.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Lễ hội đền thờ ngô tướng công phúc yên",
-    "content": "Lễ hội đền thờ Ngô Tướng Công được tổ chức vô cùng trang trọng hoành tráng hàng năm từ ngày mùng 9 đến ngày mùng 11 tháng Giêng âm lịch đầu xuân tại di tích đền thờ Ngô Tướng Công, phường Phúc Thắng, thành phố Phúc Yên. Lễ hội mang ý nghĩa lịch sử văn hóa sâu sắc truyền thống lâu đời cư dân vùng trung du đồng bằng Bắc Bộ nhằm tưởng nhớ phụng thờ tôn vinh công đức vĩ đại vị anh hùng dân tộc Ngô Miễn có công lớn theo phò vua Hồ Quý Ly đánh giặc ngoại xâm giữ gìn bờ cõi biên cương giang sơn đất nước và khai hoang lập ấp lập làng dạy dân đánh cá làm ruộng ổn định cuộc sống ấm no hạnh phúc thịnh vượng định cư lâu dài từ ngàn xưa triều phong kiến ban tặng sắc phong. Phần lễ diễn ra trang nghiêm tế xuân đầu năm dâng hương dâng bánh chưng bánh giầy kính tế cầu quốc thái dân an tài lộc may mắn.",
-    "category": "festival",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 9
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Đình Đồng Tâm",
-    "content": "Đình Đồng Tâm tọa lạc tại phường Đồng Tâm, thành phố Vĩnh Yên, là di tích lịch sử văn hóa cổ kính mang giá trị kiến trúc nghệ thuật truyền thống mộc mạc lâu đời của địa phương. Ngôi đình cổ thờ phụng vị anh hùng thành hoàng làng có công lớn giúp dân dẹp giặc giữ yên xóm làng khai hoang lập ấp ổn định sản xuất nông nghiệp cuộc sống phát triển thịnh vượng bình an thái bình định cư từ ngàn xưa triều phong kiến ban tặng sắc phong ghi nhận đức độ vĩ đại. Đình Đồng Tâm mang kiến trúc rêu phong cổ kính mái ngói đỏ phai màu đao đao cong uốn lượn thanh thoát sừng sững dưới tán lá rộng cây đa cổ thụ tỏa bóng mát mát mẻ rợp sân đình khang trang sạch sẽ rộng rãi lộng gió. Các mảng vì kèo lim gỗ được đục chạm trổ tinh xảo hoa văn mây lá rồng bay sinh động khéo léo tài hoa. Lễ hội diễn ra tháng giêng cầu bình an sức khỏe tốt.",
-    "category": "attraction",
-    "latitude": 11.7928763,
-    "longitude": 108.2444201,
-    "costEstimate": 30000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Nhà hàng Lẩu Riêu Cua Bắp Bò Vĩnh Yên",
-    "content": "Nhà hàng Lẩu Riêu Cua Bắp Bò nằm trên đường Hùng Vương, thành phố Vĩnh Yên, là địa chỉ ẩm thực đồng quê dân dã ngon miệng chuyên phục vụ món lẩu riêu cua đồng chính hiệu đậm đà hương vị thơm ngon hấp dẫn nhiều thực khách địa phương ăn uống họp mặt. Quán thiết kế không gian mộc mạc rộng rãi sạch sẽ thoáng mát bàn ghế tre đơn giản mộc mạc đem lại cảm giác gần gũi thân thiện ấm cúng cho thực khách ăn uống ẩm thực đầm ấm gia đình liên hoan bạn bè vui vẻ thoải mái. Món ăn chủ đạo làm nên thương hiệu của quán chính là lẩu riêu cua đồng với làn gạch cua béo ngậy ngọt nước thơm nức mũi nhúng kèm thịt ba chỉ bò bắp bò tươi rói giòn sần sật, sườn sụn non heo dạ dày và đĩa rau muống hoa chuối tươi xanh mướt chấm mắm tôm chuẩn vị tuyệt vời ngon miệng ngọt lịm giá cả bình dân phải chăng rất rẻ phục vụ tốt nhanh nhẹn.",
-    "category": "restaurant",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 80000
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Khách sạn Khai Quang Hotel Vĩnh Yên",
-    "content": "Khách sạn Khai Quang Hotel tọa lạc tại trung tâm phường Khai Quang, thành phố Vĩnh Yên, là địa điểm lưu trú tiện nghi khang trang hiện đại tiêu chuẩn bình dân sạch sẽ phục vụ tốt cho du khách nhân viên công tác làm việc làm thương mại tại trung tâm kinh tế sầm uất đô thị phát triển của tỉnh Vĩnh Phúc. Khai Quang Hotel cung cấp hệ thống phòng nghỉ lưu trú sạch sẽ ngăn nắp thiết kế hiện đại thanh lịch tông màu ấm áp trang bị đầy đủ tivi, wifi internet miễn phí tốc độ cao ổn định, điều hòa bình nóng lạnh phục vụ tốt chăn đệm ấm áp sạch sẽ phục vụ du khách chu đáo thư giãn thoải mái nghỉ ngơi tốt nhất. Khách sạn hỗ trợ khách hàng dịch vụ gọi xe taxi dịch vụ giặt là nhanh chóng thuận tiện, bãi đỗ xe ô tô xe máy rộng rãi an toàn ngay trong khuôn viên có bảo vệ trực chu đáo.",
-    "category": "hotel",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
-  },
-  {
-    "province": "Vĩnh Phúc",
-    "title": "Hồ Lập Thạch Vĩnh Phúc",
-    "content": "Hồ Lập Thạch nằm yên bình trên địa bàn thị trấn Lập Thạch, huyện Lập Thạch, là hồ nước ngọt tự nhiên nhỏ mang vẻ đẹp yên ả trong lành thanh bình giữa lòng khu vực đô thị trung du đang phát triển khang trang của tỉnh Vĩnh Phúc. Hồ sở hữu diện tích mặt nước trong xanh phẳng lặng quanh năm êm đềm lộng gió đồi thổi mát dịu trong lành mát mẻ dễ chịu vô cùng thơ mộng lãng mạn. Xung quanh bờ hồ Lập Thạch được quy hoạch xây dựng tuyến đường dạo bộ khang trang sạch sẽ rợp bóng cây xanh bãi cỏ công viên cảnh quan thảm hoa nhỏ xinh xắn tuyệt đẹp, là địa điểm lý tưởng vô cùng yêu thích hàng ngày của cư dân địa phương đến đi bộ thể dục dạo mát hít thở không khí trong lành ngắm hoàng hôn rực rỡ buông xuống lấp lánh mặt nước hồ tĩnh lặng xua tan đi mệt mỏi áp lực công việc thường nhật trọn vẹn.",
-    "category": "nature",
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Vĩnh Thành, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2409,7 +2276,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 2
+    "costEstimate": 2,
+    "address": "Thị trấn Hương Canh, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2418,7 +2286,8 @@
     "category": "attraction",
     "latitude": 20.3862263,
     "longitude": 106.1376957,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Liên Bảo, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2427,7 +2296,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã Đại Đình, Huyện Tam Đảo, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2436,7 +2306,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Tam Sơn, Huyện Sông Lô, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2445,7 +2316,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Xuân Lôi, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2454,7 +2326,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 10
+    "costEstimate": 10,
+    "address": "Xã Đồng Tĩnh, Huyện Tam Dương, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2463,7 +2336,8 @@
     "category": "attraction",
     "latitude": 20.8657749,
     "longitude": 106.6938326,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Ngô Quyền, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2472,7 +2346,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2481,7 +2356,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Lập Thạch, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2490,7 +2366,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Xuân Lôi, Huyện Lập Thạch, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2499,7 +2376,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Thanh Lãng, Huyện Bình Xuyên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2508,7 +2386,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Liên Bảo, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2517,7 +2396,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2526,7 +2406,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Hợp Hòa, Huyện Tam Dương, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2535,7 +2416,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Phường Khai Quang, TP. Vĩnh Yên, Tỉnh Vĩnh Phúc"
   },
   {
     "province": "Vĩnh Phúc",
@@ -2544,6 +2426,7 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 20
+    "costEstimate": 20,
+    "address": "Thị trấn Thổ Tang, Huyện Vĩnh Tường, Tỉnh Vĩnh Phúc"
   }
 ]

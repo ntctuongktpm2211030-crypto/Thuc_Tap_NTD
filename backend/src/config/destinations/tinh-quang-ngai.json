@@ -6,7 +6,8 @@
     "category": "attraction",
     "latitude": 14.6995372,
     "longitude": 107.9323831,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -15,7 +16,8 @@
     "category": "attraction",
     "latitude": 14.3469891,
     "longitude": 108.0355259,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Klor, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -24,7 +26,8 @@
     "category": "attraction",
     "latitude": 14.3482379,
     "longitude": 108.0344241,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Klor, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -33,7 +36,8 @@
     "category": "nature",
     "latitude": 14.5771705,
     "longitude": 108.2774587,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -42,7 +46,8 @@
     "category": "nature",
     "latitude": 14.59705,
     "longitude": 108.2566602,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -51,7 +56,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -60,7 +66,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -69,7 +76,8 @@
     "category": "hotel",
     "latitude": 14.3455668,
     "longitude": 108.0013614,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -78,7 +86,8 @@
     "category": "attraction",
     "latitude": 14.343499,
     "longitude": 107.9910235,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -87,7 +96,8 @@
     "category": "nature",
     "latitude": 14.5808175,
     "longitude": 108.2766309,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -96,7 +106,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Rơ Bang, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -105,7 +116,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -114,7 +126,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -123,7 +136,8 @@
     "category": "hotel",
     "latitude": 14.349861,
     "longitude": 108.033509,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Gần cầu treo Kon Klor, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -132,7 +146,8 @@
     "category": "nature",
     "latitude": 14.4730443,
     "longitude": 107.6340341,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Sa Thầy, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -141,7 +156,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Ea H'leo, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -150,7 +166,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -159,7 +176,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -168,7 +186,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -177,7 +196,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Ven sông Đăk Bla, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -186,7 +206,8 @@
     "category": "attraction",
     "latitude": 10.8462621,
     "longitude": 106.7662593,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -195,7 +216,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Huyện Đăk Hà, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -204,7 +226,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các khu vực ven sông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -213,7 +236,8 @@
     "category": "hotel",
     "latitude": 14.3502246,
     "longitude": 108.0017724,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -222,7 +246,8 @@
     "category": "nature",
     "latitude": 15.0690415,
     "longitude": 107.9749364,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Dãy núi Ngọc Linh, Huyện Tu Mơ Rông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -231,7 +256,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -240,7 +266,8 @@
     "category": "restaurant",
     "latitude": 14.3496584,
     "longitude": 108.0146086,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -249,7 +276,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -258,7 +286,8 @@
     "category": "hotel",
     "latitude": 14.3498197,
     "longitude": 108.0068199,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -267,7 +296,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Khu vực Thủy điện Yaly, Huyện Sa Thầy, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -276,7 +306,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Trang Long Loi, Xã Đăk La, Huyện Đăk Hà, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -285,7 +316,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -294,7 +326,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -303,7 +336,8 @@
     "category": "hotel",
     "latitude": 14.3186184,
     "longitude": 107.989739,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -312,7 +346,8 @@
     "category": "nature",
     "latitude": 15.1543486,
     "longitude": 107.9374321,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Đăk Glei và Huyện Tu Mơ Rông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -321,7 +356,8 @@
     "category": "attraction",
     "latitude": 14.6995372,
     "longitude": 107.9323831,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -330,7 +366,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -339,7 +376,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -348,7 +386,8 @@
     "category": "hotel",
     "latitude": 14.3575956,
     "longitude": 108.0057363,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -357,7 +396,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -366,7 +406,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Đăk Hà, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -375,7 +416,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -384,7 +426,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -393,7 +436,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -402,7 +446,8 @@
     "category": "nature",
     "latitude": 22.2225901,
     "longitude": 103.9442592,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -411,7 +456,8 @@
     "category": "attraction",
     "latitude": 14.6995372,
     "longitude": 107.9323831,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Jơ Dri, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -420,7 +466,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -429,7 +476,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -438,7 +486,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -447,7 +496,8 @@
     "category": "nature",
     "latitude": 13.975644,
     "longitude": 108.5540146,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Kon Rẫy, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -456,7 +506,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Ea H'leo, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -465,7 +516,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -474,7 +526,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -483,7 +536,8 @@
     "category": "hotel",
     "latitude": 14.3502246,
     "longitude": 108.0017724,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -492,7 +546,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Măng Đen, Huyện Kon Plông, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -501,7 +556,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Rơ Bang, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -510,7 +566,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Toàn tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -519,7 +576,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Kon Jơ Dri, Thành phố Kon Tum, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -528,7 +586,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Kon Tum",
@@ -537,7 +596,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các buôn làng dân tộc, Tỉnh Kon Tum"
   },
   {
     "province": "Quảng Ngãi",
@@ -546,7 +606,8 @@
     "category": "nature",
     "latitude": 15.3809098,
     "longitude": 109.1174595,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -555,7 +616,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -564,7 +626,8 @@
     "category": "nature",
     "latitude": 10.7744439,
     "longitude": 106.7805666,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -573,7 +636,8 @@
     "category": "nature",
     "latitude": 15.4298174,
     "longitude": 109.0819609,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -582,7 +646,8 @@
     "category": "attraction",
     "latitude": 15.3908508,
     "longitude": 109.1248439,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -591,7 +656,8 @@
     "category": "attraction",
     "latitude": 15.3891999,
     "longitude": 109.1018742,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -600,7 +666,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -609,7 +676,8 @@
     "category": "nature",
     "latitude": 14.8518176,
     "longitude": 108.9373221,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Đông, xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -618,7 +686,8 @@
     "category": "nature",
     "latitude": 15.1906337,
     "longitude": 108.8952905,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Cổ Lũy, xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -627,7 +696,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -636,7 +706,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 2000
+    "costEstimate": 2000,
+    "address": "Phường Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -645,7 +716,8 @@
     "category": "nature",
     "latitude": 14.7270285,
     "longitude": 109.0462397,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Phường Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -654,7 +726,8 @@
     "category": "nature",
     "latitude": 14.6767187,
     "longitude": 109.0658101,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -663,7 +736,8 @@
     "category": "attraction",
     "latitude": 14.6885833,
     "longitude": 109.0636823,
-    "costEstimate": 3
+    "costEstimate": 3,
+    "address": "Phường Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -672,7 +746,8 @@
     "category": "nature",
     "latitude": 14.9062538,
     "longitude": 108.6597987,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Thạch An, huyện Minh Long, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -681,7 +756,8 @@
     "category": "attraction",
     "latitude": 15.149357,
     "longitude": 108.8181961,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Ấn Đông, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -690,7 +766,8 @@
     "category": "attraction",
     "latitude": 15.148929,
     "longitude": 108.8187085,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Ấn Đông, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -699,7 +776,8 @@
     "category": "attraction",
     "latitude": 15.1111747,
     "longitude": 108.8117349,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -708,7 +786,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 213
+    "costEstimate": 213,
+    "address": "Số 213 đường Nguyễn Nghĩa, phường Trần Hưng Đạo, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -717,7 +796,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đức Tân, huyện Mộ Đức, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -726,7 +806,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -735,7 +816,8 @@
     "category": "nature",
     "latitude": 20.8466221,
     "longitude": 106.7067224,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Thạnh, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -744,7 +826,8 @@
     "category": "nature",
     "latitude": 15.2353356,
     "longitude": 108.9439018,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Châu, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -753,7 +836,8 @@
     "category": "nature",
     "latitude": 10.5904732,
     "longitude": 107.2104396,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hành Tín Đông, huyện Nghĩa Hành, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -762,7 +846,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Phổ Khánh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -771,7 +856,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Mộ Đức, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -780,7 +866,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thôn An Vĩnh, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -789,7 +876,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -798,7 +886,8 @@
     "category": "attraction",
     "latitude": 13.0081476,
     "longitude": 109.2119862,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Nghĩa Hòa, huyện Tư Nghĩa, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -807,7 +896,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -816,7 +906,8 @@
     "category": "nature",
     "latitude": 20.1697572,
     "longitude": 105.9416304,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Thanh Thủy, xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -825,7 +916,8 @@
     "category": "nature",
     "latitude": 14.5733784,
     "longitude": 108.4468762,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -834,7 +926,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Minh Long và Huyện Sơn Hà, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -843,7 +936,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -852,7 +946,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 136
+    "costEstimate": 136,
+    "address": "Số 136 đường Phan Đình Phùng, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -861,7 +956,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 122
+    "costEstimate": 122,
+    "address": "Số 122 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -870,7 +966,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã Tịnh Ấn Tây, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -879,7 +976,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 21
+    "costEstimate": 21,
+    "address": "Số 21 đường Nguyễn Đình Chiểu, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -888,7 +986,8 @@
     "category": "hotel",
     "latitude": 15.1233568,
     "longitude": 108.8025397,
-    "costEstimate": 1
+    "costEstimate": 1,
+    "address": "Số 01 đường Phạm Văn Đồng, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -896,8 +995,9 @@
     "content": "Khách sạn Hùng Vương nằm tại số 45 đường Hùng Vương, phường Trần Hưng Đạo, thành phố Quảng Ngãi, sở hữu một vị trí đắc địa ngay cung đường trung tâm thương mại và giải trí lớn của tỉnh. Khách sạn này đạt tiêu chuẩn 3 sao, nổi bật với tòa nhà thiết kế kiến trúc khối vững chãi, lịch sự. Hệ thống phòng nghỉ tại Hùng Vương được thiết kế rộng rãi, sử dụng tông màu ấm áp và ban công cửa sổ lớn đón ánh sáng tự nhiên, trang bị đầy đủ trang thiết bị tiện nghi. Khách sạn có bãi đỗ xe ô tô rộng rãi, an toàn ngay phía trước khuôn viên. Nhà hàng trong khuôn viên khách sạn có sức chứa lớn chuyên tổ chức các buổi tiệc cưới, liên hoan và phục vụ các món ăn đặc sản xứ Quảng ngon miệng. Đội ngũ nhân viên thân thiện, có tác phong phục vụ chuyên nghiệp, sẵn sàng hỗ trợ thông tin du lịch cho du khách 24/7.",
     "category": "hotel",
     "latitude": 15.1233568,
-    "longitude": 108.8025397,
-    "costEstimate": 45
+    "longitude": 108.8008313,
+    "costEstimate": 45,
+    "address": "Số 45 đường Hùng Vương, phường Trần Hưng Đạo, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -906,7 +1006,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 784
+    "costEstimate": 784,
+    "address": "Số 784 đường Quang Trung, phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -915,7 +1016,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 317
+    "costEstimate": 317,
+    "address": "Số 317 đường Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -924,7 +1026,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thôn Đông, xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -933,7 +1036,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Di Lăng, huyện Trà Bồng, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -942,7 +1046,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đình làng An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -951,7 +1056,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 4
+    "costEstimate": 4,
+    "address": "Đình làng An Vĩnh và An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -960,7 +1066,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các vùng ven biển thuộc tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -969,7 +1076,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Sông Trà Khúc, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -978,7 +1086,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Nghĩa Thuận, huyện Tư Nghĩa, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -987,7 +1096,8 @@
     "category": "nature",
     "latitude": 15.0044016,
     "longitude": 108.9143673,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Minh, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -996,7 +1106,8 @@
     "category": "hotel",
     "latitude": 15.3671478,
     "longitude": 108.7533205,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Bãi biển Khe Hai, xã Bình Thạnh, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1005,7 +1116,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Sông Vệ, huyện Tư Nghĩa, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1014,7 +1126,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Sơn Hà, tỉnh Quảng Ngãi (giáp tỉnh Kon Tum)"
   },
   {
     "province": "Quảng Ngãi",
@@ -1023,7 +1136,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ba Thành, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1032,7 +1146,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Sơn Tây, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1041,7 +1156,8 @@
     "category": "attraction",
     "latitude": 14.7159663,
     "longitude": 108.740785,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Ba Tơ, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1050,7 +1166,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hành Tín Đông, huyện Nghĩa Hành, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1059,7 +1176,8 @@
     "category": "hotel",
     "latitude": 20.4905278,
     "longitude": 106.3604021,
-    "costEstimate": 2
+    "costEstimate": 2,
+    "address": "Số 02 đường Hùng Vương, phường Lê Hồng Phong, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1068,7 +1186,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1
+    "costEstimate": 1,
+    "address": "Số 01 đường An Dương Vương, phường Lê Hồng Phong, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1077,7 +1196,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 122
+    "costEstimate": 122,
+    "address": "Số 122 đường Phan Đình Phùng, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1086,7 +1206,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1095,7 +1216,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Nguyễn Du, phường Nghĩa Chánh, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1104,7 +1226,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Phường Tịnh An, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1113,16 +1236,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Suối khoáng nóng Thạch Bích",
-    "content": "Suối khoáng nóng Thạch Bích tọa lạc tại xã Trà Bình, huyện Trà Bồng, tỉnh Quảng Ngãi, là nguồn khoáng nóng thiên nhiên có trữ lượng lớn và chất lượng vi lượng thuộc hàng tốt nhất Việt Nam, là nguồn nguyên liệu chính để sản xuất thương hiệu nước khoáng Thạch Bích nổi tiếng. Nguồn nước khoáng phun lộ thiên từ lòng mạch đá sâu ở nhiệt độ hơn 70 độ C chứa hàm lượng vi chất silic cao tốt cho sức khỏe con người. Khu vực suối khoáng được bao bọc bao quanh bởi thảm thực vật đồi núi Trà Bồng xanh mướt mát mẻ. Du khách đến tham quan suối khoáng nóng Thạch Bích có thể trải nghiệm ngâm chân khoáng nóng thư giãn cơ thể, tắm luộc trứng gà chín tự nhiên bằng dòng nước khoáng nóng lộ thiên độc đáo và tận hưởng bầu không khí trong lành nguyên sơ của núi rừng vùng cao xứ Quảng.",
+    "content": "Suối khoáng nóng Thạch Bích tọa lạc tại xã Trà Bình, huyện Trà Bồng, tỉnh Quảng Ngãi, là một nguồn khoáng nóng thiên nhiên có trữ lượng lớn và chất lượng vi lượng thuộc hàng tốt nhất Việt Nam, là nguồn nguyên liệu chính để sản xuất thương hiệu nước khoáng Thạch Bích nổi tiếng. Nguồn nước khoáng phun lộ thiên từ lòng mạch đá sâu ở nhiệt độ hơn 70 độ C chứa hàm lượng vi chất silic cao tốt cho sức khỏe con người. Khu vực suối khoáng được bao bọc bao quanh bởi thảm thực vật đồi núi Trà Bồng xanh mướt mát mẻ. Du khách đến tham quan suối khoáng nóng Thạch Bích có thể trải nghiệm ngâm chân khoáng nóng thư giãn cơ thể, tắm luộc trứng gà chín tự nhiên bằng dòng nước khoáng nóng lộ thiên độc đáo và tận hưởng bầu không khí trong lành nguyên sơ của núi rừng vùng cao xứ Quảng.",
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 70
+    "costEstimate": 70,
+    "address": "Xã Trà Bình, huyện Trà Bồng, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1131,7 +1256,8 @@
     "category": "nature",
     "latitude": 17.1267163,
     "longitude": 106.7429814,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Lệ Thủy, xã Bình Trị, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1140,7 +1266,8 @@
     "category": "attraction",
     "latitude": 14.7470907,
     "longitude": 107.7615293,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đức Chánh, huyện Mộ Đức, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1149,7 +1276,8 @@
     "category": "attraction",
     "latitude": 9.6382255,
     "longitude": 105.2889923,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thôn An Vĩnh, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1158,7 +1286,8 @@
     "category": "attraction",
     "latitude": 11.5610187,
     "longitude": 108.9936451,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1167,16 +1296,18 @@
     "category": "nature",
     "latitude": 15.3845561,
     "longitude": 109.103442,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đảo Lý Sơn, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Biển Lệ Thủy Quảng Ngãi",
-    "content": "Biển Lệ Thủy Quảng Ngãi tọa lạc tại xã Bình Trị, huyện Bình Sơn, nổi tiếng là một vùng biển hoang sơ có cấu trúc địa chất nham thạch núi lửa cổ độc đáo ven bờ biển miền Trung. Bãi biển này cuốn hút du khách bởi những bãi đá trầm tích đen thẫm màu bóng loáng có tuổi đời hàng triệu năm chồng xếp xếp thành hình bậc thang tự nhiên vươn dài ra phía làn nước biển trong vắt màu xanh ngọc. Không gian biển nơi đây vô cùng thanh bình yên tĩnh rợp bóng phi lao xanh. Du khách đến biển Lệ Thủy có thể thả bộ đi dạo chụp những bức ảnh check-in thiên nhiên độc đáo lạ mắt độc lạ, tắm mát trong hồ bơi tự nhiên tạo thành giữa các hốc đá hoặc thưởng thức hải sản ghẹ ốc mực tươi ngon do ngư dân địa phương đánh bắt bán ngay bờ biển với mức giá cực kỳ rẻ bình dân.",
+    "content": "Biển Lệ Thủy Quảng Ngãi tọa lạc tại xã Bình Trị, huyện Bình Sơn, nổi tiếng là một vùng biển hoang sơ có cấu trúc địa chất nham thạch núi lửa cổ độc đáo ven bờ biển miền Trung. Bãi biển này cuốn hút du khách bởi những bãi đá trầm tích đen thẫm màu bóng loáng có tuổi đời hàng triệu năm chồng xếp xếp thành hình bậc thang tự nhiên vươn dài ra phía làn nước biển trong xanh ngắt. Không gian biển nơi đây vô cùng thanh bình yên tĩnh rợp bóng phi lao xanh. Du khách đến biển Lệ Thủy có thể thả bộ đi dạo chụp những bức ảnh check-in thiên nhiên độc đáo lạ mắt độc lạ, tắm mát trong hồ bơi tự nhiên tạo thành giữa các hốc đá hoặc thưởng thức hải sản ghẹ ốc mực tươi ngon do ngư dân địa phương đánh bắt bán ngay bờ biển với mức giá cực kỳ rẻ bình dân.",
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Trị, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1185,7 +1316,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1194,7 +1326,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã Hành Minh, huyện Nghĩa Hành, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1203,7 +1336,8 @@
     "category": "hotel",
     "latitude": 15.0913146,
     "longitude": 108.8201741,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Khu phố cổ Thu Xà, xã Nghĩa Hòa, huyện Tư Nghĩa, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1212,7 +1346,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 250
+    "costEstimate": 250,
+    "address": "Số 250 đường Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1221,7 +1356,8 @@
     "category": "hotel",
     "latitude": 14.6497159,
     "longitude": 109.0651721,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Phường Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1230,7 +1366,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hành Thuận, huyện Nghĩa Hành, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1239,7 +1376,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Ấn Đông, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1248,7 +1386,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Trà Hiệp, huyện Trà Bồng, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1257,7 +1396,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Sơn Tây, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1266,7 +1406,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Trần Hưng Đạo, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1275,16 +1416,18 @@
     "category": "hotel",
     "latitude": 15.1335913,
     "longitude": 108.8008313,
-    "costEstimate": 2
+    "costEstimate": 2,
+    "address": "Số 02 đường Hùng Vương, phường Lê Hồng Phong, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Khách sạn Hạnh Nguyên Quảng Ngãi",
-    "content": "Khách sạn Hạnh Nguyên tọa lạc tại số 264 đường Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, sở hữu vị trí thuận lợi ngay trung tâm đô thị năng động năng nổ sầm uất. Đây là địa chỉ khách sạn nghỉ ngơi lưu trú bình dân chất lượng tốt được đánh giá cao nhờ sự phục vụ tận tâm chu đáo tận tình. Khách sạn có quy mô tòa nhà sạch sẽ khang trang gồm nhiều phòng ngủ trang nhã yên tĩnh thiết kế cửa sổ kính thông thoáng mát mẻ đón ánh nắng chan hòa. Nội thất phòng nghỉ trang bị đồng bộ tivi màn hình led đời mới, wifi miễn phí băng thông rộng, phòng tắm vòi hoa sen nước nóng lạnh ổn định quanh năm phục vụ quý khách. Chung quanh khách sạn tập trung rất nhiều quán cà phê đẹp mắt nhà hàng quán nhậu bình dân ăn uống vui chơi giải trí thuận tiện vô cùng.",
+    "content": "Khách sạn Hạnh Nguyên tọa lạc tại số 264 đường Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, sở hữu vị trí thuận lợi ngay trung tâm đô thị năng động năng nổ sầm uất. Đây là địa chỉ khách sạn nghỉ ngơi lưu trú bình dân chất lượng tốt được đánh giá cao nhờ sự phục vụ tận tâm chu đáo tận tình. Khách sạn có quy mô tòa nhà sạch sẽ khang trang gồm nhiều phòng ngủ trang nhã yên tĩnh thiết kế cửa sổ kính thông thoáng mát mẻ đón ánh nắng chan hòa. Nội thất các phòng nghỉ trang bị đồng bộ tivi màn hình led đời mới, wifi miễn phí băng thông rộng, phòng tắm vòi hoa sen nước nóng lạnh ổn định quanh năm phục vụ quý khách. Chung quanh khách sạn tập trung rất nhiều quán cà phê đẹp mắt nhà hàng quán nhậu bình dân ăn uống vui chơi giải trí thuận tiện vô cùng.",
     "category": "hotel",
     "latitude": 14.8789644,
     "longitude": 108.9038851,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 264 đường Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1293,7 +1436,8 @@
     "category": "restaurant",
     "latitude": 15.380261,
     "longitude": 109.0958276,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1302,7 +1446,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Nghĩa Hành và huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1311,7 +1456,8 @@
     "category": "nature",
     "latitude": 14.6731367,
     "longitude": 108.4522101,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Thạnh, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1320,7 +1466,8 @@
     "category": "attraction",
     "latitude": 10.2498125,
     "longitude": 106.3739333,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1329,7 +1476,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1338,7 +1486,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 439
+    "costEstimate": 439,
+    "address": "Số 439 đường Phan Đình Phùng, phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1347,7 +1496,8 @@
     "category": "nature",
     "latitude": 15.3566038,
     "longitude": 108.7260824,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bình Thạnh, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1356,7 +1506,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1365,7 +1516,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 118
+    "costEstimate": 118,
+    "address": "Số 118 đường đại lộ Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1374,7 +1526,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 12
+    "costEstimate": 12,
+    "address": "Số 12 đường Nguyễn Công Phương, phường Nghĩa Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1383,16 +1536,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ba Trang, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Di tích chiến thắng vạn tường",
-    "content": "Di tích lịch sử chiến thắng Vạn Tường tọa lạc tại địa phận xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là khu di tích lịch sử cách mạng cấp quốc gia ghi dấu chiến công hiển hách vang dội của quân và dân ta trong trận đánh chống lại cuộc hành quân Starlite quy mô lớn của thủy quân lục chiến Mỹ vào tháng 8 năm 1965. Quần thể khu di tích bao gồm các địa điểm di tích gốc quan trọng được bảo tồn trang trọng như đồi Ngọc Hương, hang chiến hào vạn tường, nhà bảo tàng chiến thắng Vạn Tường rộng lớn. Tại nhà bảo tàng trưng bày lưu giữ nhiều hiện vật chiến tranh có giá trị như xe tăng, pháo cao xạ, súng đạn vũ khí tự tạo của quân giải phóng cùng các hình ảnh tư liệu sống động tái hiện trận đánh lịch sử. Đây là điểm tham quan lịch sử mang ý nghĩa giáo dục tinh thần yêu nước sâu sắc.",
+    "content": "Di tích lịch sử chiến thắng Vạn Tường tọa lạc tại địa phận xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là khu di tích lịch sử cách mạng cấp quốc gia ghi dấu chiến công hiển hách vang dội của quân và dân ta trong trận đánh chống lại cuộc hành quân Starlite quy mô lớn của thủy quân lục chiến Mỹ vào tháng 8 năm 1965. Quần thể di tích bao gồm các địa điểm di tích gốc quan trọng được bảo tồn trang trọng như đồi Ngọc Hương, hang chiến hào vạn tường, nhà bảo tàng chiến thắng Vạn Tường rộng lớn. Tại nhà bảo tàng trưng bày lưu giữ nhiều hiện vật chiến tranh có giá trị như xe tăng, pháo cao xạ, súng đạn vũ khí tự tạo của quân giải phóng cùng các hình ảnh tư liệu sống động tái hiện trận đánh lịch sử. Đây là điểm tham quan lịch sử mang ý nghĩa giáo dục tinh thần yêu nước sâu sắc.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1401,7 +1556,8 @@
     "category": "hotel",
     "latitude": 14.7071581,
     "longitude": 107.6910752,
-    "costEstimate": 482
+    "costEstimate": 482,
+    "address": "Số 482 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1410,7 +1566,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Bãi biển Mỹ Khê, xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1419,7 +1576,8 @@
     "category": "nature",
     "latitude": 15.1591173,
     "longitude": 108.4677708,
-    "costEstimate": 20
+    "costEstimate": 20,
+    "address": "Huyện Sơn Hà và huyện Trà Bồng, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1428,7 +1586,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Chợ Chùa, huyện Nghĩa Hành, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1437,7 +1596,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1446,7 +1606,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 68
+    "costEstimate": 68,
+    "address": "Số 68 đường Nguyễn Chánh, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1455,16 +1616,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Đức Thạnh, huyện Mộ Đức, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Di tích lịch sử Vụ thảm sát Bình An",
-    "content": "Di tích Vụ thảm sát Bình An tọa lạc tại xã Bình Tân, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là nơi ghi dấu ấn sự kiện lịch sử đau thương tàn khốc diễn ra vào năm 1966 do quân đội viễn chinh đánh thuê gây ra đối với hàng trăm người dân vô tội chủ yếu người già phụ nữ trẻ em làng quê Bình An xưa trong cuộc chiến tranh xâm lược Việt Nam. Khu di tích được xây dựng tôn tạo khang trang trang nghiêm bao gồm đài tưởng niệm chính ghi danh các nạn nhân, nhà bia ký lịch sử và khuôn viên sân vườn trồng nhiều cây xanh hoa kiểng tĩnh mịch đượm buồn yên ả. Đây là địa chỉ đỏ lịch sử di tích cấp tỉnh mang ý nghĩa giáo dục sâu sắc truyền thống lòng yêu nước, ghi nhớ công ơn lịch sử xương máu cha ông và lên án tội ác chiến tranh phi nghĩa hướng tới hòa bình phát triển tốt đẹp tương lai.",
+    "content": "Di tích Vụ thảm sát Bình An tọa lạc tại xã Bình Tân, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là nơi ghi dấu ấn sự kiện lịch sử đau thương tàn khốc diễn ra vào năm 1966 do quân đội viễn chinh đánh thuê gây ra đối với hàng trăm người dân vô tội chủ yếu người già phụ nữ trẻ em làng quê Bình An xưa trong cuộc chiến tranh xâm lược Việt Nam. Khu di tích được xây dựng tôn tạo khang trang trang nghiêm bao gồm đài tưởng niệm chính ghi danh các nạn nhân, nhà bia ký lịch sử và khuôn viên sân vườn trồng nhiều cây xanh hoa kiểng tĩnh mịch đượm buồn yên ả. Đây là địa chỉ đỏ lịch sử cấp tỉnh mang ý nghĩa giáo dục sâu sắc truyền thống lòng yêu nước, ghi nhớ công ơn lịch sử xương máu cha ông và lên án tội ác chiến tranh phi nghĩa hướng tới hòa bình phát triển tốt đẹp tương lai.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Bình Tân, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1473,7 +1636,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Đông, xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1482,7 +1646,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Lê Lợi, phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1491,7 +1656,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Phường Phổ Quang, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1500,16 +1666,18 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Đức Tân, huyện Mộ Đức, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Khách sạn Hồng Ngọc Quảng Ngãi",
-    "content": "Khách sạn Hồng Ngọc tọa lạc tại số 138 đường đại lộ Quang Trung, phường Lê Hồng Phong, thành phố Quảng Ngãi, vị trí trung tâm trục đường huyết mạch rất thuận lợi cho việc đi lại làm việc của quý khách du lịch. Khách sạn mang kiến trúc nhà tầng hiện đại lịch sự trang nhã với hệ thống phòng ốc sạch sẽ ngăn nắp được thiết kế tối ưu công năng thông thoáng mát mẻ. Nội thất các phòng nghỉ trang bị đầy đủ tivi led truyền hình cáp, máy lạnh điều hòa nhiệt độ, tủ quần áo cá nhân, bàn làm việc ghế ngồi nhà tắm khép kín vòi hoa sen nước nóng lạnh chạy ổn định phục vụ nhu cầu sinh hoạt du khách tốt. Khách sạn Hồng Ngọc Quảng Ngãi có đội ngũ nhân viên đón tiếp nhiệt tình lịch sự mến khách chu đáo, hỗ trợ dịch vụ giặt là gọi xe taxi nhanh chóng giá cả phòng nghỉ rất hợp lý vừa túi tiền bình dân.",
+    "content": "Khách sạn Hồng Ngọc tọa lạc tại số 138 đường đại lộ Quang Trung, phường Lê Hồng Phong, thành phố Quảng Ngãi, vị trí trung tâm trục đường huyết mạch rất thuận lợi cho việc đi lại làm việc của quý khách du lịch. Khách sạn mang kiến trúc nhà tầng hiện đại lịch sự trang nhã với hệ thống phòng ốc sạch sẽ ngăn nắp được thiết kế tối ưu công năng thông thoáng mát mẻ. Nội thất các phòng nghỉ trang bị đầy đủ tivi led truyền hình cáp, máy lạnh điều hòa nhiệt độ, tủ quần áo cá nhân, bàn làm việc ghế ngồi nhà tắm khép kín vòi sen nước nóng lạnh ổn định quanh năm phục vụ nhu cầu sinh hoạt du khách tốt. Khách sạn Hồng Ngọc Quảng Ngãi có đội ngũ nhân viên đón tiếp nhiệt tình lịch sự mến khách chu đáo, hỗ trợ dịch vụ giặt là gọi xe taxi nhanh chóng giá cả phòng nghỉ rất hợp lý vừa túi tiền bình dân.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 138
+    "costEstimate": 138,
+    "address": "Số 138 đường đại lộ Quang Trung, phường Lê Hồng Phong, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1518,7 +1686,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 82
+    "costEstimate": 82,
+    "address": "Số 82 đường Phan Chu Trinh, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1527,16 +1696,18 @@
     "category": "nature",
     "latitude": 15.1906337,
     "longitude": 108.8952905,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
-    "title": "Di tích khu mộ nhà chí sĩ cách mạng Lê Trung Đình",
+    "title": "Di tích lịch sử khu mộ nhà chí sĩ cách mạng Lê Trung Đình",
     "content": "Khu mộ nhà chí sĩ Lê Trung Đình tọa lạc tại xã Tịnh Ấn Đông, thành phố Quảng Ngãi, tỉnh Quảng Ngãi. Đây là di tích lịch sử cách mạng ý nghĩa tôn vinh tưởng niệm nhà chí sĩ yêu nước kiên trung Lê Trung Đình - người lãnh đạo cuộc khởi nghĩa Cần Vương đầu tiên tại tỉnh Quảng Ngãi chống lại thực dân Pháp xâm lược năm 1885. Khu mộ của ông được xây dựng trùng tu kiên cố trang nghiêm trang trọng trên sườn đồi cao lộng gió núi đồi nhìn xuống dòng sông Trà Khúc hiền hòa thơ mộng bao quanh rợp bóng cây tùng bách xanh mát quanh năm. Kiến trúc lăng mộ sử dụng đá khối xám khắc bia ký ghi danh tiểu sử sự nghiệp hoạt động cách mạng vẻ vang của ông đối với quê hương đất nước. Đây là địa chỉ đỏ lịch sử cấp quốc gia thu hút các thế hệ trẻ du khách đến dâng hương bày tỏ lòng biết ơn kính cẩn.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Ấn Đông, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1545,7 +1716,8 @@
     "category": "hotel",
     "latitude": 15.1906337,
     "longitude": 108.8952905,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1554,7 +1726,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 285
+    "costEstimate": 285,
+    "address": "Số 285 đường đại lộ Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1563,7 +1736,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Long Mai, huyện Minh Long, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1572,7 +1746,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Bình, huyện Sơn Tịnh, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1581,7 +1756,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1590,7 +1766,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 154
+    "costEstimate": 154,
+    "address": "Số 154 đường đại lộ Hùng Vương, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1599,7 +1776,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Phường Phổ Thạnh, thị xã Đức Phổ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1608,7 +1786,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Ba Động, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1617,16 +1796,18 @@
     "category": "hotel",
     "latitude": 14.832447,
     "longitude": 108.9637507,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 46 đường Nguyễn Du, phường Nghĩa Chánh, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Quán Chè xu xoa Quảng Ngãi Cô Ba",
-    "content": "Quán Chè xu xoa Cô Ba nằm tại đường Nguyễn Nghiêm, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, là địa điểm giải nhiệt ẩm thực mùa hè bình dân mộc mạc đắt khách bậc nhất thành phố. Món chè xu xoa (hay còn gọi là sương sa) đặc sản xứ Quảng tại quán được làm hoàn toàn tự nhiên từ rau câu bám đá biển khơi đánh bắt từ đảo Lý Sơn mang về nấu đông thủ công dẻo dai sần sật trong vắt làm mát cơ thể cực tốt. Tô chè xu xoa dọn ra mát lạnh gồm những khối xu xoa cắt nhỏ dẻo dai kết hợp thạch đen sương sáo, hạt lựu dai giòn, chan thêm nước đường bát nấu gừng thơm nồng ngọt thanh đặc sánh béo ngậy nước cốt dừa tươi cùng đá bào mát lạnh. Vị ngọt ngọt bùi béo cay nồng của gừng xu xoa ăn ngon tuyệt vời xua tan nóng bức hè. Quán không gian vỉa hè nhỏ nhắn sạch sẽ phục vụ nhanh nhẹn vui vẻ.",
+    "content": "Quán Chè xu xoa Cô Ba nằm tại đường Nguyễn Nghiêm, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, là địa điểm giải nhiệt ẩm thực mùa hè bình dân mộc mạc đắt khách bậc nhất thành phố. Món chè xu xoa (hay còn gọi là sương sa) đặc sản xứ Quảng tại quán được làm hoàn toàn tự nhiên từ rau câu bám đá biển khơi đánh bắt từ đảo Lý Sơn mang về nấu đông thủ công dẻo dai sần sật làm mát cơ thể cực tốt. Tô chè xu xoa dọn ra mát lạnh gồm những khối xu xoa cắt nhỏ dẻo dai kết hợp thạch đen sương sáo, hạt lựu dai giòn, chan thêm nước đường bát nấu gừng thơm nồng ngọt thanh đặc sánh béo ngậy nước cốt dừa tươi cùng đá bào mát lạnh. Vị ngọt ngọt bùi béo cay nồng của gừng xu xoa ăn ngon tuyệt vời xua tan nóng bức hè. Quán không gian vỉa hè nhỏ nhắn sạch sẽ phục vụ nhanh nhẹn vui vẻ.",
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Nguyễn Nghiêm, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1635,7 +1816,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Trà Hiệp, huyện Trà Bồng, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1644,7 +1826,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1653,7 +1836,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Đông, xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1662,7 +1846,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 48
+    "costEstimate": 48,
+    "address": "Số 48 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1671,7 +1856,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tịnh Khê và xã Bình Châu, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1680,16 +1866,18 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Long, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Khách sạn Như Ngọc Quảng Ngãi",
-    "content": "Khách sạn Như Ngọc tọa lạc tại số 326 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, vị trí nằm ngay cung đường trung tâm thương mại hành chính lớn rất thuận tiện cho du khách đi lại di chuyển tìm kiếm quán xá ăn uống vui chơi mua sắm. Khách sạn mang lối thiết kế kiến trúc khối tòa nhà sạch sẽ khang trang lịch sự trang nhã với hệ thống phòng nghỉ trang bị nội thất đồng bộ tiện nghi cơ bản đầy đủ gồm tivi màn hình led kết nối internet wifi miễn phí, máy lạnh điều hòa nhiệt độ ổn định, tủ gỗ đựng đồ quần áo nhà tắm khép kín riêng biệt vòi sen tắm mát lạnh. Như Ngọc Hotel có đội ngũ nhân viên đón tiếp nhiệt tình lịch sự niềm nở chu đáo sẵn sàng hỗ trợ gọi xe đưa đón giá phòng nghỉ rất bình dân phải chăng phù hợp kinh tế.",
+    "content": "Khách sạn Như Ngọc tọa lạc tại số 326 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, vị trí nằm ngay cung đường trung tâm thương mại hành chính lớn rất thuận tiện cho du khách đi lại di chuyển tìm kiếm quán xá ăn uống vui chơi mua sắm. Khách sạn mang lối thiết kế kiến trúc khối tòa nhà sạch sẽ khang trang lịch sự trang nhã với hệ thống phòng nghỉ trang bị nội thất đồng bộ tiện nghi cơ bản đầy đủ gồm tivi màn hình led kết nối internet wifi miễn phí, máy lạnh điều hòa nhiệt độ ổn định, tủ gỗ đựng đồ quần áo nhà tắm khép kín riêng biệt vòi sen tắm mát lạnh. Như Ngọc Hotel có đội ngũ nhân viên đón tiếp nhiệt tình lịch sự niềm nở chu đáo sẵn sàng hỗ trợ gọi xe đưa đón giá phòng nghỉ rất bình dân phải chăng.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 326 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1698,7 +1886,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 72
+    "costEstimate": 72,
+    "address": "Số 72 đường Nguyễn Nghiêm, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1707,7 +1896,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ba Thành, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1716,7 +1906,8 @@
     "category": "attraction",
     "latitude": 23.2594286,
     "longitude": 105.2106347,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1725,7 +1916,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1734,7 +1926,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Phan Đình Phùng, phường Chánh Lộ, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1743,7 +1936,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Thanh An, huyện Minh Long, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1752,25 +1946,28 @@
     "category": "attraction",
     "latitude": 18.435636,
     "longitude": 105.720241,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Sơn, huyện Sơn Tịnh, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Khách sạn Phú Mỹ Quảng Ngãi",
-    "content": "Khách sạn Phú Mỹ tọa lạc tại số 512 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, nằm ngay vị trí đắc địa cung đường sầm uất thương mại huyết mạch hành chính đô thị. Khách sạn được xây dựng khang trang thiết kế hiện đại thanh lịch tinh tế với quy mô hệ thống phòng ốc sạch sẽ gọn gàng thông thoáng mát mẻ yên tĩnh đáp ứng đầy đủ tiện nghi sinh hoạt lưu trú cho du khách cá nhân công tác khách đoàn. Nội thất các phòng nghỉ Phú Mỹ Hotel trang bị máy lạnh điều hòa nhiệt độ, tivi led truyền hình cáp màn hình phẳng, wifi miễn phí băng thông rộng, bàn ghế gỗ tủ quần áo phòng tắm khép kín vòi sen vòi sen nước nóng ổn định. Khách sạn có quầy lễ tân trực 24h phục vụ nhiệt tình lịch sự mến khách chu đáo giá cả phòng rất bình dân phải chăng.",
+    "content": "Khách sạn Phú Mỹ tọa lạc tại số 512 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, nằm ngay vị trí đắc địa cung đường sầm uất thương mại huyết mạch hành chính đô thị. Khách sạn được xây dựng khang trang thiết kế hiện đại thanh lịch tinh tế với quy mô hệ thống phòng ốc sạch sẽ gọn gàng thông thoáng mát mẻ yên tĩnh đáp ứng đầy đủ tiện nghi sinh hoạt lưu trú cho du khách cá nhân công tác khách đoàn. Nội thất các phòng nghỉ Phú Mỹ Hotel trang bị máy lạnh điều hòa nhiệt độ, tivi led truyền hình cáp màn hình phẳng, wifi miễn phí băng thông rộng, bàn ghế gỗ tủ quần áo phòng tắm khép kín vòi sen vòi sen nước nóng ổn định. Khách sạn có quầy lễ tân trực 24h phục vụ nhiệt tình lịch sự mến khách chu đáo giá cả phòng nghỉ rất bình dân phải chăng.",
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 512 đường đại lộ Quang Trung, phường Nguyễn Nghiêm, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Quán Bún thịt nướng ngon Quảng Ngãi Út Nhung",
-    "content": "Quán Bún thịt nướng Út Nhung nằm tại số 124 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, là địa điểm ăn uống bún thịt nướng xá xíu miền Trung vô cùng nổi tiếng thơm ngon mặn mà đậm đà cực đông khách ăn mỗi buổi chiều tối. Thịt heo tại quán được chọn lọc phần thịt ba chỉ nạc vai ngon tẩm ướp gia vị tiêu tỏi sả mật ong đậm đà xiên que gỗ nướng bếp than hoa hồng chín vàng ruộm béo ngậy thơm phức cháy cạnh ngọt lịm chắc thịt. Tô bún thịt nướng dọn ra đầy đặn gồm bún tươi dẻo dai, thịt nướng thơm lừng, ram giòn rụm rán vàng, rau sống búp chuối xà lách cải mầm dưa leo, đậu phụng rang giã nhỏ hành phi bùi béo rồi chan nước mắm tỏi ớt chua ngọt pha sền sệt đậm đà ngon tuyệt vời. Quán sạch sẽ ngăn nắp phục vụ nhanh nhẹn chu đáo bình dân.",
+    "content": "Quán Bún thịt nướng Út Nhung nằm tại số 124 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, là địa điểm ăn uống bún thịt nướng xá xíu miền Trung vô cùng nổi tiếng thơm ngon mặn mà đậm đà đắt khách bậc nhất phố thị Quảng Ngãi mỗi buổi chiều tối. Thịt heo tại quán được chọn lọc phần thịt ba chỉ nạc vai ngon tẩm ướp gia vị tiêu tỏi sả mật ong đậm đà xiên que gỗ nướng bếp than hoa hồng chín vàng ruộm béo ngậy thơm phức cháy cạnh ngọt lịm chắc thịt. Tô bún thịt nướng dọn ra đầy đặn gồm bún tươi dẻo dai, thịt nướng thơm lừng, ram giòn rụm rán vàng, rau sống búp chuối xà lách cải mầm dưa leo, đậu phụng rang giã nhỏ hành phi bùi béo rồi chan nước mắm tỏi ớt chua ngọt pha sền sệt đậm đà ngon tuyệt vời. Quán sạch sẽ ngăn nắp phục vụ nhanh nhẹn chu đáo bình dân.",
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 124
+    "costEstimate": 124,
+    "address": "Số 124 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1779,16 +1976,18 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Ba Động, huyện Ba Tơ, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Di tích lịch sử văn hóa Chùa Hang cổ tự Bình Sơn",
-    "content": "Chùa Hang cổ tự Bình Sơn nằm tại sườn núi đá ven bờ biển thuộc địa phận xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là ngôi đền chùa cổ kính có cấu trúc kiến trúc tâm linh vô cùng độc đáo độc lạ ẩn mình hoàn toàn bên trong một hang đá tự nhiên do quá trình biển xâm thực bào mòn đá vôi từ ngàn năm xưa tạo thành. Không gian bên trong chùa hang rộng rãi thông thoáng quanh năm mát mẻ lạnh giá trong lành phảng phất mùi khói hương trầm kính cẩn trang nghiêm thờ phụng các pho tượng Phật Bồ Tát tiên hiền bám đầy màu thời gian phủ rêu phong cổ kính cổ xưa. Trước cửa hang đá là rặng cây phi lao cổ thụ xanh mát hướng tầm nhìn thẳng ra bờ cát sóng biển vỗ rì rào mát rượi linh thiêng tịnh tâm. Di tích lịch sử văn hóa cấp tỉnh thu hút thiện nam tín nữ chiêm bái.",
+    "content": "Chùa Hang cổ tự Bình Sơn nằm tại sườn núi đá ven bờ biển thuộc địa phận xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi. Đây là ngôi đền đền chùa cổ kính kiến trúc tâm linh tôn giáo vô cùng độc đáo độc lạ ẩn mình hoàn toàn bên trong một hang đá tự nhiên do quá trình biển xâm thực bào mòn đá vôi từ ngàn năm xưa tạo thành. Không gian bên trong chùa hang rộng rãi thông thoáng quanh năm mát mẻ lạnh giá trong lành phảng phất mùi khói hương trầm kính cẩn trang nghiêm thờ phụng các pho tượng Phật Bồ Tát tiên hiền bám đầy màu thời gian phủ rêu phong cổ kính cổ xưa. Trước cửa hang đá là rặng cây phi lao cổ thụ xanh mát hướng tầm nhìn thẳng ra bờ cát sóng biển vỗ rì rào mát rượi linh thiêng tịnh tâm. Di tích lịch sử văn hóa cấp tỉnh thu hút thiện nam tín nữ chiêm bái.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Bình Hải, huyện Bình Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1797,7 +1996,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Đông, xã An Hải, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1806,7 +2006,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thôn Tây, xã An Vĩnh, huyện đảo Lý Sơn, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1815,7 +2016,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thôn Trường Định, xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1824,16 +2026,18 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tịnh Khê, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
     "title": "Khách sạn Ninh Thọ Quảng Ngãi",
-    "content": "Khách sạn Ninh Thọ tọa lạc tại số 48 đường đại lộ Hùng Vương, phường Trần Hưng Đạo, thành phố Quảng Ngãi, vị trí nằm ngay cung đường trung tâm sầm uất dịch vụ thương mại giải trí mua sắm sầm uất nhộn nhịp. Khách sạn mang phong cách thiết kế hiện đại lịch sự trang nhã với hệ thống phòng ốc sạch sẽ ngăn nắp được bày biện nội thất tối ưu công năng thông thoáng mát mẻ yên tĩnh đáp ứng tốt nhu cầu lưu trú nghỉ ngơi của du khách. Các phòng nghỉ Ninh Thọ Hotel trang bị đầy đủ máy lạnh điều hòa nhiệt độ, tivi led màn hình phẳng truyền hình cáp, wifi tốc độ cao miễn phí, bàn làm việc tủ gỗ đựng đồ nhà tắm khép kín riêng biệt sạch sẽ sạch sẽ tiện nghi vòi sen tắm mát. Khách sạn có giá cả phòng nghỉ rất bình dân phải chăng phù hợp túi tiền tiết kiệm chi phí.",
+    "content": "Khách sạn Ninh Thọ tọa lạc tại số 48 đường đại lộ Hùng Vương, phường Trần Hưng Đạo, thành phố Quảng Ngãi, vị trí nằm ngay cung đường trung tâm sầm uất dịch vụ thương mại giải trí mua sắm sầm uất nhộn nhịp. Khách sạn mang phong cách thiết kế hiện đại lịch sự trang nhã với hệ thống phòng ốc sạch sẽ ngăn nắp được bày biện nội thất tối ưu công năng thông thoáng mát mẻ yên tĩnh đáp ứng tốt nhu cầu lưu trú nghỉ ngơi của du khách. Các phòng nghỉ Ninh Thọ Hotel trang bị đầy đủ máy lạnh điều hòa nhiệt độ, tivi led màn hình phẳng truyền hình cáp, wifi tốc độ cao miễn phí, bàn làm việc tủ gỗ đựng đồ nhà tắm khép kín riêng biệt sạch sẽ sạch sẽ tiện nghi vòi sen tắm mát. Khách sạn có giá cả phòng nghỉ rất bình dân phải chăng.",
     "category": "hotel",
     "latitude": 15.119674,
     "longitude": 108.8093176,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 48 đường đại lộ Hùng Vương, phường Trần Hưng Đạo, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1842,7 +2046,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 168
+    "costEstimate": 168,
+    "address": "Số 168 đường Nguyễn Tự Tân, phường Trần Phú, thành phố Quảng Ngãi, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1851,7 +2056,8 @@
     "category": "nature",
     "latitude": 14.9793297,
     "longitude": 108.3012172,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Sơn Tây, tỉnh Quảng Ngãi"
   },
   {
     "province": "Quảng Ngãi",
@@ -1860,6 +2066,7 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Nghĩa Hòa, huyện Tư Nghĩa, tỉnh Quảng Ngãi"
   }
 ]

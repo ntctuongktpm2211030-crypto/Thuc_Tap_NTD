@@ -6,7 +6,8 @@
     "category": "nature",
     "latitude": 17.5552645,
     "longitude": 106.1123041,
-    "costEstimate": 4
+    "costEstimate": 4,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -15,7 +16,8 @@
     "category": "nature",
     "latitude": 17.5192008,
     "longitude": 106.223045,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -24,7 +26,8 @@
     "category": "attraction",
     "latitude": 17.491054,
     "longitude": 106.627149,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -33,7 +36,8 @@
     "category": "restaurant",
     "latitude": 10.3843472,
     "longitude": 106.9076658,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -42,7 +46,8 @@
     "category": "hotel",
     "latitude": 17.4807354,
     "longitude": 106.632455,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -51,7 +56,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -60,7 +66,8 @@
     "category": "nature",
     "latitude": 17.5553924,
     "longitude": 106.2357356,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -69,7 +76,8 @@
     "category": "attraction",
     "latitude": 17.9557619,
     "longitude": 106.4650918,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -78,7 +86,8 @@
     "category": "nature",
     "latitude": 17.9890855,
     "longitude": 106.4777784,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -87,7 +96,8 @@
     "category": "attraction",
     "latitude": 21.0029591,
     "longitude": 105.8149899,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Mỹ Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -96,7 +106,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Lộc Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -105,7 +116,8 @@
     "category": "restaurant",
     "latitude": 22.4109422,
     "longitude": 104.5802646,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -114,7 +126,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -123,7 +136,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -132,7 +146,8 @@
     "category": "nature",
     "latitude": 17.5801109,
     "longitude": 106.2839963,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -141,7 +156,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Quang Phú, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -150,7 +166,8 @@
     "category": "nature",
     "latitude": 21.000584,
     "longitude": 107.2902146,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -159,7 +176,8 @@
     "category": "attraction",
     "latitude": 17.4654591,
     "longitude": 106.6271418,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -168,7 +186,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -177,7 +196,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -186,7 +206,8 @@
     "category": "nature",
     "latitude": 17.5737841,
     "longitude": 106.2541677,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -195,7 +216,8 @@
     "category": "restaurant",
     "latitude": 20.4528848,
     "longitude": 106.340023,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -204,7 +226,8 @@
     "category": "hotel",
     "latitude": 17.4668798,
     "longitude": 106.6411847,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -213,7 +236,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Mỹ Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -222,7 +246,8 @@
     "category": "nature",
     "latitude": 17.4348771,
     "longitude": 106.2997788,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -231,7 +256,8 @@
     "category": "nature",
     "latitude": 20.1458349,
     "longitude": 106.3234607,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -240,7 +266,8 @@
     "category": "restaurant",
     "latitude": 23.5913925,
     "longitude": 110.0771691,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -249,7 +276,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -258,7 +286,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -267,7 +296,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -276,7 +306,8 @@
     "category": "nature",
     "latitude": 20.9409868,
     "longitude": 105.7680391,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Nhân Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -285,7 +316,8 @@
     "category": "restaurant",
     "latitude": 40.7027052,
     "longitude": -74.0097985,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -294,7 +326,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -303,7 +336,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Mỹ Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -312,7 +346,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -321,7 +356,8 @@
     "category": "nature",
     "latitude": 14.1774585,
     "longitude": 109.0545232,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Quang Phú, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -330,7 +366,8 @@
     "category": "restaurant",
     "latitude": 21.009802,
     "longitude": 105.9317588,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -339,7 +376,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -348,7 +386,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -357,7 +396,8 @@
     "category": "nature",
     "latitude": 21.5308166,
     "longitude": 107.9741656,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -366,7 +406,8 @@
     "category": "nature",
     "latitude": 14.1774585,
     "longitude": 109.0545232,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Quang Phú, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -375,7 +416,8 @@
     "category": "restaurant",
     "latitude": 14.1743801,
     "longitude": 109.0492093,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -384,7 +426,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -393,7 +436,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -402,7 +446,8 @@
     "category": "nature",
     "latitude": 17.5192008,
     "longitude": 106.223045,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -411,7 +456,8 @@
     "category": "nature",
     "latitude": 10.8777292,
     "longitude": 106.7404477,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -420,7 +466,8 @@
     "category": "restaurant",
     "latitude": 10.7707494,
     "longitude": 106.6695065,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -429,7 +476,8 @@
     "category": "hotel",
     "latitude": 17.6100933,
     "longitude": 106.3089528,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -438,7 +486,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -447,7 +496,8 @@
     "category": "nature",
     "latitude": 10.8939732,
     "longitude": 108.0380472,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -456,7 +506,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 100
+    "costEstimate": 100,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -465,7 +516,8 @@
     "category": "restaurant",
     "latitude": 21.181199,
     "longitude": 106.0694403,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -474,16 +526,18 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
-    "title": "Lễ hội Đua thuyền Lệ Thủy",
+    "title": "Lễ hội Đua thuyền truyền thống trên sông Kiến Giang",
     "content": "Lễ hội Đua thuyền Lệ Thủy không chỉ là một sự kiện văn hóa, thể thao mà còn là niềm tự hào của người dân huyện Lệ Thủy, tỉnh Quảng Bình. Diễn ra vào dịp Quốc khánh 2/9, lễ hội biến dòng sông Kiến Giang trở thành một đấu trường rực rỡ sắc màu với những chiếc thuyền trải được trang trí lộng lẫy. Tiếng trống hội, tiếng hò reo vang vọng và sự đoàn kết của các đội đua tạo nên một không khí vô cùng phấn khích. Du khách đến đây không chỉ được thưởng thức màn thi đấu kịch tính mà còn tìm hiểu về tinh thần yêu nước, ý chí kiên cường của người dân địa phương qua những làn điệu hò khoan truyền thống. Sau các cuộc đua, du khách còn được thưởng thức những món đặc sản địa phương tại các khu chợ quanh đó. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -492,7 +546,8 @@
     "category": "nature",
     "latitude": 14.0217837,
     "longitude": 107.6050329,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -501,7 +556,8 @@
     "category": "nature",
     "latitude": 21.000584,
     "longitude": 107.2902146,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -510,7 +566,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -519,7 +576,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -528,7 +586,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -537,16 +596,18 @@
     "category": "nature",
     "latitude": 17.5737841,
     "longitude": 106.2541677,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
-    "title": "Bãi biển Nhật Lệ (Sáng sớm)",
+    "title": "Biển Nhật Lệ (Sáng sớm)",
     "content": "Sáng sớm là khoảng thời gian tuyệt vời nhất để cảm nhận vẻ đẹp đích thực của bãi biển Nhật Lệ. Khi mặt trời bắt đầu ló dạng, những tia nắng vàng óng ả làm cho mặt biển trở nên lung linh huyền ảo như dát bạc. Đây là lúc ngư dân bắt đầu trở về sau một đêm đánh bắt, mang theo những mẻ cá tươi rói, tạo nên một khung cảnh lao động vô cùng nhộn nhịp và tràn đầy sức sống. Nhiều du khách và người dân địa phương thường tranh thủ thời gian này để chạy bộ, tập thể dục trên cát hoặc đơn giản là hít thở không khí trong lành của biển cả. Sự mát mẻ và yên tĩnh vào sáng sớm sẽ giúp bạn cảm thấy sảng khoái và tràn đầy năng lượng cho một ngày mới. Nếu bạn là người yêu nhiếp ảnh, đây chính là thời điểm vàng để bắt được những khung hình đẹp nhất của cuộc sống thường nhật tại thành phố biển Đồng Hới. Một trải nghiệm bình dị mà ai cũng nên thử một lần.",
     "category": "nature",
     "latitude": 10.8777292,
     "longitude": 106.7404477,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -555,7 +616,8 @@
     "category": "restaurant",
     "latitude": 20.9914455,
     "longitude": 105.9461001,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -564,7 +626,8 @@
     "category": "hotel",
     "latitude": 17.4759704,
     "longitude": 106.6151072,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -573,25 +636,28 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Nhân Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
     "title": "Suối Bang (Trải nghiệm suối nóng)",
-    "content": "Suối Bang không chỉ là một điểm đến thiên nhiên mà còn là một khu nghỉ dưỡng độc đáo với suối nước khoáng nóng có nhiệt độ cao nhất Việt Nam. Trải nghiệm ngâm mình trong nước nóng tự nhiên giữa cảnh quan rừng núi bao la mang lại sự thư giãn tuyệt đối cho cơ thể và tâm trí. Dòng suối nóng chảy qua các khe đá, tạo nên làn hơi nước huyền ảo làm khung cảnh trở nên thơ mộng hơn bao giờ hết. Đây là phương pháp trị liệu tự nhiên rất hiệu quả cho các vấn đề xương khớp và giảm căng thẳng. Bên cạnh việc ngâm mình, du khách còn có thể tham gia trải nghiệm luộc trứng ngay tại điểm nước sôi, một hoạt động nhỏ nhưng đầy ắp tiếng cười. Hãy chú ý tuân thủ hướng dẫn về an toàn khi sử dụng suối nước nóng. Hiện nay khu vực này đã có thêm các dịch vụ spa cao cấp, giúp bạn có những giây phút nghỉ dưỡng sang trọng và trọn vẹn nhất. Một địa điểm không thể bỏ qua tại huyện Lệ Thủy.",
+    "content": "Suối Bang không chỉ là một điểm đến thiên nhiên mà còn là một khu nghỉ dưỡng độc đáo với suối nước khoáng nóng có nhiệt độ cao nhất Việt Nam. Trải nghiệm ngâm mình trong nước nóng tự nhiên giữa cảnh quan rừng núi bao la mang lại sự thư giãn tuyệt đối cho cơ thể và tâm trí. Dòng suối nóng chảy qua các khe đá, tạo nên làn hơi nước huyền ảo làm khung cảnh trở nên thơ mộng hơn bao giờ hết. Đây là phương pháp trị liệu tự nhiên rất hiệu quả cho các vấn đề xương khớp và giảm đau nhức xương khớp. Bên cạnh việc ngâm mình, du khách còn có thể tham gia trải nghiệm luộc trứng ngay tại điểm nước sôi, một hoạt động nhỏ nhưng đầy ắp tiếng cười. Hãy chú ý tuân thủ các chỉ dẫn an toàn tại các khu vực nước quá nóng. Hiện nay khu vực này đã có thêm các dịch vụ spa cao cấp, giúp bạn có những giây phút nghỉ dưỡng sang trọng và trọn vẹn nhất. Một địa điểm không thể bỏ qua tại huyện Lệ Thủy.",
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
     "title": "Bãi biển Hải Ninh (Làng chài)",
-    "content": "Bãi biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát trắng mịn và nước biển trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "content": "Biển Hải Ninh thuộc xã Hải Ninh, huyện Quảng Ninh, là một bãi biển còn rất hoang sơ và ít dấu chân du khách. Với bờ cát dài, trắng mịn và làn nước trong xanh, nơi đây là thiên đường cho những ai muốn lánh xa sự ồn ào của thành phố. Khác với những bãi biển sầm uất, Hải Ninh giữ được vẻ đẹp thuần khiết với những hàng phi lao rì rào trước gió. Du khách có thể tận hưởng cảm giác tự do, tắm biển trong làn nước mát lạnh và thưởng thức những món hải sản tươi rói ngay tại các quán nhỏ của người dân địa phương. Đặc sản nổi tiếng nhất ở đây là món bánh khoái cá kình, một hương vị đặc trưng mà bạn khó có thể tìm thấy ở nơi khác. Đến Hải Ninh, hãy dành thời gian để cắm trại qua đêm, lắng nghe tiếng sóng biển và ngắm sao trời. Đây là nơi lý tưởng để tận hưởng cuộc sống bình yên, hòa mình vào thiên nhiên và cảm nhận sự chân chất, hiếu khách của người dân vùng biển Quảng Bình.",
     "category": "nature",
-    "latitude": 20.4096279,
-    "longitude": 106.4376945,
-    "costEstimate": 0
+    "latitude": 20.1458349,
+    "longitude": 106.3234607,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -600,7 +666,8 @@
     "category": "restaurant",
     "latitude": 10.8424335,
     "longitude": 106.7681883,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -609,16 +676,18 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
     "title": "Lễ hội Đua thuyền xã Cảnh Dương",
-    "content": "Lễ hội Đua thuyền xã Cảnh Dương là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội vang dội tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là sự kiện mang tính biểu tượng, thể hiện rõ nét văn hóa làng chài ven biển tỉnh Quảng Bình. Được tổ chức định kỳ vào dịp Tết Nguyên Đán, lễ hội thu hút sự chú ý của toàn thể người dân địa phương và đông đảo du khách. Những chiếc thuyền thi đấu với những họa tiết trang trí bắt mắt, cùng hàng chục tay chèo cường tráng tranh tài trên mặt nước trong tiếng trống hội giục giã và sự cổ vũ nhiệt tình của người xem. Đây không chỉ là một cuộc thi thể thao mà còn là dịp để người dân gửi gắm những lời cầu chúc cho một năm mưa thuận gió hòa, đánh bắt được nhiều tôm cá. Du khách đến thăm làng Cảnh Dương vào dịp này không chỉ được chiêm ngưỡng không khí lễ hội sôi động mà còn có cơ hội tìm hiểu về các giá trị văn hóa truyền thống, thưởng thức ẩm thực đặc trưng và trải nghiệm lòng hiếu khách của người dân vùng biển. Một nét đẹp khó quên trong văn hóa Quảng Bình.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -627,7 +696,8 @@
     "category": "nature",
     "latitude": 17.5737841,
     "longitude": 106.2541677,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -636,7 +706,8 @@
     "category": "nature",
     "latitude": 17.9890855,
     "longitude": 106.4777784,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -645,7 +716,8 @@
     "category": "restaurant",
     "latitude": 20.8511941,
     "longitude": 106.7389086,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -654,7 +726,8 @@
     "category": "hotel",
     "latitude": 14.707055,
     "longitude": 107.6922423,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -663,7 +736,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -672,7 +746,8 @@
     "category": "nature",
     "latitude": 17.5737841,
     "longitude": 106.2541677,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -681,7 +756,8 @@
     "category": "nature",
     "latitude": 21.6421044,
     "longitude": 107.7617994,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -690,7 +766,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -699,16 +776,108 @@
     "category": "hotel",
     "latitude": 21.0012177,
     "longitude": 107.287792,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền truyền thống xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là sự kiện mang tính biểu tượng, thể hiện rõ nét văn hóa làng chài ven biển tỉnh Quảng Bình. Được tổ chức định kỳ vào dịp Tết Nguyên Đán, lễ hội thu hút sự chú ý của toàn thể người dân địa phương và đông đảo du khách. Những chiếc thuyền thi đấu với những họa tiết trang trí bắt mắt, cùng hàng chục tay chèo cường tráng tranh tài trên mặt nước trong tiếng trống hội giục giã và sự cổ vũ nhiệt tình của người xem. Đây không chỉ là một cuộc thi thể thao mà còn là dịp để người dân gửi gắm những lời cầu chúc cho một năm mưa thuận gió hòa, đánh bắt được nhiều tôm cá. Du khách đến thăm làng Cảnh Dương vào dịp này không chỉ được chiêm ngưỡng không khí lễ hội sôi động mà còn có cơ hội tìm hiểu về các giá trị văn hóa truyền thống, thưởng thức ẩm thực đặc trưng và trải nghiệm lòng hiếu khách của người dân vùng biển. Một nét đẹp khó quên trong văn hóa Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
     "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
-    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính gắn kết cộng đồng rất cao, tạo nên sức hút đặc biệt đối với khách du lịch. Đừng bỏ lỡ cơ hội tham gia và hòa mình vào bầu không khí náo nhiệt của ngày hội này nếu bạn có dịp ghé thăm Lệ Thủy nhé.",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -717,7 +886,1128 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền xã Cảnh Dương là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Chi tiết)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy luôn là sự kiện được mong chờ nhất trong năm. Những chiếc thuyền trải với màu sắc rực rỡ lướt trên mặt sông, tiếng trống hội dồn dập vang lên, tạo nên một khung cảnh cực kỳ ấn tượng. Các đội đua với những tay chèo lực lưỡng, nỗ lực hết mình để giành chiến thắng trong sự cổ vũ nhiệt tình của người dân và du khách. Đây không chỉ là một cuộc đua tài mà còn thể hiện tinh thần đoàn kết, kiên cường của cộng đồng. Du khách có thể dễ dàng tham gia và cảm nhận không khí lễ hội sôi động khắp các bờ sông. Những món ăn đặc sản địa phương được chuẩn bị trong dịp lễ hội cũng là một trải nghiệm tuyệt vời. Đừng bỏ lỡ sự kiện đầy cảm hứng này nếu bạn có dịp ghé thăm Lệ Thủy vào dịp Quốc khánh nhé.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính cộng đồng cao, để lại ấn tượng sâu đậm về sự chân chất và hiếu khách của người dân vùng quê Lệ Thủy.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Hải Ninh (Làng chài)",
+    "content": "Biển Hải Ninh không chỉ cuốn hút du khách bởi bờ cát dài, trắng mịn và làn nước trong xanh mà còn bởi sự gần gũi với cuộc sống của người dân làng chài. Tại đây, bạn có thể dễ dàng bắt gặp những con thuyền neo đậu sau một chuyến đánh bắt, cùng những người dân cần cù phân loại cá tôm. Không gian nơi đây vô cùng thanh bình và gần gũi, tách biệt với sự xô bồ của phố thị. Du khách đến đây có thể thưởng thức đặc sản bánh khoái cá kình độc đáo, một hương vị riêng biệt của vùng đất Hải Ninh. Dạo bước trên bờ cát vào sáng sớm hoặc chiều tà để cảm nhận làn gió biển mát lành là trải nghiệm tuyệt vời. Nếu bạn yêu thích sự giản dị và muốn tìm kiếm một nơi để thư giãn thực sự, bãi biển Hải Ninh chính là lựa chọn hoàn hảo. Đừng quên thử trải nghiệm cùng ngư dân kéo lưới vào buổi sáng, bạn sẽ có những kỷ niệm khó quên.",
+    "category": "nature",
+    "latitude": 20.4096279,
+    "longitude": 106.4376945,
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng cơm niêu Minh Nhật",
+    "content": "Nhà hàng cơm niêu Minh Nhật tại Đồng Hới là địa chỉ chuyên phục vụ các món ăn truyền thống Việt Nam với hương vị đậm đà, khó quên. Điểm nhấn của quán chính là món cơm niêu nóng hổi, giòn tan ở lớp đáy, ăn kèm với các món kho, xào rau rừng mang hương vị quê nhà. Không gian nhà hàng được thiết kế theo phong cách truyền thống, tạo cảm giác gần gũi, đầm ấm như đang dùng cơm tại gia đình. Đây là địa điểm lý tưởng cho các buổi họp mặt gia đình, bữa cơm trưa văn phòng hoặc các chuyến du lịch nhóm muốn thưởng thức ẩm thực Việt một cách chân thực nhất. Đội ngũ nhân viên phục vụ rất nhiệt tình, nhanh chóng. Với mức giá bình dân và chất lượng món ăn ổn định, nhà hàng luôn là lựa chọn hàng đầu cho những ai yêu thích các món ăn Việt Nam truyền thống khi đặt chân tới thành phố Đồng Hới. Hãy ghé thử để cảm nhận hương vị cơm niêu đặc trưng tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.8424335,
+    "longitude": 106.7681883,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Royal Quảng Bình",
+    "content": "Khách sạn Royal Quảng Bình tọa lạc tại vị trí đắc địa ở thành phố Đồng Hới, mang đến không gian lưu trú sang trọng với dịch vụ đẳng cấp. Với thiết kế kiến trúc hiện đại, khách sạn sở hữu hệ thống phòng nghỉ tiện nghi, sạch sẽ và tầm nhìn hướng ra dòng sông Nhật Lệ hoặc toàn cảnh phố thị năng động. Khách sạn còn được trang bị các dịch vụ cao cấp như phòng hội nghị, hồ bơi ngoài trời và nhà hàng phục vụ thực đơn phong phú từ Á đến Âu. Đội ngũ nhân viên chuyên nghiệp luôn tận tâm phục vụ, mang lại cảm giác thoải mái nhất cho khách hàng. Vị trí thuận lợi của khách sạn giúp du khách dễ dàng tham quan các điểm du lịch nổi tiếng, khám phá các món ăn địa phương và trải nghiệm nhịp sống sôi động của Đồng Hới. Dù bạn đến đây vì mục đích nghỉ dưỡng hay công việc, khách sạn Royal luôn là điểm đến hoàn hảo cho kỳ nghỉ trọn vẹn và đáng nhớ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền xã Cảnh Dương",
+    "content": "Lễ hội Đua thuyền tại xã Cảnh Dương, huyện Quảng Trạch là một trong những nét văn hóa đặc sắc nhất của người dân làng chài Quảng Trạch, Quảng Bình. Diễn ra vào dịp đầu năm mới, lễ hội mang ý nghĩa cầu mong sự bình an, may mắn và một mùa đánh bắt bội thu. Những chiếc thuyền đua với sắc màu rực rỡ được điều khiển bởi những tay chèo lực lưỡng, tranh tài quyết liệt trên sông trong sự cổ vũ nhiệt tình của người xem. Không khí náo nhiệt cùng tiếng trống hội giục giã tạo nên một bức tranh văn hóa tuyệt đẹp. Du khách đến đây không chỉ được thưởng thức những màn thi đấu hấp dẫn mà còn được tìm hiểu sâu hơn về truyền thống lâu đời của người dân làng chài. Những món hải sản tươi ngon được chuẩn bị công phu trong dịp lễ hội cũng là một trải nghiệm ẩm thực đáng nhớ. Đây là một điểm đến tuyệt vời để cảm nhận hơi thở văn hóa truyền thống của vùng biển miền Trung.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động tắm bùn)",
+    "content": "Hoạt động tắm bùn khoáng tự nhiên bên trong Hang Tối là một trải nghiệm độc đáo và thú vị nhất tại Vườn quốc gia Phong Nha - Kẻ Bàng. Sau khi vượt qua hành trình khám phá, bạn sẽ đến một không gian bên trong hang nơi chứa lượng bùn khoáng tự nhiên dồi dào. Ngâm mình trong lớp bùn này không chỉ mang lại cảm giác thích thú mà còn có tác dụng làm đẹp da và thư giãn cơ thể hiệu quả. Sau đó, du khách sẽ được tắm sạch trong dòng sông Chày xanh mát ngay bên ngoài. Hoạt động này luôn thu hút đông đảo du khách, đặc biệt là các bạn trẻ muốn tìm kiếm sự mới mẻ và vui vẻ. Hãy chuẩn bị đồ bơi và sẵn sàng cho những giây phút nghịch ngợm hết mình trong bùn. Đây là cơ hội tuyệt vời để tận hưởng thiên nhiên một cách trọn vẹn và thư giãn sau những giờ trekking mệt mỏi. Đừng quên mang theo điện thoại chống nước để lưu lại những khoảnh khắc vui vẻ này nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Hải Cảng",
+    "content": "Nhà hàng hải sản Hải Cảng nằm ở vị trí thuận lợi, chuyên phục vụ các món ăn đặc sản vùng biển Đồng Hới trong không gian rộng rãi và lịch sự. Thực đơn của quán rất phong phú với các loại hải sản tươi sống như cua, tôm, cá, ốc... tất cả đều được tuyển chọn kỹ lưỡng mỗi ngày. Cách chế biến của nhà hàng vừa giữ được vị ngọt tự nhiên của hải sản, vừa có những nét sáng tạo riêng khiến thực khách thích thú. Không gian nhà hàng được thiết kế thoáng mát, thích hợp cho các buổi tiệc tùng, gặp mặt gia đình hay liên hoan công ty. Nhân viên phục vụ rất nhiệt tình, nhanh chóng và luôn cởi mở với khách. Nếu bạn muốn tìm một địa điểm ăn uống chất lượng, giá cả phải chăng tại thành phố Đồng Hới, nhà hàng Hải Cảng là lựa chọn không thể bỏ qua. Hãy ghé thử và trải nghiệm hương vị hải sản tuyệt vời tại đây.",
+    "category": "restaurant",
+    "latitude": 20.8511941,
+    "longitude": 106.7389086,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Anh Linh 2",
+    "content": "Khách sạn Anh Linh 2 là lựa chọn lưu trú thoải mái và tiện lợi tại thành phố Đồng Hới, mang đến không gian nghỉ ngơi thư giãn cho du khách. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ sạch sẽ, đầy đủ tiện nghi, phù hợp cho cả du khách cá nhân và gia đình. Vị trí của khách sạn rất thuận lợi, chỉ mất vài phút để di chuyển đến bãi biển Nhật Lệ, trung tâm thành phố và các điểm tham quan chính. Đội ngũ nhân viên luôn nhiệt tình, chu đáo, sẵn sàng hỗ trợ du khách mọi nhu cầu từ đặt tour, thuê xe cho đến tư vấn các quán ăn ngon. Với mức giá hợp lý và dịch vụ chất lượng, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá Quảng Bình một cách nhẹ nhàng và thuận tiện. Nếu bạn đang tìm kiếm một nơi lưu trú ổn định, giá phải chăng, khách sạn Anh Linh 2 là gợi ý hoàn hảo cho bạn.",
+    "category": "hotel",
+    "latitude": 14.707055,
+    "longitude": 107.6922423,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền trên sông Kiến Giang (Trải nghiệm)",
+    "content": "Lễ hội Đua thuyền trên sông Kiến Giang tại Lệ Thủy mang lại những trải nghiệm văn hóa không thể nào quên cho du khách. Không chỉ được xem những cuộc thi gay cấn, bạn còn có cơ hội tìm hiểu sâu hơn về lịch sử và truyền thống của các làng quê bên dòng sông. Không gian lễ hội tràn ngập niềm vui với tiếng trống hội, tiếng cổ vũ vang dội khắp hai bên bờ. Du khách có thể dễ dàng thuê thuyền nhỏ để theo dõi cuộc đua từ góc nhìn gần hơn, một trải nghiệm đầy phấn khích. Các gian hàng ẩm thực quanh vùng cũng mở ra với những món đặc sản địa phương vô cùng hấp dẫn. Sự nồng hậu, hiếu khách của người dân địa phương sẽ khiến bạn cảm thấy như đang ở trong một gia đình lớn. Nếu bạn có dịp đến Quảng Bình vào đầu tháng 9, đừng bỏ lỡ sự kiện đầy cảm hứng này. Một lễ hội thực sự mang lại cái nhìn sâu sắc về tâm hồn và văn hóa của con người Quảng Bình.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Hang Tối (Hoạt động chèo Kayak)",
+    "content": "Chèo Kayak trên sông Chày tại khu vực Hang Tối là một trải nghiệm tuyệt vời, hòa mình vào làn nước xanh ngắt và cảnh sắc thiên nhiên hùng vĩ của Vườn quốc gia Phong Nha - Kẻ Bàng. Dòng sông Chày chảy lững lờ giữa những vách núi đá vôi cao vút tạo nên một khung cảnh đẹp như tranh vẽ. Du khách có thể tự mình điều khiển con thuyền kayak, len lỏi qua các khúc sông, chiêm ngưỡng vẻ đẹp hoang sơ của thiên nhiên hai bên bờ. Đây là hoạt động rất phù hợp cho những nhóm bạn yêu thích thể thao và muốn tận hưởng những giây phút yên bình giữa lòng thiên nhiên. Hãy chú ý mặc áo phao đầy đủ và tuân thủ các quy định an toàn của nhân viên khu du lịch. Trải nghiệm chèo kayak trên sông Chày không chỉ giúp bạn rèn luyện sức khỏe mà còn mang lại những bức ảnh cực kỳ ấn tượng. Đừng bỏ lỡ hoạt động này khi đến tham quan Hang Tối nhé.",
+    "category": "nature",
+    "latitude": 17.5737841,
+    "longitude": 106.2541677,
+    "costEstimate": 0,
+    "address": "Xã Sơn Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Biển Bảo Ninh (Hoàng hôn - chi tiết)",
+    "content": "Hoàng hôn trên bãi biển Bảo Ninh là một trong những trải nghiệm đẹp nhất tại Quảng Bình. Khi bầu trời dần chuyển từ màu xanh sang đỏ cam rực rỡ, cảnh quan tại đây trở nên vô cùng huyền ảo và thơ mộng. Du khách có thể thong dong dạo bộ, lắng nghe tiếng sóng biển rì rào và cảm nhận làn gió mát lạnh của đại dương. Đây là thời điểm tuyệt vời để thư giãn, suy ngẫm hoặc trò chuyện cùng người thân sau một ngày dài tham quan. Khung cảnh mặt trời lặn dần ở phía xa chân trời là phông nền hoàn hảo cho những bức hình lưu niệm. Nếu bạn là người yêu thiên nhiên, hãy dành thời gian ngồi yên trên bãi cát và chiêm ngưỡng sự chuyển động của đất trời. Đừng quên mang theo áo khoác mỏng vì không khí có thể trở nên hơi se lạnh khi đêm xuống. Một khoảnh khắc bình yên, sâu lắng tại Bảo Ninh sẽ để lại trong bạn những kỷ niệm vô cùng đẹp đẽ.",
+    "category": "nature",
+    "latitude": 21.6421044,
+    "longitude": 107.7617994,
+    "costEstimate": 0,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Nhà hàng hải sản Mái Lá",
+    "content": "Nhà hàng hải sản Mái Lá nằm giữa không gian xanh mát tại thành phố Đồng Hới, là điểm dừng chân lý tưởng cho những bữa ăn cùng bạn bè và gia đình. Với phong cách thiết kế đơn giản, mộc mạc như chính tên gọi, nhà hàng mang đến cảm giác thoải mái, gần gũi với thiên nhiên cho mọi thực khách. Thực đơn của nhà hàng chuyên phục vụ các loại hải sản đặc sản địa phương như mực, tôm, cá biển... với hương vị được chế biến theo phong cách dân dã nhưng vô cùng đậm đà. Điểm cộng lớn của nhà hàng là đội ngũ nhân viên phục vụ rất nhiệt tình, chu đáo. Với mức giá cạnh tranh và không gian thoáng đãng, nhà hàng Mái Lá luôn là lựa chọn hàng đầu cho những ai tìm kiếm trải nghiệm ẩm thực chất lượng tại Đồng Hới. Hãy ghé thử và tận hưởng những giờ phút thư giãn, thưởng thức các món ăn ngon tại đây nhé.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Khách sạn Tân Bình",
+    "content": "Khách sạn Tân Bình là một lựa chọn lưu trú tiện nghi, thoải mái tại thành phố Đồng Hới, được nhiều du khách yêu thích nhờ chất lượng dịch vụ ổn định. Với thiết kế hiện đại, khách sạn cung cấp các phòng nghỉ thoáng mát, sạch sẽ, phù hợp cho cả kỳ nghỉ dưỡng hay chuyến công tác. Vị trí của khách sạn rất thuận lợi cho việc di chuyển đến các điểm tham quan nổi tiếng, chợ đêm và bãi biển Nhật Lệ. Nhân viên khách sạn luôn nhiệt tình hỗ trợ du khách các thông tin cần thiết như địa chỉ ăn uống, tour du lịch tham quan. Với mức giá hợp lý, đây là điểm dừng chân lý tưởng cho những ai muốn khám phá thành phố Đồng Hới mà không cần quá lo lắng về chi phí lưu trú. Khách sạn luôn nỗ lực để mang đến sự hài lòng cao nhất cho mọi khách hàng. Một điểm đến lưu trú tin cậy trong chuyến hành trình khám phá mảnh đất Quảng Bình đầy thú vị.",
+    "category": "hotel",
+    "latitude": 21.0012177,
+    "longitude": 107.287792,
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Lễ hội Đua thuyền Lệ Thủy (Ý nghĩa)",
+    "content": "Lễ hội Đua thuyền tại huyện Lệ Thủy không chỉ là một hoạt động thể thao gay cấn mà còn là biểu tượng cho tinh thần bất khuất, sự đoàn kết của người dân vùng quê sông nước. Lễ hội được tổ chức hàng năm để kỷ niệm ngày Quốc khánh 2/9, thể hiện lòng biết ơn đến các thế hệ cha ông đã hy sinh vì độc lập dân tộc. Tiếng trống hội dồn dập, những chiếc thuyền đua lướt sóng nhanh như tên bắn tạo nên một hình ảnh vô cùng ấn tượng. Du khách đến đây không chỉ được chứng kiến tinh thần thể thao quyết liệt mà còn hiểu thêm về giá trị văn hóa, tình yêu quê hương đất nước của người dân nơi đây. Đây là một lễ hội mang tính gắn kết cộng đồng rất cao, tạo nên sức hút đặc biệt đối với khách du lịch. Đừng bỏ lỡ cơ hội tham gia và hòa mình vào bầu không khí náo nhiệt của ngày hội này nếu bạn có dịp ghé thăm Lệ Thủy nhé.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
+  },
+  {
+    "province": "Quảng Bình",
+    "title": "Suối Bang (Trải nghiệm suối nóng 2)",
+    "content": "Trải nghiệm suối nước nóng tại Suối Bang là một phương pháp trị liệu tự nhiên đầy thú vị cho sức khỏe. Dòng suối nóng tự nhiên này có nhiệt độ rất cao, chứa nhiều khoáng chất có lợi cho cơ thể, đặc biệt là trong việc hỗ trợ điều trị các bệnh về xương khớp và ngoài da. Việc ngâm mình trong dòng nước nóng giữa khung cảnh núi rừng hoang sơ mang đến một cảm giác thư giãn tuyệt đối cho cơ thể. Sau khi ngâm mình, bạn sẽ cảm thấy vô cùng sảng khoái và khỏe khoắn. Hoạt động luộc trứng ngay tại điểm nóng cũng là một điểm nhấn nhỏ thú vị trong hành trình của bạn. Hãy chú ý quan sát các biển báo an toàn để đảm bảo bạn chỉ ngâm mình tại các khu vực cho phép. Đây là một điểm đến nghỉ dưỡng kết hợp sức khỏe tuyệt vời tại Quảng Bình, nơi bạn có thể quên đi mọi âu lo và nạp lại năng lượng cho cơ thể. Một trải nghiệm thật sự đáng nhớ.",
+    "category": "nature",
+    "latitude": 10.649678,
+    "longitude": 107.5543211,
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -726,7 +2016,8 @@
     "category": "nature",
     "latitude": 20.4096279,
     "longitude": 106.4376945,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -735,7 +2026,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -744,7 +2036,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -753,7 +2046,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Nhân Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -762,7 +2056,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 100
+    "costEstimate": 100,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -771,7 +2066,8 @@
     "category": "nature",
     "latitude": 20.1458349,
     "longitude": 106.3234607,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -780,7 +2076,8 @@
     "category": "restaurant",
     "latitude": 21.1684243,
     "longitude": 106.0589669,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -789,7 +2086,8 @@
     "category": "hotel",
     "latitude": 10.8081934,
     "longitude": 106.6708686,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -798,7 +2096,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -807,7 +2106,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -816,7 +2116,8 @@
     "category": "nature",
     "latitude": 17.491054,
     "longitude": 106.627149,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -825,7 +2126,8 @@
     "category": "restaurant",
     "latitude": 21.0015329,
     "longitude": 105.8168458,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -834,7 +2136,8 @@
     "category": "hotel",
     "latitude": 21.009802,
     "longitude": 105.9317588,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -843,7 +2146,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Cảnh Dương, Huyện Quảng Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -852,16 +2156,8 @@
     "category": "nature",
     "latitude": 17.5737841,
     "longitude": 106.2541677,
-    "costEstimate": 0
-  },
-  {
-    "province": "Quảng Bình",
-    "title": "Biển Đá Nhảy (Trải nghiệm)",
-    "content": "Bãi biển Đá Nhảy là một điểm đến tuyệt vời, mang vẻ đẹp độc đáo với những khối đá nhấp nhô đầy kỳ thú. Du khách có thể thong dong dạo bộ trên bãi cát, ngắm nhìn những tạo hình tự nhiên của đá vôi qua hàng nghìn năm. Đặc biệt, vào mùa hè, đây là nơi lý tưởng để tắm biển, cắm trại và cùng bạn bè tổ chức tiệc ngoài trời. Sự bình yên và cảnh quan hùng vĩ tại đây làm cho du khách cảm thấy nhẹ nhàng, dễ chịu hơn. Nếu bạn là một nhiếp ảnh gia, đừng quên mang theo máy ảnh vì có rất nhiều góc chụp hình ấn tượng tại Đá Nhảy. Hãy dành thời gian để tận hưởng không gian thoáng đãng, nghe tiếng sóng vỗ và cảm nhận hơi thở của biển cả. Một địa điểm không thể bỏ qua trong chuyến hành trình khám phá Quảng Bình, nơi vẻ đẹp tự nhiên được tôn vinh một cách đầy ấn tượng.",
-    "category": "nature",
-    "latitude": 17.9890855,
-    "longitude": 106.4777784,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Sơn Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -870,7 +2166,8 @@
     "category": "restaurant",
     "latitude": 20.8684586,
     "longitude": 106.6426666,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -879,7 +2176,8 @@
     "category": "hotel",
     "latitude": 21.5294646,
     "longitude": 107.9734604,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -888,16 +2186,18 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
     "title": "Suối Bang (Sức khỏe và thiên nhiên)",
-    "content": "Trải nghiệm tại suối nước nóng Suối Bang mang đến sự kết hợp hoàn hảo giữa du lịch khám phá thiên nhiên và chăm sóc sức khỏe. Nguồn nước khoáng nóng tự nhiên ở đây có những đặc tính trị liệu vượt trội, giúp du khách cảm nhận sự thay đổi rõ rệt của cơ thể sau khi ngâm mình. Không gian rừng núi trong lành, tĩnh lặng kết hợp với làn hơi nước huyền ảo làm cho chuyến đi trở nên thư thái hơn bao giờ hết. Đây là nơi lý tưởng để bạn tách biệt với thế giới bên ngoài, tập trung vào việc phục hồi năng lượng. Ngoài ra, việc luộc trứng tại suối nước nóng cũng là một hoạt động vui vẻ được nhiều người yêu thích. Hãy để không gian tự nhiên tại Suối Bang làm dịu đi mọi mệt mỏi trong tâm hồn bạn. Một sự lựa chọn tuyệt vời cho những ai tìm kiếm sự cân bằng và thư giãn trong kỳ nghỉ tại Quảng Bình.",
+    "content": "Trải nghiệm tại suối nước nóng Suối Bang mang đến sự kết hợp hoàn hảo giữa du lịch khám phá thiên nhiên và chăm sóc sức khỏe. Nguồn nước khoáng tự nhiên với nhiệt độ cao chứa nhiều khoáng chất quý có khả năng giúp thư giãn cơ bắp, hỗ trợ điều trị xương khớp và làm đẹp da hiệu quả. Không gian rừng núi trong lành, tĩnh lặng kết hợp với làn hơi nước huyền ảo làm cho chuyến đi trở nên thư thái hơn bao giờ hết. Đây là nơi lý tưởng để bạn tách biệt với thế giới bên ngoài, tập trung vào việc phục hồi năng lượng. Ngoài ra, việc luộc trứng tại suối nước nóng cũng là một hoạt động vui vẻ được nhiều người yêu thích. Hãy để không gian tự nhiên tại Suối Bang làm dịu đi mọi mệt mỏi trong tâm hồn bạn. Một sự lựa chọn tuyệt vời cho những ai tìm kiếm sự cân bằng và thư giãn trong kỳ nghỉ tại Quảng Bình.",
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -906,7 +2206,8 @@
     "category": "nature",
     "latitude": 20.4096279,
     "longitude": 106.4376945,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -915,7 +2216,8 @@
     "category": "restaurant",
     "latitude": 11.9624798,
     "longitude": 108.4249813,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -924,7 +2226,8 @@
     "category": "hotel",
     "latitude": 17.4655336,
     "longitude": 106.6441253,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Xã Bảo Ninh, Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -933,7 +2236,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -942,7 +2246,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -951,7 +2256,8 @@
     "category": "nature",
     "latitude": 17.491054,
     "longitude": 106.627149,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -960,7 +2266,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -969,7 +2276,8 @@
     "category": "hotel",
     "latitude": 16.0706544,
     "longitude": 108.2359101,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -978,7 +2286,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Nhân Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -987,7 +2296,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -996,7 +2306,8 @@
     "category": "nature",
     "latitude": 20.1458349,
     "longitude": 106.3234607,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1005,7 +2316,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1014,7 +2326,8 @@
     "category": "hotel",
     "latitude": 17.4744739,
     "longitude": 106.600694,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1023,7 +2336,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1032,7 +2346,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 100
+    "costEstimate": 100,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1041,7 +2356,8 @@
     "category": "nature",
     "latitude": 20.1458349,
     "longitude": 106.3234607,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1050,7 +2366,8 @@
     "category": "restaurant",
     "latitude": 19.449955,
     "longitude": 105.7805949,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1059,7 +2376,8 @@
     "category": "hotel",
     "latitude": 17.4970562,
     "longitude": 106.5925472,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1068,7 +2386,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1077,7 +2396,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1086,7 +2406,8 @@
     "category": "nature",
     "latitude": 17.491054,
     "longitude": 106.627149,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1095,7 +2416,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1104,7 +2426,8 @@
     "category": "hotel",
     "latitude": 10.2177647,
     "longitude": 103.9585934,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1113,7 +2436,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1122,7 +2446,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1131,7 +2456,8 @@
     "category": "nature",
     "latitude": 20.1458349,
     "longitude": 106.3234607,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải Ninh, Huyện Quảng Ninh, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1140,7 +2466,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1149,7 +2476,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1158,7 +2486,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1167,7 +2496,8 @@
     "category": "nature",
     "latitude": 10.649678,
     "longitude": 107.5543211,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thủy, Huyện Lệ Thủy, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1176,7 +2506,8 @@
     "category": "nature",
     "latitude": 17.491054,
     "longitude": 106.627149,
-    "costEstimate": 5
+    "costEstimate": 5,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1185,7 +2516,8 @@
     "category": "restaurant",
     "latitude": 14.1794862,
     "longitude": 109.0538731,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Bình",
@@ -1194,7 +2526,8 @@
     "category": "hotel",
     "latitude": 17.4694715,
     "longitude": 106.607977,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thành phố Đồng Hới, Tỉnh Quảng Bình"
   },
   {
     "province": "Quảng Trị",
@@ -1203,7 +2536,8 @@
     "category": "attraction",
     "latitude": 16.7539122,
     "longitude": 107.1895187,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị xã Quảng Trị, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1212,7 +2546,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Kim Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1221,7 +2556,8 @@
     "category": "attraction",
     "latitude": 16.9574954,
     "longitude": 106.9547331,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Linh Trường, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1230,7 +2566,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Huyện Vĩnh Linh và Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1239,7 +2576,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1798
+    "costEstimate": 1798,
+    "address": "Xã Hải Phú, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1248,16 +2586,18 @@
     "category": "attraction",
     "latitude": 16.6543271,
     "longitude": 106.7243017,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Tân Hợp, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
     "title": "Nhà tù Lao Bảo",
-    "content": "Nhà tù Lao Bảo nằm ở thị trấn Lao Bảo, huyện Hướng Hóa, là một trong năm nhà tù lớn nhất Đông Dương do thực dân Pháp xây dựng để giam giữ các nhà yêu nước và chiến sĩ cộng sản Việt Nam. Công trình này là minh chứng sống động cho tội ác của chế độ thực dân và tinh thần kiên cường, bất khuất của những người chiến sĩ cách mạng. Nhà tù được thiết kế với các bức tường kiên cố, hệ thống cũi cọp, xà phòng giam giữ khắc nghiệt cùng nhiều hình phạt tra tấn dã man. Mặc dù phần lớn công trình đã bị phá hủy bởi thời gian và chiến tranh, nhưng các phân khu còn lại và khu nhà trưng bày hiện vật vẫn đủ sức gợi lại không khí u tối, nghiêm trang thời bấy giờ. Đến đây, du khách sẽ được nghe thuyết minh về những câu chuyện hoạt động bí mật của các nhà cách mạng tiêu biểu như Nguyễn Chí Thanh, Tố Hữu. Vị trí nhà tù khá gần biên giới Việt - Lào, rất thuận tiện để kết hợp tham quan cửa khẩu quốc tế.",
+    "content": "Nhà tù Lao Bảo nằm ở thị trấn Lao Bảo, huyện Hướng Hóa, là một trong những năm nhà tù lớn nhất Đông Dương do thực dân Pháp xây dựng để giam giữ các nhà yêu nước và chiến sĩ cộng sản Việt Nam. Công trình này là minh chứng sống động cho tội ác của chế độ thực dân và tinh thần kiên cường, bất khuất của những người chiến sĩ cách mạng. Nhà tù được thiết kế với các bức tường kiên cố, hệ thống cũi cọp, xà phòng giam giữ khắc nghiệt cùng nhiều hình phạt tra tấn dã man. Mặc dù phần lớn công trình đã bị phá hủy bởi thời gian và chiến tranh, nhưng các phân khu còn lại và khu nhà trưng bày hiện vật vẫn đủ sức gợi lại không khí u tối, nghiêm trang thời bấy giờ. Đến đây, du khách sẽ được nghe thuyết minh về những câu chuyện hoạt động bí mật của các nhà cách mạng tiêu biểu như Nguyễn Chí Thanh, Tố Hữu. Vị trí nhà tù khá gần biên giới Việt - Lào, rất thuận tiện để kết hợp tham quan cửa khẩu quốc tế.",
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Lao Bảo, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1266,7 +2606,8 @@
     "category": "nature",
     "latitude": 17.158598,
     "longitude": 107.3393576,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện đảo Cồn Cỏ, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1275,7 +2616,8 @@
     "category": "nature",
     "latitude": 17.0286068,
     "longitude": 107.1064278,
-    "costEstimate": 5
+    "costEstimate": 5,
+    "address": "Huyện Vĩnh Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1284,7 +2626,8 @@
     "category": "nature",
     "latitude": 16.9065854,
     "longitude": 107.1775717,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1293,7 +2636,8 @@
     "category": "nature",
     "latitude": 16.5404721,
     "longitude": 107.0285087,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Đakrông, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1302,7 +2646,8 @@
     "category": "nature",
     "latitude": 16.7771055,
     "longitude": 106.5798126,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hướng Phùng, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1311,7 +2656,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Đakrông, Huyện Đakrông, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1320,7 +2666,8 @@
     "category": "nature",
     "latitude": 16.8046849,
     "longitude": 106.5752444,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hướng Phùng và Xã Hướng Lập, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1329,7 +2676,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Khu di tích đôi bờ Hiền Lương - Sông Bến Hải, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1338,7 +2686,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Bến thả hoa đăng, Thị xã Quảng Trị, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1347,7 +2696,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đình làng Bích La, Xã Triệu Thành, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1356,7 +2706,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường Trần Hưng Đạo, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1365,7 +2716,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Làng Phương Lang, Xã Hải Ba, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1374,7 +2726,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị trấn Diên Sanh, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1383,7 +2736,8 @@
     "category": "hotel",
     "latitude": 10.75552,
     "longitude": 106.6701873,
-    "costEstimate": 1
+    "costEstimate": 1,
+    "address": "Số 1 đường Hùng Vương, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1392,7 +2746,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 68
+    "costEstimate": 68,
+    "address": "Số 68 đường Lê Duẩn, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1401,7 +2756,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Bãi biển Cửa Việt, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1410,7 +2766,8 @@
     "category": "attraction",
     "latitude": 16.8083872,
     "longitude": 107.0594839,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường 4, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1419,7 +2776,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Tổ dân phố xứ Cát, Thị trấn Ái Tử, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1428,7 +2786,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Cam Lộ, Huyện Cam Lộ, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1437,7 +2796,8 @@
     "category": "nature",
     "latitude": 16.7429391,
     "longitude": 107.3715714,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hải An, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1446,7 +2806,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 1
+    "costEstimate": 1,
+    "address": "Xã Hướng Lập, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1455,7 +2816,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hướng Lập, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1464,7 +2826,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 13
+    "costEstimate": 13,
+    "address": "Thánh địa La Vang, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1473,7 +2836,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Làng Mai Xá, Xã Gio Mai, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1482,7 +2846,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 297 đường Lê Duẩn, Phường 5, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1491,7 +2856,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Phong Bình, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1500,7 +2866,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hải Hưng, Huyện Hải Lăng, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1509,7 +2876,8 @@
     "category": "nature",
     "latitude": 17.0845297,
     "longitude": 107.1165047,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Kim Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1518,7 +2886,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 10
+    "costEstimate": 10,
+    "address": "Huyện Hướng Hóa và Huyện Đakrông, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1527,7 +2896,8 @@
     "category": "restaurant",
     "latitude": 16.8301078,
     "longitude": 107.088252,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Đường bờ sông Bà Triệu, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1536,7 +2906,8 @@
     "category": "hotel",
     "latitude": 16.821912,
     "longitude": 107.0953949,
-    "costEstimate": 66
+    "costEstimate": 66,
+    "address": "Số 66 đường Trần Hưng Đạo, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1545,7 +2916,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Làng Hậu Kiên, Xã Triệu Thành, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1554,7 +2926,8 @@
     "category": "nature",
     "latitude": 16.7102316,
     "longitude": 106.6864408,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1563,7 +2936,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Vùng biển Cửa Tùng, Huyện Vĩnh Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1572,7 +2946,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Khóm An Hà, Thị trấn Lao Bảo, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1581,7 +2956,8 @@
     "category": "hotel",
     "latitude": 16.6186164,
     "longitude": 106.6001001,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Lao Bảo, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1590,7 +2966,8 @@
     "category": "attraction",
     "latitude": 16.7847145,
     "longitude": 106.9442751,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Cam Lộ, Huyện Cam Lộ, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1599,7 +2976,8 @@
     "category": "nature",
     "latitude": 21.0447918,
     "longitude": 105.7883504,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Triệu Lăng, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1608,7 +2986,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đoạn sông qua khu di tích Hiền Lương, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1617,7 +2996,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 48
+    "costEstimate": 48,
+    "address": "Số 48 đường Nguyễn Tri Phương, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1626,7 +3006,8 @@
     "category": "hotel",
     "latitude": 16.8192943,
     "longitude": 107.1050829,
-    "costEstimate": 58
+    "costEstimate": 58,
+    "address": "Số 58 đường Lê Duẩn, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1635,7 +3016,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Thị trấn Khe Sanh, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1644,7 +3026,8 @@
     "category": "nature",
     "latitude": 21.1769224,
     "longitude": 106.0579293,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hướng Phùng, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1653,7 +3036,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hướng Hóa và Huyện Đakrông, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1662,7 +3046,8 @@
     "category": "restaurant",
     "latitude": 21.0362652,
     "longitude": 105.8528119,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Chợ Đông Hà, Đường Trần Hưng Đạo, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1671,7 +3056,8 @@
     "category": "hotel",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị xã Quảng Trị, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1680,7 +3066,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Gio An, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1689,7 +3076,8 @@
     "category": "nature",
     "latitude": 13.7941043,
     "longitude": 109.1582384,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Tân Liên, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1698,7 +3086,8 @@
     "category": "attraction",
     "latitude": 17.2166964,
     "longitude": 106.9548246,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hương Toàn, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1707,7 +3096,8 @@
     "category": "restaurant",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 80000
+    "costEstimate": 80000,
+    "address": "Thị xã Quảng Trị, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1716,7 +3106,8 @@
     "category": "hotel",
     "latitude": 16.4712388,
     "longitude": 107.5976493,
-    "costEstimate": 1200000
+    "costEstimate": 1200000,
+    "address": "Thị trấn Khe Sanh, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1725,7 +3116,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Kim Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1734,7 +3126,8 @@
     "category": "nature",
     "latitude": 16.757807,
     "longitude": 107.1144281,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Thị trấn Ái Tử, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1743,7 +3136,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Khu du lịch biển Cửa Việt, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1752,7 +3146,8 @@
     "category": "restaurant",
     "latitude": 24.3998851,
     "longitude": 111.5775528,
-    "costEstimate": 208
+    "costEstimate": 208,
+    "address": "Số 208 đường Lê Duẩn, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1761,7 +3156,8 @@
     "category": "hotel",
     "latitude": 21.0756588,
     "longitude": 105.772135,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Số 144 đường Lê Duẩn, Phường 5, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1770,7 +3166,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Gio Mỹ, Huyện Gio Linh, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1779,7 +3176,8 @@
     "category": "nature",
     "latitude": 23.3607345,
     "longitude": 105.2989554,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Đakrông, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1788,7 +3186,8 @@
     "category": "attraction",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Phường 2, Thành phố Đông Hà, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1797,7 +3196,8 @@
     "category": "nature",
     "latitude": 16.6640505,
     "longitude": 107.0923743,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Đakrông, Thị xã Quảng Trị, Huyện Triệu Phong, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1806,7 +3206,8 @@
     "category": "festival",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Đài tưởng niệm trung tâm Thành cổ, Thị xã Quảng Trị, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1815,7 +3216,8 @@
     "category": "nature",
     "latitude": 10.7769,
     "longitude": 106.7009,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Xã Hướng Lập, Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1824,7 +3226,8 @@
     "category": "nature",
     "latitude": 16.8609594,
     "longitude": 106.641055,
-    "costEstimate": 0
+    "costEstimate": 0,
+    "address": "Huyện Hướng Hóa, Tỉnh Quảng Trị"
   },
   {
     "province": "Quảng Trị",
@@ -1833,6 +3236,7 @@
     "category": "attraction",
     "latitude": 16.8222447,
     "longitude": 107.1007719,
-    "costEstimate": 30000
+    "costEstimate": 30000,
+    "address": "Xã Hải Quy, Huyện Hải Lăng, Tỉnh Quảng Trị"
   }
 ]
