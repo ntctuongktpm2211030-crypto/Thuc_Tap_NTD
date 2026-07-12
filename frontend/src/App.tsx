@@ -473,10 +473,10 @@ const MapDashboard = () => {
 // ──────────────────────────────────────────────────────────
 const TripPlanner = () => {
   const { lang, t } = useLang();
-  const [destination, setDestination] = useState('Ha Giang');
+  const [destination, setDestination] = useState('Thai Nguyen');
   const [days, setDays] = useState<number | ''>(3);
-  const [budget, setBudget] = useState<number | ''>(150);
-  const [currency, setCurrency] = useState<'USD' | 'VND'>('USD');
+  const [budget, setBudget] = useState<number | ''>(1000000);
+  const [currency, setCurrency] = useState<'USD' | 'VND'>('VND');
   const [style, setStyle] = useState('Adventure');
   const [interests, setInterests] = useState<string[]>(['nature', 'culture']);
   const [loading, setLoading] = useState(false);
@@ -484,17 +484,22 @@ const TripPlanner = () => {
   const [optimized, setOptimized] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
 
+  // New state variables
+  const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+  const [loadingPart, setLoadingPart] = useState<string | null>(null);
+
   const toggleInterest = (val: string) =>
     setInterests(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val]);
 
   const handleGenerate = async () => {
     if (!destination || days === '' || budget === '') return;
-    setLoading(true); setOptimized(false); setAiError(null);
+    setLoading(true); setOptimized(false); setAiError(null); setSelectedDay(1);
     try {
       const result = await tripsService.aiGenerate({
         destination,
         durationDays: Number(days),
-        dailyBudget: Number(budget),
+        totalBudget: Number(budget),
         currency,
         interests,
         travelStyle: style
@@ -504,21 +509,63 @@ const TripPlanner = () => {
       const isVi = lang === 'vi';
       setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
       setItinerary({
-        destination, totalEstimatedCost: Number(budget) * Number(days) * 0.75, currency,
+        destination, totalEstimatedCost: Number(budget) * 0.75, currency,
         days: [
-          { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan nhẹ nhàng' : 'Day 1: Arrival & First Impressions', activities: [
-            { timeSlot: '09:00 - 11:00', activityName: isVi ? `Đi dạo chào đón tại ${destination}` : `${destination} Welcome Walk`, estimatedCost: Number(budget) * 0.15, category: 'attraction', notes: isVi ? 'Ổn định chỗ ở, đi dạo khám phá trung tâm' : 'Settle in, explore the town center' },
-            { timeSlot: '12:00 - 13:30', activityName: isVi ? 'Ăn trưa ẩm thực đường phố' : 'Local Street Food Lunch', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thử các món ăn đặc sản tại chợ địa phương' : 'Try local specialties at the market' },
-            { timeSlot: '15:00 - 18:00', activityName: isVi ? 'Tham quan danh thắng chính' : 'Main Landmark Visit', estimatedCost: Number(budget) * 0.35, category: 'attraction', notes: isVi ? 'Điểm ngắm cảnh biểu tượng hoặc di sản' : 'Iconic viewpoint or heritage site' },
+          { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan trung tâm thành phố Thái Nguyên' : 'Day 1: Arrival & Explore Thai Nguyen Center', activities: [
+            { session: 'Sáng', timeSlot: '09:00 - 11:00', activityName: isVi ? 'Nhận phòng tại khách sạn trung tâm' : 'Check-in at center hotel', estimatedCost: Number(budget) * 0.15, category: 'hotel', notes: isVi ? 'Ổn định chỗ ở, chuẩn bị hành lý.' : 'Settle in, prepare luggage.', latitude: 21.5939, longitude: 105.8442 },
+            { session: 'Sáng', timeSlot: '11:00 - 12:00', activityName: isVi ? 'Tham quan Bảo tàng Văn hóa các Dân tộc Việt Nam' : 'Museum of Cultures of Vietnam Ethnic Groups', estimatedCost: isVi ? 30000 : 2, category: 'attraction', notes: isVi ? 'Tìm hiểu văn hóa của 54 dân tộc Việt Nam. Đây là điểm tham quan nổi bật nhất của thành phố.' : 'Learn about the cultures of 54 ethnic groups.', latitude: 21.5959, longitude: 105.8431 },
+            { session: 'Trưa', timeSlot: '12:00 - 13:30', activityName: isVi ? 'Thưởng thức ẩm thực đặc sản Thái Nguyên' : 'Thai Nguyen Specialty Lunch', estimatedCost: Number(budget) * 0.20, category: 'restaurant', notes: isVi ? 'Thưởng thức bánh chưng Bờ Đậu, gà đồi, cá sông nướng.' : 'Enjoy Bo Dau banh chung, hill chicken, grilled river fish.', latitude: 21.5925, longitude: 105.8420 },
+            { session: 'Chiều', timeSlot: '15:00 - 17:00', activityName: isVi ? 'Tham quan Chùa Hang Thái Nguyên' : 'Hang Pagoda Visit', estimatedCost: 0, category: 'attraction', notes: isVi ? 'Ghé thăm ngôi chùa cổ độc đáo trong hang đá.' : 'Visit the historic cave pagoda.', latitude: 21.6186, longitude: 105.8569 },
+            { session: 'Chiều', timeSlot: '17:00 - 18:00', activityName: isVi ? 'Thưởng thức trà Tân Cương' : 'Taste Tan Cuong Tea', estimatedCost: isVi ? 50000 : 3, category: 'restaurant', notes: isVi ? 'Thưởng thức những tách trà Tân Cương trứ danh tại quán trà địa phương.' : 'Enjoy famous Tan Cuong tea.', latitude: 21.5794, longitude: 105.7483 },
+            { session: 'Tối', timeSlot: '19:00 - 21:30', activityName: isVi ? 'Dạo quảng trường trung tâm và uống chè' : 'Walk Center Square & Drink Tea', estimatedCost: Number(budget) * 0.1, category: 'restaurant', notes: isVi ? 'Đi dạo quảng trường lớn và thưởng thức chè và ăn vặt.' : 'Walk the square, enjoy tea and snacks.', latitude: 21.5975, longitude: 105.8445 },
           ]},
-          { dayIndex: 2, dateIndex: isVi ? 'Ngày 2: Trải nghiệm văn hóa sâu sắc' : 'Day 2: Cultural Deep Dive', activities: [
-            { timeSlot: '08:00 - 09:30', activityName: isVi ? 'Đi bộ tìm hiểu di sản buổi sáng' : 'Morning Heritage Walk', estimatedCost: Number(budget) * 0.2, category: 'attraction', notes: isVi ? 'Tour có hướng dẫn viên tại khu lịch sử' : 'Guided tour of historic quarter' },
-            { timeSlot: '12:30 - 14:00', activityName: isVi ? 'Ăn trưa học nấu ăn' : 'Cooking Class Lunch', estimatedCost: Number(budget) * 0.35, category: 'restaurant', notes: isVi ? 'Học cách nấu các món ăn truyền thống' : 'Learn to cook traditional dishes' },
-            { timeSlot: '16:00 - 18:00', activityName: isVi ? 'Ngắm hoàng hôn' : 'Sunset Viewpoint', estimatedCost: Number(budget) * 0.1, category: 'attraction', notes: isVi ? 'Điểm chụp ảnh đẹp nhất trong vùng' : 'Best photo spot in the area' },
+          { dayIndex: 2, dateIndex: isVi ? 'Ngày 2: Hồ Núi Cốc – Đồi chè Tân Cương' : 'Day 2: Nui Coc Lake & Tan Cuong Tea Hill', activities: [
+            { session: 'Sáng', timeSlot: '08:00 - 11:30', activityName: isVi ? 'Khám phá Hồ Núi Cốc' : 'Explore Nui Coc Lake', estimatedCost: isVi ? 150000 : 7, category: 'nature', notes: isVi ? 'Đi thuyền trên hồ, tham quan đảo, cầu tình yêu, công viên giải trí và đền chùa.' : 'Take a boat, visit islands, love bridge and temples.', latitude: 21.5714, longitude: 105.7083 },
+            { session: 'Trưa', timeSlot: '12:00 - 13:30', activityName: isVi ? 'Ăn trưa đặc sản hồ' : 'Lake Specialties Lunch', estimatedCost: Number(budget) * 0.2, category: 'restaurant', notes: isVi ? 'Ăn cá hồ, gà nướng và rau rừng.' : 'Eat lake fish, grilled chicken, forest vegetables.', latitude: 21.5735, longitude: 105.7065 },
+            { session: 'Chiều', timeSlot: '15:00 - 18:00', activityName: isVi ? 'Trải nghiệm vùng chè Tân Cương' : 'Tan Cuong Tea Hill Experience', estimatedCost: isVi ? 100000 : 5, category: 'attraction', notes: isVi ? 'Tham quan đồi chè, hái chè cùng người dân và tìm hiểu quy trình chế biến, uống trà mới pha.' : 'Visit tea hills, pick tea leaves, learn process and buy tea.', latitude: 21.5794, longitude: 105.7483 },
+            { session: 'Tối', timeSlot: '19:00 - 21:00', activityName: isVi ? 'Ăn lẩu nướng địa phương' : 'Local BBQ/Hotpot Dinner', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thưởng thức bữa tối nướng lẩu thịnh soạn.' : 'Enjoy local hotpot dinner.', latitude: 21.5940, longitude: 105.8450 },
           ]},
         ]
       });
     } finally { setLoading(false); }
+  };
+
+  const handleRegeneratePart = async (dayIdx: number, sessionName?: 'Sáng' | 'Trưa' | 'Chiều' | 'Tối') => {
+    if (!itinerary) return;
+    const targetKey = sessionName ? `session-${dayIdx}-${sessionName}` : `day-${dayIdx}`;
+    setLoadingPart(targetKey);
+    
+    // Gather exclude places (current names)
+    const excludePlaces: string[] = [];
+    itinerary.days.forEach((d: any) => {
+      d.activities.forEach((a: any) => {
+        if (a.activityName) excludePlaces.push(a.activityName);
+      });
+    });
+
+    try {
+      const response = await tripsService.aiRegeneratePart({
+        destination,
+        durationDays: Number(days),
+        totalBudget: Number(budget),
+        currency,
+        interests,
+        travelStyle: style,
+        targetDayIndex: dayIdx,
+        targetSession: sessionName,
+        currentItinerary: itinerary,
+        excludePlaces
+      });
+      if (response) {
+        setItinerary(response);
+        setOptimized(false);
+      }
+    } catch (err) {
+      console.error('Failed to regenerate part:', err);
+      alert(lang === 'vi' ? 'Không thể đổi lịch trình. Vui lòng thử lại.' : 'Failed to regenerate part. Please try again.');
+    } finally {
+      setLoadingPart(null);
+    }
   };
 
   const runRouteOptimization = async () => {
@@ -529,7 +576,6 @@ const TripPlanner = () => {
         itinerary.days.map(async (d: any) => {
           if (!d.activities || d.activities.length <= 1) return d;
           
-          // Map activities to Waypoints for backend TSP optimizer
           const waypoints: Waypoint[] = d.activities.map((act: any, idx: number) => ({
             id: String(idx),
             name: act.activityName || act.name,
@@ -546,7 +592,6 @@ const TripPlanner = () => {
             return { ...d, activities: reordered };
           } catch (err) {
             console.error('Failed to call optimize-route on backend:', err);
-            // Fallback to reversing array if API fails
             return { ...d, activities: [...d.activities].reverse() };
           }
         })
@@ -579,6 +624,23 @@ const TripPlanner = () => {
       return `${Math.round(num).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US')} đ`;
     }
     return `$${Math.round(num)}`;
+  };
+
+  const getGoogleMapsDirectionsUrl = (activities: any[]) => {
+    if (!activities || activities.length === 0) return '';
+    const validActs = activities.filter(act => act.latitude && act.longitude);
+    if (validActs.length === 0) return '';
+    if (validActs.length === 1) {
+      return `https://www.google.com/maps/search/?api=1&query=${validActs[0].latitude},${validActs[0].longitude}`;
+    }
+    const origin = `${validActs[0].latitude},${validActs[0].longitude}`;
+    const destination = `${validActs[validActs.length - 1].latitude},${validActs[validActs.length - 1].longitude}`;
+    let waypoints = '';
+    if (validActs.length > 2) {
+      const intermediate = validActs.slice(1, validActs.length - 1);
+      waypoints = intermediate.map(act => `${act.latitude},${act.longitude}`).join('%7C');
+    }
+    return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypoints ? `&waypoints=${waypoints}` : ''}&travelmode=driving`;
   };
 
   const styleOptions = [
@@ -614,7 +676,7 @@ const TripPlanner = () => {
             </div>
             <div className="space-y-1.5">
               <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
-                {lang === 'vi' ? `Ngân sách/ngày` : `Budget/Day`}
+                {t('planner.budget')}
               </label>
               <div className="relative flex items-center">
                 <input 
@@ -673,7 +735,9 @@ const TripPlanner = () => {
           {aiError && <div className="surface-elevated px-4 py-3 border-l-2 border-amber-500 text-xs text-amber-400 flex items-center gap-2"><AlertTriangle size={14} /> {aiError}</div>}
           {itinerary ? (
             <div className="space-y-6">
-              <div className="surface-elevated p-5 flex justify-between items-center">
+              
+              {/* Cost & Optimization bar */}
+              <div className="surface-elevated p-5 flex justify-between items-center gap-4 flex-wrap">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('planner.cost')}</p>
                   <span className="text-3xl font-bold text-gold">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
@@ -684,35 +748,216 @@ const TripPlanner = () => {
                   {optimized ? <><Check size={12} className="inline mr-1" /> {t('planner.optimized')}</> : <><Zap size={12} className="inline mr-1" /> {t('planner.optimize')}</>}
                 </button>
               </div>
-              {itinerary.days.map((d: any) => (
-                <div key={d.dayIndex || d.day} className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <span className="badge-category">{lang === 'vi' ? 'Ngày' : 'Day'} {d.dayIndex || d.day}</span>
-                    <h3 className="headline-md">{d.dateIndex || d.title}</h3>
-                  </div>
-                  <div className="relative border-l-2 border-[var(--border-subtle)] ml-3 pl-6 space-y-3">
-                    {d.activities.map((act: any, idx: number) => (
-                      <div key={idx} className="relative group">
-                        <div className="absolute -left-[27px] top-3 w-3 h-3 rounded-full bg-[var(--bg-primary)] border-2 border-[var(--gold)] group-hover:scale-125 transition-transform" />
-                        <div className="card-editorial p-4 space-y-1.5 hover:border-[var(--border-normal)]">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <span className="text-[10px] font-bold text-[var(--text-muted)]">{act.timeSlot || act.time}</span>
-                              <h4 className="text-sm font-bold text-cream flex items-center gap-1.5">
-                                {(() => { const ActIcon = getCategoryIcon(act.category); return <ActIcon size={14} className="text-[var(--gold)] flex-shrink-0" />; })()}
-                                {act.activityName || act.name}
-                              </h4>
-                            </div>
-                            <span className="text-sm font-bold text-gold">{formatCost(act.estimatedCost || act.cost)}</span>
+
+              {/* Day selection tabs */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[var(--border-subtle)]">
+                {itinerary.days.map((d: any) => (
+                  <button
+                    key={d.dayIndex || d.day}
+                    onClick={() => setSelectedDay(d.dayIndex || d.day)}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                      selectedDay === (d.dayIndex || d.day)
+                        ? 'bg-[var(--gold)] text-black'
+                        : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-white'
+                    }`}
+                  >
+                    {lang === 'vi' ? `Ngày ${d.dayIndex || d.day}` : `Day ${d.dayIndex || d.day}`}
+                  </button>
+                ))}
+              </div>
+
+              {/* Mobile tabs toggle */}
+              <div className="flex md:hidden items-center justify-center rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-0.5">
+                <button 
+                  type="button"
+                  onClick={() => setActiveTab('list')} 
+                  className={`flex-1 py-2 text-xs font-bold rounded-md transition-all border-none cursor-pointer ${activeTab === 'list' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 bg-transparent'}`}
+                >
+                  {t('planner.tabList')}
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setActiveTab('map')} 
+                  className={`flex-1 py-2 text-xs font-bold rounded-md transition-all border-none cursor-pointer ${activeTab === 'map' ? 'bg-[var(--gold)] text-black' : 'text-slate-400 bg-transparent'}`}
+                >
+                  {t('planner.tabMap')}
+                </button>
+              </div>
+
+              {/* Split layout: Timeline on left, Map on right */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                
+                {/* Left: Day timeline */}
+                <div className={`md:col-span-7 space-y-4 ${activeTab === 'list' ? 'block' : 'hidden md:block'}`}>
+                  {(() => {
+                    const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
+                    if (!currentDay) return null;
+                    const sessions = ['Sáng', 'Trưa', 'Chiều', 'Tối'] as const;
+
+                    return (
+                      <div className="space-y-4">
+                        {/* Day header & Day actions */}
+                        <div className="flex justify-between items-center bg-[var(--bg-elevated)] p-4 rounded-xl border border-[var(--border-subtle)] gap-2 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <span className="badge-category">{lang === 'vi' ? 'Ngày' : 'Day'} {currentDay.dayIndex || currentDay.day}</span>
+                            <h3 className="text-xs font-bold text-cream truncate max-w-[150px]">{currentDay.dateIndex || currentDay.title}</h3>
                           </div>
-                          <p className="text-xs text-[var(--text-secondary)]">{act.notes || act.note}</p>
-                          <span className="badge-category-outline text-[9px] uppercase tracking-wider px-2 py-0.5 rounded">{act.category}</span>
+                          
+                          <div className="flex gap-1.5 flex-wrap">
+                            <button
+                              type="button"
+                              onClick={() => handleRegeneratePart(currentDay.dayIndex || currentDay.day)}
+                              disabled={loadingPart !== null || loading}
+                              className="px-2.5 py-1.5 text-[9px] font-bold rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                            >
+                              {loadingPart === `day-${currentDay.dayIndex || currentDay.day}` ? (
+                                <Loader2 size={10} className="animate-spin" />
+                              ) : (
+                                '🔄 ' + t('planner.regenerateDay')
+                              )}
+                            </button>
+                            
+                            {getGoogleMapsDirectionsUrl(currentDay.activities) && (
+                              <a
+                                href={getGoogleMapsDirectionsUrl(currentDay.activities)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-2.5 py-1.5 text-[9px] font-bold rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-all flex items-center gap-1"
+                              >
+                                🗺️ {t('planner.dayRouteGoogleMaps')}
+                              </a>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Session groupings */}
+                        <div className="relative border-l border-[var(--border-subtle)] ml-3 pl-6 space-y-4">
+                          {sessions.map(session => {
+                            const sessionActs = currentDay.activities.filter((act: any) => act.session === session || (!act.session && session === 'Sáng'));
+                            if (sessionActs.length === 0) return null;
+
+                            return (
+                              <div key={session} className="space-y-3">
+                                {/* Session Header */}
+                                <div className="flex justify-between items-center pt-2">
+                                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-500 flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                    {session}
+                                  </h4>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRegeneratePart(currentDay.dayIndex || currentDay.day, session)}
+                                    disabled={loadingPart !== null || loading}
+                                    className="text-[9px] font-bold text-[var(--gold)] hover:underline flex items-center gap-1 bg-transparent border-none cursor-pointer disabled:opacity-50"
+                                  >
+                                    {loadingPart === `session-${currentDay.dayIndex || currentDay.day}-${session}` ? (
+                                      <Loader2 size={10} className="animate-spin" />
+                                    ) : (
+                                      '🔄 ' + t('planner.regenerateSession')
+                                    )}
+                                  </button>
+                                </div>
+
+                                {/* Activity Cards */}
+                                <div className="space-y-3">
+                                  {sessionActs.map((act: any, idx: number) => {
+                                    const ActIcon = getCategoryIcon(act.category);
+                                    
+                                    const currentIdx = currentDay.activities.findIndex((a: any) => a === act);
+                                    const prevAct = currentIdx > 0 ? currentDay.activities[currentIdx - 1] : null;
+                                    const directionsUrl = prevAct && prevAct.latitude && prevAct.longitude
+                                      ? `https://www.google.com/maps/dir/?api=1&origin=${prevAct.latitude},${prevAct.longitude}&destination=${act.latitude},${act.longitude}&travelmode=driving`
+                                      : `https://www.google.com/maps/dir/?api=1&destination=${act.latitude},${act.longitude}&travelmode=driving`;
+
+                                    return (
+                                      <div key={idx} className="relative group">
+                                        <div className="absolute -left-[31px] top-4 w-2 h-2 rounded-full bg-[var(--bg-primary)] border-2 border-[var(--gold)] group-hover:scale-125 transition-transform" />
+                                        <div className="card-editorial p-4 space-y-2 hover:border-[var(--border-normal)] transition-all">
+                                          <div className="flex justify-between items-start gap-2">
+                                            <div>
+                                              <span className="text-[10px] font-bold text-[var(--text-muted)] block">{act.timeSlot || act.time}</span>
+                                              <h5 className="text-xs font-bold text-cream flex items-center gap-1.5 mt-0.5">
+                                                <ActIcon size={13} className="text-[var(--gold)] flex-shrink-0" />
+                                                {act.activityName || act.name}
+                                              </h5>
+                                              <span className="text-[9px] text-[var(--text-muted)] block mt-0.5">📍 {act.locationName}</span>
+                                            </div>
+                                            <span className="text-xs font-bold text-gold flex-shrink-0">{formatCost(act.estimatedCost || act.cost)}</span>
+                                          </div>
+                                          <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{act.notes || act.note}</p>
+                                          
+                                          {/* Google Maps Actions */}
+                                          <div className="flex gap-1.5 flex-wrap pt-1.5 border-t border-[var(--border-subtle)]/40 mt-2">
+                                            <a
+                                              href={act.latitude && act.longitude 
+                                                ? `https://www.google.com/maps/search/?api=1&query=${act.latitude},${act.longitude}` 
+                                                : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.locationName || act.activityName)}`}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="inline-flex items-center gap-1 text-[9px] font-semibold text-sky-400 hover:text-sky-300 bg-sky-500/10 px-2 py-0.5 rounded transition-all"
+                                            >
+                                              <Map size={9} /> {t('planner.openInGoogleMaps')}
+                                            </a>
+                                            <a
+                                              href={directionsUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="inline-flex items-center gap-1 text-[9px] font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded transition-all"
+                                            >
+                                              <Send size={9} /> {t('planner.directionsFromPrev')}
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })()}
                 </div>
-              ))}
+
+                {/* Right: Map View */}
+                <div className={`md:col-span-5 ${activeTab === 'map' ? 'block' : 'hidden md:block'} sticky top-[80px]`}>
+                  {(() => {
+                    const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
+                    if (!currentDay) return null;
+
+                    const mapLocations: MapLocation[] = currentDay.activities
+                      .filter((act: any) => act.latitude && act.longitude)
+                      .map((act: any, idx: number) => ({
+                        id: `act-${idx}`,
+                        name: act.activityName || act.name,
+                        lat: act.latitude,
+                        lng: act.longitude,
+                        category: act.category,
+                        note: act.notes || act.note,
+                      }));
+
+                    const mapCenter: [number, number] = mapLocations.length > 0 
+                      ? [mapLocations[0].lat, mapLocations[0].lng] 
+                      : [21.028511, 105.804817];
+
+                    return (
+                      <div className="h-[400px] md:h-[520px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-subtle)]">
+                        <MapLibreMap
+                          center={mapCenter}
+                          zoom={12}
+                          locations={mapLocations}
+                          viewMode="markers"
+                          routePoints={mapLocations}
+                        />
+                      </div>
+                    );
+                  })()}
+                </div>
+
+              </div>
+
             </div>
           ) : (
             <div className="surface-elevated p-16 text-center space-y-4">

@@ -1,0 +1,2262 @@
+[
+  {
+    "province": "Cần Thơ",
+    "title": "Chợ nổi Cái Răng",
+    "content": "Chợ nổi Cái Răng nằm trên sông Cái Răng, thuộc quận Cái Răng, cách trung tâm thành phố Cần Thơ khoảng 6 km...",
+    "category": "attraction",
+    "latitude": 10.0023957,
+    "longitude": 105.7443925,
+    "costEstimate": 30000,
+    "address": "Phường Lê Bình, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Bến Ninh Kiều",
+    "content": "Bến Ninh Kiều, hiện nay còn được gọi là Công viên Ninh Kiều, tọa lạc ngay ngã ba sông Hậu và sông Cần Thơ, thuộc địa bàn phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0315282,
+    "longitude": 105.7875681,
+    "costEstimate": 30000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà cổ Bình Thủy",
+    "content": "Nhà cổ Bình Thủy nằm trên đường Bùi Hữu Nghĩa, thuộc phường Bình Thủy, quận Bình Thủy, thành phố Cần Thơ...",
+    "category": "attraction",
+    "latitude": 10.066996,
+    "longitude": 105.7496309,
+    "costEstimate": 30000,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Ông Cần Thơ",
+    "content": "Chùa Ông, tên chính thức là Quảng Triệu Hội Quán, tọa lạc tại đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0341631,
+    "longitude": 105.7885335,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Thiền viện Trúc Lâm Phương Đông",
+    "content": "Thiền viện Trúc Lâm Phương Đông tọa lạc tại ấp Nhơn Mỹ, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "attraction",
+    "latitude": 11.9036316,
+    "longitude": 108.4356206,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Bảo tàng Cần Thơ",
+    "content": "Bảo tàng Cần Thơ tọa lạc tại số 1 đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.03491,
+    "longitude": 105.7868383,
+    "costEstimate": 1,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cầu đi bộ Ninh Kiều",
+    "content": "Cầu đi bộ Ninh Kiều... bắc qua con rạch Khai Luông nối liền bến Ninh Kiều sầm uất với cồn Cái Khế thuộc quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0370351,
+    "longitude": 105.7912377,
+    "costEstimate": 30000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Đình Bình Thủy",
+    "content": "Đình Bình Thủy, tên chữ là Long Tuyền Cổ Miếu, tọa lạc trên đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.0724902,
+    "longitude": 105.752238,
+    "costEstimate": 30000,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pôthi Sômrôn",
+    "content": "Chùa Pôthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Châu Văn Liêm, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng nghề bánh tráng Thuận Hưng",
+    "content": "Làng nghề bánh tráng Thuận Hưng thuộc địa bàn phường Thuận Hưng, quận Thốt Nốt...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Thuận Hưng, Quận Thốt Nốt, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Phật Học Cần Thơ",
+    "content": "Chùa Phật Học tọa lạc tại số 11 đại lộ Hòa Bình, ngay trung tâm phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.03305,
+    "longitude": 105.7842464,
+    "costEstimate": 11,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà thờ Chánh tòa Cần Thơ",
+    "content": "Nhà thờ Chánh tòa Cần Thơ tọa lạc tại số 14 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0271498,
+    "longitude": 105.7848274,
+    "costEstimate": 14,
+    "address": "Phường An Lạc, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu di tích lịch sử Giàn Gừa",
+    "content": "Khu di tích lịch sử Giàn Gừa tọa lạc tại ấp Nhơn Khánh, xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "attraction",
+    "latitude": 9.9786976,
+    "longitude": 105.7241214,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Nam Nhã",
+    "content": "Chùa Nam Nhã, hay còn gọi là Chùa Minh Sư, tọa lạc trên đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.0719975,
+    "longitude": 105.7542024,
+    "costEstimate": 0,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn TTC Hotel Cần Thơ",
+    "content": "Khách sạn TTC Hotel Cần Thơ tọa lạc tại số 2 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0358613,
+    "longitude": 105.7891613,
+    "costEstimate": 2,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Victoria Cần Thơ Resort",
+    "content": "Victoria Cần Thơ Resort tọa lạc tại phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0393054,
+    "longitude": 105.7930514,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Muong Thanh Luxury Can Tho Hotel",
+    "content": "Muong Thanh Luxury Can Tho Hotel tọa lạc tại khu cồn Cái Khế, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Azerai Cần Thơ",
+    "content": "Azerai Cần Thơ là khu nghỉ dưỡng... tọa lạc hoàn toàn trên cồn Ấu... thuộc quận Cái Răng...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Cồn Ấu, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Nesta Cần Thơ",
+    "content": "Khách sạn Nesta Cần Thơ tọa lạc tại số 9C đường Trần Phú, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0521372,
+    "longitude": 105.789168,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Can Tho Eco Resort",
+    "content": "Can Tho Eco Resort tọa lạc tại quốc lộ 61C, xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Vườn trái cây Mỹ Khánh",
+    "content": "Vườn trái cây Mỹ Khánh nằm trong khuôn viên Làng du lịch Mỹ Khánh, số 335 lộ Vòng Cung, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng du lịch sinh thái Ông Đề",
+    "content": "Làng du lịch sinh thái Ông Đề tọa lạc tại tổ 26, ấp Mỹ Ái, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 9.9905834,
+    "longitude": 105.7092021,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cồn Sơn Cần Thơ",
+    "content": "Cồn Sơn là một dải đất cù lao... thuộc địa bàn phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.0845129,
+    "longitude": 105.74988,
+    "costEstimate": 0,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Vịt nấu chao Thành Giao",
+    "content": "Quán Vịt nấu chao Thành Giao tọa lạc tại số 1/8 đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Phường An Phú, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Nem nướng Thanh Vân Cần Thơ",
+    "content": "Quán Nem nướng Thanh Vân nằm tại số 14 đường đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.032372,
+    "longitude": 105.783341,
+    "costEstimate": 14,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình Bình Thủy",
+    "content": "Lễ hội Kỳ yên Đình Bình Thủy được tổ chức... tại ngôi đình cổ Long Tuyền thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Bánh dân gian Nam Bộ",
+    "content": "Lễ hội Bánh dân gian Nam Bộ được tổ chức... tại trung tâm quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pơthi Sômrôn Ô Môn Cần Thơ",
+    "content": "Chùa Pơthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Châu Văn Liêm, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún tôm khô Cái Răng chợ lớn cô Ba",
+    "content": "Quán Bún tôm khô Cái Răng cô Ba nằm gần khu vực chợ Cái Răng, quận Cái Răng...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Lê Bình, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Iris Hotel Cần Thơ",
+    "content": "Iris Hotel Cần Thơ tọa lạc tại số 224 đường 30 Tháng 4, phường Xuân Khánh, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0267458,
+    "longitude": 105.7762721,
+    "costEstimate": 224,
+    "address": "Phường Xuân Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rừng tràm sinh thái Lung Ngọc Hoàng",
+    "content": "Mặc dù phần lớn diện tích thuộc tỉnh Hậu Giang... kết nối trực tiếp... huyện Phong Điền, thành phố Cần Thơ...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Phong Điền, Thành phố Cần Thơ (vùng đệm)"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đua thuyền rồng truyền thống sông Hậu Cần Thơ",
+    "content": "Lễ hội Đua thuyền rồng... tại khu vực phố đi bộ kè sông bến Ninh Kiều, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Long Tuyền Cần Thơ",
+    "content": "Đình thần Long Tuyền... tọa lạc trên trục đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Ốc tiêu nướng nước mắm tiêu xanh Quê Nhà Cần Thơ",
+    "content": "Quán Ốc tiêu nướng tiêu xanh Quê Nhà nằm trên đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Fortuneland Hotel Cần Thơ",
+    "content": "Khách sạn Fortuneland Hotel tọa lạc tại số 141 đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 141,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Ấu sông Hậu Cần Thơ",
+    "content": "Cồn Ấu... đối diện bến Ninh Kiều thuộc địa phận quận Cái Răng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Cồn Ấu, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới An Ô Môn",
+    "content": "Lễ hội cúng đình Thới An được tổ chức... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Khám lớn Cần Thơ",
+    "content": "Khám lớn Cần Thơ tọa lạc tại số 8 đường Ngô Gia Tự, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.036086,
+    "longitude": 105.7883079,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún mắm miền Tây nước lèo đậm đà cô mười Cần Thơ",
+    "content": "Quán Bún mắm cô mười nằm trên đường Trần Việt Châu, phường An Hòa, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Hòa, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Linh Phương Luxury Cần Thơ",
+    "content": "Khách sạn Linh Phương Luxury tọa lạc tại số 55-57 đường Trần Ngọc Quế, phường Xuân Khánh, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 56,
+    "address": "Phường Xuân Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Ô Môn Cần Thơ",
+    "content": "Rạch sông Ô Môn chảy hiền hòa uốn lượn qua bờ địa phận quận Ô Môn...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Bình Thủy Thượng Điền",
+    "content": "Lễ hội cúng đình Bình Thủy Thượng Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Mộ thủ khoa Bùi Hữu Nghĩa",
+    "content": "Khu di tích mộ Thủ khoa Bùi Hữu Nghĩa tọa lạc trên đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bánh cống sườn non Cô Út Cần Thơ",
+    "content": "Quán Bánh cống Cô Út nằm tại số 86/4 đường Lý Tự Trọng, phường An Cư, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 4,
+    "address": "Phường An Cư, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Holiday One Hotel Cần Thơ",
+    "content": "Khách sạn Holiday One Hotel tọa lạc tại số 59-61-63-65 đường Phạm Ngọc Thạch, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 64,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Khương sông Hậu Cần Thơ",
+    "content": "Cồn Khương... thuộc địa phận phường Cái Khế, quận Ninh Kiều...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới Bình Ninh Kiều",
+    "content": "Lễ hội cúng đình Thới Bình được tổ chức... tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ hội hội Quảng Triệu",
+    "content": "Chùa cổ hội hội Quảng Triệu... tọa lạc tại số 32 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 32,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu khô sa tế bò viên mực nhảy cô Lan Cà Mau",
+    "content": "Quán Hủ tiếu khô cô Lan nằm trên đường đề thám, phường An Cư, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Cư, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Anh Dao Mekong 2 Hotel Cần Thơ",
+    "content": "Khách sạn Anh Dao Mekong 2 Hotel tọa lạc tại số 8 đường Lý Thường Kiệt, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây lê lộc Phong Điền Cần Thơ",
+    "content": "Vườn trái cây lê lộc tọa lạc tại phường Ba Láng, quận Cái Răng kết nối trục lộ giao thông Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Thượng Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Thượng Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ Hội Linh Cần Thơ",
+    "content": "Chùa Hội Linh... tọa lạc tại đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún riêu cua giò heo gạch cua đặc sản cô sen Cần Thơ",
+    "content": "Quán Bún riêu cua cô sen nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Tây Đô Hotel Cần Thơ",
+    "content": "Khách sạn Tây Đô Hotel tọa lạc tại số 61 đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0308613,
+    "longitude": 105.7856653,
+    "costEstimate": 61,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cò Bằng Lăng Thốt Nốt",
+    "content": "Vườn cò Bằng Lăng tọa lạc tại thới bình, phường Thuận An, quận Thốt Nốt...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thuận An, Quận Thốt Nốt, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Hạ Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Hạ Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Cơ quan Đặc ủy Hậu Giang Cần Thơ",
+    "content": "Di tích Cơ quan Đặc ủy Hậu Giang tọa lạc tại số 26 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường An Lạc, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cháo lòng Cái Tắc lòng thập cẩm ngon cô Ba",
+    "content": "Quán Cháo lòng Cái Tắc cô Ba nằm trên quốc lộ 1A, đoạn gần giáp ranh thành phố Cần Thơ...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Khu vực giáp ranh Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.035186,
+    "longitude": 105.7885932,
+    "costEstimate": 1200000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây chín hồng Phong Điền Cần Thơ",
+    "content": "Vườn trái cây chín hồng tọa lạc tại ấp Mỹ Nhơn, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đền thờ Vua Hùng Cần Thơ",
+    "content": "Lễ hội Đền thờ Vua Hùng... tại Khu Đền thờ Vua Hùng quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Đền thờ Thủ khoa Bùi Hữu Nghĩa Cần Thơ",
+    "content": "Đền thờ Bùi Hữu Nghĩa... tọa lạc trên đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún chả Hà Nội hương vị phố cổ ngon chuẩn vị",
+    "content": "Quán Bún chả Hà Nội phố cổ nằm trên đường Nguyễn Văn Cừ kéo dài, phường An Khánh, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Hạnh Phúc Hotel Cần Thơ",
+    "content": "Khách sạn Hạnh Phúc Hotel tọa lạc tại số 75-77-79 đường Nguyễn An Ninh, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.043166,
+    "longitude": 105.7858234,
+    "costEstimate": 78,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn dâu hạ châu Phong Điền Cần Thơ",
+    "content": "Vườn dâu hạ châu trải dài trên diện tích rộng lớn tại các xã thuộc huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 6,
+    "address": "Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An được tổ chức... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu mực ống tươi mực nhảy Cái Răng",
+    "content": "Quán Hủ tiếu mực tươi Cái Răng nằm trên đường Ba Láng, quận Cái Răng...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Mekong Logis Homestay Cần Thơ",
+    "content": "Mekong Logis Homestay tọa lạc tại số 188 đường ba láng, phường Ba Láng, quận Cái Răng...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả ba cống Bình Thủy Cần Thơ",
+    "content": "Vườn cây ăn quả ba cống tọa lạc tại phường Long Tuyền, quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Long Tuyền, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới Bình được tổ chức... tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Đình thần Thới Bình tọa lạc tại phường Thới Bình, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cơm tấm sườn bì chả nướng than hồng cô Diễm Cần Thơ",
+    "content": "Quán Cơm tấm cô Diễm nằm trên đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Phú, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Green House Hotel Cần Thơ",
+    "content": "Khách sạn Green House Hotel tọa lạc tại số 39 đường Nguyễn Anh Ninh, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả gia bảo Phong Điền Cần Thơ",
+    "content": "Vườn cây ăn quả gia bảo tọa lạc tại xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Phở bò tái lăn gầu giòn béo ngậy chín nạc hương vị Bắc cô Lan",
+    "content": "Quán Phở bò gia truyền cô Lan nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Luxury Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Luxury Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Bình Thủy Cần Thơ",
+    "content": "Rạch sông Bình Thủy chảy hiền hòa uốn lượn qua bờ địa phận quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Uyên Hưng... tại thị xã Bến Cát...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Bến Cát, Tỉnh Bình Dương (ghi chú: tên địa danh trong content có thể nhầm lẫn với Cần Thơ)"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Đình thần Uyên Hưng tọa lạc tại thị xã Bến Cát, tỉnh Bình Dương...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Bến Cát, Tỉnh Bình Dương"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu Nam Vang nước lèo ngọt thanh chuẩn vị gia truyền cô Út Cần Thơ",
+    "content": "Quán Hủ tiếu Nam Vang cô Út nằm trên đường Nguyễn Văn Cừ, phường An Hòa, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Hòa, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chợ nổi Cái Răng",
+    "content": "Chợ nổi Cái Răng nằm trên sông Cái Răng, thuộc quận Cái Răng, cách trung tâm thành phố Cần Thơ khoảng 6 km...",
+    "category": "attraction",
+    "latitude": 10.0023957,
+    "longitude": 105.7443925,
+    "costEstimate": 30000,
+    "address": "Phường Lê Bình, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Bến Ninh Kiều",
+    "content": "Bến Ninh Kiều, hiện nay còn được gọi là Công viên Ninh Kiều, tọa lạc ngay ngã ba sông Hậu và sông Cần Thơ, thuộc địa bàn phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0315282,
+    "longitude": 105.7875681,
+    "costEstimate": 30000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà cổ Bình Thủy",
+    "content": "Nhà cổ Bình Thủy nằm trên đường Bùi Hữu Nghĩa, thuộc phường Bình Thủy, quận Bình Thủy, thành phố Cần Thơ...",
+    "category": "attraction",
+    "latitude": 10.066996,
+    "longitude": 105.7496309,
+    "costEstimate": 30000,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Ông Cần Thơ",
+    "content": "Chùa Ông, tên chính thức là Quảng Triệu Hội Quán, tọa lạc tại đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0341631,
+    "longitude": 105.7885335,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Thiền viện Trúc Lâm Phương Đông",
+    "content": "Thiền viện Trúc Lâm Phương Đông tọa lạc tại ấp Nhơn Mỹ, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "attraction",
+    "latitude": 11.9036316,
+    "longitude": 108.4356206,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Bảo tàng Cần Thơ",
+    "content": "Bảo tàng Cần Thơ tọa lạc tại số 1 đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.03491,
+    "longitude": 105.7868383,
+    "costEstimate": 1,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cầu đi bộ Ninh Kiều",
+    "content": "Cầu đi bộ Ninh Kiều... bắc qua con rạch Khai Luông nối liền bến Ninh Kiều sầm uất với cồn Cái Khế thuộc quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0370351,
+    "longitude": 105.7912377,
+    "costEstimate": 30000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Đình Bình Thủy",
+    "content": "Đình Bình Thủy, tên chữ là Long Tuyền Cổ Miếu, tọa lạc trên đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.0724902,
+    "longitude": 105.752238,
+    "costEstimate": 30000,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pôthi Sômrôn",
+    "content": "Chùa Pôthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Châu Văn Liêm, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng nghề bánh tráng Thuận Hưng",
+    "content": "Làng nghề bánh tráng Thuận Hưng thuộc địa bàn phường Thuận Hưng, quận Thốt Nốt...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Thuận Hưng, Quận Thốt Nốt, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Phật Học Cần Thơ",
+    "content": "Chùa Phật Học tọa lạc tại số 11 đại lộ Hòa Bình, ngay trung tâm phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.03305,
+    "longitude": 105.7842464,
+    "costEstimate": 11,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Nhà thờ Chánh tòa Cần Thơ",
+    "content": "Nhà thờ Chánh tòa Cần Thơ tọa lạc tại số 14 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.0271498,
+    "longitude": 105.7848274,
+    "costEstimate": 14,
+    "address": "Phường An Lạc, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu di tích lịch sử Giàn Gừa",
+    "content": "Khu di tích lịch sử Giàn Gừa tọa lạc tại ấp Nhơn Khánh, xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "attraction",
+    "latitude": 9.9786976,
+    "longitude": 105.7241214,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Nam Nhã",
+    "content": "Chùa Nam Nhã, hay còn gọi là Chùa Minh Sư, tọa lạc trên đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.0719975,
+    "longitude": 105.7542024,
+    "costEstimate": 0,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn TTC Hotel Cần Thơ",
+    "content": "Khách sạn TTC Hotel Cần Thơ tọa lạc tại số 2 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0358613,
+    "longitude": 105.7891613,
+    "costEstimate": 2,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Victoria Cần Thơ Resort",
+    "content": "Victoria Cần Thơ Resort tọa lạc tại phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0393054,
+    "longitude": 105.7930514,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Muong Thanh Luxury Can Tho Hotel",
+    "content": "Muong Thanh Luxury Can Tho Hotel tọa lạc tại khu cồn Cái Khế, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Azerai Cần Thơ",
+    "content": "Azerai Cần Thơ là khu nghỉ dưỡng... tọa lạc hoàn toàn trên cồn Ấu... thuộc quận Cái Răng...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Cồn Ấu, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Nesta Cần Thơ",
+    "content": "Khách sạn Nesta Cần Thơ tọa lạc tại số 9C đường Trần Phú, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0521372,
+    "longitude": 105.789168,
+    "costEstimate": 1200000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Can Tho Eco Resort",
+    "content": "Can Tho Eco Resort tọa lạc tại quốc lộ 61C, xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Vườn trái cây Mỹ Khánh",
+    "content": "Vườn trái cây Mỹ Khánh nằm trong khuôn viên Làng du lịch Mỹ Khánh, số 335 lộ Vòng Cung, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Làng du lịch sinh thái Ông Đề",
+    "content": "Làng du lịch sinh thái Ông Đề tọa lạc tại tổ 26, ấp Mỹ Ái, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 9.9905834,
+    "longitude": 105.7092021,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Cồn Sơn Cần Thơ",
+    "content": "Cồn Sơn là một dải đất cù lao... thuộc địa bàn phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.0845129,
+    "longitude": 105.74988,
+    "costEstimate": 0,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Vịt nấu chao Thành Giao",
+    "content": "Quán Vịt nấu chao Thành Giao tọa lạc tại số 1/8 đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Phường An Phú, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Nem nướng Thanh Vân Cần Thơ",
+    "content": "Quán Nem nướng Thanh Vân nằm tại số 14 đường đại lộ Hòa Bình, phường Tân An, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.032372,
+    "longitude": 105.783341,
+    "costEstimate": 14,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình Bình Thủy",
+    "content": "Lễ hội Kỳ yên Đình Bình Thủy được tổ chức... tại ngôi đình cổ Long Tuyền thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Bánh dân gian Nam Bộ",
+    "content": "Lễ hội Bánh dân gian Nam Bộ được tổ chức... tại trung tâm quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Chùa Pơthi Sômrôn Ô Môn Cần Thơ",
+    "content": "Chùa Pơthi Sômrôn tọa lạc ven bờ sông Ô Môn thuộc phường Châu Văn Liêm, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Châu Văn Liêm, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún tôm khô Cái Răng chợ lớn cô Ba",
+    "content": "Quán Bún tôm khô Cái Răng cô Ba nằm gần khu vực chợ Cái Răng, quận Cái Răng...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Lê Bình, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Iris Hotel Cần Thơ",
+    "content": "Iris Hotel Cần Thơ tọa lạc tại số 224 đường 30 Tháng 4, phường Xuân Khánh, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0267458,
+    "longitude": 105.7762721,
+    "costEstimate": 224,
+    "address": "Phường Xuân Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rừng tràm sinh thái Lung Ngọc Hoàng",
+    "content": "Mặc dù phần lớn diện tích thuộc tỉnh Hậu Giang... kết nối trực tiếp... huyện Phong Điền, thành phố Cần Thơ...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Phong Điền, Thành phố Cần Thơ (vùng đệm)"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đua thuyền rồng truyền thống sông Hậu Cần Thơ",
+    "content": "Lễ hội Đua thuyền rồng... tại khu vực phố đi bộ kè sông bến Ninh Kiều, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Long Tuyền Cần Thơ",
+    "content": "Đình thần Long Tuyền... tọa lạc trên trục đường Lê Hồng Phong, phường Bình Thủy, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Ốc tiêu nướng nước mắm tiêu xanh Quê Nhà Cần Thơ",
+    "content": "Quán Ốc tiêu nướng tiêu xanh Quê Nhà nằm trên đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Fortuneland Hotel Cần Thơ",
+    "content": "Khách sạn Fortuneland Hotel tọa lạc tại số 141 đường Trần Văn Khéo, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 141,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Ấu sông Hậu Cần Thơ",
+    "content": "Cồn Ấu... đối diện bến Ninh Kiều thuộc địa phận quận Cái Răng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Cồn Ấu, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới An Ô Môn",
+    "content": "Lễ hội cúng đình Thới An được tổ chức... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Khám lớn Cần Thơ",
+    "content": "Khám lớn Cần Thơ tọa lạc tại số 8 đường Ngô Gia Tự, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.036086,
+    "longitude": 105.7883079,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún mắm miền Tây nước lèo đậm đà cô mười Cần Thơ",
+    "content": "Quán Bún mắm cô mười nằm trên đường Trần Việt Châu, phường An Hòa, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Hòa, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Linh Phương Luxury Cần Thơ",
+    "content": "Khách sạn Linh Phương Luxury tọa lạc tại số 55-57 đường Trần Ngọc Quế, phường Xuân Khánh, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 56,
+    "address": "Phường Xuân Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Ô Môn Cần Thơ",
+    "content": "Rạch sông Ô Môn chảy hiền hòa uốn lượn qua bờ địa phận quận Ô Môn...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Bình Thủy Thượng Điền",
+    "content": "Lễ hội cúng đình Bình Thủy Thượng Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Mộ thủ khoa Bùi Hữu Nghĩa",
+    "content": "Khu di tích mộ Thủ khoa Bùi Hữu Nghĩa tọa lạc trên đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bánh cống sườn non Cô Út Cần Thơ",
+    "content": "Quán Bánh cống Cô Út nằm tại số 86/4 đường Lý Tự Trọng, phường An Cư, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 4,
+    "address": "Phường An Cư, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Holiday One Hotel Cần Thơ",
+    "content": "Khách sạn Holiday One Hotel tọa lạc tại số 59-61-63-65 đường Phạm Ngọc Thạch, phường Cái Khế, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 64,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Cồn Khương sông Hậu Cần Thơ",
+    "content": "Cồn Khương... thuộc địa phận phường Cái Khế, quận Ninh Kiều...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Cái Khế, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội cúng đình làng Thới Bình Ninh Kiều",
+    "content": "Lễ hội cúng đình Thới Bình được tổ chức... tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ hội hội Quảng Triệu",
+    "content": "Chùa cổ hội hội Quảng Triệu... tọa lạc tại số 32 đường Hai Bà Trưng, phường Tân An, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 32,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu khô sa tế bò viên mực nhảy cô Lan Cà Mau",
+    "content": "Quán Hủ tiếu khô cô Lan nằm trên đường đề thám, phường An Cư, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Cư, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Anh Dao Mekong 2 Hotel Cần Thơ",
+    "content": "Khách sạn Anh Dao Mekong 2 Hotel tọa lạc tại số 8 đường Lý Thường Kiệt, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây lê lộc Phong Điền Cần Thơ",
+    "content": "Vườn trái cây lê lộc tọa lạc tại phường Ba Láng, quận Cái Răng kết nối trục lộ giao thông Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Thượng Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Thượng Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Chùa cổ Hội Linh Cần Thơ",
+    "content": "Chùa Hội Linh... tọa lạc tại đường Cách Mạng Tháng Tám, phường Bùi Hữu Nghĩa, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Bùi Hữu Nghĩa, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún riêu cua giò heo gạch cua đặc sản cô sen Cần Thơ",
+    "content": "Quán Bún riêu cua cô sen nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Tây Đô Hotel Cần Thơ",
+    "content": "Khách sạn Tây Đô Hotel tọa lạc tại số 61 đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.0308613,
+    "longitude": 105.7856653,
+    "costEstimate": 61,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cò Bằng Lăng Thốt Nốt",
+    "content": "Vườn cò Bằng Lăng tọa lạc tại thới bình, phường Thuận An, quận Thốt Nốt...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thuận An, Quận Thốt Nốt, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Long Tuyền Cần Thơ Hạ Điền",
+    "content": "Lễ hội Kỳ yên Đình thần Long Tuyền Hạ Điền được tổ chức... tại Đình Bình Thủy thuộc phường Bình Thủy, quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Bình Thủy, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Cơ quan Đặc ủy Hậu Giang Cần Thơ",
+    "content": "Di tích Cơ quan Đặc ủy Hậu Giang tọa lạc tại số 26 đường Nguyễn Thị Minh Khai, phường An Lạc, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường An Lạc, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cháo lòng Cái Tắc lòng thập cẩm ngon cô Ba",
+    "content": "Quán Cháo lòng Cái Tắc cô Ba nằm trên quốc lộ 1A, đoạn gần giáp ranh thành phố Cần Thơ...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Khu vực giáp ranh Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.035186,
+    "longitude": 105.7885932,
+    "costEstimate": 1200000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn trái cây chín hồng Phong Điền Cần Thơ",
+    "content": "Vườn trái cây chín hồng tọa lạc tại ấp Mỹ Nhơn, xã Mỹ Khánh, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Mỹ Khánh, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Đền thờ Vua Hùng Cần Thơ",
+    "content": "Lễ hội Đền thờ Vua Hùng... tại Khu Đền thờ Vua Hùng quận Bình Thủy...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 8,
+    "address": "Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Đền thờ Thủ khoa Bùi Hữu Nghĩa Cần Thơ",
+    "content": "Đền thờ Bùi Hữu Nghĩa... tọa lạc trên đường Bùi Hữu Nghĩa, phường An Thới, quận Bình Thủy...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Bún chả Hà Nội hương vị phố cổ ngon chuẩn vị",
+    "content": "Quán Bún chả Hà Nội phố cổ nằm trên đường Nguyễn Văn Cừ kéo dài, phường An Khánh, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Khánh, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Hạnh Phúc Hotel Cần Thơ",
+    "content": "Khách sạn Hạnh Phúc Hotel tọa lạc tại số 75-77-79 đường Nguyễn An Ninh, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.043166,
+    "longitude": 105.7858234,
+    "costEstimate": 78,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn dâu hạ châu Phong Điền Cần Thơ",
+    "content": "Vườn dâu hạ châu trải dài trên diện tích rộng lớn tại các xã thuộc huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 6,
+    "address": "Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An được tổ chức... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Cần Thơ",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu mực ống tươi mực nhảy Cái Răng",
+    "content": "Quán Hủ tiếu mực tươi Cái Răng nằm trên đường Ba Láng, quận Cái Răng...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Mekong Logis Homestay Cần Thơ",
+    "content": "Mekong Logis Homestay tọa lạc tại số 188 đường ba láng, phường Ba Láng, quận Cái Răng...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Ba Láng, Quận Cái Răng, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả ba cống Bình Thủy Cần Thơ",
+    "content": "Vườn cây ăn quả ba cống tọa lạc tại phường Long Tuyền, quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Long Tuyền, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Thới Bình được tổ chức... tại Đình thần Thới Bình thuộc phường Thới Bình, quận Ninh Kiều...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới Bình Ninh Kiều Cần Thơ",
+    "content": "Đình thần Thới Bình tọa lạc tại phường Thới Bình, quận Ninh Kiều...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới Bình, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Cơm tấm sườn bì chả nướng than hồng cô Diễm Cần Thơ",
+    "content": "Quán Cơm tấm cô Diễm nằm trên đường Lý Tự Trọng, phường An Phú, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Phú, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Green House Hotel Cần Thơ",
+    "content": "Khách sạn Green House Hotel tọa lạc tại số 39 đường Nguyễn Anh Ninh, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Vườn cây ăn quả gia bảo Phong Điền Cần Thơ",
+    "content": "Vườn cây ăn quả gia bảo tọa lạc tại xã Nhơn Nghĩa, huyện Phong Điền...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Nghĩa, Huyện Phong Điền, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Lễ hội Kỳ yên Đình thần Thới An... tại Đình thần Thới An thuộc phường Thới An, quận Ô Môn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Thới An Ô Môn Bình Dương",
+    "content": "Đình thần Thới An tọa lạc tại phường Thới An, quận Ô Môn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thới An, Quận Ô Môn, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Phở bò tái lăn gầu giòn béo ngậy chín nạc hương vị Bắc cô Lan",
+    "content": "Quán Phở bò gia truyền cô Lan nằm trên đường Cách Mạng Tháng Tám, phường An Thới, quận Bình Thủy...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Thới, Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khách sạn Kim Thơ Luxury Hotel Cần Thơ",
+    "content": "Khách sạn Kim Thơ Luxury Hotel tọa lạc tại số 1A đường Ngô Quyền, phường Tân An, quận Ninh Kiều...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Tân An, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Khu sinh thái Rạch sông Bình Thủy Cần Thơ",
+    "content": "Rạch sông Bình Thủy chảy hiền hòa uốn lượn qua bờ địa phận quận Bình Thủy...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Bình Thủy, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Uyên Hưng... tại thị xã Bến Cát...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Bến Cát, Tỉnh Bình Dương (ghi chú: tên địa danh trong content có thể nhầm lẫn với Cần Thơ)"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
+    "content": "Đình thần Uyên Hưng tọa lạc tại thị xã Bến Cát, tỉnh Bình Dương...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Bến Cát, Tỉnh Bình Dương"
+  },
+  {
+    "province": "Cần Thơ",
+    "title": "Quán Hủ tiếu Nam Vang nước lèo ngọt thanh chuẩn vị gia truyền cô Út Cần Thơ",
+    "content": "Quán Hủ tiếu Nam Vang cô Út nằm trên đường Nguyễn Văn Cừ, phường An Hòa, quận Ninh Kiều...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường An Hòa, Quận Ninh Kiều, Thành phố Cần Thơ"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Dơi",
+    "content": "Chùa Dơi, hay còn gọi là Chùa Mã Tộc hoặc Chùa Mahatup, là một trong những ngôi chùa cổ nổi tiếng và đẹp nhất tại Sóc Trăng...",
+    "category": "attraction",
+    "latitude": 9.5789679,
+    "longitude": 105.9724396,
+    "costEstimate": 0,
+    "address": "Phường 3, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Chén Kiểu",
+    "content": "Chùa Chén Kiểu, có tên gọi chính thức là Sà Lôn, là một điểm đến không thể bỏ qua...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Quốc lộ 1A, Xã Đại Tâm, Huyện Mỹ Xuyên, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Kh'Leang",
+    "content": "Chùa Kh'Leang được xem là ngôi chùa cổ nhất tại Sóc Trăng, được xây dựng từ thế kỷ XVI...",
+    "category": "attraction",
+    "latitude": 9.6100629,
+    "longitude": 105.9767306,
+    "costEstimate": 0,
+    "address": "Phường 6, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Bảo tàng tỉnh Sóc Trăng",
+    "content": "Bảo tàng tỉnh Sóc Trăng là địa điểm lý tưởng để tìm hiểu về văn hóa và lịch sử...",
+    "category": "attraction",
+    "latitude": 9.6123895,
+    "longitude": 105.9699571,
+    "costEstimate": 0,
+    "address": "Phường 6, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chợ nổi Ngã Năm",
+    "content": "Chợ nổi Ngã Năm là một trong những chợ nổi lâu đời và nổi tiếng nhất...",
+    "category": "attraction",
+    "latitude": 9.5663969,
+    "longitude": 105.597209,
+    "costEstimate": 0,
+    "address": "Phường 1, Thị xã Ngã Năm, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bún Nước Lèo Cây Nhãn",
+    "content": "Nhà hàng Bún Nước Lèo Cây Nhãn là địa chỉ ẩm thực trứ danh...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Đường Võ Đình Sâm, Phường 6, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khu du lịch sinh thái Bình An",
+    "content": "Khu du lịch sinh thái Bình An là điểm đến yêu thích dành cho những ai muốn hòa mình vào thiên nhiên...",
+    "category": "nature",
+    "latitude": 9.5994432,
+    "longitude": 105.9691502,
+    "costEstimate": 0,
+    "address": "Phường 10, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Bánh Pía Lương Trân",
+    "content": "Bánh Pía là món đặc sản không thể không nhắc đến khi nói về Sóc Trăng, và Lương Trân là một trong những thương hiệu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Quốc lộ 1A, Xã Phú Tâm, Huyện Châu Thành, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Quê Hương",
+    "content": "Khách sạn Quê Hương là một trong những điểm lưu trú chất lượng cao tại trung tâm thành phố Sóc Trăng...",
+    "category": "hotel",
+    "latitude": 9.6008592,
+    "longitude": 105.9711876,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Ông Bổn",
+    "content": "Chùa Ông Bổn, hay còn gọi là Hòa An Hội Quán, là ngôi chùa của cộng đồng người Hoa...",
+    "category": "attraction",
+    "latitude": 9.6053728,
+    "longitude": 105.9759138,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Căn cứ Tỉnh ủy Sóc Trăng",
+    "content": "Căn cứ Tỉnh ủy Sóc Trăng là di tích lịch sử cách mạng quan trọng, tọa lạc tại xã Mỹ Phước, huyện Mỹ Tú...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Mỹ Phước, Huyện Mỹ Tú, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa La Hán",
+    "content": "Chùa La Hán là ngôi chùa Phật giáo mang đậm nét văn hóa Hoa, nằm gần trung tâm thành phố Sóc Trăng...",
+    "category": "attraction",
+    "latitude": 9.6076074,
+    "longitude": 105.9809421,
+    "costEstimate": 0,
+    "address": "Phường 8, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Vườn nhãn trăm tuổi Vĩnh Châu",
+    "content": "Vườn nhãn trăm tuổi tại thị xã Vĩnh Châu là một điểm đến đầy thú vị...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Vĩnh Châu, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Pătum Wongsa Somrong",
+    "content": "Chùa Somrong, hay còn gọi là Chùa Pătum Wongsa Somrong, là một trong những ngôi chùa Khmer có kiến trúc hiện đại...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 5, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Hải sản Hòa Phát",
+    "content": "Nhà hàng Hải sản Hòa Phát là điểm đến lý tưởng cho những tín đồ yêu thích ẩm thực biển...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Resort Mekong Garden",
+    "content": "Resort Mekong Garden là điểm nghỉ dưỡng sinh thái đẳng cấp tại Sóc Trăng...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Bôtum Vongsa",
+    "content": "Chùa Bôtum Vongsa, nằm tại thị xã Vĩnh Châu, là một ngôi chùa Khmer nổi tiếng với không gian yên tĩnh...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Thị xã Vĩnh Châu, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Lễ hội đua ghe Ngo",
+    "content": "Lễ hội đua ghe Ngo là hoạt động đặc sắc nhất trong khuôn khổ lễ hội Ok Om Bok tại Sóc Trăng...",
+    "category": "festival",
+    "latitude": 9.3203771,
+    "longitude": 106.1059371,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Bún nước lèo Hương Việt",
+    "content": "Bún nước lèo Hương Việt là điểm đến quen thuộc của cả người dân địa phương và du khách...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Phật Học 2",
+    "content": "Chùa Phật Học 2, hay còn được người dân địa phương gọi thân thương là Chùa Giữa...",
+    "category": "attraction",
+    "latitude": 12.25051,
+    "longitude": 109.1803014,
+    "costEstimate": 0,
+    "address": "Phường 5, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Cồn Mỹ Phước",
+    "content": "Cồn Mỹ Phước là một điểm đến du lịch sinh thái nổi tiếng thuộc huyện Kế Sách, nằm giữa dòng sông Hậu...",
+    "category": "nature",
+    "latitude": 9.7916817,
+    "longitude": 106.0447451,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Mỹ, Huyện Kế Sách, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Wat Seray Techo Mahatup",
+    "content": "Chùa Wat Seray Techo Mahatup, hay còn được biết đến là Chùa Dơi, là một trong những di tích kiến trúc...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 3, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Ngọc Thu",
+    "content": "Khách sạn Ngọc Thu là điểm lưu trú bình dân nhưng chất lượng, tọa lạc tại vị trí thuận lợi...",
+    "category": "hotel",
+    "latitude": 10.6476026,
+    "longitude": 107.2392722,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khu bảo tồn thiên nhiên rừng tràm",
+    "content": "Khu bảo tồn thiên nhiên rừng tràm là một trong những điểm du lịch sinh thái hấp dẫn tại Sóc Trăng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Mỹ Tú, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Hội quán Triều Châu",
+    "content": "Hội quán Triều Châu, hay còn gọi là Chùa Ông Bổn, là một di tích văn hóa của cộng đồng người Hoa...",
+    "category": "attraction",
+    "latitude": 15.8779062,
+    "longitude": 108.3330331,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bún Cống",
+    "content": "Nhà hàng Bún Cống không chỉ là một quán ăn, mà là nơi thực khách có thể thưởng thức trọn vẹn đặc sản Bánh Cống...",
+    "category": "restaurant",
+    "latitude": 11.9580964,
+    "longitude": 108.4426667,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Lễ hội Chol Chnam Thmay",
+    "content": "Lễ hội Chol Chnam Thmay là Tết cổ truyền của đồng bào dân tộc Khmer...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Homestay Mỹ Phước",
+    "content": "Homestay Mỹ Phước là lựa chọn tuyệt vời cho những ai muốn trải nghiệm cuộc sống thường ngày...",
+    "category": "hotel",
+    "latitude": 16.0629916,
+    "longitude": 108.2438207,
+    "costEstimate": 0,
+    "address": "Xã Nhơn Mỹ, Huyện Kế Sách, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Wathpich",
+    "content": "Chùa Wathpich, còn gọi là Chùa Pích, là một ngôi chùa Khmer cổ kính nằm tại thị xã Vĩnh Châu...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Thị xã Vĩnh Châu, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Lễ hội cúng Phước Biển",
+    "content": "Lễ hội cúng Phước Biển là một trong những lễ hội văn hóa độc đáo của người Khmer tại thị xã Vĩnh Châu...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thị xã Vĩnh Châu, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Minh Phượng",
+    "content": "Khách sạn Minh Phượng nằm ngay trung tâm thành phố Sóc Trăng, là điểm dừng chân quen thuộc...",
+    "category": "hotel",
+    "latitude": 9.6012558,
+    "longitude": 105.9756282,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Sà Lôn",
+    "content": "Chùa Sà Lôn, hay còn gọi là Chùa Chén Kiểu, là một công trình kiến trúc Phật giáo Khmer đầy sáng tạo...",
+    "category": "attraction",
+    "latitude": 41.3886359,
+    "longitude": 2.1615144,
+    "costEstimate": 0,
+    "address": "Quốc lộ 1A, Xã Đại Tâm, Huyện Mỹ Xuyên, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bún Nước Lèo Anh Huy",
+    "content": "Nhà hàng Bún Nước Lèo Anh Huy từ lâu đã trở thành địa chỉ ẩm thực tin cậy...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Biển Mỏ Ó",
+    "content": "Biển Mỏ Ó là một điểm đến du lịch hoang sơ, thú vị tại huyện Trần Đề...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Trần Đề, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Đền thờ Bác Hồ",
+    "content": "Đền thờ Bác Hồ tại xã An Thạnh Đông, huyện Cù Lao Dung là một công trình văn hóa mang ý nghĩa lịch sử...",
+    "category": "attraction",
+    "latitude": 10.8596698,
+    "longitude": 106.9573011,
+    "costEstimate": 0,
+    "address": "Xã An Thạnh Đông, Huyện Cù Lao Dung, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chợ đêm Sóc Trăng",
+    "content": "Chợ đêm Sóc Trăng là điểm dừng chân sôi động nhất khi màn đêm buông xuống...",
+    "category": "attraction",
+    "latitude": 9.6047043,
+    "longitude": 105.9766419,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Thuận Phát",
+    "content": "Khách sạn Thuận Phát là một lựa chọn đáng tin cậy cho du khách khi đến Sóc Trăng...",
+    "category": "hotel",
+    "latitude": 10.6520824,
+    "longitude": 107.0412809,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khu du lịch sinh thái Trăng Sông",
+    "content": "Khu du lịch sinh thái Trăng Sông là điểm đến lý tưởng cho những ai muốn tìm kiếm sự yên tĩnh...",
+    "category": "nature",
+    "latitude": 16.4109728,
+    "longitude": 107.2427364,
+    "costEstimate": 0,
+    "address": "Huyện Mỹ Tú, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Mahatup",
+    "content": "Chùa Mahatup, hay còn được người dân biết đến rộng rãi với tên gọi là Chùa Dơi...",
+    "category": "attraction",
+    "latitude": 9.5789679,
+    "longitude": 105.9724396,
+    "costEstimate": 0,
+    "address": "Phường 3, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Lễ hội Ok Om Bok (Lễ Cúng Trăng)",
+    "content": "Lễ hội Ok Om Bok là một trong những lễ hội văn hóa quan trọng nhất của người Khmer...",
+    "category": "festival",
+    "latitude": 9.3203771,
+    "longitude": 106.1059371,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Hải sản Biển Đông",
+    "content": "Nhà hàng Hải sản Biển Đông là địa chỉ quen thuộc dành cho những ai muốn thưởng thức các món ăn hải sản...",
+    "category": "restaurant",
+    "latitude": 21.0015329,
+    "longitude": 105.8168458,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Homestay Mekong",
+    "content": "Homestay Mekong mang đến cho du khách cơ hội trải nghiệm cuộc sống miền Tây bình dị...",
+    "category": "hotel",
+    "latitude": 10.0431137,
+    "longitude": 105.809711,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Ông Bổn (Hòa An Hội Quán)",
+    "content": "Chùa Ông Bổn, hay còn được biết đến với tên gọi Hòa An Hội Quán, là một điểm đến văn hóa đầy ấn tượng...",
+    "category": "attraction",
+    "latitude": 9.6053728,
+    "longitude": 105.9759138,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Bãi biển Trần Đề",
+    "content": "Bãi biển Trần Đề, thuộc huyện Trần Đề, là một khu vực biển đầy thú vị...",
+    "category": "nature",
+    "latitude": 9.470921,
+    "longitude": 106.1982765,
+    "costEstimate": 0,
+    "address": "Huyện Trần Đề, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Minh Tâm",
+    "content": "Khách sạn Minh Tâm tọa lạc tại vị trí trung tâm thành phố Sóc Trăng, là điểm nghỉ chân thuận tiện...",
+    "category": "hotel",
+    "latitude": 22.6991933,
+    "longitude": 106.0853736,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Bodhi Rajapalarama",
+    "content": "Chùa Bodhi Rajapalarama là ngôi chùa Khmer độc đáo với kiến trúc kết hợp giữa nét cổ điển và hiện đại...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 5, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bánh Cống cô Phượng",
+    "content": "Nhà hàng Bánh Cống cô Phượng từ lâu đã trở thành địa chỉ ẩm thực không thể bỏ qua...",
+    "category": "restaurant",
+    "latitude": 15.8771595,
+    "longitude": 108.3278952,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Lễ hội đua ghe Ngo Sóc Trăng",
+    "content": "Lễ hội đua ghe Ngo là đỉnh cao của văn hóa lễ hội tại Sóc Trăng, thu hút hàng chục ngàn du khách...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Resort Mekong Riverside",
+    "content": "Resort Mekong Riverside là sự lựa chọn hoàn hảo cho những ai đang tìm kiếm một nơi nghỉ dưỡng yên bình và sang trọng...",
+    "category": "hotel",
+    "latitude": 10.3248294,
+    "longitude": 106.0195525,
+    "costEstimate": 0,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Wat K'leang",
+    "content": "Chùa Wat K'leang là ngôi chùa Phật giáo Khmer cổ kính và có tầm ảnh hưởng quan trọng nhất tại Sóc Trăng...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 6, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bún Nước Lèo Sáu Hồng",
+    "content": "Nhà hàng Bún Nước Lèo Sáu Hồng từ lâu đã khẳng định được thương hiệu của mình với thực khách...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chợ nổi Ngã Năm (Thị xã Ngã Năm)",
+    "content": "Chợ nổi Ngã Năm, nằm tại thị xã Ngã Năm, tỉnh Sóc Trăng, là một trong những điểm đến văn hóa sông nước đặc sắc nhất...",
+    "category": "attraction",
+    "latitude": 9.5663969,
+    "longitude": 105.597209,
+    "costEstimate": 0,
+    "address": "Phường 1, Thị xã Ngã Năm, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Sóc Trăng",
+    "content": "Khách sạn Sóc Trăng là địa điểm lưu trú uy tín, tọa lạc ngay trung tâm thành phố...",
+    "category": "hotel",
+    "latitude": 9.5996002,
+    "longitude": 105.9727503,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Bôtum Vongsa (Chùa Sóc Trăng)",
+    "content": "Chùa Bôtum Vongsa, nằm ở trung tâm Sóc Trăng, là một trong những ngôi chùa Khmer có không gian vô cùng bình yên...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 5, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Nhà hàng Bún Cống Hùng Cường",
+    "content": "Nhà hàng Bún Cống Hùng Cường là địa chỉ tin cậy để thưởng thức món đặc sản bánh Cống trứ danh...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khu sinh thái Hổ Cứ",
+    "content": "Khu sinh thái Hổ Cứ, thuộc huyện Mỹ Tú, Sóc Trăng, là điểm đến lý tưởng cho những ai yêu thích khám phá...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Mỹ Tú, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Chùa Wat Mahatup",
+    "content": "Chùa Wat Mahatup, hay còn được gọi là Chùa Dơi, là một trong những ngôi chùa cổ kính và linh thiêng nhất tại Sóc Trăng...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường 3, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  },
+  {
+    "province": "Sóc Trăng",
+    "title": "Khách sạn Phú Quý",
+    "content": "Khách sạn Phú Quý, tọa lạc ngay trung tâm thành phố Sóc Trăng, là sự lựa chọn hoàn hảo...",
+    "category": "hotel",
+    "latitude": 10.6731625,
+    "longitude": 107.4747784,
+    "costEstimate": 0,
+    "address": "Phường 1, Thành phố Sóc Trăng, Tỉnh Sóc Trăng"
+  }
+]

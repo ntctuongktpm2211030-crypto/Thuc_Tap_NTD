@@ -124,6 +124,10 @@ export const tripsService = {
   aiGenerate: (payload: AIGeneratePayload) =>
     apiClient.post('/trips/ai-generate', payload).then(r => r.data),
 
+  /** Regenerate specific day or session using AI */
+  aiRegeneratePart: (payload: any) =>
+    apiClient.post('/trips/ai-regenerate-part', payload).then(r => r.data),
+
   /** TSP route optimization via backend algorithm */
   optimizeRoute: (waypoints: Waypoint[]) =>
     apiClient.post('/trips/optimize-route', { waypoints }).then(r => r.data),

@@ -1,0 +1,2112 @@
+[
+  {
+    "province": "Đà Nẵng",
+    "title": "Khu du lịch Sun World Ba Na Hills",
+    "content": "Tọa lạc trên đỉnh núi Chúa thuộc huyện Hòa Vang, cách trung tâm thành phố Đà Nẵng khoảng 25 km...",
+    "category": "attraction",
+    "latitude": 15.9958569,
+    "longitude": 107.9890712,
+    "costEstimate": 30000,
+    "address": "Xã Hòa Ninh, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Danh thắng Ngũ Hành Sơn",
+    "content": "Danh thắng Ngũ Hành Sơn nằm trên địa bàn phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Cầu Rồng",
+    "content": "Tọa lạc ngay trung tâm thành phố, kết nối trục đường chính giao thông...",
+    "category": "attraction",
+    "latitude": 16.0611682,
+    "longitude": 108.2278968,
+    "costEstimate": 30000,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bảo tàng Điêu khắc Chăm Đà Nẵng",
+    "content": "Bảo tàng Điêu khắc Chăm Đà Nẵng tọa lạc tại số 2 đường Hai Tháng Chín, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0601209,
+    "longitude": 108.223084,
+    "costEstimate": 2,
+    "address": "Phường Bình Hiên, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi biển Mỹ Khê",
+    "content": "Bãi biển Mỹ Khê trải dài ven trục đường bờ biển Võ Nguyên Giáp thuộc quận Sơn Trà và quận Ngũ Hành Sơn...",
+    "category": "nature",
+    "latitude": 16.0756383,
+    "longitude": 108.246874,
+    "costEstimate": 0,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Linh Ứng Bán đảo Sơn Trà",
+    "content": "Chùa Linh Ứng Sơn Trà... tọa lạc lưng chừng núi thuộc bán đảo Sơn Trà, quận Sơn Trà...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khu bảo tồn thiên nhiên Sơn Trà",
+    "content": "Khu bảo tồn thiên nhiên Sơn Trà nằm trên bán đảo Sơn Trà, quận Sơn Trà...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà thờ Chánh tòa Đà Nẵng",
+    "content": "Nhà thờ Chánh tòa Đà Nẵng... tọa lạc tại số 156 đường Trần Phú, phường Hải Châu 1, quận Hải Châu.",
+    "category": "attraction",
+    "latitude": 16.0666827,
+    "longitude": 108.2230584,
+    "costEstimate": 156,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Làng nghề điêu khắc đá mỹ nghệ Non Nước",
+    "content": "Làng nghề điêu khắc đá mỹ nghệ Non Nước nằm ngay dưới chân danh thắng Ngũ Hành Sơn thuộc phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh tráng cuốn thịt heo Trần",
+    "content": "Quán ăn ẩm thực đặc sản Trần nằm tại số 4 đường Lê Duẩn, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 4,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "InterContinental Danang Sun Peninsula Resort",
+    "content": "Nằm ẩn mình biệt lập giữa thung lũng xanh mướt... bãi Bắc thuộc bán đảo Sơn Trà...",
+    "category": "hotel",
+    "latitude": 16.1210876,
+    "longitude": 108.3061358,
+    "costEstimate": 1200000,
+    "address": "Bãi Bắc, Bán đảo Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội pháo hoa quốc tế Đà Nẵng",
+    "content": "Lễ hội pháo hoa quốc tế Đà Nẵng (DIFF)... diễn ra tại khu vực sân khấu quảng trường bờ kè cảng sông Hàn...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Rạn Nam Ô",
+    "content": "Rạn Nam Ô tọa lạc tại phường Hòa Hiệp Bắc, quận Liên Chiểu...",
+    "category": "nature",
+    "latitude": 28.6891059,
+    "longitude": 115.93267,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hiệp Bắc, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đền thờ Thoại Ngọc Hầu Đà Nẵng",
+    "content": "Đền thờ Thoại Ngọc Hầu tọa lạc tại làng cổ An Hải cổ xưa, nay thuộc địa phận phường An Hải Tây, quận Sơn Trà...",
+    "category": "attraction",
+    "latitude": 15.8758709,
+    "longitude": 108.3207009,
+    "costEstimate": 30000,
+    "address": "Phường An Hải Tây, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Mì Quảng Ếch Bếp Trang",
+    "content": "Quán Mì Quảng Ếch Bếp Trang nằm tại số 441 đường Ông Ích Khiêm, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 441,
+    "address": "Phường Vĩnh Trung, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Novotel Danang Han River Hotel",
+    "content": "Tọa lạc tại số 36 đường Bạch Đằng, phường Thạch Thang, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 36,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đèo Hải Vân",
+    "content": "Đèo Hải Vân vắt mình qua dãy núi Bạch Mã... giáp ranh giữa thành phố Đà Nẵng (quận Liên Chiểu) và tỉnh Thừa Thiên Huế...",
+    "category": "nature",
+    "latitude": 16.1691434,
+    "longitude": 108.1262622,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hiệp Bắc, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội rước mục đồng Hòa Tiến",
+    "content": "Lễ hội rước mục đồng... tại làng cổ Phong Nam, xã Hòa Tiến, huyện Hòa Vang, thành phố Đà Nẵng.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Hòa Tiến, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Di tích quốc gia đặc biệt Thành Điện Hải",
+    "content": "Thành Điện Hải tọa lạc tại số 24 đường Trần Phú, phường Thạch Thang, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bê thui Cầu Mống Mười Đà Nẵng",
+    "content": "Quán Bê thui Cầu Mống Mười nằm trên quốc lộ 1A thuộc quận Cẩm Lệ...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Quận Cẩm Lệ, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi cát vàng",
+    "content": "Bãi Cát Vàng là một khu du lịch sinh thái hoang sơ nằm nép mình tại bán đảo Sơn Trà, quận Sơn Trà...",
+    "category": "nature",
+    "latitude": 16.1425958,
+    "longitude": 108.2319028,
+    "costEstimate": 3,
+    "address": "Bán đảo Sơn Trà, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà hàng Hải sản Năm Đảnh",
+    "content": "Nhà hàng Hải sản Năm Đảnh tọa lạc tại ngõ 139/59/38 đường Trần Quang Khải, phường Thọ Quang, quận Sơn Trà.",
+    "category": "restaurant",
+    "latitude": 16.1044234,
+    "longitude": 108.2535985,
+    "costEstimate": 38,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh xèo Bà Dưỡng",
+    "content": "Quán Bánh xèo Bà Dưỡng nằm tại ngõ 280/23 đường Hoàng Diệu, phường Bình Hiên, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 16.0588034,
+    "longitude": 108.2160349,
+    "costEstimate": 23,
+    "address": "Phường Bình Hiên, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Da Nang Mikazuki Japanese Resorts & Spa",
+    "content": "Da Nang Mikazuki Japanese Resorts & Spa tọa lạc ngay trục đường bờ biển Nguyễn Tất Thành, phường Hòa Hiệp Nam, quận Liên Chiểu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Hòa Hiệp Nam, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả cá 109",
+    "content": "Quán Bún chả cá 109 nằm tại số 109 đường Nguyễn Chí Thanh, phường Hải Châu 1, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 16.0743887,
+    "longitude": 108.2207958,
+    "costEstimate": 109,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà hàng Hải sản Mộc Quán",
+    "content": "Nhà hàng Hải sản Mộc Quán tọa lạc tại số 26 đường Tô Hiến Thành, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 26,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Làng chiếu hoa Cẩm Nê",
+    "content": "Làng chiếu Cẩm Ne thuộc địa phận xã Hòa Tiến, huyện Hòa Vang, thành phố Đà Nẵng...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Hòa Tiến, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nghề làm bánh khô mè Cẩm Lệ",
+    "content": "Làng nghề làm bánh khô mề thuộc địa bàn phường Khuê Trung, quận Cẩm Lệ, thành phố Đà Nẵng...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Khuê Trung, Quận Cẩm Lệ, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nghề bánh tráng Túy Loan",
+    "content": "Làng nghề bánh tráng Túy Loan tọa lạc tại làng cổ Túy Loan, xã Hòa Phong, huyện Hòa Vang, thành phố Đà Nẵng...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Hòa Phong, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Công viên Châu Á",
+    "content": "Công viên Châu Á... tọa lạc tại số 1 đường Phan Đăng Lưu, phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0381534,
+    "longitude": 108.225404,
+    "costEstimate": 1,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Linh Ứng Ngũ Hành Sơn",
+    "content": "Chùa Linh Ứng Ngũ Hành Sơn... tọa lạc trên ngọn Thủy Sơn thuộc cụm danh thắng Ngũ Hành Sơn, phường Hòa Hải, quận Ngũ Hành Sơn.",
+    "category": "attraction",
+    "latitude": 16.004283,
+    "longitude": 108.2643473,
+    "costEstimate": 30000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Tam Thai",
+    "content": "Chùa Tam Thai nằm trên đỉnh ngọn Thủy Sơn thuộc danh thắng Ngũ Hành Sơn, phường Hòa Hải, quận Ngũ Hành Sơn.",
+    "category": "attraction",
+    "latitude": 16.0038895,
+    "longitude": 108.2627912,
+    "costEstimate": 30000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Động Huyền Không Ngũ Hành Sơn",
+    "content": "Động Huyền Không... lòng ngọn Thủy Sơn thuộc cụm danh thắng Ngũ Hành Sơn, quận Ngũ Hành Sơn.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Cầu Thuận Phước",
+    "content": "Cầu Thuận Phước... kết nối hai quận Hải Châu và Sơn Trà.",
+    "category": "attraction",
+    "latitude": 16.0951418,
+    "longitude": 108.2205974,
+    "costEstimate": 30000,
+    "address": "Quận Hải Châu và Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Cầu Trần Thị Lý",
+    "content": "Cầu Trần Thị Lý... kết nối quận Hải Châu và quận Ngũ Hành Sơn.",
+    "category": "attraction",
+    "latitude": 16.0502245,
+    "longitude": 108.2300162,
+    "costEstimate": 30000,
+    "address": "Quận Hải Châu và Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Cầu Nguyễn Văn Trỗi",
+    "content": "Cầu Nguyễn Văn Trỗi là cây cầu cổ nhất bắc qua sông Hàn... thuộc quận Hải Châu và Sơn Trà.",
+    "category": "attraction",
+    "latitude": 16.0510759,
+    "longitude": 108.2291164,
+    "costEstimate": 0,
+    "address": "Quận Hải Châu và Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bảo tàng Đà Nẵng",
+    "content": "Bảo tàng Đà Nẵng hiện nay tọa lạc tại số 24 đường Trần Phú, phường Thạch Thang, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0750129,
+    "longitude": 108.2239347,
+    "costEstimate": 24,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bảo tàng Mỹ thuật Đà Nẵng",
+    "content": "Bảo tàng Mỹ thuật Đà Nẵng tọa lạc tại số 78 đường Lê Duẩn, phường Thạch Thang, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0712623,
+    "longitude": 108.2177145,
+    "costEstimate": 78,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi biển Phạm Văn Đồng",
+    "content": "Bãi biển Phạm Văn Đồng nằm cuối trục lộ đường Phạm Văn Đồng... thuộc phường Phước Mỹ, quận Sơn Trà.",
+    "category": "nature",
+    "latitude": 16.0726054,
+    "longitude": 108.2316858,
+    "costEstimate": 0,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi biển Non Nước",
+    "content": "Bãi biển Non Nước trải dọc trùm mép bờ biển đường Trường Sa thuộc phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "nature",
+    "latitude": 16.0056684,
+    "longitude": 108.2687971,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi biển Xuân Thiều",
+    "content": "Bãi biển Xuân Thiều nằm dọc trục lộ đường Nguyễn Tất Thành thuộc địa phận phường Hòa Hiệp Nam, quận Liên Chiểu...",
+    "category": "nature",
+    "latitude": 16.1083968,
+    "longitude": 108.1326081,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hiệp Nam, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi biển Thanh Bình",
+    "content": "Bãi biển Thanh Bình tọa lạc ngay lòng đô thị thuộc tuyến đường lóng Nguyễn Tất Thành, phường Thanh Bình, quận Hải Châu...",
+    "category": "nature",
+    "latitude": 15.7785031,
+    "longitude": 108.4310266,
+    "costEstimate": 0,
+    "address": "Phường Thanh Bình, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Linh Ứng Bãi Bắc",
+    "content": "Chùa Linh Ứng Bãi Bắc, tên gọi hành chính... tại bán đảo Sơn Trà, quận Sơn Trà...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Pháp Lâm",
+    "content": "Chùa Pháp Lâm tọa lạc tại số 574 đường Ông Ích Khiêm, phường Nam Dương, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0622864,
+    "longitude": 108.2155343,
+    "costEstimate": 574,
+    "address": "Phường Nam Dương, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Bát Nhã Đà Nẵng",
+    "content": "Chùa Bát Nhã tọa lạc tại số 176 đường Triệu Nữ Vương, phường Nam Dương, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Nam Dương, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Chùa Phổ Đà Đà Nẵng",
+    "content": "Chùa Phổ Đà tọa lạc tại số 340 đường Phan Châu Trinh, phường Bình Thuận, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0559193,
+    "longitude": 108.2182286,
+    "costEstimate": 0,
+    "address": "Phường Bình Thuận, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đền thờ Thoại Ngọc Hầu Đà Nẵng",
+    "content": "Đền thờ Thoại Ngọc Hầu tọa lạc tại làng cổ An Hải... thuộc địa phận phường An Hải Tây, quận Sơn Trà...",
+    "category": "attraction",
+    "latitude": 15.8758709,
+    "longitude": 108.3207009,
+    "costEstimate": 30000,
+    "address": "Phường An Hải Tây, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đài tưởng niệm thành phố Đà Nẵng",
+    "content": "Đài tưởng niệm thành phố Đà Nẵng... tọa lạc tại đường lóng đường Hai Tháng Chín, phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.040969,
+    "longitude": 108.2243228,
+    "costEstimate": 0,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà thờ Giáo xứ Hòa Khánh",
+    "content": "Nhà thờ Giáo xứ Hòa Khánh tọa lạc tại số 48 đường Nguyễn Lương Bằng, phường Hòa Khánh Bắc, quận Liên Chiểu...",
+    "category": "attraction",
+    "latitude": 16.0768315,
+    "longitude": 108.1146406,
+    "costEstimate": 48,
+    "address": "Phường Hòa Khánh Bắc, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đình làng Hải Châu",
+    "content": "Đình làng Hải Châu tọa lạc tại tổ 21, ngõ 48 đường Phan Châu Trinh, phường Hải Châu 1, quận Hải Châu...",
+    "category": "attraction",
+    "latitude": 16.0676414,
+    "longitude": 108.2192638,
+    "costEstimate": 0,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Đình làng Túy Loan",
+    "content": "Đình làng Túy Loan tọa lạc ngay bên bờ sông Túy Loan... xã Hòa Phong, huyện Hòa Vang...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Hòa Phong, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Giáo xứ Chính Tòa Đà Nẵng",
+    "content": "Giáo xứ Chính Tòa Đà Nẵng... tọa lạc tại số 156 đường Trần Phú, phường Hải Châu 1, quận Hải Châu.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 156,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Hải sản Bé Mặn",
+    "content": "Quán Hải sản Bé Mặn tọa lạc tại số 6B đường Võ Nguyên Giáp, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Hải sản Thôi Kệ",
+    "content": "Quán Hải sản Thôi Kệ nằm tại số 150 đường Nguyễn Văn Thoại, phường Mỹ An, quận Ngũ Hành Sơn...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 150,
+    "address": "Phường Mỹ An, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả cá Ông Tạ",
+    "content": "Quán Bún chả cá Ông Tạ tọa lạc tại số 113A đường Nguyễn Chí Thanh, phường Hải Châu 1, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 16.0740827,
+    "longitude": 108.2212407,
+    "costEstimate": 80000,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún mắm thịt quay Vân",
+    "content": "Quán Bún mắm Vân nằm tại số 23/14 đường Trần Kế Xương, phường Hải Châu 2, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 14,
+    "address": "Phường Hải Châu 2, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Cao lầu Hoài Phố Đà Nẵng",
+    "content": "Quán Cao lầu Hoài Phố tọa lạc tại số 255 đường Nguyễn Chí Thanh, phường Phước Ninh, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 255,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Chè Liên đường Hải Phòng",
+    "content": "Quán Chè Liên tọa lạc tại số 189 đường Hải Phòng, phường Tân Chính, quận Thanh Khê...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 189,
+    "address": "Phường Tân Chính, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh canh ruộng Cầu Thuận Phước",
+    "content": "Quán Bánh canh ruộng nằm dưới chân cầu Thuận Phước, trục đường lóng đường Trần Hưng Đạo kéo dài thuộc phường Nại Hiên Đông, quận Sơn Trà...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Nại Hiên Đông, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà hàng Cơm niêu Nhà Đỏ Đà Nẵng",
+    "content": "Nhà hàng Cơm niêu Nhà Đỏ tọa lạc tại số 86 đường Nguyễn Tri Phương, phường Chính Gián, quận Thanh Khê...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 86,
+    "address": "Phường Chính Gián, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả cá Hờn",
+    "content": "Quán Bún chả cá Hờn nằm tại số 242 đường Hùng Vương, phường Hải Châu 2, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 16.0740827,
+    "longitude": 108.2212407,
+    "costEstimate": 242,
+    "address": "Phường Hải Châu 2, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Ốc Hút Đĩa Bay đài tưởng niệm",
+    "content": "Quán Ốc Hút Đĩa Bay tọa lạc tại đường lóng đường Ba Tháng Hai ven quảng trường đài tưởng niệm đường Hai Tháng Chín, phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Hilton Đà Nẵng",
+    "content": "Khách sạn Hilton Đà Nẵng tọa lạc tại số 50 đường Bạch Đằng, phường Hải Châu 1, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 16.0726103,
+    "longitude": 108.2242301,
+    "costEstimate": 50,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Haian Beach Hotel & Spa",
+    "content": "Khách sạn Haian Beach Hotel & Spa tọa lạc tại số 278 đường bờ biển Võ Nguyên Giáp, phường Mỹ An, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 16.053048,
+    "longitude": 108.2475341,
+    "costEstimate": 278,
+    "address": "Phường Mỹ An, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Diamond Sea Đà Nẵng",
+    "content": "Khách sạn Diamond Sea tọa lạc tại số 232 đường Võ Nguyên Giáp, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 16.0665111,
+    "longitude": 108.2448813,
+    "costEstimate": 232,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Sala Danang Beach Hotel",
+    "content": "Sala Danang Beach Hotel tọa lạc tại số 36 đường Lâm Hoành, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 16.0621113,
+    "longitude": 108.2451665,
+    "costEstimate": 36,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Balcona Đà Nẵng",
+    "content": "Khách sạn Balcona tọa lạc tại số 288 đường Võ Nguyên Giáp, phường Mỹ An, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 16.0515496,
+    "longitude": 108.2479741,
+    "costEstimate": 288,
+    "address": "Phường Mỹ An, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Mường Thanh Grand Đà Nẵng",
+    "content": "Khách sạn Mường Thanh Grand Đà Nẵng tọa lạc tại số 962 đường Ngô Quyền, phường An Hải Tây, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 962,
+    "address": "Phường An Hải Tây, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Ariyana Convention Centre Danang",
+    "content": "Ariyana Convention Centre Danang tọa lạc tại số 107 đường lóng trục bờ biển đường Võ Nguyên Giáp, phường Khuê Mỹ, quận Ngũ Hành Sơn...",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 107,
+    "address": "Phường Khuê Mỹ, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Furama Resort Đà Nẵng",
+    "content": "Furama Resort Đà Nẵng tọa lạc tại số 105 đường Võ Nguyên Giáp, phường Khuê Mỹ, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 16.0397489,
+    "longitude": 108.2513386,
+    "costEstimate": 105,
+    "address": "Phường Khuê Mỹ, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Pullman Danang Beach Resort",
+    "content": "Pullman Danang Beach Resort tọa lạc tại số 101 đường bờ biển đại lộ Võ Nguyên Giáp, phường Khuê Mỹ, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 101,
+    "address": "Phường Khuê Mỹ, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Hyatt Regency Danang Resort & Spa",
+    "content": "Hyatt Regency Danang Resort & Spa tọa lạc ngay mặt tiền tuyến bờ biển trục đường Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Sheraton Grand Danang Resort",
+    "content": "Sheraton Grand Danang Resort tọa lạc tại số 35 đường bờ biển đại lộ Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 15.9814271,
+    "longitude": 108.2789535,
+    "costEstimate": 35,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Danang Golden Bay Hotel",
+    "content": "Danang Golden Bay Hotel tọa lạc tại đường lóng đường Lê Văn Duyệt, phường Nại Hiên Đông, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 16.0980621,
+    "longitude": 108.2243797,
+    "costEstimate": 1200000,
+    "address": "Phường Nại Hiên Đông, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Naman Retreat Đà Nẵng",
+    "content": "Naman Retreat Đà Nẵng tọa lạc ngay trục lộ bờ biển đại lộ Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 15.96915,
+    "longitude": 108.2847535,
+    "costEstimate": 1200000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Melia Danang Beach Resort",
+    "content": "Melia Danang Beach Resort tọa lạc tại số 19 đường Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 16.0010848,
+    "longitude": 108.2691135,
+    "costEstimate": 19,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Premier Village Danang Resort",
+    "content": "Premier Village Danang Resort tọa lạc tại số 99 đường Võ Nguyên Giáp, phường Mỹ An, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 99,
+    "address": "Phường Mỹ An, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Vinpearl Resort & Spa Đà Nẵng",
+    "content": "Vinpearl Resort & Spa Đà Nẵng tọa lạc ngay trục lộ bờ biển đường Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Centara Sandy Beach Resort Danang",
+    "content": "Centara Sandy Beach Resort Danang tọa lạc tại số 21 đường đại lộ Trường Sa, phường Hòa Hải, quận Ngũ Hành Sơn...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 21,
+    "address": "Phường Hòa Hải, Quận Ngũ Hành Sơn, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả cá Quy Nhơn Kim Long",
+    "content": "Quán Bún chả cá Quy Nhơn Kim Long nằm tại số 125 đường Nguyễn Chí Thanh, phường Hải Châu 1, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 125,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh tráng kẹp Dì Hoa",
+    "content": "Quán Bánh tráng kẹp Dì Hoa nằm tại số 62/2A đường núi Thành, phường Hòa Thuận Đông, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hòa Thuận Đông, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Ram cuốn cải Đóng Đa cô Tiến",
+    "content": "Quán Ram cuốn cải cô Tiến nằm trên đường Đống Đa, khóm phố sầm uất phường Thạch Thang, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún hủ tiếu khô trộn súp sườn gân bò cô Lan",
+    "content": "Quán Bún hủ tiếu khô cô Lan nằm trên đường Trưng Nữ Vương sầm uất sầm uất phường Hòa Thuận Đông, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hòa Thuận Đông, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh xèo nem lụi miền Trung cô Thảo Đà Nẵng",
+    "content": "Quán Bánh xèo nem lụi cô Thảo nằm trên đại lộ đường Nguyễn Văn Linh sầm uất sầm uất phường Thạc Gián, quận Thanh Khê...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Thạc Gián, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Nhà hàng Cơm gà quay tỏi chiên giòn A Hải",
+    "content": "Nhà hàng Cơm gà A Hải tọa lạc tại số 96 đường Phan Châu Trinh, phường Phước Ninh, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 96,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Phở bò gia truyền Bắc lý Lý Quốc Sư Hà Nội",
+    "content": "Quán Phở bò Lý Quốc Sư nằm trên đường Nguyễn Văn Linh sầm uất sầm uất phường Nam Dương, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Nam Dương, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả Hà Nội hương vị cổ truyền cô Hương",
+    "content": "Quán Bún chả Hà Nội cô Hương nằm trên đường Hàm Nghi sầm uất sầm uất phường Thạc Gián, quận Thanh Khê...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Thạc Gián, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Cháo lòng lòng heo thập cẩm luộc chín giòn cô Thảo",
+    "content": "Quán Cháo lòng cô Thảo nằm trên đường lóng trục sầm uất đường Nguyễn Tri Phương, phường Chính Gián, quận Thanh Khê...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Chính Gián, Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Hủ tiếu khô mực tươi trứng cút sền sệt cô Lan",
+    "content": "Quán Hủ tiếu khô cô Lan nằm trên đường Núi Thành sầm uất sầm uất phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Novotel Danang Han River",
+    "content": "Khách sạn Novotel Danang Han River tọa lạc tại số 36 đường Bạch Đằng, phường Thạch Thang, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 36,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Grand Mercure Đà Nẵng",
+    "content": "Khách sạn Grand Mercure Đà Nẵng tọa lạc hoàn toàn tách biệt yên tĩnh trên cồn đảo biệt lập cồn đảo xanh thuộc phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 15.9202798,
+    "longitude": 108.3285347,
+    "costEstimate": 1200000,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Zen Diamond Suites Đà Nẵng",
+    "content": "Khách sạn Zen Diamond Suites tọa lạc tại số 16 đường Lý Thường Kiệt, phường Thạch Thang, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 16,
+    "address": "Phường Thạch Thang, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Vị trí địa lý đèo Hải Vân Liên Chiểu Đà Nẵng",
+    "content": "Đèo Hải Vân vắt mình qua dãy núi Bạch Mã nhô ra biển Đông, nằm trên tuyến quốc lộ 1A giáp ranh giữa thành phố Đà Nẵng (quận Liên Chiểu)...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Hòa Hiệp Bắc, Quận Liên Chiểu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Bãi cỏ xanh thảo nguyên bán đảo Sơn Trà",
+    "content": "Thảo nguyên bãi cỏ xanh Sơn Trà tọa lạc ven tuyến đường lóng trục xuyên bán đảo Sơn Trà bờ Bắc hướng đi ngọn hải đăng cổ đài radar thuộc quận Sơn Trà...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội Kỳ yên Đình làng Hải Châu Đà Nẵng",
+    "content": "Lễ hội Kỳ yên Đình làng Hải Châu được tổ chức long trọng trang nghiêm định kỳ hàng năm... tại ngôi đình cổ Hải Châu thuộc khóm phố tổ 21, phường Hải Châu 1, quận Hải Châu...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 10,
+    "address": "Phường Hải Châu 1, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội cầu ngư làng cá Thanh Khê Cần Thơ",
+    "content": "Lễ hội cầu ngư làng cá Thanh Khê được tổ chức tưng bừng long trọng hàng năm... tại khu vực phố bờ biển kè sông bờ biển đường Nguyễn Tất Thành thuộc quận Thanh Khê...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Quận Thanh Khê, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Di tích lịch sử Nghĩa trủng Hòa Vang",
+    "content": "Nghĩa trủng Hòa Vang tọa lạc tại phường Khuê Trung, quận Cẩm Lệ, thành phố Đà Nẵng.",
+    "category": "attraction",
+    "latitude": 16.0240657,
+    "longitude": 108.2141076,
+    "costEstimate": 0,
+    "address": "Phường Khuê Trung, Quận Cẩm Lệ, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún chả cá lâu đời nhất nhì Lê Hồng Phong",
+    "content": "Quán Bún chả cá nằm tại số 109 đường Lê Hồng Phong, phường Phước Ninh, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 109,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn HAIAN Riverfront Hotel Da Nang",
+    "content": "Khách sạn HAIAN Riverfront Hotel Da Nang tọa lạc tại số 182 đường Bạch Đằng, phường Phước Ninh, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 182,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khu sinh thái Rạch suối nước trong Hòa Bắc Đường Lâm Đà Nẵng",
+    "content": "Suối Nước Trong nằm sâu lòng địa hình thung lũng bản mọc thôn Đường Lâm, xã Hòa Bắc, huyện Hòa Vang, thành phố Đà Nẵng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Hòa Bắc, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội Đình làng Phong Nam Hòa Tiến",
+    "content": "Lễ hội Đình làng Phong Nam được tổ chức long trọng trang nghiêm hàng năm... tại ngôi đình cổ Phong Nam thuộc địa phận xã Hòa Tiến, huyện Hòa Vang, thành phố Đà Nẵng.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Hòa Tiến, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Di tích lịch sử Nhà lưu niệm đồng chí Nguyễn Phong Sắc",
+    "content": "Nhà lưu niệm đồng chí Nguyễn Phong Sắc tọa lạc tại đường Nguyễn Phong Sắc, phường Khuê Trung, quận Cẩm Lệ, thành phố Đà Nẵng.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Khuê Trung, Quận Cẩm Lệ, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bún hủ tiếu khô mực tươi trứng cút sền sệt cô Lan",
+    "content": "Quán Hủ tiếu khô cô Lan nằm trên đường Núi Thành sầm uất sầm uất phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Canvas Danang Beach Hotel",
+    "content": "Khách sạn Canvas Danang Beach Hotel tọa lạc tại số 234 đường Võ Nguyên Giáp, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 234,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khu sinh thái Vạt rừng thông ngút ngàn Hòa Vang Đà Nẵng",
+    "content": "Vạt rừng thông Hòa Vang trải dài... thuộc địa phận xã Hòa Phú, huyện Hòa Vang, thành phố Đà Nẵng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Hòa Phú, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội Đề cử Thành hoàng Đình làng cổ Thọ Quang Sơn Trà",
+    "content": "Lễ hội Đình làng Thọ Quang được tổ chức long trọng trang nghiêm hàng năm... tại ngôi đình cổ Thọ Quang thuộc địa phận phường Thọ Quang, quận Sơn Trà, thành phố Đà Nẵng.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thọ Quang, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Di tích lịch sử Đình làng cổ An Hải Bắc Sơn Trà Cần Thơ",
+    "content": "Đình làng An Hải tọa lạc tại đường Nguyễn Công Trứ, phường An Hải Bắc, quận Sơn Trà, thành phố Đà Nẵng.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường An Hải Bắc, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Quán Bánh xèo nem lụi giòn cháy cạnh tôm thịt bò băm cô Ba",
+    "content": "Quán Bánh xèo nem lụi cô Ba nằm trên đường Ông Ích Khiêm sầm uất sầm uất phường Hải Châu 2, quận Hải Châu...",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Hải Châu 2, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Maximilan Danang Beach Hotel",
+    "content": "Khách sạn Maximilan Danang Beach Hotel tọa lạc tại số 228 đường Võ Nguyên Giáp, phường Phước Mỹ, quận Sơn Trà...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 228,
+    "address": "Phường Phước Mỹ, Quận Sơn Trà, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khu sinh thái Thác nước đá tự nhiên hang ngầm Suối Mơ Hòa Vang",
+    "content": "Suối Mơ nằm nép mình chân ngọn núi Chúa vách đá đứng vôi hùng vĩ thuộc địa phận xã Hòa Ninh, huyện Hòa Vang, thành phố Đà Nẵng...",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Hòa Ninh, Huyện Hòa Vang, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Lễ hội Đua thuyền rồng truyền thống sông Hàn Đà Nẵng Thượng Điền",
+    "content": "Lễ hội Đua thuyền rồng truyền thống trên sông Hàn được tổ chức tưng bừng long trọng... tại khu vực phố đi bộ kèm sông Hàn, phường Phước Ninh, quận Hải Châu, thành phố Đà Nẵng...",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Phước Ninh, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Đà Nẵng",
+    "title": "Khách sạn Minh Toàn Galaxy Hotel Cần Thơ Đà Nẵng",
+    "content": "Khách sạn Minh Toàn Galaxy tọa lạc tại số 306 đường lóng đường Hai Tháng Chín, phường Hòa Cường Bắc, quận Hải Châu...",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 306,
+    "address": "Phường Hòa Cường Bắc, Quận Hải Châu, Thành phố Đà Nẵng"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Đô thị cổ Hội An",
+    "content": "Đô thị cổ Hội An là thương cảng quốc tế sầm uất từ thế kỷ 16-19, được UNESCO công nhận di sản văn hóa. Nơi đây kết hợp kiến trúc Việt, Nhật, Trung với các hội quán, nhà cổ và chùa cầu nổi tiếng. Du khách nên đi dạo, thả hoa đăng trên sông Hoài và ăn cao lầu.",
+    "category": "attraction",
+    "latitude": 11.9537073,
+    "longitude": 108.4306103,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Thánh địa Mỹ Sơn",
+    "content": "Thánh địa Mỹ Sơn tại Duy Xuyên là quần thể đền tháp Chăm Pa cổ đại quan trọng nhất Việt Nam. Với kiến trúc gạch nung bí ẩn, đây là điểm đến lịch sử không thể bỏ lỡ. Hãy đến vào buổi sáng để tận hưởng không khí thanh bình và xem múa Apsara.",
+    "category": "attraction",
+    "latitude": 15.7655202,
+    "longitude": 108.1234531,
+    "costEstimate": 0,
+    "address": "Xã Duy Phú, Huyện Duy Xuyên, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Bảo tàng Văn hóa Sa Huỳnh",
+    "content": "Bảo tàng lưu giữ hàng trăm hiện vật về nền văn hóa Sa Huỳnh cổ đại. Đây là nguồn tư liệu quý giúp du khách hiểu sâu về lịch sử phát triển của cư dân vùng đất Hội An hàng ngàn năm trước.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Hội quán Phúc Kiến",
+    "content": "Công trình kiến trúc tinh xảo của cộng đồng người Phúc Kiến tại Hội An. Đây là điểm thờ tự linh thiêng, nổi bật với nghệ thuật điêu khắc gỗ đặc sắc.",
+    "category": "attraction",
+    "latitude": 21.0355907,
+    "longitude": 105.8489328,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Chùa Cầu",
+    "content": "Biểu tượng của Hội An do các thương nhân Nhật Bản xây dựng vào thế kỷ 17. Đây là chiếc cầu độc đáo có kiến trúc Nhật Bản duy nhất còn sót lại trong phố cổ.",
+    "category": "attraction",
+    "latitude": 16.82568,
+    "longitude": 107.1000749,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà cổ Tấn Ký",
+    "content": "Ngôi nhà cổ đầu tiên tại Hội An được công nhận Di tích quốc gia. Kiến trúc giao thoa Việt, Nhật, Trung thể hiện sự thịnh vượng của thương cảng xưa.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà cổ Phùng Hưng",
+    "content": "Kiến trúc 2 tầng độc đáo với mái ngói âm dương, từng là cơ ngơi của gia đình thương gia lớn. Đây là nơi lưu giữ nét sống truyền thống của Hội An.",
+    "category": "attraction",
+    "latitude": 15.8772193,
+    "longitude": 108.3257902,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Làng gốm Thanh Hà",
+    "content": "Làng nghề 500 năm tuổi bên sông Thu Bồn. Du khách có thể trải nghiệm làm gốm thủ công và tham quan công viên gốm với các công trình mô phỏng kỳ quan thế giới.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Phường Thanh Hà, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Làng rau Trà Quế",
+    "content": "Nổi tiếng với phương pháp canh tác rau sạch truyền thống. Du khách có thể hóa thân thành nông dân và tham gia chế biến các món ăn từ chính những loại rau hái tại vườn.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Cẩm Hà, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Làng mộc Kim Bồng",
+    "content": "Nằm ở xã Cẩm Kim, nổi tiếng với nghề chạm khắc gỗ tinh xảo. Các nghệ nhân nơi đây từng tham gia xây dựng nhiều công trình kiến trúc quan trọng ở Kinh thành Huế.",
+    "category": "attraction",
+    "latitude": 15.8645169,
+    "longitude": 108.3253021,
+    "costEstimate": 0,
+    "address": "Xã Cẩm Kim, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tượng đài Mẹ Việt Nam Anh hùng",
+    "content": "Tọa lạc tại thành phố Tam Kỳ, công trình kiến trúc đồ sộ tôn vinh hình tượng người Mẹ Việt Nam. Đây là nơi giáo dục lòng yêu nước ý nghĩa.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Tam Phú, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Bảo tàng Quảng Nam",
+    "content": "Nơi lưu giữ, trưng bày các hiện vật lịch sử văn hóa của vùng đất Quảng Nam qua các thời kỳ. Kiến trúc hiện đại và nội dung phong phú.",
+    "category": "attraction",
+    "latitude": 21.6655073,
+    "longitude": 110.9160006,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tháp Bằng An",
+    "content": "Tháp Chăm cổ duy nhất có hình bát giác còn sót lại tại Việt Nam, nằm ở huyện Điện Bàn. Một công trình độc đáo trong quần thể kiến trúc Chăm.",
+    "category": "attraction",
+    "latitude": 15.8845159,
+    "longitude": 108.2326904,
+    "costEstimate": 0,
+    "address": "Xã Điện An, Thị xã Điện Bàn, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tháp Khương Mỹ",
+    "content": "Quần thể ba tháp Chăm được xây dựng theo phong cách chuyển tiếp vào cuối thế kỷ 10. Kiến trúc đặc trưng với những mảng phù điêu chạm khắc công phu.",
+    "category": "attraction",
+    "latitude": 15.5478107,
+    "longitude": 108.5056326,
+    "costEstimate": 0,
+    "address": "Xã Tam Xuân 1, Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tháp Chiên Đàn",
+    "content": "Nằm ở huyện Phú Ninh, quần thể ba ngôi tháp Chăm đứng song song mang phong cách nghệ thuật độc đáo. Đây là di tích quốc gia quan trọng.",
+    "category": "attraction",
+    "latitude": 15.6158093,
+    "longitude": 108.442489,
+    "costEstimate": 0,
+    "address": "Xã Tam An, Huyện Phú Ninh, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Làng bích họa Tam Thanh",
+    "content": "Làng chài đầu tiên ở Việt Nam được họa sĩ trang trí bằng những bức tranh bích họa 3D sống động trên tường nhà. Điểm check-in nổi tiếng bậc nhất Quảng Nam.",
+    "category": "attraction",
+    "latitude": 15.5924837,
+    "longitude": 108.5504663,
+    "costEstimate": 0,
+    "address": "Xã Tam Thanh, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tượng đài chiến thắng Núi Thành",
+    "content": "Di tích lịch sử quan trọng đánh dấu chiến thắng vang dội của quân và dân Quảng Nam trong cuộc kháng chiến chống Mỹ. Điểm đến ý nghĩa về lịch sử.",
+    "category": "attraction",
+    "latitude": 20.9245483,
+    "longitude": 105.8495834,
+    "costEstimate": 0,
+    "address": "Thị trấn Núi Thành, Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Thánh địa Mỹ Sơn (Khu B)",
+    "content": "Phần trung tâm của Mỹ Sơn với nhiều đền thờ và văn bia cổ kính nhất. Đây là khu vực có nhiều giá trị khảo cổ quan trọng cần khám phá.",
+    "category": "attraction",
+    "latitude": 15.7655202,
+    "longitude": 108.1234531,
+    "costEstimate": 0,
+    "address": "Xã Duy Phú, Huyện Duy Xuyên, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Di tích nhà lưu niệm Phan Châu Trinh",
+    "content": "Nơi tưởng niệm nhà yêu nước Phan Châu Trinh, người con ưu tú của quê hương Quảng Nam. Đây là không gian lịch sử văn hóa ý nghĩa tại huyện Phú Ninh.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Tam Lộc, Huyện Phú Ninh, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà lưu niệm Huỳnh Thúc Kháng",
+    "content": "Di tích quan trọng về cuộc đời và sự nghiệp của cụ Huỳnh Thúc Kháng. Nằm tại xã Tiên Cảnh, huyện Tiên Phước, nơi lưu giữ nhiều kỷ vật quý.",
+    "category": "attraction",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 30000,
+    "address": "Xã Tiên Cảnh, Huyện Tiên Phước, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Cù Lao Chàm",
+    "content": "Khu dự trữ sinh quyển thế giới với hệ sinh thái biển đa dạng. Nơi lý tưởng để lặn biển ngắm san hô và thưởng thức hải sản tại các nhà bè.",
+    "category": "nature",
+    "latitude": 15.9508587,
+    "longitude": 108.5227203,
+    "costEstimate": 0,
+    "address": "Xã Tân Hiệp, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Bãi biển An Bàng",
+    "content": "Bãi biển yên bình, hoang sơ cách phố cổ Hội An không xa. Nơi nghỉ dưỡng lý tưởng cho du khách yêu thích nắng vàng, cát trắng và không gian tĩnh lặng.",
+    "category": "nature",
+    "latitude": 15.9117198,
+    "longitude": 108.3411656,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Bãi biển Cửa Đại",
+    "content": "Nơi sông Thu Bồn đổ ra biển, bãi biển dài với không gian thoáng đãng. Rất thích hợp để ngắm cảnh và dạo chơi cùng gia đình.",
+    "category": "nature",
+    "latitude": 15.8827381,
+    "longitude": 108.3462268,
+    "costEstimate": 0,
+    "address": "Phường Cửa Đại, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Hồ Phú Ninh",
+    "content": "Khu du lịch sinh thái bao quanh bởi rừng nguyên sinh. Có dịch vụ du thuyền, tắm khoáng nóng tự nhiên và các hoạt động cắm trại thú vị.",
+    "category": "nature",
+    "latitude": 20.9209782,
+    "longitude": 106.7989283,
+    "costEstimate": 0,
+    "address": "Xã Tam Đàn, Huyện Phú Ninh, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Biển Tam Thanh",
+    "content": "Bãi biển sạch, hoang sơ bên cạnh làng bích họa Tam Thanh. Không gian thoáng đãng, yên tĩnh, phù hợp tắm biển và thưởng thức ẩm thực địa phương.",
+    "category": "nature",
+    "latitude": 10.9314701,
+    "longitude": 106.8675973,
+    "costEstimate": 0,
+    "address": "Xã Tam Thanh, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khe Lim",
+    "content": "Khu du lịch thiên nhiên với thác nước đổ từ trên cao tạo nên dòng chảy trong vắt, mát lành giữa rừng sâu ở huyện Đại Lộc.",
+    "category": "nature",
+    "latitude": 21.1831231,
+    "longitude": 106.742494,
+    "costEstimate": 0,
+    "address": "Xã Đại Hồng, Huyện Đại Lộc, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Suối Tiên",
+    "content": "Dòng suối tự nhiên với nhiều tầng thác đẹp, không gian rừng nguyên sinh xanh mát. Là nơi cắm trại, picnic lý tưởng cho nhóm bạn.",
+    "category": "nature",
+    "latitude": 11.0096515,
+    "longitude": 107.04991,
+    "costEstimate": 0,
+    "address": "Xã Quế Hiệp, Huyện Quế Sơn, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Đỉnh Quế",
+    "content": "Nằm ở huyện Tây Giang, đỉnh núi cao vút với không khí se lạnh, là nơi săn mây tuyệt đẹp cho những ai yêu thích du lịch khám phá thiên nhiên.",
+    "category": "nature",
+    "latitude": 15.8339502,
+    "longitude": 107.3813457,
+    "costEstimate": 0,
+    "address": "Xã Tr'Hy, Huyện Tây Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Rừng dừa Bảy Mẫu",
+    "content": "Khu rừng dừa nước tại Cẩm Thanh, Hội An. Du khách có thể trải nghiệm ngồi thuyền thúng, khám phá hệ sinh thái và xem biểu diễn xoay thúng.",
+    "category": "nature",
+    "latitude": 15.8855608,
+    "longitude": 108.3678833,
+    "costEstimate": 0,
+    "address": "Xã Cẩm Thanh, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Biển Hà My",
+    "content": "Bãi biển hoang sơ, yên tĩnh nằm giữa Hội An và Đà Nẵng. Không gian sạch, ít người, cực kỳ thích hợp cho nghỉ dưỡng riêng tư.",
+    "category": "nature",
+    "latitude": 10.7952597,
+    "longitude": 106.7217457,
+    "costEstimate": 0,
+    "address": "Phường Điện Dương, Thị xã Điện Bàn, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Hố Giang Thơm",
+    "content": "Nằm ở huyện Núi Thành, khu vực có các hố nước tự nhiên giữa rừng và thác nước đẹp. Đây là địa điểm lý tưởng cho các chuyến trekking.",
+    "category": "nature",
+    "latitude": 9.9107676,
+    "longitude": 103.9942476,
+    "costEstimate": 0,
+    "address": "Xã Tam Mỹ Tây, Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Cổng trời Đông Giang",
+    "content": "Điểm du lịch sinh thái mới với những công trình độc đáo giữa đại ngàn. Nơi trải nghiệm văn hóa bản địa và thiên nhiên hùng vĩ.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Mà Cooih, Huyện Đông Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Thác Grăng",
+    "content": "Ngọn thác cao hùng vĩ tại huyện Nam Giang. Đây là điểm trekking đòi hỏi sự kiên trì nhưng phần thưởng là thiên nhiên cực đẹp.",
+    "category": "nature",
+    "latitude": 15.6777386,
+    "longitude": 107.7072076,
+    "costEstimate": 0,
+    "address": "Xã Tà Bhing, Huyện Nam Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Biển Tam Kỳ",
+    "content": "Bãi biển dài tại thành phố Tam Kỳ với không gian thoáng mát, nhiều nhà hàng hải sản tươi ngon, giá cả hợp lý.",
+    "category": "nature",
+    "latitude": 20.9450474,
+    "longitude": 105.9755158,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Đảo Tam Hải",
+    "content": "Hòn đảo hoang sơ với những bãi đá đẹp mắt và làng chài hiền hòa. Nơi tận hưởng vẻ đẹp biển đảo nguyên sơ chưa bị tác động mạnh.",
+    "category": "nature",
+    "latitude": 23.1577246,
+    "longitude": 112.8830733,
+    "costEstimate": 0,
+    "address": "Xã Tam Hải, Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khu bảo tồn thiên nhiên Sông Thanh",
+    "content": "Hệ sinh thái rừng nhiệt đới phong phú, nơi bảo tồn nhiều loài động thực vật quý hiếm tại huyện Nam Giang.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Huyện Nam Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Vườn quốc gia Sông Thanh",
+    "content": "Khu rừng đặc dụng có giá trị lớn về đa dạng sinh học. Địa điểm cho những ai yêu thích du lịch xanh và thám hiểm rừng.",
+    "category": "nature",
+    "latitude": 15.4878173,
+    "longitude": 107.5893453,
+    "costEstimate": 0,
+    "address": "Huyện Nam Giang & Huyện Phước Sơn, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Thác Ba Tầng",
+    "content": "Nằm trong khu vực rừng núi huyện Đông Giang, dòng thác chảy qua 3 tầng đá đẹp mắt và mát lạnh.",
+    "category": "nature",
+    "latitude": 14.5051818,
+    "longitude": 108.3857489,
+    "costEstimate": 0,
+    "address": "Xã Sông Kôn, Huyện Đông Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Biển Rạng",
+    "content": "Bãi biển yên bình thuộc huyện Núi Thành với bãi cát dài và nước trong vắt, rất thích hợp cho kỳ nghỉ gia đình.",
+    "category": "nature",
+    "latitude": 10.9549771,
+    "longitude": 108.224076,
+    "costEstimate": 0,
+    "address": "Xã Tam Quang, Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Hồ chứa nước Khe Tân",
+    "content": "Hồ nước mênh mông, tĩnh lặng bao quanh bởi rừng cây, là điểm câu cá và cắm trại thú vị.",
+    "category": "nature",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Đại Chánh, Huyện Đại Lộc, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Morning Glory Original",
+    "content": "Nhà hàng nổi tiếng tại Hội An với không gian mở. Chuyên các món cao lầu, bánh xèo, nem nướng chuẩn vị truyền thống.",
+    "category": "restaurant",
+    "latitude": 15.8766175,
+    "longitude": 108.3276628,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Bông Hồng Trắng",
+    "content": "Chuyên món bánh bao, bánh vạc nổi tiếng của Hội An. Không gian ấm cúng, phù hợp cho gia đình và khách du lịch.",
+    "category": "restaurant",
+    "latitude": 15.8829593,
+    "longitude": 108.3250054,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Cơm Gà Bà Buội",
+    "content": "Đặc sản cơm gà Hội An trứ danh. Thịt gà dai ngon cùng nước sốt đặc biệt tạo nên thương hiệu lâu đời.",
+    "category": "restaurant",
+    "latitude": 15.8771556,
+    "longitude": 108.322325,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Cao Lầu Thanh",
+    "content": "Địa chỉ quen thuộc cho món cao lầu chuẩn vị ngay phố cổ. Sợi mì đặc trưng và nước dùng đậm đà.",
+    "category": "restaurant",
+    "latitude": 21.0371054,
+    "longitude": 105.8523196,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Mì Quảng Ếch Bếp Trang",
+    "content": "Sáng tạo với món mì quảng ếch độc đáo, kết hợp hương vị dân dã và phong cách chế biến hiện đại.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Cargo Club",
+    "content": "Nhà hàng phong cách hiện đại với thực đơn đa dạng từ món Âu đến món Á. Nơi có view nhìn ra phố cổ rất đẹp.",
+    "category": "restaurant",
+    "latitude": 15.8764695,
+    "longitude": 108.3275305,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Secret Garden",
+    "content": "Không gian ẩm thực ẩn mình trong con hẻm nhỏ với thực đơn phong phú các món Việt, decor rất thơ mộng.",
+    "category": "restaurant",
+    "latitude": 10.7689156,
+    "longitude": 106.6983666,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Hội An House",
+    "content": "Không gian thoáng đãng, thực đơn gồm các món hải sản tươi sống và ẩm thực địa phương hấp dẫn.",
+    "category": "restaurant",
+    "latitude": 15.8802989,
+    "longitude": 108.3428569,
+    "costEstimate": 0,
+    "address": "Phường Cẩm Châu, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Trung Bắc",
+    "content": "Nhà hàng với lịch sử lâu đời, chuyên các món ăn đặc sản vùng miền của phố cổ Hội An.",
+    "category": "restaurant",
+    "latitude": 17.1720601,
+    "longitude": 106.9756197,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Bánh Xèo Giếng Bá Lễ",
+    "content": "Địa chỉ bánh xèo nổi tiếng với hương vị giòn rụm, nước chấm đậm đà, thu hút đông đảo du khách.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Hải sản Bé Mặn",
+    "content": "Hải sản tươi sống, chế biến theo yêu cầu, tọa lạc ven biển Tam Kỳ với không gian thoáng mát.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Tam Kỳ Quán",
+    "content": "Chuyên các món ăn đồng quê như gà vườn, cá đồng với hương vị đậm chất Quảng Nam.",
+    "category": "restaurant",
+    "latitude": 10.795661,
+    "longitude": 106.6632185,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Ẩm thực Quảng",
+    "content": "Nơi tập hợp đủ các loại đặc sản mì quảng, bánh tráng cuốn thịt heo, cơm gà từ các huyện.",
+    "category": "restaurant",
+    "latitude": 14.3583707,
+    "longitude": 108.0221788,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Gió Biển",
+    "content": "Nhà hàng sát biển Tam Thanh, view đẹp, chuyên hải sản tươi sống và không gian lãng mạn.",
+    "category": "restaurant",
+    "latitude": 21.4759424,
+    "longitude": 108.0165495,
+    "costEstimate": 0,
+    "address": "Xã Tam Thanh, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Đồng Xanh",
+    "content": "Không gian rộng rãi, chuyên các món ăn dân dã, đồng quê phù hợp cho đoàn du khách đông.",
+    "category": "restaurant",
+    "latitude": 10.0183737,
+    "longitude": 105.7706407,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng hải sản Làng Chài",
+    "content": "Nằm ven biển, không gian bình dị, giá cả hợp lý và hải sản rất tươi ngon.",
+    "category": "restaurant",
+    "latitude": 21.181199,
+    "longitude": 106.0694403,
+    "costEstimate": 0,
+    "address": "Huyện Núi Thành, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng ẩm thực phố cổ",
+    "content": "Nằm trong lòng Hội An, nơi thực khách có thể tìm thấy mọi món đặc sản truyền thống phố cổ.",
+    "category": "restaurant",
+    "latitude": 21.03756,
+    "longitude": 105.8526198,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Quán cơm gà Bà Nga",
+    "content": "Một trong những quán cơm gà có tiếng nhất với hương vị đậm đà truyền thống của người Hội An.",
+    "category": "restaurant",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 80000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Cầu Gỗ",
+    "content": "Nhà hàng thiết kế độc đáo với view sông Thu Bồn tuyệt đẹp, phù hợp cho bữa tối lãng mạn.",
+    "category": "restaurant",
+    "latitude": 20.9665221,
+    "longitude": 107.1608307,
+    "costEstimate": 0,
+    "address": "Phường Cẩm Châu, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Nhà hàng Tre Việt",
+    "content": "Không gian nhà hàng làm từ tre độc đáo, chuyên các món ăn Việt Nam truyền thống.",
+    "category": "restaurant",
+    "latitude": 16.0662328,
+    "longitude": 108.2244753,
+    "costEstimate": 0,
+    "address": "Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Almanity Hoi An Resort & Spa",
+    "content": "Khu nghỉ dưỡng cao cấp kết hợp giữa sự sang trọng và các liệu pháp chăm sóc sức khỏe toàn diện. Không gian xanh mát và yên bình.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Palm Garden Resort",
+    "content": "Resort ven biển với khuôn viên vườn nhiệt đới rộng lớn, dịch vụ chuyên nghiệp, là nơi nghỉ dưỡng hoàn hảo bên bãi biển.",
+    "category": "hotel",
+    "latitude": 15.9007812,
+    "longitude": 108.3592095,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Vinpearl Resort & Spa Hội An",
+    "content": "Resort sang trọng bên bãi biển Cửa Đại với hệ thống hồ bơi vô cực, dịch vụ cao cấp và tiện nghi đẳng cấp.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Cửa Đại, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Anantara Hoi An Resort",
+    "content": "Nằm bên dòng sông Thu Bồn, không gian thanh lịch, cổ điển, phù hợp cho kỳ nghỉ dưỡng sang trọng.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Little Hoi An A Boutique Hotel",
+    "content": "Khách sạn boutique nhỏ nhắn xinh xắn, thiết kế tinh tế theo phong cách phố cổ, gần trung tâm.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Hoi An Memories Resort & Spa",
+    "content": "Khu nghỉ dưỡng nằm trên đảo Ký Ức, mang đến tầm nhìn toàn cảnh ra phố cổ và sông Hoài.",
+    "category": "hotel",
+    "latitude": 15.8752745,
+    "longitude": 108.3382954,
+    "costEstimate": 0,
+    "address": "Phường Cẩm Nam, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Silk Sense Hoi An River Resort",
+    "content": "Resort cao cấp bên sông, không gian yên tĩnh, dịch vụ chăm sóc khách hàng tận tình chu đáo.",
+    "category": "hotel",
+    "latitude": 15.8994923,
+    "longitude": 108.357296,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Boutique Hoi An Resort",
+    "content": "Nằm ngay bãi biển, phong cách kiến trúc đặc sắc kết hợp giữa cổ điển và hiện đại.",
+    "category": "hotel",
+    "latitude": 15.9035576,
+    "longitude": 108.3540871,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Allegro Hoi An A Little Luxury Hotel",
+    "content": "Khách sạn sang trọng mang phong cách phố cổ, dịch vụ chuẩn quốc tế, gần trung tâm.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Golden Sand Resort & Spa",
+    "content": "Khu nghỉ dưỡng ven biển rộng lớn với hồ bơi cực đẹp, không gian riêng tư cho du khách.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn Le Pavillon Hoi An",
+    "content": "Khách sạn xinh xắn gần trung tâm, giá cả hợp lý và dịch vụ khách hàng tốt.",
+    "category": "hotel",
+    "latitude": 15.8791498,
+    "longitude": 108.3462047,
+    "costEstimate": 0,
+    "address": "Phường Cẩm Châu, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn TTC Hotel Premium - Hoi An",
+    "content": "Khách sạn hiện đại, dịch vụ chuyên nghiệp, vị trí thuận lợi để tham quan phố cổ.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Homestay An Bàng Beach",
+    "content": "Trải nghiệm lưu trú tại homestay gần biển, mang đến sự gần gũi như ở nhà cho du khách.",
+    "category": "hotel",
+    "latitude": 15.9137723,
+    "longitude": 108.3365284,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn Hội An Historic",
+    "content": "Khách sạn lâu đời với kiến trúc đặc trưng, mang đậm nét văn hóa Hội An.",
+    "category": "hotel",
+    "latitude": 15.880315,
+    "longitude": 108.3304896,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn Tam Kỳ",
+    "content": "Khách sạn phục vụ tốt tại trung tâm thành phố Tam Kỳ, thuận lợi cho việc công tác.",
+    "category": "hotel",
+    "latitude": 15.5722328,
+    "longitude": 108.4743668,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Homestay Làng rau Trà Quế",
+    "content": "Trải nghiệm cuộc sống cùng nông dân tại làng rau sạch nổi tiếng, vô cùng thú vị.",
+    "category": "hotel",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 1200000,
+    "address": "Xã Cẩm Hà, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn Vĩnh Hưng",
+    "content": "Khách sạn mang phong cách cổ điển, lưu giữ không gian sống của thời xưa tại Hội An.",
+    "category": "hotel",
+    "latitude": 19.7283468,
+    "longitude": 105.8673048,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Resort Hội An Beach",
+    "content": "Khu nghỉ dưỡng ven biển với đầy đủ tiện nghi cho kỳ nghỉ gia đình trọn vẹn.",
+    "category": "hotel",
+    "latitude": 15.9021378,
+    "longitude": 108.3569013,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Khách sạn Phố Cổ",
+    "content": "Điểm dừng chân thuận lợi, ngay trung tâm, dễ dàng di chuyển tham quan các di tích.",
+    "category": "hotel",
+    "latitude": 15.8683304,
+    "longitude": 108.3502537,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội Đèn lồng Hội An",
+    "content": "Diễn ra đêm 14 âm lịch hàng tháng. Cả phố cổ lung linh ánh đèn lồng, người dân thả hoa đăng trên sông Hoài cầu bình an.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội Cầu Ngư",
+    "content": "Lễ hội truyền thống của ngư dân ven biển Quảng Nam, nhằm tạ ơn cá Ông đã phù hộ cho các chuyến đánh bắt thuận lợi.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội Bài chòi",
+    "content": "Loại hình nghệ thuật đặc sắc của xứ Quảng, được tổ chức thường xuyên tại các khu vực trung tâm phố cổ Hội An.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội Vu Lan Hội An",
+    "content": "Dịp để con cháu báo hiếu tổ tiên, tổ chức trang trọng tại các ngôi chùa lớn tại Quảng Nam.",
+    "category": "festival",
+    "latitude": 11.9537073,
+    "longitude": 108.4306103,
+    "costEstimate": 0,
+    "address": "Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội làng nghề gốm Thanh Hà",
+    "content": "Được tổ chức hàng năm để tôn vinh nghề làm gốm lâu đời, thu hút nhiều nghệ nhân tham gia.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Thanh Hà, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội ẩm thực Quảng Nam",
+    "content": "Sự kiện quảng bá đặc sản địa phương, nơi du khách thưởng thức đủ món như mì quảng, cao lầu, bê thui.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ giỗ tổ nghề yến Cù Lao Chàm",
+    "content": "Lễ hội truyền thống đặc sắc nhằm tôn vinh những người có công khai phá nghề khai thác yến sào trên đảo.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Tân Hiệp, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội Tết Nguyên Đán tại Hội An",
+    "content": "Phố cổ trang hoàng rực rỡ, tổ chức nhiều trò chơi dân gian, ẩm thực và biểu diễn nghệ thuật đón xuân.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội hoa đăng Hội An",
+    "content": "Sự kiện hàng tuần thu hút đông đảo du khách, tạo nên bức tranh huyền ảo trên sông Hoài.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Minh An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Giải Marathon Quốc tế Hội An",
+    "content": "Sự kiện thể thao thu hút đông đảo vận động viên trong và ngoài nước tham gia, khám phá phố cổ.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội hát bả trạo",
+    "content": "Nghệ thuật trình diễn dân gian đặc sắc của cư dân miền biển, thường gắn liền với Lễ hội Cầu Ngư.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội văn hóa các dân tộc anh em",
+    "content": "Tôn vinh văn hóa đa dạng của các dân tộc sinh sống tại vùng núi phía Tây tỉnh Quảng Nam.",
+    "category": "festival",
+    "latitude": 11.9537073,
+    "longitude": 108.4306103,
+    "costEstimate": 0,
+    "address": "Huyện Tây Giang, Đông Giang & Nam Giang, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Tuần lễ Văn hóa - Thể thao - Du lịch Quảng Nam",
+    "content": "Sự kiện quy mô lớn nhằm quảng bá hình ảnh tỉnh nhà đến bạn bè quốc tế.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội mừng xuân tại Làng Bích Họa Tam Thanh",
+    "content": "Làng chài trở nên sôi động với các hoạt động biểu diễn nghệ thuật, ẩm thực đặc sắc.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Tam Thanh, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội thả diều Hội An",
+    "content": "Diễn ra vào mùa hè, trên các bãi biển rộng lớn, thu hút nhiều nghệ nhân chơi diều tham gia.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Phường Cẩm An, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ giỗ Tổ nghề Mộc Kim Bồng",
+    "content": "Dịp để các nghệ nhân tri ân tổ nghề, cầu mong sự khéo léo và thành công trong công việc.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Xã Cẩm Kim, Thành phố Hội An, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Liên hoan nghệ thuật truyền thống xứ Quảng",
+    "content": "Tôn vinh các loại hình nghệ thuật dân gian như bài chòi, hát hố, hò khoan.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ hội hoa xuân tại Tam Kỳ",
+    "content": "Sự kiện hoa xuân được tổ chức tại thành phố Tam Kỳ, làm bừng sáng cả vùng đất vào mùa Tết.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Ngày hội văn hóa, thể thao miền biển",
+    "content": "Gắn kết cộng đồng ngư dân, tổ chức nhiều trò chơi trên biển như đua thuyền thúng, kéo lưới.",
+    "category": "festival",
+    "latitude": 10.7769,
+    "longitude": 106.7009,
+    "costEstimate": 0,
+    "address": "Các xã ven biển, Tỉnh Quảng Nam"
+  },
+  {
+    "province": "Quảng Nam",
+    "title": "Lễ tưởng niệm các anh hùng liệt sĩ",
+    "content": "Tổ chức trang trọng tại các di tích lịch sử như Tượng đài Mẹ Việt Nam Anh hùng.",
+    "category": "festival",
+    "latitude": 20.8253032,
+    "longitude": 106.6882316,
+    "costEstimate": 0,
+    "address": "Xã Tam Phú, Thành phố Tam Kỳ, Tỉnh Quảng Nam"
+  }
+]

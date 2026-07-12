@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
-import { generateAIItinerary } from '../ai/ai-planner';
+import { generateAIItinerary, regenerateItineraryPart } from '../ai/ai-planner';
 import { optimizeRoute, Waypoint } from '../optimizer/route-optimizer';
 
 const router = Router();
@@ -100,17 +100,19 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { destination, durationDays, dailyBudget, currency, interests, travelStyle } = req.body;
+    const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle } = req.body;
 
     if (!destination || !durationDays) {
       return res.status(400).json({ error: 'destination and durationDays are required.' });
     }
 
+    const calculatedTotalBudget = totalBudget || (dailyBudget ? Number(dailyBudget) * Number(durationDays) : 500);
+
     // 1. Call AI planner
     const aiResult = await generateAIItinerary({
       destination,
       durationDays: Number(durationDays),
-      dailyBudget: Number(dailyBudget) || 100,
+      totalBudget: Number(calculatedTotalBudget),
       currency: currency || 'USD',
       interests: interests || [],
       travelStyle: travelStyle || 'Adventure',
@@ -120,7 +122,7 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
     await prisma.aIHistory.create({
       data: {
         userId: req.user!.sub,
-        promptText: `destination=${destination} days=${durationDays} budget=${dailyBudget} style=${travelStyle}`,
+        promptText: `destination=${destination} days=${durationDays} budget=${calculatedTotalBudget} style=${travelStyle}`,
         responseJson: JSON.stringify(aiResult),
         type: 'itinerary',
       },
@@ -130,6 +132,61 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
   } catch (err) {
     console.error('[trips/ai-generate]', err);
     return res.status(500).json({ error: 'AI itinerary generation failed.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
+// POST /api/v1/trips/ai-regenerate-part — AI partial regeneration (day or session)
+// ─────────────────────────────────────────────────────────
+router.post('/ai-regenerate-part', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const {
+      destination,
+      durationDays,
+      totalBudget,
+      dailyBudget,
+      currency,
+      interests,
+      travelStyle,
+      targetDayIndex,
+      targetSession,
+      currentItinerary,
+      excludePlaces
+    } = req.body;
+
+    if (!destination || !durationDays || targetDayIndex === undefined || !currentItinerary) {
+      return res.status(400).json({ error: 'destination, durationDays, targetDayIndex, and currentItinerary are required.' });
+    }
+
+    const calculatedTotalBudget = totalBudget || (dailyBudget ? Number(dailyBudget) * Number(durationDays) : 500);
+
+    const aiResult = await regenerateItineraryPart({
+      destination,
+      durationDays: Number(durationDays),
+      totalBudget: Number(calculatedTotalBudget),
+      currency: currency || 'USD',
+      interests: interests || [],
+      travelStyle: travelStyle || 'Adventure',
+      targetDayIndex: Number(targetDayIndex),
+      targetSession,
+      currentItinerary,
+      excludePlaces: excludePlaces || [],
+    });
+
+    // Persist to AIHistory
+    await prisma.aIHistory.create({
+      data: {
+        userId: req.user!.sub,
+        promptText: `regenerate_part destination=${destination} day=${targetDayIndex} session=${targetSession || 'day'}`,
+        responseJson: JSON.stringify(aiResult),
+        type: 'itinerary_part_regeneration',
+      },
+    });
+
+    return res.status(200).json(aiResult);
+  } catch (err) {
+    console.error('[trips/ai-regenerate-part]', err);
+    return res.status(500).json({ error: 'AI partial itinerary regeneration failed.' });
   }
 });
 
