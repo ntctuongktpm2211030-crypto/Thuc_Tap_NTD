@@ -195,15 +195,15 @@ export default function ExploreArticlePage() {
             </p>
           </div>
 
-          {/* Post Images Masonry Layout (medium size) */}
-          <div className="columns-1 sm:columns-2 md:columns-3 gap-3 space-y-3 mt-4">
+          {/* Post Images Grid Layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
             {[
               post.coverImage,
               'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=80',
               'https://images.unsplash.com/photo-1552083375-1447ce886485?auto=format&fit=crop&w=900&q=80'
             ].map((src, i) => (
-              <div key={`${src}-${i}`} className="break-inside-avoid rounded-xl overflow-hidden shadow-sm border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-                <img src={src} alt="" className="w-full h-auto object-cover hover:scale-[1.01] transition-transform duration-300" loading="lazy" />
+              <div key={`${src}-${i}`} className="aspect-[3/2] rounded-xl overflow-hidden shadow-sm border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+                <img src={src} alt="" className="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-300" loading="lazy" />
               </div>
             ))}
           </div>

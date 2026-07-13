@@ -1,6 +1,6 @@
 import { INITIAL_EXPLORE_POSTS, type ExplorePost } from './exploreBlogData';
 
-const STORAGE_KEY = 'smarttravel_explore_posts_v1';
+const STORAGE_KEY = 'smarttravel_explore_posts_v2';
 
 function loadStored(): ExplorePost[] | null {
   try {
