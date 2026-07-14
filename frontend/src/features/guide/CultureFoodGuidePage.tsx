@@ -7,11 +7,11 @@ import {
 import { useLang } from '../../contexts/LanguageContext';
 
 const CATEGORIES = [
-  { id: 'all', labelVi: 'cả', labelEn: 'All', icon: Sparkles },
-  { id: 'culture', labelVi: 'Văn phòng', labelEn: 'Culture', icon: Landmark },
+  { id: 'all', labelVi: 'Tất cả', labelEn: 'All', icon: Sparkles },
+  { id: 'culture', labelVi: 'Văn hóa', labelEn: 'Culture', icon: Landmark },
   { id: 'food', labelVi: 'Ẩm thực', labelEn: 'Cuisine', icon: Utensils },
   { id: 'festival', labelVi: 'Lễ hội', labelEn: 'Festivals', icon: Calendar },
-  { id: 'tips', labelVi: 'kinh nghiệm pháp lý', labelEn: 'Tips', icon: BookOpen },
+  { id: 'tips', labelVi: 'Mẹo du lịch', labelEn: 'Tips', icon: BookOpen },
 ] as const;
 
 const ARTICLES = [
@@ -29,19 +29,19 @@ const ARTICLES = [
   {
     id: '2',
     category: 'culture' as const,
-    title: 'Hội An — Phố cổ và nghệ thủ công công công trăm năm',
-    excerpt: 'Lồng đèn, hội An, chùa Cầu và nhịp sống chậm rãi giữa kiến trúc gỗ mái ngói.',
+    title: 'Hội An — Phố cổ và nghề thủ công trăm năm',
+    excerpt: 'Lồng đèn Hội An, chùa Cầu và nhịp sống chậm rãi giữa kiến trúc gỗ mái ngói.',
     region: 'Quảng Nam',
     readMin: 8,
     rating: 4.8,
     image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80',
-    tags: ['Di', 'Kiến trúc'],
+    tags: ['Di sản', 'Kiến trúc'],
   },
   {
     id: '3',
     category: 'festival' as const,
     title: 'Lễ hội Đền Hùng — Cội nguồn dân tộc',
-    excerpt: 'Thời điểm, nghi thức và cách tham gia lễ hội Đền Hùng một cách tôn giáo trong văn hóa.',
+    excerpt: 'Thời điểm, nghi thức và cách tham gia lễ hội Đền Hùng một cách trọn vẹn và trang nghiêm.',
     region: 'Phú Thọ',
     readMin: 5,
     rating: 4.7,
@@ -74,7 +74,7 @@ const ARTICLES = [
     id: '6',
     category: 'tips' as const,
     title: 'Ăn đường phố an toàn theo lịch trình',
-    excerpt: 'Danh sách kiểm tra lựa chọn quán, nhận biết bao vệ sinh và tránh sốc văn hóa ẩm thực cho tân thủ.',
+    excerpt: 'Bí quyết lựa chọn quán ăn, nhận biết vệ sinh an toàn thực phẩm và tránh sốc văn hóa ẩm thực cho người mới.',
     region: 'toàn quốc',
     readMin: 4,
     rating: 4.8,
@@ -84,17 +84,17 @@ const ARTICLES = [
 ];
 
 const BADGE_STYLES: Record<string, string> = {
-  food: 'bg-amber-100 text-amber-800 border border-amber-200',
-  culture: 'bg-orange-50 text-orange-800 border border-orange-200',
-  festival: 'bg-rose-100 text-rose-800 border border-rose-200',
-  tips: 'bg-teal-50 text-teal-800 border border-teal-200',
+  food: 'bg-blue-50 text-blue-700 border border-blue-100',
+  culture: 'bg-sky-50 text-sky-700 border border-sky-100',
+  festival: 'bg-indigo-50 text-indigo-700 border border-indigo-100',
+  tips: 'bg-cyan-50 text-cyan-700 border border-cyan-100',
 };
 
 const TAG_STYLES: Record<string, string> = {
-  food: 'bg-orange-50 text-orange-700 border border-orange-100',
-  culture: 'bg-amber-50 text-amber-800 border border-amber-100',
-  festival: 'bg-rose-50/70 text-rose-700 border border-rose-100',
-  tips: 'bg-teal-50/70 text-teal-700 border border-teal-100',
+  food: 'bg-blue-50/50 text-blue-600 border border-blue-100/50',
+  culture: 'bg-sky-50/50 text-sky-600 border border-sky-100/50',
+  festival: 'bg-indigo-50/50 text-indigo-600 border border-indigo-100/50',
+  tips: 'bg-cyan-50/50 text-cyan-600 border border-cyan-100/50',
 };
 
 export default function CultureFoodGuidePage() {
@@ -118,7 +118,7 @@ export default function CultureFoodGuidePage() {
         <div className="container-wide py-10 sm:py-14 flex flex-col lg:flex-row justify-between items-center gap-8">
           
           <div className="flex-1 space-y-4 max-w-2xl w-full">
-            <span className="text-[#ea580c] font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-blue-600 font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Utensils size={14} className="stroke-[3px]" /> 
               {vi ? 'HƯỚNG DẪN DU LỊCH THÔNG MINH' : 'SMART TRAVEL GUIDE'}
             </span>
@@ -133,28 +133,33 @@ export default function CultureFoodGuidePage() {
                 : 'Explore heritage, festivals and local flavors before every trip. Curated for culture-loving travellers in Vietnam.'}
             </p>
             
-            {/* Search Box */}
-            <div className="relative max-w-md w-full pt-2">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="search"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                placeholder={vi ? 'Tìm món ăn, địa danh, lễ hội...' : 'Search dishes, places, festivals...'}
-                className="w-full bg-white border border-amber-300 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent shadow-sm text-slate-800 transition-all duration-200"
-              />
+            {/* Search Box & Share Journey Action */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 max-w-xl w-full">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder={vi ? 'Tìm món ăn, địa danh, lễ hội...' : 'Search dishes, places, festivals...'}
+                  className="w-full bg-white border border-blue-300 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent shadow-sm text-slate-800 transition-all duration-200"
+                />
+              </div>
+              <Link to="/journeys/create" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 justify-center shrink-0">
+                {vi ? 'Đăng hành trình' : 'Share journey'} <ChevronRight size={15} className="stroke-[2.5px]" />
+              </Link>
             </div>
           </div>
 
           {/* Stats Boxes (aligned right) */}
           <div className="flex flex-wrap sm:flex-nowrap gap-3 sm:gap-4 justify-center lg:justify-end w-full lg:w-auto">
             {[
-              { n: '120+', l: vi ? 'BÀI VIẾT VỀ NANG' : 'ARTICLES' },
+              { n: '120+', l: vi ? 'BÀI VIẾT' : 'ARTICLES' },
               { n: '34', l: vi ? 'TỈNH THÀNH' : 'PROVINCES' },
               { n: '4.8', l: vi ? 'ĐÁNH GIÁ TB' : 'AVG RATING' },
             ].map(s => (
-              <div key={s.l} className="bg-white border border-amber-200/50 rounded-2xl p-5 text-center shadow-[0_4px_12px_rgba(245,158,11,0.04)] flex-1 sm:flex-initial sm:w-[130px] flex flex-col justify-center items-center">
-                <span className="text-orange-500 font-black text-2xl sm:text-3.5xl tracking-tight">{s.n}</span>
+              <div key={s.l} className="bg-white border border-blue-200/50 rounded-2xl p-5 text-center shadow-[0_4px_12px_rgba(37,99,235,0.04)] flex-1 sm:flex-initial sm:w-[130px] flex flex-col justify-center items-center">
+                <span className="text-blue-600 font-black text-2xl sm:text-3.5xl tracking-tight">{s.n}</span>
                 <span className="text-[9px] font-extrabold text-slate-400 tracking-wider uppercase mt-1.5">{s.l}</span>
               </div>
             ))}
@@ -213,7 +218,7 @@ export default function CultureFoodGuidePage() {
                   <div className="flex items-center gap-3.5 text-[11px] text-slate-400 font-bold mb-3.5">
                     <span className="flex items-center gap-1"><MapPin size={13} className="text-slate-400" /> {article.region}</span>
                     <span className="flex items-center gap-1"><Clock size={13} className="text-slate-400" /> {article.readMin} {vi ? 'phút' : 'min'}</span>
-                    <span className="flex items-center gap-1 text-orange-500"><Star size={13} className="fill-current" /> {article.rating}</span>
+                    <span className="flex items-center gap-1 text-blue-600"><Star size={13} className="fill-current" /> {article.rating}</span>
                   </div>
                   
                   {/* Title */}
@@ -241,8 +246,8 @@ export default function CultureFoodGuidePage() {
 
                   {/* Read button link */}
                   <div className="pt-3.5 border-t border-slate-100 flex items-center">
-                    <span className="text-orange-500 font-bold text-xs hover:text-orange-600 transition-colors cursor-pointer inline-flex items-center gap-1">
-                      {vi ? 'nang hoa quả' : 'Read guide'} <ChevronRight size={13} className="stroke-[2.5px]" />
+                    <span className="text-blue-600 font-bold text-xs hover:text-blue-700 transition-colors cursor-pointer inline-flex items-center gap-1">
+                      {vi ? 'Đọc cẩm nang' : 'Read guide'} <ChevronRight size={13} className="stroke-[2.5px]" />
                     </span>
                   </div>
                 </div>
@@ -258,21 +263,6 @@ export default function CultureFoodGuidePage() {
             <p className="text-slate-500 text-sm font-semibold">{vi ? 'Không tìm thấy bài viết phù hợp.' : 'No matching articles found.'}</p>
           </div>
         )}
-
-        {/* CTA Footer banner */}
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6 shadow-sm mt-12">
-          <div className="text-center sm:text-left space-y-1">
-            <h3 className="text-slate-900 font-black text-lg sm:text-xl">
-              {vi ? 'Có câu chuyện riêng tư không?' : 'Have your own story?'}
-            </h3>
-            <p className="text-slate-500 text-xs sm:text-sm leading-normal">
-              {vi ? 'Chia sẻ hành trình và món ăn yêu thích với cộng đồng SmartTravel.' : 'Share your journey and favorite dishes with the community.'}
-            </p>
-          </div>
-          <Link to="/journeys/create" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center">
-            {vi ? 'Đăng hành trình' : 'Share journey'} <ChevronRight size={15} className="stroke-[2.5px]" />
-          </Link>
-        </div>
 
       </div>
     </div>

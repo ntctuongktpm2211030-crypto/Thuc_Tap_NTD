@@ -3,6 +3,7 @@ import Map, { Source, Layer, Popup, Marker, NavigationControl } from 'react-map-
 import maplibregl from 'maplibre-gl';
 import { useLang } from '../../contexts/LanguageContext';
 import { mapService } from '../../services/smartTravel.service';
+import { CloudRain, Car, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
 
 export interface MapLocation {
   id: string;
@@ -474,31 +475,33 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   };
 
   return (
-    <div className="w-full h-full relative rounded-2xl overflow-hidden border border-slate-800 bg-[#0f172a]">
+    <div className="w-full h-full relative rounded-2xl overflow-hidden border border-[var(--border-normal)] bg-[var(--bg-elevated)]">
       {/* 1. Toggle Tabs Switcher */}
-      <div className="absolute top-3 left-3 z-20 flex gap-1 bg-slate-900/90 backdrop-blur-md border border-slate-850 p-1 rounded-xl shadow-lg">
+      <div className="absolute top-3 left-3 z-20 flex gap-1 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-1 rounded-xl shadow-lg">
         <button
           type="button"
           onClick={() => setViewType('map')}
-          className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer border-none ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
             viewType === 'map'
-              ? 'bg-[var(--gold)] text-black'
-              : 'text-slate-400 hover:text-white hover:bg-white/10'
+              ? 'bg-blue-600 text-white shadow-sm border border-transparent'
+              : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
           }`}
           disabled={!isWebGLSupported()}
         >
-          🗺️ {vi ? 'Bản đồ' : 'Map'}
+          <Compass size={11} className={viewType === 'map' ? 'text-white' : 'text-blue-500'} />
+          <span>{vi ? 'Bản đồ' : 'Map'}</span>
         </button>
         <button
           type="button"
           onClick={() => setViewType('timeline')}
-          className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer border-none ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
             viewType === 'timeline'
-              ? 'bg-[var(--gold)] text-black'
-              : 'text-slate-400 hover:text-white hover:bg-white/10'
+              ? 'bg-blue-600 text-white shadow-sm border border-transparent'
+              : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
           }`}
         >
-          📋 {vi ? 'Lộ trình' : 'Timeline'}
+          <ListTodo size={11} className={viewType === 'timeline' ? 'text-white' : 'text-blue-500'} />
+          <span>{vi ? 'Lộ trình' : 'Timeline'}</span>
         </button>
       </div>
 
@@ -514,7 +517,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           mapStyle={getStyleUrl()}
           style={{ width: '100%', height: '100%', minHeight: '400px' }}
         >
-          <NavigationControl position="top-left" showCompass={true} />
+          <NavigationControl position="top-right" showCompass={true} />
 
           {/* Satellite Layer Switch */}
           {mapStyle === 'satellite' && (
@@ -791,21 +794,21 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         </Map>
       ) : (
         /* Alternate View Mode */
-        <div className="w-full h-full flex flex-col p-6 pt-16 bg-slate-950/40 backdrop-blur-xl overflow-y-auto text-slate-200">
+        <div className="w-full h-full flex flex-col p-6 pt-16 bg-[var(--bg-primary)] overflow-y-auto text-[var(--text-primary)]">
           {timelinePoints.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--text-muted)]">
                 {vi ? 'Chưa có địa điểm nào trong danh sách.' : 'No locations available in the list.'}
               </p>
             </div>
           ) : (
             <div className="flex-1 flex flex-col space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center justify-between border-b border-[var(--border-normal)] pb-3">
                 <div>
                   <h4 className="text-xs font-black text-[var(--gold)] uppercase tracking-wider">
-                    📋 {vi ? 'Lộ trình di chuyển chi tiết' : 'Detailed Route Itinerary'}
+                    Lộ trình di chuyển chi tiết
                   </h4>
-                  <p className="text-[10px] text-slate-400 mt-0.5">
+                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5">
                     {vi ? `Tổng số: ${timelinePoints.length} địa điểm` : `Total: ${timelinePoints.length} stops`}
                   </p>
                 </div>
@@ -813,13 +816,14 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                   href={getGoogleMapsDirUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 bg-[var(--gold)] text-black text-[10px] font-black rounded-lg hover:bg-amber-400 transition-all no-underline flex items-center gap-1 shadow-md shadow-amber-500/10 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all no-underline shadow-sm cursor-pointer"
                 >
-                  🗺️ {vi ? 'Mở Google Maps chỉ đường' : 'Open Google Maps'}
+                  <Compass size={11} className="text-white" />
+                  <span>{vi ? 'Mở Google Maps chỉ đường' : 'Open Google Maps'}</span>
                 </a>
               </div>
 
-              <div className="relative border-l border-dashed border-slate-700 ml-3 pl-6 space-y-6 flex-1 py-2">
+              <div className="relative border-l border-dashed border-[var(--border-normal)] ml-3 pl-6 space-y-6 flex-1 py-2">
                 {timelinePoints.map((point, index) => {
                   const isCheckin = !!point.user;
                   return (
@@ -833,19 +837,19 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                           />
                         </div>
                       ) : (
-                        <span className="absolute -left-[31px] top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-slate-900 border-2 border-[var(--gold)] text-[8px] font-black text-[var(--gold)] shadow-sm">
+                        <span className="absolute -left-[31px] top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--bg-elevated)] border-2 border-[var(--gold)] text-[8px] font-bold text-[var(--gold)] shadow-sm">
                           {index + 1}
                         </span>
                       )}
 
-                      <div className="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl hover:bg-slate-900/85 hover:border-slate-700/80 transition-all space-y-1.5">
+                      <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-xl hover:bg-[var(--bg-overlay)] hover:border-blue-500/30 shadow-sm transition-all space-y-1.5">
                         <div className="flex items-start justify-between gap-4">
                           <div>
-                            <h5 className="text-xs font-black text-white group-hover:text-[var(--gold)] transition-colors">
+                            <h5 className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors">
                               {isCheckin ? `${point.user} (Check-in)` : point.name}
                             </h5>
                             {point.category && (
-                              <span className="inline-block text-[8px] font-bold uppercase tracking-wider bg-[var(--gold-glow)]/10 text-[var(--gold)] px-1.5 py-0.5 rounded mt-1">
+                              <span className="inline-block text-[8px] font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded border border-blue-100 dark:border-blue-900/30 mt-1">
                                 {point.category}
                               </span>
                             )}
@@ -855,7 +859,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                             {onAddPointToRoute && !routePoints.some(rp => rp.id === point.id) && (
                               <button
                                 onClick={() => onAddPointToRoute(point)}
-                                className="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-none rounded text-[9px] font-bold cursor-pointer transition-all"
+                                className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[9px] font-bold cursor-pointer transition-all shadow-sm border border-transparent"
                               >
                                 + {vi ? 'Thêm' : 'Add'}
                               </button>
@@ -863,7 +867,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                             {onRemovePointFromRoute && routePoints.some(rp => rp.id === point.id) && (
                               <button
                                 onClick={() => onRemovePointFromRoute(point.id)}
-                                className="px-2 py-0.5 bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/30 rounded text-[9px] font-bold cursor-pointer transition-all"
+                                className="px-2.5 py-1 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/30 rounded text-[9px] font-bold cursor-pointer transition-all shadow-sm"
                               >
                                 ✕ {vi ? 'Xoá' : 'Remove'}
                               </button>
@@ -872,22 +876,22 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                               href={getSinglePlaceUrl(point)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2 py-1 bg-slate-800/50 hover:bg-slate-700/80 text-[9px] text-[var(--gold)] font-bold rounded hover:text-amber-400 no-underline cursor-pointer border border-slate-700/50"
+                              className="inline-flex items-center justify-center p-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--gold)] hover:text-blue-700 rounded transition-all cursor-pointer"
                               title={vi ? 'Xem trên Google Bản đồ' : 'View on Google Maps'}
                             >
-                              📍
+                              <MapPin size={10} />
                             </a>
                           </div>
                         </div>
 
                         {point.note && (
-                          <p className="text-[10px] text-slate-300 italic bg-slate-950/30 p-2 rounded-lg border-l-2 border-slate-700">
+                          <p className="text-[10px] text-[var(--text-secondary)] italic bg-[var(--bg-primary)] p-2 rounded-lg border-l-2 border-[var(--border-normal)]">
                             "{point.note}"
                           </p>
                         )}
 
                         {point.time && (
-                          <div className="text-[9px] text-slate-400 flex items-center gap-1">
+                          <div className="text-[9px] text-[var(--text-muted)] flex items-center gap-1">
                             ⏰ {point.time}
                           </div>
                         )}
@@ -904,15 +908,17 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       {/* Style switcher */}
       {viewType === 'map' && (
         <>
-          <div className="absolute top-3 right-3 z-10 flex gap-1 bg-slate-900/80 backdrop-blur-md border border-slate-800 p-1 rounded-xl shadow-lg">
+          <div className="absolute bottom-3 left-3 z-10 flex gap-1 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-1 rounded-xl shadow-lg">
             <button
               type="button"
               onClick={() => {
                 setMapStyle('street');
                 setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
               }}
-              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
-                mapStyle === 'street' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
+                mapStyle === 'street' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
               {vi ? 'Đường' : 'Street'}
@@ -923,8 +929,10 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                 setMapStyle('satellite');
                 setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
               }}
-              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
-                mapStyle === 'satellite' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
+                mapStyle === 'satellite' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
               {vi ? 'Vệ tinh' : 'Satellite'}
@@ -935,8 +943,10 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                 setMapStyle('dark');
                 setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
               }}
-              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
-                mapStyle === 'dark' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
+                mapStyle === 'dark' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
               {vi ? 'Tối' : 'Dark'}
@@ -947,8 +957,10 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                 setMapStyle('light');
                 setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
               }}
-              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
-                mapStyle === 'light' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
+                mapStyle === 'light' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
               {vi ? 'Sáng' : 'Light'}
@@ -959,8 +971,10 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                 setMapStyle('3d');
                 setViewState(prev => ({ ...prev, pitch: 60, bearing: -20 }));
               }}
-              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
-                mapStyle === '3d' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
+                mapStyle === '3d' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
               3D
@@ -968,47 +982,59 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           </div>
 
           {/* GIS Layers Switcher */}
-          <div className="absolute bottom-20 right-3 z-10 flex flex-col gap-1 bg-slate-900/90 backdrop-blur-md border border-slate-800 p-1.5 rounded-xl shadow-lg w-[95px]">
-            <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest block text-center mb-1">GIS Layers</span>
+          <div className="absolute bottom-20 right-3 z-10 flex flex-col gap-1 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-1.5 rounded-xl shadow-lg w-[105px]">
+            <span className="text-[7.5px] font-black text-[var(--text-muted)] uppercase tracking-widest block text-center mb-1">GIS Layers</span>
             <button
               type="button"
               onClick={() => setShowWeather(prev => !prev)}
-              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
-                showWeather ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                showWeather 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
-              🌧️ {vi ? 'Khí tượng' : 'Weather'}
+              <CloudRain size={10} className={showWeather ? 'text-white' : 'text-blue-500'} />
+              <span>{vi ? 'Khí tượng' : 'Weather'}</span>
             </button>
             <button
               type="button"
               onClick={() => setShowTraffic(prev => !prev)}
-              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
-                showTraffic ? 'bg-amber-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                showTraffic 
+                  ? 'bg-amber-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
-              🚗 {vi ? 'Giao thông' : 'Traffic'}
+              <Car size={10} className={showTraffic ? 'text-white' : 'text-amber-500'} />
+              <span>{vi ? 'Giao thông' : 'Traffic'}</span>
             </button>
             <button
               type="button"
               onClick={() => setShowSafety(prev => !prev)}
-              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
-                showSafety ? 'bg-red-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                showSafety 
+                  ? 'bg-red-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
-              ⚠️ {vi ? 'Cảnh báo' : 'Safety'}
+              <AlertTriangle size={10} className={showSafety ? 'text-white' : 'text-red-500'} />
+              <span>{vi ? 'Cảnh báo' : 'Safety'}</span>
             </button>
             <button
               type="button"
               onClick={() => setShowEvents(prev => !prev)}
-              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
-                showEvents ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                showEvents 
+                  ? 'bg-purple-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
               }`}
             >
-              📅 {vi ? 'Lễ hội' : 'Events'}
+              <Calendar size={10} className={showEvents ? 'text-white' : 'text-purple-500'} />
+              <span>{vi ? 'Lễ hội' : 'Events'}</span>
             </button>
           </div>
 
-          <div className="absolute top-14 right-3 z-10 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider text-[var(--gold)]">
+          <div className="absolute top-28 right-3 z-10 bg-[var(--bg-elevated)] border border-[var(--border-normal)] px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider text-[var(--gold)] shadow-md">
             {viewMode.toUpperCase()}
           </div>
         </>

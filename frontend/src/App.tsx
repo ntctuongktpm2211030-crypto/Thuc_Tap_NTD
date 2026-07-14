@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import {
-  MapPin, Users, Search, Bot, Loader2, Plane, Zap, Check, AlertTriangle,
+  MapPin, Users, Search, Bot, BrainCircuit, Loader2, Plane, Zap, Check, AlertTriangle,
   Map, MessageCircle, FileText, Link2, Mountain, Flame,
   Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe,
   Menu, X, Bookmark, User, Send, Utensils,
   Calendar, DollarSign, Hash, ChevronDown, ChevronUp, Clock, ExternalLink,
+  Navigation,
 } from 'lucide-react';
 import { TRIP_ACTIVITY_ICONS } from './config/modernIcons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -434,7 +435,7 @@ const MapDashboard = () => {
       {/* COLUMN 1: Search, Filter, AI Recommendations (Left Column, span 3) */}
       <div className="lg:col-span-3 flex flex-col gap-5 h-[620px] overflow-y-auto pr-1">
         {/* 1. Search Box with Autocomplete */}
-        <div className="surface-elevated p-4 space-y-2 relative rounded-xl border border-[var(--border-subtle)] bg-[#1e293b]/40 backdrop-blur-md">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-2 relative rounded-xl shadow-sm">
           <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
             <Search size={12} /> {vi ? 'Tìm địa điểm' : 'Search Place'}
           </h3>
@@ -444,20 +445,20 @@ const MapDashboard = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder={vi ? 'Nhập tên địa điểm...' : 'Search place...'}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 pl-8 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)]"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-2 pl-8 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
             <Search size={12} className="absolute left-2.5 top-3 text-[var(--text-muted)]" />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2.5 text-xs text-[var(--text-muted)] hover:text-white border-none bg-transparent cursor-pointer"
+                className="absolute right-2.5 top-2.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
               >
                 ✕
               </button>
             )}
           </div>
           {searchQuery && destinations.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 && (
-            <div className="absolute left-0 right-0 top-full bg-slate-900 border border-slate-800 rounded-lg mt-1 max-h-40 overflow-y-auto z-30 shadow-2xl p-1">
+            <div className="absolute left-0 right-0 top-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg mt-1 max-h-40 overflow-y-auto z-30 shadow-2xl p-1">
               {destinations
                 .filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()))
                 .slice(0, 5)
@@ -469,7 +470,7 @@ const MapDashboard = () => {
                       setSelectedLocation({ id: d.id, name: d.name, lat: d.latitude, lng: d.longitude, category: d.category });
                       setSearchQuery('');
                     }}
-                    className="px-3 py-1.5 hover:bg-slate-800 text-[10px] text-white rounded cursor-pointer truncate"
+                    className="px-3 py-1.5 hover:bg-[var(--bg-overlay)] text-[10px] text-[var(--text-primary)] rounded cursor-pointer truncate"
                   >
                     📍 {d.name} <span className="text-[8px] text-slate-400">({d.category})</span>
                   </div>
@@ -479,7 +480,7 @@ const MapDashboard = () => {
         </div>
 
         {/* 2. Filters */}
-        <div className="surface-elevated p-4 space-y-3 rounded-xl border border-[var(--border-subtle)] bg-[#1e293b]/40 backdrop-blur-md">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-3 rounded-xl shadow-sm">
           <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
             🧭 {vi ? 'Bộ lọc nâng cao' : 'Filters'}
           </h3>
@@ -487,7 +488,7 @@ const MapDashboard = () => {
             <select
               value={filterCategory}
               onChange={e => setFilterCategory(e.target.value)}
-              className="bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none"
+              className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
             >
               <option value="">{vi ? 'Tất cả' : 'All Categories'}</option>
               <option value="attraction">{vi ? 'Tham quan' : 'Attraction'}</option>
@@ -498,7 +499,7 @@ const MapDashboard = () => {
             <select
               value={filterRating}
               onChange={e => setFilterRating(Number(e.target.value))}
-              className="bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none"
+              className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
             >
               <option value="0">{vi ? 'Đánh giá' : 'Rating'}</option>
               <option value="4">★ 4.0+</option>
@@ -508,15 +509,15 @@ const MapDashboard = () => {
         </div>
 
         {/* 3. AI Recommendations Layer */}
-        <div className="surface-elevated p-4 space-y-3 rounded-xl border border-[var(--border-subtle)] bg-[#1e293b]/40 backdrop-blur-md">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-3 rounded-xl shadow-sm">
           <div className="flex justify-between items-center">
             <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
-              <Sparkles size={12} className="text-emerald-400" /> {vi ? 'Đề xuất AI lân cận' : 'Nearby AI Suggestions'}
+              <Sparkles size={12} className="text-blue-500 dark:text-blue-400" /> {vi ? 'Đề xuất AI lân cận' : 'Nearby AI Suggestions'}
             </h3>
             <button
               onClick={handleGetAiRecommendations}
               disabled={loadingAiRecs}
-              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 text-white rounded text-[8px] font-black uppercase cursor-pointer border-none flex items-center gap-1"
+              className="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white rounded text-[8px] font-bold uppercase cursor-pointer border-none flex items-center gap-1 transition-all"
             >
               {loadingAiRecs ? <Loader2 size={8} className="animate-spin" /> : 'Ask'}
             </button>
@@ -529,13 +530,13 @@ const MapDashboard = () => {
                   <div
                     key={rec.id}
                     onClick={() => dest && setSelectedCenter([dest.latitude, dest.longitude])}
-                    className="p-2 bg-emerald-950/10 border border-emerald-800/20 rounded-lg hover:bg-emerald-950/20 transition-all cursor-pointer"
+                    className="p-2.5 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/70 dark:border-blue-900/30 rounded-lg hover:bg-blue-100/50 dark:hover:bg-blue-950/30 transition-all cursor-pointer"
                   >
-                    <h4 className="text-[10px] font-black text-emerald-400 flex items-center justify-between">
+                    <h4 className="text-[10px] font-bold text-blue-600 dark:text-blue-400 flex items-center justify-between">
                       {dest ? dest.name : 'Địa điểm'}
-                      <span className="text-[8px] bg-emerald-950/50 text-emerald-300 px-1.5 py-0.5 rounded">{rec.tag || 'AI'}</span>
+                      <span className="text-[8px] bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded">{rec.tag || 'AI'}</span>
                     </h4>
-                    <p className="text-[9px] text-slate-300 mt-1 italic leading-tight">"{rec.reason}"</p>
+                    <p className="text-[9px] text-[var(--text-secondary)] mt-1 italic leading-tight">"{rec.reason}"</p>
                   </div>
                 );
               })}
@@ -549,17 +550,17 @@ const MapDashboard = () => {
 
         {/* 4. AI Travel Assistant Panel */}
         {selectedLocation && !selectedLocation.id.startsWith('live-') && !selectedLocation.id.startsWith('checkin-') && (
-          <div className="surface-elevated p-4 space-y-3 rounded-xl border border-amber-600 bg-amber-950/10">
+          <div className="bg-[var(--bg-elevated)] border border-blue-500 dark:border-blue-400 p-4 space-y-3 rounded-xl shadow-md">
             <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center justify-between">
               <span className="flex items-center gap-1">🤖 AI Assistant</span>
               <button
                 onClick={() => setSelectedLocation(null)}
-                className="text-xs text-[var(--text-muted)] hover:text-white border-none bg-transparent cursor-pointer"
+                className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
               >
                 ✕
               </button>
             </h3>
-            <p className="text-[10px] font-bold text-white truncate">{selectedLocation.name}</p>
+            <p className="text-[10px] font-bold text-[var(--text-primary)] truncate">{selectedLocation.name}</p>
             
             <div className="grid grid-cols-2 gap-1.5">
               {[
@@ -572,7 +573,7 @@ const MapDashboard = () => {
                   key={q}
                   disabled={loadingAiAssistant}
                   onClick={() => handleAskAiAssistant(q)}
-                  className="px-2 py-1 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-900 text-slate-300 rounded text-[9px] font-semibold text-left truncate border-none cursor-pointer"
+                  className="px-2 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] disabled:bg-slate-300 border border-[var(--border-normal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded text-[9px] font-semibold text-left truncate cursor-pointer transition-all"
                 >
                   💬 {q}
                 </button>
@@ -587,7 +588,7 @@ const MapDashboard = () => {
             )}
 
             {aiAssistantAnswer && (
-              <p className="text-[9px] text-slate-300 bg-slate-950 border border-slate-900 p-2 rounded-lg italic leading-relaxed">
+              <p className="text-[9px] text-[var(--text-secondary)] bg-[var(--bg-primary)] border border-[var(--border-normal)] p-2 rounded-lg italic leading-relaxed">
                 {aiAssistantAnswer}
               </p>
             )}
@@ -609,37 +610,46 @@ const MapDashboard = () => {
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setViewMode('markers')}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all border-none cursor-pointer ${
-                viewMode === 'markers' ? 'bg-[var(--gold)] text-black' : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-white'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                viewMode === 'markers' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
               }`}
             >
-              📍 {vi ? 'Ghim' : 'Pins'}
+              <MapPin size={12} className={viewMode === 'markers' ? 'text-white' : 'text-blue-500'} />
+              <span>{vi ? 'Ghim' : 'Pins'}</span>
             </button>
             <button
               onClick={() => setViewMode('cluster')}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all border-none cursor-pointer ${
-                viewMode === 'cluster' ? 'bg-[var(--gold)] text-black' : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-white'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                viewMode === 'cluster' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
               }`}
             >
-              👥 {vi ? 'Nhóm' : 'Clusters'}
+              <Users size={12} className={viewMode === 'cluster' ? 'text-white' : 'text-blue-500'} />
+              <span>{vi ? 'Nhóm' : 'Clusters'}</span>
             </button>
             <button
               onClick={() => setViewMode('heatmap')}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all border-none cursor-pointer ${
-                viewMode === 'heatmap' ? 'bg-[var(--gold)] text-black' : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-white'
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                viewMode === 'heatmap' 
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+                  : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
               }`}
             >
-              🔥 {vi ? 'Nhiệt' : 'Heatmap'}
+              <Flame size={12} className={viewMode === 'heatmap' ? 'text-white' : 'text-orange-500'} />
+              <span>{vi ? 'Nhiệt' : 'Heatmap'}</span>
             </button>
           </div>
         </div>
 
         {/* Route Planner Action Bar */}
-        <div className="flex flex-wrap gap-2 items-center bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-3 rounded-xl bg-[#1e293b]/40 backdrop-blur-md">
+        <div className="flex flex-wrap gap-2 items-center bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-xl shadow-sm">
           <button
             onClick={handleOptimizeTSP}
             disabled={routeQueue.length < 3}
-            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-500 text-white text-[10px] font-black uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:text-slate-500 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
           >
             ⚡ {vi ? 'Tối ưu tuyến đường (TSP)' : 'Optimize Route (TSP)'}
           </button>
@@ -647,7 +657,7 @@ const MapDashboard = () => {
           <button
             onClick={handleCacheTiles}
             disabled={cachingProgress !== null}
-            className="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 disabled:bg-slate-850 text-white text-[10px] font-black uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1 ml-auto"
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1 ml-auto"
           >
             💾 {vi ? 'Tải bản đồ ngoại tuyến' : 'Cache Offline Map'}
           </button>
@@ -655,7 +665,7 @@ const MapDashboard = () => {
           {routeQueue.length > 0 && (
             <button
               onClick={() => setRouteQueue([])}
-              className="px-2.5 py-1.5 bg-red-950/40 hover:bg-red-900/50 text-red-400 text-[10px] font-black uppercase rounded-lg transition-all border border-red-800/30 cursor-pointer"
+              className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 text-[10px] font-bold uppercase rounded-lg transition-all border border-red-200 dark:border-red-800/30 cursor-pointer"
             >
               {vi ? 'Xoá lộ trình' : 'Clear Route'}
             </button>
@@ -686,7 +696,7 @@ const MapDashboard = () => {
       {/* COLUMN 3: Live Friends & Check-Ins (Right Column, span 3) */}
       <div className="lg:col-span-3 flex flex-col gap-5 h-[620px]">
         {/* check-in form */}
-        <div className="surface-elevated p-4 space-y-3 rounded-xl border border-[var(--border-subtle)] bg-[#1e293b]/40 backdrop-blur-md">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-3 rounded-xl shadow-sm">
           <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
             📸 {vi ? 'Check-in Địa điểm' : 'Check-In Location'}
           </h3>
@@ -694,7 +704,7 @@ const MapDashboard = () => {
             <select
               value={selectedDestId}
               onChange={e => setSelectedDestId(e.target.value)}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-2.5 py-2 text-xs text-[var(--text-primary)] focus:outline-none"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             >
               <option value="">-- {vi ? 'Chọn địa điểm' : 'Select location'} --</option>
               {destinations.map(d => (
@@ -707,11 +717,11 @@ const MapDashboard = () => {
               onChange={e => setNewNote(e.target.value)}
               placeholder={vi ? 'Bạn đang nghĩ gì về nơi này?...' : 'What do you think about this place?...'}
               rows={2}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
 
             <div className="flex gap-2 items-center justify-between">
-              <label className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[9px] font-bold cursor-pointer transition-all border border-slate-700">
+              <label className="flex items-center gap-1 px-2.5 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--text-secondary)] rounded text-[9px] font-bold cursor-pointer transition-all">
                 📷 {isExtractingGps ? 'GPS...' : (vi ? 'Trích GPS Ảnh' : 'Extract GPS')}
                 <input
                   type="file"
@@ -722,7 +732,7 @@ const MapDashboard = () => {
               </label>
               <button
                 type="submit"
-                className="px-3.5 py-1.5 bg-[var(--gold)] text-black text-[9px] font-black uppercase rounded-lg hover:bg-amber-400 cursor-pointer border-none transition-all"
+                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold uppercase rounded-lg cursor-pointer border-none transition-all shadow-sm"
               >
                 {vi ? 'Đăng Check-In' : 'Post Check-In'}
               </button>
@@ -731,10 +741,10 @@ const MapDashboard = () => {
         </div>
 
         {/* list of check-ins */}
-        <div className="surface-elevated p-4 flex flex-col flex-1 rounded-xl border border-[var(--border-subtle)] bg-[#1e293b]/40 backdrop-blur-md overflow-hidden">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 flex flex-col flex-1 rounded-xl shadow-sm overflow-hidden">
           <h3 className="sidebar-title mb-3 flex items-center justify-between">
             <span className="flex items-center gap-1.5"><Users size={12} className="text-[var(--gold)]" /> Community Check-Ins</span>
-            <span className="text-[8px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-black">{checkins.length}</span>
+            <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full font-extrabold shadow-sm shadow-red-500/10">{checkins.length}</span>
           </h3>
           <div className="flex-1 overflow-y-auto space-y-3 pr-1">
             {checkins.length === 0 ? (
@@ -749,7 +759,7 @@ const MapDashboard = () => {
                   <div
                     key={chk.id}
                     onClick={() => setSelectedCenter([lat, lng])}
-                    className="p-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] border border-[var(--border-subtle)] rounded-xl transition-all cursor-pointer space-y-1.5 group"
+                    className="p-2 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] rounded-xl transition-all cursor-pointer space-y-1.5 group"
                   >
                     <div className="flex items-center gap-1.5">
                       <img
@@ -758,7 +768,7 @@ const MapDashboard = () => {
                         className="w-6 h-6 rounded-full object-cover border border-[var(--border-normal)]"
                       />
                       <div className="min-w-0 flex-1">
-                        <h4 className="text-[10px] font-bold text-[var(--text-primary)] group-hover:text-gold transition-colors truncate">
+                        <h4 className="text-[10px] font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors truncate">
                           {chk.user?.profile?.fullName || chk.user?.email || 'User'}
                         </h4>
                         <p className="text-[8px] text-[var(--text-muted)] leading-none mt-0.5">
@@ -772,7 +782,7 @@ const MapDashboard = () => {
                     {chk.note && (
                       <p className="text-[10px] text-[var(--text-secondary)] italic line-clamp-2 leading-snug">"{chk.note}"</p>
                     )}
-                    <div className="text-[9px] text-gold font-semibold flex items-center gap-0.5 truncate">
+                    <div className="text-[9px] text-[var(--gold)] font-semibold flex items-center gap-0.5 truncate">
                       <MapPin size={8} /> {chk.destination?.name || 'Vị trí'}
                     </div>
                   </div>
@@ -1058,38 +1068,38 @@ const TripPlanner = () => {
   };
 
   return (
-    <div className="p-6 max-w-screen-xl mx-auto space-y-8 animate-fade-in">
+    <div className="container-wide py-4 sm:py-6 space-y-8 animate-fade-in">
       {/* Title & Banner */}
-      <div className="relative p-6 md:p-8 rounded-3xl overflow-hidden bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border border-[var(--border-normal)]/40 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="relative p-6 md:p-8 rounded-3xl overflow-hidden bg-[var(--bg-elevated)] border border-[var(--border-normal)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_45%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.06),transparent_50%)] pointer-events-none" />
         
         <div className="space-y-2 relative">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
             <Sparkles size={11} className="animate-pulse" /> {lang === 'vi' ? 'Công nghệ AI Thế Hệ Mới' : 'Next-Gen AI Technology'}
           </div>
-          <h1 className="headline-xl !text-4xl md:!text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-cream to-slate-200">{t('planner.heading')}</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-white dark:via-cream dark:to-slate-200">{t('planner.heading')}</h1>
           <p className="text-xs text-[var(--text-secondary)] max-w-xl">{t('planner.subtitle')}</p>
         </div>
         
         <div className="flex-shrink-0 flex items-center gap-4 relative">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Bot size={24} className="text-white animate-pulse" />
+            <BrainCircuit size={24} className="text-white animate-pulse" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-cream">{lang === 'vi' ? 'Trợ lý Lộ trình AI' : 'AI Itinerary Assistant'}</h4>
+            <h4 className="text-xs font-bold text-[var(--text-primary)]">{lang === 'vi' ? 'Trợ lý Lộ trình AI' : 'AI Itinerary Assistant'}</h4>
             <p className="text-[10px] text-[var(--text-muted)]">{lang === 'vi' ? 'Sẵn sàng tư vấn 24/7' : 'Ready to help 24/7'}</p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Left Form: Itinerary Parameters */}
-        <div className="surface-elevated p-6 rounded-2xl border border-[var(--border-normal)]/40 shadow-xl space-y-6 h-fit relative overflow-hidden">
+        <div className="lg:col-span-3 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-6 h-fit relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-teal-500 to-indigo-500" />
           
-          <h3 className="font-ui text-sm font-bold text-cream flex items-center gap-2 border-b border-[var(--border-subtle)] pb-4">
+          <h3 className="font-ui text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 border-b border-[var(--border-normal)] pb-4">
             <Compass size={16} className="text-blue-500" /> {lang === 'vi' ? 'Thông số hành trình' : 'Itinerary Parameters'}
           </h3>
           
@@ -1104,18 +1114,18 @@ const TripPlanner = () => {
                   value={destination} 
                   onChange={e => setDestination(e.target.value)}
                   placeholder={lang === 'vi' ? 'Nhập điểm đến (ví dụ: Hà Giang)' : 'Enter destination (e.g., Ha Giang)'}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-cream placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
                 />
               </div>
             </div>
 
             {/* Days & Budget Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-[100px_1fr] gap-4">
               {/* Days Input */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.days')}</label>
+                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider h-8 flex items-end">{t('planner.days')}</label>
                 <div className="relative group">
-                  <Calendar size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
+                  <Calendar size={16} className="absolute left-3 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
                   <input 
                     type="number" 
                     value={days === '' ? '' : days} 
@@ -1123,30 +1133,30 @@ const TripPlanner = () => {
                     min={1} 
                     max={15}
                     placeholder="2"
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-3 py-3.5 text-xs text-cream placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-9 pr-2 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
                   />
                 </div>
               </div>
 
               {/* Budget Input */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.budget')}</label>
-                <div className="flex rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-primary)] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-inner relative group">
+                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider h-8 flex items-end">{t('planner.budget')}</label>
+                <div className="flex rounded-xl overflow-hidden border border-[var(--border-normal)] bg-[var(--bg-primary)] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-inner relative group">
                   <DollarSign size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
                   <input 
                     type="text" 
                     value={budget === '' ? '' : budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} 
-                    placeholder={lang === 'vi' ? 'Ngân sách' : 'Budget'}
+                    placeholder=""
                     onChange={e => {
                       const rawVal = e.target.value.replace(/\D/g, '');
                       setBudget(rawVal === '' ? '' : Number(rawVal));
                     }} 
-                    className="w-full bg-transparent pl-11 pr-1 py-3.5 text-xs text-cream placeholder-[var(--text-muted)] focus:outline-none min-w-0" 
+                    className="w-full bg-transparent pl-11 pr-1 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none min-w-0" 
                   />
                   <select 
                     value={currency} 
                     onChange={e => setCurrency(e.target.value as 'USD' | 'VND')}
-                    className="bg-[var(--bg-elevated)] border-l border-[var(--border-subtle)] text-[10px] text-blue-400 font-bold px-2 py-3.5 outline-none cursor-pointer hover:bg-[var(--bg-primary)] transition-all flex-shrink-0"
+                    className="bg-[var(--bg-elevated)] border-l border-[var(--border-normal)] text-[10px] text-blue-500 font-bold px-2 py-3.5 outline-none cursor-pointer hover:bg-[var(--bg-primary)] transition-all flex-shrink-0"
                   >
                     <option value="VND">VND</option>
                     <option value="USD">USD</option>
@@ -1163,7 +1173,7 @@ const TripPlanner = () => {
                 <select 
                   value={style} 
                   onChange={e => setStyle(e.target.value)}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-cream focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner appearance-none cursor-pointer"
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner appearance-none cursor-pointer"
                 >
                   {styleOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
@@ -1173,7 +1183,7 @@ const TripPlanner = () => {
 
             {/* Interests tags */}
             <div className="space-y-2.5">
-              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.interests')}</label>
+              <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{t('planner.interests')}</label>
               <div className="flex flex-wrap gap-2">
                 {['nature', 'culture', 'food', 'hiking', 'photography', 'history'].map(tag => {
                   const isActive = interests.includes(tag);
@@ -1182,10 +1192,10 @@ const TripPlanner = () => {
                       key={tag} 
                       type="button" 
                       onClick={() => toggleInterest(tag)}
-                      className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 active:scale-95 cursor-pointer ${
+                      className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-1 active:scale-95 cursor-pointer ${
                         isActive 
-                          ? 'bg-blue-500/10 border-blue-500/30 text-blue-400 shadow-md shadow-blue-500/5' 
-                          : 'bg-[var(--bg-primary)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-normal)] hover:text-[var(--text-secondary)]'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-md' 
+                          : 'bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 hover:border-blue-500 shadow-sm'
                       }`}
                     >
                       <Hash size={10} /> {tag}
@@ -1199,12 +1209,12 @@ const TripPlanner = () => {
             <button 
               onClick={handleGenerate} 
               disabled={loading || !destination || days === '' || budget === ''} 
-              className="btn-gold w-full py-4 text-xs font-bold rounded-xl disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] transition-all cursor-pointer"
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all cursor-pointer border border-transparent disabled:cursor-not-allowed"
             >
               {loading ? (
                 <><Loader2 size={14} className="animate-spin" /> {t('planner.generating')}</>
               ) : (
-                <><Bot size={14} /> {t('planner.generate')}</>
+                <><Sparkles size={14} /> {t('planner.generate')}</>
               )}
             </button>
 
@@ -1212,23 +1222,23 @@ const TripPlanner = () => {
         </div>
 
         {/* Right Panel: Results / Itinerary View */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-9 space-y-6">
           
           {/* Error Message */}
           {aiError && (
-            <div className="surface-elevated px-4 py-3 rounded-xl border-l-4 border-amber-500 text-xs text-amber-400 flex items-center gap-2 shadow-md animate-shake">
+            <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] px-4 py-3 rounded-xl border-l-4 border-amber-500 text-xs text-amber-500 flex items-center gap-2 shadow-md animate-shake">
               <AlertTriangle size={15} /> {aiError}
             </div>
           )}
 
           {/* Loading State Skeleton */}
           {loading && !itinerary ? (
-            <div className="surface-elevated p-8 md:p-12 rounded-2xl border border-[var(--border-normal)]/40 shadow-2xl text-center space-y-8 relative overflow-hidden animate-fade-in">
+            <div className="bg-[var(--bg-elevated)] p-8 md:p-12 rounded-2xl border border-[var(--border-normal)] shadow-2xl text-center space-y-8 relative overflow-hidden animate-fade-in">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08),transparent_45%)] pointer-events-none" />
               
               <div className="relative">
                 <div className="w-20 h-20 mx-auto rounded-full bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center animate-spin duration-8000">
-                  <Bot size={36} className="text-blue-400 animate-pulse" />
+                  <BrainCircuit size={36} className="text-blue-400 animate-pulse" />
                 </div>
                 <div className="absolute inset-0 w-20 h-20 mx-auto rounded-full bg-blue-500/5 animate-ping" />
               </div>
@@ -1266,13 +1276,13 @@ const TripPlanner = () => {
             <div className="space-y-6 animate-slide-up">
               
               {/* Cost & Optimization dashboard header */}
-              <div className="surface-elevated p-6 rounded-2xl border border-[var(--border-normal)]/40 shadow-xl flex flex-col sm:flex-row justify-between sm:items-center gap-6 relative overflow-hidden">
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-6 rounded-2xl shadow-xl flex flex-col sm:flex-row justify-between sm:items-center gap-6 relative overflow-hidden">
                 <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
                 
                 <div className="space-y-2">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('planner.cost')}</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-extrabold text-blue-400">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
+                    <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
                     <span className="text-[11px] text-[var(--text-muted)]">({itinerary.currency || currency} ±10%)</span>
                   </div>
                   {/* Budget comparison check */}
@@ -1281,7 +1291,7 @@ const TripPlanner = () => {
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       <span>
                         {lang === 'vi' ? 'Ngân sách đề xuất: ' : 'Target Budget: '} 
-                        <strong className="text-cream">{formatCost(budget)}</strong>
+                        <strong className="text-[var(--text-primary)]">{formatCost(budget)}</strong>
                       </span>
                     </div>
                   )}
@@ -1293,8 +1303,8 @@ const TripPlanner = () => {
                     disabled={loading}
                     className={`px-5 py-3 text-xs font-bold rounded-xl border active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
                       optimized 
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-md shadow-emerald-500/5' 
-                        : 'btn-gold border-transparent shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20'
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-md shadow-emerald-500/5' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white font-bold border-transparent shadow-md hover:shadow-blue-500/10'
                     }`}
                   >
                     {optimized ? (
@@ -1309,8 +1319,8 @@ const TripPlanner = () => {
                     disabled={savingTrip || savedTripId !== null}
                     className={`px-5 py-3 text-xs font-bold rounded-xl border active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
                       savedTripId 
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                        : 'bg-indigo-600 border-indigo-700 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-600/15'
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white font-bold border-transparent shadow-md'
                     }`}
                   >
                     {savingTrip ? (
@@ -1325,7 +1335,7 @@ const TripPlanner = () => {
               </div>
 
               {/* Day Selection Tabs */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1.5 border-b border-[var(--border-subtle)]/60 scrollbar-thin">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1.5 border-b border-[var(--border-normal)] scrollbar-thin">
                 {itinerary.days.map((d: any) => {
                   const dayNum = d.dayIndex || d.day;
                   const isActive = selectedDay === dayNum;
@@ -1335,8 +1345,8 @@ const TripPlanner = () => {
                       onClick={() => setSelectedDay(dayNum)}
                       className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 border cursor-pointer active:scale-95 ${
                         isActive
-                          ? 'bg-blue-500 border-blue-500 text-white shadow-md shadow-blue-500/20'
-                          : 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-white hover:border-[var(--border-normal)]'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20'
+                          : 'bg-[var(--bg-elevated)] border border-blue-200 dark:border-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-500'
                       }`}
                     >
                       {lang === 'vi' ? `Ngày ${dayNum}` : `Day ${dayNum}`}
@@ -1376,10 +1386,10 @@ const TripPlanner = () => {
                     return (
                       <div className="space-y-6">
                         {/* Day Title and Quick Actions */}
-                        <div className="flex justify-between items-center bg-[var(--bg-elevated)] p-4 rounded-2xl border border-[var(--border-subtle)] gap-4 flex-wrap">
+                        <div className="flex justify-between items-center bg-[var(--bg-elevated)] p-4 rounded-2xl border border-[var(--border-normal)] gap-4 flex-wrap">
                           <div className="flex items-center gap-2.5">
-                            <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase tracking-wider">{lang === 'vi' ? 'Ngày' : 'Day'} {currentDay.dayIndex || currentDay.day}</span>
-                            <h3 className="text-xs font-bold text-cream truncate max-w-[200px]">{currentDay.dateIndex || currentDay.title}</h3>
+                            <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-500 uppercase tracking-wider">{lang === 'vi' ? 'Ngày' : 'Day'} {currentDay.dayIndex || currentDay.day}</span>
+                            <h3 className="text-xs font-bold text-[var(--text-primary)] truncate max-w-[200px]">{currentDay.dateIndex || currentDay.title}</h3>
                           </div>
                           
                           <div className="flex gap-2 flex-wrap">
@@ -1387,7 +1397,7 @@ const TripPlanner = () => {
                               type="button"
                               onClick={() => handleRegeneratePart(currentDay.dayIndex || currentDay.day)}
                               disabled={loadingPart !== null || loading}
-                              className="px-3 py-2 text-[10px] font-bold rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                              className="px-3 py-2 text-[10px] font-bold rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
                             >
                               {loadingPart === `day-${currentDay.dayIndex || currentDay.day}` ? (
                                 <Loader2 size={11} className="animate-spin" />
@@ -1401,9 +1411,10 @@ const TripPlanner = () => {
                                 href={getGoogleMapsDirectionsUrl(currentDay.activities)}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-3 py-2 text-[10px] font-bold rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-all flex items-center gap-1 shadow-inner"
+                                className="px-3 py-2 text-[10px] font-bold rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all flex items-center gap-1 shadow-sm"
                               >
-                                🗺️ {t('planner.dayRouteGoogleMaps')}
+                                <Compass size={11} className="text-blue-500" />
+                                <span>{t('planner.dayRouteGoogleMaps')}</span>
                               </a>
                             )}
                           </div>
@@ -1461,7 +1472,7 @@ const TripPlanner = () => {
                                         {/* Card connecting node */}
                                         <div className={`absolute -left-[30px] top-5 w-2.5 h-2.5 rounded-full ${styles.dot} transition-transform duration-300 group-hover:scale-125`} />
                                         
-                                        <div className={`card-editorial p-5 space-y-3 hover:shadow-lg transition-all ${styles.accent} bg-gradient-to-br from-[var(--bg-surface)] to-[var(--bg-primary)]/80 border border-[var(--border-normal)]/40 hover:border-blue-500/30`}>
+                                        <div className={`bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl hover:shadow-md transition-all ${styles.accent} hover:border-blue-500/30 shadow-sm space-y-3`}>
                                           <div className="flex justify-between items-start gap-4">
                                             <div className="space-y-1">
                                               <div className="flex items-center gap-2">
@@ -1471,13 +1482,13 @@ const TripPlanner = () => {
                                                   {act.category || 'spot'}
                                                 </span>
                                               </div>
-                                              <h5 className="text-xs font-bold text-cream flex items-center gap-1.5 mt-1">
+                                              <h5 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 mt-1">
                                                 <ActIcon size={14} className={`${styles.iconColor} flex-shrink-0`} />
                                                 {act.activityName || act.name}
                                               </h5>
                                               <span className="text-[10px] text-[var(--text-secondary)] block">📍 {act.locationName}</span>
                                             </div>
-                                            <span className="text-xs font-bold text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 shadow-sm">{formatCost(act.estimatedCost || act.cost)}</span>
+                                            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 dark:border-blue-500/20 shadow-sm">{formatCost(act.estimatedCost || act.cost)}</span>
                                           </div>
                                           
                                           {/* Description Notes with expand action */}
@@ -1524,17 +1535,17 @@ const TripPlanner = () => {
                                               })()}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-sky-400 hover:text-sky-300 bg-sky-500/10 hover:bg-sky-500/15 px-3 py-1.5 rounded-lg border border-sky-500/20 transition-all shadow-inner"
+                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
                                             >
-                                              <Map size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
+                                              <Compass size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
                                             </a>
                                             <a
                                               href={directionsUrl}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/15 px-3 py-1.5 rounded-lg border border-emerald-500/20 transition-all shadow-inner"
+                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
                                             >
-                                              <Send size={10} /> {t('planner.directionsFromPrev')}
+                                              <Navigation size={10} /> {t('planner.directionsFromPrev')}
                                             </a>
                                           </div>
                                         </div>
@@ -1574,9 +1585,9 @@ const TripPlanner = () => {
 
                     return (
                       <div className="space-y-4">
-                        <div className="surface-elevated p-4 rounded-xl border border-[var(--border-subtle)] flex items-center justify-between text-xs font-bold text-cream bg-gradient-to-r from-[var(--bg-elevated)] to-[var(--bg-primary)] shadow-sm">
+                        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 rounded-xl flex items-center justify-between text-xs font-bold text-[var(--text-primary)] shadow-sm">
                           <span>📍 {lang === 'vi' ? `Bản đồ lộ trình Ngày ${selectedDay}` : `Itinerary Map Day ${selectedDay}`}</span>
-                          <span className="text-[10px] text-blue-400 bg-blue-500/10 border border-blue-500/25 px-2 py-0.5 rounded-md">{mapLocations.length} {lang === 'vi' ? 'Điểm dừng' : 'Stops'}</span>
+                          <span className="text-[10px] text-blue-600 dark:text-blue-400 bg-blue-500/5 border border-blue-500/15 dark:border-blue-500/30 px-2 py-0.5 rounded-md">{mapLocations.length} {lang === 'vi' ? 'Điểm dừng' : 'Stops'}</span>
                         </div>
                         <div className="h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-normal)]/40 relative">
                           <MapLibreMap

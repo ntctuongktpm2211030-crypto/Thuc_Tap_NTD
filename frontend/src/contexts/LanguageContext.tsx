@@ -283,7 +283,7 @@ const translations = {
     'planner.subtitle':    'Tạo hành trình cá nhân tối ưu với thuật toán TSP và trí tuệ GPT-4o.',
     'planner.destination': 'Điểm đến',
     'planner.days':        'Số ngày',
-    'planner.budget':      'Tổng kinh phí dự kiến (đ)',
+    'planner.budget':      'Kinh phí dự kiến (đ)',
     'planner.style':       'Phong cách du lịch',
     'planner.interests':   'Sở thích',
     'planner.generate':    'Tạo hành trình thông minh',
