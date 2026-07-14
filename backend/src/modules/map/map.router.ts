@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
 import { calculateBoundingBox, calculateHaversineDistance } from './gis-helper';
+import { WeatherTool } from '../ai-agents/tools/agent.tools';
 
 const router = Router();
 
@@ -496,6 +497,24 @@ Question: "${question}"`;
   } catch (err) {
     console.error('[map/ai-assistant POST]', err);
     return res.status(500).json({ error: 'Failed to get answer from AI Assistant.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
+// GET /api/v1/map/weather  — get active weather for location
+// ─────────────────────────────────────────────────────────
+router.get('/weather', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const { location } = req.query;
+    if (!location) {
+      return res.status(400).json({ error: 'location query param is required' });
+    }
+    const weatherTool = new WeatherTool();
+    const result = await weatherTool.execute({ location: String(location) });
+    return res.json(result);
+  } catch (err) {
+    console.error('[map/weather GET]', err);
+    return res.status(500).json({ error: 'Failed to fetch weather.' });
   }
 });
 

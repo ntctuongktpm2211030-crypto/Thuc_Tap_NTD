@@ -30,6 +30,7 @@ export interface AIGeneratePayload {
   totalBudget?: number;
   currency?: string;
   interests: string[]; travelStyle: string;
+  transportation?: string;
 }
 export interface Waypoint { id: string; name: string; latitude: number; longitude: number; }
 export interface Post {
@@ -197,6 +198,9 @@ export const mapService = {
 
   events: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get('/map/events', { params }).then(r => r.data),
+
+  weather: (params: { location: string }) =>
+    apiClient.get<{ status: string; temperature: string; condition: string }>('/map/weather', { params }).then(r => r.data),
 
   aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
     apiClient.get('/map/ai-recommendations', { params }).then(r => r.data),

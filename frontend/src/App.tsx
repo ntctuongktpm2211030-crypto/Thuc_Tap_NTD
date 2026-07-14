@@ -956,6 +956,7 @@ const TripPlanner = () => {
   const [budget, setBudget] = useState<number | ''>('');
   const [currency, setCurrency] = useState<'USD' | 'VND'>('VND');
   const [style, setStyle] = useState('Adventure');
+  const [transportation, setTransportation] = useState('Xe máy');
   const [interests, setInterests] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [itinerary, setItinerary] = useState<any>(null);
@@ -1023,7 +1024,8 @@ const TripPlanner = () => {
         totalBudget: Number(budget),
         currency,
         interests,
-        travelStyle: style
+        travelStyle: style,
+        transportation: transportation
       });
       setItinerary(result);
     } catch {
@@ -1332,6 +1334,25 @@ const TripPlanner = () => {
               </div>
             </div>
 
+            {/* Transportation Mode */}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{lang === 'vi' ? 'Phương tiện di chuyển' : 'Transportation Mode'}</label>
+              <div className="relative group">
+                <Navigation size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors pointer-events-none" />
+                <select 
+                  value={transportation} 
+                  onChange={e => setTransportation(e.target.value)}
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner appearance-none cursor-pointer"
+                >
+                  <option value="Xe máy">{lang === 'vi' ? 'Xe máy' : 'Motorcycle'}</option>
+                  <option value="Xe ô tô / Xe khách">{lang === 'vi' ? 'Xe ô tô / Xe khách' : 'Car / Bus'}</option>
+                  <option value="Máy bay">{lang === 'vi' ? 'Máy bay' : 'Airplane'}</option>
+                  <option value="Tàu hỏa">{lang === 'vi' ? 'Tàu hỏa' : 'Train'}</option>
+                </select>
+                <div className="absolute right-3.5 top-4 pointer-events-none text-[var(--text-muted)] border-none bg-transparent">▼</div>
+              </div>
+            </div>
+
             {/* Interests tags */}
             <div className="space-y-2.5">
               <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{t('planner.interests')}</label>
@@ -1555,7 +1576,7 @@ const TripPlanner = () => {
                   {(() => {
                     const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
                     if (!currentDay) return null;
-                    const sessions = ['Sáng', 'Trưa', 'Chiều', 'Tối'] as const;
+                    const sessions = ['Sáng', 'Ăn sáng', 'Trưa', 'Chiều', 'Tối'] as const;
 
                     return (
                       <div className="space-y-6">
@@ -1691,10 +1712,82 @@ const TripPlanner = () => {
                                             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 dark:border-blue-500/20 shadow-sm">{formatCost(act.estimatedCost || act.cost)}</span>
                                           </div>
                                           
-                                          {/* Description Notes with expand action */}
+                                          {/* Render custom structured fields based on session */}
+                                          <div className="space-y-2 text-xs border-t border-[var(--border-subtle)]/40 pt-3">
+                                            {act.session === 'Sáng' && (
+                                              <>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Hoạt động: ' : '• Activity: '}</span> <span className="text-[var(--text-primary)]">{act.activityName || act.name}</span></div>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Địa điểm tham quan: ' : '• Sightseeing spot: '}</span> <span className="text-[var(--text-primary)]">{act.locationName}</span></div>
+                                                {act.thoiGianThamQuan && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Thời gian tham quan: ' : '• Visiting duration: '}</span> <span className="text-[var(--text-primary)]">{act.thoiGianThamQuan}</span></div>
+                                                )}
+                                                {act.goiYTraiNghiem && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Gợi ý trải nghiệm: ' : '• Suggested experience: '}</span> <span className="text-[var(--text-primary)]">{act.goiYTraiNghiem}</span></div>
+                                                )}
+                                              </>
+                                            )}
+
+                                            {act.session === 'Ăn sáng' && (
+                                              <>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Món ăn: ' : '• Dish: '}</span> <span className="text-[var(--text-primary)]">{act.activityName || act.name}</span></div>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Quán gợi ý: ' : '• Suggested place: '}</span> <span className="text-[var(--text-primary)]">{act.locationName}</span></div>
+                                              </>
+                                            )}
+
+                                            {act.session === 'Trưa' && (
+                                              <>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Ăn trưa: ' : '• Lunch: '}</span> <span className="text-[var(--text-primary)]">{act.activityName || act.name}</span></div>
+                                                {act.monDacSan && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Món đặc sản: ' : '• Speciality: '}</span> <span className="text-[var(--text-primary)]">{act.monDacSan}</span></div>
+                                                )}
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Địa điểm: ' : '• Location: '}</span> <span className="text-[var(--text-primary)]">{act.locationName}</span></div>
+                                                {act.thoiGianNghiNgoi && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Thời gian nghỉ ngơi: ' : '• Rest time: '}</span> <span className="text-[var(--text-primary)]">{act.thoiGianNghiNgoi}</span></div>
+                                                )}
+                                              </>
+                                            )}
+
+                                            {act.session === 'Chiều' && (
+                                              <>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Địa điểm tham quan: ' : '• Sightseeing spot: '}</span> <span className="text-[var(--text-primary)]">{act.locationName}</span></div>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Hoạt động: ' : '• Activity: '}</span> <span className="text-[var(--text-primary)]">{act.activityName || act.name}</span></div>
+                                                {act.thoiGianLuuLai && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Thời gian lưu lại: ' : '• Staying duration: '}</span> <span className="text-[var(--text-primary)]">{act.thoiGianLuuLai}</span></div>
+                                                )}
+                                              </>
+                                            )}
+
+                                            {act.session === 'Tối' && (
+                                              <>
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Ăn tối: ' : '• Dinner: '}</span> <span className="text-[var(--text-primary)]">{act.anToi || act.activityName || act.name}</span></div>
+                                                {act.diaDiemDaoChoi && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Địa điểm dạo chơi: ' : '• Walk around: '}</span> <span className="text-[var(--text-primary)]">{act.diaDiemDaoChoi}</span></div>
+                                                )}
+                                                {act.choDem && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Chợ đêm: ' : '• Night market: '}</span> <span className="text-[var(--text-primary)]">{act.choDem}</span></div>
+                                                )}
+                                                {act.cafe && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Café: ' : '• Café: '}</span> <span className="text-[var(--text-primary)]">{act.cafe}</span></div>
+                                                )}
+                                                {act.hoatDongGiaiTri && (
+                                                  <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Hoạt động giải trí: ' : '• Entertainment: '}</span> <span className="text-[var(--text-primary)]">{act.hoatDongGiaiTri}</span></div>
+                                                )}
+                                                <div><span className="font-bold text-[var(--text-secondary)]">{lang === 'vi' ? '• Nghỉ đêm ở đâu: ' : '• Overnight stay: '}</span> <span className="text-[var(--text-primary)]">{act.nghiDemODau || act.locationName}</span></div>
+                                              </>
+                                            )}
+                                          </div>
+
+                                          {/* Description Notes with expand action (Fallback) */}
                                           {(() => {
                                             const noteText = act.notes || act.note || '';
                                             if (!noteText) return null;
+
+                                            // Check if we rendered custom fields
+                                            const hasCustomFields = ['Sáng', 'Ăn sáng', 'Trưa', 'Chiều', 'Tối'].includes(act.session) && 
+                                              (act.thoiGianThamQuan || act.goiYTraiNghiem || act.monAn || act.quanGoiY || act.monDacSan || act.thoiGianNghiNgoi || act.thoiGianLuuLai || act.anToi || act.diaDiemDaoChoi || act.choDem || act.cafe || act.hoatDongGiaiTri || act.nghiDemODau);
+
+                                            if (hasCustomFields) return null;
+
                                             return (
                                               <div className="space-y-1.5 pt-1.5 border-t border-[var(--border-subtle)]/40">
                                                 <p className={`text-[11px] text-[var(--text-secondary)] leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-2'}`}>
@@ -1796,6 +1889,7 @@ const TripPlanner = () => {
                             locations={mapLocations}
                             viewMode="markers"
                             routePoints={mapLocations}
+                            destination={destination}
                           />
                         </div>
                       </div>

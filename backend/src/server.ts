@@ -1,3 +1,4 @@
+import './db-sync';
 import http from 'http';
 import { Server } from 'socket.io';
 import app from './app';
