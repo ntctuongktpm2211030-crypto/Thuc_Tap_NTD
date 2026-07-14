@@ -676,6 +676,7 @@ const MapDashboard = () => {
             viewMode={viewMode}
             routePoints={routeQueue}
             onAddPointToRoute={addPointToRoute}
+            onRemovePointFromRoute={removeRoutePoint}
             aiRecommendedIds={aiRecs.map(r => r.id)}
             onSelectLocation={setSelectedLocation}
           />

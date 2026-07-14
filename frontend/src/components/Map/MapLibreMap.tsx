@@ -24,6 +24,7 @@ interface MapLibreMapProps {
   viewMode?: 'markers' | 'cluster' | 'heatmap';
   routePoints?: MapLocation[];
   onAddPointToRoute?: (loc: MapLocation) => void;
+  onRemovePointFromRoute?: (id: string) => void;
   aiRecommendedIds?: string[];
   weatherInfo?: { condition: string; temp: string };
   onSelectLocation?: (loc: MapLocation | null) => void;
@@ -62,11 +63,12 @@ function createGeoJSONCircle(center: [number, number], radiusKm: number, points 
 
   return {
     type: 'Feature',
+    properties: {},
     geometry: {
       type: 'Polygon',
       coordinates: [coords],
     },
-  };
+  } as any;
 }
 
 const STREET_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
@@ -135,7 +137,7 @@ const svgUserString = `
 </svg>
 `;
 
-const createPopupContent = (loc: MapLocation, vi: boolean) => {
+const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boolean) => {
   const isCheckin = !!loc.user;
   const isLive = loc.id.startsWith('live-');
   const timeStr = loc.time ? `<p class="text-[10px] text-slate-400 mt-0.5">${loc.time}</p>` : '';
@@ -165,7 +167,7 @@ const createPopupContent = (loc: MapLocation, vi: boolean) => {
       ${headerHtml}
       ${noteStr}
       <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1 mt-1">📍 ${loc.name || (isLive ? 'Live Tracking' : '')}</div>
-      ${onAddPointToRoute ? `
+      ${hasRouteCallback ? `
       <button 
         onclick="window.addPointToRoute('${loc.id}')"
         class="mt-2.5 w-full bg-[#d4af37] text-black text-[10px] font-bold py-1.5 px-3 rounded-lg hover:bg-amber-400 transition-all cursor-pointer border-none"
@@ -192,6 +194,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   viewMode = 'markers',
   routePoints = [],
   onAddPointToRoute,
+  onRemovePointFromRoute,
   aiRecommendedIds = [],
   weatherInfo = { condition: 'Sunny', temp: '28' },
   onSelectLocation,
@@ -722,9 +725,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                     'case',
                     ['get', 'isCurrentUser'],
                     'marker-user',
-                    ['case', 'isLive'],
+                    ['get', 'isLive'],
                     'marker-blue',
-                    ['case', 'isCheckin', 'marker-red', ['case', 'isRecommended', 'marker-green', 'marker-gold']]
+                    ['get', 'isCheckin'],
+                    'marker-red',
+                    ['get', 'isRecommended'],
+                    'marker-green',
+                    'marker-gold'
                   ],
                   'icon-size': 1.0,
                   'icon-allow-overlap': true
@@ -777,7 +784,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             >
               <div 
                 className="space-y-2.5 text-white" 
-                dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi) }} 
+                dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi, !!onAddPointToRoute) }} 
               />
             </Popup>
           )}
@@ -851,6 +858,14 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                                 className="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-none rounded text-[9px] font-bold cursor-pointer transition-all"
                               >
                                 + {vi ? 'Thêm' : 'Add'}
+                              </button>
+                            )}
+                            {onRemovePointFromRoute && routePoints.some(rp => rp.id === point.id) && (
+                              <button
+                                onClick={() => onRemovePointFromRoute(point.id)}
+                                className="px-2 py-0.5 bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/30 rounded text-[9px] font-bold cursor-pointer transition-all"
+                              >
+                                ✕ {vi ? 'Xoá' : 'Remove'}
                               </button>
                             )}
                             <a
