@@ -10,6 +10,7 @@ import type { RootState, AppDispatch } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
 import { loginGoogle } from '../../config/firebase';
+import logoImg from '../../assets/logo.png';
 
 // ──────────────────────────────────────────────────────────────
 // BACKGROUND SLIDES — travel imagery carousel
@@ -197,12 +198,12 @@ const LeftPanel = () => {
       {/* Top: Logo */}
       <div className="relative z-10 p-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--gold)] to-blue-700 flex items-center justify-center shadow-lg">
-            <span className="text-white font-black text-sm">ST</span>
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src={logoImg} alt="Terraholic Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <span className="font-editorial text-white font-bold text-lg leading-none block">SmartTravel</span>
-            <span className="text-[10px] text-blue-300 font-semibold tracking-widest uppercase">AI × Social × Map</span>
+            <span className="font-editorial text-white font-bold text-lg leading-none block">Terraholic</span>
+            <span className="text-[10px] text-blue-300 font-semibold tracking-widest uppercase">Khám phá bằng đam mê, kết nối bằng hành trình</span>
           </div>
         </Link>
       </div>
@@ -603,7 +604,7 @@ export default function AuthPage() {
           {/* Back to home (desktop) */}
           <div className="hidden lg:flex justify-center">
             <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--gold)] transition-colors">
-              <ChevronLeft size={14} /> Về trang chủ SmartTravel
+              <ChevronLeft size={14} /> Về trang chủ Terraholic
             </Link>
           </div>
         </div>

@@ -710,3 +710,17 @@ model KnowledgeAnswer {
   @@index([contentId])
 }
 
+model SafetyWarning {
+  id          String    @id @default(uuid())
+  type        String    // "FLOOD", "LANDSLIDE", "CLOSED_ROAD", "STORM"
+  description String
+  latitude    Float
+  longitude   Float
+  radiusKm    Float     @default(1.0)
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+
+  @@index([latitude, longitude])
+}
+
+

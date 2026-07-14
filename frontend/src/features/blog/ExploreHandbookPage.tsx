@@ -49,7 +49,7 @@ export default function ExploreHandbookPage() {
             <div className="space-y-4">
               <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border ${accent.chip}`}>
                 {isFood ? <Utensils size={14} /> : <Landmark size={14} />}
-                Cẩm nang tổng hợp · SmartTravel
+                Cẩm nang tổng hợp · Terraholic
               </span>
               <h1 className="font-editorial text-3xl sm:text-5xl font-bold text-slate-900 leading-tight">
                 {doc.title}

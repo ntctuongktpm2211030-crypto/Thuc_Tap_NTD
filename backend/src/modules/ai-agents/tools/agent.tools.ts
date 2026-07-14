@@ -1,5 +1,6 @@
 import { AgentTool } from '../types/agent.types';
 import prisma from '../../../config/db';
+import { getCuratedProvince } from '../../../config/vietnam_destinations';
 
 export function extractItemNameFromTitle(title: string): string {
   const parts = title.split(' - ').map(p => p.trim());
@@ -201,7 +202,51 @@ export class FoodTool implements AgentTool {
   description = 'Tìm kiếm món ăn ngon và nhà hàng đặc sản theo vùng miền.';
 
   async execute(input: { region: string; dish?: string }) {
-    // Truy vấn các món ăn từ bảng KnowledgeContent đã được nạp
+    // 1. Ưu tiên đọc dữ liệu từ tệp JSON đã gộp trong backend/src/config/destinations
+    try {
+      const curated = getCuratedProvince(input.region);
+      if (curated) {
+        const results: any[] = [];
+        
+        // Thêm các nhà hàng từ dữ liệu gộp
+        if (curated.restaurants && curated.restaurants.length > 0) {
+          curated.restaurants.forEach((r) => {
+            results.push({
+              name: r.name,
+              region: curated.provinceName,
+              rating: 4.8,
+              description: r.description + (r.costEstimate ? ` (Chi phí dự kiến: ${r.costEstimate.toLocaleString('vi-VN')} đ)` : ''),
+            });
+          });
+        }
+        
+        // Thêm các đặc sản từ dữ liệu gộp
+        if (curated.specialties && curated.specialties.length > 0) {
+          curated.specialties.forEach((spec) => {
+            if (!results.some(item => item.name.toLowerCase() === spec.toLowerCase())) {
+              results.push({
+                name: spec,
+                region: curated.provinceName,
+                rating: 4.9,
+                description: `Món ngon đặc sản nổi tiếng nhất định phải thử khi ghé thăm ${curated.provinceName}.`,
+              });
+            }
+          });
+        }
+        
+        if (results.length > 0) {
+          console.log(`[FoodTool] Loaded ${results.length} items from curated JSON for: "${input.region}"`);
+          return {
+            status: 'success',
+            results: results.slice(0, 10),
+          };
+        }
+      }
+    } catch (e: any) {
+      console.warn('[FoodTool] Error loading curated destinations JSON:', e.message);
+    }
+
+    // 2. Dự phòng: Truy vấn các món ăn từ bảng KnowledgeContent
     const dbFoods = await prisma.knowledgeContent.findMany({
       where: {
         category: 'food',
@@ -249,7 +294,34 @@ export class CultureTool implements AgentTool {
   description = 'Tra cứu văn hóa, lễ hội, lịch sử và phong tục tập quán của các vùng miền.';
 
   async execute(input: { region: string }) {
-    // Truy vấn thông tin văn hóa từ bảng KnowledgeContent
+    // 1. Ưu tiên đọc dữ liệu văn hóa/lễ hội từ tệp JSON đã gộp trong backend/src/config/destinations
+    try {
+      const curated = getCuratedProvince(input.region);
+      if (curated) {
+        let info = '';
+        if (curated.festivals && curated.festivals.length > 0) {
+          const festivalInfo = curated.festivals.map(f => `• **${f.name}**: ${f.description}`).join('\n');
+          info += `**Các lễ hội truyền thống đặc sắc tại ${curated.provinceName}:**\n${festivalInfo}\n\n`;
+        }
+        if (curated.specialties && curated.specialties.length > 0) {
+          info += `**Di sản ẩm thực đặc trưng:** ${curated.specialties.join(', ')}.\n\n`;
+        }
+        
+        if (info) {
+          info += `Khám phá văn hóa bản địa độc đáo cùng lối sống mộc mạc, hiếu khách của người dân nơi đây.`;
+          console.log(`[CultureTool] Loaded curated culture information from JSON for: "${input.region}"`);
+          return {
+            status: 'success',
+            region: curated.provinceName,
+            info,
+          };
+        }
+      }
+    } catch (e: any) {
+      console.warn('[CultureTool] Error loading curated destinations JSON:', e.message);
+    }
+
+    // 2. Dự phòng: Truy vấn thông tin văn hóa từ bảng KnowledgeContent
     const dbCultures = await prisma.knowledgeContent.findFirst({
       where: {
         category: 'culture',
@@ -287,37 +359,59 @@ export class RecommendationTool implements AgentTool {
 
     // Tìm kiếm các địa điểm từ DB phù hợp với vùng miền yêu cầu (nếu có)
     let recommendations: Array<{ name: string; type: string; reason: string }> = [];
+    
     if (input.region) {
-      const dbDestinations = await prisma.knowledgeContent.findMany({
-        where: {
-          category: 'destination',
-          OR: [
-            {
-              title: {
-                contains: input.region,
-                mode: 'insensitive',
-              },
-            },
-            {
-              body: {
-                contains: input.region,
-                mode: 'insensitive',
-              },
-            },
-          ],
-        },
-        take: 6,
-      });
+      // 1. Ưu tiên đọc dữ liệu từ tệp JSON đã gộp trong backend/src/config/destinations
+      try {
+        const curated = getCuratedProvince(input.region);
+        if (curated) {
+          const items = [...(curated.attractions || []), ...(curated.nature || [])];
+          if (items.length > 0) {
+            recommendations = items.map(item => ({
+              name: item.name,
+              type: item.category === 'nature' ? 'nature' : 'explore',
+              reason: item.description + (item.address ? ` (Địa chỉ: ${item.address})` : ''),
+            }));
+            console.log(`[RecommendationTool] Loaded ${recommendations.length} recommendations from curated JSON for: "${input.region}"`);
+          }
+        }
+      } catch (e: any) {
+        console.warn('[RecommendationTool] Error loading curated destinations JSON:', e.message);
+      }
 
-      recommendations = dbDestinations.map(d => {
-        const name = extractItemNameFromTitle(d.title);
-        const bodyPreview = d.body.length > 250 ? d.body.substring(0, 250) + '...' : d.body;
-        return {
-          name,
-          type: 'explore',
-          reason: bodyPreview,
-        };
-      });
+      // 2. Dự phòng: Truy vấn từ bảng KnowledgeContent
+      if (recommendations.length === 0) {
+        const dbDestinations = await prisma.knowledgeContent.findMany({
+          where: {
+            category: 'destination',
+            OR: [
+              {
+                title: {
+                  contains: input.region,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                body: {
+                  contains: input.region,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+          take: 6,
+        });
+
+        recommendations = dbDestinations.map(d => {
+          const name = extractItemNameFromTitle(d.title);
+          const bodyPreview = d.body.length > 250 ? d.body.substring(0, 250) + '...' : d.body;
+          return {
+            name,
+            type: 'explore',
+            reason: bodyPreview,
+          };
+        });
+      }
     } else {
       // Chỉ gợi ý theo sở thích du lịch tổng quát từ DB nếu người dùng không chọn địa phương cụ thể
       const dbDestinations = await prisma.knowledgeContent.findMany({
@@ -360,19 +454,37 @@ export class ItineraryTool implements AgentTool {
   description = 'Tạo và gợi ý khung lịch trình du lịch tham khảo.';
 
   async execute(input: { destination: string; days: number }) {
-    // Thử truy vấn các điểm tham quan hoặc trải nghiệm từ DB để làm cơ sở lên lịch trình
-    const attractions = await prisma.knowledgeContent.findFirst({
-      where: {
-        title: {
-          contains: `${input.destination} - Những trải nghiệm`,
-          mode: 'insensitive',
-        },
-      },
-    });
+    let activitiesList: string[] = [];
 
-    const activitiesList = attractions
-      ? attractions.body.split('\n').filter(l => l.trim().length > 10).map(l => l.replace(/^[*\-\d.\s]+/g, '').trim())
-      : [];
+    // 1. Ưu tiên đọc dữ liệu từ tệp JSON đã gộp trong backend/src/config/destinations
+    try {
+      const curated = getCuratedProvince(input.destination);
+      if (curated) {
+        const items = [...(curated.attractions || []), ...(curated.nature || [])];
+        if (items.length > 0) {
+          activitiesList = items.map(item => item.name);
+          console.log(`[ItineraryTool] Loaded ${activitiesList.length} activities from curated JSON for: "${input.destination}"`);
+        }
+      }
+    } catch (e: any) {
+      console.warn('[ItineraryTool] Error loading curated destinations JSON:', e.message);
+    }
+
+    // 2. Dự phòng: Thử truy vấn các điểm tham quan hoặc trải nghiệm từ DB
+    if (activitiesList.length === 0) {
+      const attractions = await prisma.knowledgeContent.findFirst({
+        where: {
+          title: {
+            contains: `${input.destination} - Những trải nghiệm`,
+            mode: 'insensitive',
+          },
+        },
+      });
+
+      if (attractions) {
+        activitiesList = attractions.body.split('\n').filter(l => l.trim().length > 10).map(l => l.replace(/^[*\-\d.\s]+/g, '').trim());
+      }
+    }
 
     const timeline = [];
     const fallbackActivities = [
@@ -411,3 +523,4 @@ export class ItineraryTool implements AgentTool {
     };
   }
 }
+

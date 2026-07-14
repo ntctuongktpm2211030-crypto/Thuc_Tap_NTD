@@ -176,7 +176,7 @@ const translations = {
 
     // Footer
     'footer.built': 'React 19 · MapLibre · Express · Supabase · GPT-4o · Socket.io',
-    'footer.thesis': 'SmartTravel — Graduation Thesis 2026',
+    'footer.thesis': 'Terraholic — Graduation Thesis 2026',
   },
 
   vi: {
@@ -348,7 +348,7 @@ const translations = {
 
     // Footer
     'footer.built': 'React 19 · MapLibre · Express · Supabase · GPT-4o · Socket.io',
-    'footer.thesis': 'SmartTravel — Đồ án tốt nghiệp 2026',
+    'footer.thesis': 'Terraholic — Đồ án tốt nghiệp 2026',
   },
 } as const;
 

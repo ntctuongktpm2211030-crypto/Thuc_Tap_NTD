@@ -1,11 +1,11 @@
-# BÁO CÁO PHÂN TÍCH KIẾN TRÚC & MÃ NGUỒN DỰ ÁN SMARTTRAVEL
+# BÁO CÁO PHÂN TÍCH KIẾN TRÚC & MÃ NGUỒN DỰ ÁN TERRAHOLIC
 *Người lập: Software Architect & Senior Full Stack Developer*
 *Thời gian cập nhật: 2026-06-27*
 
 ---
 
 ## A. Tổng quan dự án
-**SmartTravel** là một ứng dụng du lịch thông minh đột phá tích hợp mô hình **AI × Social × Map**. Hệ thống được thiết kế nhằm mang lại trải nghiệm du lịch cá nhân hóa tối đa cho người dùng thông qua các tính năng cốt lõi:
+**Terraholic** là một ứng dụng du lịch thông minh đột phá tích hợp mô hình **Khám phá bằng đam mê, kết nối bằng hành trình.**. Hệ thống được thiết kế nhằm mang lại trải nghiệm du lịch cá nhân hóa tối đa cho người dùng thông qua các tính năng cốt lõi:
 1. **Lập kế hoạch du lịch bằng AI (AI Trip Planner):** Tự động thiết lập lộ trình đi lại chi tiết dựa trên điểm đến, thời gian, ngân sách, phong cách du lịch và sở thích cá nhân. Tích hợp giải thuật tối ưu hóa đường đi ngắn nhất (Traveling Salesperson Problem - TSP).
 2. **Bản đồ Xã hội Thời gian thực (Real-time Social Map & GIS):** Cho phép người dùng check-in tại các địa điểm, hiển thị mật độ check-in thông qua bản đồ nhiệt (Heatmap), chia sẻ vị trí trực tiếp cho bạn bè (Heartbeat) và tự động trích xuất tọa độ GPS từ siêu dữ liệu ảnh chụp (JPEG EXIF).
 3. **Trợ lý ảo thông minh (AI Chatbot & Memory):** Hỗ trợ tư vấn thông tin ẩm thực địa phương, lịch sử văn hóa vùng miền thông qua hệ thống Multi-Agent có cấu trúc bộ nhớ dài hạn (AIMemory), cho phép đánh giá chất lượng phản hồi và khôi phục lịch sử hội thoại nhiều phiên bản.

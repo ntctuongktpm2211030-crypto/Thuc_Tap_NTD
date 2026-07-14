@@ -68,12 +68,13 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { title, description, destinationName, startDate, endDate, totalBudget, travelStyle, isPublic } = req.body;
+    const { title, description, destinationName, startDate, endDate, totalBudget, travelStyle, isPublic, days } = req.body;
 
     if (!title || !destinationName || !startDate || !endDate) {
       return res.status(400).json({ error: 'title, destinationName, startDate, endDate are required.' });
     }
 
+    // 1. Create the trip
     const trip = await prisma.trip.create({
       data: {
         ownerId: req.user!.sub,
@@ -87,6 +88,81 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
         isPublic: isPublic || false,
       },
     });
+
+    // 2. If days are provided, create them and associate activities
+    if (days && Array.isArray(days)) {
+      for (const day of days) {
+        const dayIndex = day.dayNumber || day.dayIndex || 1;
+        const dayTitle = day.title || day.dateIndex || `Day ${dayIndex}`;
+
+        const tripStartDate = new Date(startDate);
+        const dayDate = new Date(tripStartDate);
+        dayDate.setDate(tripStartDate.getDate() + (dayIndex - 1));
+
+        const tripDay = await prisma.tripDay.create({
+          data: {
+            tripId: trip.id,
+            dayIndex,
+            date: dayDate,
+          },
+        });
+
+        if (day.activities && Array.isArray(day.activities)) {
+          for (let i = 0; i < day.activities.length; i++) {
+            const act = day.activities[i];
+
+            const destName = act.name || act.activityName || act.locationName || 'Destination';
+            const lat = Number(act.latitude) || 21.0285;
+            const lng = Number(act.longitude) || 105.8048;
+            const cat = act.category || 'attraction';
+            const notes = act.note || act.notes || '';
+            const cost = Number(act.cost) || Number(act.estimatedCost) || 0;
+            const timeRange = act.time || act.timeSlot || '09:00 - 10:00';
+
+            let startTime = '09:00';
+            let endTime = '10:00';
+            if (timeRange.includes('-')) {
+              const parts = timeRange.split('-');
+              startTime = parts[0].trim();
+              endTime = parts[1].trim();
+            } else {
+              startTime = timeRange.trim();
+            }
+
+            // Find or create Destination
+            let destination = await prisma.destination.findFirst({
+              where: { name: destName },
+            });
+
+            if (!destination) {
+              destination = await prisma.destination.create({
+                data: {
+                  name: destName,
+                  description: notes || destName,
+                  latitude: lat,
+                  longitude: lng,
+                  category: cat,
+                  address: act.address || destName,
+                },
+              });
+            }
+
+            // Create TripActivity
+            await prisma.tripActivity.create({
+              data: {
+                tripDayId: tripDay.id,
+                destinationId: destination.id,
+                startTime,
+                endTime,
+                estimatedCost: cost,
+                sequenceOrder: i + 1,
+                notes,
+              },
+            });
+          }
+        }
+      }
+    }
 
     return res.status(201).json(trip);
   } catch (err) {

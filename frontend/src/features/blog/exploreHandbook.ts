@@ -63,7 +63,7 @@ export function buildHandbook(posts: ExplorePost[], type: HandbookType): Handboo
   return {
     type,
     title: isFood ? 'Cẩm nang ẩm thực Việt Nam' : 'Cẩm nang văn hóa & trải nghiệm',
-    subtitle: `Tổng hợp từ ${relevant.length} bài viết cộng đồng SmartTravel`,
+    subtitle: `Tổng hợp từ ${relevant.length} bài viết cộng đồng Terraholic`,
     intro: isFood
       ? `Chúng tôi trích xuất hành trình ẩm thực từ ${relevant.length} bài đăng của travellers — gợi ý món ăn, địa điểm và kinh nghiệm thực tế tại ${sections.length} điểm đến. Tổng cộng ${allItems.length} món/địa điểm ẩm thực được nhắc đến.`
       : `Tổng hợp di sản, lễ hội và trải nghiệm văn hóa từ ${relevant.length} bài chia sẻ — giúp bạn lên kế hoạch hành trình có chiều sâu hơn trước mỗi chuyến đi.`,

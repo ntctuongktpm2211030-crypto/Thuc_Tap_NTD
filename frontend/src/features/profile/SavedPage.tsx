@@ -144,7 +144,7 @@ export default function SavedPage() {
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-violet-600/30 to-rose-600/30 flex items-center justify-center text-[var(--text-muted)] font-editorial text-sm">
-                        SmartTravel Journey
+                        Terraholic Journey
                       </div>
                     )}
                     

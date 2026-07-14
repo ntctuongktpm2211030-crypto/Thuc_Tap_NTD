@@ -320,7 +320,7 @@ export default function ChatbotPage() {
             </div>
             <div>
               <h3 className="text-xs font-black text-[var(--text-primary)]">
-                SmartTravel AI Agent
+                Terraholic AI Agent
               </h3>
               <p className="text-[9px] text-[var(--text-muted)]">
                 {vi ? 'Trợ lý du lịch cá nhân của bạn' : 'Your personal travel companion'}

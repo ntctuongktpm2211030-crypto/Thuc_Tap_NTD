@@ -8,6 +8,7 @@ export interface RealPlace {
   category: 'attraction' | 'restaurant' | 'hotel' | 'nature' | 'festival';
   description: string;
   costEstimate: number; // in VND
+  address?: string;
 }
 
 export interface ProvinceData {
@@ -28,15 +29,15 @@ let fileMap: Record<string, string> | null = null;
  */
 export function normalizeProvince(p: string): string {
   if (!p) return '';
-  return p.toLowerCase()
+  let str = p.toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/\btinh\b/g, '')
-    .replace(/\bthanh pho\b/g, '')
-    .replace(/\btp\b/g, '')
-    .replace(/[^a-z0-9]/g, '')
-    .trim();
+    .replace(/đ/g, 'd');
+  
+  // Strip common administrative prefixes only at the start of the string
+  str = str.replace(/^(tinh|thanh pho|tp)\s*[- ]*/g, '');
+  
+  return str.replace(/[^a-z0-9]/g, '').trim();
 }
 
 /**
@@ -153,6 +154,7 @@ export function getCuratedProvince(query: string): ProvinceData | null {
       category: item.category,
       description: item.content,
       costEstimate: item.costEstimate || 0,
+      address: item.address || '',
     };
 
     switch (item.category) {

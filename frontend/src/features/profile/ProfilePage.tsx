@@ -175,11 +175,11 @@ export default function ProfilePage() {
               <h3 className="fb-profile-card-title">{vi ? 'Giới thiệu' : 'Intro'}</h3>
               <p className="fb-profile-intro-text">
                 {vi
-                  ? 'Yêu du lịch khám phá, ẩm thực địa phương và chia sẻ hành trình thực tế trên SmartTravel.'
-                  : 'Love exploring, local food, and sharing real travel stories on SmartTravel.'}
+                  ? 'Yêu du lịch khám phá, ẩm thực địa phương và chia sẻ hành trình thực tế trên Terraholic.'
+                  : 'Love exploring, local food, and sharing real travel stories on Terraholic.'}
               </p>
               <ul className="fb-profile-intro-list">
-                <li><Briefcase size={16} /> {vi ? 'Làm việc tại SmartTravel' : 'Works at SmartTravel'}</li>
+                <li><Briefcase size={16} /> {vi ? 'Làm việc tại Terraholic' : 'Works at Terraholic'}</li>
                 <li><GraduationCap size={16} /> {vi ? 'Học tại CTUT' : 'Studied at CTUT'}</li>
                 <li><MapPin size={16} /> {vi ? 'Sống tại Hà Nội' : 'Lives in Hanoi'}</li>
                 <li><Globe size={16} /> {user.email}</li>

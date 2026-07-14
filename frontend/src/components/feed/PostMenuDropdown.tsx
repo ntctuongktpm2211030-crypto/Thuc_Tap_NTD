@@ -55,7 +55,7 @@ export default function PostMenuDropdown({
     const shareUrl = `${window.location.origin}/posts/${post.id}`;
     const descText = post.displayType === 'social' ? post.content : (post.body || post.excerpt || '');
     const shareData = {
-      title: 'Khám phá bài viết trên SmartTravel',
+      title: 'Khám phá bài viết trên Terraholic',
       text: descText.slice(0, 100),
       url: shareUrl,
     };

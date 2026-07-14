@@ -1,6 +1,6 @@
-# ✈️ SmartTravel - AI-Powered Travel Planning & Social Platform
+# ✈️ Terraholic - AI-Powered Travel Planning & Social Platform
 
-Chào mừng bạn đến với **SmartTravel**, một nền tảng mạng xã hội kết hợp lập kế hoạch du lịch thông minh, tối ưu hóa lộ trình di chuyển và hỗ trợ tra cứu thông tin văn hóa ẩm thực địa phương thông qua Trí tuệ nhân tạo (AI).
+Chào mừng bạn đến với **Terraholic**, một nền tảng mạng xã hội kết hợp lập kế hoạch du lịch thông minh, tối ưu hóa lộ trình di chuyển và hỗ trợ tra cứu thông tin văn hóa ẩm thực địa phương thông qua Trí tuệ nhân tạo (AI).
 
 Tài liệu này được biên soạn chi tiết giúp các lập trình viên mới tiếp cận dự án có thể nhanh chóng nắm bắt mục đích, kiến trúc, công nghệ, cấu trúc mã nguồn và luồng hoạt động của hệ thống.
 

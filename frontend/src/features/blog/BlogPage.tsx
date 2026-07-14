@@ -373,7 +373,7 @@ export default function BlogPage() {
         <div className="relative container-wide py-12 sm:py-16 space-y-8">
           <div className="text-center space-y-4 max-w-2xl mx-auto">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
-              <Sparkles size={14} className="text-amber-500" /> SmartTravel Magazine
+              <Sparkles size={14} className="text-amber-500" /> Terraholic Magazine
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
               Khám phá{' '}
@@ -405,7 +405,7 @@ export default function BlogPage() {
           
           {/* LEFT SIDEBAR: Explore Filters */}
           <aside className="space-y-4">
-            <div className="sticky top-[120px] space-y-4">
+            <div className="sticky top-[142px] space-y-4">
               <ExploreFiltersPanel
                 filters={filters}
                 onChange={patchFilters}
@@ -521,7 +521,7 @@ export default function BlogPage() {
 
           {/* RIGHT SIDEBAR: Extra Travel Info Widgets */}
           <aside className="hidden lg:block">
-            <div className="sticky top-[120px] space-y-4">
+            <div className="sticky top-[142px] space-y-4">
               
               {/* Hot Topics tag list */}
               <div className="explore-sidebar-card space-y-3">

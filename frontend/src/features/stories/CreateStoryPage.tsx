@@ -1732,7 +1732,7 @@ export default function CreateStoryPage() {
         message={(
           <>
             Bài kiểu <strong>{FEED_DISPLAY_OPTIONS.find(o => o.id === data.displayType)?.authorStyle}</strong>
-            {data.title ? <> — <strong>{data.title}</strong></> : null} đã được chia sẻ với cộng đồng SmartTravel.
+            {data.title ? <> — <strong>{data.title}</strong></> : null} đã được chia sẻ với cộng đồng Terraholic.
           </>
         )}
         actions={

@@ -26,7 +26,8 @@ export interface TravelPreferences {
   activities: string[]; destinationTypes: string[]; foodPreferences: string[];
 }
 export interface AIGeneratePayload {
-  destination: string; durationDays: number; dailyBudget: number;
+  destination: string; durationDays: number; dailyBudget?: number;
+  totalBudget?: number;
   currency?: string;
   interests: string[]; travelStyle: string;
 }
@@ -190,6 +191,18 @@ export const mapService = {
 
   destinations: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get<Destination[]>('/map/destinations', { params }).then(r => r.data),
+
+  safetyWarnings: (params?: { lat?: number; lng?: number; radius?: number }) =>
+    apiClient.get('/map/safety-warnings', { params }).then(r => r.data),
+
+  events: (params?: { lat?: number; lng?: number; radius?: number }) =>
+    apiClient.get('/map/events', { params }).then(r => r.data),
+
+  aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
+    apiClient.get('/map/ai-recommendations', { params }).then(r => r.data),
+
+  aiAssistant: (destinationId: string, question: string) =>
+    apiClient.post('/map/ai-assistant', { destinationId, question }).then(r => r.data),
 };
 
 // ─────────────────────────────────────────────────────────

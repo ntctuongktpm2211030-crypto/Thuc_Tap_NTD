@@ -166,7 +166,7 @@ export default function CreatePostPage() {
       <CreateSuccessScreen
         variant="post"
         title="Bài viết đã đăng! 🎉"
-        message={<>Bài viết &ldquo;<strong>{data.title}</strong>&rdquo; đã được chia sẻ với cộng đồng SmartTravel.</>}
+        message={<>Bài viết &ldquo;<strong>{data.title}</strong>&rdquo; đã được chia sẻ với cộng đồng Terraholic.</>}
         actions={
           <>
             <button onClick={() => navigate('/', { state: { refreshFeed: true } })} className="btn-post px-6 py-3">Về Bảng tin</button>

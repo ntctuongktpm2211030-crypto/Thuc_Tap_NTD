@@ -23,6 +23,7 @@ export interface ActivitySchema {
   latitude: number;
   longitude: number;
   notes: string;
+  address?: string;
 }
 
 export interface TripDaySchema {
@@ -507,32 +508,146 @@ async function refineItineraryCoordinates(itinerary: AIItineraryResponse, destin
 
   const cleanDest = clean(destProvince || destinationQuery);
 
+  // Load curated destinations for the province
+  let allPlaces: RealPlace[] = [];
+  try {
+    const curated = getCuratedProvince(destinationQuery);
+    if (curated) {
+      allPlaces = [
+        ...curated.attractions,
+        ...curated.restaurants,
+        ...curated.hotels,
+        ...curated.nature,
+        ...curated.festivals
+      ];
+    }
+  } catch (err) {
+    console.error('Error loading curated province data in refineItineraryCoordinates:', err);
+  }
+
+  // Fallback: calculate average center from local destinations JSON
+  if (!destCoords && allPlaces.length > 0) {
+    const validPlaces = allPlaces.filter(p => p.latitude && p.longitude && p.latitude !== 0 && p.longitude !== 0 && p.latitude > 8 && p.latitude < 24 && p.longitude > 102 && p.longitude < 110);
+    if (validPlaces.length > 0) {
+      const sumLat = validPlaces.reduce((sum, p) => sum + p.latitude, 0);
+      const sumLng = validPlaces.reduce((sum, p) => sum + p.longitude, 0);
+      destCoords = { lat: sumLat / validPlaces.length, lng: sumLng / validPlaces.length };
+    }
+  }
+
+  const isCoordsValid = (lat: number, lng: number) => {
+    if (!lat || !lng || lat === 0 || lng === 0) return false;
+    if (destCoords) {
+      const dist = calculateHaversineDistance(
+        { latitude: destCoords.lat, longitude: destCoords.lng },
+        { latitude: lat, longitude: lng }
+      );
+      const largeProvinces = ['hagiang', 'sonla', 'nghean', 'gialai', 'caobang', 'laocai', 'dienbien', 'quangninh', 'quangnam', 'lamdong', 'thanhhoa', 'daklak', 'tuyenquang'];
+      const maxRadius = largeProvinces.includes(cleanDest) ? 120 : 40;
+      return dist <= maxRadius;
+    }
+    return true;
+  };
+
   for (const day of itinerary.days) {
     if (Array.isArray(day.activities)) {
       for (const act of day.activities) {
-        const searchTerms = [act.locationName, act.activityName].filter(Boolean);
         let refined = false;
+        const normActName = clean(act.activityName || '');
+        const normLocName = clean(act.locationName || '');
 
-        for (const term of searchTerms) {
-          try {
-            const parsed = await addressService.parseAddress(term, 'LEGACY')
-                        || await addressService.parseAddress(term, 'FROM_2025');
+        // 1. Cross-check with local destinations dataset
+        let matchedPlace: RealPlace | null = null;
+        if (allPlaces.length > 0) {
+          matchedPlace = allPlaces.find(p => {
+            const normPName = clean(p.name || '');
+            return normPName === normActName || normPName === normLocName ||
+                   normActName.includes(normPName) || normPName.includes(normActName) ||
+                   normLocName.includes(normPName) || normPName.includes(normLocName);
+          }) || null;
+        }
 
-            if (parsed && parsed.latitude && parsed.longitude) {
-              const cleanParsedProvince = clean(parsed.province || '');
-
-              if (cleanParsedProvince && (cleanParsedProvince.includes(cleanDest) || cleanDest.includes(cleanParsedProvince))) {
-                act.latitude = parsed.latitude;
-                act.longitude = parsed.longitude;
-                refined = true;
-                break;
+        if (matchedPlace) {
+          act.address = matchedPlace.address || '';
+          // 1. Try local JSON coordinates first if they are valid (within province range)
+          if (matchedPlace.latitude && matchedPlace.longitude && isCoordsValid(matchedPlace.latitude, matchedPlace.longitude)) {
+            act.latitude = matchedPlace.latitude;
+            act.longitude = matchedPlace.longitude;
+            refined = true;
+          }
+          // 2. Fallback: Parse matchedPlace.address via vietnamadminunits if JSON coordinates are invalid/missing
+          if (!refined && matchedPlace.address) {
+            try {
+              const parsed = await addressService.parseAddress(matchedPlace.address, 'LEGACY')
+                          || await addressService.parseAddress(matchedPlace.address, 'FROM_2025');
+              if (parsed && parsed.latitude && parsed.longitude) {
+                const cleanParsedProvince = clean(parsed.province || '');
+                if (cleanParsedProvince && (cleanParsedProvince.includes(cleanDest) || cleanDest.includes(cleanParsedProvince)) && isCoordsValid(parsed.latitude, parsed.longitude)) {
+                  act.latitude = parsed.latitude;
+                  act.longitude = parsed.longitude;
+                  if (parsed.formatted_address) {
+                    act.locationName = parsed.formatted_address;
+                  }
+                  refined = true;
+                }
               }
+            } catch (e) {
+              // Ignore
             }
-          } catch (e) {
-            // fallback silently
           }
         }
 
+        // 2. Extra fallback: Extract address from description/notes text and parse
+        if (!refined) {
+          const descText = act.notes || (matchedPlace && matchedPlace.description) || '';
+          const addressMatch = descText.match(/(?:số\s+\d+|đường|phường|quận|huyện|thành phố|thị xã|tỉnh)\s+[^.]{5,120}/i);
+          if (addressMatch) {
+            try {
+              const parsed = await addressService.parseAddress(addressMatch[0], 'LEGACY')
+                          || await addressService.parseAddress(addressMatch[0], 'FROM_2025');
+              if (parsed && parsed.latitude && parsed.longitude) {
+                const cleanParsedProvince = clean(parsed.province || '');
+                if (cleanParsedProvince && (cleanParsedProvince.includes(cleanDest) || cleanDest.includes(cleanParsedProvince)) && isCoordsValid(parsed.latitude, parsed.longitude)) {
+                  act.latitude = parsed.latitude;
+                  act.longitude = parsed.longitude;
+                  act.address = addressMatch[0];
+                  if (parsed.formatted_address) {
+                    act.locationName = parsed.formatted_address;
+                  }
+                  refined = true;
+                }
+              }
+            } catch (e) {
+              // Ignore
+            }
+          }
+        }
+
+        // 3. Default fallback: Parse activity names directly if no match found
+        if (!refined) {
+          const searchTerms = [act.locationName, act.activityName].filter(Boolean);
+          for (const term of searchTerms) {
+            try {
+              const parsed = await addressService.parseAddress(term, 'LEGACY')
+                          || await addressService.parseAddress(term, 'FROM_2025');
+
+              if (parsed && parsed.latitude && parsed.longitude) {
+                const cleanParsedProvince = clean(parsed.province || '');
+
+                if (cleanParsedProvince && (cleanParsedProvince.includes(cleanDest) || cleanDest.includes(cleanParsedProvince)) && isCoordsValid(parsed.latitude, parsed.longitude)) {
+                  act.latitude = parsed.latitude;
+                  act.longitude = parsed.longitude;
+                  refined = true;
+                  break;
+                }
+              }
+            } catch (e) {
+              // fallback silently
+            }
+          }
+        }
+
+        // 4. Fallback to destination center coordinates
         if (!refined && (!act.latitude || !act.longitude || act.latitude === 0)) {
           if (destCoords) {
             act.latitude = destCoords.lat;

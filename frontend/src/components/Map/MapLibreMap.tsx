@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Map, { Source, Layer, Popup, Marker, NavigationControl } from 'react-map-gl/maplibre';
 import maplibregl from 'maplibre-gl';
 import { useLang } from '../../contexts/LanguageContext';
+import { mapService } from '../../services/smartTravel.service';
 
 export interface MapLocation {
   id: string;
@@ -13,6 +14,7 @@ export interface MapLocation {
   avatar?: string;
   category?: string;
   time?: string;
+  address?: string;
 }
 
 interface MapLibreMapProps {
@@ -22,20 +24,66 @@ interface MapLibreMapProps {
   viewMode?: 'markers' | 'cluster' | 'heatmap';
   routePoints?: MapLocation[];
   onAddPointToRoute?: (loc: MapLocation) => void;
+  aiRecommendedIds?: string[];
+  weatherInfo?: { condition: string; temp: string };
+  onSelectLocation?: (loc: MapLocation | null) => void;
+}
+
+// Math helpers for client-side distance and bounding box calculations
+function calculateHaversineDistance(
+  p1: { latitude: number; longitude: number },
+  p2: { latitude: number; longitude: number }
+): number {
+  const EARTH_RADIUS_KM = 6371.0088;
+  const dLat = (p2.latitude - p1.latitude) * (Math.PI / 180);
+  const dLng = (p2.longitude - p1.longitude) * (Math.PI / 180);
+  const lat1Rad = p1.latitude * (Math.PI / 180);
+  const lat2Rad = p2.latitude * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLng / 2) * Math.sin(dLng / 2) * Math.cos(lat1Rad) * Math.cos(lat2Rad);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return EARTH_RADIUS_KM * c;
+}
+
+function createGeoJSONCircle(center: [number, number], radiusKm: number, points = 32) {
+  const [lat, lng] = center;
+  const coords: [number, number][] = [];
+  const distanceX = radiusKm / (111.32 * Math.cos((lat * Math.PI) / 180));
+  const distanceY = radiusKm / 110.57;
+
+  for (let i = 0; i < points; i++) {
+    const theta = (i / points) * (2 * Math.PI);
+    const x = distanceX * Math.cos(theta);
+    const y = distanceY * Math.sin(theta);
+    coords.push([lng + x, lat + y]);
+  }
+  coords.push(coords[0]); // close the polygon
+
+  return {
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [coords],
+    },
+  };
 }
 
 const STREET_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
+const DARK_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
+const LIGHT_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 const SATELLITE_STYLE: any = {
   version: 8,
   sources: {
     'satellite-tiles': {
       type: 'raster',
       tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    }
+      attribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    },
   },
   layers: [
     {
@@ -43,9 +91,9 @@ const SATELLITE_STYLE: any = {
       type: 'raster',
       source: 'satellite-tiles',
       minzoom: 0,
-      maxzoom: 19
-    }
-  ]
+      maxzoom: 19,
+    },
+  ],
 };
 
 const svgRedString = `
@@ -60,17 +108,47 @@ const svgGoldString = `
 </svg>
 `;
 
+const svgBlueString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#3b82f6">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+</svg>
+`;
+
+const svgGreenString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#10b981">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+</svg>
+`;
+
+const svgEventString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#a855f7">
+  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/>
+</svg>
+`;
+
+const svgUserString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
+  <circle cx="12" cy="12" r="10" fill="#3b82f6" fill-opacity="0.3">
+    <animate attributeName="r" values="6;12;6" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="12" cy="12" r="6" fill="#3b82f6" stroke="#ffffff" stroke-width="2" />
+</svg>
+`;
+
 const createPopupContent = (loc: MapLocation, vi: boolean) => {
   const isCheckin = !!loc.user;
+  const isLive = loc.id.startsWith('live-');
   const timeStr = loc.time ? `<p class="text-[10px] text-slate-400 mt-0.5">${loc.time}</p>` : '';
   const noteStr = loc.note ? `<p class="text-xs text-slate-300 italic mt-1.5">"${loc.note}"</p>` : '';
   
+  const badge = isLive ? `<span class="text-[8px] bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded ml-1.5">Live</span>` : '';
+
   const headerHtml = isCheckin
     ? `
       <div class="flex items-center gap-2">
         <img src="${loc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="w-8 h-8 rounded-full object-cover border border-slate-700" />
         <div>
-          <h4 class="text-xs font-black text-white leading-none">${loc.user}</h4>
+          <h4 class="text-xs font-black text-white leading-none flex items-center">${loc.user}${badge}</h4>
           ${timeStr}
         </div>
       </div>
@@ -86,16 +164,26 @@ const createPopupContent = (loc: MapLocation, vi: boolean) => {
     <div class="space-y-2.5 text-slate-100">
       ${headerHtml}
       ${noteStr}
-      <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1 mt-1">📍 ${loc.name}</div>
+      <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1 mt-1">📍 ${loc.name || (isLive ? 'Live Tracking' : '')}</div>
+      ${onAddPointToRoute ? `
       <button 
         onclick="window.addPointToRoute('${loc.id}')"
         class="mt-2.5 w-full bg-[#d4af37] text-black text-[10px] font-bold py-1.5 px-3 rounded-lg hover:bg-amber-400 transition-all cursor-pointer border-none"
       >
         ${vi ? '+ Thêm vào lộ trình' : '+ Add to Route'}
-      </button>
+      </button>` : ''}
     </div>
   `;
 };
+
+function isWebGLSupported(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+}
 
 export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   center = [21.028511, 105.804817],
@@ -104,13 +192,32 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   viewMode = 'markers',
   routePoints = [],
   onAddPointToRoute,
+  aiRecommendedIds = [],
+  weatherInfo = { condition: 'Sunny', temp: '28' },
+  onSelectLocation,
 }) => {
   const { lang } = useLang();
   const vi = lang === 'vi';
   const mapRef = useRef<any>(null);
+  
+  // Local Map style & view switches
+  const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'dark' | 'light' | '3d'>('street');
+  const [viewType, setViewType] = useState<'map' | 'timeline'>(() => {
+    return isWebGLSupported() ? 'map' : 'timeline';
+  });
+
+  // GIS layers active state
+  const [showWeather, setShowWeather] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(false);
+  const [showSafety, setShowSafety] = useState(true);
+  const [showEvents, setShowEvents] = useState(true);
+
+  // Dynamic GIS fetched data
+  const [warnings, setWarnings] = useState<any[]>([]);
+  const [eventsData, setEventsData] = useState<any[]>([]);
+
   const [activePopup, setActivePopup] = useState<MapLocation | null>(null);
 
-  const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | '3d'>('street');
   const [viewState, setViewState] = useState({
     latitude: center[0],
     longitude: center[1],
@@ -145,25 +252,94 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   const handleMapLoad = (e: any) => {
     const map = e.target;
     
-    // Add red marker image
+    // Add marker images for MapLibre Layer support
     const imgRed = new Image(30, 30);
     imgRed.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgRedString);
     imgRed.onload = () => {
       if (!map.hasImage('marker-red')) map.addImage('marker-red', imgRed);
     };
 
-    // Add gold marker image
     const imgGold = new Image(30, 30);
     imgGold.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgGoldString);
     imgGold.onload = () => {
       if (!map.hasImage('marker-gold')) map.addImage('marker-gold', imgGold);
     };
+
+    const imgBlue = new Image(30, 30);
+    imgBlue.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgBlueString);
+    imgBlue.onload = () => {
+      if (!map.hasImage('marker-blue')) map.addImage('marker-blue', imgBlue);
+    };
+
+    const imgGreen = new Image(30, 30);
+    imgGreen.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgGreenString);
+    imgGreen.onload = () => {
+      if (!map.hasImage('marker-green')) map.addImage('marker-green', imgGreen);
+    };
+
+    const imgUser = new Image(30, 30);
+    imgUser.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgUserString);
+    imgUser.onload = () => {
+      if (!map.hasImage('marker-user')) map.addImage('marker-user', imgUser);
+    };
   };
+
+  // Viewport-based fetching for warnings and events
+  const [lastFetchCenter, setLastFetchCenter] = useState<[number, number]>([0, 0]);
+  useEffect(() => {
+    const latDiff = Math.abs(viewState.latitude - lastFetchCenter[0]);
+    const lngDiff = Math.abs(viewState.longitude - lastFetchCenter[1]);
+
+    if (latDiff > 0.03 || lngDiff > 0.03) {
+      setLastFetchCenter([viewState.latitude, viewState.longitude]);
+      
+      const fetchLayers = async () => {
+        try {
+          const [warns, evts] = await Promise.all([
+            mapService.safetyWarnings({ lat: viewState.latitude, lng: viewState.longitude, radius: 30 }),
+            mapService.events({ lat: viewState.latitude, lng: viewState.longitude, radius: 30 })
+          ]);
+          if (Array.isArray(warns)) setWarnings(warns);
+          if (Array.isArray(evts)) setEventsData(evts);
+        } catch (err) {
+          console.error('[MapLibreMap] Bounding Box GIS fetch failed:', err);
+        }
+      };
+      fetchLayers();
+    }
+  }, [viewState.latitude, viewState.longitude]);
+
+  // Geofencing Proximity Checker
+  useEffect(() => {
+    if (locations.length === 0) return;
+
+    const checkGeofencing = () => {
+      const userCoords = { latitude: center[0], longitude: center[1] };
+      for (const loc of locations) {
+        if (loc.id.startsWith('checkin-') || loc.id.startsWith('live-')) continue;
+
+        const dist = calculateHaversineDistance(userCoords, { latitude: loc.lat, longitude: loc.lng });
+        if (dist <= 0.3) {
+          const alertKey = `geofence-alert-${loc.id}`;
+          const lastAlert = sessionStorage.getItem(alertKey);
+          if (!lastAlert) {
+            sessionStorage.setItem(alertKey, Date.now().toString());
+            alert(vi
+              ? `🔔 Bạn đang đến gần địa danh: ${loc.name}! Chỉ cách ${(dist * 1000).toFixed(0)}m.`
+              : `🔔 You are approaching: ${loc.name}! Just ${(dist * 1000).toFixed(0)}m away.`
+            );
+          }
+          break;
+        }
+      }
+    };
+    checkGeofencing();
+  }, [center[0], center[1], locations]);
 
   // Fit map bounds to show route
   useEffect(() => {
     const map = mapRef.current?.getMap();
-    if (!map || routePoints.length < 2) return;
+    if (!map || routePoints.length < 2 || viewType !== 'map') return;
 
     let minLng = routePoints[0].lng;
     let maxLng = routePoints[0].lng;
@@ -181,13 +357,12 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       [[minLng, minLat], [maxLng, maxLat]],
       { padding: 50, duration: 800 }
     );
-  }, [routePoints]);
+  }, [routePoints, viewType]);
 
   const handleMapClick = (event: any) => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    // Check click on clusters
     const features = map.queryRenderedFeatures(event.point, {
       layers: ['clusters']
     });
@@ -204,7 +379,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       return;
     }
 
-    // Check click on unclustered points (if in cluster mode)
     if (viewState.zoom >= 1) {
       const unclustered = map.queryRenderedFeatures(event.point, {
         layers: ['unclustered-point']
@@ -214,6 +388,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         const loc = locations.find(l => l.id === props.id);
         if (loc) {
           setActivePopup(loc);
+          if (onSelectLocation) onSelectLocation(loc);
         }
       }
     }
@@ -234,7 +409,10 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       category: loc.category,
       time: loc.time,
       note: loc.note,
-      isCheckin: !!loc.user
+      isCheckin: !!loc.user,
+      isCurrentUser: loc.id.startsWith('live-current-user-'),
+      isLive: loc.id.startsWith('live-') && !loc.id.startsWith('live-current-user-'),
+      isRecommended: aiRecommendedIds.includes(loc.id),
     }
   }));
 
@@ -252,248 +430,577 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   };
 
+  const timelinePoints = routePoints.length > 0 ? routePoints : locations;
+
+  const getGoogleMapsDirUrl = () => {
+    if (timelinePoints.length === 0) return '#';
+    const origin = timelinePoints[0];
+    const destination = timelinePoints[timelinePoints.length - 1];
+    
+    if (timelinePoints.length === 1) {
+      return `https://www.google.com/maps/search/?api=1&query=${origin.lat},${origin.lng}`;
+    }
+    
+    const waypoints = timelinePoints.slice(1, -1).map(p => `${p.lat},${p.lng}`).join('|');
+    return `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}&waypoints=${waypoints}&travelmode=driving`;
+  };
+
+  const getSinglePlaceUrl = (loc: MapLocation) => {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.name)}+${loc.lat},${loc.lng}`;
+  };
+
+  // Mock Weather Stations Layer Data
+  const weatherStations = [
+    { id: 'w1', name: 'Trạm trung tâm', temp: weatherInfo.temp, condition: weatherInfo.condition.toLowerCase().includes('rain') ? '🌧️' : '☀️', lat: viewState.latitude + 0.015, lng: viewState.longitude - 0.015 },
+    { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherInfo.temp) - 1), condition: '☁️', lat: viewState.latitude - 0.015, lng: viewState.longitude + 0.015 }
+  ];
+
+  // Mock Traffic Congestion Indicators
+  const trafficIncidents = [
+    { id: 't1', message: vi ? 'Kẹt xe nặng - Cầu Giấy' : 'Heavy Traffic - Cau Giay', lat: viewState.latitude + 0.01, lng: viewState.longitude + 0.01 },
+    { id: 't2', message: vi ? 'Ùn tắc di chuyển chậm' : 'Congestion - Slow Speed', lat: viewState.latitude - 0.01, lng: viewState.longitude - 0.01 }
+  ];
+
+  const getStyleUrl = () => {
+    switch (mapStyle) {
+      case 'dark': return DARK_STYLE;
+      case 'light': return LIGHT_STYLE;
+      case 'satellite': return STREET_STYLE; // Layer handles satellite raster
+      default: return STREET_STYLE;
+    }
+  };
+
   return (
-    <div className="w-full h-full relative rounded-2xl overflow-hidden border border-slate-800">
-      <Map
-        ref={mapRef}
-        mapLib={maplibregl}
-        {...viewState}
-        onMove={(evt: any) => setViewState(evt.viewState)}
-        onClick={handleMapClick}
-        onLoad={handleMapLoad}
-        mapStyle={mapStyle === 'satellite' ? SATELLITE_STYLE : STREET_STYLE}
-        style={{ width: '100%', height: '100%', minHeight: '400px' }}
-      >
-        <NavigationControl position="top-left" showCompass={false} />
+    <div className="w-full h-full relative rounded-2xl overflow-hidden border border-slate-800 bg-[#0f172a]">
+      {/* 1. Toggle Tabs Switcher */}
+      <div className="absolute top-3 left-3 z-20 flex gap-1 bg-slate-900/90 backdrop-blur-md border border-slate-850 p-1 rounded-xl shadow-lg">
+        <button
+          type="button"
+          onClick={() => setViewType('map')}
+          className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer border-none ${
+            viewType === 'map'
+              ? 'bg-[var(--gold)] text-black'
+              : 'text-slate-400 hover:text-white hover:bg-white/10'
+          }`}
+          disabled={!isWebGLSupported()}
+        >
+          🗺️ {vi ? 'Bản đồ' : 'Map'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setViewType('timeline')}
+          className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer border-none ${
+            viewType === 'timeline'
+              ? 'bg-[var(--gold)] text-black'
+              : 'text-slate-400 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          📋 {vi ? 'Lộ trình' : 'Timeline'}
+        </button>
+      </div>
 
-        {/* 1. Draw Dash Route Line */}
-        {routePoints.length >= 2 && (
-          <Source id="route-line-source" type="geojson" data={routeGeoJSON}>
-            <Layer
-              id="route-line-layer"
-              type="line"
-              paint={{
-                'line-color': '#d4af37',
-                'line-width': 4,
-                'line-opacity': 0.8,
-                'line-dasharray': [2, 2]
-              }}
-            />
-          </Source>
-        )}
+      {/* 2. Map View Mode */}
+      {viewType === 'map' ? (
+        <Map
+          ref={mapRef}
+          mapLib={maplibregl}
+          {...viewState}
+          onMove={(evt: any) => setViewState(evt.viewState)}
+          onClick={handleMapClick}
+          onLoad={handleMapLoad}
+          mapStyle={getStyleUrl()}
+          style={{ width: '100%', height: '100%', minHeight: '400px' }}
+        >
+          <NavigationControl position="top-left" showCompass={true} />
 
-        {/* 2. Markers View Mode */}
-        {viewMode === 'markers' && 
-          locations.map(loc => {
-            const isCheckin = !!loc.user;
-            return (
-              <Marker
-                key={loc.id}
-                longitude={loc.lng}
-                latitude={loc.lat}
-                onClick={(e: any) => {
-                  e.originalEvent.stopPropagation();
-                  setActivePopup(loc);
+          {/* Satellite Layer Switch */}
+          {mapStyle === 'satellite' && (
+            <Source id="satellite-source" type="raster" tiles={SATELLITE_STYLE.sources['satellite-tiles'].tiles} tileSize={256}>
+              <Layer id="satellite-raster-layer" type="raster" />
+            </Source>
+          )}
+
+          {/* Draw Safety Warning Polygons */}
+          {showSafety && warnings.map((warn) => (
+            <Source key={warn.id} id={`safety-src-${warn.id}`} type="geojson" data={createGeoJSONCircle([warn.latitude, warn.longitude], warn.radiusKm)}>
+              <Layer
+                id={`safety-fill-${warn.id}`}
+                type="fill"
+                paint={{
+                  'fill-color': warn.type === 'FLOOD' ? '#3b82f6' : '#ef4444',
+                  'fill-opacity': 0.2
                 }}
-                anchor="bottom"
-              >
-                <div 
-                  className="custom-map-marker cursor-pointer hover:scale-110 transition-transform"
-                  dangerouslySetInnerHTML={{ __html: isCheckin ? svgRedString : svgGoldString }}
-                />
-              </Marker>
-            );
-          })
-        }
+              />
+              <Layer
+                id={`safety-line-${warn.id}`}
+                type="line"
+                paint={{
+                  'line-color': warn.type === 'FLOOD' ? '#1d4ed8' : '#b91c1c',
+                  'line-width': 1.5
+                }}
+              />
+            </Source>
+          ))}
 
-        {/* 3. Cluster View Mode */}
-        {viewMode === 'cluster' && (
-          <Source
-            id="locations-source"
-            type="geojson"
-            data={geojsonData}
-            cluster={true}
-            clusterMaxZoom={14}
-            clusterRadius={50}
-          >
-            {/* Cluster circles */}
-            <Layer
-              id="clusters"
-              type="circle"
-              filter={['has', 'point_count']}
-              paint={{
-                'circle-color': [
-                  'step',
-                  ['get', 'point_count'],
-                  'rgba(212, 175, 55, 0.6)',
-                  10,
-                  'rgba(245, 158, 11, 0.7)',
-                  30,
-                  'rgba(239, 68, 68, 0.8)'
-                ],
-                'circle-radius': [
-                  'step',
-                  ['get', 'point_count'],
-                  20,
-                  10,
-                  25,
-                  30,
-                  30
-                ],
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#fff'
-              }}
-            />
-            {/* Cluster count text */}
-            <Layer
-              id="cluster-count"
-              type="symbol"
-              filter={['has', 'point_count']}
-              layout={{
-                'text-field': '{point_count}',
-                'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-                'text-size': 12
-              }}
-              paint={{
-                'text-color': '#ffffff'
-              }}
-            />
-            {/* Unclustered points Layer */}
-            <Layer
-              id="unclustered-point"
-              type="symbol"
-              filter={['!', ['has', 'point_count']]}
-              layout={{
-                'icon-image': [
-                  'case',
-                  ['get', 'isCheckin'],
-                  'marker-red',
-                  'marker-gold'
-                ],
-                'icon-size': 1.0,
-                'icon-allow-overlap': true
-              }}
-            />
-          </Source>
-        )}
+          {/* Draw Dash Route Itinerary Line */}
+          {routePoints.length >= 2 && (
+            <Source id="route-line-source" type="geojson" data={routeGeoJSON}>
+              <Layer
+                id="route-line-layer"
+                type="line"
+                paint={{
+                  'line-color': '#d4af37',
+                  'line-width': 4,
+                  'line-opacity': 0.8,
+                  'line-dasharray': [2, 2]
+                }}
+              />
+            </Source>
+          )}
 
-        {/* 4. Heatmap View Mode */}
-        {viewMode === 'heatmap' && (
-          <Source id="heatmap-source" type="geojson" data={geojsonData}>
-            <Layer
-              id="heatmap-layer"
-              type="heatmap"
-              paint={{
-                'heatmap-weight': 1,
-                'heatmap-intensity': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  0,
-                  1,
-                  9,
-                  3
-                ],
-                'heatmap-color': [
-                  'interpolate',
-                  ['linear'],
-                  ['heatmap-density'],
-                  0,
-                  'rgba(212, 175, 55, 0)',
-                  0.2,
-                  'rgba(212, 175, 55, 0.4)',
-                  0.5,
-                  'rgba(245, 158, 11, 0.7)',
-                  0.8,
-                  'rgba(239, 68, 68, 0.8)',
-                  1,
-                  'rgb(220, 38, 38)'
-                ],
-                'heatmap-radius': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  0,
-                  3,
-                  9,
-                  25
-                ],
-                'heatmap-opacity': 0.85
-              }}
-            />
-          </Source>
-        )}
+          {/* 2. Markers View Mode */}
+          {viewMode === 'markers' && 
+            locations.map(loc => {
+              const isCheckin = !!loc.user;
+              const isLive = loc.id.startsWith('live-') && !loc.id.startsWith('live-current-user-');
+              const isCurrentUser = loc.id.startsWith('live-current-user-');
+              const isRecommended = aiRecommendedIds.includes(loc.id);
 
-        {/* Popup layer */}
-        {activePopup && (
-          <Popup
-            longitude={activePopup.lng}
-            latitude={activePopup.lat}
-            anchor="bottom"
-            onClose={() => setActivePopup(null)}
-            closeButton={true}
-            closeOnClick={false}
-            maxWidth="280px"
-          >
-            <div 
-              className="space-y-2.5 text-white" 
-              dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi) }} 
-            />
-          </Popup>
-        )}
-      </Map>
+              let svg = svgGoldString;
+              if (isCheckin) svg = svgRedString;
+              if (isLive) svg = svgBlueString;
+              if (isCurrentUser) svg = svgUserString;
+              if (isRecommended) svg = svgGreenString;
+
+              return (
+                <Marker
+                  key={loc.id}
+                  longitude={loc.lng}
+                  latitude={loc.lat}
+                  onClick={(e: any) => {
+                    e.originalEvent.stopPropagation();
+                    setActivePopup(loc);
+                    if (onSelectLocation) onSelectLocation(loc);
+                  }}
+                  anchor="bottom"
+                >
+                  <div 
+                    className={`custom-map-marker cursor-pointer hover:scale-110 transition-transform ${isRecommended ? 'animate-bounce' : ''}`}
+                    dangerouslySetInnerHTML={{ __html: svg }}
+                  />
+                </Marker>
+              );
+            })
+          }
+
+          {/* Safety Warnings Markers */}
+          {showSafety && warnings.map(warn => (
+            <Marker
+              key={`warn-marker-${warn.id}`}
+              longitude={warn.longitude}
+              latitude={warn.latitude}
+              onClick={(e: any) => {
+                e.originalEvent.stopPropagation();
+                setActivePopup({
+                  id: warn.id,
+                  name: `CẢNH BÁO: ${warn.type}`,
+                  lat: warn.latitude,
+                  lng: warn.longitude,
+                  note: warn.description,
+                  category: 'SAFETY_WARNING'
+                });
+              }}
+              anchor="center"
+            >
+              <div className="text-xl filter drop-shadow cursor-pointer select-none">⚠️</div>
+            </Marker>
+          ))}
+
+          {/* Local Events Markers */}
+          {showEvents && eventsData.map(evt => (
+            <Marker
+              key={`event-marker-${evt.id}`}
+              longitude={evt.longitude}
+              latitude={evt.latitude}
+              onClick={(e: any) => {
+                e.originalEvent.stopPropagation();
+                setActivePopup({
+                  id: evt.id,
+                  name: evt.title,
+                  lat: evt.latitude,
+                  lng: evt.longitude,
+                  note: evt.description || '',
+                  category: `LỄ HỘI: ${evt.category.toUpperCase()}`,
+                  time: new Date(evt.startDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')
+                });
+              }}
+              anchor="bottom"
+            >
+              <div 
+                className="custom-event-marker cursor-pointer hover:scale-110 transition-transform"
+                dangerouslySetInnerHTML={{ __html: svgEventString }}
+              />
+            </Marker>
+          ))}
+
+          {/* Weather Stations Layer */}
+          {showWeather && weatherStations.map(station => (
+            <Marker key={station.id} longitude={station.lng} latitude={station.lat} anchor="center">
+              <div className="bg-slate-900/90 border border-slate-700 text-white rounded-full px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold">
+                <span>{station.condition}</span>
+                <span>{station.temp}°C</span>
+              </div>
+            </Marker>
+          ))}
+
+          {/* Traffic Congestion Layer */}
+          {showTraffic && trafficIncidents.map(inc => (
+            <Marker key={inc.id} longitude={inc.lng} latitude={inc.lat} anchor="center">
+              <div className="bg-red-950/95 border border-red-500 text-white rounded-xl px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold max-w-[150px]">
+                <span>🚨</span>
+                <span>{inc.message}</span>
+              </div>
+            </Marker>
+          ))}
+
+          {/* Cluster View Mode */}
+          {viewMode === 'cluster' && (
+            <Source
+              id="locations-source"
+              type="geojson"
+              data={geojsonData}
+              cluster={true}
+              clusterMaxZoom={14}
+              clusterRadius={50}
+            >
+              <Layer
+                id="clusters"
+                type="circle"
+                filter={['has', 'point_count']}
+                paint={{
+                  'circle-color': [
+                    'step',
+                    ['get', 'point_count'],
+                    'rgba(212, 175, 55, 0.6)',
+                    10,
+                    'rgba(245, 158, 11, 0.7)',
+                    30,
+                    'rgba(239, 68, 68, 0.8)'
+                  ],
+                  'circle-radius': [
+                    'step',
+                    ['get', 'point_count'],
+                    20,
+                    10,
+                    25,
+                    30,
+                    30
+                  ],
+                  'circle-stroke-width': 2,
+                  'circle-stroke-color': '#fff'
+                }}
+              />
+              <Layer
+                id="cluster-count"
+                type="symbol"
+                filter={['has', 'point_count']}
+                layout={{
+                  'text-field': '{point_count}',
+                  'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                  'text-size': 12
+                }}
+                paint={{
+                  'text-color': '#ffffff'
+                }}
+              />
+              <Layer
+                id="unclustered-point"
+                type="symbol"
+                filter={['!', ['has', 'point_count']]}
+                layout={{
+                  'icon-image': [
+                    'case',
+                    ['get', 'isCurrentUser'],
+                    'marker-user',
+                    ['case', 'isLive'],
+                    'marker-blue',
+                    ['case', 'isCheckin', 'marker-red', ['case', 'isRecommended', 'marker-green', 'marker-gold']]
+                  ],
+                  'icon-size': 1.0,
+                  'icon-allow-overlap': true
+                }}
+              />
+            </Source>
+          )}
+
+          {/* Heatmap View Mode */}
+          {viewMode === 'heatmap' && (
+            <Source id="heatmap-source" type="geojson" data={geojsonData}>
+              <Layer
+                id="heatmap-layer"
+                type="heatmap"
+                paint={{
+                  'heatmap-weight': 1,
+                  'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+                  'heatmap-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    0,
+                    'rgba(212, 175, 55, 0)',
+                    0.2,
+                    'rgba(212, 175, 55, 0.4)',
+                    0.5,
+                    'rgba(245, 158, 11, 0.7)',
+                    0.8,
+                    'rgba(239, 68, 68, 0.8)',
+                    1,
+                    'rgb(220, 38, 38)'
+                  ],
+                  'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 3, 9, 25],
+                  'heatmap-opacity': 0.85
+                }}
+              />
+            </Source>
+          )}
+
+          {/* Popup layer */}
+          {activePopup && (
+            <Popup
+              longitude={activePopup.lng}
+              latitude={activePopup.lat}
+              anchor="bottom"
+              onClose={() => setActivePopup(null)}
+              closeButton={true}
+              closeOnClick={false}
+              maxWidth="280px"
+            >
+              <div 
+                className="space-y-2.5 text-white" 
+                dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi) }} 
+              />
+            </Popup>
+          )}
+        </Map>
+      ) : (
+        /* Alternate View Mode */
+        <div className="w-full h-full flex flex-col p-6 pt-16 bg-slate-950/40 backdrop-blur-xl overflow-y-auto text-slate-200">
+          {timelinePoints.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
+              <p className="text-xs text-slate-400">
+                {vi ? 'Chưa có địa điểm nào trong danh sách.' : 'No locations available in the list.'}
+              </p>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col space-y-5">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h4 className="text-xs font-black text-[var(--gold)] uppercase tracking-wider">
+                    📋 {vi ? 'Lộ trình di chuyển chi tiết' : 'Detailed Route Itinerary'}
+                  </h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    {vi ? `Tổng số: ${timelinePoints.length} địa điểm` : `Total: ${timelinePoints.length} stops`}
+                  </p>
+                </div>
+                <a
+                  href={getGoogleMapsDirUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-[var(--gold)] text-black text-[10px] font-black rounded-lg hover:bg-amber-400 transition-all no-underline flex items-center gap-1 shadow-md shadow-amber-500/10 cursor-pointer"
+                >
+                  🗺️ {vi ? 'Mở Google Maps chỉ đường' : 'Open Google Maps'}
+                </a>
+              </div>
+
+              <div className="relative border-l border-dashed border-slate-700 ml-3 pl-6 space-y-6 flex-1 py-2">
+                {timelinePoints.map((point, index) => {
+                  const isCheckin = !!point.user;
+                  return (
+                    <div key={point.id} className="relative group">
+                      {isCheckin ? (
+                        <div className="absolute -left-[35px] top-0.5 w-6 h-6 rounded-full overflow-hidden border border-red-500 shadow-lg">
+                          <img 
+                            src={point.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} 
+                            className="w-full h-full object-cover"
+                            alt="Avatar"
+                          />
+                        </div>
+                      ) : (
+                        <span className="absolute -left-[31px] top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-slate-900 border-2 border-[var(--gold)] text-[8px] font-black text-[var(--gold)] shadow-sm">
+                          {index + 1}
+                        </span>
+                      )}
+
+                      <div className="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl hover:bg-slate-900/85 hover:border-slate-700/80 transition-all space-y-1.5">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h5 className="text-xs font-black text-white group-hover:text-[var(--gold)] transition-colors">
+                              {isCheckin ? `${point.user} (Check-in)` : point.name}
+                            </h5>
+                            {point.category && (
+                              <span className="inline-block text-[8px] font-bold uppercase tracking-wider bg-[var(--gold-glow)]/10 text-[var(--gold)] px-1.5 py-0.5 rounded mt-1">
+                                {point.category}
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-1.5">
+                            {onAddPointToRoute && !routePoints.some(rp => rp.id === point.id) && (
+                              <button
+                                onClick={() => onAddPointToRoute(point)}
+                                className="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-none rounded text-[9px] font-bold cursor-pointer transition-all"
+                              >
+                                + {vi ? 'Thêm' : 'Add'}
+                              </button>
+                            )}
+                            <a
+                              href={getSinglePlaceUrl(point)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2 py-1 bg-slate-800/50 hover:bg-slate-700/80 text-[9px] text-[var(--gold)] font-bold rounded hover:text-amber-400 no-underline cursor-pointer border border-slate-700/50"
+                              title={vi ? 'Xem trên Google Bản đồ' : 'View on Google Maps'}
+                            >
+                              📍
+                            </a>
+                          </div>
+                        </div>
+
+                        {point.note && (
+                          <p className="text-[10px] text-slate-300 italic bg-slate-950/30 p-2 rounded-lg border-l-2 border-slate-700">
+                            "{point.note}"
+                          </p>
+                        )}
+
+                        {point.time && (
+                          <div className="text-[9px] text-slate-400 flex items-center gap-1">
+                            ⏰ {point.time}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Style switcher */}
-      <div className="absolute top-3 right-3 z-10 flex gap-1 bg-slate-900/80 backdrop-blur-md border border-slate-800 p-1 rounded-xl shadow-lg">
-        <button
-          type="button"
-          onClick={() => {
-            setMapStyle('street');
-            setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
-          }}
-          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-            mapStyle === 'street'
-              ? 'bg-[var(--gold)] text-black'
-              : 'text-slate-300 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          Bản đồ
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setMapStyle('satellite');
-            setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
-          }}
-          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-            mapStyle === 'satellite'
-              ? 'bg-[var(--gold)] text-black'
-              : 'text-slate-300 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          Vệ tinh
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setMapStyle('3d');
-            setViewState(prev => ({ ...prev, pitch: 60, bearing: -20 }));
-          }}
-          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-            mapStyle === '3d'
-              ? 'bg-[var(--gold)] text-black'
-              : 'text-slate-300 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          3D
-        </button>
-      </div>
+      {viewType === 'map' && (
+        <>
+          <div className="absolute top-3 right-3 z-10 flex gap-1 bg-slate-900/80 backdrop-blur-md border border-slate-800 p-1 rounded-xl shadow-lg">
+            <button
+              type="button"
+              onClick={() => {
+                setMapStyle('street');
+                setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+              }}
+              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
+                mapStyle === 'street' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {vi ? 'Đường' : 'Street'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMapStyle('satellite');
+                setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+              }}
+              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
+                mapStyle === 'satellite' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {vi ? 'Vệ tinh' : 'Satellite'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMapStyle('dark');
+                setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+              }}
+              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
+                mapStyle === 'dark' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {vi ? 'Tối' : 'Dark'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMapStyle('light');
+                setViewState(prev => ({ ...prev, pitch: 0, bearing: 0 }));
+              }}
+              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
+                mapStyle === 'light' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {vi ? 'Sáng' : 'Light'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMapStyle('3d');
+                setViewState(prev => ({ ...prev, pitch: 60, bearing: -20 }));
+              }}
+              className={`px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer border-none ${
+                mapStyle === '3d' ? 'bg-[var(--gold)] text-black' : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              3D
+            </button>
+          </div>
 
-      <div className="absolute top-14 right-3 z-10 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-[var(--gold)]">
-        {viewMode.toUpperCase()} Mode Active
-      </div>
+          {/* GIS Layers Switcher */}
+          <div className="absolute bottom-20 right-3 z-10 flex flex-col gap-1 bg-slate-900/90 backdrop-blur-md border border-slate-800 p-1.5 rounded-xl shadow-lg w-[95px]">
+            <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest block text-center mb-1">GIS Layers</span>
+            <button
+              type="button"
+              onClick={() => setShowWeather(prev => !prev)}
+              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
+                showWeather ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+            >
+              🌧️ {vi ? 'Khí tượng' : 'Weather'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowTraffic(prev => !prev)}
+              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
+                showTraffic ? 'bg-amber-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+            >
+              🚗 {vi ? 'Giao thông' : 'Traffic'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowSafety(prev => !prev)}
+              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
+                showSafety ? 'bg-red-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+            >
+              ⚠️ {vi ? 'Cảnh báo' : 'Safety'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowEvents(prev => !prev)}
+              className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider transition-all border-none cursor-pointer text-left flex items-center gap-1.5 ${
+                showEvents ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+            >
+              📅 {vi ? 'Lễ hội' : 'Events'}
+            </button>
+          </div>
+
+          <div className="absolute top-14 right-3 z-10 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider text-[var(--gold)]">
+            {viewMode.toUpperCase()}
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
 export default MapLibreMap;
+

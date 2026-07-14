@@ -958,7 +958,7 @@ export default function SocialFeedPage() {
 
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block" key={sidebarTick}>
-          <div className="sticky top-[120px]">
+          <div className="sticky top-[142px]">
             <LeftSidebar myPostCount={myPostCount} />
           </div>
         </aside>
@@ -1071,7 +1071,7 @@ export default function SocialFeedPage() {
 
         {/* RIGHT SIDEBAR */}
         <aside className="hidden lg:block">
-          <div className="sticky top-[120px]">
+          <div className="sticky top-[142px]">
             <RightSidebar hotDestinations={hotDestinations} companions={companions} />
           </div>
         </aside>
