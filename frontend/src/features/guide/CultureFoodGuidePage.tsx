@@ -111,7 +111,6 @@ export default function CultureFoodGuidePage() {
   });
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-slate-50/50 pb-16">
       
       {/* Light Blue Curved Hero Header Banner */}
@@ -122,14 +121,6 @@ export default function CultureFoodGuidePage() {
             <span className="text-[#ea580c] font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Utensils size={14} className="stroke-[3px]" /> 
               {vi ? 'HƯỚNG DẪN DU LỊCH THÔNG MINH' : 'SMART TRAVEL GUIDE'}
-=======
-    <div className="culture-guide-page">
-      <section className="culture-guide-hero">
-        <div className="container-wide culture-guide-hero-inner">
-          <div className="culture-guide-hero-text">
-            <span className="culture-guide-kicker">
-              <Utensils size={14} /> {vi ? 'Terraholic Guide' : 'Terraholic Guide'}
->>>>>>> 360b434 (update)
             </span>
             
             <h1 className="font-editorial text-3xl sm:text-4.5xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
@@ -268,7 +259,6 @@ export default function CultureFoodGuidePage() {
           </div>
         )}
 
-<<<<<<< HEAD
         {/* CTA Footer banner */}
         <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6 shadow-sm mt-12">
           <div className="text-center sm:text-left space-y-1">
@@ -278,12 +268,6 @@ export default function CultureFoodGuidePage() {
             <p className="text-slate-500 text-xs sm:text-sm leading-normal">
               {vi ? 'Chia sẻ hành trình và món ăn yêu thích với cộng đồng SmartTravel.' : 'Share your journey and favorite dishes with the community.'}
             </p>
-=======
-        <div className="culture-guide-cta">
-          <div>
-            <h3>{vi ? 'Có câu chuyện riêng?' : 'Have your own story?'}</h3>
-            <p>{vi ? 'Chia sẻ hành trình và món ăn yêu thích với cộng đồng Terraholic.' : 'Share your journey and favorite dishes with the community.'}</p>
->>>>>>> 360b434 (update)
           </div>
           <Link to="/journeys/create" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center">
             {vi ? 'Đăng hành trình' : 'Share journey'} <ChevronRight size={15} className="stroke-[2.5px]" />
