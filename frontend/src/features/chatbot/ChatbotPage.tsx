@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Send, Bot, User, Plus, Trash2, Brain, Star, RefreshCw,
+  Send, User, Plus, Trash2, Brain, Star, RefreshCw,
   Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare
 } from 'lucide-react';
 import { chatbotService, feedbackService, ChatConversation, ChatMessage, AIMemory } from '../../services/smartTravel.service';
 import { useLang } from '../../contexts/LanguageContext';
+import chatbotImg from '../../assets/chatbot.jpg';
+import loadingVideo from '../../../4278555227519042772.mp4';
 
 export default function ChatbotPage() {
   const { lang } = useLang();
@@ -12,6 +14,7 @@ export default function ChatbotPage() {
 
   // State
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
+  const [showIntroVideo, setShowIntroVideo] = useState(true);
   const [currentConversation, setCurrentConversation] = useState<ChatConversation | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -42,6 +45,12 @@ export default function ChatbotPage() {
   useEffect(() => {
     fetchConversations();
     fetchMemory();
+
+    // Show intro video for 6 seconds
+    const timer = setTimeout(() => {
+      setShowIntroVideo(false);
+    }, 6000);
+    return () => clearTimeout(timer);
   }, []);
 
   // Scroll to bottom on new message
@@ -241,23 +250,43 @@ export default function ChatbotPage() {
 
   return (
     <div className="max-w-screen-2xl mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-4 gap-5 h-[calc(100vh-130px)] min-h-[550px]">
+      <style>{`
+        @keyframes bot-sway {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          25% {
+            transform: translateY(-8px) rotate(4deg);
+          }
+          50% {
+            transform: translateY(-2px) rotate(0deg);
+          }
+          75% {
+            transform: translateY(-8px) rotate(-4deg);
+          }
+        }
+        .animate-bot-sway {
+          animation: bot-sway 4s ease-in-out infinite;
+          transform-origin: bottom center;
+        }
+      `}</style>
       
       {/* ─── SIDEBAR: LỊCH SỬ CHAT ─── */}
       <div className="lg:col-span-1 surface-elevated rounded-2xl flex flex-col overflow-hidden border border-[var(--border-subtle)]">
         <div className="p-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-1.5">
-            <MessageSquare size={14} /> {vi ? 'Lịch sử Chat' : 'Chat History'}
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+            <MessageSquare size={16} className="text-gold" /> {vi ? 'Lịch sử Chat' : 'Chat History'}
           </h3>
           <button
             onClick={handleNewConversation}
-            className="p-1.5 rounded-lg bg-[var(--bg-elevated)] hover:bg-[var(--gold-glow)]/15 border border-[var(--border-subtle)] hover:border-[var(--gold)] text-[var(--gold)] transition-all cursor-pointer"
+            className="p-1.5 rounded-lg bg-[var(--bg-elevated)] hover:bg-[var(--gold-glow)]/10 border border-[var(--border-subtle)] hover:border-[var(--gold)] text-[var(--gold)] transition-all cursor-pointer hover:scale-105 active:scale-95"
             title={vi ? 'Trò chuyện mới' : 'New Chat'}
           >
             <Plus size={15} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {loadingConvList ? (
             <div className="flex items-center justify-center py-10">
               <Loader2 className="animate-spin text-[var(--gold)]" size={20} />
@@ -273,15 +302,15 @@ export default function ChatbotPage() {
                 <div
                   key={conv.id}
                   onClick={() => selectConversation(conv.id)}
-                  className={`w-full text-left p-3 rounded-xl cursor-pointer transition-all flex items-center justify-between border ${
+                  className={`w-full text-left p-3.5 rounded-xl cursor-pointer transition-all flex items-center justify-between border ${
                     isActive
-                      ? 'bg-[var(--gold-glow)]/10 border-[var(--gold)]/30 text-gold font-bold shadow-md'
+                      ? 'bg-[var(--gold-glow)]/10 border-[var(--gold)]/30 text-gold font-semibold shadow-sm'
                       : 'bg-transparent border-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <p className="text-xs truncate">{conv.title || (vi ? 'Không có tiêu đề' : 'Untitled')}</p>
-                    <p className="text-[9px] text-[var(--text-muted)] mt-1">
+                    <p className="text-xs font-medium truncate">{conv.title || (vi ? 'Không có tiêu đề' : 'Untitled')}</p>
+                    <p className="text-[10px] text-[var(--text-muted)] mt-1.5 font-normal">
                       {new Date(conv.updatedAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -290,7 +319,7 @@ export default function ChatbotPage() {
                       })}
                     </p>
                   </div>
-                  <ChevronRight size={13} className={`opacity-60 ${isActive ? 'text-gold' : ''}`} />
+                  <ChevronRight size={13} className={`opacity-60 transition-transform ${isActive ? 'text-gold translate-x-0.5' : ''}`} />
                 </div>
               );
             })
@@ -301,9 +330,9 @@ export default function ChatbotPage() {
         <div className="p-3 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
           <button
             onClick={() => setShowMemoryPanel(true)}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-600/10 border border-amber-500/25 hover:border-[var(--gold)] text-xs text-gold font-black transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:border-[var(--gold)] hover:bg-[var(--gold-glow)]/5 text-xs text-gold font-semibold transition-all cursor-pointer active:scale-98"
           >
-            <Brain size={14} className="animate-pulse" />
+            <Brain size={14} className="text-gold" />
             {vi ? 'Bộ nhớ Cá nhân AI' : 'AI Preferences Memory'}
           </button>
         </div>
@@ -311,96 +340,130 @@ export default function ChatbotPage() {
 
       {/* ─── KHUNG CHAT CHÍNH ─── */}
       <div className="lg:col-span-3 surface-elevated rounded-2xl flex flex-col overflow-hidden border border-[var(--border-subtle)] relative">
-        
-        {/* Header chat */}
-        <div className="p-4 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)] flex justify-between items-center flex-wrap gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--gold)] to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/10">
-              <Bot size={16} className="text-white" />
+        {showIntroVideo ? (
+          <div className="flex-1 min-h-0 bg-white flex flex-col items-center justify-center relative overflow-hidden gap-5 p-6">
+            <div className="w-full max-w-2xl aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-950 flex items-center justify-center">
+              <video
+                src={loadingVideo}
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+                onEnded={() => setShowIntroVideo(false)}
+              />
             </div>
-            <div>
-              <h3 className="text-xs font-black text-[var(--text-primary)]">
-                Terraholic AI Agent
-              </h3>
-              <p className="text-[9px] text-[var(--text-muted)]">
-                {vi ? 'Trợ lý du lịch cá nhân của bạn' : 'Your personal travel companion'}
-              </p>
-            </div>
+            {/* Quick skip button */}
+            <button
+              type="button"
+              onClick={() => setShowIntroVideo(false)}
+              className="px-4 py-1.5 bg-white/80 hover:bg-white text-[11px] text-gray-600 hover:text-gray-900 rounded-full border border-gray-300 hover:border-gray-500 transition-all font-bold uppercase tracking-wider cursor-pointer active:scale-95 shadow-sm"
+            >
+              {vi ? 'Bỏ qua ✕' : 'Skip ✕'}
+            </button>
           </div>
-          
-          {currentConversation && (
-            <div className="text-[10px] text-[var(--text-muted)] bg-[var(--bg-primary)] px-3 py-1 rounded-full border border-[var(--border-subtle)]">
-              ID: {currentConversation.id.substring(0, 8)}
-            </div>
-          )}
-        </div>
-
-        {/* Nội dung hội thoại */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-transparent to-[var(--bg-primary)]/15">
-          {loadingConvDetail ? (
-            <div className="flex flex-col items-center justify-center h-full space-y-3 py-20">
-              <Loader2 className="animate-spin text-[var(--gold)]" size={32} />
-              <p className="text-xs text-[var(--text-muted)]">{vi ? 'Đang tải lịch sử tin nhắn...' : 'Loading conversation history...'}</p>
-            </div>
-          ) : messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center space-y-4 max-w-md mx-auto py-16">
-              <div className="w-16 h-16 rounded-full bg-[var(--bg-elevated)] flex items-center justify-center text-[var(--gold)] border border-[var(--border-subtle)]">
-                <Bot size={32} />
+        ) : (
+          <>
+            {/* Header chat */}
+            <div className="px-6 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]/85 backdrop-blur-md sticky top-0 z-10 flex justify-between items-center flex-wrap gap-3">
+              <div className="flex items-center gap-3.5">
+                <div className="relative">
+                  <div className="w-9 h-9 rounded-xl bg-transparent flex items-center justify-center shadow-sm overflow-hidden border border-[var(--border-subtle)]">
+                    <img src={chatbotImg} alt="TravelBot" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[var(--bg-elevated)] absolute -bottom-0.5 -right-0.5 shadow-sm animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+                    Terraholic AI Agent
+                  </h3>
+                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                    {vi ? 'Trợ lý du lịch cá nhân của bạn' : 'Your personal travel companion'}
+                  </p>
+                </div>
               </div>
-              <h2 className="text-sm font-bold text-[var(--text-primary)]">
-                {vi ? 'Xin chào! Tôi có thể giúp gì cho bạn?' : 'Hello! How can I help you today?'}
-              </h2>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                {vi
-                  ? 'Hãy hỏi tôi về các địa điểm du lịch, món ăn đặc sản, văn hóa địa phương hoặc lịch trình du lịch tùy chỉnh tại Việt Nam.'
-                  : 'Ask me about tourist attractions, culinary specialties, local culture, or customized travel itineraries in Vietnam.'}
-              </p>
               
-              {memory && (
-                <div className="p-3.5 bg-gradient-to-r from-amber-500/5 to-orange-500/5 border border-amber-500/10 rounded-2xl text-[11px] text-[var(--text-secondary)] italic">
-                  💡 {vi ? 'Trợ lý đã nạp bộ nhớ sở thích của bạn: ' : 'Agent loaded preferences memory: '}
-                  {memory.travelPreferences?.join(', ') || (vi ? 'phượt' : 'backpacking')}.
+              {currentConversation && (
+                <div className="text-[10px] font-medium text-[var(--text-secondary)] bg-[var(--bg-primary)] px-3 py-1 rounded-full border border-[var(--border-subtle)] shadow-sm">
+                  ID: {currentConversation.id.substring(0, 8)}
                 </div>
               )}
             </div>
+
+            {/* Nội dung hội thoại */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-transparent to-[var(--bg-primary)]/15">
+              {loadingConvDetail ? (
+                <div className="flex flex-col items-center justify-center h-full space-y-3 py-20">
+                  <Loader2 className="animate-spin text-[var(--gold)]" size={32} />
+                  <p className="text-xs text-[var(--text-muted)]">{vi ? 'Đang tải lịch sử tin nhắn...' : 'Loading conversation history...'}</p>
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-lg mx-auto py-20 px-4">
+                  <div className="relative group mb-4">
+                    <div className="w-44 h-44 mx-auto overflow-hidden rounded-3xl bg-transparent flex items-center justify-center animate-bot-sway cursor-pointer transition-transform duration-300 group-hover:scale-102">
+                      <img src={chatbotImg} alt="TravelBot" className="w-full h-full object-contain filter drop-shadow-xl" />
+                    </div>
+                    <div className="absolute top-2 right-4 w-4.5 h-4.5 bg-emerald-500 rounded-full border-2 border-[var(--bg-primary)] animate-ping" />
+                    <div className="absolute top-2 right-4 w-4.5 h-4.5 bg-emerald-500 rounded-full border-2 border-[var(--bg-primary)] shadow-sm" />
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-base font-semibold text-[var(--text-primary)]">
+                      {vi ? 'Xin chào! Tôi có thể giúp gì cho bạn?' : 'Hello! How can I help you today?'}
+                    </h2>
+                    <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto leading-relaxed">
+                      {vi
+                        ? 'Hãy hỏi tôi về các địa điểm du lịch, món ăn đặc sản, văn hóa địa phương hoặc lịch trình du lịch tùy chỉnh tại Việt Nam.'
+                        : 'Ask me about tourist attractions, culinary specialties, local culture, or customized travel itineraries in Vietnam.'}
+                    </p>
+                  </div>
+                  
+                  {memory && (
+                    <div className="w-full max-w-md p-4 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[11px] text-[var(--text-secondary)] flex items-start gap-2.5 text-left leading-relaxed shadow-sm">
+                      <span className="text-sm shrink-0">💡</span>
+                      <div>
+                        <span className="font-semibold text-gold">{vi ? 'Đã tải sở thích: ' : 'Loaded styles: '}</span>
+                        <span className="italic">{memory.travelPreferences?.join(', ') || (vi ? 'phượt' : 'backpacking')}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
           ) : (
             messages.map((msg) => {
               const isUser = msg.role === 'user';
               const activeVersion = msg.versions.find(v => v.isActive) || msg.versions[0];
               
               return (
-                <div key={msg.id} className={`flex gap-3 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}>
+                <div key={msg.id} className={`flex gap-3.5 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}>
                   
                   {/* Avatar */}
-                  <div className={`w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center border shadow-sm ${
+                  <div className={`w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden border shadow-sm ${
                     isUser
-                      ? 'bg-[var(--bg-elevated)] border-[var(--border-normal)] text-[var(--text-secondary)]'
-                      : 'bg-gradient-to-br from-[var(--gold)] to-amber-500 border-transparent text-black'
+                      ? 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)]'
+                      : 'bg-transparent border-transparent'
                   }`}>
-                    {isUser ? <User size={14} /> : <Bot size={14} />}
+                    {isUser ? <User size={14} /> : <img src={chatbotImg} alt="TravelBot" className="w-full h-full object-cover" />}
                   </div>
 
                   {/* Bubble Container */}
-                  <div className="space-y-1.5 min-w-[120px] max-w-[85%] sm:max-w-xl">
-                    <div className={`p-4 rounded-2xl border text-xs leading-relaxed shadow-sm transition-all ${
+                  <div className="space-y-2 min-w-[120px] max-w-[85%] sm:max-w-xl">
+                    <div className={`p-4 rounded-2xl text-xs leading-relaxed transition-all ${
                       isUser
-                        ? 'bg-[var(--bg-elevated)] border-[var(--border-normal)] text-[var(--text-primary)] rounded-tr-none'
-                        : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-primary)] rounded-tl-none'
+                        ? 'bg-[var(--gold)] text-white border-transparent rounded-2xl rounded-tr-sm shadow-sm'
+                        : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-2xl rounded-tl-sm shadow-sm'
                     }`}>
                       {/* Message Content */}
-                      <p className="whitespace-pre-line">{activeVersion?.content || ''}</p>
+                      <p className="whitespace-pre-line leading-relaxed">{activeVersion?.content || ''}</p>
 
                       {/* Tool Calls Log */}
                       {!isUser && msg.toolCalls && msg.toolCalls.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-[var(--border-subtle)] space-y-1.5">
-                          <p className="text-[9px] font-black uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1">
+                        <div className="mt-3.5 pt-3 border-t border-[var(--border-subtle)] space-y-2">
+                          <p className="text-[9px] font-black uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
                             🔧 {vi ? 'Công cụ đã sử dụng:' : 'Tools Triggered:'}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {msg.toolCalls.map(tc => (
                               <div
                                 key={tc.id}
-                                className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[10px] text-[var(--text-secondary)]"
+                                className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[10px] text-[var(--text-secondary)] shadow-sm"
                                 title={`Input: ${tc.input}\nOutput: ${tc.output || 'N/A'}`}
                               >
                                 <span>{tc.toolName}</span>
@@ -418,7 +481,7 @@ export default function ChatbotPage() {
 
                     {/* Metadata & Controls */}
                     {!isUser && (
-                      <div className="flex items-center gap-3 text-[10px] text-[var(--text-muted)] px-1">
+                      <div className="flex items-center gap-3.5 text-[10px] text-[var(--text-muted)] px-1">
                         {/* Phiên bản câu trả lời */}
                         {msg.versions.length > 1 && (
                           <span className="font-semibold text-gold">
@@ -457,11 +520,11 @@ export default function ChatbotPage() {
           )}
 
           {loadingMsg && (
-            <div className="flex gap-3 max-w-xl mr-auto">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--gold)] to-amber-500 text-black flex items-center justify-center flex-shrink-0 animate-bounce">
-                <Bot size={14} />
+            <div className="flex gap-3.5 max-w-xl mr-auto animate-pulse">
+              <div className="w-8 h-8 rounded-xl bg-transparent flex items-center justify-center flex-shrink-0 overflow-hidden border border-[var(--border-subtle)] shadow-sm">
+                <img src={chatbotImg} alt="TravelBot" className="w-full h-full object-cover" />
               </div>
-              <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-2xl rounded-tl-none text-xs flex items-center gap-2 text-[var(--text-muted)]">
+              <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-2xl rounded-tl-sm text-xs flex items-center gap-2 text-[var(--text-muted)] shadow-sm">
                 <Loader2 className="animate-spin text-[var(--gold)]" size={14} />
                 <span>{vi ? 'AI đang phân tích & soạn câu trả lời...' : 'AI is processing response...'}</span>
               </div>
@@ -470,24 +533,29 @@ export default function ChatbotPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Hộp nhập tin nhắn */}
-        <form onSubmit={handleSendMessage} className="p-3 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)] flex gap-2">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={e => setInputMessage(e.target.value)}
-            placeholder={vi ? 'Hỏi AI du lịch điều gì đó...' : 'Ask travel AI something...'}
-            disabled={loadingMsg}
-            className="flex-1 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-xs text-cream focus:outline-none focus:border-[var(--gold)] placeholder:text-[var(--text-muted)]"
-          />
-          <button
-            type="submit"
-            disabled={loadingMsg || !inputMessage.trim()}
-            className="btn-gold p-3 rounded-xl flex items-center justify-center disabled:opacity-50"
+        {/* Hộp nhập tin nhắn nổi */}
+        <div className="px-4 pb-4 pt-2 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)/90] to-transparent">
+          <form
+            onSubmit={handleSendMessage}
+            className="max-w-3xl mx-auto flex items-center bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl pl-4 pr-1.5 py-1.5 shadow-lg gap-2 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all duration-200"
           >
-            <Send size={15} />
-          </button>
-        </form>
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={e => setInputMessage(e.target.value)}
+              placeholder={vi ? 'Hỏi AI du lịch điều gì đó...' : 'Ask travel AI something...'}
+              disabled={loadingMsg}
+              className="flex-1 bg-transparent border-none text-xs text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-2.5"
+            />
+            <button
+              type="submit"
+              disabled={loadingMsg || !inputMessage.trim()}
+              className="btn-gold p-2.5 rounded-xl flex items-center justify-center disabled:opacity-40 cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150 shrink-0"
+            >
+              <Send size={14} />
+            </button>
+          </form>
+        </div>
 
         {/* ─── MODAL: ĐÁNH GIÁ CÂU TRẢ LỜI (FEEDBACK) ─── */}
         {activeFeedbackMsgId && (
@@ -672,7 +740,8 @@ export default function ChatbotPage() {
             </div>
           </div>
         )}
-
+          </>
+        )}
       </div>
     </div>
   );

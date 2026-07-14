@@ -31,11 +31,11 @@
   --text-inverse:     #0b0f19;
 
   /* ── Warm Gold (mapped to Primary Blue / Accent) ── */
-  --gold:             #3b82f6;   /* Primary Blue for dark mode contrast */
-  --gold-dark:        #2563eb;
-  --gold-light:       #60a5fa;
-  --gold-glow:        rgba(59, 130, 246, 0.15);
-  --gold-glow-strong: rgba(59, 130, 246, 0.3);
+  --gold:             #2563eb;   /* Primary Blue - consistent with light mode */
+  --gold-dark:        #1d4ed8;
+  --gold-light:       #3b82f6;
+  --gold-glow:        rgba(37, 99, 235, 0.18);
+  --gold-glow-strong: rgba(37, 99, 235, 0.38);
 
   /* ── Jewel Accent Colors ── */
   --indigo:           #2563eb;   /* primary brand blue */
@@ -47,7 +47,7 @@
   --amber:            #f59e0b;
 
   /* ── Gradient Presets ── */
-  --grad-gold:        linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --grad-gold:        linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   --grad-hero:        linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #10b981 100%);
   --grad-teal:        linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
   --grad-sunset:      linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
@@ -98,7 +98,9 @@
 }
 
 img, video, canvas, svg {
-  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
+  transition: opacity 0.2s ease !important;
+  /* Note: transform intentionally excluded — hover image scale is an AI slop tell.
+     Animate card container (shadow/translate) instead of the image itself. */
 }
 
 /* =========================================================
@@ -180,19 +182,17 @@ body::before {
   color: var(--text-primary);
 }
 
-/* Gradient text utility */
+/* Accent text utilities — solid colors only (gradient-text is a banned AI tell) */
 .text-gradient-gold {
-  background: var(--grad-gold);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  /* Replaced: background-clip gradient → solid brand color */
+  color: var(--gold);
+  font-weight: 700;
 }
 
 .text-gradient-hero {
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  /* Replaced: background-clip gradient → solid primary text */
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .text-gold   { color: var(--gold); }
@@ -300,13 +300,19 @@ body::before {
   box-shadow: 0 8px 48px rgba(0,0,0,0.5);
 }
 
+.card-hero {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hero:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.65);
+}
 .card-hero-image {
   width: 100%;
   height: clamp(260px, 40vw, 480px);
   object-fit: cover;
+  /* No transform on hover — animate the card, not the image */
 }
-
-.card-hero:hover .card-hero-image { transform: scale(1.04); }
 
 .card-hero-overlay {
   position: absolute;
@@ -340,19 +346,17 @@ body::before {
 }
 
 .card-medium:hover {
-  border-color: rgba(240,196,106,0.25);
+  border-color: var(--gold-glow);
   transform: translateY(-4px);
-  box-shadow: 0 20px 56px rgba(0,0,0,0.5), 0 0 0 1px rgba(240,196,106,0.15);
+  box-shadow: 0 20px 56px rgba(0,0,0,0.5), 0 0 0 1px var(--gold-glow);
 }
 
 .card-medium-image {
   width: 100%;
   height: clamp(160px, 25vw, 220px);
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  /* No hover transform — image scaling on hover is a banned AI tell */
 }
-
-.card-medium:hover .card-medium-image { transform: scale(1.06); }
 
 /* Compact horizontal */
 .card-compact {
@@ -608,8 +612,8 @@ body::before {
 }
 
 .compose-box:focus-within {
-  border-color: rgba(240,196,106,0.3);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 0 0 1px rgba(240,196,106,0.15);
+  border-color: var(--gold);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 0 0 2px var(--gold-glow);
 }
 
 .compose-input {
@@ -4053,6 +4057,11 @@ body::before {
   overflow: hidden;
   min-height: 380px;
   box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.explore-featured:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
 }
 .explore-tag {
   font-size: 0.65rem;
@@ -4072,7 +4081,7 @@ body::before {
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 @media (min-width: 768px) {
@@ -4085,8 +4094,9 @@ body::before {
   }
 }
 .blog-article:hover {
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-4px);
+  border-color: var(--gold-light);
 }
 .blog-article__media {
   position: relative;
@@ -4105,10 +4115,6 @@ body::before {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
-}
-.blog-article:hover .blog-article__media img {
-  transform: scale(1.04);
 }
 .blog-article__body {
   flex: 1;
@@ -5072,5 +5078,59 @@ body::before {
 @media (min-width: 640px) {
   .post-detail-panel--single-column .post-detail-body-scrollable {
     padding: 1.75rem 2.25rem;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION — Accessibility (WCAG 2.1 SC 2.3.3)
+   Người dùng mắc chứng rối loạn tiền đình cần môi trường
+   không có animation. Tắt toàn bộ transform/animation.
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Card hovers — dùng opacity thay vì translate */
+  .card-hero:hover,
+  .card-medium:hover,
+  .card-glass:hover,
+  .card-editorial:hover,
+  .card-compact:hover,
+  .blog-article:hover,
+  .explore-featured:hover {
+    transform: none !important;
+  }
+
+  /* Story ring */
+  .story-ring:hover {
+    transform: none !important;
+  }
+
+  /* Trending & compact items */
+  .trending-item:hover {
+    transform: none !important;
+  }
+
+  /* Staggered entrance animations (BlogPage, ChatbotPage) */
+  .anim-fade-up {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Explore handbook banners */
+  .explore-handbook-banner:hover {
+    transform: none !important;
+  }
+
+  /* Icon buttons */
+  .icon-btn:hover {
+    transform: none !important;
   }
 }

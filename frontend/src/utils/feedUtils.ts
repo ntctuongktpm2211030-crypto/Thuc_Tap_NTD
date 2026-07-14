@@ -323,7 +323,7 @@ const DEST_IMAGES: Record<string, string> = {
 };
 
 const DEST_GRADIENTS = [
-  'from-violet-500 to-indigo-600',
+  'from-blue-600 to-indigo-800',
   'from-amber-500 to-orange-600',
   'from-sky-500 to-blue-600',
   'from-teal-500 to-emerald-600',

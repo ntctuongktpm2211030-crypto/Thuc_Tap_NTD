@@ -41,20 +41,23 @@ const BlogArticleCard = ({
   post,
   distanceLabel,
   onOpenDetail,
+  index = 0,
 }: {
   post: ExplorePost;
   distanceLabel?: string;
   onOpenDetail: (post: ExplorePost) => void;
+  index?: number;
 }) => {
   const cultureFood = isCultureOrFood(post.category);
 
   return (
     <article
-      className={`blog-article ${cultureFood ? 'blog-article--culture-food' : ''}`}
+      className={`blog-article anim-fade-up ${cultureFood ? 'blog-article--culture-food' : ''}`}
       onClick={() => onOpenDetail(post)}
       role="button"
       tabIndex={0}
       onKeyDown={e => e.key === 'Enter' && onOpenDetail(post)}
+      style={{ '--i': index } as React.CSSProperties}
     >
       <div className="blog-article__media">
         <img src={post.coverImage} alt={post.title} loading="lazy" />
@@ -128,8 +131,8 @@ const HeroPostCard = ({
   post: ExplorePost;
   onOpenDetail: (post: ExplorePost) => void;
 }) => (
-  <article className="explore-featured cursor-pointer group" onClick={() => onOpenDetail(post)}>
-    <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+  <article className="explore-featured cursor-pointer group anim-fade-up" style={{ '--i': 0.4 } as React.CSSProperties} onClick={() => onOpenDetail(post)}>
+    <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/35 to-slate-900/10" />
     <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-end gap-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -369,6 +372,41 @@ export default function BlogPage() {
 
   return (
     <div className="explore-page explore-page--magazine">
+      <style>{`
+        @keyframes fade-up-reveal {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .anim-fade-up {
+          opacity: 0;
+          animation: fade-up-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation-delay: calc(var(--i, 0) * 80ms);
+        }
+        .explore-handbook-banner {
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .explore-handbook-banner:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .anim-fade-up {
+            opacity: 1 !important;
+            animation: none !important;
+            transform: none !important;
+          }
+          .explore-handbook-banner {
+            transition: none !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
       <header className="explore-hero">
         <div className="relative container-wide py-12 sm:py-16 space-y-8">
           <div className="text-center space-y-4 max-w-2xl mx-auto">
@@ -377,7 +415,7 @@ export default function BlogPage() {
             </span>
             <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
               Khám phá{' '}
-              <span className="bg-gradient-to-r from-teal-600 via-sky-600 to-violet-600 bg-clip-text text-transparent">
+              <span className="text-teal-700">
                 câu chuyện du lịch
               </span>
             </h1>
@@ -424,7 +462,8 @@ export default function BlogPage() {
             <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link
                 to="/explore/cam-nang/am-thuc"
-                className="explore-handbook-banner explore-handbook-banner--food group"
+                className="explore-handbook-banner explore-handbook-banner--food group anim-fade-up"
+                style={{ '--i': 0.1 } as React.CSSProperties}
               >
                 <Utensils size={28} className="text-amber-600 mb-2" />
                 <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-amber-800">
@@ -437,7 +476,8 @@ export default function BlogPage() {
               </Link>
               <Link
                 to="/explore/cam-nang/van-hoa"
-                className="explore-handbook-banner explore-handbook-banner--culture group"
+                className="explore-handbook-banner explore-handbook-banner--culture group anim-fade-up"
+                style={{ '--i': 0.25 } as React.CSSProperties}
               >
                 <Landmark size={28} className="text-violet-600 mb-2" />
                 <h2 className="font-editorial text-lg font-bold text-slate-900 group-hover:text-violet-800">
@@ -465,12 +505,13 @@ export default function BlogPage() {
                       Văn hóa & ẩm thực
                     </h2>
                     <div className="blog-article-list">
-                      {visibleCulture.map(post => (
+                      {visibleCulture.map((post, index) => (
                         <BlogArticleCard
                           key={post.id}
                           post={post}
                           distanceLabel={getDistanceLabel(post)}
                           onOpenDetail={openPost}
+                          index={index + 1}
                         />
                       ))}
                     </div>
@@ -493,12 +534,13 @@ export default function BlogPage() {
                       Hành trình & trải nghiệm
                     </h2>
                     <div className="blog-article-list">
-                      {visibleOther.map(post => (
+                      {visibleOther.map((post, index) => (
                         <BlogArticleCard
                           key={post.id}
                           post={post}
                           distanceLabel={getDistanceLabel(post)}
                           onOpenDetail={openPost}
+                          index={index + 3}
                         />
                       ))}
                     </div>

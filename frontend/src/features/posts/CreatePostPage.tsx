@@ -204,7 +204,7 @@ export default function CreatePostPage() {
     >
       <div className="create-hero mb-6 animate-fade-in">
         <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-sky-400 mb-2">✍️ Trình soạn thảo</p>
-        <h1 className="headline-md text-gradient-hero mb-2">Viết bài chia sẻ trải nghiệm</h1>
+        <h1 className="headline-md text-[var(--text-primary)] mb-2">Viết bài chia sẻ trải nghiệm</h1>
         <p className="text-sm text-[var(--text-secondary)]">Thêm ảnh bìa, nội dung và vị trí — bài viết sẽ hiện trên bảng tin.</p>
       </div>
 
