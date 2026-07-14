@@ -65,7 +65,7 @@ function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0): s
   2. Ensure the locations are real places in the destination.
   3. Guess coordinates (latitude, longitude) as accurately as possible for MapLibre map mapping.
   4. Ensure activities map correctly to their categories ("restaurant", "hotel", "attraction", "nature", "festival").
-  5. Distribute daily costs logically so that the SUM of all activities' estimatedCost across all days does NOT exceed the total budget of ${totalBudget} ${currency}.
+  5. Distribute daily costs logically so that the SUM of all activities' estimatedCost across all days does NOT exceed the total budget of ${totalBudget} ${currency}. Note: transportation and daily buffer fees will be calculated programmatically on top of this by the system, so aim for the sum of activities to be about 70-80% of the total budget.
   6. Enforce realistic travel paths (i.e. morning activities near afternoon activities to minimize travel times).
   7. Respond entirely in Vietnamese. All text values (destination name, activityName, locationName, notes) MUST be in the Vietnamese language.
   8. Do NOT use generic activity names like "Welcome walk", "Morning tour", "Eat local food", "Sightseeing experience", or "Local delicacy tasting". Always output real, actual, and famous tourist spots, monuments, streets, parks, restaurants, cafes, hotels, and specific local culinary specialties of the destination. Make notes detail-rich with actual tips.
@@ -270,10 +270,12 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
 
     const data = await response.json();
     const resultJson = JSON.parse(data.choices[0].message.content) as AIItineraryResponse;
-    return await refineItineraryCoordinates(resultJson, params.destination);
+    const refined = await refineItineraryCoordinates(resultJson, params.destination);
+    return calculateItineraryCosts(refined, params.travelStyle, params.currency || 'USD');
   } catch (error) {
     console.error('❌ Failed to retrieve AI itinerary from OpenAI:', error);
-    return await generateFallbackMock(params);
+    const mock = await generateFallbackMock(params);
+    return calculateItineraryCosts(mock, params.travelStyle, params.currency || 'USD');
   }
 }
 
@@ -459,16 +461,12 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
     }
 
     const refined = await refineItineraryCoordinates(updatedItinerary, params.destination);
-    
-    let newTotal = 0;
-    refined.days.forEach(d => d.activities.forEach(a => newTotal += Number(a.estimatedCost) || 0));
-    refined.totalEstimatedCost = newTotal;
-
-    return refined;
+    return calculateItineraryCosts(refined, params.travelStyle, params.currency || 'USD');
 
   } catch (error) {
     console.error('❌ Failed to regenerate itinerary part with AI:', error);
-    return generateFallbackRegenerate(params);
+    const fb = generateFallbackRegenerate(params);
+    return calculateItineraryCosts(fb, params.travelStyle, params.currency || 'USD');
   }
 }
 
@@ -923,4 +921,146 @@ function generateFallbackRegenerate(params: AIRegeneratePartParams): AIItinerary
   updated.days.forEach(d => d.activities.forEach(a => newTotal += Number(a.estimatedCost) || 0));
   updated.totalEstimatedCost = newTotal;
   return updated;
+}
+
+/**
+ * Calculates dynamic costs (activities, transport based on distance, and daily buffer)
+ * using the Terraholic Custom Cost Formula.
+ * Mutates the itinerary object to populate detailed cost fields and correct data anomalies.
+ */
+export function calculateItineraryCosts(
+  itinerary: AIItineraryResponse,
+  travelStyle: string,
+  currency: string = 'VND'
+): AIItineraryResponse {
+  if (!itinerary || !Array.isArray(itinerary.days)) return itinerary;
+
+  const isVnd = currency === 'VND';
+  const style = travelStyle || 'Adventure';
+
+  // 1. Determine transport rate per km
+  let transportRate = 8000; // default VND
+  if (isVnd) {
+    if (style.includes('Backpacker') || style.includes('Budget')) transportRate = 2000;
+    else if (style.includes('Adventure')) transportRate = 5000;
+    else if (style.includes('Leisure') || style.includes('Cultural')) transportRate = 12000;
+    else if (style.includes('Luxury')) transportRate = 22000;
+  } else {
+    // USD
+    transportRate = 0.40;
+    if (style.includes('Backpacker') || style.includes('Budget')) transportRate = 0.10;
+    else if (style.includes('Adventure')) transportRate = 0.25;
+    else if (style.includes('Leisure') || style.includes('Cultural')) transportRate = 0.60;
+    else if (style.includes('Luxury')) transportRate = 1.10;
+  }
+
+  // 2. Determine daily buffer cost
+  let dailyBuffer = 100000; // default VND
+  if (isVnd) {
+    if (style.includes('Backpacker') || style.includes('Budget')) dailyBuffer = 40000;
+    else if (style.includes('Adventure')) dailyBuffer = 75000;
+    else if (style.includes('Leisure') || style.includes('Cultural')) dailyBuffer = 150000;
+    else if (style.includes('Luxury')) dailyBuffer = 400000;
+  } else {
+    // USD
+    dailyBuffer = 5.0;
+    if (style.includes('Backpacker') || style.includes('Budget')) dailyBuffer = 2.0;
+    else if (style.includes('Adventure')) dailyBuffer = 3.5;
+    else if (style.includes('Leisure') || style.includes('Cultural')) dailyBuffer = 7.0;
+    else if (style.includes('Luxury')) dailyBuffer = 20.0;
+  }
+
+  let totalTripDistance = 0;
+  let totalTripActivityCost = 0;
+  let totalTripTransportCost = 0;
+  let totalTripBufferCost = 0;
+
+  itinerary.days.forEach(day => {
+    let dayActivityCost = 0;
+    let dayDistance = 0;
+
+    if (day.activities && day.activities.length > 0) {
+      // Correct any database anomalies (such as street numbers 1, 2, 14 scraped as costEstimate)
+      day.activities.forEach(act => {
+        const cost = Number(act.estimatedCost) || 0;
+        const category = (act.category || '').toLowerCase();
+        let correctedCost = cost;
+
+        if (category === 'hotel') {
+          // Lodging correction: if less than 5000 VND / 1 USD, replace with baseline
+          if (cost < (isVnd ? 5000 : 1)) {
+            correctedCost = isVnd
+              ? (style.includes('Backpacker') || style.includes('Budget') ? 200000 : style.includes('Adventure') ? 400000 : style.includes('Leisure') || style.includes('Cultural') ? 900000 : style.includes('Luxury') ? 2500000 : 600000)
+              : (style.includes('Backpacker') || style.includes('Budget') ? 10 : style.includes('Adventure') ? 18 : style.includes('Leisure') || style.includes('Cultural') ? 40 : style.includes('Luxury') ? 110 : 25);
+          }
+        } else if (category === 'restaurant') {
+          // Dining correction: if less than 5000 VND / 1 USD, replace with baseline
+          if (cost < (isVnd ? 5000 : 1)) {
+            correctedCost = isVnd
+              ? (style.includes('Backpacker') || style.includes('Budget') ? 40000 : style.includes('Adventure') ? 70000 : style.includes('Leisure') || style.includes('Cultural') ? 180000 : style.includes('Luxury') ? 500000 : 100000)
+              : (style.includes('Backpacker') || style.includes('Budget') ? 2 : style.includes('Adventure') ? 3.5 : style.includes('Leisure') || style.includes('Cultural') ? 8 : style.includes('Luxury') ? 22 : 4.5);
+          }
+        } else if (cost > 0 && cost < (isVnd ? 5000 : 0.5)) {
+          // Attraction correction: if > 0 but too small, replace with baseline
+          correctedCost = isVnd
+            ? (style.includes('Backpacker') || style.includes('Budget') || style.includes('Adventure') ? 20000 : style.includes('Leisure') || style.includes('Cultural') ? 50000 : style.includes('Luxury') ? 150000 : 30000)
+            : (style.includes('Backpacker') || style.includes('Budget') || style.includes('Adventure') ? 1 : style.includes('Leisure') || style.includes('Cultural') ? 2.5 : style.includes('Luxury') ? 7 : 1.5);
+        }
+
+        act.estimatedCost = correctedCost;
+        dayActivityCost += correctedCost;
+      });
+
+      // Calculate transportation distance between sequential activities
+      for (let j = 0; j < day.activities.length - 1; j++) {
+        const a1 = day.activities[j];
+        const a2 = day.activities[j + 1];
+        if (a1.latitude && a1.longitude && a2.latitude && a2.longitude) {
+          dayDistance += calculateHaversineDistance(
+            { latitude: a1.latitude, longitude: a1.longitude },
+            { latitude: a2.latitude, longitude: a2.longitude }
+          );
+        }
+      }
+
+      // Add distance from the last activity back to the first activity (hotel/base loop)
+      if (day.activities.length > 1) {
+        const first = day.activities[0];
+        const last = day.activities[day.activities.length - 1];
+        if (first.latitude && first.longitude && last.latitude && last.longitude) {
+          dayDistance += calculateHaversineDistance(
+            { latitude: last.latitude, longitude: last.longitude },
+            { latitude: first.latitude, longitude: first.longitude }
+          );
+        }
+      }
+    }
+
+    const dayTransportCost = dayDistance * transportRate;
+    const dayBufferCost = dailyBuffer;
+    const dayTotalCost = dayActivityCost + dayTransportCost + dayBufferCost;
+
+    // Attach computed parameters to the day object
+    (day as any).dailyEstimatedCost = Math.round(dayTotalCost);
+    (day as any).activityCost = Math.round(dayActivityCost);
+    (day as any).transportCost = Math.round(dayTransportCost);
+    (day as any).bufferCost = Math.round(dayBufferCost);
+    (day as any).totalDistanceKm = Number(dayDistance.toFixed(2));
+
+    totalTripDistance += dayDistance;
+    totalTripActivityCost += dayActivityCost;
+    totalTripTransportCost += dayTransportCost;
+    totalTripBufferCost += dayBufferCost;
+  });
+
+  const totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
+
+  // Attach breakdown parameters to the main itinerary object
+  itinerary.totalEstimatedCost = Math.round(totalTripCost);
+  (itinerary as any).totalActivityCost = Math.round(totalTripActivityCost);
+  (itinerary as any).totalTransportCost = Math.round(totalTripTransportCost);
+  (itinerary as any).totalBufferCost = Math.round(totalTripBufferCost);
+  (itinerary as any).totalDistanceKm = Number(totalTripDistance.toFixed(2));
+
+  return itinerary;
 }

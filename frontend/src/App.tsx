@@ -796,6 +796,156 @@ const MapDashboard = () => {
   );
 };
 
+function calculateHaversineDistance(
+  p1: { latitude: number; longitude: number },
+  p2: { latitude: number; longitude: number }
+): number {
+  const EARTH_RADIUS_KM = 6371.0088;
+  const dLat = (p2.latitude - p1.latitude) * (Math.PI / 180);
+  const dLng = (p2.longitude - p1.longitude) * (Math.PI / 180);
+  const lat1Rad = p1.latitude * (Math.PI / 180);
+  const lat2Rad = p2.latitude * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLng / 2) * Math.sin(dLng / 2) * Math.cos(lat1Rad) * Math.cos(lat2Rad);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return EARTH_RADIUS_KM * c;
+}
+
+function calculateItineraryCosts(
+  itinerary: any,
+  travelStyle: string,
+  currency: string = 'VND'
+): any {
+  if (!itinerary || !Array.isArray(itinerary.days)) return itinerary;
+
+  const isVnd = currency === 'VND';
+  const style = travelStyle || 'Adventure';
+
+  // 1. Determine transport rate per km
+  let transportRate = 8000;
+  if (isVnd) {
+    if (style.includes('Backpacker') || style.includes('Budget')) transportRate = 2000;
+    else if (style.includes('Adventure')) transportRate = 5000;
+    else if (style.includes('Leisure') || style.includes('Cultural')) transportRate = 12000;
+    else if (style.includes('Luxury')) transportRate = 22000;
+  } else {
+    transportRate = 0.40;
+    if (style.includes('Backpacker') || style.includes('Budget')) transportRate = 0.10;
+    else if (style.includes('Adventure')) transportRate = 0.25;
+    else if (style.includes('Leisure') || style.includes('Cultural')) transportRate = 0.60;
+    else if (style.includes('Luxury')) transportRate = 1.10;
+  }
+
+  // 2. Determine daily buffer cost
+  let dailyBuffer = 100000;
+  if (isVnd) {
+    if (style.includes('Backpacker') || style.includes('Budget')) dailyBuffer = 40000;
+    else if (style.includes('Adventure')) dailyBuffer = 75000;
+    else if (style.includes('Leisure') || style.includes('Cultural')) dailyBuffer = 150000;
+    else if (style.includes('Luxury')) dailyBuffer = 400000;
+  } else {
+    dailyBuffer = 5.0;
+    if (style.includes('Backpacker') || style.includes('Budget')) dailyBuffer = 2.0;
+    else if (style.includes('Adventure')) dailyBuffer = 3.5;
+    else if (style.includes('Leisure') || style.includes('Cultural')) dailyBuffer = 7.0;
+    else if (style.includes('Luxury')) dailyBuffer = 20.0;
+  }
+
+  let totalTripDistance = 0;
+  let totalTripActivityCost = 0;
+  let totalTripTransportCost = 0;
+  let totalTripBufferCost = 0;
+
+  const updatedDays = itinerary.days.map((day: any) => {
+    let dayActivityCost = 0;
+    let dayDistance = 0;
+
+    if (day.activities && day.activities.length > 0) {
+      day.activities.forEach((act: any) => {
+        const cost = Number(act.estimatedCost) || 0;
+        const category = (act.category || '').toLowerCase();
+        let correctedCost = cost;
+
+        if (category === 'hotel') {
+          if (cost < (isVnd ? 5000 : 1)) {
+            correctedCost = isVnd
+              ? (style.includes('Backpacker') || style.includes('Budget') ? 200000 : style.includes('Adventure') ? 400000 : style.includes('Leisure') || style.includes('Cultural') ? 900000 : style.includes('Luxury') ? 2500000 : 600000)
+              : (style.includes('Backpacker') || style.includes('Budget') ? 10 : style.includes('Adventure') ? 18 : style.includes('Leisure') || style.includes('Cultural') ? 40 : style.includes('Luxury') ? 110 : 25);
+          }
+        } else if (category === 'restaurant') {
+          if (cost < (isVnd ? 5000 : 1)) {
+            correctedCost = isVnd
+              ? (style.includes('Backpacker') || style.includes('Budget') ? 40000 : style.includes('Adventure') ? 70000 : style.includes('Leisure') || style.includes('Cultural') ? 180000 : style.includes('Luxury') ? 500000 : 100000)
+              : (style.includes('Backpacker') || style.includes('Budget') ? 2 : style.includes('Adventure') ? 3.5 : style.includes('Leisure') || style.includes('Cultural') ? 8 : style.includes('Luxury') ? 22 : 4.5);
+          }
+        } else if (cost > 0 && cost < (isVnd ? 5000 : 0.5)) {
+          correctedCost = isVnd
+            ? (style.includes('Backpacker') || style.includes('Budget') || style.includes('Adventure') ? 20000 : style.includes('Leisure') || style.includes('Cultural') ? 50000 : style.includes('Luxury') ? 150000 : 30000)
+            : (style.includes('Backpacker') || style.includes('Budget') || style.includes('Adventure') ? 1 : style.includes('Leisure') || style.includes('Cultural') ? 2.5 : style.includes('Luxury') ? 7 : 1.5);
+        }
+
+        act.estimatedCost = correctedCost;
+        dayActivityCost += correctedCost;
+      });
+
+      // Calculate transportation distance between sequential activities
+      for (let j = 0; j < day.activities.length - 1; j++) {
+        const a1 = day.activities[j];
+        const a2 = day.activities[j + 1];
+        if (a1.latitude && a1.longitude && a2.latitude && a2.longitude) {
+          dayDistance += calculateHaversineDistance(
+            { latitude: a1.latitude, longitude: a1.longitude },
+            { latitude: a2.latitude, longitude: a2.longitude }
+          );
+        }
+      }
+
+      // Add distance from the last activity back to the first activity (hotel/base loop)
+      if (day.activities.length > 1) {
+        const first = day.activities[0];
+        const last = day.activities[day.activities.length - 1];
+        if (first.latitude && first.longitude && last.latitude && last.longitude) {
+          dayDistance += calculateHaversineDistance(
+            { latitude: last.latitude, longitude: last.longitude },
+            { latitude: first.latitude, longitude: first.longitude }
+          );
+        }
+      }
+    }
+
+    const dayTransportCost = dayDistance * transportRate;
+    const dayBufferCost = dailyBuffer;
+    const dayTotalCost = dayActivityCost + dayTransportCost + dayBufferCost;
+
+    totalTripDistance += dayDistance;
+    totalTripActivityCost += dayActivityCost;
+    totalTripTransportCost += dayTransportCost;
+    totalTripBufferCost += dayBufferCost;
+
+    return {
+      ...day,
+      dailyEstimatedCost: Math.round(dayTotalCost),
+      activityCost: Math.round(dayActivityCost),
+      transportCost: Math.round(dayTransportCost),
+      bufferCost: Math.round(dayBufferCost),
+      totalDistanceKm: Number(dayDistance.toFixed(2)),
+    };
+  });
+
+  const totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
+
+  return {
+    ...itinerary,
+    totalEstimatedCost: Math.round(totalTripCost),
+    totalActivityCost: Math.round(totalTripActivityCost),
+    totalTransportCost: Math.round(totalTripTransportCost),
+    totalBufferCost: Math.round(totalTripBufferCost),
+    totalDistanceKm: Number(totalTripDistance.toFixed(2)),
+    days: updatedDays,
+  };
+}
+
 // ──────────────────────────────────────────────────────────
 // 2. AI TRIP PLANNER
 // ──────────────────────────────────────────────────────────
@@ -879,8 +1029,8 @@ const TripPlanner = () => {
     } catch {
       const isVi = lang === 'vi';
       setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
-      setItinerary({
-        destination, totalEstimatedCost: Number(budget) * 0.75, currency,
+      const mockResult = {
+        destination, currency,
         days: [
           { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan trung tâm thành phố Thái Nguyên' : 'Day 1: Arrival & Explore Thai Nguyen Center', activities: [
             { session: 'Sáng', timeSlot: '09:00 - 11:00', activityName: isVi ? 'Nhận phòng tại khách sạn trung tâm' : 'Check-in at center hotel', estimatedCost: Number(budget) * 0.15, category: 'hotel', notes: isVi ? 'Ổn định chỗ ở, chuẩn bị hành lý.' : 'Settle in, prepare luggage.', latitude: 21.5939, longitude: 105.8442 },
@@ -897,7 +1047,8 @@ const TripPlanner = () => {
             { session: 'Tối', timeSlot: '19:00 - 21:00', activityName: isVi ? 'Ăn lẩu nướng địa phương' : 'Local BBQ/Hotpot Dinner', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thưởng thức bữa tối nướng lẩu thịnh soạn.' : 'Enjoy local hotpot dinner.', latitude: 21.5940, longitude: 105.8450 },
           ]},
         ]
-      });
+      };
+      setItinerary(calculateItineraryCosts(mockResult, style, currency));
     } finally { setLoading(false); }
   };
 
@@ -967,7 +1118,7 @@ const TripPlanner = () => {
           }
         })
       );
-      setItinerary({ ...itinerary, days: optimizedDays });
+      setItinerary(calculateItineraryCosts({ ...itinerary, days: optimizedDays }, style, currency));
       setOptimized(true);
     } catch (err) {
       console.error('Failed to run route optimization:', err);
@@ -1279,7 +1430,7 @@ const TripPlanner = () => {
               <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-6 rounded-2xl shadow-xl flex flex-col sm:flex-row justify-between sm:items-center gap-6 relative overflow-hidden">
                 <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
                 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full sm:w-auto">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('planner.cost')}</p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">{formatCost(itinerary.totalEstimatedCost || itinerary.totalCost || 0)}</span>
@@ -1295,6 +1446,26 @@ const TripPlanner = () => {
                       </span>
                     </div>
                   )}
+                  {/* Dynamic Cost Breakdown Row */}
+                  <div className="grid grid-cols-3 gap-4 pt-3 mt-3 border-t border-[var(--border-normal)] text-[10px]">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-[var(--text-muted)] block">{t('planner.activitiesCost')}</span>
+                      <span className="font-bold text-[var(--text-primary)]">{formatCost(itinerary.totalActivityCost || 0)}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-[var(--text-muted)] block">{t('planner.transportCost')}</span>
+                      <span className="font-bold text-[var(--text-primary)]">
+                        {formatCost(itinerary.totalTransportCost || 0)}
+                        {itinerary.totalDistanceKm !== undefined && (
+                          <span className="text-[9px] font-normal text-[var(--text-muted)] block">({itinerary.totalDistanceKm} km)</span>
+                        )}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-[var(--text-muted)] block">{t('planner.bufferCost')}</span>
+                      <span className="font-bold text-[var(--text-primary)]">{formatCost(itinerary.totalBufferCost || 0)}</span>
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="flex flex-wrap gap-3">
@@ -1343,13 +1514,16 @@ const TripPlanner = () => {
                     <button
                       key={dayNum}
                       onClick={() => setSelectedDay(dayNum)}
-                      className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 border cursor-pointer active:scale-95 ${
+                      className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 border cursor-pointer active:scale-95 flex flex-col items-center gap-0.5 ${
                         isActive
                           ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20'
                           : 'bg-[var(--bg-elevated)] border border-blue-200 dark:border-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-500'
                       }`}
                     >
-                      {lang === 'vi' ? `Ngày ${dayNum}` : `Day ${dayNum}`}
+                      <span>{lang === 'vi' ? `Ngày ${dayNum}` : `Day ${dayNum}`}</span>
+                      <span className={`text-[9px] font-normal ${isActive ? 'text-blue-200' : 'text-[var(--text-muted)]'}`}>
+                        {formatCost(d.dailyEstimatedCost || 0)}
+                      </span>
                     </button>
                   );
                 })}
@@ -1417,6 +1591,32 @@ const TripPlanner = () => {
                                 <span>{t('planner.dayRouteGoogleMaps')}</span>
                               </a>
                             )}
+                          </div>
+                        </div>
+
+                        {/* Daily Cost Breakdown Card */}
+                        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-[var(--text-primary)]">{t('planner.dailyCost')}:</span>
+                            <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400">{formatCost(currentDay.dailyEstimatedCost || 0)}</span>
+                          </div>
+                          
+                          <div className="flex flex-wrap items-center gap-4 text-[10px] text-[var(--text-muted)]">
+                            <div>
+                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Hoạt động: ' : 'Activities: '}</span>
+                              <span className="font-bold text-[var(--text-primary)]">{formatCost(currentDay.activityCost || 0)}</span>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Di chuyển: ' : 'Transport: '}</span>
+                              <span className="font-bold text-[var(--text-primary)]">
+                                {formatCost(currentDay.transportCost || 0)}
+                                {currentDay.totalDistanceKm !== undefined && ` (${currentDay.totalDistanceKm} km)`}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Dự phòng: ' : 'Buffer: '}</span>
+                              <span className="font-bold text-[var(--text-primary)]">{formatCost(currentDay.bufferCost || 0)}</span>
+                            </div>
                           </div>
                         </div>
 
