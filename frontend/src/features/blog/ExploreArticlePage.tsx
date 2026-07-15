@@ -190,7 +190,7 @@ export default function ExploreArticlePage() {
               {post.title}
             </h1>
             
-            <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border-l-4 border-[var(--gold)] pl-3 italic bg-[var(--bg-elevated)]/30 py-2 pr-2 rounded-r-md">
+            <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border border-[var(--border-subtle)] bg-[var(--bg-elevated)]/30 p-4 rounded-xl italic">
               {post.excerpt}
             </p>
           </div>

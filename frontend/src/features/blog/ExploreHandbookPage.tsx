@@ -186,7 +186,7 @@ export default function ExploreHandbookPage() {
                     )}
 
                     {section.excerpt && (
-                      <p className="text-slate-600 leading-relaxed text-sm sm:text-base border-l-4 border-teal-400 pl-4">
+                      <p className="text-slate-600 leading-relaxed text-sm sm:text-base border border-slate-100 bg-slate-50/50 p-4 rounded-xl">
                         {section.excerpt}
                       </p>
                     )}
