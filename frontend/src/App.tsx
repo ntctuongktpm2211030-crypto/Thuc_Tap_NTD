@@ -1,8 +1,8 @@
-﻿import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import {
   Map, Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe, Loader2,
-  Menu, X, User, Send, Utensils, Bot, Search,
+  Menu, X, User, Send, Utensils, Bot, Search, Bookmark,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './store/authSlice';
@@ -34,6 +34,7 @@ import ChatbotPage from './features/chatbot/ChatbotPage';
 const MapDashboard = lazy(() => import('./features/map/MapDashboard'));
 const TripPlanner = lazy(() => import('./features/trips/TripPlanner'));
 const AdminDashboard = lazy(() => import('./features/admin/AdminDashboard'));
+
 function App() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
