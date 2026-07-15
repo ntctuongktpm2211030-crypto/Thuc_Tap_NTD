@@ -1,6 +1,6 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions } from '../utils/agent.utils';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
 import { VectorStoreService } from '../../rag/services/vector-store.service';
@@ -101,7 +101,7 @@ export class TravelAgent implements AgentStrategy {
     messageId?: string,
     extractedDestination?: string,
     history?: { role: string; content: string }[]
-  ): Promise<string> {
+  ): Promise<AgentResponse> {
     console.log(`[TravelAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // 1. Kiểm tra xem người dùng có đang chủ động cung cấp/khai báo vị trí bắt đầu của họ hay không
@@ -277,18 +277,14 @@ export class TravelAgent implements AgentStrategy {
     // 4. Truy xuất RAG bổ trợ từ database du lịch
     const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (1 - 12)
     
+    // --- OPTIMIZED RAG PIPELINE: Consolidated from 6 calls to 1-2 targeted calls ---
     let localDestinationsText = '';
-    let ragDocsText = '';
-    let festivalDocsText = '';
-    let foodDocsText = '';
-    let cultureDocsText = '';
-    let historyDocsText = '';
-    let attractionDocsText = '';
-
+    let ragContextText = '';
     let hasRagData = false;
+    let allRetrievedDocs: any[] = [];
 
     if (hasDestination) {
-      // Prioritize local JSON destinations
+      // 1. Load local JSON destinations (fast, no API call)
       try {
         const curated = getCuratedProvince(destination);
         if (curated) {
@@ -319,77 +315,32 @@ export class TravelAgent implements AgentStrategy {
       const needsHistory = hasKeyword(['lịch sử', 'nguồn gốc', 'thời xưa', 'kháng chiến', 'chiến tích', 'bảo tàng', 'di tích', 'cổ kính', 'cổ xưa', 'thành lập', 'tên gọi', 'truyền thuyết', 'sự tích', 'vua', 'cổ xưa']);
       const needsDestination = !needsFestival && !needsFood && !needsCulture && !needsHistory || hasKeyword(['địa điểm', 'điểm', 'cảnh', 'chơi', 'tham quan', 'vị trí', 'ở đâu', 'đường đi', 'di chuyển', 'bản đồ', 'đẹp', 'vịnh', 'đảo', 'núi', 'sông', 'hồ', 'suối', 'thác', 'rừng', 'bãi biển']);
 
-      // 1. General RAG
+      // 2. Optimized: Always do 1 general RAG call (topK=4 for broad coverage)
+      //    Then 1 targeted call if specific category keywords match
+      const targetedCategory = needsFestival ? 'festival' : needsFood ? 'food' : needsCulture ? 'culture' : needsHistory ? 'history' : needsDestination ? 'destination' : undefined;
+      
       try {
-        const ragDocs = await this.retriever.retrieve(`${destination} ${input}`, undefined, 2);
-        const filtered = filterRagDocs(ragDocs, destination);
-        if (filtered.length > 0) hasRagData = true;
-        ragDocsText = filtered.map(d => {
-          const cleanContent = d.content.length > 1000 ? d.content.substring(0, 1000) + '...' : d.content;
-          return `- [${d.category}] ${d.title}: ${cleanContent}`;
-        }).join('\n');
+        // Primary: General broad retrieval (covers everything)
+        const generalDocs = await this.retriever.retrieve(`${destination} ${input}`, undefined, 4);
+        const filteredGeneral = filterRagDocs(generalDocs, destination);
+        allRetrievedDocs = [...filteredGeneral];
+        
+        // Secondary: Targeted category retrieval (if specific topic detected)
+        let targetedDocs: any[] = [];
+        if (targetedCategory && targetedCategory !== 'destination') {
+          try {
+            targetedDocs = await this.retriever.retrieve(`${destination} ${input}`, targetedCategory as any, 3);
+            const filteredTargeted = filterRagDocs(targetedDocs, destination);
+            allRetrievedDocs = [...allRetrievedDocs, ...filteredTargeted];
+          } catch (e) {
+            console.warn('[TravelAgent] Targeted RAG retrieval failed:', e);
+          }
+        }
+        
+        if (allRetrievedDocs.length > 0) hasRagData = true;
+        ragContextText = buildRagContextWithRefs(allRetrievedDocs);
       } catch (ragErr) {
-        console.warn('[TravelAgent] General RAG retrieval failed:', ragErr);
-      }
-
-      // 2. Lễ hội
-      if (needsFestival) {
-        try {
-          const festivalDocs = await this.retriever.retrieve(`${destination} lễ hội tháng ${currentMonth}`, 'festival', 2);
-          const filtered = filterRagDocs(festivalDocs, destination);
-          if (filtered.length > 0) hasRagData = true;
-          festivalDocsText = filtered.map(d => `- [${d.category}] ${d.title}: ${d.content}`).join('\n');
-        } catch (festErr) {
-          console.warn('[TravelAgent] Festival RAG retrieval failed:', festErr);
-        }
-      }
-
-      // 3. Ẩm thực
-      if (needsFood) {
-        try {
-          const foodDocs = await this.retriever.retrieve(`${destination} đặc sản món ăn ẩm thực`, 'food', 2);
-          const filtered = filterRagDocs(foodDocs, destination);
-          if (filtered.length > 0) hasRagData = true;
-          foodDocsText = filtered.map(d => `- [${d.category}] ${d.title}: ${d.content}`).join('\n');
-        } catch (foodErr) {
-          console.warn('[TravelAgent] Food RAG retrieval failed:', foodErr);
-        }
-      }
-
-      // 4. Văn hóa
-      if (needsCulture) {
-        try {
-          const cultureDocs = await this.retriever.retrieve(`${destination} văn hóa truyền thống tín ngưỡng phong tục tập quán`, 'culture', 2);
-          const filtered = filterRagDocs(cultureDocs, destination);
-          if (filtered.length > 0) hasRagData = true;
-          cultureDocsText = filtered.map(d => `- [${d.category}] ${d.title}: ${d.content}`).join('\n');
-        } catch (cultErr) {
-          console.warn('[TravelAgent] Culture RAG retrieval failed:', cultErr);
-        }
-      }
-
-      // 5. Lịch sử
-      if (needsHistory) {
-        try {
-          const historyDocs = await this.retriever.retrieve(`${destination} lịch sử di tích truyền thuyết nguồn gốc xưa`, 'history', 2);
-          const filtered = filterRagDocs(historyDocs, destination);
-          if (filtered.length > 0) hasRagData = true;
-          historyDocsText = filtered.map(d => `- [${d.category}] ${d.title}: ${d.content}`).join('\n');
-        } catch (histErr) {
-          console.warn('[TravelAgent] History RAG retrieval failed:', histErr);
-        }
-      }
-
-      // 6. Địa danh điểm tham quan
-      if (needsDestination) {
-        try {
-          const attractionDocs = await this.retriever.retrieve(`${destination} địa điểm tham quan danh lam thắng cảnh du lịch`, 'destination', 2);
-          const filtered = filterRagDocs(attractionDocs, destination);
-          if (filtered.length > 0) hasRagData = true;
-          attractionDocsText = filtered.map(d => `- [${d.category}] ${d.title}: ${d.content}`).join('\n');
-        } catch (attrErr) {
-          console.warn('[TravelAgent] Attraction RAG retrieval failed:', attrErr);
-        }
+        console.warn('[TravelAgent] Primary RAG retrieval failed:', ragErr);
       }
     }
 
@@ -507,23 +458,8 @@ Khung lịch trình thô (Itinerary): ${itineraryData ? JSON.stringify(itinerary
 DANH SÁCH ĐỊA ĐIỂM THỰC TẾ LOCAL (ƯU TIÊN GIỚI THIỆU HÀNG ĐẦU):
 ${localDestinationsText || 'Không tìm thấy danh sách địa điểm local.'}
 
-Tài liệu tri thức chung bổ trợ:
-${ragDocsText || 'Không tìm thấy tài liệu liên quan.'}
-
-Tài liệu lễ hội mùa này (Tháng ${currentMonth}):
-${festivalDocsText || 'Không tìm thấy thông tin lễ hội đặc thù cho tháng này.'}
-
-Tài liệu ẩm thực (Món ăn đặc sản):
-${foodDocsText || 'Không tìm thấy thông tin ẩm thực liên quan.'}
-
-Tài liệu địa điểm tham quan:
-${attractionDocsText || 'Không tìm thấy thông tin địa điểm tham quan liên quan.'}
-
-Tài liệu văn hóa địa phương (Culture):
-${cultureDocsText || 'Không tìm thấy thông tin văn hóa đặc thù.'}
-
-Tài liệu lịch sử di tích (History):
-${historyDocsText || 'Không tìm thấy thông tin lịch sử liên quan.'}
+TÀI LIỆU TRI THỨC (Có đánh số nguồn - hãy tham chiếu với [số] trong câu trả lời của bạn):
+${ragContextText || 'Không tìm thấy tài liệu liên quan.'}
 
 Câu hỏi/Yêu cầu của người dùng: "${input}"`;
       } else {
@@ -542,19 +478,20 @@ Danh sách gợi ý điểm đến nổi bật: ${dests.slice(0, 10).join(', ')}
       }
 
       const llmResponse = await callAgentLLM(systemPrompt, userPrompt, history);
-      return llmResponse;
+      const citations = buildCitationsFromDocs(allRetrievedDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[TravelAgent] LLM call failed, falling back to static template response:', err);
     }
 
     // Fallback: Phản hồi phân tích từ Agent theo template cũ
-    let response = `Chào bạn, dưới đây là thông tin chi tiết và hành trình du lịch tham khảo được thiết kế dành riêng cho bạn:\n\n`;
+    let fallbackResponse = `Chào bạn, dưới đây là thông tin chi tiết và hành trình du lịch tham khảo được thiết kế dành riêng cho bạn:\n\n`;
     if (userLocation) {
-      response += `📍 Vị trí khởi hành của bạn đã được ghi nhận tại hệ thống. Bạn vui lòng cho tôi biết địa điểm muốn đi để bắt đầu lên lịch trình nhé!\n`;
+      fallbackResponse += `📍 Vị trí khởi hành của bạn đã được ghi nhận tại hệ thống. Bạn vui lòng cho tôi biết địa điểm muốn đi để bắt đầu lên lịch trình nhé!\n`;
     } else {
-      response += `📍 Vui lòng cho tôi biết vị trí hiện tại và điểm đến của bạn để tôi lên lịch trình di chuyển chi tiết nhất nhé!\n`;
+      fallbackResponse += `📍 Vui lòng cho tôi biết vị trí hiện tại và điểm đến của bạn để tôi lên lịch trình di chuyển chi tiết nhất nhé!\n`;
     }
-    return response;
+    return { response: fallbackResponse, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {

@@ -1,6 +1,6 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions } from '../utils/agent.utils';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
 import { VectorStoreService } from '../../rag/services/vector-store.service';
@@ -23,7 +23,7 @@ export class FoodAgent implements AgentStrategy {
     messageId?: string,
     extractedDestination?: string,
     history?: { role: string; content: string }[]
-  ): Promise<string> {
+  ): Promise<AgentResponse> {
     console.log(`[FoodAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // 1. Phân tích vùng miền sử dụng Fuzzy Match để chống lỗi gõ sai chữ/thiếu dấu
@@ -94,10 +94,7 @@ export class FoodAgent implements AgentStrategy {
         hasRagData = true;
       }
 
-      ragDocsText = filteredDocs.map(d => {
-        const cleanContent = d.content.length > 1500 ? d.content.substring(0, 1500) + '...' : d.content;
-        return `- [${d.category}] ${d.title}: ${cleanContent}`;
-      }).join('\n');
+      ragDocsText = buildRagContextWithRefs(filteredDocs);
     } catch (ragErr) {
       console.warn('[FoodAgent] RAG retrieval failed:', ragErr);
     }
@@ -127,7 +124,8 @@ ${ragDocsText || 'Không tìm thấy tài liệu liên quan.'}
 Câu hỏi/Yêu cầu của người dùng: "${input}"`;
 
       const llmResponse = await callAgentLLM(systemPrompt, userPrompt, history);
-      return llmResponse;
+      const citations = buildCitationsFromDocs(ragDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[FoodAgent] LLM call failed, falling back to static template response:', err);
     }
@@ -143,7 +141,7 @@ Câu hỏi/Yêu cầu của người dùng: "${input}"`;
 
     response += `💡 *Mách nhỏ dành cho bạn:* Bạn có thể ấn nút lưu các món đặc sản này vào danh sách ẩm thực yêu thích trên ứng dụng để dễ dàng mở ra tra cứu địa điểm quán ăn ngon khi đi thực tế nhé!`;
 
-    return response;
+    return { response, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {

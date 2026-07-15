@@ -282,6 +282,16 @@ export interface AIFeedback {
   createdAt: string;
 }
 
+export interface Citation {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  score: number;
+  similarity?: number;
+  index: number;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant' | 'system';
@@ -289,6 +299,7 @@ export interface ChatMessage {
   versions: ChatMessageVersion[];
   feedback?: AIFeedback | null;
   toolCalls?: ToolCall[];
+  citations?: Citation[];
 }
 
 export interface ChatConversation {

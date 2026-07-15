@@ -1,4 +1,5 @@
 import prisma from '../../../config/db';
+import { Citation } from '../types/agent.types';
 
 /**
  * Helper utility to remove Vietnamese diacritics and normalize search text.
@@ -457,6 +458,57 @@ export async function getDynamicRegions(): Promise<string[]> {
     console.warn('[getDynamicRegions] Failed to fetch dynamic regions:', err);
   }
   return ['Hà Nội', 'Sài Gòn', 'Đà Nẵng', 'Huế', 'Hà Giang'];
+}
+
+// ─── CITATION HELPER: Build citation objects from RAG docs ──────────
+
+/**
+ * Build citation objects from retrieved RAG documents with relevance filtering.
+ * Only includes docs with score >= 0.6 and limits to top 5.
+ */
+export function buildCitationsFromDocs(docs: any[], maxCites: number = 5): Citation[] {
+  if (!docs || docs.length === 0) return [];
+
+  const filtered = docs
+    .filter(d => {
+      const score = d.similarity !== undefined ? d.similarity : d.score;
+      return score !== undefined && score >= 0.6;
+    })
+    .sort((a, b) => {
+      const scoreA = a.similarity !== undefined ? a.similarity : a.score;
+      const scoreB = b.similarity !== undefined ? b.similarity : b.score;
+      return (scoreB || 0) - (scoreA || 0);
+    })
+    .slice(0, maxCites);
+
+  return filtered.map((d, idx) => ({
+    id: d.id || `cite-${idx}`,
+    title: d.title || 'Nguồn tham khảo',
+    content: d.content ? (d.content.length > 300 ? d.content.substring(0, 300) + '...' : d.content) : '',
+    category: d.category || 'general',
+    score: d.similarity !== undefined ? d.similarity : (d.score || 0),
+    similarity: d.similarity || d.score || 0,
+    index: idx + 1,
+  }));
+}
+
+/**
+ * Build a RAG context string with numbered references for citation in LLM prompts.
+ */
+export function buildRagContextWithRefs(docs: any[]): string {
+  if (!docs || docs.length === 0) return 'Không tìm thấy tài liệu liên quan.';
+  
+  return docs
+    .filter(d => {
+      const score = d.similarity !== undefined ? d.similarity : d.score;
+      return score !== undefined && score >= 0.6;
+    })
+    .slice(0, 5)
+    .map((d, idx) => {
+      const cleanContent = d.content && d.content.length > 800 ? d.content.substring(0, 800) + '...' : (d.content || '');
+      return `[${idx + 1}] ${d.title}: ${cleanContent}`;
+    })
+    .join('\n\n');
 }
 
 // ─── THUẬT TOÁN ĐÁNH GIÁ CHẤT LƯỢNG ĐÁP ÁN (BLEU SCORE) ──────────

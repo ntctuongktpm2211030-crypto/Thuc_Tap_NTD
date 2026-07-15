@@ -1,4 +1,4 @@
-import { AgentStrategy, AgentType } from '../types/agent.types';
+import { AgentStrategy, AgentType, AgentResponse, Citation } from '../types/agent.types';
 import { TravelAgent } from '../strategies/travel.agent';
 import { AddressService } from './address-service';
 import { FoodAgent } from '../strategies/food.agent';
@@ -12,7 +12,7 @@ import {
   RecommendationTool,
   ItineraryTool,
 } from '../tools/agent.tools';
-import { removeDiacritics, classifyIntentWithLLM, cleanGeographicName, getDynamicRegions, findBestBleuMatch } from '../utils/agent.utils';
+import { removeDiacritics, classifyIntentWithLLM, cleanGeographicName, getDynamicRegions, findBestBleuMatch, buildCitationsFromDocs } from '../utils/agent.utils';
 import prisma from '../../../config/db';
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
@@ -47,7 +47,7 @@ export class AgentExecutorService {
     agentType?: AgentType,
     messageId?: string,
     history?: { role: string; content: string }[]
-  ): Promise<{ response: string; agentUsed: string }> {
+  ): Promise<{ response: string; agentUsed: string; citations: Citation[] }> {
     let selectedType = agentType;
     let extractedDestination: string | undefined = undefined;
 
@@ -166,6 +166,7 @@ export class AgentExecutorService {
             return {
               response: `Tôi chưa hiểu rõ địa điểm "**${extractedDestination}**" hoặc địa điểm này không tồn tại thực tế. Bạn có thể nói rõ hơn hoặc nhập một địa điểm khác được không?`,
               agentUsed: 'System-Clarification',
+              citations: [],
             };
           }
         }
@@ -181,6 +182,7 @@ export class AgentExecutorService {
       return {
         response: 'Tôi chưa hiểu rõ ý của bạn lắm. Bạn có thể nói rõ hơn hoặc mô tả chi tiết hơn yêu cầu của mình được không?',
         agentUsed: 'System-Clarification',
+        citations: [],
       };
     }
 
@@ -215,20 +217,23 @@ export class AgentExecutorService {
       const bleuMatch = await findBestBleuMatch(input, filteredDocs);
       if (bleuMatch && bleuMatch.score >= 0.75) {
         console.log(`[AgentExecutor] BLEU score exact match found: ${bleuMatch.score.toFixed(2)}. Bypassing LLM.`);
+        const bleuCitations = buildCitationsFromDocs(ragDocs, 2).map(c => ({ ...c, index: 1 }));
         return {
           response: bleuMatch.answer,
           agentUsed: `${agent.name} (BLEU Match)`,
+          citations: bleuCitations,
         };
       }
     } catch (bleuErr) {
       console.warn('[AgentExecutor] BLEU match verification error:', bleuErr);
     }
 
-    const response = await agent.execute(userId, input, messageId, extractedDestination, history);
+    const agentResult = await agent.execute(userId, input, messageId, extractedDestination, history);
 
     return {
-      response,
+      response: agentResult.response,
       agentUsed: agent.name,
+      citations: agentResult.citations || [],
     };
   }
 

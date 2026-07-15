@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Send, User, Plus, Trash2, Brain, Star, RefreshCw,
-  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare
+  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare, BookOpen, ExternalLink
 } from 'lucide-react';
 import { chatbotService, feedbackService, ChatConversation, ChatMessage, AIMemory } from '../../services/smartTravel.service';
 import { useLang } from '../../contexts/LanguageContext';
@@ -34,7 +34,8 @@ export default function ChatbotPage() {
     favoriteLocations: '',
   });
 
-  // Feedback State
+  // Citation State
+  const [showCitationModal, setShowCitationModal] = useState<{ messageId: string; citation: any } | null>(null);
   const [activeFeedbackMsgId, setActiveFeedbackMsgId] = useState<string | null>(null);
   const [feedbackRating, setFeedbackRating] = useState(5);
   const [feedbackComment, setFeedbackComment] = useState('');
@@ -477,6 +478,37 @@ export default function ChatbotPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Citations */}
+                      {!isUser && msg.citations && msg.citations.length > 0 && (
+                        <div className="mt-3 pt-2.5 border-t border-[var(--border-subtle)] space-y-1.5">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <BookOpen size={10} className="text-blue-400" />
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-blue-400">
+                              {vi ? 'Nguồn tham khảo' : 'Sources'} ({msg.citations.length})
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {msg.citations.slice(0, 3).map((cite) => (
+                              <button
+                                key={cite.id}
+                                onClick={() => setShowCitationModal({ messageId: msg.id, citation: cite })}
+                                className="group inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 hover:border-blue-500/30 transition-all text-[10px] text-blue-300 cursor-pointer"
+                                title={cite.title}
+                              >
+                                <span className="font-bold">[{cite.index}]</span>
+                                <span className="truncate max-w-[100px]">{cite.title}</span>
+                                <ExternalLink size={8} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </button>
+                            ))}
+                            {msg.citations.length > 3 && (
+                              <span className="text-[10px] text-blue-400/60 px-1 py-1">
+                                +{msg.citations.length - 3} {vi ? 'khác' : 'more'}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Metadata & Controls */}
@@ -556,6 +588,55 @@ export default function ChatbotPage() {
             </button>
           </form>
         </div>
+
+        {/* ─── MODAL: CHI TIẾT NGUỒN THAM KHẢO (CITATION) ─── */}
+        {showCitationModal && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+            <div className="surface-elevated rounded-2xl p-5 border border-[var(--border-subtle)] w-full max-w-lg space-y-3.5 shadow-2xl relative">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 flex items-center justify-center border border-blue-500/20">
+                    <BookOpen size={13} className="text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+                      {vi ? 'Nguồn tham khảo' : 'Source'} [{showCitationModal.citation.index}]
+                    </h3>
+                    <span className="text-[10px] text-blue-400 font-medium">
+                      {showCitationModal.citation.category} · {vi ? 'Độ phù hợp' : 'Relevance'}: {(showCitationModal.citation.score * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCitationModal(null)}
+                  className="p-1 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer border-none"
+                >
+                  <XCircle size={16} />
+                </button>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                  {showCitationModal.citation.title}
+                </p>
+                <div className="bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl p-3 max-h-48 overflow-y-auto">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                    {showCitationModal.citation.content}
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => setShowCitationModal(null)}
+                className="w-full py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-xs text-blue-400 font-semibold transition-all cursor-pointer"
+              >
+                {vi ? 'Đóng' : 'Close'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ─── MODAL: ĐÁNH GIÁ CÂU TRẢ LỜI (FEEDBACK) ─── */}
         {activeFeedbackMsgId && (

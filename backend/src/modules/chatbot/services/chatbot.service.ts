@@ -1,5 +1,5 @@
 import { ChatbotRepository } from '../repositories/chatbot.repository';
-import { SaveMemoryDto, ChatMessageResponse } from '../types/chatbot.types';
+import { SaveMemoryDto, ChatMessageResponse, SendMessageResult } from '../types/chatbot.types';
 import { generateChatbotResponse } from '../utils/chatbot.utils';
 import { AgentExecutorService } from '../../ai-agents/services/agent-executor.service';
 
@@ -41,7 +41,7 @@ export class ChatbotService {
   }
 
   // ─── Message Flow & AI ──────────────────────────────────────
-  async sendMessage(conversationId: string, userId: string, content: string) {
+  async sendMessage(conversationId: string, userId: string, content: string): Promise<SendMessageResult> {
     // 1. Xác thực quyền sở hữu cuộc trò chuyện
     const conversation = await this.repo.getConversationById(conversationId, userId);
     if (!conversation) {
@@ -63,9 +63,11 @@ export class ChatbotService {
 
     // 6. Gọi AI để lấy câu trả lời (Ưu tiên gọi Agent Layer, fallback sang openai utility)
     let aiResponseContent = '';
+    let citations: any[] = [];
     try {
       const agentResult = await this.agentExecutor.execute(userId, content, undefined, assistantMsg.id, history);
       aiResponseContent = agentResult.response;
+      citations = agentResult.citations || [];
     } catch (err) {
       console.error('Agent execution failed, falling back to openai utility:', err);
       aiResponseContent = await generateChatbotResponse(history, memory);
@@ -84,10 +86,12 @@ export class ChatbotService {
       userMessage: {
         ...userMsg,
         versions: [userVersion],
+        citations: [],
       },
       assistantMessage: {
         ...assistantMsg,
         versions: [assistantVersion],
+        citations,
       },
     };
   }
@@ -131,10 +135,12 @@ export class ChatbotService {
 
     // 4. Gọi AI sinh câu trả lời mới (Ưu tiên gọi Agent Layer, fallback sang openai utility)
     let newAiResponseContent = '';
+    let citations: any[] = [];
     try {
       const lastUserMsg = history.slice().reverse().find(h => h.role === 'user');
       const agentResult = await this.agentExecutor.execute(userId, lastUserMsg ? lastUserMsg.content : 'xin chào', undefined, messageId, history);
       newAiResponseContent = agentResult.response;
+      citations = agentResult.citations || [];
     } catch (err) {
       console.error('Agent execution failed during regenerate, falling back to openai utility:', err);
       newAiResponseContent = await generateChatbotResponse(history, memory);
@@ -159,6 +165,7 @@ export class ChatbotService {
     return {
       ...message,
       versions: [newVersion],
+      citations,
     };
   }
 

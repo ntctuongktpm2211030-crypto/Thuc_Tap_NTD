@@ -1,6 +1,6 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM } from '../utils/agent.utils';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
 import { VectorStoreService } from '../../rag/services/vector-store.service';
@@ -23,7 +23,7 @@ export class RecommendationAgent implements AgentStrategy {
     messageId?: string,
     extractedDestination?: string,
     history?: { role: string; content: string }[]
-  ): Promise<string> {
+  ): Promise<AgentResponse> {
     console.log(`[RecommendationAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // Phân tích và trích xuất điểm đến từ câu hỏi để cá nhân hóa
@@ -89,10 +89,7 @@ export class RecommendationAgent implements AgentStrategy {
         hasRagData = true;
       }
 
-      ragDocsText = filteredDocs.map(d => {
-        const cleanContent = d.content.length > 1500 ? d.content.substring(0, 1500) + '...' : d.content;
-        return `- [${d.category}] ${d.title}: ${cleanContent}`;
-      }).join('\n');
+      ragDocsText = buildRagContextWithRefs(filteredDocs);
     } catch (ragErr) {
       console.warn('[RecommendationAgent] RAG retrieval failed:', ragErr);
     }
@@ -168,7 +165,8 @@ Câu hỏi/Yêu cầu mới nhất của người dùng: "${input}"`;
         console.warn('[RecommendationAgent] Warning: Detected potential unauthorized/hallucinated destinations, but returning response anyway to avoid empty/generic template fallback.');
       }
 
-      return llmResponse;
+      const citations = buildCitationsFromDocs(ragDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[RecommendationAgent] LLM call failed or rejected, falling back to static template response:', err);
     }
@@ -190,7 +188,7 @@ Câu hỏi/Yêu cầu mới nhất của người dùng: "${input}"`;
 
     response += `\nHy vọng những gợi ý chi tiết này sẽ giúp bạn lựa chọn được hành trình ưng ý nhất. Nếu bạn muốn lập lịch trình cụ thể hay tìm hiểu thêm về thời tiết, ẩm thực tại các điểm đến này, hãy cứ đặt câu hỏi cho tôi nhé!`;
 
-    return response;
+    return { response, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {

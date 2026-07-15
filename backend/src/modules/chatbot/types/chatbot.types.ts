@@ -1,3 +1,5 @@
+import { Citation } from '../../ai-agents/types/agent.types';
+
 export type ChatRole = 'user' | 'assistant' | 'system';
 
 export interface CreateConversationDto {
@@ -31,4 +33,11 @@ export interface ChatMessageResponse {
   createdAt: Date;
   updatedAt: Date;
   versions: ChatMessageVersionResponse[];
+  citations?: Citation[];
+  toolCalls?: any[];
+}
+
+export interface SendMessageResult {
+  userMessage: ChatMessageResponse;
+  assistantMessage: ChatMessageResponse;
 }

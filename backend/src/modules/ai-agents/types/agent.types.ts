@@ -1,3 +1,18 @@
+export interface Citation {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  score: number;
+  similarity?: number;
+  index: number;
+}
+
+export interface AgentResponse {
+  response: string;
+  citations: Citation[];
+}
+
 export interface AgentTool {
   name: string;
   description: string;
@@ -13,13 +28,13 @@ export interface AgentStrategy {
     messageId?: string,
     extractedDestination?: string,
     history?: { role: string; content: string }[]
-  ): Promise<string>;
+  ): Promise<AgentResponse>;
 }
 
 export type AgentType = 'travel' | 'food' | 'culture' | 'recommendation' | 'unknown';
 
 export interface RunAgentDto {
-  agentType?: AgentType; // Nếu không truyền, hệ thống sẽ tự động nhận diện agent phù hợp
+  agentType?: AgentType;
   input: string;
-  messageId?: string; // Dùng để lưu vết ToolCall nếu chạy trong ngữ cảnh chat
+  messageId?: string;
 }

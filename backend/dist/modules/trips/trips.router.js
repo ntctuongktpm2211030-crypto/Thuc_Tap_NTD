@@ -9,6 +9,28 @@ const auth_middleware_1 = require("../auth/auth.middleware");
 const ai_planner_1 = require("../ai/ai-planner");
 const route_optimizer_1 = require("../optimizer/route-optimizer");
 const router = (0, express_1.Router)();
+function unpackActivityNotes(act) {
+    let extra = {};
+    if (act.notes) {
+        try {
+            if (act.notes.trim().startsWith('{') && act.notes.trim().endsWith('}')) {
+                extra = JSON.parse(act.notes);
+            }
+        }
+        catch (e) { }
+    }
+    const originalNotes = extra.originalNotes !== undefined ? extra.originalNotes : act.notes;
+    return {
+        ...act,
+        ...extra,
+        notes: originalNotes,
+        activityName: act.destination?.name || act.activityName || 'Destination',
+        locationName: act.destination?.address || act.destination?.name || act.locationName || 'Destination',
+        category: act.destination?.category || act.category || 'attraction',
+        latitude: act.destination?.latitude || act.latitude,
+        longitude: act.destination?.longitude || act.longitude,
+    };
+}
 // ─────────────────────────────────────────────────────────
 // GET /api/v1/trips  — list current user's trips
 // ─────────────────────────────────────────────────────────
@@ -23,7 +45,14 @@ router.get('/', auth_middleware_1.requireAuth, async (req, res) => {
             },
             orderBy: { createdAt: 'desc' },
         });
-        return res.json(trips);
+        const mappedTrips = trips.map(trip => {
+            const mappedDays = trip.days.map(d => {
+                const mappedActivities = d.activities.map(unpackActivityNotes);
+                return { ...d, activities: mappedActivities };
+            });
+            return { ...trip, days: mappedDays };
+        });
+        return res.json(mappedTrips);
     }
     catch (err) {
         console.error('[trips/GET /]', err);
@@ -57,7 +86,11 @@ router.get('/:id', auth_middleware_1.requireAuth, async (req, res) => {
         if (trip.ownerId !== req.user.sub && !trip.isPublic) {
             return res.status(403).json({ error: 'Access denied.' });
         }
-        return res.json(trip);
+        const mappedDays = trip.days.map(d => {
+            const mappedActivities = d.activities.map(unpackActivityNotes);
+            return { ...d, activities: mappedActivities };
+        });
+        return res.json({ ...trip, days: mappedDays });
     }
     catch (err) {
         console.error('[trips/GET /:id]', err);
@@ -69,10 +102,11 @@ router.get('/:id', auth_middleware_1.requireAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { title, description, destinationName, startDate, endDate, totalBudget, travelStyle, isPublic } = req.body;
+        const { title, description, destinationName, startDate, endDate, totalBudget, travelStyle, isPublic, days } = req.body;
         if (!title || !destinationName || !startDate || !endDate) {
             return res.status(400).json({ error: 'title, destinationName, startDate, endDate are required.' });
         }
+        // 1. Create the trip
         const trip = await db_1.default.trip.create({
             data: {
                 ownerId: req.user.sub,
@@ -86,6 +120,92 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
                 isPublic: isPublic || false,
             },
         });
+        // 2. If days are provided, create them and associate activities
+        if (days && Array.isArray(days)) {
+            for (const day of days) {
+                const dayIndex = day.dayNumber || day.dayIndex || 1;
+                const dayTitle = day.title || day.dateIndex || `Day ${dayIndex}`;
+                const tripStartDate = new Date(startDate);
+                const dayDate = new Date(tripStartDate);
+                dayDate.setDate(tripStartDate.getDate() + (dayIndex - 1));
+                const tripDay = await db_1.default.tripDay.create({
+                    data: {
+                        tripId: trip.id,
+                        dayIndex,
+                        date: dayDate,
+                    },
+                });
+                if (day.activities && Array.isArray(day.activities)) {
+                    for (let i = 0; i < day.activities.length; i++) {
+                        const act = day.activities[i];
+                        const destName = act.name || act.activityName || act.locationName || 'Destination';
+                        const lat = Number(act.latitude) || 21.0285;
+                        const lng = Number(act.longitude) || 105.8048;
+                        const cat = act.category || 'attraction';
+                        const notes = act.note || act.notes || '';
+                        const cost = Number(act.cost) || Number(act.estimatedCost) || 0;
+                        const timeRange = act.time || act.timeSlot || '09:00 - 10:00';
+                        let startTime = '09:00';
+                        let endTime = '10:00';
+                        if (timeRange.includes('-')) {
+                            const parts = timeRange.split('-');
+                            startTime = parts[0].trim();
+                            endTime = parts[1].trim();
+                        }
+                        else {
+                            startTime = timeRange.trim();
+                        }
+                        // Find or create Destination
+                        let destination = await db_1.default.destination.findFirst({
+                            where: { name: destName },
+                        });
+                        if (!destination) {
+                            destination = await db_1.default.destination.create({
+                                data: {
+                                    name: destName,
+                                    description: notes || destName,
+                                    latitude: lat,
+                                    longitude: lng,
+                                    category: cat,
+                                    address: act.address || destName,
+                                },
+                            });
+                        }
+                        const extraFields = {
+                            thoiGianThamQuan: act.thoiGianThamQuan,
+                            goiYTraiNghiem: act.goiYTraiNghiem,
+                            monAn: act.monAn,
+                            quanGoiY: act.quanGoiY,
+                            anTrua: act.anTrua,
+                            monDacSan: act.monDacSan,
+                            thoiGianNghiNgoi: act.thoiGianNghiNgoi,
+                            thoiGianLuuLai: act.thoiGianLuuLai,
+                            anToi: act.anToi,
+                            diaDiemDaoChoi: act.diaDiemDaoChoi,
+                            choDem: act.choDem,
+                            cafe: act.cafe,
+                            hoatDongGiaiTri: act.hoatDongGiaiTri,
+                            nghiDemODau: act.nghiDemODau,
+                            originalNotes: notes,
+                        };
+                        const hasExtra = Object.keys(extraFields).some(k => k !== 'originalNotes' && extraFields[k] !== undefined && extraFields[k] !== null);
+                        const notesToSave = hasExtra ? JSON.stringify(extraFields) : notes;
+                        // Create TripActivity
+                        await db_1.default.tripActivity.create({
+                            data: {
+                                tripDayId: tripDay.id,
+                                destinationId: destination.id,
+                                startTime,
+                                endTime,
+                                estimatedCost: cost,
+                                sequenceOrder: i + 1,
+                                notes: notesToSave,
+                            },
+                        });
+                    }
+                }
+            }
+        }
         return res.status(201).json(trip);
     }
     catch (err) {
@@ -98,24 +218,26 @@ router.post('/', auth_middleware_1.requireAuth, async (req, res) => {
 // ─────────────────────────────────────────────────────────
 router.post('/ai-generate', auth_middleware_1.requireAuth, async (req, res) => {
     try {
-        const { destination, durationDays, dailyBudget, currency, interests, travelStyle } = req.body;
+        const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle, transportation } = req.body;
         if (!destination || !durationDays) {
             return res.status(400).json({ error: 'destination and durationDays are required.' });
         }
+        const calculatedTotalBudget = totalBudget || (dailyBudget ? Number(dailyBudget) * Number(durationDays) : 500);
         // 1. Call AI planner
         const aiResult = await (0, ai_planner_1.generateAIItinerary)({
             destination,
             durationDays: Number(durationDays),
-            dailyBudget: Number(dailyBudget) || 100,
+            totalBudget: Number(calculatedTotalBudget),
             currency: currency || 'USD',
             interests: interests || [],
             travelStyle: travelStyle || 'Adventure',
+            transportation: transportation || 'Xe máy',
         });
         // 2. Persist to AIHistory table for analytics
         await db_1.default.aIHistory.create({
             data: {
                 userId: req.user.sub,
-                promptText: `destination=${destination} days=${durationDays} budget=${dailyBudget} style=${travelStyle}`,
+                promptText: `destination=${destination} days=${durationDays} budget=${calculatedTotalBudget} style=${travelStyle}`,
                 responseJson: JSON.stringify(aiResult),
                 type: 'itinerary',
             },
@@ -125,6 +247,44 @@ router.post('/ai-generate', auth_middleware_1.requireAuth, async (req, res) => {
     catch (err) {
         console.error('[trips/ai-generate]', err);
         return res.status(500).json({ error: 'AI itinerary generation failed.' });
+    }
+});
+// ─────────────────────────────────────────────────────────
+// POST /api/v1/trips/ai-regenerate-part — AI partial regeneration (day or session)
+// ─────────────────────────────────────────────────────────
+router.post('/ai-regenerate-part', auth_middleware_1.requireAuth, async (req, res) => {
+    try {
+        const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle, targetDayIndex, targetSession, currentItinerary, excludePlaces } = req.body;
+        if (!destination || !durationDays || targetDayIndex === undefined || !currentItinerary) {
+            return res.status(400).json({ error: 'destination, durationDays, targetDayIndex, and currentItinerary are required.' });
+        }
+        const calculatedTotalBudget = totalBudget || (dailyBudget ? Number(dailyBudget) * Number(durationDays) : 500);
+        const aiResult = await (0, ai_planner_1.regenerateItineraryPart)({
+            destination,
+            durationDays: Number(durationDays),
+            totalBudget: Number(calculatedTotalBudget),
+            currency: currency || 'USD',
+            interests: interests || [],
+            travelStyle: travelStyle || 'Adventure',
+            targetDayIndex: Number(targetDayIndex),
+            targetSession,
+            currentItinerary,
+            excludePlaces: excludePlaces || [],
+        });
+        // Persist to AIHistory
+        await db_1.default.aIHistory.create({
+            data: {
+                userId: req.user.sub,
+                promptText: `regenerate_part destination=${destination} day=${targetDayIndex} session=${targetSession || 'day'}`,
+                responseJson: JSON.stringify(aiResult),
+                type: 'itinerary_part_regeneration',
+            },
+        });
+        return res.status(200).json(aiResult);
+    }
+    catch (err) {
+        console.error('[trips/ai-regenerate-part]', err);
+        return res.status(500).json({ error: 'AI partial itinerary regeneration failed.' });
     }
 });
 // ─────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions } from '../utils/agent.utils';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
 import { VectorStoreService } from '../../rag/services/vector-store.service';
@@ -23,7 +23,7 @@ export class CultureAgent implements AgentStrategy {
     messageId?: string,
     extractedDestination?: string,
     history?: { role: string; content: string }[]
-  ): Promise<string> {
+  ): Promise<AgentResponse> {
     console.log(`[CultureAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // 1. Phân tích khu vực sử dụng Fuzzy Match chống lỗi gõ sai chữ/thiếu dấu
@@ -75,12 +75,10 @@ export class CultureAgent implements AgentStrategy {
 
     // 3. Lấy dữ liệu RAG bổ trợ (tìm kiếm tự do không giới hạn category để bao quát cả history, festival, culture)
     let ragDocsText = '';
+    let ragDocs: any[] = [];
     try {
-      const ragDocs = await this.retriever.retrieve(`${region} ${input}`, undefined, 4);
-      ragDocsText = ragDocs.map(d => {
-        const cleanContent = d.content.length > 1500 ? d.content.substring(0, 1500) + '...' : d.content;
-        return `- [${d.category}] ${d.title}: ${cleanContent}`;
-      }).join('\n');
+      ragDocs = await this.retriever.retrieve(`${region} ${input}`, undefined, 4);
+      ragDocsText = buildRagContextWithRefs(ragDocs);
     } catch (ragErr) {
       console.warn('[CultureAgent] RAG retrieval failed:', ragErr);
     }
@@ -99,7 +97,8 @@ ${ragDocsText || 'Không tìm thấy tài liệu liên quan.'}
 Câu hỏi/Yêu cầu của người dùng: "${input}"`;
 
       const llmResponse = await callAgentLLM(systemPrompt, userPrompt, history);
-      return llmResponse;
+      const citations = buildCitationsFromDocs(ragDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[CultureAgent] LLM call failed, falling back to static template response:', err);
     }
@@ -110,7 +109,7 @@ Câu hỏi/Yêu cầu của người dùng: "${input}"`;
     response += `${cultureData.info}\n\n`;
     response += `Hy vọng những thông tin văn hóa lịch sử thú vị này sẽ giúp hành trình khám phá và trải nghiệm thực tế của bạn tại **${region}** trở nên ý nghĩa, sâu sắc và trọn vẹn hơn bao giờ hết!`;
 
-    return response;
+    return { response, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {
