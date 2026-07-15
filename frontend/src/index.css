@@ -69,7 +69,7 @@
 
   --text-primary:     #111827;   /* Gray 900 for heading/emphasis */
   --text-secondary:   #374151;   /* Gray 700 for body/secondary - User requested */
-  --text-muted:       #6b7280;   /* Gray 500 */
+  --text-muted:       #4b5563;   /* Gray 600 - High contrast WCAG AA */
   --text-inverse:     #ffffff;   /* White text on dark elements */
 
   --gold:             #2563eb;   /* Primary Blue - User requested */

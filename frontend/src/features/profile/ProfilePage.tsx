@@ -363,8 +363,8 @@ export default function ProfilePage() {
                     notifications.map(notif => (
                       <div
                         key={notif.id}
-                        className={`flex items-start gap-3.5 p-4 rounded-xl transition-all ${
-                          notif.isRead ? 'opacity-70 bg-transparent' : 'bg-[var(--gold-glow)]/15 border-l-3 border-[var(--gold)]'
+                        className={`flex items-start gap-3.5 p-4 rounded-xl transition-all border ${
+                          notif.isRead ? 'opacity-70 bg-transparent border-transparent' : 'bg-[var(--gold-glow)]/20 border-[var(--border-glow)] shadow-sm'
                         }`}
                       >
                         <div className="mt-0.5 p-2 rounded-xl bg-[var(--bg-elevated)] text-[var(--gold)]">
