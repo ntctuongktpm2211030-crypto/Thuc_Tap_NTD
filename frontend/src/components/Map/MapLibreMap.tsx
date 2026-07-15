@@ -29,6 +29,7 @@ interface MapLibreMapProps {
   aiRecommendedIds?: string[];
   weatherInfo?: { condition: string; temp: string };
   onSelectLocation?: (loc: MapLocation | null) => void;
+  destination?: string;
 }
 
 // Math helpers for client-side distance and bounding box calculations
@@ -188,6 +189,8 @@ function isWebGLSupported(): boolean {
   }
 }
 
+const DEFAULT_WEATHER = { condition: 'Sunny', temp: '28' };
+
 export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   center = [21.028511, 105.804817],
   zoom = 13,
@@ -197,8 +200,9 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   onAddPointToRoute,
   onRemovePointFromRoute,
   aiRecommendedIds = [],
-  weatherInfo = { condition: 'Sunny', temp: '28' },
+  weatherInfo = DEFAULT_WEATHER,
   onSelectLocation,
+  destination,
 }) => {
   const { lang } = useLang();
   const vi = lang === 'vi';
@@ -219,24 +223,62 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   // Dynamic GIS fetched data
   const [warnings, setWarnings] = useState<any[]>([]);
   const [eventsData, setEventsData] = useState<any[]>([]);
+  const [weatherDataState, setWeatherDataState] = useState(weatherInfo);
+
+  const lastWeatherRef = useRef(weatherInfo);
+  useEffect(() => {
+    if (weatherInfo && (weatherInfo.condition !== lastWeatherRef.current?.condition || weatherInfo.temp !== lastWeatherRef.current?.temp)) {
+      lastWeatherRef.current = weatherInfo;
+      setWeatherDataState(weatherInfo);
+    }
+  }, [weatherInfo?.condition, weatherInfo?.temp]);
+
+  useEffect(() => {
+    if (!destination) return;
+    const fetchWeather = async () => {
+      try {
+        const res = await mapService.weather({ location: destination });
+        if (res && res.temperature) {
+          setWeatherDataState({
+            condition: res.condition,
+            temp: res.temperature.replace('°C', '')
+          });
+        }
+      } catch (err) {
+        console.error('[MapLibreMap] Failed to fetch weather:', err);
+      }
+    };
+    fetchWeather();
+  }, [destination]);
 
   const [activePopup, setActivePopup] = useState<MapLocation | null>(null);
 
   const [viewState, setViewState] = useState({
-    latitude: center[0],
-    longitude: center[1],
+    latitude: Number(center[0]) || 21.028511,
+    longitude: Number(center[1]) || 105.804817,
     zoom: zoom,
     pitch: 0,
     bearing: 0,
   });
 
   // Sync center when prop changes
+  const lastSyncedCenter = useRef<[number, number]>([0, 0]);
   useEffect(() => {
-    setViewState(prev => ({
-      ...prev,
-      latitude: center[0],
-      longitude: center[1],
-    }));
+    const lat = Number(center[0]);
+    const lng = Number(center[1]);
+    if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) return;
+
+    const latDiff = Math.abs(lat - lastSyncedCenter.current[0]);
+    const lngDiff = Math.abs(lng - lastSyncedCenter.current[1]);
+
+    if (latDiff > 0.001 || lngDiff > 0.001) {
+      lastSyncedCenter.current = [lat, lng];
+      setViewState(prev => ({
+        ...prev,
+        latitude: lat,
+        longitude: lng,
+      }));
+    }
   }, [center[0], center[1]]);
 
   // Setup global callback for popups
@@ -289,13 +331,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   };
 
   // Viewport-based fetching for warnings and events
-  const [lastFetchCenter, setLastFetchCenter] = useState<[number, number]>([0, 0]);
+  const lastFetchCenterRef = useRef<[number, number]>([0, 0]);
   useEffect(() => {
-    const latDiff = Math.abs(viewState.latitude - lastFetchCenter[0]);
-    const lngDiff = Math.abs(viewState.longitude - lastFetchCenter[1]);
+    const latDiff = Math.abs(viewState.latitude - lastFetchCenterRef.current[0]);
+    const lngDiff = Math.abs(viewState.longitude - lastFetchCenterRef.current[1]);
 
     if (latDiff > 0.03 || lngDiff > 0.03) {
-      setLastFetchCenter([viewState.latitude, viewState.longitude]);
+      lastFetchCenterRef.current = [viewState.latitude, viewState.longitude];
       
       const fetchLayers = async () => {
         try {
@@ -341,6 +383,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   }, [center[0], center[1], locations]);
 
   // Fit map bounds to show route
+  const routePointsKey = JSON.stringify(routePoints.map(p => p.id));
   useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map || routePoints.length < 2 || viewType !== 'map') return;
@@ -361,7 +404,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       [[minLng, minLat], [maxLng, maxLat]],
       { padding: 50, duration: 800 }
     );
-  }, [routePoints, viewType]);
+  }, [routePointsKey, viewType]);
 
   const handleMapClick = (event: any) => {
     const map = mapRef.current?.getMap();
@@ -399,7 +442,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   };
 
   // Build GeoJSON data for clustering and heatmap
-  const geojsonFeatures = locations.map(loc => ({
+  const geojsonFeatures = React.useMemo(() => locations.map(loc => ({
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -418,21 +461,21 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       isLive: loc.id.startsWith('live-') && !loc.id.startsWith('live-current-user-'),
       isRecommended: aiRecommendedIds.includes(loc.id),
     }
-  }));
+  })), [locations, aiRecommendedIds]);
 
-  const geojsonData: any = {
+  const geojsonData: any = React.useMemo(() => ({
     type: 'FeatureCollection',
     features: geojsonFeatures
-  };
+  }), [geojsonFeatures]);
 
-  const routeGeoJSON: any = {
+  const routeGeoJSON: any = React.useMemo(() => ({
     type: 'Feature',
     properties: {},
     geometry: {
       type: 'LineString',
       coordinates: routePoints.map(p => [p.lng, p.lat])
     }
-  };
+  }), [routePoints]);
 
   const timelinePoints = routePoints.length > 0 ? routePoints : locations;
 
@@ -455,13 +498,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
 
   // Mock Weather Stations Layer Data
   const weatherStations = [
-    { id: 'w1', name: 'Trạm trung tâm', temp: weatherInfo.temp, condition: weatherInfo.condition.toLowerCase().includes('rain') ? '🌧️' : '☀️', lat: viewState.latitude + 0.015, lng: viewState.longitude - 0.015 },
-    { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherInfo.temp) - 1), condition: '☁️', lat: viewState.latitude - 0.015, lng: viewState.longitude + 0.015 }
+    { id: 'w1', name: 'Trạm trung tâm', temp: weatherDataState.temp, condition: weatherDataState.condition.toLowerCase().includes('rain') || weatherDataState.condition.toLowerCase().includes('mưa') ? '🌧️' : '☀️', lat: viewState.latitude + 0.015, lng: viewState.longitude - 0.015 },
+    { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherDataState.temp) - 1), condition: '☁️', lat: viewState.latitude - 0.015, lng: viewState.longitude + 0.015 }
   ];
 
   // Mock Traffic Congestion Indicators
   const trafficIncidents = [
-    { id: 't1', message: vi ? 'Kẹt xe nặng - Cầu Giấy' : 'Heavy Traffic - Cau Giay', lat: viewState.latitude + 0.01, lng: viewState.longitude + 0.01 },
+    { id: 't1', message: vi ? `Kẹt xe nặng - ${destination || 'Khu vực trung tâm'}` : `Heavy Traffic - ${destination || 'Center'}`, lat: viewState.latitude + 0.01, lng: viewState.longitude + 0.01 },
     { id: 't2', message: vi ? 'Ùn tắc di chuyển chậm' : 'Congestion - Slow Speed', lat: viewState.latitude - 0.01, lng: viewState.longitude - 0.01 }
   ];
 

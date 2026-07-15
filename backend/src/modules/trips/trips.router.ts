@@ -6,6 +6,28 @@ import { optimizeRoute, Waypoint } from '../optimizer/route-optimizer';
 
 const router = Router();
 
+function unpackActivityNotes(act: any) {
+  let extra: any = {};
+  if (act.notes) {
+    try {
+      if (act.notes.trim().startsWith('{') && act.notes.trim().endsWith('}')) {
+        extra = JSON.parse(act.notes);
+      }
+    } catch (e) {}
+  }
+  const originalNotes = extra.originalNotes !== undefined ? extra.originalNotes : act.notes;
+  return {
+    ...act,
+    ...extra,
+    notes: originalNotes,
+    activityName: act.destination?.name || act.activityName || 'Destination',
+    locationName: act.destination?.address || act.destination?.name || act.locationName || 'Destination',
+    category: act.destination?.category || act.category || 'attraction',
+    latitude: act.destination?.latitude || act.latitude,
+    longitude: act.destination?.longitude || act.longitude,
+  };
+}
+
 // ─────────────────────────────────────────────────────────
 // GET /api/v1/trips  — list current user's trips
 // ─────────────────────────────────────────────────────────
@@ -20,7 +42,16 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
       },
       orderBy: { createdAt: 'desc' },
     });
-    return res.json(trips);
+
+    const mappedTrips = trips.map(trip => {
+      const mappedDays = trip.days.map(d => {
+        const mappedActivities = d.activities.map(unpackActivityNotes);
+        return { ...d, activities: mappedActivities };
+      });
+      return { ...trip, days: mappedDays };
+    });
+
+    return res.json(mappedTrips);
   } catch (err) {
     console.error('[trips/GET /]', err);
     return res.status(500).json({ error: 'Failed to fetch trips.' });
@@ -56,7 +87,12 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
       return res.status(403).json({ error: 'Access denied.' });
     }
 
-    return res.json(trip);
+    const mappedDays = trip.days.map(d => {
+      const mappedActivities = d.activities.map(unpackActivityNotes);
+      return { ...d, activities: mappedActivities };
+    });
+
+    return res.json({ ...trip, days: mappedDays });
   } catch (err) {
     console.error('[trips/GET /:id]', err);
     return res.status(500).json({ error: 'Failed to fetch trip.' });
@@ -147,6 +183,27 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
               });
             }
 
+            const extraFields = {
+              thoiGianThamQuan: act.thoiGianThamQuan,
+              goiYTraiNghiem: act.goiYTraiNghiem,
+              monAn: act.monAn,
+              quanGoiY: act.quanGoiY,
+              anTrua: act.anTrua,
+              monDacSan: act.monDacSan,
+              thoiGianNghiNgoi: act.thoiGianNghiNgoi,
+              thoiGianLuuLai: act.thoiGianLuuLai,
+              anToi: act.anToi,
+              diaDiemDaoChoi: act.diaDiemDaoChoi,
+              choDem: act.choDem,
+              cafe: act.cafe,
+              hoatDongGiaiTri: act.hoatDongGiaiTri,
+              nghiDemODau: act.nghiDemODau,
+              originalNotes: notes,
+            };
+
+            const hasExtra = Object.keys(extraFields).some(k => k !== 'originalNotes' && (extraFields as any)[k] !== undefined && (extraFields as any)[k] !== null);
+            const notesToSave = hasExtra ? JSON.stringify(extraFields) : notes;
+
             // Create TripActivity
             await prisma.tripActivity.create({
               data: {
@@ -156,7 +213,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
                 endTime,
                 estimatedCost: cost,
                 sequenceOrder: i + 1,
-                notes,
+                notes: notesToSave,
               },
             });
           }
@@ -176,7 +233,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle } = req.body;
+    const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle, transportation } = req.body;
 
     if (!destination || !durationDays) {
       return res.status(400).json({ error: 'destination and durationDays are required.' });
@@ -192,6 +249,7 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
       currency: currency || 'USD',
       interests: interests || [],
       travelStyle: travelStyle || 'Adventure',
+      transportation: transportation || 'Xe máy',
     });
 
     // 2. Persist to AIHistory table for analytics

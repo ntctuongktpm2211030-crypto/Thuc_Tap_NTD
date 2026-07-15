@@ -4,6 +4,7 @@ import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDesti
 import { RetrieverService } from '../../rag/services/retriever.service';
 import { EmbeddingsService } from '../../rag/services/embeddings.service';
 import { VectorStoreService } from '../../rag/services/vector-store.service';
+import { getCuratedProvince } from '../../../config/vietnam_destinations';
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Bán kính Trái Đất (km)
@@ -276,6 +277,7 @@ export class TravelAgent implements AgentStrategy {
     // 4. Truy xuất RAG bổ trợ từ database du lịch
     const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (1 - 12)
     
+    let localDestinationsText = '';
     let ragDocsText = '';
     let festivalDocsText = '';
     let foodDocsText = '';
@@ -286,6 +288,28 @@ export class TravelAgent implements AgentStrategy {
     let hasRagData = false;
 
     if (hasDestination) {
+      // Prioritize local JSON destinations
+      try {
+        const curated = getCuratedProvince(destination);
+        if (curated) {
+          const allPlaces = [
+            ...curated.attractions,
+            ...curated.nature,
+            ...curated.restaurants.slice(0, 3),
+            ...curated.hotels.slice(0, 2)
+          ];
+          const top6Places = allPlaces.slice(0, 6);
+          if (top6Places.length > 0) {
+            localDestinationsText = top6Places.map((p, idx) => 
+              `${idx + 1}. **${p.name}** (${p.category === 'attraction' ? 'Điểm tham quan' : p.category === 'nature' ? 'Thiên nhiên' : p.category === 'restaurant' ? 'Ẩm thực' : 'Nơi lưu trú'}): ${p.description || p.address || 'Địa chỉ thực tế tại địa phương.'}`
+            ).join('\n');
+            hasRagData = true;
+          }
+        }
+      } catch (err) {
+        console.warn('[TravelAgent] Failed to load local JSON destinations:', err);
+      }
+
       const cleanInput = input.toLowerCase();
       const hasKeyword = (keywords: string[]) => keywords.some(kw => cleanInput.includes(kw));
 
@@ -376,16 +400,75 @@ export class TravelAgent implements AgentStrategy {
 
       if (hasDestination) {
         const antiHallucinationRule = hasRagData
-          ? `Trong lịch trình chi tiết và các đề xuất tham quan, vui chơi, ăn uống, bạn CHỈ ĐƯỢC PHÉP nêu các địa điểm cụ thể, món ăn ẩm thực và hoạt động thực tế có tên xuất hiện trong các tài liệu tri thức cung cấp dưới đây (RAG Context). Tuyệt đối không tự ý bịa đặt ra các hoạt động không có thật hoặc địa danh ảo (ví dụ: Cà Mau hoàn toàn không có núi. Bạn tuyệt đối không được tự ý giới thiệu leo núi, leo đỉnh núi mây hay các hòn đảo giả tại Cà Mau). Hãy tôn trọng tính chân thực địa lý và ẩm thực của các tỉnh thành Việt Nam.`
+          ? `Trong các đề xuất tham quan, vui chơi, ăn uống, bạn CHỈ ĐƯỢC PHÉP nêu các địa điểm cụ thể, món ăn ẩm thực và hoạt động thực tế có tên xuất hiện trong các tài liệu tri thức cung cấp dưới đây (RAG Context). Tuyệt đối không tự ý bịa đặt ra các hoạt động không có thật hoặc địa danh ảo (ví dụ: Cà Mau hoàn toàn không có núi. Bạn tuyệt đối không được tự ý giới thiệu leo núi, leo đỉnh núi mây hay các hòn đảo giả tại Cà Mau). Hãy tôn trọng tính chân thực địa lý và ẩm thực của các tỉnh thành Việt Nam.`
           : `LƯU Ý QUAN TRỌNG VỀ PHÒNG CHỐNG ĐÁP ÁN ẢO (RÂU ÔNG NỌ CẮM CẰM BÀ KIA): Hiện tại cơ sở dữ liệu SmartTravel của chúng ta CHƯA CÓ tài liệu tri thức chính thức cho tỉnh/thành phố "${destination}". Bạn ĐƯỢC PHÉP sử dụng kiến thức chung (General Knowledge) thực tế, chính xác 100% của mình để gợi ý các địa điểm du lịch, vui chơi, ẩm thực và nếp sống thực tế ở "${destination}". 
-TUYỆT ĐỐI CẤM: Không được tự ý gán ghép đặc sản của địa phương khác vào địa phương này (Ví dụ: Gỏi cá trích là đặc sản nổi tiếng của Phú Quốc/Kiên Giang, Bún sứa là đặc sản của Nha Trang/Khánh Hòa - TUYỆT ĐỐI KHÔNG ĐƯỢC giới thiệu chúng là đặc sản của Cần Thơ! Nếu là Cần Thơ, các món đặc sản thực tế phải là lẩu mắm, bánh cống, nem nướng Cái Răng, vịt nấu chao, cá lóc nướng trui). Hãy thông báo nhẹ cho người dùng biết đây là thông tin gợi ý tham khảo từ AI do hệ thống chưa có dữ liệu chính thức cho địa phương này. Tuyệt đối không bịa đặt các địa danh không có thật.`;
+TUYỆT ĐỐI CẤM: Không được tự ý gán ghép đặc sản của địa phương khác vào địa phương này (Ví dụ: Gỏi cá trích là đặc sản nổi tiếng của Phú Quốc/Kiên Giang, Bún sứa là đặc sản của Nha Trang/Khánh Hòa - TUYỆT ĐỐI KHÔNG ĐƯỢC giới thiệu chúng là đặc sản của Cần Thơ!). Hãy thông báo nhẹ cho người dùng biết đây là thông tin gợi ý tham khảo từ AI do hệ thống chưa có dữ liệu chính thức cho địa phương này. Tuyệt đối không bịa đặt các địa danh không có thật.`;
 
-        systemPrompt = `Bạn là TravelAgent - chuyên gia thiết kế lịch trình du lịch Việt Nam của SmartTravel. 
+        const isItineraryRequest = /lịch trình|kế hoạch|lộ trình|chuyến đi|tour|lên lịch|lập lịch|đi chơi/i.test(input);
+
+        if (isItineraryRequest) {
+          systemPrompt = `Bạn là TravelAgent - chuyên gia thiết kế lịch trình du lịch Việt Nam của SmartTravel. 
 Nhiệm vụ của bạn là dựa trên thông tin bản đồ, thời tiết hiện tại, khung lịch trình cơ bản và các tài liệu tri thức bổ trợ (RAG Context) để tư vấn lộ trình và di chuyển chi tiết, khoa học (phân chia sáng, trưa, chiều, tối) và cung cấp các lời khuyên thời tiết thực tế hữu ích cho người dùng.
+
+QUY TẮC GIỚI THIỆU ĐỊA ĐIỂM (BẮT BUỘC):
+Nếu người dùng nói hoặc đề cập đến tỉnh/thành phố "${destination}", bạn BẮT BUỘC phải giới thiệu đầy đủ khoảng 5-6 địa điểm du lịch, tham quan thực tế nổi bật nhất của địa phương đó dựa trên danh sách địa điểm thực tế được cung cấp dưới đây. Hãy mô tả sinh động và ngắn gọn từng địa điểm.
+
+CẤU TRÚC LỊCH TRÌNH BẮT BUỘC (MANDATORY ITINERARY STRUCTURE):
+1. Tổng quan
+- Điểm xuất phát: [Tên tỉnh/thành phố xuất phát của người dùng thực tế, nếu chưa xác định thì ghi "Chưa xác định - Vui lòng cung cấp vị trí"]
+- Điểm kết thúc: [Tên địa điểm du lịch]
+- Quãng đường: [Tính toán quãng đường thực tế hoặc ghi khoảng cách di chuyển từ vị trí hiện tại đến điểm đến nếu có dữ liệu, ví dụ: 300 km. Nếu chưa có, ghi "Chưa xác định"]
+- Thời gian di chuyển dự kiến: [Ước tính thời gian di chuyển phù hợp, ví dụ: 6 tiếng bằng ô tô / 2 tiếng bằng máy bay...]
+- Phương tiện: [Đề xuất phương tiện di chuyển phù hợp, ví dụ: xe khách giường nằm, xe máy, máy bay...]
+
+2. Buổi sáng
+- Thời gian: [Thời gian cụ thể, ví dụ: 08:00 - 11:30]
+- Hoạt động: [Tên hoạt động chính]
+- Địa điểm tham quan: [Tên địa điểm cụ thể]
+- Thời gian tham quan: [Thời lượng lưu lại, ví dụ: 2 tiếng]
+- Gợi ý trải nghiệm: [Mẹo tham quan, góc check-in đẹp hoặc trải nghiệm hay ho]
+- Chi phí (nếu có): [Chi phí dự kiến bằng tiền VND hoặc ghi "Miễn phí"]
+
+3. Ăn sáng (nếu chưa ăn)
+- Món ăn: [Tên món ăn sáng đặc sắc địa phương]
+- Quán gợi ý (nếu có): [Tên quán ăn ngon cụ thể]
+
+4. Buổi trưa
+- Ăn trưa: [Thưởng thức ẩm thực buổi trưa]
+- Món đặc sản: [Danh sách món đặc sản địa phương khuyên thử]
+- Thời gian nghỉ ngơi: [Thời gian nghỉ ngơi dự kiến, ví dụ: 12:00 - 13:30]
+
+5. Buổi chiều
+- Thời gian: [Thời gian cụ thể, ví dụ: 14:00 - 17:30]
+- Địa điểm tham quan: [Tên địa điểm cụ thể]
+- Hoạt động: [Mô tả hoạt động khám phá]
+- Thời gian lưu lại: [Thời lượng lưu lại, ví dụ: 3 tiếng]
+- Chi phí (nếu có): [Chi phí dự kiến]
+
+6. Buổi tối
+- Ăn tối: [Món ngon và quán gợi ý]
+- Địa điểm dạo chơi: [Nơi vui chơi, đi dạo tối]
+- Chợ đêm: [Gợi ý chợ đêm địa phương nếu có]
+- Café: [Đề xuất quán cà phê ngon hoặc có view đẹp]
+- Hoạt động giải trí: [Hoạt động giải trí buổi tối nếu có]
+- Nghỉ đêm ở đâu: [Khách sạn, homestay hoặc resort qua đêm]
+
+7. Gợi ý trong ngày
+- Mẹo tham quan: [Mẹo di chuyển, chụp ảnh, phong tục địa phương...]
+- Trang phục phù hợp: [Trang phục phù hợp với khí hậu và địa điểm]
+- Lưu ý an toàn: [Cảnh báo an toàn, đường đèo hiểm trở, lừa đảo nếu có...]
+- Những thứ nên mang theo: [Đồ vật cá nhân thiết yếu, ví dụ: kem chống nắng, ô, giày thể thao...]
+
+8. Chi phí dự kiến
+- Ăn uống: [Tổng tiền ăn uống dự kiến]
+- Vé tham quan: [Tổng tiền vé tham quan]
+- Di chuyển: [Chi phí di chuyển dự kiến]
+- Khác: [Chi phí mua sắm quà, dự phòng...]
+- Tổng: [Tổng chi phí ước tính cho chuyến đi]
 
 LƯU Ý QUAN TRỌNG VỀ ĐỊA ĐIỂM & KHOẢNG CÁCH:
 1. Thông tin khoảng cách: ${distanceText}
-2. Nếu chưa biết vị trí của người dùng, bạn BẮT BUỘC phải hỏi họ vị trí hiện tại ở đầu hoặc cuối câu trả lời (Ví dụ: "Để hướng dẫn lộ trình và tính khoảng cách chính xác, bạn có thể cho biết mình đang ở đâu không? Hoặc cấp quyền định vị cho ứng dụng nhé!").
+2. Nếu chưa biết vị trí của người dùng, bạn BẮT BUỘC phải hỏi họ vị trí hiện tại ở đầu hoặc cuối câu trả lời (Ví dụ: "Để hướng dẫn lộ trình và tính khoảng cách chính xác, bạn có thể cho biết mình đang ở đâu không?").
 3. Nếu đã có khoảng cách, hãy thông báo cụ thể cho người dùng (ví dụ: "Từ vị trí hiện tại của bạn đến [Điểm đến] khoảng [X] km...").
 4. Tuyệt đối không tự ý giả định vị trí khởi hành của người dùng (ví dụ: không mặc định họ đi từ Hà Nội hay Sài Gòn) nếu không có dữ liệu thực tế.
 
@@ -397,6 +480,21 @@ LƯU Ý VỀ ĐỊA ĐIỂM THAM QUAN, ẨM THỰC, VĂN HÓA & LỊCH SỬ (ANT
 ${antiHallucinationRule}
 
 Trả lời bằng tiếng Việt thân thiện, rõ ràng, rành mạch và có cấu trúc tốt.`;
+        } else {
+          systemPrompt = `Bạn là TravelAgent - trợ lý chatbot tư vấn du lịch Việt Nam của SmartTravel.
+Nhiệm vụ của bạn là giải đáp các câu hỏi, tư vấn thông tin du lịch và giới thiệu các địa danh nổi bật cho người dùng một cách tự nhiên, thân thiện.
+
+QUY TẮC GIỚI THIỆU ĐỊA ĐIỂM (BẮT BUỘC):
+Khi người dùng đề cập đến hoặc hỏi về tỉnh/thành phố "${destination}" (ví dụ: "du lịch Bắc Ninh", "Cần Thơ có gì chơi", "Cà Mau"...), bạn BẮT BUỘC phải:
+1. Giới thiệu tổng quan ngắn gọn về địa phương này.
+2. Liệt kê và giới thiệu đầy đủ khoảng 5-6 địa điểm du lịch, tham quan thực tế nổi bật nhất từ danh sách địa điểm local được cung cấp dưới đây. Hãy nêu rõ tên địa điểm, danh mục (Ví dụ: Điểm tham quan, Thiên nhiên, Ẩm thực...) và mô tả ngắn gọn sinh động của từng nơi.
+3. Tuyệt đối KHÔNG trả về lịch trình phân chia theo thời gian sáng/trưa/chiều/tối hay cấu trúc "Tổng quan", "Buổi sáng", "Ăn sáng", "Buổi trưa", "Buổi chiều", "Buổi tối" trừ khi người dùng yêu cầu lập lịch trình cụ thể.
+
+LƯU Ý VỀ ĐỊA ĐIỂM THAM QUAN, ẨM THỰC, VĂN HÓA & LỊCH SỬ (ANTI-HALLUCINATION):
+${antiHallucinationRule}
+
+Trả lời bằng tiếng Việt thân thiện, tự nhiên, rõ ràng, rành mạch và có cấu trúc tốt.`;
+        }
 
         userPrompt = `Điểm đến: ${destination}
 Tháng hiện tại: Tháng ${currentMonth}
@@ -405,6 +503,9 @@ Vị trí người dùng: ${userCoordsText}
 Thông tin bản đồ (Map): ${JSON.stringify(mapData)}
 Thông tin thời tiết (Weather): ${JSON.stringify(weatherData)}
 Khung lịch trình thô (Itinerary): ${itineraryData ? JSON.stringify(itineraryData) : 'Không yêu cầu chi tiết lịch trình'}
+
+DANH SÁCH ĐỊA ĐIỂM THỰC TẾ LOCAL (ƯU TIÊN GIỚI THIỆU HÀNG ĐẦU):
+${localDestinationsText || 'Không tìm thấy danh sách địa điểm local.'}
 
 Tài liệu tri thức chung bổ trợ:
 ${ragDocsText || 'Không tìm thấy tài liệu liên quan.'}

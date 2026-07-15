@@ -11,6 +11,7 @@ export interface PlannerParams {
   currency?: string;
   interests: string[];
   travelStyle: string;
+  transportation?: string;
 }
 
 export interface ActivitySchema {
@@ -66,36 +67,28 @@ function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0): s
   3. Guess coordinates (latitude, longitude) as accurately as possible for MapLibre map mapping.
   4. Ensure activities map correctly to their categories ("restaurant", "hotel", "attraction", "nature", "festival").
   5. Distribute daily costs logically so that the SUM of all activities' estimatedCost across all days does NOT exceed the total budget of ${totalBudget} ${currency}. Note: transportation and daily buffer fees will be calculated programmatically on top of this by the system, so aim for the sum of activities to be about 70-80% of the total budget.
-  6. Enforce realistic travel paths (i.e. morning activities near afternoon activities to minimize travel times).
+  6. Enforce realistic travel paths. ALL locations planned in the SAME day MUST be located within a 15km radius of each other. Do NOT plan remote/far-away spots in the same day (for instance, do not mix Mũi Cà Mau and Cà Mau city center on the same day as they are 100km apart). Plan city center activities together on one day, and remote nature spots on another day.
   7. Respond entirely in Vietnamese. All text values (destination name, activityName, locationName, notes) MUST be in the Vietnamese language.
   8. Do NOT use generic activity names like "Welcome walk", "Morning tour", "Eat local food", "Sightseeing experience", or "Local delicacy tasting". Always output real, actual, and famous tourist spots, monuments, streets, parks, restaurants, cafes, hotels, and specific local culinary specialties of the destination. Make notes detail-rich with actual tips.
-  9. Organize each day's activities strictly into 4 sessions: "Sáng", "Trưa", "Chiều", "Tối". Usually:
-     - "Sáng": 1-2 activities (e.g. check-in, morning sightseeing/coffee).
-     - "Trưa": 1 restaurant/eatery activity (e.g. local lunch).
-     - "Chiều": 1-2 activities (afternoon exploration/nature/culture).
-     - "Tối": 1-2 activities (dinner at a restaurant, walking street, night market).
+  9. Organize each day's activities strictly into exactly 5 activities in this order:
+     - Activity 1 (session="Sáng"): Morning sightseeing/activities. Fields: "session": "Sáng", "timeSlot" (e.g. "08:00 - 11:30"), "activityName", "locationName", "thoiGianThamQuan" (e.g. "2 tiếng"), "goiYTraiNghiem" (rich tips), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
+     - Activity 2 (session="Ăn sáng"): Breakfast. Fields: "session": "Ăn sáng", "timeSlot" (e.g. "07:00 - 08:00"), "activityName" (monAn), "locationName" (quanGoiY), "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
+     - Activity 3 (session="Trưa"): Lunch. Fields: "session": "Trưa", "timeSlot" (e.g. "12:00 - 13:30"), "activityName" (anTrua), "locationName" (quanGoiY), "monDacSan" (mon đặc sản), "thoiGianNghiNgoi" (thời gian nghỉ ngơi), "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
+     - Activity 4 (session="Chiều"): Afternoon sightseeing/activities. Fields: "session": "Chiều", "timeSlot" (e.g. "14:00 - 17:30"), "activityName", "locationName", "thoiGianLuuLai" (e.g. "3 tiếng"), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
+     - Activity 5 (session="Tối"): Dinner and Evening. Fields: "session": "Tối", "timeSlot" (e.g. "18:30 - 22:00"), "activityName", "locationName" (nghiDemODau), "anToi" (ăn tối món gì ở đâu), "diaDiemDaoChoi" (điểm đi dạo chơi), "choDem" (chợ đêm), "cafe" (quán cà phê), "hoatDongGiaiTri" (hoạt động giải trí), "nghiDemODau" (nơi nghỉ đêm), "estimatedCost", "category": "hotel" (or "restaurant"), "latitude", "longitude", "notes".
+  10. DUPLICATE & REPETITION PREVENTION: Every single activity, hotel, restaurant, and sightseeing spot generated MUST be unique. Do NOT repeat any locations or activities across different days or within the same day. Each day must feature completely different, fresh spots.
   
   JSON STRUCTURE:
   {
-    "destination": "Name of destination in Vietnamese",
+    "destination": "Tên địa điểm bằng tiếng Việt",
     "totalEstimatedCost": 120.0,
     "currency": "${currency}",
     "days": [
       {
         "dayIndex": 1,
-        "dateIndex": "Ngày 1: Tên mô tả chủ đề ngày (Ví dụ: Khám phá trung tâm thành phố)",
+        "dateIndex": "Ngày 1: Tên mô tả chủ đề ngày",
         "activities": [
-          {
-            "session": "Sáng", // Choose from: "Sáng", "Trưa", "Chiều", "Tối"
-            "timeSlot": "09:00 - 11:00",
-            "activityName": "Tên địa điểm/hoạt động thực tế (Ví dụ: Dạo Bến Ninh Kiều)",
-            "locationName": "Tên địa danh/địa chỉ thực tế (Ví dụ: Bến Ninh Kiều, Cần Thơ)",
-            "estimatedCost": 25.0,
-            "category": "attraction", // Choose from: "attraction", "restaurant", "hotel", "nature", "festival"
-            "latitude": 10.0333,
-            "longitude": 105.7833,
-            "notes": "Mô tả chi tiết và lời khuyên du lịch thực tế"
-          }
+          // Gồm đúng 5 hoạt động theo thứ tự (Sáng, Ăn sáng, Trưa, Chiều, Tối) với các trường đã mô tả ở trên.
         ]
       }
     ]
@@ -130,45 +123,58 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
 
       const totalCount = fAttractions.length + fRestaurants.length + fHotels.length + fNature.length + fFestivals.length;
       
-      // If we have at least 5 results in the 20km area, restrict to them. Otherwise, take the closest 10 elements in each category.
+      // If we have at least 5 results in the 20km area, restrict to them. Otherwise, take the closest ones.
       if (totalCount >= 5) {
-        attractions = fAttractions;
-        restaurants = fRestaurants;
-        hotels = fHotels;
-        nature = fNature;
-        festivals = fFestivals;
+        const sortByRating = (places: RealPlace[], limit: number) => {
+          return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+        };
+        attractions = sortByRating(fAttractions, 8);
+        restaurants = sortByRating(fRestaurants, 8);
+        hotels = sortByRating(fHotels, 6);
+        nature = sortByRating(fNature, 6);
+        festivals = sortByRating(fFestivals, 6);
       } else {
-        const sortByDistance = (places: RealPlace[]) => {
+        const sortByDistance = (places: RealPlace[], limit: number) => {
           return [...places].map(p => {
             const dist = calculateHaversineDistance(
               { latitude: centerCoords!.lat, longitude: centerCoords!.lng },
               { latitude: p.latitude, longitude: p.longitude }
             );
             return { ...p, dist };
-          }).sort((a, b) => a.dist - b.dist).slice(0, 10);
+          }).sort((a, b) => a.dist - b.dist).slice(0, limit);
         };
-        attractions = sortByDistance(attractions);
-        restaurants = sortByDistance(restaurants);
-        hotels = sortByDistance(hotels);
-        nature = sortByDistance(nature);
-        festivals = sortByDistance(festivals);
+        attractions = sortByDistance(attractions, 8);
+        restaurants = sortByDistance(restaurants, 8);
+        hotels = sortByDistance(hotels, 6);
+        nature = sortByDistance(nature, 6);
+        festivals = sortByDistance(festivals, 6);
       }
+    } else {
+      // Sort by rating and slice to prevent large payload (HTTP 413)
+      const sortByRating = (places: RealPlace[], limit: number) => {
+        return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+      };
+      attractions = sortByRating(attractions, 8);
+      restaurants = sortByRating(restaurants, 8);
+      hotels = sortByRating(hotels, 6);
+      nature = sortByRating(nature, 6);
+      festivals = sortByRating(festivals, 6);
     }
 
     const attractionContext = attractions.length > 0
-      ? `Real attractions (use their names and exact coordinates):\n${attractions.map(a => `- ${a.name} (lat: ${a.latitude}, lng: ${a.longitude}): ${a.description}`).join('\n')}`
+      ? `Real attractions (use their names and exact coordinates):\n${attractions.map(a => `- ${a.name} (lat: ${a.latitude}, lng: ${a.longitude})`).join('\n')}`
       : "";
     const restaurantContext = restaurants.length > 0
-      ? `Real restaurants/eateries (use their names and exact coordinates):\n${restaurants.map(r => `- ${r.name} (lat: ${r.latitude}, lng: ${r.longitude}): ${r.description}`).join('\n')}`
+      ? `Real restaurants/eateries (use their names and exact coordinates):\n${restaurants.map(r => `- ${r.name} (lat: ${r.latitude}, lng: ${r.longitude})`).join('\n')}`
       : "";
     const hotelContext = hotels.length > 0
-      ? `Real hotels/accommodations (use their names and exact coordinates):\n${hotels.map(h => `- ${h.name} (lat: ${h.latitude}, lng: ${h.longitude}): ${h.description}`).join('\n')}`
+      ? `Real hotels/accommodations (use their names and exact coordinates):\n${hotels.map(h => `- ${h.name} (lat: ${h.latitude}, lng: ${h.longitude})`).join('\n')}`
       : "";
     const natureContext = nature.length > 0
-      ? `Real nature/scenic locations (use their names and exact coordinates):\n${nature.map(n => `- ${n.name} (lat: ${n.latitude}, lng: ${n.longitude}): ${n.description}`).join('\n')}`
+      ? `Real nature/scenic locations (use their names and exact coordinates):\n${nature.map(n => `- ${n.name} (lat: ${n.latitude}, lng: ${n.longitude})`).join('\n')}`
       : "";
     const festivalContext = festivals.length > 0
-      ? `Real local events/festivals (use their names and exact coordinates):\n${festivals.map(f => `- ${f.name} (lat: ${f.latitude}, lng: ${f.longitude}): ${f.description}`).join('\n')}`
+      ? `Real local events/festivals (use their names and exact coordinates):\n${festivals.map(f => `- ${f.name} (lat: ${f.latitude}, lng: ${f.longitude})`).join('\n')}`
       : "";
 
     context = `
@@ -198,6 +204,7 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
   - Duration: ${params.durationDays} days
   - Total Trip Budget: ${params.totalBudget} ${params.currency || 'USD'} (total for all days)
   - Travel Style: ${params.travelStyle}
+  - Transportation: ${params.transportation || 'Any (Xe máy/Xe khách/Ô tô)'}
   - Interests: ${params.interests.join(', ')}
   
   Ensure all timeslots are sequenced correctly from morning (e.g. 08:00) to evening (e.g. 21:00).
@@ -260,12 +267,14 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
         ],
         temperature: 0.7,
         response_format: { type: 'json_object' },
-        max_tokens: 3000,
+        max_tokens: 1500,
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API responded with status ${response.status}`);
+      const errBody = await response.text().catch(() => 'No error body');
+      console.error(`❌ OpenAI/Groq API Error: Status ${response.status}, Body: ${errBody}`);
+      throw new Error(`OpenAI API responded with status ${response.status}: ${errBody}`);
     }
 
     const data = await response.json();
@@ -353,17 +362,21 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
         { latitude: centerCoords.lat, longitude: centerCoords.lng },
         { latitude: place.latitude, longitude: place.longitude }
       );
-      return dist <= 20; // 20km
+      return dist <= 15; // 15km
     };
 
-    attractions = attractions.filter(filterFn);
-    restaurants = restaurants.filter(filterFn);
-    hotels = hotels.filter(filterFn);
-    nature = nature.filter(filterFn);
-    festivals = festivals.filter(filterFn);
+    const sortByRating = (places: RealPlace[], limit: number) => {
+      return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+    };
+
+    attractions = sortByRating(attractions.filter(filterFn), 8);
+    restaurants = sortByRating(restaurants.filter(filterFn), 8);
+    hotels = sortByRating(hotels.filter(filterFn), 6);
+    nature = sortByRating(nature.filter(filterFn), 6);
+    festivals = sortByRating(festivals.filter(filterFn), 6);
 
     filteredContext = `
-    Only select from the following real-world locations in "${curated.provinceName}" within 20km from the central area (exclude already visited: ${excludeList.join(', ')}):
+    Only select from the following real-world locations in "${curated.provinceName}" within 15km from the central area (exclude already visited: ${excludeList.join(', ')}):
     
     Attractions: ${attractions.map(a => `${a.name} (lat: ${a.latitude}, lng: ${a.longitude})`).join(', ')}
     Restaurants: ${restaurants.map(r => `${r.name} (lat: ${r.latitude}, lng: ${r.longitude})`).join(', ')}
@@ -374,6 +387,9 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
 
   const systemPrompt = `You are a travel planning expert.
   You must regenerate a specific portion of an existing travel itinerary and return ONLY a valid JSON.
+  
+  CRITICAL EXCLUSION RULE:
+  You MUST NOT reuse or load any locations or activities that have already been visited or are present in the current itinerary. The new regenerated locations/activities MUST be completely new and different from any existing ones. DO NOT output any location name present in the excludePlaces list.
   
   If regenerating a SESSION, return a JSON object with a single key "activities" containing an array of ActivitySchema objects:
   {
@@ -406,12 +422,14 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
   - Destination: ${params.destination}
   - Target Day Index: ${dayIndex}
   - Target Session: ${params.targetSession || 'WHOLE DAY'}
+  - Exclude List (DO NOT REUSE ANY OF THESE PLACES): ${JSON.stringify(excludeList)}
   - Current Full Itinerary: ${JSON.stringify(params.currentItinerary)}
   - Budget style: ${params.travelStyle}
   
   Constraints:
   ${filteredContext}
   - Ensure the new activities fit the travel style and have realistic coordinates.
+  - The new activities and location names MUST be completely different from any names in the Exclude List.
   - Session coordinates must be within 20km of this day's other activities: ${centerCoords ? `${centerCoords.lat}, ${centerCoords.lng}` : 'N/A'}.
   `;
 
@@ -452,11 +470,23 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
         const otherActivities = day.activities.filter(act => act.session !== params.targetSession);
         const newActivities = resultJson.activities || resultJson;
         day.activities = [...otherActivities, ...newActivities];
+        
+        const sessionOrder = ['Sáng', 'Ăn sáng', 'Trưa', 'Chiều', 'Tối'];
+        day.activities.sort((a, b) => {
+          return sessionOrder.indexOf(a.session) - sessionOrder.indexOf(b.session);
+        });
       }
     } else {
       const dayIdx = updatedItinerary.days.findIndex(d => d.dayIndex === dayIndex);
       if (dayIdx !== -1) {
         updatedItinerary.days[dayIdx] = resultJson;
+        
+        const sessionOrder = ['Sáng', 'Ăn sáng', 'Trưa', 'Chiều', 'Tối'];
+        if (updatedItinerary.days[dayIdx].activities) {
+          updatedItinerary.days[dayIdx].activities.sort((a, b) => {
+            return sessionOrder.indexOf(a.session) - sessionOrder.indexOf(b.session);
+          });
+        }
       }
     }
 
@@ -680,89 +710,140 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
 
     for (let i = 1; i <= totalDays; i++) {
       const dayActivities: ActivitySchema[] = [];
+      const hotel = hotels[(i - 1) % Math.max(1, hotels.length)] || {
+        name: 'Khách sạn trung tâm',
+        costEstimate: isVnd ? 500000 : 25,
+        latitude: curated.hotels[0]?.latitude || 21.0285,
+        longitude: curated.hotels[0]?.longitude || 105.8048,
+        description: 'Khách sạn sạch sẽ, đầy đủ tiện nghi.'
+      };
 
-      // Check-in on Day 1 morning if hotel exists
-      if (i === 1 && hotels.length > 0) {
-        const hotel = hotels[0];
-        dayActivities.push({
-          session: 'Sáng',
-          timeSlot: '08:00 - 09:30',
-          activityName: `Nhận phòng tại ${hotel.name}`,
-          locationName: `${hotel.name}, ${curated.provinceName}`,
-          estimatedCost: isVnd ? hotel.costEstimate : Math.round(hotel.costEstimate / 25000),
-          category: 'hotel',
-          latitude: hotel.latitude,
-          longitude: hotel.longitude,
-          notes: hotel.description,
-        });
-      }
+      // Lọc các điểm tham quan và quán ăn lân cận khách sạn trong bán kính dưới 15km
+      const localSightseeing = sightseeing.filter(p => {
+        const dist = calculateHaversineDistance(
+          { latitude: hotel.latitude, longitude: hotel.longitude },
+          { latitude: p.latitude, longitude: p.longitude }
+        );
+        return dist <= 15;
+      });
 
-      // Sightseeing 1
-      if (sightseeing.length > 0) {
-        const place = sightseeing[(i * 2 - 2) % sightseeing.length];
-        dayActivities.push({
-          session: 'Sáng',
-          timeSlot: dayActivities.length > 0 ? '10:00 - 11:30' : '08:00 - 11:30',
-          activityName: `Tham quan ${place.name}`,
-          locationName: `${place.name}, ${curated.provinceName}`,
-          estimatedCost: isVnd ? place.costEstimate : Math.round(place.costEstimate / 25000),
-          category: place.category,
-          latitude: place.latitude,
-          longitude: place.longitude,
-          notes: place.description,
-        });
-      }
+      const localEateries = eateries.filter(r => {
+        const dist = calculateHaversineDistance(
+          { latitude: hotel.latitude, longitude: hotel.longitude },
+          { latitude: r.latitude, longitude: r.longitude }
+        );
+        return dist <= 15;
+      });
 
-      // Lunch/Noon Eating
-      if (eateries.length > 0) {
-        const rest = eateries[(i - 1) % eateries.length];
-        const specName = curated.specialties.length > 0 
-          ? curated.specialties[(i - 1) % curated.specialties.length] 
-          : 'đặc sản địa phương';
-        dayActivities.push({
-          session: 'Trưa',
-          timeSlot: '12:00 - 13:30',
-          activityName: `Ăn trưa tại ${rest.name}`,
-          locationName: `${rest.name}, ${curated.provinceName}`,
-          estimatedCost: isVnd ? rest.costEstimate : Math.round(rest.costEstimate / 25000),
-          category: 'restaurant',
-          latitude: rest.latitude,
-          longitude: rest.longitude,
-          notes: `Thưởng thức ${specName}. ${rest.description}`,
-        });
-      }
+      const place1 = localSightseeing[(i * 2 - 2) % Math.max(1, localSightseeing.length)] || sightseeing[(i * 2 - 2) % Math.max(1, sightseeing.length)] || {
+        name: 'Điểm tham quan buổi sáng',
+        costEstimate: 0,
+        category: 'attraction',
+        latitude: hotel.latitude + 0.005,
+        longitude: hotel.longitude + 0.005,
+        description: 'Điểm đến thú vị, thu hút khách du lịch.'
+      };
 
-      // Sightseeing 2 (afternoon)
-      if (sightseeing.length > 1) {
-        const place = sightseeing[(i * 2 - 1) % sightseeing.length];
-        dayActivities.push({
-          session: 'Chiều',
-          timeSlot: '15:00 - 17:30',
-          activityName: `Khám phá ${place.name}`,
-          locationName: `${place.name}, ${curated.provinceName}`,
-          estimatedCost: isVnd ? place.costEstimate : Math.round(place.costEstimate / 25000),
-          category: place.category,
-          latitude: place.latitude,
-          longitude: place.longitude,
-          notes: place.description,
-        });
-      }
+      const place2 = localSightseeing[(i * 2 - 1) % Math.max(1, localSightseeing.length)] || sightseeing[(i * 2 - 1) % Math.max(1, sightseeing.length)] || {
+        name: 'Điểm tham quan buổi chiều',
+        costEstimate: 0,
+        category: 'nature',
+        latitude: hotel.latitude + 0.01,
+        longitude: hotel.longitude + 0.01,
+        description: 'Khung cảnh thiên nhiên hữu tình, trong lành.'
+      };
 
-      // Dinner/Evening
-      if (eateries.length > 1) {
-        const rest = eateries[i % eateries.length];
-        dayActivities.push({
-          session: 'Tối',
-          timeSlot: '19:00 - 21:00',
-          activityName: `Ăn tối và dạo mát tại ${rest.name}`,
-          locationName: `${rest.name}, ${curated.provinceName}`,
-          estimatedCost: isVnd ? rest.costEstimate : Math.round(rest.costEstimate / 25000),
-          category: 'restaurant',
-          latitude: rest.latitude,
-          longitude: rest.longitude,
-          notes: rest.description,
-        });
-      }
+      const breakfastPlace = localEateries[(i * 2 - 2) % Math.max(1, localEateries.length)] || eateries[(i * 2 - 2) % Math.max(1, eateries.length)] || {
+        name: 'Quán ăn sáng địa phương',
+        costEstimate: isVnd ? 45000 : 2,
+        latitude: hotel.latitude + 0.002,
+        longitude: hotel.longitude + 0.002,
+        description: 'Phục vụ món ăn sáng gia truyền thơm ngon.'
+      };
+
+      const lunchPlace = localEateries[(i * 2 - 1) % Math.max(1, localEateries.length)] || eateries[(i * 2 - 1) % Math.max(1, eateries.length)] || {
+        name: 'Nhà hàng ăn trưa',
+        costEstimate: isVnd ? 150000 : 8,
+        latitude: hotel.latitude + 0.004,
+        longitude: hotel.longitude + 0.004,
+        description: 'Không gian ấm cúng, phục vụ nhiều đặc sản.'
+      };
+
+      // 1. Sáng
+      dayActivities.push({
+        session: 'Sáng',
+        timeSlot: '08:00 - 11:30',
+        activityName: `Khám phá ${place1.name}`,
+        locationName: `${place1.name}, ${curated.provinceName}`,
+        thoiGianThamQuan: '2.5 tiếng',
+        goiYTraiNghiem: `Tham quan, chụp hình lưu niệm tại ${place1.name}. ${place1.description}`,
+        estimatedCost: isVnd ? place1.costEstimate : Math.round(place1.costEstimate / 25000),
+        category: place1.category || 'attraction',
+        latitude: place1.latitude,
+        longitude: place1.longitude,
+        notes: place1.description,
+      });
+
+      // 2. Ăn sáng
+      dayActivities.push({
+        session: 'Ăn sáng',
+        timeSlot: '07:00 - 08:00',
+        activityName: curated.specialties.length > 0 ? curated.specialties[(i - 1) % curated.specialties.length] : 'Bún bò Huế/Hủ tiếu',
+        locationName: breakfastPlace.name,
+        estimatedCost: isVnd ? breakfastPlace.costEstimate : Math.round(breakfastPlace.costEstimate / 25000),
+        category: 'restaurant',
+        latitude: breakfastPlace.latitude,
+        longitude: breakfastPlace.longitude,
+        notes: 'Thưởng thức món ăn sáng đặc sắc địa phương.',
+      });
+
+      // 3. Trưa
+      dayActivities.push({
+        session: 'Trưa',
+        timeSlot: '12:00 - 13:30',
+        activityName: `Ăn trưa đặc sản tại ${lunchPlace.name}`,
+        locationName: lunchPlace.name,
+        monDacSan: curated.specialties.length > 1 ? curated.specialties[i % curated.specialties.length] : 'Gỏi cá, lẩu thả',
+        thoiGianNghiNgoi: '12:00 - 13:30',
+        estimatedCost: isVnd ? lunchPlace.costEstimate : Math.round(lunchPlace.costEstimate / 25000),
+        category: 'restaurant',
+        latitude: lunchPlace.latitude,
+        longitude: lunchPlace.longitude,
+        notes: lunchPlace.description,
+      });
+
+      // 4. Chiều
+      dayActivities.push({
+        session: 'Chiều',
+        timeSlot: '14:00 - 17:30',
+        activityName: `Khám phá vẻ đẹp ${place2.name}`,
+        locationName: `${place2.name}, ${curated.provinceName}`,
+        thoiGianLuuLai: '3 tiếng',
+        estimatedCost: isVnd ? place2.costEstimate : Math.round(place2.costEstimate / 25000),
+        category: place2.category || 'nature',
+        latitude: place2.latitude,
+        longitude: place2.longitude,
+        notes: place2.description,
+      });
+
+      // 5. Tối
+      dayActivities.push({
+        session: 'Tối',
+        timeSlot: '19:00 - 22:00',
+        activityName: `Nghỉ ngơi và dạo chơi đêm tại ${hotel.name}`,
+        locationName: hotel.name,
+        anToi: 'Thưởng thức món lẩu địa phương hoặc hải sản tươi sống',
+        diaDiemDaoChoi: 'Quảng trường trung tâm thành phố',
+        choDem: 'Chợ đêm trung tâm',
+        cafe: 'Quán cafe view sông/phố cổ',
+        hoatDongGiaiTri: 'Nghe nhạc/dạo bộ thư giãn',
+        nghiDemODau: hotel.name,
+        estimatedCost: isVnd ? hotel.costEstimate : Math.round(hotel.costEstimate / 25000),
+        category: 'hotel',
+        latitude: hotel.latitude,
+        longitude: hotel.longitude,
+        notes: hotel.description,
+      });
 
       days.push({
         dayIndex: i,
@@ -792,8 +873,10 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
         {
           session: 'Sáng',
           timeSlot: '08:00 - 11:30',
-          activityName: `Tham quan địa danh nổi tiếng`,
+          activityName: `Tham quan thắng cảnh ${params.destination}`,
           locationName: `${params.destination}`,
+          thoiGianThamQuan: '3 tiếng',
+          goiYTraiNghiem: 'Khám phá thắng cảnh và lưu lại những bức ảnh kỷ niệm.',
           estimatedCost: 0,
           category: 'attraction',
           latitude: 21.028511 + (i * 0.005),
@@ -801,22 +884,36 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
           notes: 'Nên chuẩn bị mũ nón và giày đi bộ thoải mái.',
         },
         {
+          session: 'Ăn sáng',
+          timeSlot: '07:00 - 08:00',
+          activityName: 'Bún chả/Bún bò đặc sản',
+          locationName: 'Quán ăn ngon nổi tiếng',
+          estimatedCost: isVnd ? 45000 : 2,
+          category: 'restaurant',
+          latitude: 21.028511 + (i * 0.005),
+          longitude: 105.804817 + (i * 0.005),
+          notes: 'Nên thử món ăn sáng gia truyền đặc sắc.',
+        },
+        {
           session: 'Trưa',
           timeSlot: '12:00 - 13:30',
-          activityName: `Thưởng thức ẩm thực địa phương`,
-          locationName: `${params.destination}`,
-          estimatedCost: isVnd ? 60000 : 3,
+          activityName: `Thưởng thức ẩm thực trưa`,
+          locationName: `Nhà hàng đặc sản ${params.destination}`,
+          monDacSan: 'Cơm niêu/Ẩm thực truyền thống',
+          thoiGianNghiNgoi: '12:00 - 13:30',
+          estimatedCost: isVnd ? 120000 : 6,
           category: 'restaurant',
           latitude: 21.029511 + (i * 0.005),
           longitude: 105.805817 + (i * 0.005),
-          notes: 'Thưởng thức món ngon ẩm thực đường phố được đánh giá cao.',
+          notes: 'Thưởng thức món ngon ẩm thực được đánh giá cao.',
         },
         {
           session: 'Chiều',
-          timeSlot: '15:00 - 18:00',
-          activityName: `Trải nghiệm văn hóa địa phương`,
-          locationName: `Phố đi bộ, ${params.destination}`,
-          estimatedCost: isVnd ? 40000 : 2,
+          timeSlot: '14:00 - 17:30',
+          activityName: `Trải nghiệm văn hóa tại ${params.destination}`,
+          locationName: `Khu phố cổ/Trung tâm văn hóa`,
+          thoiGianLuuLai: '3 tiếng',
+          estimatedCost: isVnd ? 30000 : 1.5,
           category: 'attraction',
           latitude: 21.031511 + (i * 0.005),
           longitude: 105.806817 + (i * 0.005),
@@ -824,14 +921,20 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
         },
         {
           session: 'Tối',
-          timeSlot: '19:00 - 21:00',
-          activityName: `Dạo phố ẩm thực đêm`,
-          locationName: `Chợ đêm, ${params.destination}`,
-          estimatedCost: isVnd ? 80000 : 4,
-          category: 'restaurant',
+          timeSlot: '19:00 - 22:00',
+          activityName: `Ăn tối & dạo chơi đêm`,
+          locationName: `Khách sạn tại ${params.destination}`,
+          anToi: 'Thưởng thức buffet lẩu nướng',
+          diaDiemDaoChoi: 'Chợ đêm và phố đi bộ',
+          choDem: 'Chợ đêm mua sắm quà tặng',
+          cafe: 'Cà phê view cao ngắm phố phường',
+          hoatDongGiaiTri: 'Xem biểu diễn nhạc nước',
+          nghiDemODau: 'Khách sạn trung tâm tiện nghi',
+          estimatedCost: isVnd ? 300000 : 15,
+          category: 'hotel',
           latitude: 21.032511 + (i * 0.005),
           longitude: 105.807817 + (i * 0.005),
-          notes: 'Trải nghiệm ẩm thực đêm sôi động.'
+          notes: 'Nghỉ ngơi sau ngày dài khám phá năng động.'
         }
       ],
     });
@@ -853,66 +956,196 @@ function generateFallbackRegenerate(params: AIRegeneratePartParams): AIItinerary
   const curated = getCuratedProvince(params.destination);
   const isVnd = params.currency === 'VND';
   const prefix = params.targetSession ? `Thay đổi ${params.targetSession}` : 'Thay đổi cả ngày';
+  const excludeList = params.excludePlaces || [];
   
   if (params.targetSession) {
     const otherActivities = day.activities.filter(a => a.session !== params.targetSession);
+    
+    // Tìm địa điểm từ danh sách curated không nằm trong danh sách excludeList
+    let newName = `${prefix} tại điểm mới`;
+    let newLocationName = params.destination;
+    let newLat = 21.0285;
+    let newLng = 105.8048;
+    let newCategory: 'restaurant' | 'hotel' | 'attraction' | 'nature' | 'festival' = 'attraction';
+    let newNotes = 'Lịch trình được tạo tự động mới ở khu vực lân cận.';
+    let newCost = isVnd ? 50000 : 3;
+
+    let extraFields: any = {};
+
+    if (curated) {
+      const candidates = [
+        ...curated.attractions,
+        ...curated.nature,
+        ...curated.restaurants,
+        ...curated.hotels
+      ].filter(p => !excludeList.some(ex => ex.toLowerCase().includes(p.name.toLowerCase()) || p.name.toLowerCase().includes(ex.toLowerCase())));
+
+      if (candidates.length > 0) {
+        const p = candidates[0];
+        newName = p.name;
+        newLocationName = `${p.name}, ${curated.provinceName}`;
+        newLat = p.latitude;
+        newLng = p.longitude;
+        newCategory = p.category as any;
+        newNotes = p.description;
+        newCost = isVnd ? p.costEstimate : Math.round(p.costEstimate / 25000);
+      } else {
+        // Fallback random/offset if candidates are exhausted
+        newName = `Địa danh mới ở ${params.destination}`;
+        newLocationName = `${params.destination}`;
+        newLat = 21.0285 + Math.random() * 0.05;
+        newLng = 105.8048 + Math.random() * 0.05;
+      }
+    }
+
+    if (params.targetSession === 'Sáng') {
+      extraFields = {
+        thoiGianThamQuan: '2.5 tiếng',
+        goiYTraiNghiem: `Khám phá và lưu giữ kỷ niệm tại đây.`
+      };
+    } else if (params.targetSession === 'Ăn sáng') {
+      extraFields = {
+        monAn: newName,
+        quanGoiY: newLocationName
+      };
+    } else if (params.targetSession === 'Trưa') {
+      extraFields = {
+        anTrua: newName,
+        monDacSan: 'Đặc sản ẩm thực vùng miền',
+        thoiGianNghiNgoi: '12:00 - 13:30'
+      };
+    } else if (params.targetSession === 'Chiều') {
+      extraFields = {
+        thoiGianLuuLai: '3 tiếng'
+      };
+    } else if (params.targetSession === 'Tối') {
+      extraFields = {
+        anToi: 'Lẩu đặc sản hoặc đồ nướng địa phương',
+        diaDiemDaoChoi: 'Phố đi bộ & phố ẩm thực đêm',
+        choDem: 'Chợ đêm đặc trưng vùng miền',
+        cafe: 'Cà phê ngắm cảnh phố phường',
+        hoatDongGiaiTri: 'Dạo mát vui chơi thư giãn',
+        nghiDemODau: newLocationName
+      };
+    }
+
     const newAct: ActivitySchema = {
       session: params.targetSession,
-      timeSlot: params.targetSession === 'Sáng' ? '09:00 - 11:00' : params.targetSession === 'Trưa' ? '12:00 - 13:30' : params.targetSession === 'Chiều' ? '15:00 - 17:30' : '19:00 - 21:00',
-      activityName: `${prefix} tại điểm mới`,
-      locationName: curated ? `${curated.attractions[0]?.name || params.destination}` : params.destination,
-      estimatedCost: isVnd ? 50000 : 3,
-      category: 'attraction',
-      latitude: curated?.attractions[0]?.latitude || 21.0285,
-      longitude: curated?.attractions[0]?.longitude || 105.8048,
-      notes: 'Lịch trình được tạo tự động mới ở khu vực lân cận.'
+      timeSlot: params.targetSession === 'Sáng' ? '08:00 - 11:30' : params.targetSession === 'Ăn sáng' ? '07:00 - 08:00' : params.targetSession === 'Trưa' ? '12:00 - 13:30' : params.targetSession === 'Chiều' ? '14:00 - 17:30' : '19:00 - 22:00',
+      activityName: newName,
+      locationName: newLocationName,
+      estimatedCost: newCost,
+      category: newCategory,
+      latitude: newLat,
+      longitude: newLng,
+      notes: newNotes,
+      ...extraFields
     };
     day.activities = [...otherActivities, newAct];
+    const sessionOrder = ['Sáng', 'Ăn sáng', 'Trưa', 'Chiều', 'Tối'];
+    day.activities.sort((a, b) => {
+      return sessionOrder.indexOf(a.session) - sessionOrder.indexOf(b.session);
+    });
   } else {
+    // Tái tạo cả ngày
+    let candidates: any[] = [];
+    if (curated) {
+      candidates = [
+        ...curated.attractions,
+        ...curated.nature,
+        ...curated.restaurants,
+        ...curated.hotels
+      ].filter(p => !excludeList.some(ex => ex.toLowerCase().includes(p.name.toLowerCase()) || p.name.toLowerCase().includes(ex.toLowerCase())));
+    }
+
+    const getCandidate = (prefCat: string) => {
+      const match = candidates.find(c => c.category === prefCat);
+      if (match) {
+        candidates = candidates.filter(c => c !== match);
+        return match;
+      }
+      if (candidates.length > 0) {
+        const first = candidates[0];
+        candidates = candidates.filter(c => c !== first);
+        return first;
+      }
+      return null;
+    };
+
+    const sangPlace = getCandidate('attraction');
+    const anSangPlace = getCandidate('restaurant');
+    const truaPlace = getCandidate('restaurant');
+    const chieuPlace = getCandidate('nature');
+    const toiPlace = getCandidate('hotel') || getCandidate('restaurant');
+
+    const i = params.targetDayIndex;
+
     day.activities = [
       {
         session: 'Sáng',
         timeSlot: '08:00 - 11:30',
-        activityName: `Khám phá sáng mới ${params.destination}`,
-        locationName: params.destination,
-        estimatedCost: 0,
-        category: 'attraction',
-        latitude: 21.0285,
-        longitude: 105.8048,
-        notes: 'Khám phá văn hóa địa phương buổi sáng.'
+        activityName: sangPlace ? sangPlace.name : `Khám phá sáng mới ${params.destination}`,
+        locationName: sangPlace ? `${sangPlace.name}, ${curated?.provinceName}` : params.destination,
+        thoiGianThamQuan: '2.5 tiếng',
+        goiYTraiNghiem: sangPlace ? sangPlace.description : 'Khám phá văn hóa địa phương buổi sáng.',
+        estimatedCost: sangPlace ? (isVnd ? sangPlace.costEstimate : Math.round(sangPlace.costEstimate / 25000)) : 0,
+        category: sangPlace ? (sangPlace.category as any) : 'attraction',
+        latitude: sangPlace ? sangPlace.latitude : 21.0285 + Math.random() * 0.05,
+        longitude: sangPlace ? sangPlace.longitude : 105.8048 + Math.random() * 0.05,
+        notes: sangPlace ? sangPlace.description : 'Khám phá văn hóa địa phương buổi sáng.'
+      },
+      {
+        session: 'Ăn sáng',
+        timeSlot: '07:00 - 08:00',
+        activityName: curated?.specialties.length ? curated.specialties[0] : 'Đặc sản ăn sáng',
+        locationName: anSangPlace ? anSangPlace.name : 'Quán ăn sáng địa phương',
+        estimatedCost: anSangPlace ? (isVnd ? anSangPlace.costEstimate : Math.round(anSangPlace.costEstimate / 25000)) : (isVnd ? 45000 : 2),
+        category: 'restaurant',
+        latitude: anSangPlace ? anSangPlace.latitude : 21.0285 + Math.random() * 0.05,
+        longitude: anSangPlace ? anSangPlace.longitude : 105.8048 + Math.random() * 0.05,
+        notes: 'Thưởng thức ẩm thực sáng.'
       },
       {
         session: 'Trưa',
         timeSlot: '12:00 - 13:30',
-        activityName: `Ăn trưa mới tại ${params.destination}`,
-        locationName: params.destination,
-        estimatedCost: isVnd ? 80000 : 4,
+        activityName: truaPlace ? truaPlace.name : `Ăn trưa mới tại ${params.destination}`,
+        locationName: truaPlace ? `${truaPlace.name}, ${curated?.provinceName}` : params.destination,
+        monDacSan: curated?.specialties.length ? curated.specialties[i % curated.specialties.length] : 'Món ngon vùng miền',
+        thoiGianNghiNgoi: '12:00 - 13:30',
+        estimatedCost: truaPlace ? (isVnd ? truaPlace.costEstimate : Math.round(truaPlace.costEstimate / 25000)) : (isVnd ? 120000 : 6),
         category: 'restaurant',
-        latitude: 21.0295,
-        longitude: 105.8058,
-        notes: 'Thưởng thức ẩm thực trưa.'
+        latitude: truaPlace ? truaPlace.latitude : 21.0295 + Math.random() * 0.05,
+        longitude: truaPlace ? truaPlace.longitude : 105.8058 + Math.random() * 0.05,
+        notes: truaPlace ? truaPlace.description : 'Thưởng thức ẩm thực trưa.'
       },
       {
         session: 'Chiều',
-        timeSlot: '15:00 - 18:00',
-        activityName: `Tham quan chiều mới`,
-        locationName: params.destination,
-        estimatedCost: 0,
-        category: 'attraction',
-        latitude: 21.0315,
-        longitude: 105.8068,
-        notes: 'Tận hưởng cảnh đẹp chiều.'
+        timeSlot: '14:00 - 17:30',
+        activityName: chieuPlace ? chieuPlace.name : `Tham quan chiều mới`,
+        locationName: chieuPlace ? `${chieuPlace.name}, ${curated?.provinceName}` : params.destination,
+        thoiGianLuuLai: '3 tiếng',
+        estimatedCost: chieuPlace ? (isVnd ? chieuPlace.costEstimate : Math.round(chieuPlace.costEstimate / 25000)) : 0,
+        category: chieuPlace ? (chieuPlace.category as any) : 'nature',
+        latitude: chieuPlace ? chieuPlace.latitude : 21.0315 + Math.random() * 0.05,
+        longitude: chieuPlace ? chieuPlace.longitude : 105.8068 + Math.random() * 0.05,
+        notes: chieuPlace ? chieuPlace.description : 'Tận hưởng cảnh đẹp chiều.'
       },
       {
         session: 'Tối',
-        timeSlot: '19:00 - 21:30',
-        activityName: `Dạo chơi tối mới`,
-        locationName: params.destination,
-        estimatedCost: isVnd ? 60000 : 3,
-        category: 'restaurant',
-        latitude: 21.0325,
-        longitude: 105.8078,
-        notes: 'Đi dạo và trải nghiệm đêm.'
+        timeSlot: '19:00 - 22:00',
+        activityName: toiPlace ? toiPlace.name : `Dạo chơi tối mới`,
+        locationName: toiPlace ? `${toiPlace.name}, ${curated?.provinceName}` : params.destination,
+        anToi: 'Lẩu nướng hải sản đặc sản',
+        diaDiemDaoChoi: 'Quảng trường trung tâm',
+        choDem: 'Khu mua sắm chợ đêm',
+        cafe: 'Cà phê phố cổ ngắm cảnh',
+        hoatDongGiaiTri: 'Dạo phố đi bộ thư giãn',
+        nghiDemODau: toiPlace ? toiPlace.name : 'Khách sạn trung tâm',
+        estimatedCost: toiPlace ? (isVnd ? toiPlace.costEstimate : Math.round(toiPlace.costEstimate / 25000)) : (isVnd ? 300000 : 15),
+        category: 'hotel',
+        latitude: toiPlace ? toiPlace.latitude : 21.0325 + Math.random() * 0.05,
+        longitude: toiPlace ? toiPlace.longitude : 105.8078 + Math.random() * 0.05,
+        notes: toiPlace ? toiPlace.description : 'Đi dạo và trải nghiệm đêm.'
       }
     ];
   }
