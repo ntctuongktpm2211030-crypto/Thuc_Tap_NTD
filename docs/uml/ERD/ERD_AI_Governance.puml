@@ -1,0 +1,120 @@
+@startuml ERD_AI_Governance
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 100
+skinparam nodesep 80
+hide circle
+hide methods
+hide stereotype
+
+package "Phân hệ Quản trị & Kiểm toán AI" {
+  entity "Đăng ký mô hình" as ModelRegistry {
+    * id : String <<PK>>
+    --
+    * name : String <<UNIQUE>>
+    * provider : String
+    * type : String
+    * version : String
+    * isActive : Boolean
+  }
+
+  entity "Phiên bản Prompt" as PromptVersion {
+    * id : String <<PK>>
+    --
+    * templateName : String
+    * versionHash : String <<UNIQUE>>
+    * templateText : String
+    * isActive : Boolean
+  }
+
+  entity "Nhật ký AI Chat" as AIChatLog {
+    * id : String <<PK>>
+    --
+    * messageId : String <<FK>> <<UNIQUE>>
+    * modelId : String <<FK>>
+    * promptId : String <<FK>>
+    * query : String
+    * llmPrompt : String
+    * llmResponse : String
+    * similarityScore : Float
+    * confidenceScore : Int
+    * reliabilityLevel : String
+    * groundednessScore : Int
+    * claimVerScore : Int
+    * retrievedContext : String
+    * promptTokens : Int
+    * completionTokens : Int
+    * totalTokens : Int
+    * apiCostUsd : Float
+    * latencyMs : Int
+  }
+
+  entity "Phản hồi học tập" as UserFeedback {
+    * id : String <<PK>>
+    --
+    * chatLogId : String <<FK>>
+    * rating : Int
+    comment : String
+    correctedText : String
+    * isProcessed : Boolean
+  }
+
+  entity "Lịch sử đánh giá" as EvaluationHistory {
+    * id : String <<PK>>
+    --
+    * chatLogId : String <<FK>>
+    * metricName : String
+    * score : Float
+    * evaluatorModel : String
+    reasoning : String
+  }
+
+  entity "Sự kiện Guardrail" as GuardrailEvent {
+    * id : String <<PK>>
+    --
+    chatLogId : String <<FK>>
+    * ruleViolated : String
+    * severity : String
+    * payloadBlocked : String
+    * actionTaken : String
+  }
+
+  entity "Phiên bản Tri thức" as KnowledgeVersion {
+    * id : String <<PK>>
+    --
+    * versionNumber : Int <<UNIQUE>>
+    commitMessage : String
+  }
+
+  entity "Độ tươi mới Tri thức" as KnowledgeFreshness {
+    * id : String <<PK>>
+    --
+    * contentId : String
+    * versionId : Int <<FK>>
+    * knowledgeCat : String
+    * lastCheckedAt : DateTime
+    * driftDetected : Boolean
+  }
+
+  entity "Vết kiểm toán hệ thống" as AuditTrail {
+    * id : String <<PK>>
+    --
+    * actionType : String
+    * actorName : String
+    * description : String
+    ipAddress : String
+  }
+}
+
+entity "Tin nhắn AI" as ChatMessage <<External>>
+
+ChatMessage ||--|| AIChatLog : "ghi nhật ký"
+ModelRegistry ||--o{ AIChatLog : "chạy bằng"
+PromptVersion ||--o{ AIChatLog : "sử dụng"
+AIChatLog ||--o{ UserFeedback : "có phản hồi"
+AIChatLog ||--o{ EvaluationHistory : "được đánh giá"
+AIChatLog ||--o{ GuardrailEvent : "kích hoạt"
+KnowledgeVersion ||--o{ KnowledgeFreshness : "được đánh dấu ở"
+
+@enduml

@@ -365,7 +365,7 @@ export class RecommendationTool implements AgentTool {
       try {
         const curated = getCuratedProvince(input.region);
         if (curated) {
-          const items = [...(curated.attractions || []), ...(curated.nature || [])];
+          const items = [...(curated.attractions || []), ...(curated.nature || [])].slice(0, 10);
           if (items.length > 0) {
             recommendations = items.map(item => ({
               name: item.name,

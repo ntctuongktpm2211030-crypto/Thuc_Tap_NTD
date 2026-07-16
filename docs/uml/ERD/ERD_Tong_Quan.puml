@@ -1,0 +1,70 @@
+@startuml ERD_Tong_Quan
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Người dùng và Cá nhân hóa" {
+  entity "Người dùng" as NguoiDung
+  entity "Hồ sơ" as HoSo
+  entity "Sở thích du lịch" as SoThichDuLich
+  entity "Bộ nhớ AI" as BoNhoAI
+}
+
+package "Hành trình và Chuyến đi" {
+  entity "Chuyến đi" as ChuyenDi
+  entity "Nhật ký hành trình" as NhatKyHanhTrinh
+}
+
+package "Địa điểm và GIS" {
+  entity "Điểm đến" as DiemDen
+  entity "Cảnh báo an toàn" as CanhBaoAnToan
+}
+
+package "Mạng xã hội và Tương tác" {
+  entity "Bài đăng" as BaiDang
+}
+
+package "Sự kiện và Kết nối" {
+  entity "Sự kiện" as SuKien
+  entity "Ghép đôi du khách" as GhepDoiDuKhach
+}
+
+package "Trợ lý Chatbot AI" {
+  entity "Cuộc hội thoại AI" as CuocHoiThoaiAI
+}
+
+package "Hệ thống RAG và Tri thức" {
+  entity "Nội dung tri thức" as NoiDungTriThuc
+}
+
+package "Đệm Cache và Nhật ký" {
+  entity "Món ăn yêu thích" as MonAnYeuThich
+  entity "Đệm hệ thống" as SystemCache
+}
+
+' ─── QUAN HỆ TỔNG QUAN GIỮA CÁC MODULES ───
+
+NguoiDung ||--|| HoSo : "sở hữu"
+NguoiDung ||--|| SoThichDuLich : "cấu hình"
+NguoiDung ||--|| BoNhoAI : "lưu sở thích"
+
+NguoiDung ||--o{ ChuyenDi : "lập"
+NguoiDung ||--o{ BaiDang : "đăng"
+NguoiDung ||--o{ NhatKyHanhTrinh : "ghi chép"
+NguoiDung ||--o{ SuKien : "tổ chức"
+NguoiDung ||--o{ CuocHoiThoaiAI : "trò chuyện"
+NguoiDung ||--o{ MonAnYeuThich : "thích ăn"
+NguoiDung ||--o{ GhepDoiDuKhach : "gợi ý ghép"
+
+ChuyenDi }o--|| DiemDen : "ghé thăm"
+ChuyenDi ||--o{ BaiDang : "được chia sẻ qua"
+
+SuKien }o--|| DiemDen : "diễn ra tại"
+NguoiDung }o--o{ SuKien : "đăng ký tham gia"
+
+@enduml

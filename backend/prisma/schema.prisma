@@ -42,7 +42,6 @@ model User {
   liveLocation         Location?          @relation("UserLiveLocation")
   chatbotConversations ChatConversation[]
   aiMemory             AIMemory?
-  itineraries          Itinerary[]
   userRecommendations  UserRecommendation[]
   travelHistories      TravelHistory[]
   favoriteFoods        FavoriteFood[]
@@ -91,17 +90,24 @@ model TravelPreferences {
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum TripStatus {
+  DRAFT_AI      // Lịch trình nháp sinh bởi trợ lý AI
+  DRAFT_USER    // Lịch trình nháp do người dùng tự tạo
+  CONFIRMED     // Chuyến đi chính thức đã phê duyệt
+}
+
 model Trip {
   id              String           @id @default(uuid())
   ownerId         String
   title           String
   description     String?
   destinationName String
-  startDate       DateTime
-  endDate         DateTime
-  totalBudget     Float
-  travelStyle     String           // "solo", "family", "friends", "couple"
+  startDate       DateTime?        // Chuyển thành optional
+  endDate         DateTime?        // Chuyển thành optional
+  totalBudget     Float            @default(0.0)
+  travelStyle     String           @default("solo") // "solo", "family", "friends", "couple"
   isPublic        Boolean          @default(false)
+  status          TripStatus       @default(CONFIRMED)
   cloneSourceId   String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -121,7 +127,7 @@ model TripDay {
   id         String         @id @default(uuid())
   tripId     String
   dayIndex   Int
-  date       DateTime
+  date       DateTime?      // Chuyển thành optional
   trip       Trip           @relation(fields: [tripId], references: [id], onDelete: Cascade)
   activities TripActivity[]
 
@@ -129,16 +135,19 @@ model TripDay {
 }
 
 model TripActivity {
-  id            String      @id @default(uuid())
+  id            String       @id @default(uuid())
   tripDayId     String
-  destinationId String
-  startTime     String      // HH:MM format
-  endTime       String      // HH:MM format
-  estimatedCost Float       @default(0.0)
+  destinationId String?      // Chuyển thành optional
+  title         String?      // Tên hoạt động tự do
+  location      String?      // Mô tả vị trí tự do
+  description   String?      // Chi tiết hoạt động
+  startTime     String?      // HH:MM format (optional)
+  endTime       String?      // HH:MM format (optional)
+  estimatedCost Float        @default(0.0)
   sequenceOrder Int
   notes         String?
-  tripDay       TripDay     @relation(fields: [tripDayId], references: [id], onDelete: Cascade)
-  destination   Destination @relation(fields: [destinationId], references: [id])
+  tripDay       TripDay      @relation(fields: [tripDayId], references: [id], onDelete: Cascade)
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
 
   @@index([tripDayId])
   @@index([destinationId])
@@ -158,6 +167,8 @@ model Destination {
   checkIns      CheckIn[]
   recommendations Recommendation[]
   events        Event[]
+  travelHistories     TravelHistory[]
+  userRecommendations UserRecommendation[]
 
   // Compound index to speed up spatial bounding box searches
   @@index([latitude, longitude])
@@ -494,6 +505,7 @@ model ChatMessage {
   versions       ChatMessageVersion[]
   feedback       AIFeedback?
   toolCalls      ToolCall[]
+  aiChatLog      AIChatLog?
 
   @@index([conversationId])
 }
@@ -523,70 +535,38 @@ model AIMemory {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Itinerary {
-  id          String         @id @default(uuid())
-  userId      String
-  title       String
-  description String?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  days        ItineraryDay[]
-
-  @@index([userId])
-}
-
-model ItineraryDay {
-  id          String              @id @default(uuid())
-  itineraryId String
-  dayIndex    Int                 // Day 1, Day 2, etc.
-  date        DateTime?
-  itinerary   Itinerary           @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
-  activities  ItineraryActivity[]
-
-  @@index([itineraryId])
-}
-
-model ItineraryActivity {
-  id             String       @id @default(uuid())
-  itineraryDayId String
-  title          String
-  description    String?
-  startTime      String?      // e.g., "09:00"
-  endTime        String?      // e.g., "11:00"
-  location       String?
-  cost           Float?       @default(0.0)
-  day            ItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
-
-  @@index([itineraryDayId])
-}
-
 model UserRecommendation {
-  id        String   @id @default(uuid())
-  userId    String
-  location  String   // địa điểm đề xuất
-  priority  String   // độ ưu tiên (e.g., "high", "medium", "low")
-  reason    String?  // lý do gợi ý
-  type      String   // loại gợi ý (e.g., "destination", "food", "activity")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String       @id @default(uuid())
+  userId        String
+  location      String       // địa điểm đề xuất
+  destinationId String?      // [BỔ SUNG] Khóa ngoại trỏ đến địa danh hệ thống
+  priority      String       // độ ưu tiên (e.g., "high", "medium", "low")
+  reason        String?      // lý do gợi ý
+  type          String       // loại gợi ý (e.g., "destination", "food", "activity")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
 
   @@index([userId])
+  @@index([destinationId])
 }
 
 model TravelHistory {
-  id        String   @id @default(uuid())
-  userId    String
-  location  String   // địa điểm đã đi
-  time      DateTime // thời gian
-  rating    String?  // đánh giá
-  cost      Float    @default(0.0) // chi phí
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String       @id @default(uuid())
+  userId        String
+  location      String       // địa điểm đã đi
+  destinationId String?      // [BỔ SUNG] Khóa ngoại trỏ đến địa danh hệ thống
+  time          DateTime     // thời gian
+  rating        String?      // đánh giá
+  cost          Float        @default(0.0) // chi phí
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
 
   @@index([userId])
+  @@index([destinationId])
 }
 
 model FavoriteFood {
@@ -647,28 +627,16 @@ model ToolCall {
   @@index([messageId])
 }
 
-model PlaceCache {
-  key       String   @id // khóa tìm kiếm cache (ví dụ: "lat_lng:21.02_105.85" hoặc "query:ha-noi")
-  value     String   // dữ liệu JSON của địa điểm được cache
-  expiresAt DateTime // thời gian hết hạn
+model SystemCache {
+  key       String   // Khóa tìm kiếm cache (ví dụ: "lat_lng:21.02_105.85" hoặc "query:pho-bo")
+  type      String   // Phân loại cache (ví dụ: "place", "food", "blog", "hotel")
+  value     String   // Dữ liệu JSON được serialize thành String
+  expiresAt DateTime // Thời gian hết hạn đệm
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model FoodCache {
-  key       String   @id // khóa tìm kiếm cache (ví dụ: "query:pho-bo" hoặc "region:ha-noi")
-  value     String   // dữ liệu JSON của món ăn được cache
-  expiresAt DateTime // thời gian hết hạn
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model BlogCache {
-  key       String   @id // khóa tìm kiếm cache (ví dụ: "topic:du-lich-ha-giang")
-  value     String   // dữ liệu JSON của blog được cache
-  expiresAt DateTime // thời gian hết hạn
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@id([key, type]) // Khóa chính composite để cho phép cùng key nhưng khác phân loại
+  @@index([type])    // Index để tìm nhanh theo nhóm phân loại
 }
 
 model KnowledgeContent {
@@ -721,6 +689,166 @@ model SafetyWarning {
   expiresAt   DateTime?
 
   @@index([latitude, longitude])
+}
+
+// =========================================================================
+// HỆ THỐNG QUẢN TRỊ AI & KIỂM TOÁN CHATBOT CHUYÊN SÂU
+// =========================================================================
+
+// 1. Quản lý Đăng ký và Trạng thái Mô hình (Model Registry)
+model ModelRegistry {
+  id             String             @id @default(uuid())
+  name           String             @unique // Ví dụ: "gpt-4o", "claude-3-5-sonnet"
+  provider       String             // Ví dụ: "openai", "anthropic"
+  type           String             // "llm" | "embedding" | "reranker" | "nli"
+  version        String             // Phiên bản cụ thể: "2024-05-13"
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  chatLogs       AIChatLog[]        @relation("UsedModel")
+}
+
+// 2. Quản lý Phiên bản Tri thức (Knowledge Versioning)
+model KnowledgeVersion {
+  id             String             @id @default(uuid())
+  versionNumber  Int                @unique
+  commitMessage  String?
+  createdAt      DateTime           @default(now())
+  freshnessLogs  KnowledgeFreshness[]
+}
+
+// 3. Quản lý Phiên bản Prompt (Prompt Versioning)
+model PromptVersion {
+  id             String             @id @default(uuid())
+  templateName   String             // Ví dụ: "rag_qa_system"
+  versionHash    String             @unique // Git-like hash
+  templateText   String             @db.Text
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  chatLogs       AIChatLog[]        @relation("UsedPrompt")
+}
+
+// 4. Nhật ký chất lượng phản hồi AI chi tiết (AIChatLog)
+model AIChatLog {
+  id                 String             @id @default(uuid())
+  messageId          String             @unique
+  query              String             @db.Text
+  llmPrompt          String             @db.Text
+  llmResponse        String             @db.Text
+  
+  // RAG & Scores
+  similarityScore    Float
+  confidenceScore    Int
+  reliabilityLevel   String
+  groundednessScore  Int
+  claimVerScore      Int
+  retrievedContext   String             @db.Text // JSON string
+  
+  // ROI & Performance
+  promptTokens       Int
+  completionTokens   Int
+  totalTokens        Int
+  apiCostUsd         Float
+  latencyMs          Int
+  ttftMs             Int
+  
+  // Security
+  guardrailsBlocked  Boolean            @default(false)
+  securityThreatType String?            // "PROMPT_INJECTION" | "JAILBREAK" | "PII_LEAK"
+  unsupportedClaims  Int                @default(0)
+  
+  // Relations
+  modelId            String
+  promptId           String
+  model              ModelRegistry      @relation("UsedModel", fields: [modelId], references: [id])
+  prompt             PromptVersion      @relation("UsedPrompt", fields: [promptId], references: [id])
+  message            ChatMessage        @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userFeedbacks      UserFeedback[]
+  evalHistories      EvaluationHistory[]
+  guardrailEvents    GuardrailEvent[]
+  
+  createdAt          DateTime           @default(now())
+  
+  @@index([confidenceScore])
+  @@index([reliabilityLevel])
+}
+
+// 5. Quản lý Phản hồi Người dùng (User Feedback Learning)
+model UserFeedback {
+  id             String             @id @default(uuid())
+  chatLogId      String
+  rating         Int                // 1 (Upvote) hoặc -1 (Downvote)
+  comment        String?            @db.Text
+  correctedText  String?            @db.Text // Câu trả lời sửa lại từ người dùng
+  isProcessed    Boolean            @default(false)
+  createdAt      DateTime           @default(now())
+  chatLog        AIChatLog          @relation(fields: [chatLogId], references: [id], onDelete: Cascade)
+
+  @@index([chatLogId])
+}
+
+// 6. Siêu dữ liệu Caching Ngữ nghĩa (Semantic Cache Metadata)
+model CacheMetadata {
+  id             String             @id @default(uuid())
+  cacheKey       String             @unique // Hash của embedding câu hỏi
+  queryText      String             @db.Text
+  responseJson   String             @db.Text
+  hitCount       Int                @default(1)
+  expiresAt      DateTime
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+// 7. Lịch sử Đánh giá Chất lượng Tự động (Evaluation History)
+model EvaluationHistory {
+  id             String             @id @default(uuid())
+  chatLogId      String
+  metricName     String             // "groundedness" | "faithfulness" | "answer_relevance"
+  score          Float
+  evaluatorModel String             // Tên model chạy eval
+  reasoning      String?            @db.Text
+  createdAt      DateTime           @default(now())
+  chatLog        AIChatLog          @relation(fields: [chatLogId], references: [id], onDelete: Cascade)
+
+  @@index([chatLogId])
+}
+
+// 8. Nhật ký Sự kiện Vi phạm An ninh (Guardrail Event)
+model GuardrailEvent {
+  id             String             @id @default(uuid())
+  chatLogId      String?
+  ruleViolated   String             // "PROMPT_INJECTION" | "TOXICITY" | "PII" | "JUNK"
+  severity       String             // "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
+  payloadBlocked String             @db.Text
+  actionTaken    String             // "BLOCKED" | "REDACTED" | "WARNING"
+  createdAt      DateTime           @default(now())
+  chatLog        AIChatLog?         @relation(fields: [chatLogId], references: [id], onDelete: SetNull)
+
+  @@index([chatLogId])
+}
+
+// 9. Giám sát Độ tươi mới Tri thức RAG (Knowledge Freshness & Drift)
+model KnowledgeFreshness {
+  id             String             @id @default(uuid())
+  contentId      String
+  knowledgeCat   String             // "food" | "culture" | "festival" | "history" | "destination"
+  lastCheckedAt  DateTime           @default(now())
+  driftDetected  Boolean            @default(false)
+  sourceHash     String?
+  versionId      Int
+  version        KnowledgeVersion   @relation(fields: [versionId], references: [versionNumber])
+
+  @@index([contentId])
+}
+
+// 10. Vết Kiểm toán Hệ thống AI (AI Audit Trail)
+model AuditTrail {
+  id             String             @id @default(uuid())
+  actionType     String             // "PROMPT_UPDATE" | "KNOWLEDGE_SEED" | "MODEL_SWITCH" | "CLEAR_CACHE"
+  actorName      String             // Tên người dùng / System
+  description    String             @db.Text
+  ipAddress      String?
+  createdAt      DateTime           @default(now())
 }
 
 

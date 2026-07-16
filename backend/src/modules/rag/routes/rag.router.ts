@@ -7,5 +7,6 @@ const controller = new RagController();
 
 router.post('/document', requireAuth, controller.addDocument);
 router.post('/query', requireAuth, controller.query);
+router.post('/query-enterprise', requireAuth, controller.queryEnterprise);
 
 export default router;

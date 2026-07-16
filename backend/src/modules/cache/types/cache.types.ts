@@ -1,4 +1,4 @@
-export type CacheType = 'place' | 'food' | 'blog';
+export type CacheType = 'place' | 'food' | 'blog' | 'hotel' | 'restaurant' | 'event';
 
 export interface SetCacheDto {
   type: CacheType;

@@ -4,81 +4,51 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-' Actors
-actor "Khách vãng lai\n(Guest)" as Guest
-actor "Khách du lịch\n(Tourist)" as Tourist
-actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
+actor "Khách vãng lai" as Guest
+actor "Khách du lịch" as Tourist
+actor "Người dùng đăng ký" as RegisteredUser
 
-' External Systems
-actor "OpenAI API" as OpenAI <<System>>
-actor "Weather API" as WeatherAPI <<System>>
-actor "OpenStreetMap" as OSM <<System>>
-
-' Actor Inheritance
 Tourist -|> Guest
 RegisteredUser -|> Tourist
 
 rectangle "Phân hệ Lập kế hoạch & Hành trình" {
-  ' Search package
   usecase "Tìm kiếm điểm đến" as UC_SearchDest
   usecase "Tìm kiếm món ăn ẩm thực" as UC_SearchFood
-  usecase "Tìm kiếm khách sạn" as UC_SearchHotel
-  usecase "Tìm kiếm lễ hội du lịch" as UC_SearchFestival
-  usecase "Tìm kiếm di tích lịch sử" as UC_SearchHistory
-  usecase "Tìm kiếm nét văn hóa đặc trưng" as UC_SearchCulture
   usecase "Xem thông tin chi tiết địa danh" as UC_ViewDetail
   
-  ' Planning package
   usecase "Tạo chuyến đi mới" as UC_CreateTrip
   usecase "Chỉnh sửa chuyến đi" as UC_EditTrip
   usecase "Xóa chuyến đi" as UC_DeleteTrip
   usecase "Tự động tạo lịch trình bằng AI" as UC_AITrip
   usecase "Tối ưu hóa thứ tự lộ trình (TSP)" as UC_OptimizeRoute
-  usecase "Lập kế hoạch ngân sách" as UC_BudgetPlan
   usecase "Lưu địa điểm yêu thích" as UC_SaveFavorite
-  usecase "Chia sẻ chuyến đi công khai" as UC_ShareTrip
-  usecase "Xuất lịch trình chuyến đi" as UC_ExportTrip
   
-  ' Navigation & Suggestions
-  usecase "Xem gợi ý điểm tham quan đề xuất" as UC_ViewRecs
-  usecase "Tìm kiếm địa điểm lân cận" as UC_Nearby
-  usecase "Xem thông tin dự báo thời tiết" as UC_Weather
-  usecase "Chỉ đường di chuyển bản đồ" as UC_Navigation
-  usecase "Nhận gợi ý hành trình nhanh" as UC_Suggestions
+  ' Bổ sung gói hành trình tự do (Custom Itineraries)
+  package "Hành trình tự do" {
+    usecase "Tạo hành trình tự do mới" as UC_CreateItin
+    usecase "Xem danh sách hành trình tự do" as UC_ListItin
+    usecase "Xem chi tiết hành trình tự do" as UC_ViewItin
+    usecase "Thêm ngày vào hành trình tự do" as UC_AddDayItin
+    usecase "Quản lý hoạt động hành trình tự do\n(Thêm/Sửa/Xóa)" as UC_ManageActItin
+  }
 }
 
-' Guest / Tourist / Registered User Associations
 Guest --> UC_SearchDest
 Guest --> UC_SearchFood
-Guest --> UC_SearchHotel
-Guest --> UC_SearchFestival
-Guest --> UC_SearchHistory
-Guest --> UC_SearchCulture
 Guest --> UC_ViewDetail
-Guest --> UC_Weather
 
 Tourist --> UC_CreateTrip
 Tourist --> UC_EditTrip
 Tourist --> UC_DeleteTrip
-Tourist --> UC_ViewRecs
-Tourist --> UC_Nearby
-Tourist --> UC_Navigation
 
 RegisteredUser --> UC_SaveFavorite
 RegisteredUser --> UC_AITrip
-RegisteredUser --> UC_ShareTrip
-RegisteredUser --> UC_ExportTrip
+RegisteredUser --> UC_CreateItin
+RegisteredUser --> UC_ListItin
+RegisteredUser --> UC_ViewItin
 
-' Relationships (include / extend)
-UC_ViewDetail <.. UC_SaveFavorite : <<extend>>
+UC_ViewItin <.. UC_AddDayItin : <<extend>>
+UC_ViewItin <.. UC_ManageActItin : <<extend>>
 UC_CreateTrip <.. UC_AITrip : <<extend>>
-UC_CreateTrip <.. UC_BudgetPlan : <<extend>>
 UC_EditTrip ..> UC_OptimizeRoute : <<extend>>
-UC_EditTrip ..> UC_Suggestions : <<extend>>
-UC_Navigation ..> UC_OptimizeRoute : <<include>>
-
-' External System Mappings
-UC_AITrip --> OpenAI
-UC_Weather --> WeatherAPI
-UC_Navigation --> OSM
 @enduml

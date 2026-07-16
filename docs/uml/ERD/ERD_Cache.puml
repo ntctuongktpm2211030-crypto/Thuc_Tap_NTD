@@ -1,0 +1,23 @@
+@startuml ERD_Cache
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Caching Lớp đệm" {
+  entity "Đệm hệ thống" as SystemCache {
+    * khoa : String <<PK>>
+    * phan_loai : String <<PK>> (place | food | blog | hotel)
+    --
+    * gia_tri : String
+    * thoi_gian_het_han : DateTime
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+}
+
+@enduml

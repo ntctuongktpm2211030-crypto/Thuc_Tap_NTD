@@ -517,6 +517,7 @@ const MapDashboard = () => {
               <option value="restaurant">{vi ? 'Nhà hàng' : 'Restaurant'}</option>
               <option value="hotel">{vi ? 'Khách sạn' : 'Hotel'}</option>
               <option value="cafe">{vi ? 'Cà phê' : 'Cafe'}</option>
+              <option value="festival">{vi ? 'Lễ hội / Sự kiện' : 'Festival / Event'}</option>
             </select>
             <select
               value={filterRating}

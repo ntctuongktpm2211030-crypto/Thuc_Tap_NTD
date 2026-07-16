@@ -1,0 +1,98 @@
+@startuml ERD_Nguoi_Dung
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Người dùng & Kết nối" {
+  entity "Người dùng" as NguoiDung {
+    * ma_nguoi_dung : String <<PK>>
+    --
+    * email : String <<UNIQUE>> <<INDEX>>
+    * mat_khau_hash : String
+    * vai_tro : UserRole
+    * da_xac_minh : Boolean
+    ma_xac_minh : String
+    ma_dat_lai_mat_khau : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Người theo dõi" as NguoiTheoDoi {
+    * ma_quan_he : String <<PK>>
+    --
+    * ma_nguoi_theo_doi : String <<FK>> <<INDEX>>
+    * ma_nguoi_duoc_theo_doi : String <<FK>> <<INDEX>>
+    * ngay_tao : DateTime
+  }
+
+  entity "Thông báo" as ThongBao {
+    * ma_thong_bao : String <<PK>>
+    --
+    * ma_nguoi_nhan : String <<FK>> <<INDEX>>
+    * loai_thong_bao : String
+    * noi_dung : String
+    * da_doc : Boolean
+    * ngay_tao : DateTime
+  }
+
+  entity "Vị trí trực tiếp" as ViTriTrucTiep {
+    * ma_vi_tri : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
+    * vi_do : Float
+    * kinh_do : Float
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Ghép đôi du khách" as GhepDoiDuKhach {
+    * ma_ghep_doi : String <<PK>>
+    --
+    * ma_nguoi_dung_1 : String <<FK>> <<UNIQUE>> <<INDEX>>
+    * ma_nguoi_dung_2 : String <<FK>> <<UNIQUE>> <<INDEX>>
+    * diem_tuong_dong : Float <<INDEX>>
+    danh_sach_ly_do : String[]
+    * trang_thai : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Cuộc hội thoại người dùng" as CuocHoiThoaiNguoiDung {
+    * ma_cuoc_hoi_thoai : String <<PK>>
+    --
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Tin nhắn người dùng" as TinNhanNguoiDung {
+    * ma_tin_nhan : String <<PK>>
+    --
+    * ma_cuoc_hoi_thoai : String <<FK>> <<INDEX>>
+    * ma_nguoi_gui : String <<FK>>
+    * noi_dung : String
+    * ngay_gui : DateTime
+  }
+}
+
+' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
+entity "Hồ sơ" as HoSo <<External>>
+entity "Sự kiện" as SuKien <<External>>
+
+NguoiDung ||--|| HoSo : "sở hữu"
+NguoiDung ||--o{ SuKien : "tổ chức"
+
+NguoiDung ||--o{ NguoiTheoDoi : "theo dõi"
+NguoiDung ||--o{ NguoiTheoDoi : "được theo dõi"
+NguoiDung ||--o{ ThongBao : "nhận"
+NguoiDung ||--|| ViTriTrucTiep : "đang ở"
+NguoiDung ||--o{ GhepDoiDuKhach : "gợi ý ghép"
+
+CuocHoiThoaiNguoiDung ||--o{ TinNhanNguoiDung : "chứa"
+NguoiDung ||--o{ TinNhanNguoiDung : "gửi"
+NguoiDung }o--o{ CuocHoiThoaiNguoiDung : "tham gia"
+
+@enduml

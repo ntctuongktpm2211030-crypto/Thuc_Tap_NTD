@@ -1,25 +1,66 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../../auth/auth.middleware';
 import { EmbeddingsService } from '../services/embeddings.service';
 import { VectorStoreService } from '../services/vector-store.service';
 import { RetrieverService } from '../services/retriever.service';
 import { PromptBuilderService } from '../services/prompt-builder.service';
+import { RagOrchestratorService } from '../services/rag-orchestrator.service';
 import { KnowledgeCategory } from '../types/rag.types';
+import prisma from '../../../config/db';
 
 export class RagController {
   private embeddingsService: EmbeddingsService;
   private vectorStoreService: VectorStoreService;
   private retrieverService: RetrieverService;
   private promptBuilderService: PromptBuilderService;
+  private orchestratorService: RagOrchestratorService;
 
   constructor() {
-    // Dependency Injection
     this.embeddingsService = new EmbeddingsService();
     this.vectorStoreService = new VectorStoreService();
     this.retrieverService = new RetrieverService(this.embeddingsService, this.vectorStoreService);
     this.promptBuilderService = new PromptBuilderService();
+    this.orchestratorService = new RagOrchestratorService();
   }
 
-  addDocument = async (req: Request, res: Response) => {
+  /**
+   * Helper to resolve or create a valid messageId for database foreign key constraints
+   */
+  private async ensureMessageId(userId: string, explicitMessageId?: string): Promise<string> {
+    if (explicitMessageId) {
+      const existing = await prisma.chatMessage.findUnique({ where: { id: explicitMessageId } });
+      if (existing) return explicitMessageId;
+    }
+
+    // Find or create a conversation for the user
+    let conv = await prisma.chatConversation.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!conv) {
+      conv = await prisma.chatConversation.create({
+        data: {
+          userId,
+        },
+      });
+    }
+
+    // Create a dummy user ChatMessage
+    const msg = await prisma.chatMessage.create({
+      data: {
+        conversationId: conv.id,
+        role: 'user',
+      },
+    });
+
+    return msg.id;
+  }
+
+  /**
+   * Ad-hoc document upload with automatic embedding generation
+   */
+  addDocument = async (req: AuthRequest, res: Response) => {
     try {
       const { title, body, content, category, questions: reqQuestions, answers: reqAnswers } = req.body;
 
@@ -36,7 +77,6 @@ export class RagController {
         return res.status(400).json({ error: 'category phải là culture, festival, food, history hoặc destination.' });
       }
 
-      // Xử lý fallback cho questions và answers
       const questions: string[] = Array.isArray(reqQuestions) && reqQuestions.length > 0 
         ? reqQuestions.map(q => String(q).trim()).filter(Boolean)
         : [title];
@@ -45,7 +85,6 @@ export class RagController {
         ? reqAnswers.map(a => String(a).trim()).filter(Boolean)
         : [docBody];
 
-      // 1. Sinh vector embedding cho từng câu hỏi mẫu
       const questionEmbeddings: { text: string; embedding: number[] }[] = [];
       for (const q of questions) {
         const embedding = await this.embeddingsService.generate(q);
@@ -55,7 +94,6 @@ export class RagController {
         });
       }
 
-      // 2. Lưu vào DB thông qua VectorStoreService quan hệ
       const result = await this.vectorStoreService.addDocument(
         title,
         docBody,
@@ -75,7 +113,10 @@ export class RagController {
     }
   };
 
-  query = async (req: Request, res: Response) => {
+  /**
+   * Traditional prompt builder query endpoint
+   */
+  query = async (req: AuthRequest, res: Response) => {
     try {
       const { query, category, topK } = req.body;
 
@@ -88,11 +129,7 @@ export class RagController {
       }
 
       const limit = topK ? parseInt(topK as any) : 3;
-
-      // 1. Truy xuất tài liệu ngữ cảnh
       const docs = await this.retrieverService.retrieve(query, category as KnowledgeCategory, limit);
-
-      // 2. Xây dựng prompt tổng hợp
       const prompt = this.promptBuilderService.build(query, docs);
 
       return res.json({
@@ -103,6 +140,44 @@ export class RagController {
     } catch (err: any) {
       console.error('[rag/query]', err);
       return res.status(500).json({ error: err.message || 'Không thể truy vấn RAG.' });
+    }
+  };
+
+  /**
+   * Production-ready Enterprise RAG Pipeline Query Endpoint
+   */
+  queryEnterprise = async (req: AuthRequest, res: Response) => {
+    try {
+      const { query, category, topK, messageId: explicitMessageId } = req.body;
+      const userId = req.user?.sub;
+
+      if (!query || typeof query !== 'string' || query.trim().length === 0) {
+        return res.status(400).json({ error: 'query (câu hỏi truy vấn) không được để trống.' });
+      }
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Không xác định được danh tính người dùng.' });
+      }
+
+      const resolvedMessageId = await this.ensureMessageId(userId, explicitMessageId);
+      const limit = topK ? parseInt(topK as any) : 4;
+
+      const result = await this.orchestratorService.execute({
+        messageId: resolvedMessageId,
+        query,
+        category,
+        topK: limit,
+        requestId: req.headers['x-request-id'] as string,
+      });
+
+      return res.json({
+        success: true,
+        messageId: resolvedMessageId,
+        data: result,
+      });
+    } catch (err: any) {
+      console.error('[rag/queryEnterprise]', err);
+      return res.status(500).json({ error: err.message || 'Lỗi xử lý luồng Enterprise RAG.' });
     }
   };
 }

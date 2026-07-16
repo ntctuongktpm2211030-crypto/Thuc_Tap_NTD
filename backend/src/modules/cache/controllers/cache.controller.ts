@@ -13,8 +13,8 @@ export class CacheController {
     try {
       const { type, key, value, ttlSeconds } = req.body;
 
-      if (!type || !['place', 'food', 'blog'].includes(type)) {
-        return res.status(400).json({ error: 'type phải là place, food hoặc blog.' });
+      if (!type || !['place', 'food', 'blog', 'hotel', 'restaurant', 'event'].includes(type)) {
+        return res.status(400).json({ error: 'type phải là place, food, blog, hotel, restaurant hoặc event.' });
       }
       if (!key || typeof key !== 'string' || key.trim().length === 0) {
         return res.status(400).json({ error: 'key không được để trống.' });
@@ -43,8 +43,8 @@ export class CacheController {
       const type = req.params.type as CacheType;
       const key = req.params.key;
 
-      if (!['place', 'food', 'blog'].includes(type)) {
-        return res.status(400).json({ error: 'type phải là place, food hoặc blog.' });
+      if (!['place', 'food', 'blog', 'hotel', 'restaurant', 'event'].includes(type)) {
+        return res.status(400).json({ error: 'type phải là place, food, blog, hotel, restaurant hoặc event.' });
       }
 
       const cachedData = await this.service.get(type, key);
@@ -64,8 +64,8 @@ export class CacheController {
       const type = req.params.type as CacheType;
       const key = req.params.key;
 
-      if (!['place', 'food', 'blog'].includes(type)) {
-        return res.status(400).json({ error: 'type phải là place, food hoặc blog.' });
+      if (!['place', 'food', 'blog', 'hotel', 'restaurant', 'event'].includes(type)) {
+        return res.status(400).json({ error: 'type phải là place, food, blog, hotel, restaurant hoặc event.' });
       }
 
       await this.service.delete(type, key);
@@ -79,8 +79,8 @@ export class CacheController {
   clearExpired = async (req: Request, res: Response) => {
     try {
       const { type } = req.body;
-      if (!type || !['place', 'food', 'blog'].includes(type)) {
-        return res.status(400).json({ error: 'type phải là place, food hoặc blog.' });
+      if (!type || !['place', 'food', 'blog', 'hotel', 'restaurant', 'event'].includes(type)) {
+        return res.status(400).json({ error: 'type phải là place, food, blog, hotel, restaurant hoặc event.' });
       }
 
       const result = await this.service.clearExpired(type as CacheType);

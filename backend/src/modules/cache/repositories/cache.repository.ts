@@ -3,55 +3,38 @@ import { CacheType } from '../types/cache.types';
 
 export class CacheRepository {
   async get(type: CacheType, key: string) {
-    switch (type) {
-      case 'place':
-        return prisma.placeCache.findUnique({ where: { key } });
-      case 'food':
-        return prisma.foodCache.findUnique({ where: { key } });
-      case 'blog':
-        return prisma.blogCache.findUnique({ where: { key } });
-    }
+    return prisma.systemCache.findUnique({
+      where: {
+        key_type: { key, type },
+      },
+    });
   }
 
   async set(type: CacheType, key: string, value: string, expiresAt: Date) {
-    const data = {
-      key,
-      value,
-      expiresAt,
-    };
-
-    switch (type) {
-      case 'place':
-        return prisma.placeCache.upsert({
-          where: { key },
-          update: { value, expiresAt },
-          create: data,
-        });
-      case 'food':
-        return prisma.foodCache.upsert({
-          where: { key },
-          update: { value, expiresAt },
-          create: data,
-        });
-      case 'blog':
-        return prisma.blogCache.upsert({
-          where: { key },
-          update: { value, expiresAt },
-          create: data,
-        });
-    }
+    return prisma.systemCache.upsert({
+      where: {
+        key_type: { key, type },
+      },
+      update: {
+        value,
+        expiresAt,
+      },
+      create: {
+        key,
+        type,
+        value,
+        expiresAt,
+      },
+    });
   }
 
   async delete(type: CacheType, key: string) {
     try {
-      switch (type) {
-        case 'place':
-          return await prisma.placeCache.delete({ where: { key } });
-        case 'food':
-          return await prisma.foodCache.delete({ where: { key } });
-        case 'blog':
-          return await prisma.blogCache.delete({ where: { key } });
-      }
+      return await prisma.systemCache.delete({
+        where: {
+          key_type: { key, type },
+        },
+      });
     } catch (err) {
       // Bỏ qua lỗi nếu cache không tồn tại
       return null;
@@ -60,13 +43,11 @@ export class CacheRepository {
 
   async clearExpired(type: CacheType) {
     const now = new Date();
-    switch (type) {
-      case 'place':
-        return prisma.placeCache.deleteMany({ where: { expiresAt: { lte: now } } });
-      case 'food':
-        return prisma.foodCache.deleteMany({ where: { expiresAt: { lte: now } } });
-      case 'blog':
-        return prisma.blogCache.deleteMany({ where: { expiresAt: { lte: now } } });
-    }
+    return prisma.systemCache.deleteMany({
+      where: {
+        type,
+        expiresAt: { lte: now },
+      },
+    });
   }
 }

@@ -1,0 +1,71 @@
+@startuml ERD_Dia_Diem
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Địa điểm & GIS" {
+  entity "Điểm đến" as DiemDen {
+    * ma_diem_den : String <<PK>>
+    --
+    * ten_diem_den : String
+    mo_ta : String
+    * vi_do : Float <<INDEX>>
+    * kinh_do : Float <<INDEX>>
+    * the_loai : String
+    * diem_danh_gia_tb : Float
+    dia_chi : String
+    gio_mo_cua : String
+  }
+
+  entity "Điểm check-in" as DiemCheckIn {
+    * ma_checkin : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * ma_diem_den : String <<FK>> <<INDEX>>
+    ghi_chu : String
+    * ngay_checkin : DateTime
+  }
+
+  entity "Địa điểm đã lưu" as DiaDiemDaLuu {
+    * ma_da_luu : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * ten_dia_diem : String
+    * the_loai : String
+    * vi_do : Float
+    * kinh_do : Float
+    dia_chi : String
+    anh_dai_dien : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Cảnh báo an toàn" as CanhBaoAnToan {
+    * ma_canh_bao : String <<PK>>
+    --
+    * loai_canh_bao : String
+    * noi_dung : String
+    * vi_do : Float <<INDEX>>
+    * kinh_do : Float <<INDEX>>
+    * ban_kinh_km : Float
+    * ngay_tao : DateTime
+    ngay_het_han : DateTime
+  }
+}
+
+' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
+entity "Người dùng" as NguoiDung <<External>>
+entity "Hoạt động chuyến đi" as HoatDongChuyenDi <<External>>
+
+NguoiDung ||--o{ DiemCheckIn : "check-in"
+NguoiDung ||--o{ DiaDiemDaLuu : "lưu"
+
+DiemDen ||--o{ DiemCheckIn : "được check-in"
+DiemDen ||--o{ HoatDongChuyenDi : "địa điểm hoạt động"
+
+@enduml

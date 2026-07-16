@@ -1,0 +1,76 @@
+@startuml ERD_Hanh_Trinh
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Nhật trình di chuyển" {
+  entity "Nhật ký hành trình" as NhatKyHanhTrinh {
+    * ma_hanh_trinh : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * tieu_de : String
+    mo_ta : String
+    anh_bia : String
+    * cong_khai : Boolean
+    * trang_thai : String <<INDEX>>
+    ngay_bat_dau : DateTime
+    ngay_ket_thuc : DateTime
+    * tong_quang_duong : Float
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Tuyến đường" as TuyenDuong {
+    * ma_tuyen_duong : String <<PK>>
+    --
+    * ma_hanh_trinh : String <<FK>> <<INDEX>>
+    * ten_chuyen_di : String
+    mo_ta : String
+    * phuong_tien : String
+    * quang_duong_km : Float
+    * thoi_gian_phut : Int
+    * mau_polyline : String
+    * ngay_tao : DateTime
+  }
+
+  entity "Điểm tuyến đường" as DiemTuyenDuong {
+    * ma_diem_gps : String <<PK>>
+    --
+    * ma_tuyen_duong : String <<FK>> <<INDEX>>
+    * vi_do : Float <<INDEX>>
+    * kinh_do : Float <<INDEX>>
+    do_cao : Float
+    * thu_tu_diem : Int
+    * thoi_gian : DateTime
+    ghi_chu : String
+    anh_chup : String
+  }
+
+  entity "Lịch sử vị trí" as LichSuViTri {
+    * ma_lich_su_gps : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * vi_do : Float <<INDEX>>
+    * kinh_do : Float <<INDEX>>
+    do_chinh_xac : Float
+    toc_do : Float
+    huong_di : Float
+    * ngay_tao : DateTime <<INDEX>>
+  }
+}
+
+' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
+entity "Người dùng" as NguoiDung <<External>>
+
+NguoiDung ||--o{ NhatKyHanhTrinh : "ghi chép"
+NguoiDung ||--o{ LichSuViTri : "lưu vết"
+
+NhatKyHanhTrinh ||--o{ TuyenDuong : "chứa"
+TuyenDuong ||--o{ DiemTuyenDuong : "vẽ bằng"
+
+@enduml

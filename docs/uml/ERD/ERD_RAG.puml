@@ -1,0 +1,46 @@
+@startuml ERD_RAG
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Hệ thống RAG và Tri thức" {
+  entity "Nội dung tri thức" as NoiDungTriThuc {
+    * ma_tri_thuc : String <<PK>>
+    --
+    * tieu_de : String
+    * noi_dung_goc : String
+    * the_loai : String <<INDEX>>
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Câu hỏi tri thức" as CauHoiTriThuc {
+    * ma_cau_hoi : String <<PK>>
+    --
+    * ma_tri_thuc : String <<FK>> <<INDEX>>
+    * noi_dung_cau_hoi : String
+    vecto_openai : Unsupported
+    vecto_local : Unsupported
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Đáp án tri thức" as DapAnTriThuc {
+    * ma_dap_an : String <<PK>>
+    --
+    * ma_tri_thuc : String <<FK>> <<INDEX>>
+    * noi_dung_dap_an : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+}
+
+NoiDungTriThuc ||--o{ CauHoiTriThuc : "chứa"
+NoiDungTriThuc ||--o{ DapAnTriThuc : "chứa"
+
+@enduml

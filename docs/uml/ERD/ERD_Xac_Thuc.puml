@@ -1,0 +1,75 @@
+@startuml ERD_Xac_Thuc
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Xác thực & Cá nhân hóa" {
+  entity "Người dùng" as NguoiDung {
+    * ma_nguoi_dung : String <<PK>>
+    --
+    * email : String <<UNIQUE>> <<INDEX>>
+    * mat_khau_hash : String
+    * vai_tro : UserRole
+    * da_xac_minh : Boolean
+    ma_xac_minh : String
+    ma_dat_lai_mat_khau : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Hồ sơ" as HoSo {
+    * ma_ho_so : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
+    * ho_ten : String
+    duong_dan_anh_dai_dien : String
+    duong_dan_anh_bia : String
+    tieu_su : String
+    so_dien_thoai : String
+    que_quan : String
+  }
+
+  entity "Sở thích du lịch" as SoThichDuLich {
+    * ma_so_thich : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
+    * nhip_do_ua_thich : String
+    * ngan_sach_hang_ngay : Float
+    * hoat_dong : String[]
+    * loai_diem_den : String[]
+    * so_thich_am_thuc : String[]
+  }
+
+  entity "Bộ nhớ AI" as BoNhoAI {
+    * ma_bo_nho : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
+    * so_thich_du_lich_ai : String[]
+    * mon_an_yeu_thich_ai : String[]
+    ngan_sach_ai : String
+    phuong_tien_ai : String[]
+    dia_diem_ai : String[]
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+}
+
+' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
+entity "Chuyến đi" as ChuyenDi <<External>>
+entity "Bài đăng" as BaiDang <<External>>
+entity "Cuộc hội thoại AI" as CuocHoiThoaiAI <<External>>
+
+NguoiDung ||--|| HoSo : "sở hữu"
+NguoiDung ||--|| SoThichDuLich : "cấu hình"
+NguoiDung ||--|| BoNhoAI : "lưu sở thích"
+
+NguoiDung ||--o{ ChuyenDi : "lập"
+NguoiDung ||--o{ BaiDang : "đăng"
+NguoiDung ||--o{ CuocHoiThoaiAI : "trò chuyện"
+
+@enduml

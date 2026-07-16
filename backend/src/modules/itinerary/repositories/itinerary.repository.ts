@@ -4,18 +4,21 @@ import { AddActivityDto, UpdateActivityDto } from '../types/itinerary.types';
 export class ItineraryRepository {
   // ─── Itinerary ──────────────────────────────────────────────
   async createItinerary(userId: string, title: string, description?: string) {
-    return prisma.itinerary.create({
+    return prisma.trip.create({
       data: {
-        userId,
+        ownerId: userId,
         title,
         description: description || null,
+        destinationName: 'Chưa xác định',
+        travelStyle: 'solo',
+        status: 'DRAFT_USER',
       },
     });
   }
 
   async getItinerariesByUserId(userId: string) {
-    return prisma.itinerary.findMany({
-      where: { userId },
+    const list = await prisma.trip.findMany({
+      where: { ownerId: userId, status: { in: ['DRAFT_AI', 'DRAFT_USER'] } },
       orderBy: { updatedAt: 'desc' },
       include: {
         _count: {
@@ -23,74 +26,127 @@ export class ItineraryRepository {
         },
       },
     });
+    return list.map(item => ({
+      ...item,
+      userId: item.ownerId,
+    }));
   }
 
   async getItineraryById(id: string, userId: string) {
-    return prisma.itinerary.findFirst({
-      where: { id, userId },
+    const trip = await prisma.trip.findFirst({
+      where: { id, ownerId: userId, status: { in: ['DRAFT_AI', 'DRAFT_USER'] } },
       include: {
         days: {
           orderBy: { dayIndex: 'asc' },
           include: {
             activities: {
-              orderBy: { startTime: 'asc' },
+              orderBy: { sequenceOrder: 'asc' },
             },
           },
         },
       },
     });
+    if (!trip) return null;
+
+    return {
+      ...trip,
+      userId: trip.ownerId,
+      days: trip.days.map(d => ({
+        ...d,
+        itineraryId: d.tripId,
+        activities: d.activities.map(a => ({
+          ...a,
+          itineraryDayId: a.tripDayId,
+          cost: a.estimatedCost,
+        })),
+      })),
+    };
   }
 
   // ─── Itinerary Day ──────────────────────────────────────────
   async addDay(itineraryId: string, dayIndex: number, date?: Date) {
-    return prisma.itineraryDay.create({
+    const day = await prisma.tripDay.create({
       data: {
-        itineraryId,
+        tripId: itineraryId,
         dayIndex,
         date: date || null,
       },
     });
+    return {
+      ...day,
+      itineraryId: day.tripId,
+    };
   }
 
   async getDayById(dayId: string) {
-    return prisma.itineraryDay.findUnique({
+    const day = await prisma.tripDay.findUnique({
       where: { id: dayId },
       include: {
-        itinerary: true,
+        trip: true,
       },
     });
+    if (!day) return null;
+
+    return {
+      ...day,
+      itineraryId: day.tripId,
+      itinerary: {
+        ...day.trip,
+        userId: day.trip.ownerId,
+      },
+    };
   }
 
   // ─── Itinerary Activity ─────────────────────────────────────
   async addActivity(itineraryDayId: string, data: AddActivityDto) {
-    return prisma.itineraryActivity.create({
+    const act = await prisma.tripActivity.create({
       data: {
-        itineraryDayId,
+        tripDayId: itineraryDayId,
         title: data.title,
         description: data.description || null,
         startTime: data.startTime || null,
         endTime: data.endTime || null,
         location: data.location || null,
-        cost: data.cost ?? 0.0,
+        estimatedCost: data.cost ?? 0.0,
+        sequenceOrder: 1,
       },
     });
+    return {
+      ...act,
+      itineraryDayId: act.tripDayId,
+      cost: act.estimatedCost,
+    };
   }
 
   async getActivityById(activityId: string) {
-    return prisma.itineraryActivity.findUnique({
+    const act = await prisma.tripActivity.findUnique({
       where: { id: activityId },
       include: {
-        day: {
+        tripDay: {
           include: {
-            itinerary: true,
+            trip: true,
           },
         },
       },
     });
+    if (!act) return null;
+
+    return {
+      ...act,
+      cost: act.estimatedCost,
+      day: {
+        ...act.tripDay,
+        itineraryId: act.tripDay.tripId,
+        itinerary: {
+          ...act.tripDay.trip,
+          userId: act.tripDay.trip.ownerId,
+        },
+      },
+    };
   }
 
   async updateActivity(activityId: string, data: UpdateActivityDto) {
-    return prisma.itineraryActivity.update({
+    const act = await prisma.tripActivity.update({
       where: { id: activityId },
       data: {
         title: data.title ?? undefined,
@@ -98,13 +154,18 @@ export class ItineraryRepository {
         startTime: data.startTime !== undefined ? data.startTime : undefined,
         endTime: data.endTime !== undefined ? data.endTime : undefined,
         location: data.location !== undefined ? data.location : undefined,
-        cost: data.cost ?? undefined,
+        estimatedCost: data.cost ?? undefined,
       },
     });
+    return {
+      ...act,
+      itineraryDayId: act.tripDayId,
+      cost: act.estimatedCost,
+    };
   }
 
   async deleteActivity(activityId: string) {
-    return prisma.itineraryActivity.delete({
+    return prisma.tripActivity.delete({
       where: { id: activityId },
     });
   }

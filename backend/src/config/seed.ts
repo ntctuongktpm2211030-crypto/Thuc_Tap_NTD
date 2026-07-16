@@ -1,5 +1,7 @@
 import prisma from './db';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
 
 const LONG_JOURNEY_BODY = `Ngày 1 — Di chuyển từ Hà Nội, chúng tôi có mặt ở thị trấn Đồng Văn lúc chiều muộn. Sương mù phủ kín các sườn núi đá vôi, không khí trong lành đến lạ. Homestay nhỏ của gia đình người H'Mông rất ấm cúng, bữa tối đơn giản nhưng đậm đà.
 
@@ -231,6 +233,58 @@ export async function autoSeed() {
       });
     }
 
+    // 3.5. Import Destinations from JSON files if not already imported
+    const destCount = await prisma.destination.count();
+    if (destCount < 50) {
+      console.log('📦 Seeding destinations from JSON files...');
+      const destDir = path.resolve(__dirname, 'destinations');
+      if (fs.existsSync(destDir)) {
+        const files = fs.readdirSync(destDir);
+        const allDests: any[] = [];
+        for (const file of files) {
+          if (!file.endsWith('.json')) continue;
+          const filePath = path.join(destDir, file);
+          try {
+            const fileItems = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+            if (Array.isArray(fileItems)) {
+              for (const item of fileItems) {
+                // Generate a deterministic ID to avoid duplicates
+                const id = 'dest-' + item.title.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 50) + '-' + (item.latitude || 0).toFixed(4) + '-' + (item.longitude || 0).toFixed(4);
+                allDests.push({
+                  id,
+                  name: item.title,
+                  description: item.content || null,
+                  latitude: item.latitude || 0,
+                  longitude: item.longitude || 0,
+                  category: item.category || 'attraction',
+                  averageRating: 4.5 + Math.random() * 0.5,
+                  address: item.address || null,
+                  openingHours: '08:00 - 18:00'
+                });
+              }
+            }
+          } catch (e: any) {
+            console.error(`Error parsing ${file}:`, e.message);
+          }
+        }
+        
+        if (allDests.length > 0) {
+          // Chunk insertions to prevent memory or connection limits (e.g. 500 items per chunk)
+          const chunkSize = 500;
+          for (let i = 0; i < allDests.length; i += chunkSize) {
+            const chunk = allDests.slice(i, i + chunkSize);
+            await prisma.destination.createMany({
+              data: chunk,
+              skipDuplicates: true
+            });
+          }
+          console.log(`✅ Loaded ${allDests.length} destinations into database.`);
+        }
+      }
+    } else {
+      console.log('✨ Destinations already seeded in database.');
+    }
+
     // 4. Create or Update Check-Ins
     const checkinsToSeed = [
       {
@@ -266,6 +320,78 @@ export async function autoSeed() {
           createdAt: c.createdAt
         },
         create: c
+      });
+    }
+
+    // 5. Create or Update Mock Events
+    const eventsToSeed = [
+      {
+        id: 'event-1',
+        title: 'Lễ hội Ánh sáng Hoàn Kiếm',
+        description: 'Lễ hội trình diễn ánh sáng nghệ thuật khinh khí cầu và drone lớn nhất mùa hè bên bờ hồ Hoàn Kiếm.',
+        coverImageUrl: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+        destinationId: 'dest-1',
+        latitude: 21.028511,
+        longitude: 105.804817,
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 86400000 * 3),
+        category: 'festival',
+        maxAttendees: 500,
+        currentCount: 15,
+        organizerId: users['Minh Quân Nguyễn'],
+        isPublic: true
+      }
+    ];
+
+    for (const e of eventsToSeed) {
+      await prisma.event.upsert({
+        where: { id: e.id },
+        update: {
+          title: e.title,
+          description: e.description,
+          coverImageUrl: e.coverImageUrl,
+          destinationId: e.destinationId,
+          latitude: e.latitude,
+          longitude: e.longitude,
+          startDate: e.startDate,
+          endDate: e.endDate,
+          category: e.category,
+          maxAttendees: e.maxAttendees,
+          currentCount: e.currentCount,
+          organizerId: e.organizerId,
+          isPublic: e.isPublic
+        },
+        create: e
+      });
+    }
+
+    // 6. Create or Update Mock Safety Warnings
+    const warningsToSeed = [
+      {
+        id: 'warning-1',
+        type: 'FLOOD',
+        description: 'Cảnh báo ngập lụt do triều cường dâng cao tại khu vực Cầu đi bộ Ninh Kiều, Cần Thơ.',
+        latitude: 10.0370351,
+        longitude: 105.7912377,
+        radiusKm: 1.5,
+        createdAt: new Date(),
+        expiresAt: new Date(Date.now() + 86400000 * 7)
+      }
+    ];
+
+    for (const w of warningsToSeed) {
+      await prisma.safetyWarning.upsert({
+        where: { id: w.id },
+        update: {
+          type: w.type,
+          description: w.description,
+          latitude: w.latitude,
+          longitude: w.longitude,
+          radiusKm: w.radiusKm,
+          createdAt: w.createdAt,
+          expiresAt: w.expiresAt
+        },
+        create: w
       });
     }
 

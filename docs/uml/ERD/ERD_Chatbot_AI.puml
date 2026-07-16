@@ -1,0 +1,73 @@
+@startuml ERD_Chatbot_AI
+
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 70
+hide circle
+hide methods
+hide stereotype
+
+package "Module Trợ lý Chatbot AI" {
+  entity "Cuộc hội thoại AI" as CuocHoiThoaiAI {
+    * ma_hoi_thoai_ai : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    tieu_de : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Tin nhắn AI" as TinNhanAI {
+    * ma_tin_nhan_ai : String <<PK>>
+    --
+    * ma_hoi_thoai_ai : String <<FK>> <<INDEX>>
+    * vai_tro : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Phiên bản tin nhắn AI" as PhienBanTinNhanAI {
+    * ma_phien_ban : String <<PK>>
+    --
+    * ma_tin_nhan_ai : String <<FK>> <<INDEX>>
+    * noi_dung : String
+    * chi_so_phien_ban : Int
+    * dang_kich_hoat : Boolean
+    * ngay_tao : DateTime
+  }
+
+  entity "Gọi công cụ AI" as GoiCongCuAI {
+    * ma_goi_cong_cu : String <<PK>>
+    --
+    * ma_tin_nhan_ai : String <<FK>> <<INDEX>>
+    * ten_cong_cu : String
+    * du_lieu_vao : String
+    ket_qua_ra : String
+    * trang_thai : String
+    * ngay_tao : DateTime
+  }
+
+  entity "Đánh giá tin nhắn AI" as DanhGiaTinNhanAI {
+    * ma_danh_gia : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * ma_tin_nhan_ai : String <<FK>> <<UNIQUE>> <<INDEX>>
+    * diem_so : Int
+    gop_y : String
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+}
+
+' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
+entity "Người dùng" as NguoiDung <<External>>
+
+NguoiDung ||--o{ CuocHoiThoaiAI : "trò chuyện"
+CuocHoiThoaiAI ||--o{ TinNhanAI : "gồm"
+TinNhanAI ||--o{ PhienBanTinNhanAI : "có phiên bản"
+TinNhanAI ||--o{ GoiCongCuAI : "gọi"
+TinNhanAI ||--|| DanhGiaTinNhanAI : "được đánh giá"
+NguoiDung ||--o{ DanhGiaTinNhanAI : "đánh giá"
+
+@enduml

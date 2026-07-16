@@ -24,6 +24,8 @@ import { SlotFillingService } from '../../dialogue/slot-filling.service';
 import { SuggestionBuilderService } from '../../dialogue/suggestion-builder.service';
 import { ResponseFormatterService } from '../../dialogue/response-formatter.service';
 import { TravelSubIntent, SUB_INTENT_KEYWORDS } from '../../dialogue/types/dialogue.types';
+import { ConversationIntelligence } from '../../chatbot/intelligence/conversation-intelligence';
+import { ContextResolver } from '../../chatbot/intelligence/context/context-resolver';
 
 export class AgentExecutorService {
   private strategies: Record<Exclude<AgentType, 'unknown'>, AgentStrategy>;
@@ -85,6 +87,7 @@ export class AgentExecutorService {
     let extractedDestination: string | undefined = undefined;
     let llmProvider = 'none';
     let classifierFailed = false;
+    let isPlanningIntent = true;
 
     logger.info('AgentExecutor', 'execute — starting', { userId, inputLength: input.length, hasPredefinedType: !!agentType }, requestId);
 
@@ -173,20 +176,83 @@ export class AgentExecutorService {
       let detectedDest: string | null = null;
       let confidence = 0.5;
       let reasoning = '';
+      const originalInput = input;
 
-      // 1. Chạy Regex Router nhanh trước để kiểm tra xem có khớp mạnh không
-      const routeResult = this.routeRequest(input);
-      if (routeResult.confidence >= 0.8) {
-        selectedType = routeResult.intent;
-        confidence = routeResult.confidence;
-        reasoning = routeResult.reasoning || '';
-        llmProvider = 'fast-regex-router';
-        logger.info('AgentExecutor', 'Fast regex router matched', { intent: selectedType, confidence }, requestId);
+      // ─── Tích hợp Conversation Intelligence Module (CIM) ───
+      const convId = messageId || userId;
+      const stateObj = this.conversationState.getState(convId);
+      const currentState = stateObj && stateObj.intent ? 'RECOMMENDATION' : 'DISCOVERY';
+      const cim = new ConversationIntelligence();
+      let cimResult = null;
+
+      try {
+        cimResult = await cim.analyzeQuery(input, convId, currentState as any);
+      } catch (err) {
+        logger.warn('AgentExecutor', 'CIM analysis failed, using legacy fallback', { error: (err as Error).message }, requestId);
+      }
+
+      if (cimResult) {
+        logger.info('AgentExecutor', 'CIM routing matched', {
+          intent: cimResult.intent.intent,
+          emotion: cimResult.emotion.emotion,
+          nextState: cimResult.nextState,
+          action: cimResult.responsePolicy.actionType,
+        }, requestId);
+
+        // Ánh xạ Intent của CIM sang Agent xử lý tương ứng
+        if (
+          cimResult.intent.intent === 'RECOMMENDATION' ||
+          cimResult.intent.intent === 'RECOMMENDATION_MORE' ||
+          cimResult.intent.intent === 'RECOMMENDATION_REPLACE'
+        ) {
+          selectedType = 'recommendation';
+          confidence = cimResult.intent.confidence;
+          reasoning = cimResult.intent.reason;
+          llmProvider = 'CIM';
+        } else if (cimResult.intent.intent === 'ITINERARY_PLAN') {
+          // Áp dụng "Answer First" nếu thiếu slot -> chuyển hướng sang gợi ý địa điểm trước
+          if (cimResult.responsePolicy.actionType === 'RECOMMEND') {
+            selectedType = 'recommendation';
+            confidence = cimResult.intent.confidence;
+            reasoning = 'CIM: Itinerary with missing slot -> answer first with recommendations.';
+            llmProvider = 'CIM-AnswerFirst';
+          } else {
+            selectedType = 'travel';
+            confidence = cimResult.intent.confidence;
+            reasoning = cimResult.intent.reason;
+            llmProvider = 'CIM';
+          }
+        } else {
+          selectedType = 'travel'; // Mặc định chuyển về trợ lý tổng quan
+          confidence = 0.8;
+          reasoning = 'CIM: default general query';
+          llmProvider = 'CIM-General';
+        }
+        isPlanningIntent = cimResult.intent.intent === 'ITINERARY_PLAN';
+
+        // Tùy biến giọng điệu, phản hồi thông qua Prompt Injection
+        let promptInjection = `\n\n[System Directive - Emotion: ${cimResult.emotion.emotion} (Intensity: ${cimResult.emotion.intensity})]:`;
+        if (cimResult.responsePolicy.toneModifier) {
+          promptInjection += `\n- Tone modifier: ${cimResult.responsePolicy.toneModifier}`;
+        }
+        if (cimResult.responsePolicy.clarificationPrompt) {
+          promptInjection += `\n- Clarification policy: ${cimResult.responsePolicy.clarificationPrompt}`;
+        }
         
-        // Quét địa danh nhanh từ danh sách có sẵn để gán detectedDest
+        // Loại bỏ các địa điểm đã gợi ý trước đó nhưng người dùng không thích
+        try {
+          const context = await new ContextResolver().resolve(convId);
+          if (context && context.lastAttractionsRejected.length > 0) {
+            promptInjection += `\n- EXCLUDE ATTRACTIONS: Please do NOT recommend or mention these attractions under any circumstances: ${context.lastAttractionsRejected.join(', ')}. Recommend other alternative places instead.`;
+          }
+        } catch (_) {}
+
+        input += promptInjection;
+
+        // Quét nhanh tìm địa danh trong câu hỏi gốc
         try {
           const dbDests = await getDynamicRegions();
-          const cleanInput = removeDiacritics(input.toLowerCase());
+          const cleanInput = removeDiacritics(originalInput.toLowerCase());
           const matched = dbDests.find(d => {
             const cleanDb = removeDiacritics(d.toLowerCase());
             const strippedDb = cleanGeographicName(d);
@@ -197,21 +263,27 @@ export class AgentExecutorService {
           }
         } catch (_) {}
       } else {
-        // 2. Nếu không khớp mạnh bằng regex, mới gọi LLM Classifier để phân loại
-        try {
-          const result = await classifyIntentWithLLM(input);
-          selectedType = result.intent;
-          detectedDest = result.destination || null;
-          confidence = result.confidence;
-          reasoning = result.reasoning || '';
-          llmProvider = 'classifier';
-        } catch (err) {
-          classifierFailed = true;
-          logger.warn('AgentExecutor', 'LLM Classifier failed, falling back to regex router', { error: (err as Error).message }, requestId);
+        // Fallback sang Regex / LLM cũ nếu CIM lỗi hoặc không kích hoạt
+        const routeResult = this.routeRequest(input);
+        if (routeResult.confidence >= 0.8) {
           selectedType = routeResult.intent;
           confidence = routeResult.confidence;
           reasoning = routeResult.reasoning || '';
-          llmProvider = 'regex-router-fallback';
+          llmProvider = 'fast-regex-router';
+        } else {
+          try {
+            const result = await classifyIntentWithLLM(input);
+            selectedType = result.intent;
+            detectedDest = result.destination || null;
+            confidence = result.confidence;
+            reasoning = result.reasoning || '';
+            llmProvider = 'classifier';
+          } catch (err) {
+            selectedType = routeResult.intent;
+            confidence = routeResult.confidence;
+            reasoning = routeResult.reasoning || '';
+            llmProvider = 'regex-router-fallback';
+          }
         }
       }
 
@@ -413,7 +485,7 @@ Hãy luôn giữ thái độ nhiệt tình, ấm áp, lắng nghe người dùng
     // Ask follow-up when the high-level agent type is not explicitly set (undefined or fallback travel)
     // This allows: "Tôi muốn đi Thái Nguyên" → "Bạn dự định đi mấy ngày?"
     const missingQuestion = this.slotFilling.getFollowUpQuestion(state, true);
-    if (missingQuestion && (selectedType === undefined || selectedType === 'travel')) {
+    if (missingQuestion && (selectedType === undefined || selectedType === 'travel') && isPlanningIntent) {
       logger.info('AgentExecutor', 'Missing slots — asking follow-up', { question: missingQuestion, selectedType }, requestId);
       const followUpResponse = this.responseFormatter.formatFollowUp({
         question: missingQuestion,
