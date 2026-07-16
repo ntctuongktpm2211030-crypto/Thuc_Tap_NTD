@@ -1306,7 +1306,7 @@ body::before {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  max-width: 1120px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 @media (min-width: 768px) {
@@ -5082,9 +5082,136 @@ body::before {
 }
 
 /* =========================================================
+   DIARY JOURNAL NOTEBOOK STYLING (Image 2)
+   ========================================================= */
+.journey-notebook {
+  background: #ffffff; /* clean white card background */
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 1024px) {
+  .journey-notebook {
+    flex-direction: row;
+  }
+}
+
+.journey-notebook-page-left {
+  flex: 1;
+  padding: 24px;
+}
+@media (min-width: 1024px) {
+  .journey-notebook-page-left {
+    padding: 36px 32px 36px 40px;
+    border-right: 1px solid rgba(15, 23, 42, 0.06);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.005), transparent 40px);
+  }
+}
+
+.journey-notebook-page-right {
+  flex: 1;
+  padding: 24px;
+}
+@media (min-width: 1024px) {
+  .journey-notebook-page-right {
+    padding: 36px 40px 36px 32px;
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.005), transparent 40px);
+  }
+}
+
+/* Notebook middle fold line on desktop */
+@media (min-width: 1024px) {
+  .journey-notebook::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent 2%, rgba(15, 23, 42, 0.06) 10%, rgba(15, 23, 42, 0.06) 90%, transparent 98%);
+    z-index: 10;
+    pointer-events: none;
+  }
+}
+
+/* Stepper connection lines */
+.journey-sidebar-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Premium scenery overlay cards */
+.display-option-card {
+  position: relative;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.display-option-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.4s ease;
+}
+.display-option-card:hover .display-option-card-bg {
+  transform: scale(1.05);
+}
+.display-option-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.7) 100%);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.display-option-card-selected {
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Floating polaroids for scrap-book theme */
+.polaroid-deco {
+  background: #ffffff;
+  padding: 8px 8px 18px 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  transform: rotate(-3deg);
+  transition: all 0.3s ease;
+}
+.polaroid-deco:hover {
+  transform: rotate(1deg) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Category grid modern icon styles */
+.category-modern-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.02);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.category-modern-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15,23,42,0.05);
+}
+
+/* =========================================================
    REDUCED MOTION — Accessibility (WCAG 2.1 SC 2.3.3)
-   Người dùng mắc chứng rối loạn tiền đình cần môi trường
-   không có animation. Tắt toàn bộ transform/animation.
    ========================================================= */
 @media (prefers-reduced-motion: reduce) {
   *,

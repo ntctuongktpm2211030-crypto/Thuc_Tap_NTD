@@ -108,6 +108,24 @@ export default function ChatbotPage() {
     }
   };
 
+  const handleDeleteConversation = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm(vi ? 'Bạn có chắc chắn muốn xóa cuộc hội thoại này?' : 'Are you sure you want to delete this conversation?')) {
+      return;
+    }
+    try {
+      await chatbotService.deleteConversation(id);
+      setConversations(prev => prev.filter(c => c.id !== id));
+      if (currentConversation?.id === id) {
+        setCurrentConversation(null);
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error('Failed to delete conversation:', err);
+      alert(vi ? 'Không thể xóa cuộc hội thoại.' : 'Failed to delete conversation.');
+    }
+  };
+
   const handleNewConversation = async () => {
     try {
       const title = vi ? 'Hội thoại mới' : 'New Chat';
@@ -319,7 +337,17 @@ export default function ChatbotPage() {
                       })}
                     </p>
                   </div>
-                  <ChevronRight size={13} className={`opacity-60 transition-transform ${isActive ? 'text-gold translate-x-0.5' : ''}`} />
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteConversation(conv.id, e)}
+                      className="p-1 rounded-lg text-[var(--text-muted)] hover:text-rose-500 hover:bg-rose-500/10 border-none bg-transparent cursor-pointer transition-all active:scale-95"
+                      title={vi ? 'Xóa lịch sử chat' : 'Delete chat history'}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                    <ChevronRight size={13} className={`opacity-60 transition-transform ${isActive ? 'text-gold translate-x-0.5' : ''}`} />
+                  </div>
                 </div>
               );
             })
@@ -342,24 +370,24 @@ export default function ChatbotPage() {
       <div className="lg:col-span-3 surface-elevated rounded-2xl flex flex-col overflow-hidden border border-[var(--border-subtle)] relative">
         {showIntroVideo ? (
           <div className="flex-1 min-h-0 bg-white flex flex-col items-center justify-center relative overflow-hidden gap-5 p-6">
-            <div className="w-full max-w-2xl aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-950 flex items-center justify-center">
+            <div className="w-full max-w-3xl aspect-video rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center relative">
               <video
                 src={loadingVideo}
                 autoPlay
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-105"
                 onEnded={() => setShowIntroVideo(false)}
               />
+              {/* Quick skip button inside the video container */}
+              <button
+                type="button"
+                onClick={() => setShowIntroVideo(false)}
+                className="absolute bottom-4 right-4 px-4 py-2 bg-black/60 hover:bg-black/80 text-[11px] text-white rounded border border-white/20 hover:border-white/40 transition-all font-semibold uppercase tracking-wider cursor-pointer active:scale-95 backdrop-blur-sm z-10"
+              >
+                {vi ? 'Bỏ qua ✕' : 'Skip ✕'}
+              </button>
             </div>
-            {/* Quick skip button */}
-            <button
-              type="button"
-              onClick={() => setShowIntroVideo(false)}
-              className="px-4 py-1.5 bg-white/80 hover:bg-white text-[11px] text-gray-600 hover:text-gray-900 rounded-full border border-gray-300 hover:border-gray-500 transition-all font-bold uppercase tracking-wider cursor-pointer active:scale-95 shadow-sm"
-            >
-              {vi ? 'Bỏ qua ✕' : 'Skip ✕'}
-            </button>
           </div>
         ) : (
           <>
@@ -537,7 +565,7 @@ export default function ChatbotPage() {
         <div className="px-4 pb-4 pt-2 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)/90] to-transparent">
           <form
             onSubmit={handleSendMessage}
-            className="max-w-3xl mx-auto flex items-center bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl pl-4 pr-1.5 py-1.5 shadow-lg gap-2 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all duration-200"
+            className="max-w-5xl mx-auto flex items-center bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl pl-4 pr-1.5 py-1.5 shadow-lg gap-2 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all duration-200"
           >
             <input
               type="text"
@@ -545,14 +573,14 @@ export default function ChatbotPage() {
               onChange={e => setInputMessage(e.target.value)}
               placeholder={vi ? 'Hỏi AI du lịch điều gì đó...' : 'Ask travel AI something...'}
               disabled={loadingMsg}
-              className="flex-1 bg-transparent border-none text-xs text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-2.5"
+              className="flex-1 bg-transparent border-none text-sm text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-3"
             />
             <button
               type="submit"
               disabled={loadingMsg || !inputMessage.trim()}
-              className="btn-gold p-2.5 rounded-xl flex items-center justify-center disabled:opacity-40 cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150 shrink-0"
+              className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white p-2.5 rounded-xl flex items-center justify-center disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95 transition-all duration-150 shrink-0"
             >
-              <Send size={14} />
+              <Send size={16} className="text-white" />
             </button>
           </form>
         </div>

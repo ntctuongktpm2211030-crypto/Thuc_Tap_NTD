@@ -151,4 +151,16 @@ export class ChatbotRepository {
       where: { userId },
     });
   }
+
+  async deleteConversation(id: string, userId: string) {
+    const conversation = await prisma.chatConversation.findFirst({
+      where: { id, userId },
+    });
+    if (!conversation) {
+      throw new Error('Không tìm thấy cuộc hội thoại hoặc bạn không có quyền xóa.');
+    }
+    return prisma.chatConversation.delete({
+      where: { id },
+    });
+  }
 }

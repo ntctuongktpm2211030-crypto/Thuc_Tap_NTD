@@ -14,6 +14,7 @@ const controller = new ChatbotController();
 router.post('/conversations', requireAuth, validateCreateConversation, controller.createConversation);
 router.get('/conversations', requireAuth, controller.getConversations);
 router.get('/conversations/:id', requireAuth, controller.getConversation);
+router.delete('/conversations/:id', requireAuth, controller.deleteConversation);
 
 // ─── Messages & Regeneration ────────────────────────────────
 router.post('/conversations/:id/messages', requireAuth, validateSendMessage, controller.sendMessage);

@@ -6,7 +6,7 @@ import {
   ChevronRight, ChevronLeft, Upload, X, Plus, Star, Globe,
   Lock, UserCheck, Clock,
   Check, Eye, Send, Loader2,
-  Image as ImageIcon, Lightbulb, AlertCircle, Video, Navigation, Route,
+  Image as ImageIcon, Lightbulb, AlertCircle, Video, Navigation, Route, BookOpen, Sparkles,
 } from 'lucide-react';
 import JourneyRouteMap from '../../components/Map/JourneyRouteMap';
 import { searchPlaces, type PlaceSearchResult } from '../../utils/geocodeUtils';
@@ -200,7 +200,21 @@ const DESTINATIONS = [
 // ──────────────────────────────────────────────────────────
 // STEP 1 — STORY CONTENT
 // ──────────────────────────────────────────────────────────
-const Step1Story = ({ data, onChange }: { data: StoryData; onChange: (d: Partial<StoryData>) => void }) => {
+const Step1Story = ({
+  data,
+  onChange,
+  onNext,
+  canNext,
+  onSaveDraft,
+  draftSaved,
+}: {
+  data: StoryData;
+  onChange: (d: Partial<StoryData>) => void;
+  onNext: () => void;
+  canNext: boolean;
+  onSaveDraft: () => void;
+  draftSaved: boolean;
+}) => {
   const [tagInput, setTagInput] = useState('');
   const isSocial = data.displayType === 'social';
   const isMagazine = data.displayType === 'magazine';
@@ -215,32 +229,6 @@ const Step1Story = ({ data, onChange }: { data: StoryData; onChange: (d: Partial
     onChange({ categories: next });
   };
 
-  const categoryBlock = (required: boolean) => (
-    <div>
-      <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
-        Danh mục {required ? '*' : '(tuỳ chọn)'}
-        {data.categories.length > 0 && (
-          <span className="ml-2 text-[var(--gold)] normal-case font-semibold">
-            · {data.categories.length} đã chọn
-          </span>
-        )}
-      </label>
-      <p className="text-[11px] text-[var(--text-muted)] mb-3">Chọn một hoặc nhiều danh mục phù hợp chuyến đi</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {JOURNEY_CATEGORIES.map(cat => (
-          <IconChip
-            key={cat.id}
-            icon={cat.icon}
-            label={cat.label}
-            accent="gold"
-            selected={data.categories.includes(cat.id)}
-            onClick={() => toggleCategory(cat.id)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
   const addTag = (tag: string) => {
     const clean = tag.startsWith('#') ? tag : `#${tag}`;
     if (!data.tags.includes(clean)) onChange({ tags: [...data.tags, clean] });
@@ -248,195 +236,348 @@ const Step1Story = ({ data, onChange }: { data: StoryData; onChange: (d: Partial
   };
 
   return (
-    <div className="space-y-5 animate-fade-in journey-step-content">
-      <SectionHeader icon={Route} title="Nội dung hành trình" subtitle="Chọn loại nội dung — tùy chỉnh giao diện chi tiết ở bước xem trước" accent="gold" />
-
-      <div>
-        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Loại nội dung *</label>
-        <p className="text-[11px] text-[var(--text-muted)] mb-3">Gợi ý form phù hợp. Ở bước 5 bạn chọn thêm 8 dạng bài, kiểu chữ và màu.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {FEED_DISPLAY_OPTIONS.map(opt => {
-            const selected = data.displayType === opt.id;
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => onChange({
-                  displayType: opt.id,
-                  layoutId: opt.id as PostLayoutId,
-                })}
-                className={`text-left p-4 rounded-xl border-2 transition-all ${
-                  selected
-                    ? 'border-[var(--gold)] bg-[var(--gold-glow)] shadow-md'
-                    : 'border-[var(--border-subtle)] hover:border-[var(--gold)]/40 bg-[var(--bg-elevated)]'
-                }`}
-              >
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--gold)] mb-1">{opt.authorStyle}</p>
-                <p className="text-sm font-bold text-[var(--text-primary)] mb-1">{opt.label}</p>
-                <p className="text-[11px] text-[var(--text-muted)] leading-relaxed mb-2">{opt.description}</p>
-                <p className="text-[10px] text-[var(--text-secondary)] italic">{opt.hint}</p>
-              </button>
-            );
-          })}
+    <div className="journey-notebook w-full transition-all duration-300">
+      {/* LEFT PAGE OF NOTEBOOK */}
+      <div className="journey-notebook-page-left space-y-6">
+        <div>
+          <h3 className="text-sm font-black text-slate-800 flex items-center gap-2 mb-1">
+            <BookOpen size={16} className="text-[var(--gold)]" /> Bố cục hiển thị
+          </h3>
+          <p className="text-[11px] text-[var(--text-muted)] mb-3">Chọn kiểu bài đăng hiển thị trên bảng tin</p>
+          <div className="grid grid-cols-3 gap-3">
+            {FEED_DISPLAY_OPTIONS.map(opt => {
+              const selected = data.displayType === opt.id;
+              const bgImages: Record<string, string> = {
+                social: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80',
+                magazine: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80',
+                hero: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=400&q=80'
+              };
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => onChange({
+                    displayType: opt.id,
+                    layoutId: opt.id as PostLayoutId,
+                  })}
+                  className={`display-option-card ${selected ? 'display-option-card-selected' : 'border-slate-200'}`}
+                >
+                  <div className="display-option-card-bg" style={{ backgroundImage: `url('${bgImages[opt.id]}')` }} />
+                  <div className="display-option-card-overlay">
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-wider text-blue-300 bg-black/25 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                        {opt.authorStyle}
+                      </span>
+                    </div>
+                    <div className="text-left">
+                      <h4 className="text-xs font-black text-white">{opt.label}</h4>
+                      <p className="text-[8px] text-slate-200 line-clamp-1 mt-0.5">{opt.description}</p>
+                    </div>
+                  </div>
+                  {selected && (
+                    <div className="absolute bottom-2 right-2 w-4.5 h-4.5 rounded-full bg-blue-500 flex items-center justify-center text-white border border-white shadow-sm z-10">
+                      <Check size={10} strokeWidth={3} />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {(isMagazine || isHero) && (
-        <>
-          <div>
-            <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Tiêu đề (headline) *</label>
-            <input value={data.title} onChange={e => onChange({ title: e.target.value })}
-              placeholder={isHero
-                ? 'VD: Con đường đèo đẹp nhất thế giới: Hành trình Hà Giang Loop 4 ngày khó quên'
-                : 'VD: Chinh phục Fansipan: Bình minh sẽ thay đổi cuộc đời bạn'}
-              className="input-premium text-lg font-semibold font-editorial" />
-            <div className="text-[10px] text-[var(--text-muted)] mt-1 text-right">{data.title.length}/150 ký tự</div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
-              Tóm tắt (excerpt) * <span className="font-normal normal-case">— hiện trên thẻ bài</span>
-            </label>
-            <textarea value={data.excerpt} onChange={e => onChange({ excerpt: e.target.value })}
-              rows={3}
-              placeholder="Mô tả ngắn gọn, hấp dẫn — 2–3 câu khiến người đọc muốn mở bài…"
-              className="create-textarea" />
-            <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
-              <span>Tối thiểu {minExcerpt} ký tự</span>
-              <span className={data.excerpt.length >= minExcerpt ? 'text-emerald-400' : ''}>{data.excerpt.length} ký tự</span>
+        {/* Headline / Excerpt / Content Form */}
+        {(isMagazine || isHero) && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">Tiêu đề (headline) *</label>
+              <input 
+                value={data.title} 
+                onChange={e => onChange({ title: e.target.value })}
+                placeholder={isHero
+                  ? 'VD: Con đường đèo đẹp nhất thế giới: Hành trình Hà Giang Loop 4 ngày khó quên'
+                  : 'VD: Chinh phục Fansipan: Bình minh sẽ thay đổi cuộc đời bạn'}
+                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all shadow-sm" 
+              />
+              <div className="text-[10px] text-[var(--text-muted)] mt-1 text-right">{data.title.length}/150 ký tự</div>
             </div>
-          </div>
 
-          <div>
-            <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
-              Nội dung đầy đủ {isHero ? '(khuyến nghị)' : '(tuỳ chọn)'}
-            </label>
-            <textarea value={data.content} onChange={e => onChange({ content: e.target.value })}
-              rows={8}
-              placeholder="Chi tiết hành trình, kinh nghiệm, lịch trình gợi ý…"
-              className="create-textarea" />
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
+                Tóm tắt (excerpt) * <span className="font-normal normal-case text-slate-400">— hiện trên thẻ bài</span>
+              </label>
+              <textarea 
+                value={data.excerpt} 
+                onChange={e => onChange({ excerpt: e.target.value })}
+                rows={3}
+                placeholder="Mô tả ngắn gọn, hấp dẫn — 2–3 câu khiến người đọc muốn mở bài…"
+                className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all resize-none shadow-sm" 
+              />
+              <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
+                <span>Tối thiểu {minExcerpt} ký tự</span>
+                <span className={data.excerpt.length >= minExcerpt ? 'text-emerald-500 font-bold' : ''}>{data.excerpt.length} ký tự</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
+                Nội dung đầy đủ {isHero ? '(khuyến nghị)' : '(tuỳ chọn)'}
+              </label>
+              <textarea 
+                value={data.content} 
+                onChange={e => onChange({ content: e.target.value })}
+                rows={5}
+                placeholder="Chi tiết hành trình, kinh nghiệm, lịch trình gợi ý…"
+                className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all resize-none shadow-sm" 
+              />
+              {isHero && (
+                <p className="text-[10px] text-[var(--text-muted)] mt-1">Bài nổi bật nên có nội dung phong phú (≥120 ký tự) hoặc tóm tắt dài.</p>
+              )}
+            </div>
+
             {isHero && (
-              <p className="text-[10px] text-[var(--text-muted)] mt-1">Bài nổi bật nên có nội dung phong phú (≥120 ký tự) hoặc tóm tắt dài.</p>
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-amber-500/20 bg-amber-500/5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={data.requestFeatured}
+                  onChange={e => onChange({ requestFeatured: e.target.checked })}
+                  className="mt-1 accent-amber-500"
+                />
+                <div>
+                  <p className="text-xs font-bold text-slate-800">Đề cử Editor&apos;s Pick</p>
+                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5">
+                    Bài có thể hiển thị full-bleed như Minh Quân Nguyễn (ban biên tập duyệt).
+                  </p>
+                </div>
+              </label>
             )}
           </div>
+        )}
 
-          {isHero && (
-            <label className="flex items-start gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/8 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={data.requestFeatured}
-                onChange={e => onChange({ requestFeatured: e.target.checked })}
-                className="mt-1 accent-amber-500"
-              />
-              <div>
-                <p className="text-sm font-bold text-[var(--text-primary)]">Đề cử Editor&apos;s Pick</p>
-                <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                  Bài có thể hiển thị full-bleed như Minh Quân Nguyễn (ban biên tập duyệt).
-                </p>
-              </div>
-            </label>
-          )}
-        </>
-      )}
+        {isSocial && (
+          <div>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">Nội dung chia sẻ *</label>
+            <textarea 
+              value={data.content} 
+              onChange={e => onChange({ content: e.target.value })}
+              rows={8}
+              placeholder="VD: Vừa đến Hội An và tôi đã mê hoàn toàn! Mẹo nhỏ: thuê xe đạp (100k/ngày) và khám phá cánh đồng lúa lúc bình minh…"
+              className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all resize-none shadow-sm" 
+            />
+            <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
+              <span>Kiểu Linh Trần — caption ngắn, có thể kèm mẹo thực tế</span>
+              <span className={data.content.length >= minContent ? 'text-emerald-500 font-bold' : ''}>{data.content.length} ký tự (≥{minContent})</span>
+            </div>
+          </div>
+        )}
+      </div>
 
-      {isSocial && (
+      {/* RIGHT PAGE OF NOTEBOOK */}
+      <div className="journey-notebook-page-right space-y-5">
+        {/* Categories */}
         <div>
-          <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Nội dung chia sẻ *</label>
-          <textarea value={data.content} onChange={e => onChange({ content: e.target.value })}
-            rows={6}
-            placeholder="VD: Vừa đến Hội An và tôi đã mê hoàn toàn! Mẹo nhỏ: thuê xe đạp (100k/ngày) và khám phá cánh đồng lúa lúc bình minh…"
-            className="create-textarea" />
-          <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
-            <span>Kiểu Linh Trần — caption ngắn, có thể kèm mẹo thực tế</span>
-            <span className={data.content.length >= minContent ? 'text-emerald-400' : ''}>{data.content.length} ký tự (≥{minContent})</span>
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2 flex items-center justify-between">
+            <span>Danh mục {isSocial ? '(tuỳ chọn)' : '*'}</span>
+            {data.categories.length > 0 && (
+              <span className="text-[var(--gold)] normal-case font-bold text-[10px]">
+                · {data.categories.length} đã chọn
+              </span>
+            )}
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {JOURNEY_CATEGORIES.map(cat => {
+              const selected = data.categories.includes(cat.id);
+              const Icon = cat.icon;
+              const accents: Record<string, { bg: string; text: string; border: string; bgSel: string }> = {
+                violet: { bg: 'bg-violet-500/5', text: 'text-violet-500', border: 'border-violet-500/10', bgSel: 'bg-violet-500 text-white border-violet-600' },
+                amber: { bg: 'bg-amber-500/5', text: 'text-amber-500', border: 'border-amber-500/10', bgSel: 'bg-amber-500 text-white border-amber-600' },
+                rose: { bg: 'bg-rose-500/5', text: 'text-rose-500', border: 'border-rose-500/10', bgSel: 'bg-rose-500 text-white border-rose-600' },
+                teal: { bg: 'bg-teal-500/5', text: 'text-teal-500', border: 'border-teal-500/10', bgSel: 'bg-teal-500 text-white border-teal-600' },
+                sky: { bg: 'bg-sky-500/5', text: 'text-sky-500', border: 'border-sky-500/10', bgSel: 'bg-sky-500 text-white border-sky-600' },
+                emerald: { bg: 'bg-emerald-500/5', text: 'text-emerald-500', border: 'border-emerald-500/10', bgSel: 'bg-emerald-500 text-white border-emerald-600' },
+              };
+              const colors = accents[cat.accent] || accents.violet;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => toggleCategory(cat.id)}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[11px] font-bold transition-all duration-200 cursor-pointer ${
+                    selected 
+                      ? `${colors.bgSel} shadow-sm` 
+                      : `${colors.bg} ${colors.text} ${colors.border} hover:bg-slate-50 hover:border-slate-300`
+                  }`}
+                >
+                  <div className={`p-1 rounded ${selected ? 'bg-white/25 text-white' : 'bg-white text-current shadow-sm'}`}>
+                    <Icon size={12} />
+                  </div>
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
-      )}
 
-      {!isSocial && categoryBlock(true)}
-
-      {isSocial && categoryBlock(false)}
-
-      <div>
-        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Tâm trạng chuyến đi</label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {MOODS.map(mood => (
-            <IconChip key={mood.id} icon={mood.icon} label={mood.label} accent="gold"
-              selected={data.mood === mood.id}
-              onClick={() => onChange({ mood: mood.id })} />
-          ))}
+        {/* Travel Mood */}
+        <div>
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Tâm trạng chuyến đi</label>
+          <div className="flex flex-wrap gap-2.5">
+            {MOODS.map(mood => {
+              const selected = data.mood === mood.id;
+              const Icon = mood.icon;
+              return (
+                <button
+                  key={mood.id}
+                  type="button"
+                  onClick={() => onChange({ mood: mood.id })}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer relative group ${
+                    selected
+                      ? 'bg-[var(--gold)] text-white shadow-md scale-105'
+                      : 'bg-white border border-slate-200 text-slate-500 hover:border-[var(--gold)] hover:text-[var(--gold)]'
+                  }`}
+                  title={mood.label}
+                >
+                  <Icon size={15} />
+                  <span className="absolute bottom-full mb-1.5 px-2 py-0.5 bg-slate-800 text-[9px] font-bold text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                    {mood.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <div>
-        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Đánh giá chuyến đi</label>
-        <div className="flex items-center gap-2 flex-wrap">
-          {[1, 2, 3, 4, 5].map(n => (
-            <button key={n} type="button" onClick={() => onChange({ rating: n })}
-              className="transition-all hover:scale-110 p-1">
-              <Star size={28} className={n <= data.rating ? 'text-[var(--gold)] fill-current' : 'text-[var(--border-normal)]'} strokeWidth={1.5} />
-            </button>
-          ))}
-          {data.rating > 0 && RATING_LABELS[data.rating] && (
-            <span className="ml-2 flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)]">
-              {(() => { const R = RATING_LABELS[data.rating]; return R ? <><R.icon size={16} /> {R.text}</> : null; })()}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Tags */}
-      <div>
-        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Thẻ từ khóa</label>
-        <div className="flex flex-wrap gap-2 mb-3">
-          {data.tags.map(tag => (
-            <span key={tag} className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--gold-glow)] border border-[var(--gold)]/40 rounded-full text-xs font-semibold text-[var(--gold)]">
-              {tag}
-              <button onClick={() => onChange({ tags: data.tags.filter(t => t !== tag) })} className="hover:text-rose-400 transition-colors">
-                <X size={11} />
+        {/* Trip Rating */}
+        <div>
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">Đánh giá chuyến đi</label>
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map(n => (
+              <button 
+                key={n} 
+                type="button" 
+                onClick={() => onChange({ rating: n })}
+                className="transition-all hover:scale-110 p-0.5 cursor-pointer"
+              >
+                <Star 
+                  size={22} 
+                  className={n <= data.rating ? 'text-amber-400 fill-current' : 'text-slate-200'} 
+                  strokeWidth={1.5} 
+                />
               </button>
-            </span>
-          ))}
+            ))}
+            {data.rating > 0 && RATING_LABELS[data.rating] && (
+              <span className="ml-2 text-xs font-bold text-[var(--gold)]">
+                {RATING_LABELS[data.rating].text}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex gap-2 mb-2">
-          <input value={tagInput} onChange={e => setTagInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && tagInput.trim() && addTag(tagInput.trim())}
-            placeholder="Nhập thẻ và nhấn Enter…"
-            className="input-premium flex-1 py-2" />
-          <button onClick={() => tagInput.trim() && addTag(tagInput.trim())} type="button"
-            className="btn-gold px-4 py-2 text-xs">Thêm</button>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {POPULAR_TAGS.filter(t => !data.tags.includes(t)).slice(0, 8).map(tag => (
-            <button key={tag} type="button" onClick={() => addTag(tag)}
-              className="px-2.5 py-1 rounded-full text-[11px] font-semibold border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all">
-              {tag}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {/* Privacy */}
-      <div>
-        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Quyền riêng tư</label>
-        <div className="flex gap-3">
-          {([
-            { id: 'public', label: 'Công khai', icon: Globe, desc: 'Mọi người đều xem được' },
-            { id: 'friends', label: 'Bạn bè', icon: UserCheck, desc: 'Chỉ người theo dõi' },
-            { id: 'private', label: 'Riêng tư', icon: Lock, desc: 'Chỉ mình tôi' },
-          ] as const).map(opt => {
-            const Icon = opt.icon;
-            const selected = data.privacy === opt.id;
-            return (
-              <button key={opt.id} type="button" onClick={() => onChange({ privacy: opt.id })}
-                className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 text-xs font-semibold transition-all
-                  ${selected ? 'border-[var(--gold)] bg-[var(--gold-glow)] text-[var(--gold)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-normal)]'}`}>
-                <Icon size={18} />
-                {opt.label}
-                <span className="text-[10px] opacity-70 hidden sm:block">{opt.desc}</span>
+        {/* Tags */}
+        <div>
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">Thẻ từ khóa</label>
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {data.tags.map(tag => (
+              <span key={tag} className="flex items-center gap-1.5 px-2.5 py-1 bg-[var(--gold-glow)] border border-[var(--gold)]/20 rounded-full text-[10px] font-bold text-[var(--gold)] font-mono">
+                {tag}
+                <button onClick={() => onChange({ tags: data.tags.filter(t => t !== tag) })} className="hover:text-rose-500 transition-colors">
+                  <X size={10} />
+                </button>
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-1.5 mb-2">
+            <input 
+              value={tagInput} 
+              onChange={e => setTagInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && tagInput.trim() && addTag(tagInput.trim())}
+              placeholder="Nhập thẻ và nhấn Enter…"
+              className="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] shadow-sm" 
+            />
+            <button 
+              onClick={() => tagInput.trim() && addTag(tagInput.trim())} 
+              type="button"
+              className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer active:scale-95 transition-all"
+            >
+              Thêm
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {POPULAR_TAGS.filter(t => !data.tags.includes(t)).slice(0, 6).map(tag => (
+              <button 
+                key={tag} 
+                type="button" 
+                onClick={() => addTag(tag)}
+                className="px-2 py-0.5 rounded-full text-[10px] font-bold border border-slate-100 text-slate-400 hover:border-[var(--gold)] hover:text-[var(--gold)] hover:bg-slate-50 transition-all cursor-pointer"
+              >
+                {tag}
               </button>
-            );
-          })}
+            ))}
+          </div>
+        </div>
+
+        {/* Privacy */}
+        <div>
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Quyền riêng tư</label>
+          <div className="grid grid-cols-3 gap-2">
+            {([
+              { id: 'public', label: 'Công khai', icon: Globe, desc: 'Mọi người' },
+              { id: 'friends', label: 'Bạn bè', icon: UserCheck, desc: 'Người theo dõi' },
+              { id: 'private', label: 'Riêng tư', icon: Lock, desc: 'Chỉ mình tôi' },
+            ] as const).map(opt => {
+              const Icon = opt.icon;
+              const selected = data.privacy === opt.id;
+              return (
+                <button 
+                  key={opt.id} 
+                  type="button" 
+                  onClick={() => onChange({ privacy: opt.id })}
+                  className={`flex flex-col items-center gap-1 p-2 rounded-xl border text-center transition-all cursor-pointer ${
+                    selected 
+                      ? 'border-[var(--gold)] bg-[var(--gold-glow)] text-[var(--gold)] font-bold shadow-sm' 
+                      : 'border-slate-200 text-slate-400 hover:border-slate-300'
+                  }`}
+                >
+                  <Icon size={15} />
+                  <span className="text-[10px] font-bold mt-0.5">{opt.label}</span>
+                  <span className="text-[8px] opacity-75 hidden sm:block">{opt.desc}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Alert / Warnings inside Notebook */}
+        {!canNext && (
+          <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[10px] text-amber-700 font-semibold flex items-start gap-1.5 animate-pulse">
+            <AlertCircle size={14} className="shrink-0 mt-0.5" />
+            <span>
+              {isSocial && 'Vui lòng nhập nội dung chia sẻ (≥30 ký tự)'}
+              {isMagazine && 'Vui lòng nhập tiêu đề, tóm tắt (≥40 ký tự) và chọn nhất 1 danh mục'}
+              {isHero && 'Vui lòng nhập tiêu đề, tóm tắt (≥80 ký tự) và chọn nhất 1 danh mục'}
+            </span>
+          </div>
+        )}
+
+        {/* BOOK FOOTER NAVIGATION */}
+        <div className="pt-4 border-t border-slate-200/60 mt-4 flex items-center justify-between gap-3 select-none">
+          <button 
+            type="button" 
+            onClick={onSaveDraft}
+            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
+          >
+            <Sparkles size={12} className="text-amber-500" /> {draftSaved ? 'Đã lưu!' : 'Lưu bản nháp'}
+          </button>
+          
+          <span className="text-xs font-bold text-slate-400">1 / 5</span>
+
+          <button 
+            type="button" 
+            onClick={onNext} 
+            disabled={!canNext}
+            className="px-5 py-2 bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md cursor-pointer active:scale-95"
+          >
+            Tiếp theo <ChevronRight size={14} />
+          </button>
         </div>
       </div>
     </div>
@@ -1755,70 +1896,64 @@ export default function CreateStoryPage() {
     <div ref={topRef}>
       <CreatePageShell
         variant="journey"
-        title="Đăng chia sẻ hành trình"
-        subtitle="Chọn kiểu bài Linh Trần, Sarah Miller hoặc Minh Quân — form tự điều chỉnh theo layout bảng tin"
-        icon={<Route size={20} strokeWidth={2.2} />}
-        onBack={handleLeave}
-        actions={
-          <>
-            <span className="hidden sm:inline text-[10px] text-[var(--text-muted)] mr-1">
-              {draftSaved ? '✓ Đã lưu nháp' : 'Tự lưu nháp'}
-            </span>
-            <button type="button" onClick={() => void handleSaveDraft()}
-              className="btn-outline text-xs px-3 py-2 hidden sm:flex items-center gap-1.5">
-              <Eye size={13} /> {draftSaved ? 'Đã lưu!' : 'Lưu nháp'}
-            </button>
-            {step === 5 && (
-              <button type="button" onClick={handlePublish} disabled={!isReadyToPublish || publishing}
-                className="btn-gold px-4 py-2 text-sm flex items-center gap-2 disabled:opacity-50">
-                {publishing ? <><Loader2 size={14} className="animate-spin" /> Đang đăng...</> : <><Send size={14} /> Đăng ngay</>}
-              </button>
-            )}
-          </>
-        }
+        noHeader={true}
       >
-        <div className="journey-create-grid">
-          <aside className="journey-create-aside">
-            <JourneyProgressSidebar
-              current={step}
-              completion={completionItems}
-              percent={completionPercent}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5 relative">
+          {/* LEFT SIDEBAR (stepper progress) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-[88px]">
+              <JourneyProgressSidebar
+                current={step}
+                completion={completionItems}
+                percent={completionPercent}
+              />
+            </div>
           </aside>
 
+          {/* CENTER COLUMN (creation content) */}
           <div className="journey-create-main">
-            {draftRestored && (
-              <div className="mb-4 flex items-center gap-2 px-4 py-3 rounded-xl bg-[var(--gold-glow)] border border-[var(--gold)]/30 text-sm text-[var(--gold)]">
-                <Check size={16} />
-                Đã khôi phục bản nháp — tiếp tục từ bước {step}
+            
+            {/* Premium Scenery Top Banner */}
+            <div 
+              className="journey-step-banner relative overflow-hidden rounded-2xl border border-slate-200/50 p-6 flex items-center justify-between min-h-[120px] shadow-sm mb-2"
+              style={{
+                backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1200&q=80')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                color: '#fff'
+              }}
+            >
+              <div className="flex items-center gap-4 z-10">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/20 backdrop-blur-md border border-white/20 text-white shadow-md">
+                  <CurrentStepIcon size={20} strokeWidth={2.2} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-200">BƯỚC {step} / {JOURNEY_STEPS.length}</p>
+                  <h2 className="text-lg font-black text-white mt-0.5">{currentStepMeta?.label}</h2>
+                  <p className="text-xs text-slate-200 mt-0.5 max-w-lg leading-relaxed">{STEP_HINTS[step]}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-[10px] sm:text-xs font-bold text-white z-10">
+                <span>{completionPercent}% hoàn thành</span>
+              </div>
+            </div>
+
+            {/* Content Form Wrapper: Notebook Diary Layout for Step 1, standard card panel for others */}
+            {step === 1 ? (
+              <Step1Story data={data} onChange={onChange} onNext={next} canNext={canNext()} onSaveDraft={handleSaveDraft} draftSaved={draftSaved} />
+            ) : (
+              <div className="create-panel create-panel--journey journey-form-panel">
+                {step === 2 && <Step2Photos data={data} onChange={onChange} />}
+                {step === 3 && <Step3Details data={data} onChange={onChange} />}
+                {step === 4 && <Step4Itinerary data={data} onChange={onChange} />}
+                {step === 5 && <Step5Preview data={data} onChange={onChange} />}
               </div>
             )}
-            <div className="journey-step-banner">
-              <div className="journey-step-banner-icon">
-                <CurrentStepIcon size={22} strokeWidth={2.2} />
-              </div>
-              <div className="journey-step-banner-text">
-                <p className="journey-step-banner-kicker">Bước {step} / {JOURNEY_STEPS.length}</p>
-                <h2 className="journey-step-banner-title">{currentStepMeta?.label}</h2>
-                <p className="journey-step-banner-hint">{STEP_HINTS[step]}</p>
-              </div>
-              <div className="journey-step-banner-badge lg:hidden">{completionPercent}%</div>
-            </div>
 
-            <div className="create-panel create-panel--journey journey-form-panel">
-              {step === 1 && <Step1Story data={data} onChange={onChange} />}
-              {step === 2 && <Step2Photos data={data} onChange={onChange} />}
-              {step === 3 && <Step3Details data={data} onChange={onChange} />}
-              {step === 4 && <Step4Itinerary data={data} onChange={onChange} />}
-              {step === 5 && <Step5Preview data={data} onChange={onChange} />}
-            </div>
-
-            {!canNext() && step < 5 && (
+            {/* Standard Warning / Publish Alerts for Step > 1 */}
+            {step > 1 && !canNext() && (
               <div className="journey-alert journey-alert--warn">
                 <AlertCircle size={15} />
-                {step === 1 && data.displayType === 'social' && 'Vui lòng nhập nội dung chia sẻ (≥30 ký tự)'}
-                {step === 1 && data.displayType === 'magazine' && 'Vui lòng nhập tiêu đề, tóm tắt (≥40 ký tự) và chọn ít nhất 1 danh mục'}
-                {step === 1 && data.displayType === 'hero' && 'Vui lòng nhập tiêu đề, tóm tắt (≥80 ký tự) và chọn ít nhất 1 danh mục'}
                 {step === 2 && data.displayType === 'social' && 'Vui lòng thêm ít nhất 1 ảnh (tối đa 2)'}
                 {step === 2 && data.displayType !== 'social' && 'Vui lòng chọn ảnh bìa'}
                 {step === 3 && 'Vui lòng thêm ít nhất 1 điểm trên bản đồ tuyến đường'}
@@ -1831,27 +1966,75 @@ export default function CreateStoryPage() {
               </div>
             )}
 
-            <div className="journey-create-footer">
-              <button type="button" onClick={prev} disabled={step === 1}
-                className="modern-nav-btn modern-nav-btn--ghost">
-                <ChevronLeft size={16} /> Bước trước
-              </button>
-
-              <span className="journey-footer-step">{step} / {JOURNEY_STEPS.length}</span>
-
-              {step < 5 ? (
-                <button type="button" onClick={next} disabled={!canNext()}
-                  className="modern-nav-btn modern-nav-btn--primary disabled:opacity-50">
-                  Tiếp theo <ChevronRight size={16} />
+            {/* Standard Footer Navigation for Step > 1 (Step 1 handles navigation internally within notebook page) */}
+            {step > 1 && (
+              <div className="journey-create-footer">
+                <button type="button" onClick={prev}
+                  className="modern-nav-btn modern-nav-btn--ghost">
+                  <ChevronLeft size={16} /> Bước trước
                 </button>
-              ) : (
-                <button type="button" onClick={handlePublish} disabled={!isReadyToPublish || publishing}
-                  className="modern-nav-btn modern-nav-btn--primary disabled:opacity-50">
-                  {publishing ? <><Loader2 size={15} className="animate-spin" /> Đang đăng...</> : <><Send size={15} /> Đăng hành trình</>}
-                </button>
-              )}
-            </div>
+
+                <div className="flex items-center gap-3">
+                  <button type="button" onClick={handleSaveDraft}
+                    className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
+                    <Sparkles size={12} className="text-amber-500" /> {draftSaved ? 'Đã lưu!' : 'Lưu bản nháp'}
+                  </button>
+
+                  <span className="journey-footer-step">{step} / {JOURNEY_STEPS.length}</span>
+                </div>
+
+                {step < 5 ? (
+                  <button type="button" onClick={next} disabled={!canNext()}
+                    className="modern-nav-btn modern-nav-btn--primary disabled:opacity-50">
+                    Tiếp theo <ChevronRight size={16} />
+                  </button>
+                ) : (
+                  <button type="button" onClick={handlePublish} disabled={!isReadyToPublish || publishing}
+                    className="modern-nav-btn modern-nav-btn--primary disabled:opacity-50">
+                    {publishing ? <><Loader2 size={15} className="animate-spin" /> Đang đăng...</> : <><Send size={15} /> Đăng hành trình</>}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+
+          {/* RIGHT SIDEBAR (inspiration card and guidelines) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-[88px] space-y-4">
+              {/* Travel Inspiration Card */}
+              <div className="sidebar-section select-none animate-fade-in space-y-3">
+                <h4 className="sidebar-title flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-amber-500 animate-pulse" /> Cảm hứng du lịch
+                </h4>
+                <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">
+                  Hãy chia sẻ những câu chuyện thực tế và các địa điểm nổi tiếng để bài viết thu hút nhiều tương tác hơn nhé!
+                </p>
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=500&q=80" 
+                    alt="Famous Destination" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
+                    <div>
+                      <p className="text-xs font-black text-white">Vịnh Hạ Long, Việt Nam</p>
+                      <p className="text-[9px] text-slate-200 font-medium">Kỳ quan thiên nhiên thế giới</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Travel Tips Card */}
+              <div className="sidebar-section select-none animate-fade-in space-y-2">
+                <h4 className="sidebar-title">Mẹo viết bài hữu ích</h4>
+                <ul className="text-[10px] text-slate-500 space-y-1.5 list-disc pl-3">
+                  <li>Hình ảnh chất lượng cao giúp tăng 80% lượt tương tác.</li>
+                  <li>Gắn thẻ các hoạt động cụ thể (ẩm thực, trekking...).</li>
+                  <li>Gợi ý lộ trình chi tiết để người đọc dễ theo dõi.</li>
+                </ul>
+              </div>
+            </div>
+          </aside>
         </div>
       </CreatePageShell>
     </div>

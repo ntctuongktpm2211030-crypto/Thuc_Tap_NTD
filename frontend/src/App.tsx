@@ -119,7 +119,7 @@ function App() {
   const isExploreReader =
     location.pathname.startsWith('/explore/post/') ||
     location.pathname.startsWith('/explore/cam-nang/');
-  const isFullscreenCreate = isCreateJourneyPage || isEditPostPage || isExploreReader;
+  const isFullscreenCreate = isEditPostPage || isExploreReader;
   if (isAuthPage) {
     return (
       <Routes>
