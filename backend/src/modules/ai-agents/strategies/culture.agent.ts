@@ -1,20 +1,20 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation, UserMemory } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions } from '../utils/agent.utils';
-import { RetrieverService } from '../../rag/services/retriever.service';
-import { EmbeddingsService } from '../../rag/services/embeddings.service';
-import { VectorStoreService } from '../../rag/services/vector-store.service';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, normalizeSlang, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
+import { buildCultureSystemPrompt } from '../prompts/culture.prompt';
+import { logger } from '../../../utils/logger';
+import { RagPipelineService } from '../../rag/services/rag-pipeline.service';
 
 export class CultureAgent implements AgentStrategy {
   name = 'CultureAgent';
   description = 'Chuyên gia tư vấn các khía cạnh văn hóa, lễ hội, lịch sử địa phương và danh lam thắng cảnh.';
 
   private cultureTool: AgentTool;
-  private retriever: RetrieverService;
+  private ragPipeline: RagPipelineService;
 
   constructor(cultureTool: AgentTool) {
     this.cultureTool = cultureTool;
-    this.retriever = new RetrieverService(new EmbeddingsService(), new VectorStoreService());
+    this.ragPipeline = new RagPipelineService();
   }
 
   async execute(
@@ -22,8 +22,9 @@ export class CultureAgent implements AgentStrategy {
     input: string,
     messageId?: string,
     extractedDestination?: string,
-    history?: { role: string; content: string }[]
-  ): Promise<string> {
+    history?: { role: string; content: string }[],
+    memory?: UserMemory
+  ): Promise<AgentResponse> {
     console.log(`[CultureAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // 1. Phân tích khu vực sử dụng Fuzzy Match chống lỗi gõ sai chữ/thiếu dấu
@@ -73,22 +74,31 @@ export class CultureAgent implements AgentStrategy {
       await this.saveToolCall(messageId, this.cultureTool.name, cultureInput, cultureData);
     }
 
-    // 3. Lấy dữ liệu RAG bổ trợ (tìm kiếm tự do không giới hạn category để bao quát cả history, festival, culture)
+    // 3. Lấy dữ liệu RAG pipeline (destination + category detection + reranking)
     let ragDocsText = '';
+    let ragDocs: any[] = [];
     try {
-      const ragDocs = await this.retriever.retrieve(`${region} ${input}`, undefined, 4);
-      ragDocsText = ragDocs.map(d => {
-        const cleanContent = d.content.length > 1500 ? d.content.substring(0, 1500) + '...' : d.content;
-        return `- [${d.category}] ${d.title}: ${cleanContent}`;
-      }).join('\n');
+      const pipelineResult = await this.ragPipeline.execute({
+        query: input,
+        destination: region,
+        topK: 4,
+      });
+      ragDocs = pipelineResult.docs;
+      ragDocsText = pipelineResult.contextText;
+      logger.info('CultureAgent', 'RAG pipeline result', {
+        hasData: pipelineResult.hasData,
+        docs: pipelineResult.docs.length,
+        dest: pipelineResult.destination,
+        cat: pipelineResult.category,
+        latencyMs: pipelineResult.metadata.latencyMs,
+      });
     } catch (ragErr) {
-      console.warn('[CultureAgent] RAG retrieval failed:', ragErr);
+      console.warn('[CultureAgent] RAG pipeline failed:', ragErr);
     }
 
     // 4. Xây dựng câu trả lời qua LLM
     try {
-      const systemPrompt = `Bạn là CultureAgent - chuyên gia lịch sử, văn hóa và lễ hội truyền thống địa phương Việt Nam của SmartTravel. 
-Nhiệm vụ của bạn là dựa vào nét đặc trưng văn hóa từ hệ thống cung cấp và các tài liệu tri thức lịch sử & văn hóa (RAG Context) để giải đáp chi tiết, sâu sắc, hấp dẫn và tự nhiên nhất câu hỏi của người dùng. Hãy trả lời bằng tiếng Việt thân thiện, văn phong lịch sự và cuốn hút.`;
+      const systemPrompt = buildCultureSystemPrompt(memory);
 
       const userPrompt = `Khu vực/Tỉnh thành: ${region}
 Nét văn hóa cơ bản hệ thống cung cấp: ${cultureData.info}
@@ -99,7 +109,8 @@ ${ragDocsText || 'Không tìm thấy tài liệu liên quan.'}
 Câu hỏi/Yêu cầu của người dùng: "${input}"`;
 
       const llmResponse = await callAgentLLM(systemPrompt, userPrompt, history);
-      return llmResponse;
+      const citations = buildCitationsFromDocs(ragDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[CultureAgent] LLM call failed, falling back to static template response:', err);
     }
@@ -110,7 +121,7 @@ Câu hỏi/Yêu cầu của người dùng: "${input}"`;
     response += `${cultureData.info}\n\n`;
     response += `Hy vọng những thông tin văn hóa lịch sử thú vị này sẽ giúp hành trình khám phá và trải nghiệm thực tế của bạn tại **${region}** trở nên ý nghĩa, sâu sắc và trọn vẹn hơn bao giờ hết!`;
 
-    return response;
+    return { response, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {

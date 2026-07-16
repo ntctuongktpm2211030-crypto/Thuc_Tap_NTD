@@ -1,0 +1,51 @@
+@startuml UseCase_Overview
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Human Actors
+actor "Khách vãng lai\n(Guest)" as Guest
+actor "Người dùng đăng ký\n(Registered Traveler)" as User
+actor "Quản trị viên\n(Admin)" as Admin
+
+' External Systems
+actor "Firebase Auth" as Firebase <<System>>
+actor "OpenStreetMap" as OSM <<System>>
+actor "OpenAI API" as OpenAI <<System>>
+actor "vietnamadminunits" as AdminUnits <<System>>
+
+' Actor Inheritance
+User -|> Guest
+Admin -|> User
+
+rectangle "Nền tảng TerraHolic SmartTravel " {
+  usecase "Xác thực & Quản lý Thành viên" as UC_Auth
+  usecase "Lập kế hoạch lịch trình" as UC_Trip
+  usecase "Mạng xã hội du lịch" as UC_Community
+  usecase "Bản đồ tương tác & Định vị" as UC_Map
+  usecase "Trợ lý ảo AI & RAG" as UC_Chatbot
+  usecase "Quản trị & Vận hành" as UC_Admin
+}
+
+' Guest Associations
+Guest --> UC_Auth
+Guest --> UC_Map
+
+' User Associations
+User --> UC_Trip
+User --> UC_Community
+User --> UC_Chatbot
+
+' Admin Associations
+Admin --> UC_Admin
+
+' External System Associations
+UC_Auth --> Firebase
+UC_Auth --> AdminUnits
+UC_Trip --> OpenAI
+UC_Map --> OSM
+UC_Chatbot --> OpenAI
+UC_Chatbot --> AdminUnits
+UC_Admin --> OpenAI
+@enduml

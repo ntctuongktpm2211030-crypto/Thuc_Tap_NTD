@@ -128,11 +128,11 @@ const TRAVEL_STYLES = ['Solo', 'Cặp đôi', 'Gia đình', 'Nhóm bạn', 'Côn
 const POPULAR_TAGS = ['#ThienNhien', '#AmThuc', '#PhieuLuu', '#NghiDuong', '#VanHoa', '#Budget', '#Luxury', '#SoloTravel', '#CouplesTrip', '#FamilyTrip', '#Backpacking', '#SunriseView'];
 
 const STEP_HINTS: Record<number, string> = {
-  1: 'Chọn kiểu bài (Linh Trần / Sarah Miller / Minh Quân) và điền nội dung phù hợp',
-  2: 'Thêm ảnh theo kiểu bài — bìa magazine hoặc 1–2 ảnh chia sẻ nhanh',
+  1: 'Chọn bố cục hiển thị và điền nội dung phù hợp cho bài viết',
+  2: 'Thêm ảnh bìa và các hình ảnh mô tả cho chuyến đi của bạn',
   3: 'Tìm điểm trên bản đồ, thêm các điểm di chuyển và nối tuyến đường',
-  4: 'Lịch trình & mẹo (tuỳ chọn với chia sẻ nhanh)',
-  5: 'Chọn dạng bài, kiểu chữ, màu sắc — xem trước trước khi đăng',
+  4: 'Lịch trình chi tiết và các mẹo du lịch hữu ích',
+  5: 'Chọn dạng bài, kiểu chữ, màu sắc và xem trước trước khi đăng',
 };
 
 function getPostStyleFromData(data: StoryData) {
@@ -593,7 +593,7 @@ const Step2Photos = ({ data, onChange }: { data: StoryData; onChange: (d: Partia
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [uploadError, setUploadError] = useState('');
   const isSocial = data.displayType === 'social';
-  const maxPhotos = isSocial ? 2 : MAX_PHOTOS;
+  const maxPhotos = isSocial ? 3 : 10;
 
   const handleCoverSelect = (files: FileList | null) => {
     if (!files?.[0]) return;
@@ -660,8 +660,8 @@ const Step2Photos = ({ data, onChange }: { data: StoryData; onChange: (d: Partia
     <div className="journey-step-content animate-fade-in">
       <SectionHeader
         icon={ImageIcon}
-        title={isSocial ? 'Ảnh chia sẻ (Linh Trần)' : 'Ảnh bìa & album (Sarah Miller / Minh Quân)'}
-        subtitle={isSocial ? 'Thêm 1–2 ảnh — hiển thị cạnh nhau trên bảng tin' : 'Ảnh bìa bắt buộc cho bài magazine / nổi bật'}
+        title={isSocial ? 'Ảnh chia sẻ hành trình' : 'Ảnh bìa & album hình ảnh'}
+        subtitle={isSocial ? 'Chọn tối đa 3 ảnh hiển thị trên bảng tin' : 'Ảnh bìa bắt buộc và album tối đa 10 ảnh'}
         accent="gold"
       />
 
@@ -1268,7 +1268,7 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
         <div className="journey-alert journey-alert--info mb-4 flex items-start gap-2">
           <Lightbulb size={15} className="flex-shrink-0 mt-0.5 text-[var(--gold)]" />
           <p className="text-xs text-[var(--text-secondary)]">
-            Kiểu <strong>Linh Trần</strong> — bước này tuỳ chọn. Bạn có thể bỏ qua và đăng ngay sau bước xem trước.
+            Kiểu <strong>Chia sẻ nhanh</strong> — bước này tuỳ chọn. Bạn có thể bỏ qua và đăng ngay sau bước xem trước.
           </p>
         </div>
       )}
@@ -1823,7 +1823,7 @@ export default function CreateStoryPage() {
       let tripId: string | undefined;
       if (data.days.length > 0) {
         try {
-          const trip = await tripsService.create({
+          const trip = await tripsService.TaoChuyenDi({
             title: data.title,
             destinationName: data.destination,
             startDate: data.startDate || new Date().toISOString(),
@@ -1849,7 +1849,7 @@ export default function CreateStoryPage() {
       }
 
       const journeyContent = buildJourneyContent(data);
-      await postsService.create({
+      await postsService.TaoBaiViet({
         content: journeyContent,
         mediaUrls,
         tripId,
@@ -1872,7 +1872,7 @@ export default function CreateStoryPage() {
         title="Hành trình đã đăng!"
         message={(
           <>
-            Bài kiểu <strong>{FEED_DISPLAY_OPTIONS.find(o => o.id === data.displayType)?.authorStyle}</strong>
+            Bài viết dạng <strong>{FEED_DISPLAY_OPTIONS.find(o => o.id === data.displayType)?.authorStyle}</strong>
             {data.title ? <> — <strong>{data.title}</strong></> : null} đã được chia sẻ với cộng đồng Terraholic.
           </>
         )}

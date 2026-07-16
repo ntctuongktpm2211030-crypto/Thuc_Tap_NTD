@@ -1,0 +1,52 @@
+@startuml
+!startsub AUTH
+entity User {
+  * id : String <<PK>>
+  --
+  * email : String <<unique>> <<index>>
+  * passwordHash : String
+  * role : UserRole
+  * isVerified : Boolean
+  verificationToken : String <<nullable>>
+  resetPasswordToken : String <<nullable>>
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity Profile {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<unique>>
+  * fullName : String
+  avatarUrl : String <<nullable>>
+  coverUrl : String <<nullable>>
+  bio : String <<nullable>>
+  phoneNumber : String <<nullable>>
+  homeLocation : String <<nullable>>
+}
+
+entity TravelPreferences {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<unique>>
+  * preferredPace : String
+  * dailyBudget : Float
+  * activities : String[]
+  * destinationTypes : String[]
+  * foodPreferences : String[]
+}
+
+User ||--o| Profile : "has profile"
+User ||--o| TravelPreferences : "has preferences"
+!endsub
+
+!startsub AUTH_OVERVIEW
+entity User {
+  * id : String <<PK>>
+  --
+  * email : String <<unique>> <<index>>
+  * role : UserRole
+  * isVerified : Boolean
+}
+!endsub
+@enduml

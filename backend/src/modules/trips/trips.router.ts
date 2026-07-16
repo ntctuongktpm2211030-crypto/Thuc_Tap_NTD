@@ -363,6 +363,19 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
     if (!existing) return res.status(404).json({ error: 'Trip not found.' });
     if (existing.ownerId !== req.user!.sub) return res.status(403).json({ error: 'Access denied.' });
 
+    // Kiểm tra xung đột đồng thời (Optimistic Concurrency Control)
+    if (req.body.lastUpdatedAt) {
+      const clientTime = new Date(req.body.lastUpdatedAt).getTime();
+      const serverTime = new Date(existing.updatedAt).getTime();
+      if (Math.abs(serverTime - clientTime) > 1000) {
+        return res.status(409).json({
+          error: 'Conflict',
+          message: 'Chuyến đi đã được cập nhật bởi một người khác trong lúc bạn đang chỉnh sửa. Vui lòng tải lại trang để lấy dữ liệu mới nhất.',
+          serverUpdatedAt: existing.updatedAt
+        });
+      }
+    }
+
     const updated = await prisma.trip.update({
       where: { id: req.params.id },
       data: {

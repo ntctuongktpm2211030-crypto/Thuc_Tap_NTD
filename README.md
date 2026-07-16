@@ -31,7 +31,7 @@ graph TD
     subgraph Frontend [React SPA Client]
         UI[Tailwind & Lucide UI] --> RC[React Components]
         RC --> RQ[React Query / Redux Store]
-        RC --> Leaflet[Bản đồ Leaflet]
+        RC --> MapLibre[Bản đồ MapLibre GL]
         RQ --> Axios[Axios API Client]
         RC --> SocketClient[Socket.io Client]
     end
@@ -62,7 +62,7 @@ graph TD
 *   **Frontend Framework:** React 19 (RC), TypeScript, Vite.
 *   **State Management:** Redux Toolkit (quản lý Auth), React Query / TanStack Query v5 (quản lý data caching từ API).
 *   **CSS & Icons:** Tailwind CSS, Lucide React.
-*   **GIS/Maps:** Leaflet, Leaflet.markercluster (hiển thị danh mục điểm đến, vẽ route).
+*   **GIS/Maps:** MapLibre GL, React Map GL (hiển thị danh mục điểm đến, vẽ route).
 *   **Backend Runtime:** Node.js, Express, TypeScript.
 *   **Database ORM:** Prisma Client v5.
 *   **Database:** PostgreSQL.
@@ -144,7 +144,7 @@ Hệ thống backend chia làm 20 module cốt lõi:
     3. Backend gọi `generateAIItinerary` (gọi OpenAI `gpt-4o-mini` kèm System Prompt định nghĩa cấu trúc JSON đầu ra rất khắt khe).
     4. AI trả về lịch trình dưới dạng JSON (bao gồm toạ độ đoán trước của địa điểm).
     5. Backend lưu vết lịch trình này vào bảng `AIHistory` và trả dữ liệu về Frontend.
-    6. Frontend vẽ lịch trình từng ngày lên bản đồ Leaflet.
+    6. Frontend vẽ lịch trình từng ngày lên bản đồ MapLibre.
 *   **Luồng Tối ưu hóa lộ trình di chuyển (TSP):**
     1. Người dùng thêm nhiều địa điểm tham quan vào một ngày đi trên bản đồ.
     2. Nhấn nút "Tối ưu hóa đường đi".
@@ -248,7 +248,7 @@ Ngoài ra còn có:
 *   `useRequireAuth.ts`: Hook kiểm tra trạng thái xác thực từ Redux Store và cung cấp hàm kiểm tra nhanh để điều hướng người dùng sang trang `/auth` nếu cần bảo vệ hành động nào đó (ví dụ nhấn nút Thích bài viết hoặc Lưu địa điểm khi chưa đăng nhập).
 
 ### 15. Component dùng chung
-*   `Map`: Component bản đồ tương tác (dựa trên Leaflet). Hỗ trợ hiển thị các icon marker phân loại theo danh mục (khách sạn, nhà hàng, điểm tham quan), vẽ đường đi lịch trình, hiển thị vòng tròn bán kính tìm kiếm lân cận, marker check-in, và hiển thị vị trí thời gian thực của bạn bè.
+*   `Map`: Component bản đồ tương tác (dựa trên MapLibre GL). Hỗ trợ hiển thị các icon marker phân loại theo danh mục (khách sạn, nhà hàng, điểm tham quan), vẽ đường đi lịch trình, hiển thị vòng tròn bán kính tìm kiếm lân cận, marker check-in, và hiển thị vị trí thời gian thực của bạn bè.
 *   `LoadingOverlay`: Component hiển thị hiệu ứng xoay tròn tải dữ liệu phủ lên màn hình.
 *   `UserMenuDropdown`: Dropdown menu hiển thị ảnh đại diện người dùng, liên kết nhanh tới Trang cá nhân, Cài đặt và nút Đăng xuất.
 

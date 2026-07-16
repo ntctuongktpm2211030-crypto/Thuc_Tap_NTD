@@ -1,0 +1,40 @@
+@startuml UseCase_External
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' External Actors
+actor "Google OAuth" as GoogleOAuth <<System>>
+actor "OpenStreetMap / MapLibre" as OSM <<System>>
+actor "Geocoding API" as GeocodingAPI <<System>>
+actor "Weather API" as WeatherAPI <<System>>
+actor "LLM Service" as LLM <<System>>
+actor "Vector Database" as VectorDB <<System>>
+actor "Cloud Storage" as CloudStorage <<System>>
+actor "Email Service" as EmailService <<System>>
+actor "Push Notification Service" as PushNotification <<System>>
+
+rectangle "Cổng tích hợp ngoại vi (External Integration Gateway)" {
+  usecase "Xác thực tài khoản qua bên thứ ba" as UC_Ext_Auth
+  usecase "Đọc dữ liệu bản đồ địa lý" as UC_Ext_Map
+  usecase "Địa mã hóa và phân tích tọa độ" as UC_Ext_Geocode
+  usecase "Truy xuất thời tiết thời gian thực" as UC_Ext_Weather
+  usecase "Định tuyến truy vấn suy luận LLM" as UC_Ext_LLM
+  usecase "Đồng bộ và truy vấn chỉ mục vector" as UC_Ext_Vector
+  usecase "Lưu trữ và phân phối tệp tin đa phương tiện" as UC_Ext_Storage
+  usecase "Gửi email xác nhận giao dịch" as UC_Ext_Email
+  usecase "Đẩy thông báo thời gian thực đến client" as UC_Ext_Push
+}
+
+' Mappings
+UC_Ext_Auth --> GoogleOAuth
+UC_Ext_Map --> OSM
+UC_Ext_Geocode --> GeocodingAPI
+UC_Ext_Weather --> WeatherAPI
+UC_Ext_LLM --> LLM
+UC_Ext_Vector --> VectorDB
+UC_Ext_Storage --> CloudStorage
+UC_Ext_Email --> EmailService
+UC_Ext_Push --> PushNotification
+@enduml

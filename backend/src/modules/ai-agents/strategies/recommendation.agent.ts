@@ -1,20 +1,20 @@
-import { AgentStrategy, AgentTool } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation, UserMemory } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM } from '../utils/agent.utils';
-import { RetrieverService } from '../../rag/services/retriever.service';
-import { EmbeddingsService } from '../../rag/services/embeddings.service';
-import { VectorStoreService } from '../../rag/services/vector-store.service';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
+import { buildRecSystemPrompt } from '../prompts/recommendation.prompt';
+import { logger } from '../../../utils/logger';
+import { RagPipelineService } from '../../rag/services/rag-pipeline.service';
 
 export class RecommendationAgent implements AgentStrategy {
   name = 'RecommendationAgent';
   description = 'Chuyên gia phân tích sở thích cá nhân để đưa ra gợi ý du lịch cá nhân hóa.';
 
   private recommendationTool: AgentTool;
-  private retriever: RetrieverService;
+  private ragPipeline: RagPipelineService;
 
   constructor(recommendationTool: AgentTool) {
     this.recommendationTool = recommendationTool;
-    this.retriever = new RetrieverService(new EmbeddingsService(), new VectorStoreService());
+    this.ragPipeline = new RagPipelineService();
   }
 
   async execute(
@@ -22,8 +22,9 @@ export class RecommendationAgent implements AgentStrategy {
     input: string,
     messageId?: string,
     extractedDestination?: string,
-    history?: { role: string; content: string }[]
-  ): Promise<string> {
+    history?: { role: string; content: string }[],
+    memory?: UserMemory
+  ): Promise<AgentResponse> {
     console.log(`[RecommendationAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // Phân tích và trích xuất điểm đến từ câu hỏi để cá nhân hóa
@@ -68,59 +69,33 @@ export class RecommendationAgent implements AgentStrategy {
     const prefList = recData.userPreferences.join(', ') || 'nghỉ dưỡng, khám phá tự nhiên';
     const locList = recData.userFavoriteLocations.join(', ') || 'Đà Lạt, Nha Trang';
 
-    // 2. Lấy dữ liệu RAG bổ trợ trong danh mục 'destination'
+    // 2. Lấy dữ liệu RAG pipeline (destination + category + reranking)
     let ragDocsText = '';
     let ragDocs: any[] = [];
     let hasRagData = false;
     try {
-      ragDocs = await this.retriever.retrieve(input, 'destination', 4);
-      let filteredDocs = ragDocs;
-      if (region) {
-        const cleanDest = cleanGeographicName(region);
-        const cleanDestNoSpaces = cleanDest.replace(/\s+/g, '');
-        filteredDocs = ragDocs.filter(d => {
-          const cleanTitle = removeDiacritics(d.title.toLowerCase()).replace(/\s+/g, '');
-          const cleanContent = removeDiacritics(d.content.toLowerCase()).replace(/\s+/g, '');
-          return cleanTitle.includes(cleanDestNoSpaces) || cleanContent.includes(cleanDestNoSpaces);
-        });
-      }
-
-      if (filteredDocs.length > 0) {
-        hasRagData = true;
-      }
-
-      ragDocsText = filteredDocs.map(d => {
-        const cleanContent = d.content.length > 1500 ? d.content.substring(0, 1500) + '...' : d.content;
-        return `- [${d.category}] ${d.title}: ${cleanContent}`;
-      }).join('\n');
+      const pipelineResult = await this.ragPipeline.execute({
+        query: input,
+        destination: region,
+        category: 'destination',
+        topK: 4,
+      });
+      ragDocs = pipelineResult.docs;
+      ragDocsText = pipelineResult.contextText;
+      hasRagData = pipelineResult.hasData;
+      logger.info('RecommendationAgent', 'RAG pipeline result', {
+        hasData: pipelineResult.hasData,
+        docs: pipelineResult.docs.length,
+        dest: pipelineResult.destination,
+        latencyMs: pipelineResult.metadata.latencyMs,
+      });
     } catch (ragErr) {
-      console.warn('[RecommendationAgent] RAG retrieval failed:', ragErr);
+      console.warn('[RecommendationAgent] RAG pipeline failed:', ragErr);
     }
 
     // 3. Xây dựng phản hồi thông qua LLM
     try {
-      const antiHallucinationRule = (region && !hasRagData)
-        ? `LƯU Ý QUAN TRỌNG VỀ PHÒNG CHỐNG ĐÁP ÁN ẢO (RÂU ÔNG NỌ CẮM CẰM BÀ KIA): Hiện tại cơ sở dữ liệu SmartTravel của chúng ta CHƯA CÓ tài liệu tri thức chính thức cho tỉnh/thành phố "${region}". Bạn ĐƯỢC PHÉP sử dụng kiến thức chung (General Knowledge) thực tế, chính xác 100% của mình để gợi ý các địa điểm du lịch, vui chơi, ẩm thực và nếp sống thực tế ở "${region}". 
-TUYỆT ĐỐI CẤM: Không được tự ý gán ghép đặc sản của địa phương khác vào địa phương này (Ví dụ: Gỏi cá trích là đặc sản nổi tiếng của Phú Quốc/Kiên Giang, Bún sứa là đặc sản của Nha Trang/Khánh Hòa - TUYỆT ĐỐI KHÔNG ĐƯỢC giới thiệu chúng là đặc sản của Cần Thơ! Nếu là Cần Thơ, các món đặc sản thực tế phải là lẩu mắm, bánh cống, nem nướng Cái Răng, vịt nấu chao, cá lóc nướng trui). Hãy thông báo nhẹ cho người dùng biết đây là thông tin gợi ý tham khảo từ AI do hệ thống chưa có dữ liệu chính thức cho địa phương này. Tuyệt đối không bịa đặt các địa danh không có thật.`
-        : `Bạn CHỈ ĐƯỢC PHÉP gợi ý hoặc đề xuất các địa danh cụ thể có tên xuất hiện trong "Dữ liệu địa điểm gợi ý thô" hoặc "RAG Context" được cung cấp ở dưới. TUYỆT ĐỐI KHÔNG ĐƯỢC TỰ BỊA ĐẶT các địa danh không có thật, và KHÔNG ĐƯỢC đề xuất các địa điểm nằm ngoài "Dữ liệu địa điểm gợi ý thô" hoặc "RAG Context". Bạn phải sử dụng TÊN CHÍNH XÁC 100% của địa điểm như được viết trong cơ sở dữ liệu/Context. Không được tự ý bổ sung các hoạt động phi thực tế nằm ngoài nội dung tài liệu RAG Context.`;
-
-      const systemPrompt = `Bạn là RecommendationAgent - chuyên gia tư vấn du lịch cá nhân hóa của SmartTravel. 
-Nhiệm vụ của bạn là dựa vào sở thích của người dùng, danh sách các địa điểm trong cơ sở dữ liệu và các tài liệu tri thức (Context) để gợi ý các địa điểm du lịch lý tưởng tại Việt Nam.
-
-QUY TẮC PHẢN HỒI THEO NGỮ CẢNH:
-1. Nếu câu hỏi của người dùng có chỉ định một địa phương/tỉnh thành cụ thể (ví dụ: Vũng Tàu, Hà Nội...), bạn CHỈ ĐƯỢC PHÉP gợi ý các địa danh nằm trong địa phương đó. Tuyệt đối không được gợi ý hay pha trộn địa phương khác (ví dụ: nếu hỏi về Vũng Tàu, không được gợi ý Đồng Nai hay Cà Mau).
-2. Nếu câu hỏi của người dùng hướng tới một địa danh cụ thể hoặc một câu hỏi hẹp (ví dụ: hỏi riêng về "Bãi Sau"), hãy tập trung trả lời thẳng vào trọng tâm địa danh đó, không liệt kê thêm các đề xuất lựa chọn khác ngoài lề.
-3. Nếu người dùng hỏi chung chung không có địa điểm cụ thể (ví dụ: "nên đi du lịch ở đâu", "tư vấn điểm du lịch nghỉ dưỡng"), hãy đưa ra khoảng 2-3 gợi ý lựa chọn đa dạng tại các tỉnh thành khác nhau phù hợp với sở thích của họ.
-
-Mỗi gợi ý được đưa ra cần ghi rõ:
-- Tên địa điểm
-- Thể loại (ví dụ: Khám phá tự nhiên, Du lịch tâm linh, Nghỉ dưỡng, Ẩm thực,...)
-- Lý do đề xuất (giải thích chi tiết tại sao địa điểm này lại hợp với sở thích/mong muốn của người dùng)
-
-RÀNG BUỘC PHÒNG CHỐNG ĐÁP ÁN ẢO (ANTI-HALLUCINATION RULES):
-${antiHallucinationRule}
-
-Hãy trả lời thân thiện, nhiệt tình bằng tiếng Việt.`;
+      const systemPrompt = buildRecSystemPrompt(region, hasRagData, memory);
 
       const userPrompt = `Sở thích người dùng (Preferences): ${prefList}
 Các địa điểm yêu thích của họ: ${locList}
@@ -168,7 +143,8 @@ Câu hỏi/Yêu cầu mới nhất của người dùng: "${input}"`;
         console.warn('[RecommendationAgent] Warning: Detected potential unauthorized/hallucinated destinations, but returning response anyway to avoid empty/generic template fallback.');
       }
 
-      return llmResponse;
+      const citations = buildCitationsFromDocs(ragDocs);
+      return { response: llmResponse, citations };
     } catch (err) {
       console.warn('[RecommendationAgent] LLM call failed or rejected, falling back to static template response:', err);
     }
@@ -190,7 +166,7 @@ Câu hỏi/Yêu cầu mới nhất của người dùng: "${input}"`;
 
     response += `\nHy vọng những gợi ý chi tiết này sẽ giúp bạn lựa chọn được hành trình ưng ý nhất. Nếu bạn muốn lập lịch trình cụ thể hay tìm hiểu thêm về thời tiết, ẩm thực tại các điểm đến này, hãy cứ đặt câu hỏi cho tôi nhé!`;
 
-    return response;
+    return { response, citations: [] };
   }
 
   private async saveToolCall(messageId: string, toolName: string, input: any, output: any) {

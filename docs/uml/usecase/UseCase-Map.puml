@@ -1,0 +1,64 @@
+@startuml UseCase_Map
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Actors
+actor "Khách vãng lai\n(Guest)" as Guest
+actor "Khách du lịch\n(Tourist)" as Tourist
+
+' External Systems
+actor "OpenStreetMap" as OSM <<System>>
+actor "Geocoding API" as GeocodingAPI <<System>>
+
+' Actor Inheritance
+Tourist -|> Guest
+
+rectangle "Phân hệ Bản đồ Tương tác & GIS" {
+  usecase "Hiển thị bản đồ Leaflet" as UC_DisplayMap
+  usecase "Phóng to / Thu nhỏ bản đồ" as UC_Zoom
+  usecase "Di chuyển góc nhìn bản đồ" as UC_Pan
+  usecase "Chuyển đổi lớp bản đồ nền" as UC_LayerSwitch
+  
+  usecase "Tìm kiếm vị trí bản đồ" as UC_SearchLocation
+  usecase "Lọc danh mục điểm tham quan" as UC_FilterAttractions
+  usecase "Tìm địa điểm xung quanh" as UC_NearbySearch
+  
+  usecase "Hiển thị ghim marker địa điểm" as UC_DisplayMarker
+  usecase "Gôm nhóm ghim markers" as UC_ClusterMarker
+  usecase "Xem bản đồ nhiệt độ check-in" as UC_Heatmap
+  usecase "Xem chi tiết điểm tham quan" as UC_ViewAttractionDetail
+  
+  usecase "Xác định vị trí hiện tại" as UC_CurrentLocation
+  usecase "Địa mã hóa ngược (Tọa độ -> Địa chỉ)" as UC_ReverseGeocoding
+  usecase "Tính khoảng cách di chuyển" as UC_DistanceCalc
+  usecase "Xem chỉ đường lộ trình di chuyển" as UC_RouteNav
+}
+
+' Guest Associations
+Guest --> UC_DisplayMap
+Guest --> UC_Zoom
+Guest --> UC_Pan
+Guest --> UC_LayerSwitch
+Guest --> UC_SearchLocation
+Guest --> UC_FilterAttractions
+
+' Tourist Associations
+Tourist --> UC_NearbySearch
+Tourist --> UC_CurrentLocation
+Tourist --> UC_RouteNav
+
+' Relationships (include / extend)
+UC_DisplayMap ..> UC_DisplayMarker : <<include>>
+UC_DisplayMarker <.. UC_ClusterMarker : <<extend>>
+UC_DisplayMap <.. UC_Heatmap : <<extend>>
+UC_SearchLocation ..> UC_ReverseGeocoding : <<include>>
+UC_NearbySearch ..> UC_ReverseGeocoding : <<include>>
+UC_RouteNav ..> UC_DistanceCalc : <<include>>
+UC_DisplayMarker ..> UC_ViewAttractionDetail : <<extend>>
+
+' External System Associations
+UC_DisplayMap --> OSM
+UC_ReverseGeocoding --> GeocodingAPI
+@enduml

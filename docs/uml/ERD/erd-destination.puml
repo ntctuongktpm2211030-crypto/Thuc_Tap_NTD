@@ -1,0 +1,100 @@
+@startuml
+!startsub DESTINATION
+entity Destination {
+  * id : String <<PK>>
+  --
+  * name : String
+  description : String <<nullable>>
+  * latitude : Float <<index: lat, lng>>
+  * longitude : Float <<index: lat, lng>>
+  * category : String
+  * averageRating : Float
+  address : String <<nullable>>
+  openingHours : String <<nullable>>
+}
+
+entity SavedPlace {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * name : String
+  * category : String
+  * latitude : Float
+  * longitude : Float
+  address : String <<nullable>>
+  imageUrl : String <<nullable>>
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity CheckIn {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * destinationId : String <<FK>> <<index>>
+  note : String <<nullable>>
+  * createdAt : DateTime
+}
+
+entity Event {
+  * id : String <<PK>>
+  --
+  * title : String
+  description : String <<nullable>>
+  coverImageUrl : String <<nullable>>
+  destinationId : String <<FK>> <<nullable>>
+  * latitude : Float <<index: lat, lng>>
+  * longitude : Float <<index: lat, lng>>
+  * startDate : DateTime <<index>>
+  endDate : DateTime <<nullable>>
+  * category : String <<index>>
+  maxAttendees : Int <<nullable>>
+  * currentCount : Int
+  * organizerId : String <<FK>> <<index>>
+  * isPublic : Boolean
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity EventAttendee {
+  * id : String <<PK>>
+  --
+  * eventId : String <<FK>> <<unique: eventId, userId>>
+  * userId : String <<FK>> <<unique: eventId, userId>>
+  * status : String
+  * createdAt : DateTime
+}
+
+Destination ||--o{ CheckIn : "referenced in check-in"
+Destination ||--o{ Event : "hosts events"
+Event ||--o{ EventAttendee : "registers attendees"
+User ||--o{ CheckIn : "checks in"
+User ||--o{ SavedPlace : "saves places"
+User ||--o{ EventAttendee : "RSVPs events"
+User ||--o{ Event : "organizes events"
+!endsub
+
+!startsub DESTINATION_OVERVIEW
+entity Destination {
+  * id : String <<PK>>
+  --
+  * name : String
+  * latitude : Float
+  * longitude : Float
+  * category : String
+}
+
+entity Event {
+  * id : String <<PK>>
+  --
+  * title : String
+  destinationId : String <<FK>> <<nullable>>
+  * startDate : DateTime
+  * category : String
+  * organizerId : String <<FK>>
+}
+
+Destination ||--o{ Event : "hosts events"
+User ||--o{ Event : "organizes events"
+!endsub
+@enduml

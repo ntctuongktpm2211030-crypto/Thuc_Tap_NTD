@@ -1,0 +1,59 @@
+@startuml UseCase_Auth
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Actors
+actor "Khách vãng lai\n(Guest)" as Guest
+actor "Khách du lịch\n(Tourist)" as Tourist
+actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
+
+' External Systems
+actor "Google OAuth" as GoogleOAuth <<System>>
+actor "Email Service" as EmailService <<System>>
+
+' Actor Inheritance
+Tourist -|> Guest
+RegisteredUser -|> Tourist
+
+rectangle "Phân hệ Xác thực & Quản lý Hồ sơ" {
+  usecase "Đăng ký tài khoản" as UC_Register
+  usecase "Xác thực email" as UC_VerifyEmail
+  usecase "Đăng nhập truyền thống" as UC_Login
+  usecase "Đăng nhập qua Google" as UC_GoogleLogin
+  usecase "Đăng xuất tài khoản" as UC_Logout
+  usecase "Yêu cầu quên mật khẩu" as UC_ForgotPassword
+  usecase "Đặt lại mật khẩu mới" as UC_ResetPassword
+  usecase "Xem hồ sơ cá nhân" as UC_ViewProfile
+  usecase "Cập nhật thông tin cá nhân" as UC_UpdateProfile
+  usecase "Đổi mật khẩu bảo mật" as UC_ChangePassword
+  usecase "Quản lý ảnh đại diện" as UC_ManageAvatar
+  usecase "Quản lý sở thích du lịch" as UC_ManagePreferences
+}
+
+' Guest Associations
+Guest --> UC_Register
+Guest --> UC_Login
+Guest --> UC_GoogleLogin
+Guest --> UC_ForgotPassword
+
+' Tourist / Registered User Associations
+Tourist --> UC_ViewProfile
+RegisteredUser --> UC_Logout
+RegisteredUser --> UC_UpdateProfile
+RegisteredUser --> UC_ChangePassword
+RegisteredUser --> UC_ManageAvatar
+RegisteredUser --> UC_ManagePreferences
+
+' Relationships (include / extend)
+UC_Register ..> UC_VerifyEmail : <<include>>
+UC_ForgotPassword ..> UC_ResetPassword : <<include>>
+UC_UpdateProfile <.. UC_ManageAvatar : <<extend>>
+UC_UpdateProfile <.. UC_ManagePreferences : <<extend>>
+
+' External System Associations
+UC_Register --> EmailService
+UC_ForgotPassword --> EmailService
+UC_GoogleLogin --> GoogleOAuth
+@enduml

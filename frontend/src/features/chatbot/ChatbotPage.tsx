@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Send, User, Plus, Trash2, Brain, Star, RefreshCw,
-  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare
+  Send, User, Plus, Brain, Star, RefreshCw,
+  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare, BookOpen, ExternalLink, Trash2
 } from 'lucide-react';
 import { chatbotService, feedbackService, ChatConversation, ChatMessage, AIMemory } from '../../services/smartTravel.service';
 import { useLang } from '../../contexts/LanguageContext';
 import chatbotImg from '../../assets/chatbot.jpg';
 import loadingVideo from '../../../4278555227519042772.mp4';
+import MemoryManager from './MemoryManager';
 
 export default function ChatbotPage() {
   const { lang } = useLang();
@@ -25,16 +26,8 @@ export default function ChatbotPage() {
   // Memory State
   const [memory, setMemory] = useState<AIMemory | null>(null);
   const [showMemoryPanel, setShowMemoryPanel] = useState(false);
-  const [loadingMemory, setLoadingMemory] = useState(false);
-  const [editMemory, setEditMemory] = useState({
-    travelPreferences: '',
-    favoriteFoods: '',
-    budget: 'trung bình',
-    transportation: '',
-    favoriteLocations: '',
-  });
-
-  // Feedback State
+  // Citation State
+  const [showCitationModal, setShowCitationModal] = useState<{ messageId: string; citation: any } | null>(null);
   const [activeFeedbackMsgId, setActiveFeedbackMsgId] = useState<string | null>(null);
   const [feedbackRating, setFeedbackRating] = useState(5);
   const [feedbackComment, setFeedbackComment] = useState('');
@@ -61,7 +54,7 @@ export default function ChatbotPage() {
   const fetchConversations = async () => {
     setLoadingConvList(true);
     try {
-      const list = await chatbotService.getConversations();
+      const list = await chatbotService.LayDanhSachCuocHoiThoai();
       setConversations(list);
       // Automatically select first conversation if available
       if (list.length > 0 && !currentConversation) {
@@ -75,30 +68,18 @@ export default function ChatbotPage() {
   };
 
   const fetchMemory = async () => {
-    setLoadingMemory(true);
     try {
-      const mem = await chatbotService.getMemory();
+      const mem = await chatbotService.LayBoNhoAI();
       setMemory(mem);
-      if (mem) {
-        setEditMemory({
-          travelPreferences: mem.travelPreferences?.join(', ') || '',
-          favoriteFoods: mem.favoriteFoods?.join(', ') || '',
-          budget: mem.budget || 'trung bình',
-          transportation: mem.transportation?.join(', ') || '',
-          favoriteLocations: mem.favoriteLocations?.join(', ') || '',
-        });
-      }
     } catch (err) {
       console.error('Failed to fetch memory:', err);
-    } finally {
-      setLoadingMemory(false);
     }
   };
 
   const selectConversation = async (id: string) => {
     setLoadingConvDetail(true);
     try {
-      const detail = await chatbotService.getConversation(id);
+      const detail = await chatbotService.LayChiTietCuocHoiThoai(id);
       setCurrentConversation(detail);
       setMessages(detail.messages || []);
     } catch (err) {
@@ -129,12 +110,28 @@ export default function ChatbotPage() {
   const handleNewConversation = async () => {
     try {
       const title = vi ? 'Hội thoại mới' : 'New Chat';
-      const newConv = await chatbotService.createConversation(title);
+      const newConv = await chatbotService.TaoCuocHoiThoai(title);
       setConversations(prev => [newConv, ...prev]);
       setCurrentConversation(newConv);
       setMessages([]);
     } catch (err) {
       console.error('Failed to create conversation:', err);
+    }
+  };
+
+  const handleDeleteConversation = async (e: React.MouseEvent, conversationId: string) => {
+    e.stopPropagation();
+    if (!window.confirm(vi ? 'Bạn có chắc chắn muốn xóa lịch sử cuộc trò chuyện này?' : 'Are you sure you want to delete this chat history?')) return;
+    try {
+      await chatbotService.XoaCuocHoiThoai(conversationId);
+      setConversations(prev => prev.filter(c => c.id !== conversationId));
+      if (currentConversation?.id === conversationId) {
+        setCurrentConversation(null);
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error(err);
+      alert(vi ? 'Xóa lịch sử chat thất bại.' : 'Failed to delete chat history.');
     }
   };
 
@@ -147,7 +144,7 @@ export default function ChatbotPage() {
     if (!conv) {
       try {
         const title = inputMessage.substring(0, 30) + (inputMessage.length > 30 ? '...' : '');
-        conv = await chatbotService.createConversation(title);
+        conv = await chatbotService.TaoCuocHoiThoai(title);
         setConversations(prev => [conv!, ...prev]);
         setCurrentConversation(conv);
       } catch (err) {
@@ -170,7 +167,7 @@ export default function ChatbotPage() {
     setMessages(prev => [...prev, tempUserMsg]);
 
     try {
-      const response = await chatbotService.sendMessage(conv.id, userText);
+      const response = await chatbotService.GuiTinNhan(conv.id, userText);
       // Replace messages with the exact ones from server
       setMessages(prev => {
         const cleaned = prev.filter(m => !m.id.startsWith('temp-'));
@@ -188,57 +185,12 @@ export default function ChatbotPage() {
   const handleRegenerate = async (msgId: string) => {
     setLoadingMsg(true);
     try {
-      const updatedMsg = await chatbotService.regenerateResponse(msgId);
+      const updatedMsg = await chatbotService.TaoLaiPhanHoi(msgId);
       setMessages(prev => prev.map(m => m.id === msgId ? { ...m, versions: updatedMsg.versions } : m));
     } catch (err) {
       console.error('Failed to regenerate response:', err);
     } finally {
       setLoadingMsg(false);
-    }
-  };
-
-  const handleSaveMemory = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoadingMemory(true);
-    try {
-      const payload = {
-        travelPreferences: editMemory.travelPreferences.split(',').map(s => s.trim()).filter(Boolean),
-        favoriteFoods: editMemory.favoriteFoods.split(',').map(s => s.trim()).filter(Boolean),
-        budget: editMemory.budget,
-        transportation: editMemory.transportation.split(',').map(s => s.trim()).filter(Boolean),
-        favoriteLocations: editMemory.favoriteLocations.split(',').map(s => s.trim()).filter(Boolean),
-      };
-      const updated = await chatbotService.saveMemory(payload);
-      setMemory(updated);
-      alert(vi ? 'Cập nhật bộ nhớ AI thành công!' : 'AI Memory updated successfully!');
-      setShowMemoryPanel(false);
-    } catch (err) {
-      console.error('Failed to save memory:', err);
-      alert(vi ? 'Cập nhật bộ nhớ thất bại.' : 'Failed to update memory.');
-    } finally {
-      setLoadingMemory(false);
-    }
-  };
-
-  const handleDeleteMemory = async () => {
-    if (!confirm(vi ? 'Bạn chắc chắn muốn xóa bộ nhớ AI?' : 'Are you sure you want to delete AI memory?')) return;
-    setLoadingMemory(true);
-    try {
-      await chatbotService.deleteMemory();
-      setMemory(null);
-      setEditMemory({
-        travelPreferences: '',
-        favoriteFoods: '',
-        budget: 'trung bình',
-        transportation: '',
-        favoriteLocations: '',
-      });
-      alert(vi ? 'Đã xóa bộ nhớ AI thành công.' : 'AI Memory deleted successfully.');
-      setShowMemoryPanel(false);
-    } catch (err) {
-      console.error('Failed to delete memory:', err);
-    } finally {
-      setLoadingMemory(false);
     }
   };
 
@@ -283,9 +235,16 @@ export default function ChatbotPage() {
             transform: translateY(-8px) rotate(-4deg);
           }
         }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .animate-bot-sway {
           animation: bot-sway 4s ease-in-out infinite;
           transform-origin: bottom center;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
         }
       `}</style>
       
@@ -320,7 +279,7 @@ export default function ChatbotPage() {
                 <div
                   key={conv.id}
                   onClick={() => selectConversation(conv.id)}
-                  className={`w-full text-left p-3.5 rounded-xl cursor-pointer transition-all flex items-center justify-between border ${
+                  className={`w-full text-left p-3.5 rounded-xl cursor-pointer transition-all flex items-center justify-between border group ${
                     isActive
                       ? 'bg-[var(--gold-glow)]/10 border-[var(--gold)]/30 text-gold font-semibold shadow-sm'
                       : 'bg-transparent border-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -339,14 +298,13 @@ export default function ChatbotPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     <button
-                      type="button"
-                      onClick={(e) => handleDeleteConversation(conv.id, e)}
-                      className="p-1 rounded-lg text-[var(--text-muted)] hover:text-rose-500 hover:bg-rose-500/10 border-none bg-transparent cursor-pointer transition-all active:scale-95"
+                      onClick={(e) => handleDeleteConversation(e, conv.id)}
+                      className="p-1 text-[var(--text-muted)] hover:text-rose-500 rounded-md hover:bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 cursor-pointer z-10"
                       title={vi ? 'Xóa lịch sử chat' : 'Delete chat history'}
                     >
-                      <Trash2 size={13} />
+                      <Trash2 size={12} />
                     </button>
-                    <ChevronRight size={13} className={`opacity-60 transition-transform ${isActive ? 'text-gold translate-x-0.5' : ''}`} />
+                    <ChevronRight size={13} className={`opacity-60 transition-transform group-hover:translate-x-0.5 ${isActive ? 'text-gold' : ''}`} />
                   </div>
                 </div>
               );
@@ -505,6 +463,37 @@ export default function ChatbotPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Citations */}
+                      {!isUser && msg.citations && msg.citations.length > 0 && (
+                        <div className="mt-3 pt-2.5 border-t border-[var(--border-subtle)] space-y-1.5">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <BookOpen size={10} className="text-blue-400" />
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-blue-400">
+                              {vi ? 'Nguồn tham khảo' : 'Sources'} ({msg.citations.length})
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {msg.citations.slice(0, 3).map((cite) => (
+                              <button
+                                key={cite.id}
+                                onClick={() => setShowCitationModal({ messageId: msg.id, citation: cite })}
+                                className="group inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 hover:border-blue-500/30 transition-all text-[10px] text-blue-300 cursor-pointer"
+                                title={cite.title}
+                              >
+                                <span className="font-bold">[{cite.index}]</span>
+                                <span className="truncate max-w-[100px]">{cite.title}</span>
+                                <ExternalLink size={8} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </button>
+                            ))}
+                            {msg.citations.length > 3 && (
+                              <span className="text-[10px] text-blue-400/60 px-1 py-1">
+                                +{msg.citations.length - 3} {vi ? 'khác' : 'more'}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Metadata & Controls */}
@@ -585,6 +574,73 @@ export default function ChatbotPage() {
           </form>
         </div>
 
+        {/* ─── MODAL: CHI TIẾT NGUỒN THAM KHẢO (CITATION) ─── */}
+        {showCitationModal && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+            <div className="surface-elevated rounded-2xl p-5 border border-[var(--border-subtle)] w-full max-w-lg space-y-3.5 shadow-2xl relative">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 flex items-center justify-center border border-blue-500/20">
+                    <BookOpen size={13} className="text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+                      {vi ? 'Nguồn tham khảo' : 'Source'} [{showCitationModal.citation.index}]
+                    </h3>
+                    <span className="text-[10px] text-blue-400 font-medium">
+                      {showCitationModal.citation.category} · {vi ? 'Độ phù hợp' : 'Relevance'}: {(showCitationModal.citation.score * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCitationModal(null)}
+                  className="p-1 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer border-none"
+                >
+                  <XCircle size={16} />
+                </button>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                  {showCitationModal.citation.title}
+                </p>
+                
+                {/* Source attribution (if available) */}
+                {showCitationModal.citation.source && (
+                  <p className="text-[10px] text-[var(--text-muted)] italic">
+                    {showCitationModal.citation.source}
+                    {showCitationModal.citation.url && (
+                      <a
+                        href={showCitationModal.citation.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-1 underline hover:text-blue-400 transition-colors"
+                      >
+                        🔗
+                      </a>
+                    )}
+                  </p>
+                )}
+                
+                <div className="bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl p-3 max-h-48 overflow-y-auto">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                    {showCitationModal.citation.content}
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => setShowCitationModal(null)}
+                className="w-full py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-xs text-blue-400 font-semibold transition-all cursor-pointer"
+              >
+                {vi ? 'Đóng' : 'Close'}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* ─── MODAL: ĐÁNH GIÁ CÂU TRẢ LỜI (FEEDBACK) ─── */}
         {activeFeedbackMsgId && (
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
@@ -647,124 +703,17 @@ export default function ChatbotPage() {
         {/* ─── PANEL: BỘ NHỚ CÁ NHÂN (AI PREFERENCES MEMORY) ─── */}
         {showMemoryPanel && (
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
-            <div className="surface-elevated rounded-2xl p-6 border border-[var(--border-subtle)] w-full max-w-md space-y-4 shadow-2xl overflow-y-auto max-h-[90%]">
-              <div className="flex justify-between items-center border-b border-[var(--border-subtle)] pb-3">
-                <h3 className="font-editorial text-sm font-bold text-cream flex items-center gap-1.5">
-                  <Brain size={16} className="text-gold" />
-                  {vi ? 'Bộ nhớ Sở thích AI' : 'AI Preferences Memory'}
-                </h3>
-                {memory && (
-                  <button
-                    type="button"
-                    onClick={handleDeleteMemory}
-                    className="p-1 text-rose-500 hover:text-rose-400 border-none bg-transparent cursor-pointer"
-                    title={vi ? 'Xóa toàn bộ bộ nhớ' : 'Clear all memory'}
-                  >
-                    <Trash2 size={15} />
-                  </button>
-                )}
-              </div>
-
-              <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
-                {vi
-                  ? 'AI sẽ sử dụng thông tin này làm ngữ cảnh cá nhân để trả lời các câu hỏi về địa điểm, ăn uống và lên lịch trình phù hợp với phong cách của bạn.'
-                  : 'AI uses this personalization context to tailor its recommendations for attractions, food, and trip itineraries.'}
-              </p>
-
-              <form onSubmit={handleSaveMemory} className="space-y-3.5">
-                {/* Preferences */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
-                    {vi ? 'Sở thích du lịch (cách nhau bởi dấu phẩy)' : 'Travel Styles (comma separated)'}
-                  </label>
-                  <input
-                    type="text"
-                    value={editMemory.travelPreferences}
-                    onChange={e => setEditMemory({ ...editMemory, travelPreferences: e.target.value })}
-                    placeholder={vi ? 'Ví dụ: phượt, khám phá thiên nhiên, di tích lịch sử' : 'e.g. phượt, nature, heritage'}
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 text-xs text-cream focus:outline-none focus:border-[var(--gold)]"
-                  />
-                </div>
-
-                {/* Foods */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
-                    {vi ? 'Món ăn yêu thích (cách nhau bởi dấu phẩy)' : 'Favorite Foods (comma separated)'}
-                  </label>
-                  <input
-                    type="text"
-                    value={editMemory.favoriteFoods}
-                    onChange={e => setEditMemory({ ...editMemory, favoriteFoods: e.target.value })}
-                    placeholder={vi ? 'Ví dụ: phở, bánh mì, bún chả' : 'e.g. phở, bánh mì'}
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 text-xs text-cream focus:outline-none focus:border-[var(--gold)]"
-                  />
-                </div>
-
-                {/* Budget */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
-                    {vi ? 'Mức ngân sách dự kiến' : 'Estimated Budget Level'}
-                  </label>
-                  <select
-                    value={editMemory.budget || 'trung bình'}
-                    onChange={e => setEditMemory({ ...editMemory, budget: e.target.value })}
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3 py-2.5 text-xs text-cream focus:outline-none focus:border-[var(--gold)]"
-                  >
-                    <option value="thấp">{vi ? 'Tiết kiệm / Thấp' : 'Budget / Low'}</option>
-                    <option value="trung bình">{vi ? 'Phổ thông / Trung bình' : 'Moderate / Mid-range'}</option>
-                    <option value="cao">{vi ? 'Sang chảnh / Cao' : 'Luxury / High'}</option>
-                  </select>
-                </div>
-
-                {/* Transportation */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
-                    {vi ? 'Phương tiện di chuyển (cách nhau bởi dấu phẩy)' : 'Preferred Transports (comma separated)'}
-                  </label>
-                  <input
-                    type="text"
-                    value={editMemory.transportation}
-                    onChange={e => setEditMemory({ ...editMemory, transportation: e.target.value })}
-                    placeholder={vi ? 'Ví dụ: xe máy, xe bus, xe khách' : 'e.g. xe máy, bus'}
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 text-xs text-cream focus:outline-none focus:border-[var(--gold)]"
-                  />
-                </div>
-
-                {/* Favorite Locations */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">
-                    {vi ? 'Các địa danh yêu thích (cách nhau bởi dấu phẩy)' : 'Favorite Locations (comma separated)'}
-                  </label>
-                  <input
-                    type="text"
-                    value={editMemory.favoriteLocations}
-                    onChange={e => setEditMemory({ ...editMemory, favoriteLocations: e.target.value })}
-                    placeholder={vi ? 'Ví dụ: Hà Giang, Sapa, Hội An' : 'e.g. Hà Giang, Sapa'}
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 text-xs text-cream focus:outline-none focus:border-[var(--gold)]"
-                  />
-                </div>
-
-                <div className="flex gap-2 pt-2 border-t border-[var(--border-subtle)]">
-                  <button
-                    type="button"
-                    onClick={() => setShowMemoryPanel(false)}
-                    className="flex-1 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-cream cursor-pointer font-bold"
-                  >
-                    {vi ? 'Đóng lại' : 'Close'}
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loadingMemory}
-                    className="flex-1 py-2.5 rounded-xl btn-gold text-xs text-black font-extrabold cursor-pointer"
-                  >
-                    {loadingMemory ? (
-                      <Loader2 className="animate-spin inline" size={12} />
-                    ) : (
-                      vi ? 'Lưu bộ nhớ' : 'Save Memory'
-                    )}
-                  </button>
-                </div>
-              </form>
+            <div className="surface-elevated rounded-2xl border border-[var(--border-subtle)] w-full max-w-md shadow-2xl overflow-hidden max-h-[85vh]">
+              <MemoryManager
+                initialMemory={memory}
+                onClose={() => setShowMemoryPanel(false)}
+                onMemorySaved={(updated) => {
+                  setMemory(updated);
+                }}
+                onMemoryDeleted={() => {
+                  setMemory(null);
+                }}
+              />
             </div>
           </div>
         )}

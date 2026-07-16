@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+skinparam ranksep 90
+skinparam nodesep 80
+
+' Overview ERD including core entities from each domain
+
+!include erd-auth.puml!AUTH_OVERVIEW
+!include erd-user.puml!USER_OVERVIEW
+!include erd-destination.puml!DESTINATION_OVERVIEW
+!include erd-review.puml!REVIEW_OVERVIEW
+!include erd-media.puml!MEDIA_OVERVIEW
+!include erd-notification.puml!NOTIFICATION_OVERVIEW
+!include erd-admin.puml!ADMIN_OVERVIEW
+!include erd-history.puml!HISTORY_OVERVIEW
+
+@enduml

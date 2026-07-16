@@ -16,6 +16,8 @@ export interface MapLocation {
   category?: string;
   time?: string;
   address?: string;
+  imageUrl?: string;
+  tag?: string;
 }
 
 interface MapLibreMapProps {
@@ -139,13 +141,52 @@ const svgUserString = `
 </svg>
 `;
 
-const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boolean) => {
+const svgFoodString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#f97316">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm2.5 6c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-6.5.5V11H6.5v-2.5h-1c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h2.5c.28 0 .5.22.5.5v3.5c0 .28-.22.5-.5.5zm11 1.5v3c0 .55-.45 1-1 1h-1.5v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V12h-1c-.55 0-1-.45-1-1V7c0-.55.45-1 1-1H18c.28 0 .5.22.5.5v3.5c0 .28-.22.5-.5.5z"/>
+</svg>
+`;
+
+const svgHotelString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#a855f7">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm5 11c0 .55-.45 1-1 1h-2v1.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V14H9v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V12c0-.55.45-1 1-1h7c.55 0 1 .45 1 1z"/>
+</svg>
+`;
+
+const svgCafeString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#ec4899">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm4 10h-2V9.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12H9v-2.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12c0 .55.45 1 1 1h7c.55 0 1-.45 1-1z"/>
+</svg>
+`;
+
+const svgNatureString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#10b981">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1.75 8l-1.3-1.74c-.2-.27-.6-.27-.8 0L10.25 10H8.5c-.41 0-.75.34-.75.75s.34.75.75.75h1.15l1.05 1.4c.2.27.6.27.8 0l1.05-1.4h1.7c.41 0 .75-.34.75-.75s-.34-.75-.75-.75h-.5z"/>
+</svg>
+`;
+
+const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boolean, allLocations: MapLocation[] = []) => {
   const isCheckin = !!loc.user;
   const isLive = loc.id.startsWith('live-');
   const timeStr = loc.time ? `<p class="text-[10px] text-slate-400 mt-0.5">${loc.time}</p>` : '';
   const noteStr = loc.note ? `<p class="text-xs text-slate-300 italic mt-1.5">"${loc.note}"</p>` : '';
   
   const badge = isLive ? `<span class="text-[8px] bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded ml-1.5">Live</span>` : '';
+
+  // Tìm check-in mới nhất của người dùng này nếu đây là Marker Live Tracking
+  let finalImageUrl = loc.imageUrl || '';
+  if (isLive && !finalImageUrl && loc.user) {
+    const userCheckin = allLocations.find(l => l.id.startsWith('checkin-') && l.user === loc.user && l.imageUrl);
+    if (userCheckin) {
+      finalImageUrl = userCheckin.imageUrl || '';
+    }
+  }
+
+  const imageHtml = finalImageUrl 
+    ? `<div class="mt-2 rounded-lg overflow-hidden border border-slate-700 max-h-32 flex items-center justify-center bg-black/10">
+        <img src="${finalImageUrl}" class="w-full h-full object-cover" />
+       </div>`
+    : '';
 
   const headerHtml = isCheckin
     ? `
@@ -168,6 +209,7 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
     <div class="space-y-2.5 text-slate-100">
       ${headerHtml}
       ${noteStr}
+      ${imageHtml}
       <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1 mt-1">📍 ${loc.name || (isLive ? 'Live Tracking' : '')}</div>
       ${hasRouteCallback ? `
       <button 
@@ -261,7 +303,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     bearing: 0,
   });
 
-  // Sync center when prop changes
+  // Sync center and flyTo smoothly when prop changes
   const lastSyncedCenter = useRef<[number, number]>([0, 0]);
   useEffect(() => {
     const lat = Number(center[0]);
@@ -271,13 +313,23 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     const latDiff = Math.abs(lat - lastSyncedCenter.current[0]);
     const lngDiff = Math.abs(lng - lastSyncedCenter.current[1]);
 
-    if (latDiff > 0.001 || lngDiff > 0.001) {
+    if (latDiff > 0.0001 || lngDiff > 0.0001) {
       lastSyncedCenter.current = [lat, lng];
       setViewState(prev => ({
         ...prev,
         latitude: lat,
         longitude: lng,
       }));
+
+      const map = mapRef.current?.getMap();
+      if (map) {
+        map.flyTo({
+          center: [lng, lat],
+          zoom: 14,
+          essential: true,
+          duration: 1200
+        });
+      }
     }
   }, [center[0], center[1]]);
 
@@ -456,7 +508,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       category: loc.category,
       time: loc.time,
       note: loc.note,
-      isCheckin: !!loc.user,
+      isCheckin: !!loc.user && !loc.id.startsWith('live-'),
       isCurrentUser: loc.id.startsWith('live-current-user-'),
       isLive: loc.id.startsWith('live-') && !loc.id.startsWith('live-current-user-'),
       isRecommended: aiRecommendedIds.includes(loc.id),
@@ -498,8 +550,8 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
 
   // Mock Weather Stations Layer Data
   const weatherStations = [
-    { id: 'w1', name: 'Trạm trung tâm', temp: weatherDataState.temp, condition: weatherDataState.condition.toLowerCase().includes('rain') || weatherDataState.condition.toLowerCase().includes('mưa') ? '🌧️' : '☀️', lat: viewState.latitude + 0.015, lng: viewState.longitude - 0.015 },
-    { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherDataState.temp) - 1), condition: '☁️', lat: viewState.latitude - 0.015, lng: viewState.longitude + 0.015 }
+    { id: 'w1', name: 'Trạm trung tâm', temp: weatherDataState.temp || '28', condition: (weatherDataState.condition || '').toLowerCase().includes('rain') || (weatherDataState.condition || '').toLowerCase().includes('mưa') ? '🌧️' : '☀️', lat: viewState.latitude + 0.015, lng: viewState.longitude - 0.015 },
+    { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherDataState.temp || '28') - 1), condition: '☁️', lat: viewState.latitude - 0.015, lng: viewState.longitude + 0.015 }
   ];
 
   // Mock Traffic Congestion Indicators
@@ -610,16 +662,22 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           {/* 2. Markers View Mode */}
           {viewMode === 'markers' && 
             locations.map(loc => {
-              const isCheckin = !!loc.user;
-              const isLive = loc.id.startsWith('live-') && !loc.id.startsWith('live-current-user-');
               const isCurrentUser = loc.id.startsWith('live-current-user-');
+              const isLive = loc.id.startsWith('live-') && !isCurrentUser;
+              const isCheckin = !!loc.user && !isLive && !isCurrentUser;
               const isRecommended = aiRecommendedIds.includes(loc.id);
 
               let svg = svgGoldString;
-              if (isCheckin) svg = svgRedString;
-              if (isLive) svg = svgBlueString;
-              if (isCurrentUser) svg = svgUserString;
-              if (isRecommended) svg = svgGreenString;
+              if (isCheckin) {
+                svg = svgRedString;
+                if (loc.tag === 'food' || loc.category === 'restaurant') svg = svgFoodString;
+                else if (loc.tag === 'hotel' || loc.category === 'hotel') svg = svgHotelString;
+                else if (loc.tag === 'cafe' || loc.category === 'cafe') svg = svgCafeString;
+                else if (loc.tag === 'nature' || loc.category === 'nature') svg = svgNatureString;
+              }
+              else if (isLive) svg = svgBlueString;
+              else if (isCurrentUser) svg = svgUserString;
+              else if (isRecommended) svg = svgGreenString;
 
               return (
                 <Marker
@@ -630,6 +688,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                     e.originalEvent.stopPropagation();
                     setActivePopup(loc);
                     if (onSelectLocation) onSelectLocation(loc);
+                    const map = mapRef.current?.getMap();
+                    if (map) {
+                      map.easeTo({
+                        center: [loc.lng, loc.lat],
+                        duration: 600
+                      });
+                    }
                   }}
                   anchor="bottom"
                 >
@@ -658,6 +723,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                   note: warn.description,
                   category: 'SAFETY_WARNING'
                 });
+                const map = mapRef.current?.getMap();
+                if (map) {
+                  map.easeTo({
+                    center: [warn.longitude, warn.latitude],
+                    duration: 600
+                  });
+                }
               }}
               anchor="center"
             >
@@ -682,6 +754,13 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                   category: `LỄ HỘI: ${evt.category.toUpperCase()}`,
                   time: new Date(evt.startDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')
                 });
+                const map = mapRef.current?.getMap();
+                if (map) {
+                  map.easeTo({
+                    center: [evt.longitude, evt.latitude],
+                    duration: 600
+                  });
+                }
               }}
               anchor="bottom"
             >
@@ -830,7 +909,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             >
               <div 
                 className="space-y-2.5 text-white" 
-                dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi, !!onAddPointToRoute) }} 
+                dangerouslySetInnerHTML={{ __html: createPopupContent(activePopup, vi, !!onAddPointToRoute, locations) }} 
               />
             </Popup>
           )}

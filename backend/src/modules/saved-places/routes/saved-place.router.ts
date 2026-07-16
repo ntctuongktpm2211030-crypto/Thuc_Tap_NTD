@@ -9,9 +9,9 @@ import {
 const router = Router();
 const controller = new SavedPlaceController();
 
-router.post('/', requireAuth, validateCreateSavedPlace, controller.create);
-router.get('/', requireAuth, controller.list);
-router.put('/:id', requireAuth, validateUpdateSavedPlace, controller.update);
-router.delete('/:id', requireAuth, controller.delete);
+router.post('/', requireAuth, validateCreateSavedPlace, controller.TaoDiaDiemDaLuu);
+router.get('/', requireAuth, controller.LayDanhSachDiaDiemDaLuu);
+router.put('/:id', requireAuth, validateUpdateSavedPlace, controller.CapNhatDiaDiemDaLuu);
+router.delete('/:id', requireAuth, controller.XoaDiaDiemDaLuu);
 
 export default router;

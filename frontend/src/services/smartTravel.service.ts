@@ -72,187 +72,209 @@ export interface Destination {
 // AUTH
 // ─────────────────────────────────────────────────────────
 export const authService = {
-  register: (payload: RegisterPayload) =>
+  DangKy: (payload: RegisterPayload) =>
     apiClient.post<AuthResponse>('/auth/register', payload).then(r => r.data),
 
-  login: (payload: LoginPayload) =>
+  DangNhap: (payload: LoginPayload) =>
     apiClient.post<AuthResponse>('/auth/login', payload).then(r => r.data),
 
-  loginWithGoogle: (idToken: string) =>
+  DangNhapGoogle: (idToken: string) =>
     apiClient.post<AuthResponse>('/auth/google', { idToken }).then(r => r.data),
 
-  refreshToken: (refreshToken: string) =>
+  LamMoiToken: (refreshToken: string) =>
     apiClient.post<{ accessToken: string }>('/auth/refresh', { refreshToken }).then(r => r.data),
 
-  me: () =>
+  LayThongTinCaNhan: () =>
     apiClient.get<CurrentUser>('/auth/me').then(r => r.data),
 
-  /** Persist tokens and user in localStorage */
-  saveSession: (res: AuthResponse) => {
+  LuuPhienDangNhap: (res: AuthResponse) => {
     localStorage.setItem('accessToken', res.accessToken);
     localStorage.setItem('refreshToken', res.refreshToken);
     localStorage.setItem('user', JSON.stringify(res.user));
   },
 
-  clearSession: () => {
+  XoaPhienDangNhap: () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
   },
 
-  getStoredUser: () => {
+  LayUserDaLuu: () => {
     const raw = localStorage.getItem('user');
     return raw ? JSON.parse(raw) : null;
   },
 
-  isLoggedIn: () => !!localStorage.getItem('accessToken'),
+  DaDangNhap: () => !!localStorage.getItem('accessToken'),
+
+  // Alias tương thích ngược
+  register: (payload: RegisterPayload) => authService.DangKy(payload),
+  login: (payload: LoginPayload) => authService.DangNhap(payload),
+  loginWithGoogle: (idToken: string) => authService.DangNhapGoogle(idToken),
+  refreshToken: (refreshToken: string) => authService.LamMoiToken(refreshToken),
+  me: () => authService.LayThongTinCaNhan(),
+  saveSession: (res: AuthResponse) => authService.LuuPhienDangNhap(res),
+  clearSession: () => authService.XoaPhienDangNhap(),
+  getStoredUser: () => authService.LayUserDaLuu(),
+  isLoggedIn: () => authService.DaDangNhap(),
 };
 
 // ─────────────────────────────────────────────────────────
 // TRIPS
 // ─────────────────────────────────────────────────────────
 export const tripsService = {
-  list: () => apiClient.get('/trips').then(r => r.data),
-
-  get: (id: string) => apiClient.get(`/trips/${id}`).then(r => r.data),
-
-  create: (data: any) => apiClient.post('/trips', data).then(r => r.data),
-
-  update: (id: string, data: any) => apiClient.put(`/trips/${id}`, data).then(r => r.data),
-
-  delete: (id: string) => apiClient.delete(`/trips/${id}`),
-
-  /** Generate AI itinerary via backend GPT-4o-mini integration */
-  aiGenerate: (payload: AIGeneratePayload) =>
+  LayDanhSachChuyenDi: () => apiClient.get('/trips').then(r => r.data),
+  LayChiTietChuyenDi: (id: string) => apiClient.get(`/trips/${id}`).then(r => r.data),
+  TaoChuyenDi: (data: any) => apiClient.post('/trips', data).then(r => r.data),
+  CapNhatChuyenDi: (id: string, data: any) => apiClient.put(`/trips/${id}`, data).then(r => r.data),
+  XoaChuyenDi: (id: string) => apiClient.delete(`/trips/${id}`),
+  TaoChuyenDiBangAI: (payload: AIGeneratePayload) =>
     apiClient.post('/trips/ai-generate', payload).then(r => r.data),
-
-  /** Regenerate specific day or session using AI */
-  aiRegeneratePart: (payload: any) =>
+  TaoLaiMotPhanChuyenDiBangAI: (payload: any) =>
     apiClient.post('/trips/ai-regenerate-part', payload).then(r => r.data),
-
-  /** TSP route optimization via backend algorithm */
-  optimizeRoute: (waypoints: Waypoint[]) =>
+  ToiUuDuongDi: (waypoints: Waypoint[]) =>
     apiClient.post('/trips/optimize-route', { waypoints }).then(r => r.data),
-
-  clone: (tripId: string) => apiClient.post(`/trips/${tripId}/clone`).then(r => r.data),
-
-  discoverPublic: (params?: { destination?: string; page?: number }) =>
+  SaoChepChuyenDi: (tripId: string) => apiClient.post(`/trips/${tripId}/clone`).then(r => r.data),
+  KhamPhaChuyenDiCongKhai: (params?: { destination?: string; page?: number }) =>
     apiClient.get('/trips/discover/public', { params }).then(r => r.data),
+
+  // Alias tương thích ngược
+  list: () => tripsService.LayDanhSachChuyenDi(),
+  get: (id: string) => tripsService.LayChiTietChuyenDi(id),
+  create: (data: any) => tripsService.TaoChuyenDi(data),
+  update: (id: string, data: any) => tripsService.CapNhatChuyenDi(id, data),
+  delete: (id: string) => tripsService.XoaChuyenDi(id),
+  aiGenerate: (payload: AIGeneratePayload) => tripsService.TaoChuyenDiBangAI(payload),
+  aiRegeneratePart: (payload: any) => tripsService.TaoLaiMotPhanChuyenDiBangAI(payload),
+  optimizeRoute: (waypoints: Waypoint[]) => tripsService.ToiUuDuongDi(waypoints),
+  clone: (tripId: string) => tripsService.SaoChepChuyenDi(tripId),
+  discoverPublic: (params?: { destination?: string; page?: number }) => tripsService.KhamPhaChuyenDiCongKhai(params),
 };
 
 // ─────────────────────────────────────────────────────────
 // POSTS (Blog)
 // ─────────────────────────────────────────────────────────
 export const postsService = {
-  feed: (params?: { page?: number; limit?: number; q?: string }) =>
+  LayBangTinBaiViet: (params?: { page?: number; limit?: number; q?: string }) =>
     apiClient.get<{ posts: Post[]; pagination: any }>('/posts', { params }).then(r => r.data),
-
-  get: (id: string) => apiClient.get<Post>(`/posts/${id}`).then(r => r.data),
-
-  create: (data: { content: string; mediaUrls?: string[]; tripId?: string }) =>
+  LayChiTietBaiViet: (id: string) => apiClient.get<Post>(`/posts/${id}`).then(r => r.data),
+  TaoBaiViet: (data: { content: string; mediaUrls?: string[]; tripId?: string }) =>
     apiClient.post<Post>('/posts', data).then(r => r.data),
-
-  updatePost: (id: string, data: { content: string; mediaUrls?: string[] }) =>
+  CapNhatBaiViet: (id: string, data: { content: string; mediaUrls?: string[] }) =>
     apiClient.put<Post>(`/posts/${id}`, data).then(r => r.data),
-
-  delete: (id: string) => apiClient.delete(`/posts/${id}`),
-
-  toggleLike: (id: string) =>
+  XoaBaiViet: (id: string) => apiClient.delete(`/posts/${id}`),
+  ThichHoacBoThich: (id: string) =>
     apiClient.post<{ liked: boolean }>(`/posts/${id}/like`).then(r => r.data),
-
-  toggleBookmark: (id: string) =>
+  LuuHoacBoLuu: (id: string) =>
     apiClient.post<{ bookmarked: boolean }>(`/posts/${id}/bookmark`).then(r => r.data),
-
-  getComments: (id: string) =>
+  LayBinhLuan: (id: string) =>
     apiClient.get<Comment[]>(`/posts/${id}/comments`).then(r => r.data),
-
-  addComment: (id: string, content: string, parentId?: string) =>
+  ThemBinhLuan: (id: string, content: string, parentId?: string) =>
     apiClient.post<Comment>(`/posts/${id}/comments`, { content, parentId }).then(r => r.data),
+  LayBaiVietDaLuuCuaToi: () => apiClient.get<Post[]>('/posts/bookmarks/mine').then(r => r.data),
 
-  myBookmarks: () => apiClient.get<Post[]>('/posts/bookmarks/mine').then(r => r.data),
+  // Alias tương thích ngược
+  feed: (params?: { page?: number; limit?: number; q?: string }) => postsService.LayBangTinBaiViet(params),
+  get: (id: string) => postsService.LayChiTietBaiViet(id),
+  create: (data: { content: string; mediaUrls?: string[]; tripId?: string }) => postsService.TaoBaiViet(data),
+  updatePost: (id: string, data: { content: string; mediaUrls?: string[] }) => postsService.CapNhatBaiViet(id, data),
+  delete: (id: string) => postsService.XoaBaiViet(id),
+  toggleLike: (id: string) => postsService.ThichHoacBoThich(id),
+  toggleBookmark: (id: string) => postsService.LuuHoacBoLuu(id),
+  getComments: (id: string) => postsService.LayBinhLuan(id),
+  addComment: (id: string, content: string, parentId?: string) => postsService.ThemBinhLuan(id, content, parentId),
+  myBookmarks: () => postsService.LayBaiVietDaLuuCuaToi(),
 };
 
 // ─────────────────────────────────────────────────────────
 // MAP / GIS
 // ─────────────────────────────────────────────────────────
 export const mapService = {
-  checkIn: (destinationId: string, note?: string) =>
+  DiemDanh: (destinationId: string, note?: string) =>
     apiClient.post('/map/checkin', { destinationId, note }).then(r => r.data),
-
-  recentCheckins: (limit?: number) =>
+  DiemDanhGanDay: (limit?: number) =>
     apiClient.get('/map/checkins', { params: { limit } }).then(r => r.data),
-
-  nearbyCheckins: (lat: number, lng: number, radius?: number) =>
+  DiemDanhLanCan: (lat: number, lng: number, radius?: number) =>
     apiClient.get('/map/checkins/nearby', { params: { lat, lng, radius } }).then(r => r.data),
-
-  updateLocation: (latitude: number, longitude: number) =>
+  CapNhatToaDo: (latitude: number, longitude: number) =>
     apiClient.put('/map/location', { latitude, longitude }).then(r => r.data),
-
-  friendsLocations: () => apiClient.get('/map/friends-locations').then(r => r.data),
-
-  destinations: (params?: { lat?: number; lng?: number; radius?: number }) =>
+  ToaDoBanBe: () => apiClient.get('/map/friends-locations').then(r => r.data),
+  LayDanhSachDiemDen: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get<Destination[]>('/map/destinations', { params }).then(r => r.data),
-
-  safetyWarnings: (params?: { lat?: number; lng?: number; radius?: number }) =>
+  CanhBaoAnToan: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get('/map/safety-warnings', { params }).then(r => r.data),
-
-  events: (params?: { lat?: number; lng?: number; radius?: number }) =>
+  LayDanhSachSuKien: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get('/map/events', { params }).then(r => r.data),
-
-  weather: (params: { location: string }) =>
+  LayThongTinThoiTiet: (params: { location: string }) =>
     apiClient.get<{ status: string; temperature: string; condition: string }>('/map/weather', { params }).then(r => r.data),
-
-  aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
+  DeXuatDiaDiemAI: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
     apiClient.get('/map/ai-recommendations', { params }).then(r => r.data),
-
-  aiAssistant: (destinationId: string, question: string) =>
+  TroLyDiaDiemAI: (destinationId: string, question: string) =>
     apiClient.post('/map/ai-assistant', { destinationId, question }).then(r => r.data),
+
+  // Alias tương thích ngược
+  checkIn: (destinationId: string, note?: string) => mapService.DiemDanh(destinationId, note),
+  recentCheckins: (limit?: number) => mapService.DiemDanhGanDay(limit),
+  nearbyCheckins: (lat: number, lng: number, radius?: number) => mapService.DiemDanhLanCan(lat, lng, radius),
+  updateLocation: (latitude: number, longitude: number) => mapService.CapNhatToaDo(latitude, longitude),
+  friendsLocations: () => mapService.ToaDoBanBe(),
+  destinations: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachDiemDen(params),
+  safetyWarnings: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.CanhBaoAnToan(params),
+  events: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachSuKien(params),
+  weather: (params: { location: string }) => mapService.LayThongTinThoiTiet(params),
+  aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) => mapService.DeXuatDiaDiemAI(params),
+  aiAssistant: (destinationId: string, question: string) => mapService.TroLyDiaDiemAI(destinationId, question),
 };
 
 // ─────────────────────────────────────────────────────────
 // RECOMMENDATIONS
 // ─────────────────────────────────────────────────────────
 export const recommendationsService = {
-  forMe: (limit?: number) =>
+  DeXuatChoToi: (limit?: number) =>
     apiClient.get<Destination[]>('/recommendations', { params: { limit } }).then(r => r.data),
-
-  nearby: (lat: number, lng: number, radius?: number, limit?: number) =>
+  DeXuatLanCan: (lat: number, lng: number, radius?: number, limit?: number) =>
     apiClient.get<Destination[]>('/recommendations/nearby', { params: { lat, lng, radius, limit } }).then(r => r.data),
-
-  destinations: (params?: { category?: string; q?: string; page?: number }) =>
+  LayDanhSachDiemDenDeXuat: (params?: { category?: string; q?: string; page?: number }) =>
     apiClient.get('/recommendations/destinations', { params }).then(r => r.data),
+
+  // Alias tương thích ngược
+  forMe: (limit?: number) => recommendationsService.DeXuatChoToi(limit),
+  nearby: (lat: number, lng: number, radius?: number, limit?: number) => recommendationsService.DeXuatLanCan(lat, lng, radius, limit),
+  destinations: (params?: { category?: string; q?: string; page?: number }) => recommendationsService.LayDanhSachDiemDenDeXuat(params),
 };
 
 // ─────────────────────────────────────────────────────────
 // SOCIAL
 // ─────────────────────────────────────────────────────────
 export const socialService = {
-  getProfile: (userId: string) =>
+  LayThongTinHauDai: (userId: string) =>
     apiClient.get(`/social/profile/${userId}`).then(r => r.data),
-
-  updateProfile: (data: { fullName?: string; bio?: string; avatarUrl?: string; coverUrl?: string; homeLocation?: string }) =>
+  CapNhatHauDai: (data: { fullName?: string; bio?: string; avatarUrl?: string; coverUrl?: string; homeLocation?: string }) =>
     apiClient.put('/social/profile', data).then(r => r.data),
-
-  toggleFollow: (targetUserId: string) =>
+  TheoDoiNguoiDung: (targetUserId: string) =>
     apiClient.post<{ following: boolean }>(`/social/follow/${targetUserId}`).then(r => r.data),
-
-  getFollowers: (userId: string) =>
+  LayNguoiTheoDoi: (userId: string) =>
     apiClient.get(`/social/followers/${userId}`).then(r => r.data),
-
-  getFollowing: (userId: string) =>
+  LayDangTheoDoi: (userId: string) =>
     apiClient.get(`/social/following/${userId}`).then(r => r.data),
-
-  notifications: () =>
+  LayThongBao: () =>
     apiClient.get('/social/notifications').then(r => r.data),
-
-  markAllRead: () =>
+  DanhDauDaDocTatCa: () =>
     apiClient.put('/social/notifications/read-all').then(r => r.data),
-
-  updatePreferences: (prefs: Partial<TravelPreferences>) =>
+  CapNhatSoThichDuLich: (prefs: Partial<TravelPreferences>) =>
     apiClient.put('/social/preferences', prefs).then(r => r.data),
-
-  searchUsers: (q: string) =>
+  TimKiemNguoiDung: (q: string) =>
     apiClient.get('/social/search', { params: { q } }).then(r => r.data),
+
+  // Alias tương thích ngược
+  getProfile: (userId: string) => socialService.LayThongTinHauDai(userId),
+  updateProfile: (data: { fullName?: string; bio?: string; avatarUrl?: string; coverUrl?: string; homeLocation?: string }) => socialService.CapNhatHauDai(data),
+  toggleFollow: (targetUserId: string) => socialService.TheoDoiNguoiDung(targetUserId),
+  getFollowers: (userId: string) => socialService.LayNguoiTheoDoi(userId),
+  getFollowing: (userId: string) => socialService.LayDangTheoDoi(userId),
+  notifications: () => socialService.LayThongBao(),
+  markAllRead: () => socialService.DanhDauDaDocTatCa(),
+  updatePreferences: (prefs: Partial<TravelPreferences>) => socialService.CapNhatSoThichDuLich(prefs),
+  searchUsers: (q: string) => socialService.TimKiemNguoiDung(q),
 };
 
 // ─────────────────────────────────────────────────────────
@@ -282,6 +304,31 @@ export interface AIFeedback {
   createdAt: string;
 }
 
+export interface Citation {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  score: number;
+  similarity?: number;
+  index: number;
+  source?: string;
+  url?: string;
+}
+
+export interface PlaceInfo {
+  name: string;
+  shortDescription: string;
+  highlights: string[];
+  activities: string[];
+  suitableFor: string[];
+  visitDuration: string;
+  bestSeason: string;
+  distance: string;
+  category: string;
+  citationIndex: number;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant' | 'system';
@@ -289,6 +336,17 @@ export interface ChatMessage {
   versions: ChatMessageVersion[];
   feedback?: AIFeedback | null;
   toolCalls?: ToolCall[];
+  citations?: Citation[];
+  places?: PlaceInfo[];
+  suggestions?: string[];
+  metadata?: {
+    intent: string | null;
+    destination: string | null;
+    hasRagData: boolean;
+    agentUsed: string;
+    latencyMs: number;
+    planGenerated: boolean;
+  };
 }
 
 export interface ChatConversation {
@@ -312,31 +370,34 @@ export interface AIMemory {
 }
 
 export const chatbotService = {
-  getConversations: () =>
+  LayDanhSachCuocHoiThoai: () =>
     apiClient.get<ChatConversation[]>('/chatbot/conversations').then(r => r.data),
 
-  getConversation: (id: string) =>
+  LayChiTietCuocHoiThoai: (id: string) =>
     apiClient.get<ChatConversation>(`/chatbot/conversations/${id}`).then(r => r.data),
 
-  createConversation: (title?: string) =>
+  XoaCuocHoiThoai: (id: string) =>
+    apiClient.delete(`/chatbot/conversations/${id}`).then(r => r.data),
+
+  TaoCuocHoiThoai: (title?: string) =>
     apiClient.post<ChatConversation>('/chatbot/conversations', { title }).then(r => r.data),
 
-  sendMessage: (conversationId: string, content: string) =>
+  GuiTinNhan: (conversationId: string, content: string) =>
     apiClient.post<{ userMessage: ChatMessage; assistantMessage: ChatMessage }>(
       `/chatbot/conversations/${conversationId}/messages`,
       { content }
     ).then(r => r.data),
 
-  regenerateResponse: (messageId: string) =>
+  TaoLaiPhanHoi: (messageId: string) =>
     apiClient.post<ChatMessage>(`/chatbot/messages/${messageId}/regenerate`).then(r => r.data),
 
-  getMemory: () =>
+  LayBoNhoAI: () =>
     apiClient.get<AIMemory>('/chatbot/memory').then(r => r.data),
 
-  saveMemory: (data: Partial<AIMemory>) =>
+  LuuBoNhoAI: (data: Partial<AIMemory>) =>
     apiClient.post<AIMemory>('/chatbot/memory', data).then(r => r.data),
 
-  deleteMemory: () =>
+  XoaBoNhoAI: () =>
     apiClient.delete('/chatbot/memory').then(r => r.data),
 
   deleteConversation: (id: string) =>
@@ -347,10 +408,13 @@ export const chatbotService = {
 // FEEDBACK
 // ─────────────────────────────────────────────────────────
 export const feedbackService = {
-  create: (data: { messageId: string; rating: number; comment?: string }) =>
+  TaoPhanHoi: (data: { messageId: string; rating: number; comment?: string }) =>
     apiClient.post('/feedback', data).then(r => r.data),
 
-  update: (id: string, data: { rating: number; comment?: string }) =>
+  CapNhatPhanHoi: (id: string, data: { rating: number; comment?: string }) =>
     apiClient.put(`/feedback/${id}`, data).then(r => r.data),
-};
 
+  // Alias tương thích ngược
+  create: (data: { messageId: string; rating: number; comment?: string }) => feedbackService.TaoPhanHoi(data),
+  update: (id: string, data: { rating: number; comment?: string }) => feedbackService.CapNhatPhanHoi(id, data),
+};

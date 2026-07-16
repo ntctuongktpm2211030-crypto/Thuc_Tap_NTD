@@ -469,23 +469,23 @@ export const FEED_DISPLAY_OPTIONS: {
   {
     id: 'social',
     label: 'Chia sẻ nhanh',
-    authorStyle: 'Linh Trần',
-    description: 'Caption ngắn, 1–2 ảnh, mẹo check-in — hiển thị dạng bài mạng xã hội.',
+    authorStyle: 'Mạng xã hội',
+    description: 'Caption ngắn, tối đa 3 ảnh, mẹo check-in — hiển thị dạng bài mạng xã hội.',
     hint: 'Phù hợp cập nhật nhanh, tip thực tế tại chỗ.',
   },
   {
     id: 'magazine',
     label: 'Bài magazine',
-    authorStyle: 'Sarah Miller',
-    description: 'Ảnh bìa, tiêu đề editorial, tóm tắt — thẻ bài ấn phẩm trên bảng tin.',
+    authorStyle: 'Ấn phẩm tạp chí',
+    description: 'Ảnh bìa, tiêu đề, tóm tắt — thẻ bài ấn phẩm trên bảng tin.',
     hint: 'Cần tiêu đề, tóm tắt (≥40 ký tự) và ảnh bìa.',
   },
   {
     id: 'hero',
     label: 'Bài nổi bật',
-    authorStyle: 'Minh Quân Nguyễn',
-    description: 'Full-bleed, Editor\'s Pick — bài dài, ảnh đẹp, có thể đề cử nổi bật.',
-    hint: 'Tóm tắt dài hơn (≥80 ký tự), nội dung phong phú.',
+    authorStyle: 'Hành trình nổi bật',
+    description: 'Bố cục toàn màn hình, bài dài, ảnh đẹp, nổi bật toàn trang.',
+    hint: 'Tóm tắt dài hơn (≥80 ký tự), nội dung chi tiết phong phú.',
   },
 ];
 
