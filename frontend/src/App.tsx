@@ -445,9 +445,7 @@ function App() {
             </div>
             <span className="font-editorial text-sm text-[var(--text-secondary)]">{t('footer.thesis')}</span>
           </div>
-          <div className="text-[10px] text-[var(--text-muted)] flex gap-4">
-            <span>{t('footer.built')}</span>
-          </div>
+
         </div>
       </footer>
       )}

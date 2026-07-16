@@ -31,6 +31,7 @@ export default function ChatbotPage() {
   const [activeFeedbackMsgId, setActiveFeedbackMsgId] = useState<string | null>(null);
   const [feedbackRating, setFeedbackRating] = useState(5);
   const [feedbackComment, setFeedbackComment] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,23 +90,7 @@ export default function ChatbotPage() {
     }
   };
 
-  const handleDeleteConversation = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!window.confirm(vi ? 'Bạn có chắc chắn muốn xóa cuộc hội thoại này?' : 'Are you sure you want to delete this conversation?')) {
-      return;
-    }
-    try {
-      await chatbotService.deleteConversation(id);
-      setConversations(prev => prev.filter(c => c.id !== id));
-      if (currentConversation?.id === id) {
-        setCurrentConversation(null);
-        setMessages([]);
-      }
-    } catch (err) {
-      console.error('Failed to delete conversation:', err);
-      alert(vi ? 'Không thể xóa cuộc hội thoại.' : 'Failed to delete conversation.');
-    }
-  };
+
 
   const handleNewConversation = async () => {
     try {
@@ -119,9 +104,15 @@ export default function ChatbotPage() {
     }
   };
 
-  const handleDeleteConversation = async (e: React.MouseEvent, conversationId: string) => {
+  const handleDeleteConversation = (e: React.MouseEvent, conversationId: string) => {
     e.stopPropagation();
-    if (!window.confirm(vi ? 'Bạn có chắc chắn muốn xóa lịch sử cuộc trò chuyện này?' : 'Are you sure you want to delete this chat history?')) return;
+    setDeleteConfirmId(conversationId);
+  };
+
+  const confirmDeleteConversation = async () => {
+    if (!deleteConfirmId) return;
+    const conversationId = deleteConfirmId;
+    setDeleteConfirmId(null);
     try {
       await chatbotService.XoaCuocHoiThoai(conversationId);
       setConversations(prev => prev.filter(c => c.id !== conversationId));
@@ -137,23 +128,9 @@ export default function ChatbotPage() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || loadingMsg) return;
 
-    let conv = currentConversation;
-    // Create new conversation if none is active
-    if (!conv) {
-      try {
-        const title = inputMessage.substring(0, 30) + (inputMessage.length > 30 ? '...' : '');
-        conv = await chatbotService.TaoCuocHoiThoai(title);
-        setConversations(prev => [conv!, ...prev]);
-        setCurrentConversation(conv);
-      } catch (err) {
-        console.error('Failed to auto-create conversation:', err);
-        return;
-      }
-    }
-
-    const userText = inputMessage;
+    const userText = inputMessage.trim();
     setInputMessage('');
     setLoadingMsg(true);
 
@@ -167,16 +144,31 @@ export default function ChatbotPage() {
     setMessages(prev => [...prev, tempUserMsg]);
 
     try {
+      let conv = currentConversation;
+      if (!conv) {
+        const title = userText.substring(0, 30) + (userText.length > 30 ? '...' : '');
+        conv = await chatbotService.TaoCuocHoiThoai(title);
+        setConversations(prev => [conv!, ...prev]);
+        setCurrentConversation(conv);
+      }
+
       const response = await chatbotService.GuiTinNhan(conv.id, userText);
       // Replace messages with the exact ones from server
       setMessages(prev => {
         const cleaned = prev.filter(m => !m.id.startsWith('temp-'));
         return [...cleaned, response.userMessage, response.assistantMessage];
       });
-      // Refresh conversation list to show correct latest update time/last message
+      // Refresh conversation list
       fetchConversations();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to send message:', err);
+      // Restore input text
+      setInputMessage(userText);
+      // Remove optimistic message
+      setMessages(prev => prev.filter(m => !m.id.startsWith('temp-')));
+      // Show descriptive alert
+      const errMsg = err.response?.data?.error || err.message || (vi ? 'Không thể gửi tin nhắn. Vui lòng thử lại.' : 'Failed to send message. Please try again.');
+      alert(errMsg);
     } finally {
       setLoadingMsg(false);
     }
@@ -717,7 +709,51 @@ export default function ChatbotPage() {
             </div>
           </div>
         )}
-          </>
+        {/* ─── MODAL: XÁC NHẬN XÓA LỊCH SỬ CHAT ─── */}
+        {deleteConfirmId && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4 animate-fadeIn">
+            <div className="surface-elevated rounded-2xl p-6 border border-[var(--border-subtle)] w-full max-w-sm space-y-4 shadow-2xl relative">
+              <div className="flex items-center gap-3 text-rose-500">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+                  <Trash2 size={20} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[var(--text-primary)]">
+                    {vi ? 'Xóa cuộc trò chuyện?' : 'Delete Conversation?'}
+                  </h3>
+                  <p className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase tracking-wider">
+                    {vi ? 'Hành động không thể hoàn tác' : 'This action is irreversible'}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-semibold">
+                {vi 
+                  ? 'Bạn có chắc chắn muốn xóa vĩnh viễn lịch sử cuộc trò chuyện này không? Toàn bộ tin nhắn và tuyến đường của cuộc hội thoại sẽ bị xóa bỏ.'
+                  : 'Are you sure you want to permanently delete this chat history? All messages and route information in this conversation will be cleared.'}
+              </p>
+
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="flex-1 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-white hover:border-slate-400 font-bold cursor-pointer transition-all active:scale-98"
+                >
+                  {vi ? 'Hủy bỏ' : 'Cancel'}
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteConversation}
+                  className="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-white font-extrabold cursor-pointer transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                >
+                  <Trash2 size={13} />
+                  {vi ? 'Xác nhận xóa' : 'Confirm Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
         )}
       </div>
     </div>

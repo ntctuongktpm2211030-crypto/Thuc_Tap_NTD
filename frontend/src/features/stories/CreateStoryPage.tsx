@@ -1065,17 +1065,15 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
         <div>
           <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngày bắt đầu</label>
           <div className="relative">
-            <Calendar size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input type="date" value={data.startDate} onChange={e => onChange({ startDate: e.target.value })}
-              className="input-premium pl-10 text-sm" />
+              className="input-premium pl-4 text-sm" />
           </div>
         </div>
         <div>
           <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngày kết thúc</label>
           <div className="relative">
-            <Calendar size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input type="date" value={data.endDate} onChange={e => onChange({ endDate: e.target.value })}
-              className="input-premium pl-10 text-sm" />
+              className="input-premium pl-4 text-sm" />
           </div>
         </div>
       </div>
