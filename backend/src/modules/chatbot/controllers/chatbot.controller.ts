@@ -148,4 +148,16 @@ export class ChatbotController {
       return res.status(500).json({ error: 'Không thể xóa bộ nhớ người dùng.' });
     }
   };
+
+  deleteConversation = async (req: AuthRequest, res: Response) => {
+    try {
+      const userId = req.user!.sub;
+      const conversationId = req.params.id;
+      const result = await this.service.deleteConversation(conversationId, userId);
+      return res.json(result);
+    } catch (err: any) {
+      console.error('[chatbot/deleteConversation]', err);
+      return res.status(400).json({ error: err.message || 'Không thể xóa cuộc hội thoại.' });
+    }
+  };
 }

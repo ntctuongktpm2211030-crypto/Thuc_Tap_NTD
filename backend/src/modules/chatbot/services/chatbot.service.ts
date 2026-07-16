@@ -302,6 +302,11 @@ export class ChatbotService {
     await this.repo.deleteMemory(userId);
     return { success: true, message: 'Đã xóa toàn bộ bộ nhớ của người dùng.' };
   }
+
+  async deleteConversation(id: string, userId: string) {
+    await this.repo.deleteConversation(id, userId);
+    return { success: true, message: 'Đã xóa cuộc hội thoại thành công.' };
+  }
 }
 
 // Fallback import

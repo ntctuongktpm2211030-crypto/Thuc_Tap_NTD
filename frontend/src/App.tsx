@@ -119,7 +119,7 @@ function App() {
   const isExploreReader =
     location.pathname.startsWith('/explore/post/') ||
     location.pathname.startsWith('/explore/cam-nang/');
-  const isFullscreenCreate = isCreateJourneyPage || isEditPostPage || isExploreReader;
+  const isFullscreenCreate = isEditPostPage || isExploreReader;
   if (isAuthPage) {
     return (
       <Routes>
@@ -445,9 +445,7 @@ function App() {
             </div>
             <span className="font-editorial text-sm text-[var(--text-secondary)]">{t('footer.thesis')}</span>
           </div>
-          <div className="text-[10px] text-[var(--text-muted)] flex gap-4">
-            <span>{t('footer.built')}</span>
-          </div>
+
         </div>
       </footer>
       )}

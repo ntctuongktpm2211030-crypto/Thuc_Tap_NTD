@@ -31,6 +31,7 @@ export default function ChatbotPage() {
   const [activeFeedbackMsgId, setActiveFeedbackMsgId] = useState<string | null>(null);
   const [feedbackRating, setFeedbackRating] = useState(5);
   const [feedbackComment, setFeedbackComment] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +90,8 @@ export default function ChatbotPage() {
     }
   };
 
+
+
   const handleNewConversation = async () => {
     try {
       const title = vi ? 'Hội thoại mới' : 'New Chat';
@@ -101,9 +104,15 @@ export default function ChatbotPage() {
     }
   };
 
-  const handleDeleteConversation = async (e: React.MouseEvent, conversationId: string) => {
+  const handleDeleteConversation = (e: React.MouseEvent, conversationId: string) => {
     e.stopPropagation();
-    if (!window.confirm(vi ? 'Bạn có chắc chắn muốn xóa lịch sử cuộc trò chuyện này?' : 'Are you sure you want to delete this chat history?')) return;
+    setDeleteConfirmId(conversationId);
+  };
+
+  const confirmDeleteConversation = async () => {
+    if (!deleteConfirmId) return;
+    const conversationId = deleteConfirmId;
+    setDeleteConfirmId(null);
     try {
       await chatbotService.XoaCuocHoiThoai(conversationId);
       setConversations(prev => prev.filter(c => c.id !== conversationId));
@@ -119,23 +128,9 @@ export default function ChatbotPage() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || loadingMsg) return;
 
-    let conv = currentConversation;
-    // Create new conversation if none is active
-    if (!conv) {
-      try {
-        const title = inputMessage.substring(0, 30) + (inputMessage.length > 30 ? '...' : '');
-        conv = await chatbotService.TaoCuocHoiThoai(title);
-        setConversations(prev => [conv!, ...prev]);
-        setCurrentConversation(conv);
-      } catch (err) {
-        console.error('Failed to auto-create conversation:', err);
-        return;
-      }
-    }
-
-    const userText = inputMessage;
+    const userText = inputMessage.trim();
     setInputMessage('');
     setLoadingMsg(true);
 
@@ -149,16 +144,31 @@ export default function ChatbotPage() {
     setMessages(prev => [...prev, tempUserMsg]);
 
     try {
+      let conv = currentConversation;
+      if (!conv) {
+        const title = userText.substring(0, 30) + (userText.length > 30 ? '...' : '');
+        conv = await chatbotService.TaoCuocHoiThoai(title);
+        setConversations(prev => [conv!, ...prev]);
+        setCurrentConversation(conv);
+      }
+
       const response = await chatbotService.GuiTinNhan(conv.id, userText);
       // Replace messages with the exact ones from server
       setMessages(prev => {
         const cleaned = prev.filter(m => !m.id.startsWith('temp-'));
         return [...cleaned, response.userMessage, response.assistantMessage];
       });
-      // Refresh conversation list to show correct latest update time/last message
+      // Refresh conversation list
       fetchConversations();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to send message:', err);
+      // Restore input text
+      setInputMessage(userText);
+      // Remove optimistic message
+      setMessages(prev => prev.filter(m => !m.id.startsWith('temp-')));
+      // Show descriptive alert
+      const errMsg = err.response?.data?.error || err.message || (vi ? 'Không thể gửi tin nhắn. Vui lòng thử lại.' : 'Failed to send message. Please try again.');
+      alert(errMsg);
     } finally {
       setLoadingMsg(false);
     }
@@ -310,24 +320,24 @@ export default function ChatbotPage() {
       <div className="lg:col-span-3 surface-elevated rounded-2xl flex flex-col overflow-hidden border border-[var(--border-subtle)] relative">
         {showIntroVideo ? (
           <div className="flex-1 min-h-0 bg-white flex flex-col items-center justify-center relative overflow-hidden gap-5 p-6">
-            <div className="w-full max-w-2xl aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-950 flex items-center justify-center">
+            <div className="w-full max-w-3xl aspect-video rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center relative">
               <video
                 src={loadingVideo}
                 autoPlay
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-105"
                 onEnded={() => setShowIntroVideo(false)}
               />
+              {/* Quick skip button inside the video container */}
+              <button
+                type="button"
+                onClick={() => setShowIntroVideo(false)}
+                className="absolute bottom-4 right-4 px-4 py-2 bg-black/60 hover:bg-black/80 text-[11px] text-white rounded border border-white/20 hover:border-white/40 transition-all font-semibold uppercase tracking-wider cursor-pointer active:scale-95 backdrop-blur-sm z-10"
+              >
+                {vi ? 'Bỏ qua ✕' : 'Skip ✕'}
+              </button>
             </div>
-            {/* Quick skip button */}
-            <button
-              type="button"
-              onClick={() => setShowIntroVideo(false)}
-              className="px-4 py-1.5 bg-white/80 hover:bg-white text-[11px] text-gray-600 hover:text-gray-900 rounded-full border border-gray-300 hover:border-gray-500 transition-all font-bold uppercase tracking-wider cursor-pointer active:scale-95 shadow-sm"
-            >
-              {vi ? 'Bỏ qua ✕' : 'Skip ✕'}
-            </button>
           </div>
         ) : (
           <>
@@ -536,7 +546,7 @@ export default function ChatbotPage() {
         <div className="px-4 pb-4 pt-2 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)/90] to-transparent">
           <form
             onSubmit={handleSendMessage}
-            className="max-w-3xl mx-auto flex items-center bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl pl-4 pr-1.5 py-1.5 shadow-lg gap-2 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all duration-200"
+            className="max-w-5xl mx-auto flex items-center bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl pl-4 pr-1.5 py-1.5 shadow-lg gap-2 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all duration-200"
           >
             <input
               type="text"
@@ -544,14 +554,14 @@ export default function ChatbotPage() {
               onChange={e => setInputMessage(e.target.value)}
               placeholder={vi ? 'Hỏi AI du lịch điều gì đó...' : 'Ask travel AI something...'}
               disabled={loadingMsg}
-              className="flex-1 bg-transparent border-none text-xs text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-2.5"
+              className="flex-1 bg-transparent border-none text-sm text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-3"
             />
             <button
               type="submit"
               disabled={loadingMsg || !inputMessage.trim()}
-              className="btn-gold p-2.5 rounded-xl flex items-center justify-center disabled:opacity-40 cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150 shrink-0"
+              className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white p-2.5 rounded-xl flex items-center justify-center disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95 transition-all duration-150 shrink-0"
             >
-              <Send size={14} />
+              <Send size={16} className="text-white" />
             </button>
           </form>
         </div>
@@ -699,7 +709,51 @@ export default function ChatbotPage() {
             </div>
           </div>
         )}
-          </>
+        {/* ─── MODAL: XÁC NHẬN XÓA LỊCH SỬ CHAT ─── */}
+        {deleteConfirmId && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4 animate-fadeIn">
+            <div className="surface-elevated rounded-2xl p-6 border border-[var(--border-subtle)] w-full max-w-sm space-y-4 shadow-2xl relative">
+              <div className="flex items-center gap-3 text-rose-500">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+                  <Trash2 size={20} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[var(--text-primary)]">
+                    {vi ? 'Xóa cuộc trò chuyện?' : 'Delete Conversation?'}
+                  </h3>
+                  <p className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase tracking-wider">
+                    {vi ? 'Hành động không thể hoàn tác' : 'This action is irreversible'}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-semibold">
+                {vi 
+                  ? 'Bạn có chắc chắn muốn xóa vĩnh viễn lịch sử cuộc trò chuyện này không? Toàn bộ tin nhắn và tuyến đường của cuộc hội thoại sẽ bị xóa bỏ.'
+                  : 'Are you sure you want to permanently delete this chat history? All messages and route information in this conversation will be cleared.'}
+              </p>
+
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="flex-1 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] hover:text-white hover:border-slate-400 font-bold cursor-pointer transition-all active:scale-98"
+                >
+                  {vi ? 'Hủy bỏ' : 'Cancel'}
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteConversation}
+                  className="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-white font-extrabold cursor-pointer transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                >
+                  <Trash2 size={13} />
+                  {vi ? 'Xác nhận xóa' : 'Confirm Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
         )}
       </div>
     </div>

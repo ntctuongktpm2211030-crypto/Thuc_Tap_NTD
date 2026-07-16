@@ -399,6 +399,9 @@ export const chatbotService = {
 
   XoaBoNhoAI: () =>
     apiClient.delete('/chatbot/memory').then(r => r.data),
+
+  deleteConversation: (id: string) =>
+    apiClient.delete<{ success: boolean; message: string }>(`/chatbot/conversations/${id}`).then(r => r.data),
 };
 
 // ─────────────────────────────────────────────────────────
