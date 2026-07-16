@@ -111,7 +111,8 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
     if (!files?.length) return;
     setUploadError('');
     const next = [...photos];
-    for (let i = 0; i < files.length && next.length < MAX_PHOTOS; i++) {
+    const MAX_QUICK_PHOTOS = 3;
+    for (let i = 0; i < files.length && next.length < MAX_QUICK_PHOTOS; i++) {
       const err = validateImage(files[i]);
       if (err) {
         setUploadError(err);
@@ -161,7 +162,7 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
         location: { name: destLabel, lat: latitude, lng: longitude },
       });
 
-      await postsService.create({ content, mediaUrls });
+      await postsService.TaoBaiViet({ content, mediaUrls });
 
       if (location.trim()) {
         saveUserProfileCache({
@@ -248,9 +249,9 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
               <div className="flex items-center justify-between mb-2">
                 <label className="quick-compose-label">
                   <ImagePlus size={14} className="text-sky-400" />
-                  {labels.addPhoto} ({photos.length}/{MAX_PHOTOS})
+                  {labels.addPhoto} ({photos.length}/3)
                 </label>
-                {photos.length < MAX_PHOTOS && (
+                {photos.length < 3 && (
                   <button type="button" className="quick-compose-link" onClick={() => fileRef.current?.click()}>
                     + Thêm ảnh
                   </button>

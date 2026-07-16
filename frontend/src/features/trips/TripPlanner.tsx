@@ -197,7 +197,7 @@ const TripPlanner = () => {
     }
     setSavingTrip(true);
     try {
-      const trip = await tripsService.create({
+      const trip = await tripsService.TaoChuyenDi({
         title: itinerary.title || (lang === 'vi' ? `Hành trình khám phá ${destination}` : `Explore ${destination}`),
         description: lang === 'vi' 
           ? `Lịch trình du lịch AI tự động cho ${days} ngày tại ${destination}.` 
@@ -229,7 +229,7 @@ const TripPlanner = () => {
     if (!destination || days === '' || budget === '') return;
     setLoading(true); setOptimized(false); setAiError(null); setSelectedDay(1); setSavedTripId(null);
     try {
-      const result = await tripsService.aiGenerate({
+      const result = await tripsService.TaoChuyenDiBangAI({
         destination,
         durationDays: Number(days),
         totalBudget: Number(budget),
@@ -278,7 +278,7 @@ const TripPlanner = () => {
     });
 
     try {
-      const response = await tripsService.aiRegeneratePart({
+      const response = await tripsService.TaoLaiMotPhanChuyenDiBangAI({
         destination,
         durationDays: Number(days),
         totalBudget: Number(budget),
@@ -318,7 +318,7 @@ const TripPlanner = () => {
           }));
 
           try {
-            const res = await tripsService.optimizeRoute(waypoints);
+            const res = await tripsService.ToiUuDuongDi(waypoints);
             const reordered = res.orderedWaypoints.map((wp: any) => {
               const originalIdx = Number(wp.id);
               return d.activities[originalIdx];

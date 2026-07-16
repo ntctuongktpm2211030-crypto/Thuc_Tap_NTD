@@ -2,6 +2,21 @@ import crypto from 'crypto';
 import prisma from '../../../config/db';
 import { KnowledgeCategory, RetrievedDoc } from '../types/rag.types';
 
+/**
+ * Maps internal category codes to human-readable Vietnamese labels for citation source attribution.
+ */
+function getCategoryLabel(category: string): string {
+  const labels: Record<string, string> = {
+    culture: 'Văn hóa',
+    festival: 'Lễ hội',
+    food: 'Ẩm thực',
+    history: 'Lịch sử',
+    destination: 'Địa điểm du lịch',
+    general: 'Kiến thức chung',
+  };
+  return labels[category] || category;
+}
+
 export class VectorStoreService {
   /**
    * Lưu tài liệu kiến thức (Content), nhiều câu hỏi (Questions) kèm theo vector embedding, và nhiều câu trả lời (Answers) vào DB
@@ -122,6 +137,7 @@ export class VectorStoreService {
         // Trộn nội dung gốc và câu trả lời mẫu làm content trả về cho Prompt Builder
         const answersText = content.answers.map((a) => `- ${a.answerText}`).join('\n');
         const fullContent = `${content.body}\n\nCác câu trả lời mẫu:\n${answersText}`;
+        const categoryLabel = getCategoryLabel(content.category);
 
         docs.push({
           id: content.id,
@@ -130,6 +146,8 @@ export class VectorStoreService {
           category: content.category,
           score: r.score !== null ? Number(r.score) : 0,
           similarity: r.score !== null ? Number(r.score) : 0,
+          source: `Nguồn: ${categoryLabel}`,
+          url: '', // URL có thể được bổ sung sau khi cập nhật schema DB
         });
       }
     }
@@ -168,12 +186,15 @@ export class VectorStoreService {
       const answers = (content as any).answers || [];
       const answersText = answers.map((a: any) => `- ${a.answerText}`).join('\n');
       const fullContent = `${content.body}\n\nCác câu trả lời mẫu:\n${answersText}`;
+      const categoryLabel = getCategoryLabel(content.category);
       return {
         id: content.id,
         title: content.title,
         content: fullContent,
         category: content.category as KnowledgeCategory,
-        score: 0.5
+        score: 0.5,
+        source: `Nguồn: ${categoryLabel}`,
+        url: '',
       };
     });
 

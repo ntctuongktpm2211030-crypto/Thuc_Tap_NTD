@@ -21,11 +21,11 @@ interface AuthState {
 }
 
 // Rehydrate from localStorage on startup
-const storedUser = authService.getStoredUser();
+const storedUser = authService.LayUserDaLuu();
 
 const initialState: AuthState = {
   user: storedUser,
-  isAuthenticated: !!storedUser && authService.isLoggedIn(),
+  isAuthenticated: !!storedUser && authService.DaDangNhap(),
   isLoading: false,
   error: null,
 };
@@ -39,8 +39,8 @@ export const loginThunk = createAsyncThunk(
   'auth/login',
   async (payload: LoginPayload, { rejectWithValue }) => {
     try {
-      const res = await authService.login(payload);
-      authService.saveSession(res);
+      const res = await authService.DangNhap(payload);
+      authService.LuuPhienDangNhap(res);
       return res.user;
     } catch (err: any) {
       const message = err.response?.data?.error || 'Login failed. Please check your credentials.';
@@ -54,8 +54,8 @@ export const loginGoogleThunk = createAsyncThunk(
   'auth/loginGoogle',
   async (idToken: string, { rejectWithValue }) => {
     try {
-      const res = await authService.loginWithGoogle(idToken);
-      authService.saveSession(res);
+      const res = await authService.DangNhapGoogle(idToken);
+      authService.LuuPhienDangNhap(res);
       return res.user;
     } catch (err: any) {
       const message = err.response?.data?.error || 'Google login failed. Please try again.';
@@ -69,8 +69,8 @@ export const registerThunk = createAsyncThunk(
   'auth/register',
   async (payload: RegisterPayload, { rejectWithValue }) => {
     try {
-      const res = await authService.register(payload);
-      authService.saveSession(res);
+      const res = await authService.DangKy(payload);
+      authService.LuuPhienDangNhap(res);
       return res.user;
     } catch (err: any) {
       const message = err.response?.data?.error || 'Registration failed. Please try again.';
@@ -87,7 +87,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      authService.clearSession();
+      authService.XoaPhienDangNhap();
       state.user = null;
       state.isAuthenticated = false;
       state.error = null;

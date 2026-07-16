@@ -1,9 +1,9 @@
-import { AgentStrategy, AgentTool, AgentResponse, Citation } from '../types/agent.types';
+import { AgentStrategy, AgentTool, AgentResponse, Citation, UserMemory } from '../types/agent.types';
 import prisma from '../../../config/db';
-import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, buildRagContextWithRefs } from '../utils/agent.utils';
-import { RetrieverService } from '../../rag/services/retriever.service';
-import { EmbeddingsService } from '../../rag/services/embeddings.service';
-import { VectorStoreService } from '../../rag/services/vector-store.service';
+import { removeDiacritics, findFuzzyMatch, cleanGeographicName, extractLastDestinationFromHistory, callAgentLLM, getDynamicRegions, buildCitationsFromDocs, mapTourismToProvince } from '../utils/agent.utils';
+import { buildTravelSystemPrompt, buildTravelUserPrompt } from '../prompts/travel.prompts';
+import { logger } from '../../../utils/logger';
+import { RagPipelineService } from '../../rag/services/rag-pipeline.service';
 import { getCuratedProvince } from '../../../config/vietnam_destinations';
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -28,6 +28,7 @@ async function extractStartLocationWithLLM(input: string): Promise<string | null
   const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
 
   try {
+    const LLM_TIMEOUT_MS = parseInt(process.env.LLM_TIMEOUT_MS || '30000', 10);
     const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
       headers: {
@@ -46,7 +47,8 @@ Nếu có, hãy trả về DUY NHẤT tên Tỉnh/Thành phố đó (Ví dụ: "
         ],
         temperature: 0.1,
         max_tokens: 50,
-      })
+      }),
+      signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
     });
 
     if (response.ok) {
@@ -60,25 +62,6 @@ Nếu có, hãy trả về DUY NHẤT tên Tỉnh/Thành phố đó (Ví dụ: "
   return null;
 }
 
-function filterRagDocs(docs: any[], destName: string): any[] {
-  const cleanDest = cleanGeographicName(destName);
-  const destNoSpaces = cleanDest.replace(/\s+/g, '');
-
-  return docs.filter(d => {
-    const sim = d.similarity !== undefined ? d.similarity : d.score;
-    if (sim < 0.75) return false;
-
-    const cleanTitle = removeDiacritics(d.title.toLowerCase()).replace(/\s+/g, '');
-    const cleanContent = removeDiacritics(d.content.toLowerCase()).replace(/\s+/g, '');
-
-    if (cleanTitle.includes(destNoSpaces) || cleanContent.includes(destNoSpaces)) {
-      return true;
-    }
-
-    return false;
-  });
-}
-
 export class TravelAgent implements AgentStrategy {
   name = 'TravelAgent';
   description = 'Chuyên gia thiết kế lịch trình, bản đồ di chuyển và thông tin thời tiết.';
@@ -86,13 +69,13 @@ export class TravelAgent implements AgentStrategy {
   private itineraryTool: AgentTool;
   private mapTool: AgentTool;
   private weatherTool: AgentTool;
-  private retriever: RetrieverService;
+  private ragPipeline: RagPipelineService;
 
   constructor(itineraryTool: AgentTool, mapTool: AgentTool, weatherTool: AgentTool) {
     this.itineraryTool = itineraryTool;
     this.mapTool = mapTool;
     this.weatherTool = weatherTool;
-    this.retriever = new RetrieverService(new EmbeddingsService(), new VectorStoreService());
+    this.ragPipeline = new RagPipelineService();
   }
 
   async execute(
@@ -100,12 +83,21 @@ export class TravelAgent implements AgentStrategy {
     input: string,
     messageId?: string,
     extractedDestination?: string,
-    history?: { role: string; content: string }[]
+    history?: { role: string; content: string }[],
+    memory?: UserMemory
   ): Promise<AgentResponse> {
     console.log(`[TravelAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
     // 1. Kiểm tra xem người dùng có đang chủ động cung cấp/khai báo vị trí bắt đầu của họ hay không
-    const declaredStartLoc = await extractStartLocationWithLLM(input);
+    // Chỉ gọi LLM trích xuất khi phát hiện câu có chứa từ khóa chỉ vị trí khởi hành để tránh làm chậm hệ thống
+    let declaredStartLoc: string | null = null;
+    const cleanInput = removeDiacritics(input.toLowerCase());
+    const hasStartLocKeywords = [' o ', ' tai ', ' tu ', ' khoi hanh ', ' xuat phat ', ' di tu '].some(kw => 
+      cleanInput.includes(kw) || cleanInput.startsWith(kw.trim() + ' ') || cleanInput.endsWith(' ' + kw.trim()) || cleanInput === kw.trim()
+    );
+    if (hasStartLocKeywords) {
+      declaredStartLoc = await extractStartLocationWithLLM(input);
+    }
     if (declaredStartLoc) {
       try {
         const userMapData = await this.mapTool.execute({ query: declaredStartLoc });
@@ -218,6 +210,9 @@ export class TravelAgent implements AgentStrategy {
         const matched = findFuzzyMatch(targetDestName, dests, 0.7);
         destination = matched || targetDestName;
       }
+      
+      // Đảm bảo địa danh du lịch phổ biến được map về Tỉnh hành chính
+      destination = mapTourismToProvince(destination);
       hasDestination = true;
     }
 
@@ -277,7 +272,7 @@ export class TravelAgent implements AgentStrategy {
     // 4. Truy xuất RAG bổ trợ từ database du lịch
     const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (1 - 12)
     
-    // --- OPTIMIZED RAG PIPELINE: Consolidated from 6 calls to 1-2 targeted calls ---
+    // --- RAG PIPELINE: destination + category detection + retrieval + reranking ---
     let localDestinationsText = '';
     let ragContextText = '';
     let hasRagData = false;
@@ -306,6 +301,7 @@ export class TravelAgent implements AgentStrategy {
         console.warn('[TravelAgent] Failed to load local JSON destinations:', err);
       }
 
+      // 2. Detect category from input keywords
       const cleanInput = input.toLowerCase();
       const hasKeyword = (keywords: string[]) => keywords.some(kw => cleanInput.includes(kw));
 
@@ -315,32 +311,28 @@ export class TravelAgent implements AgentStrategy {
       const needsHistory = hasKeyword(['lịch sử', 'nguồn gốc', 'thời xưa', 'kháng chiến', 'chiến tích', 'bảo tàng', 'di tích', 'cổ kính', 'cổ xưa', 'thành lập', 'tên gọi', 'truyền thuyết', 'sự tích', 'vua', 'cổ xưa']);
       const needsDestination = !needsFestival && !needsFood && !needsCulture && !needsHistory || hasKeyword(['địa điểm', 'điểm', 'cảnh', 'chơi', 'tham quan', 'vị trí', 'ở đâu', 'đường đi', 'di chuyển', 'bản đồ', 'đẹp', 'vịnh', 'đảo', 'núi', 'sông', 'hồ', 'suối', 'thác', 'rừng', 'bãi biển']);
 
-      // 2. Optimized: Always do 1 general RAG call (topK=4 for broad coverage)
-      //    Then 1 targeted call if specific category keywords match
       const targetedCategory = needsFestival ? 'festival' : needsFood ? 'food' : needsCulture ? 'culture' : needsHistory ? 'history' : needsDestination ? 'destination' : undefined;
-      
+
+      // 3. Run unified RAG pipeline
       try {
-        // Primary: General broad retrieval (covers everything)
-        const generalDocs = await this.retriever.retrieve(`${destination} ${input}`, undefined, 4);
-        const filteredGeneral = filterRagDocs(generalDocs, destination);
-        allRetrievedDocs = [...filteredGeneral];
-        
-        // Secondary: Targeted category retrieval (if specific topic detected)
-        let targetedDocs: any[] = [];
-        if (targetedCategory && targetedCategory !== 'destination') {
-          try {
-            targetedDocs = await this.retriever.retrieve(`${destination} ${input}`, targetedCategory as any, 3);
-            const filteredTargeted = filterRagDocs(targetedDocs, destination);
-            allRetrievedDocs = [...allRetrievedDocs, ...filteredTargeted];
-          } catch (e) {
-            console.warn('[TravelAgent] Targeted RAG retrieval failed:', e);
-          }
-        }
-        
-        if (allRetrievedDocs.length > 0) hasRagData = true;
-        ragContextText = buildRagContextWithRefs(allRetrievedDocs);
+        const pipelineResult = await this.ragPipeline.execute({
+          query: input,
+          destination,
+          category: targetedCategory,
+          topK: 5,
+        });
+        allRetrievedDocs = pipelineResult.docs;
+        ragContextText = pipelineResult.contextText;
+        if (pipelineResult.hasData) hasRagData = true;
+        logger.info('TravelAgent', 'RAG pipeline result', {
+          hasData: pipelineResult.hasData,
+          docs: pipelineResult.docs.length,
+          dest: pipelineResult.destination,
+          cat: pipelineResult.category,
+          latencyMs: pipelineResult.metadata.latencyMs,
+        });
       } catch (ragErr) {
-        console.warn('[TravelAgent] Primary RAG retrieval failed:', ragErr);
+        console.warn('[TravelAgent] RAG pipeline failed:', ragErr);
       }
     }
 
@@ -350,118 +342,30 @@ export class TravelAgent implements AgentStrategy {
       let userPrompt = '';
 
       if (hasDestination) {
-        const antiHallucinationRule = hasRagData
-          ? `Trong các đề xuất tham quan, vui chơi, ăn uống, bạn CHỈ ĐƯỢC PHÉP nêu các địa điểm cụ thể, món ăn ẩm thực và hoạt động thực tế có tên xuất hiện trong các tài liệu tri thức cung cấp dưới đây (RAG Context). Tuyệt đối không tự ý bịa đặt ra các hoạt động không có thật hoặc địa danh ảo (ví dụ: Cà Mau hoàn toàn không có núi. Bạn tuyệt đối không được tự ý giới thiệu leo núi, leo đỉnh núi mây hay các hòn đảo giả tại Cà Mau). Hãy tôn trọng tính chân thực địa lý và ẩm thực của các tỉnh thành Việt Nam.`
-          : `LƯU Ý QUAN TRỌNG VỀ PHÒNG CHỐNG ĐÁP ÁN ẢO (RÂU ÔNG NỌ CẮM CẰM BÀ KIA): Hiện tại cơ sở dữ liệu SmartTravel của chúng ta CHƯA CÓ tài liệu tri thức chính thức cho tỉnh/thành phố "${destination}". Bạn ĐƯỢC PHÉP sử dụng kiến thức chung (General Knowledge) thực tế, chính xác 100% của mình để gợi ý các địa điểm du lịch, vui chơi, ẩm thực và nếp sống thực tế ở "${destination}". 
-TUYỆT ĐỐI CẤM: Không được tự ý gán ghép đặc sản của địa phương khác vào địa phương này (Ví dụ: Gỏi cá trích là đặc sản nổi tiếng của Phú Quốc/Kiên Giang, Bún sứa là đặc sản của Nha Trang/Khánh Hòa - TUYỆT ĐỐI KHÔNG ĐƯỢC giới thiệu chúng là đặc sản của Cần Thơ!). Hãy thông báo nhẹ cho người dùng biết đây là thông tin gợi ý tham khảo từ AI do hệ thống chưa có dữ liệu chính thức cho địa phương này. Tuyệt đối không bịa đặt các địa danh không có thật.`;
-
         const isItineraryRequest = /lịch trình|kế hoạch|lộ trình|chuyến đi|tour|lên lịch|lập lịch|đi chơi/i.test(input);
 
-        if (isItineraryRequest) {
-          systemPrompt = `Bạn là TravelAgent - chuyên gia thiết kế lịch trình du lịch Việt Nam của SmartTravel. 
-Nhiệm vụ của bạn là dựa trên thông tin bản đồ, thời tiết hiện tại, khung lịch trình cơ bản và các tài liệu tri thức bổ trợ (RAG Context) để tư vấn lộ trình và di chuyển chi tiết, khoa học (phân chia sáng, trưa, chiều, tối) và cung cấp các lời khuyên thời tiết thực tế hữu ích cho người dùng.
+        systemPrompt = buildTravelSystemPrompt({
+          destination,
+          hasRagData,
+          isItineraryRequest,
+          currentMonth,
+          distanceText,
+          userCoordsText,
+          memory,
+        });
 
-QUY TẮC GIỚI THIỆU ĐỊA ĐIỂM (BẮT BUỘC):
-Nếu người dùng nói hoặc đề cập đến tỉnh/thành phố "${destination}", bạn BẮT BUỘC phải giới thiệu đầy đủ khoảng 5-6 địa điểm du lịch, tham quan thực tế nổi bật nhất của địa phương đó dựa trên danh sách địa điểm thực tế được cung cấp dưới đây. Hãy mô tả sinh động và ngắn gọn từng địa điểm.
-
-CẤU TRÚC LỊCH TRÌNH BẮT BUỘC (MANDATORY ITINERARY STRUCTURE):
-1. Tổng quan
-- Điểm xuất phát: [Tên tỉnh/thành phố xuất phát của người dùng thực tế, nếu chưa xác định thì ghi "Chưa xác định - Vui lòng cung cấp vị trí"]
-- Điểm kết thúc: [Tên địa điểm du lịch]
-- Quãng đường: [Tính toán quãng đường thực tế hoặc ghi khoảng cách di chuyển từ vị trí hiện tại đến điểm đến nếu có dữ liệu, ví dụ: 300 km. Nếu chưa có, ghi "Chưa xác định"]
-- Thời gian di chuyển dự kiến: [Ước tính thời gian di chuyển phù hợp, ví dụ: 6 tiếng bằng ô tô / 2 tiếng bằng máy bay...]
-- Phương tiện: [Đề xuất phương tiện di chuyển phù hợp, ví dụ: xe khách giường nằm, xe máy, máy bay...]
-
-2. Buổi sáng
-- Thời gian: [Thời gian cụ thể, ví dụ: 08:00 - 11:30]
-- Hoạt động: [Tên hoạt động chính]
-- Địa điểm tham quan: [Tên địa điểm cụ thể]
-- Thời gian tham quan: [Thời lượng lưu lại, ví dụ: 2 tiếng]
-- Gợi ý trải nghiệm: [Mẹo tham quan, góc check-in đẹp hoặc trải nghiệm hay ho]
-- Chi phí (nếu có): [Chi phí dự kiến bằng tiền VND hoặc ghi "Miễn phí"]
-
-3. Ăn sáng (nếu chưa ăn)
-- Món ăn: [Tên món ăn sáng đặc sắc địa phương]
-- Quán gợi ý (nếu có): [Tên quán ăn ngon cụ thể]
-
-4. Buổi trưa
-- Ăn trưa: [Thưởng thức ẩm thực buổi trưa]
-- Món đặc sản: [Danh sách món đặc sản địa phương khuyên thử]
-- Thời gian nghỉ ngơi: [Thời gian nghỉ ngơi dự kiến, ví dụ: 12:00 - 13:30]
-
-5. Buổi chiều
-- Thời gian: [Thời gian cụ thể, ví dụ: 14:00 - 17:30]
-- Địa điểm tham quan: [Tên địa điểm cụ thể]
-- Hoạt động: [Mô tả hoạt động khám phá]
-- Thời gian lưu lại: [Thời lượng lưu lại, ví dụ: 3 tiếng]
-- Chi phí (nếu có): [Chi phí dự kiến]
-
-6. Buổi tối
-- Ăn tối: [Món ngon và quán gợi ý]
-- Địa điểm dạo chơi: [Nơi vui chơi, đi dạo tối]
-- Chợ đêm: [Gợi ý chợ đêm địa phương nếu có]
-- Café: [Đề xuất quán cà phê ngon hoặc có view đẹp]
-- Hoạt động giải trí: [Hoạt động giải trí buổi tối nếu có]
-- Nghỉ đêm ở đâu: [Khách sạn, homestay hoặc resort qua đêm]
-
-7. Gợi ý trong ngày
-- Mẹo tham quan: [Mẹo di chuyển, chụp ảnh, phong tục địa phương...]
-- Trang phục phù hợp: [Trang phục phù hợp với khí hậu và địa điểm]
-- Lưu ý an toàn: [Cảnh báo an toàn, đường đèo hiểm trở, lừa đảo nếu có...]
-- Những thứ nên mang theo: [Đồ vật cá nhân thiết yếu, ví dụ: kem chống nắng, ô, giày thể thao...]
-
-8. Chi phí dự kiến
-- Ăn uống: [Tổng tiền ăn uống dự kiến]
-- Vé tham quan: [Tổng tiền vé tham quan]
-- Di chuyển: [Chi phí di chuyển dự kiến]
-- Khác: [Chi phí mua sắm quà, dự phòng...]
-- Tổng: [Tổng chi phí ước tính cho chuyến đi]
-
-LƯU Ý QUAN TRỌNG VỀ ĐỊA ĐIỂM & KHOẢNG CÁCH:
-1. Thông tin khoảng cách: ${distanceText}
-2. Nếu chưa biết vị trí của người dùng, bạn BẮT BUỘC phải hỏi họ vị trí hiện tại ở đầu hoặc cuối câu trả lời (Ví dụ: "Để hướng dẫn lộ trình và tính khoảng cách chính xác, bạn có thể cho biết mình đang ở đâu không?").
-3. Nếu đã có khoảng cách, hãy thông báo cụ thể cho người dùng (ví dụ: "Từ vị trí hiện tại của bạn đến [Điểm đến] khoảng [X] km...").
-4. Tuyệt đối không tự ý giả định vị trí khởi hành của người dùng (ví dụ: không mặc định họ đi từ Hà Nội hay Sài Gòn) nếu không có dữ liệu thực tế.
-
-LƯU Ý VỀ THỜI GIAN & LỄ HỘI:
-1. Hiện tại đang là Tháng ${currentMonth}.
-2. Dựa trên tài liệu lễ hội cung cấp dưới đây, hãy kiểm tra xem trong Tháng ${currentMonth} địa điểm này có lễ hội gì đặc sắc hay sự kiện nổi bật nào không và chủ động gợi ý cho người dùng tham gia hoặc lưu ý.
-
-LƯU Ý VỀ ĐỊA ĐIỂM THAM QUAN, ẨM THỰC, VĂN HÓA & LỊCH SỬ (ANTI-HALLUCINATION):
-${antiHallucinationRule}
-
-Trả lời bằng tiếng Việt thân thiện, rõ ràng, rành mạch và có cấu trúc tốt.`;
-        } else {
-          systemPrompt = `Bạn là TravelAgent - trợ lý chatbot tư vấn du lịch Việt Nam của SmartTravel.
-Nhiệm vụ của bạn là giải đáp các câu hỏi, tư vấn thông tin du lịch và giới thiệu các địa danh nổi bật cho người dùng một cách tự nhiên, thân thiện.
-
-QUY TẮC GIỚI THIỆU ĐỊA ĐIỂM (BẮT BUỘC):
-Khi người dùng đề cập đến hoặc hỏi về tỉnh/thành phố "${destination}" (ví dụ: "du lịch Bắc Ninh", "Cần Thơ có gì chơi", "Cà Mau"...), bạn BẮT BUỘC phải:
-1. Giới thiệu tổng quan ngắn gọn về địa phương này.
-2. Liệt kê và giới thiệu đầy đủ khoảng 5-6 địa điểm du lịch, tham quan thực tế nổi bật nhất từ danh sách địa điểm local được cung cấp dưới đây. Hãy nêu rõ tên địa điểm, danh mục (Ví dụ: Điểm tham quan, Thiên nhiên, Ẩm thực...) và mô tả ngắn gọn sinh động của từng nơi.
-3. Tuyệt đối KHÔNG trả về lịch trình phân chia theo thời gian sáng/trưa/chiều/tối hay cấu trúc "Tổng quan", "Buổi sáng", "Ăn sáng", "Buổi trưa", "Buổi chiều", "Buổi tối" trừ khi người dùng yêu cầu lập lịch trình cụ thể.
-
-LƯU Ý VỀ ĐỊA ĐIỂM THAM QUAN, ẨM THỰC, VĂN HÓA & LỊCH SỬ (ANTI-HALLUCINATION):
-${antiHallucinationRule}
-
-Trả lời bằng tiếng Việt thân thiện, tự nhiên, rõ ràng, rành mạch và có cấu trúc tốt.`;
-        }
-
-        userPrompt = `Điểm đến: ${destination}
-Tháng hiện tại: Tháng ${currentMonth}
-Số ngày: ${days}
-Vị trí người dùng: ${userCoordsText}
-Thông tin bản đồ (Map): ${JSON.stringify(mapData)}
-Thông tin thời tiết (Weather): ${JSON.stringify(weatherData)}
-Khung lịch trình thô (Itinerary): ${itineraryData ? JSON.stringify(itineraryData) : 'Không yêu cầu chi tiết lịch trình'}
-
-DANH SÁCH ĐỊA ĐIỂM THỰC TẾ LOCAL (ƯU TIÊN GIỚI THIỆU HÀNG ĐẦU):
-${localDestinationsText || 'Không tìm thấy danh sách địa điểm local.'}
-
-TÀI LIỆU TRI THỨC (Có đánh số nguồn - hãy tham chiếu với [số] trong câu trả lời của bạn):
-${ragContextText || 'Không tìm thấy tài liệu liên quan.'}
-
-Câu hỏi/Yêu cầu của người dùng: "${input}"`;
+        userPrompt = buildTravelUserPrompt({
+          destination,
+          currentMonth,
+          days,
+          userCoordsText,
+          mapData,
+          weatherData,
+          itineraryData,
+          localDestinationsText,
+          ragContextText,
+          input,
+        });
       } else {
         systemPrompt = `Bạn là TravelAgent - chuyên gia tư vấn du lịch của SmartTravel.
 Người dùng CHƯA chọn hoặc CHƯA cung cấp địa điểm du lịch mong muốn của họ.

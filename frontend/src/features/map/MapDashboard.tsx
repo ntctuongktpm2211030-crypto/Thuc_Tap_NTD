@@ -29,6 +29,8 @@ const MapDashboard = () => {
   const [selectedDestId, setSelectedDestId] = useState('');
   const [newNote, setNewNote] = useState('');
   const [isExtractingGps, setIsExtractingGps] = useState(false);
+  const [checkinImage, setCheckinImage] = useState('');
+  const [checkinTag, setCheckinTag] = useState('');
 
   // Advanced search & filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,16 +65,41 @@ const MapDashboard = () => {
     }
   };
 
+  const requestMyLocation = () => {
+    if (!navigator.geolocation) {
+      alert(vi ? 'Trình duyệt của bạn không hỗ trợ định vị GPS.' : 'Geolocation is not supported by your browser.');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation([latitude, longitude]);
+        setSelectedCenter([latitude, longitude]);
+        alert(vi 
+          ? `Đã nhận diện tọa độ của bạn: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]` 
+          : `Location acquired: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]`
+        );
+        console.log(`🎯 User requested location: [${latitude}, ${longitude}]`);
+      },
+      (error) => {
+        console.warn('⚠️ Real User Location denied/failed:', error.message);
+        alert(vi 
+          ? 'Không nhận được hoặc không xác nhận được tọa độ của bạn. Vui lòng đồng ý chia sẻ vị trí (GPS) trong phần cài đặt trình duyệt hoặc Windows để sử dụng tính năng này!' 
+          : 'Unable to acquire or verify your coordinates. Please grant location sharing permission (GPS) in your browser/OS settings!'
+        );
+      },
+      { enableHighAccuracy: false, timeout: 6000 }
+    );
+  };
+
   useEffect(() => {
     loadMapData();
   }, []);
 
   // Request actual browser geolocation on mount & track moves
   useEffect(() => {
-    if (!navigator.geolocation) {
-      console.warn('Geolocation is not supported by this browser.');
-      return;
-    }
+    if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -84,7 +111,7 @@ const MapDashboard = () => {
       (error) => {
         console.warn('⚠️ Real User Location denied/failed:', error.message);
       },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: false, timeout: 6000 }
     );
 
     const watchId = navigator.geolocation.watchPosition(
@@ -95,7 +122,7 @@ const MapDashboard = () => {
       (error) => {
         console.warn('⚠️ Real User Location watch error:', error.message);
       },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      { enableHighAccuracy: false, timeout: 10000 }
     );
 
     return () => {
@@ -165,16 +192,31 @@ const MapDashboard = () => {
       category: d.category
     }));
 
-    const mappedCheckins: MapLocation[] = checkins.map(c => ({
-      id: `checkin-${c.id}`,
-      name: c.destination?.name || 'Vị trí check-in',
-      lat: c.destination?.latitude || 21.0285,
-      lng: c.destination?.longitude || 105.8048,
-      note: c.note || '',
-      user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
-      avatar: c.user?.profile?.avatarUrl || '',
-      time: new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
-    }));
+    const mappedCheckins: MapLocation[] = checkins.map(c => {
+      let parsedNote = c.note || '';
+      let imageUrl = '';
+      let tag = '';
+      if (c.note && c.note.startsWith('{') && c.note.endsWith('}')) {
+        try {
+          const parsed = JSON.parse(c.note);
+          parsedNote = parsed.text || '';
+          imageUrl = parsed.imageUrl || '';
+          tag = parsed.tag || '';
+        } catch (e) {}
+      }
+      return {
+        id: `checkin-${c.id}`,
+        name: c.destination?.name || 'Vị trí check-in',
+        lat: c.destination?.latitude || 21.0285,
+        lng: c.destination?.longitude || 105.8048,
+        note: parsedNote,
+        imageUrl: imageUrl,
+        tag: tag,
+        user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
+        avatar: c.user?.profile?.avatarUrl || '',
+        time: new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
+      };
+    });
 
     const mappedFriends: MapLocation[] = Object.values(liveFriends).map(f => ({
       id: `live-${f.userId}`,
@@ -291,20 +333,27 @@ const MapDashboard = () => {
 
     if (coords) {
       setSelectedCenter(coords);
-      let nearest = destinations[0];
-      let minDist = Infinity;
-      destinations.forEach(d => {
-        const dist = Math.hypot(d.latitude - coords[0], d.longitude - coords[1]);
-        if (dist < minDist) {
-          minDist = dist;
-          nearest = d;
+      if (destinations.length > 0) {
+        let nearest = destinations[0];
+        let minDist = Infinity;
+        destinations.forEach(d => {
+          const dist = Math.hypot(d.latitude - coords[0], d.longitude - coords[1]);
+          if (dist < minDist) {
+            minDist = dist;
+            nearest = d;
+          }
+        });
+        if (nearest) {
+          setSelectedDestId(nearest.id);
+          alert(vi 
+            ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Tự chọn địa điểm gần nhất: ${nearest.name}`
+            : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Selected nearest place: ${nearest.name}`
+          );
         }
-      });
-      if (nearest) {
-        setSelectedDestId(nearest.id);
+      } else {
         alert(vi 
-          ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Tự chọn địa điểm gần nhất: ${nearest.name}`
-          : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Selected nearest place: ${nearest.name}`
+          ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}].`
+          : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}].`
         );
       }
     } else {
@@ -327,10 +376,17 @@ const MapDashboard = () => {
     }
 
     try {
-      const response = await mapService.checkIn(selectedDestId, newNote);
+      const finalPayload = JSON.stringify({
+        text: newNote,
+        imageUrl: checkinImage,
+        tag: checkinTag
+      });
+      const response = await mapService.checkIn(selectedDestId, finalPayload);
       setCheckins(prev => [response, ...prev]);
       setNewNote('');
       setSelectedDestId('');
+      setCheckinImage('');
+      setCheckinTag('');
       alert(vi ? 'Check-in thành công!' : 'Check-in successful!');
     } catch (err) {
       console.error('Checkin failed:', err);
@@ -613,6 +669,13 @@ const MapDashboard = () => {
         {/* Route Planner Action Bar */}
         <div className="flex flex-wrap gap-2 items-center bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-xl shadow-sm">
           <button
+            onClick={requestMyLocation}
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1.5"
+          >
+            🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
+          </button>
+
+          <button
             onClick={handleOptimizeTSP}
             disabled={routeQueue.length < 3}
             className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:text-slate-500 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
@@ -686,6 +749,51 @@ const MapDashboard = () => {
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
 
+            <div className="flex gap-2">
+              <select
+                value={checkinTag}
+                onChange={e => setCheckinTag(e.target.value)}
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-[10px] text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1"
+              >
+                <option value="">-- {vi ? 'Chọn Tag check-in' : 'Select Tag'} --</option>
+                <option value="food">{vi ? 'Ẩm thực' : 'Food'}</option>
+                <option value="hotel">{vi ? 'Nghỉ dưỡng' : 'Hotel'}</option>
+                <option value="cafe">{vi ? 'Cà phê' : 'Cafe'}</option>
+                <option value="nature">{vi ? 'Thiên nhiên' : 'Nature'}</option>
+              </select>
+
+              <label className="flex items-center justify-center px-2 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--text-secondary)] rounded text-[9px] font-bold cursor-pointer transition-all truncate max-w-[120px]">
+                📁 {checkinImage ? (vi ? 'Đã chọn ảnh' : 'Photo Selected') : (vi ? 'Thêm ảnh' : 'Add Photo')}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setCheckinImage(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {checkinImage && (
+              <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-[var(--border-normal)]">
+                <img src={checkinImage} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setCheckinImage('')}
+                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-bold cursor-pointer border-none"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             <div className="flex gap-2 items-center justify-between">
               <label className="flex items-center gap-1 px-2.5 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--text-secondary)] rounded text-[9px] font-bold cursor-pointer transition-all">
                 📷 {isExtractingGps ? 'GPS...' : (vi ? 'Trích GPS Ảnh' : 'Extract GPS')}
@@ -721,10 +829,34 @@ const MapDashboard = () => {
               checkins.map(chk => {
                 const lat = chk.destination?.latitude || 21.0285;
                 const lng = chk.destination?.longitude || 105.8048;
+                let parsedNote = chk.note || '';
+                let imageUrl = '';
+                let tag = '';
+                if (chk.note && chk.note.startsWith('{') && chk.note.endsWith('}')) {
+                  try {
+                    const parsed = JSON.parse(chk.note);
+                    parsedNote = parsed.text || '';
+                    imageUrl = parsed.imageUrl || '';
+                    tag = parsed.tag || '';
+                  } catch (e) {}
+                }
                 return (
                   <div
                     key={chk.id}
-                    onClick={() => setSelectedCenter([lat, lng])}
+                    onClick={() => {
+                      setSelectedCenter([lat, lng]);
+                      setSelectedLocation({
+                        id: `checkin-${chk.id}`,
+                        name: chk.destination?.name || 'Vị trí check-in',
+                        lat,
+                        lng,
+                        note: parsedNote,
+                        imageUrl: imageUrl,
+                        tag: tag,
+                        user: chk.user?.profile?.fullName || chk.user?.email || 'Người dùng',
+                        avatar: chk.user?.profile?.avatarUrl || ''
+                      });
+                    }}
                     className="p-2 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] rounded-xl transition-all cursor-pointer space-y-1.5 group"
                   >
                     <div className="flex items-center gap-1.5">
@@ -745,11 +877,17 @@ const MapDashboard = () => {
                         </p>
                       </div>
                     </div>
-                    {chk.note && (
-                      <p className="text-[10px] text-[var(--text-secondary)] italic line-clamp-2 leading-snug">"{chk.note}"</p>
+                    {parsedNote && (
+                      <p className="text-[10px] text-[var(--text-secondary)] italic line-clamp-2 leading-snug">"{parsedNote}"</p>
                     )}
-                    <div className="text-[9px] text-[var(--gold)] font-semibold flex items-center gap-0.5 truncate">
+                    {imageUrl && (
+                      <div className="w-16 h-12 rounded-lg overflow-hidden border border-slate-700 bg-black/10 mt-1">
+                        <img src={imageUrl} className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <div className="text-[9px] text-[var(--gold)] font-semibold flex items-center gap-0.5 truncate mt-1">
                       <MapPin size={8} /> {chk.destination?.name || 'Vị trí'}
+                      {tag && <span className="text-[7px] bg-slate-800 text-slate-300 px-1 py-0.2 rounded ml-1.5 uppercase font-black">{tag}</span>}
                     </div>
                   </div>
                 );

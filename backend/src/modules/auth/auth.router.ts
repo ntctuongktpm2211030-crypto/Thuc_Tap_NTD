@@ -3,6 +3,10 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../../config/db';
 import { firebaseAuth } from '../../config/firebase';
+import { EmailService } from './email.service';
+import crypto from 'crypto';
+
+const emailService = new EmailService();
 
 const router = Router();
 
@@ -38,10 +42,14 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
     const user = await prisma.user.create({
       data: {
         email,
         passwordHash,
+        isVerified: false,
+        verificationToken,
         profile: {
           create: { fullName },
         },
@@ -49,11 +57,16 @@ router.post('/register', async (req: Request, res: Response) => {
       include: { profile: true },
     });
 
+    // Gửi email xác thực tài khoản (chạy ngầm không block luồng phản hồi đăng ký)
+    emailService.sendVerificationEmail(email, verificationToken).catch(err => {
+      console.error('[auth/register] Gửi email xác thực thất bại:', err);
+    });
+
     const accessToken = signAccessToken(user.id, user.role);
     const refreshToken = signRefreshToken(user.id);
 
     return res.status(201).json({
-      message: 'Account created successfully.',
+      message: 'Account created successfully. Please check your email to verify your account.',
       user: {
         id: user.id,
         email: user.email,
@@ -61,6 +74,7 @@ router.post('/register', async (req: Request, res: Response) => {
         avatarUrl: user.profile?.avatarUrl,
         coverUrl: user.profile?.coverUrl,
         role: user.role,
+        isVerified: user.isVerified,
       },
       accessToken,
       refreshToken,
@@ -274,6 +288,43 @@ router.post('/google', async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     console.error('[auth/google]', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
+// POST /api/v1/auth/verify-email
+// ─────────────────────────────────────────────────────────
+router.post('/verify-email', async (req: Request, res: Response) => {
+  try {
+    const { email, token } = req.body;
+
+    if (!email || !token) {
+      return res.status(400).json({ error: 'Email and token are required.' });
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+        verificationToken: token,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Mã xác thực hoặc email không hợp lệ.' });
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        verificationToken: null,
+      },
+    });
+
+    return res.status(200).json({ message: 'Tài khoản đã được xác thực thành công. Bạn có thể sử dụng đầy đủ tính năng.' });
+  } catch (err: any) {
+    console.error('[auth/verify-email]', err);
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });

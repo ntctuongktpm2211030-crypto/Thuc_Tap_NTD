@@ -109,7 +109,8 @@ export default function CreatePostPage() {
   const handlePhotos = (files: FileList | null) => {
     if (!files?.length) return;
     const added: string[] = [];
-    for (let i = 0; i < Math.min(files.length, MAX_PHOTOS - data.photos.length); i++) {
+    const MAX_POST_PHOTOS = 1;
+    for (let i = 0; i < Math.min(files.length, MAX_POST_PHOTOS - data.photos.length); i++) {
       if (!validateImage(files[i])) added.push(createPreviewUrl(files[i]));
     }
     if (added.length) onChange({ photos: [...data.photos, ...added], coverImage: data.coverImage || added[0] });
@@ -150,7 +151,7 @@ export default function CreatePostPage() {
       const photoUrls = await Promise.all(data.photos.map(resolveMediaUrl));
       const videoUrls = await Promise.all(data.videos.map(resolveMediaUrl));
       const mediaUrls = [coverUrl, ...photoUrls, ...videoUrls].filter(Boolean);
-      await postsService.create({ content: buildPostContent(data), mediaUrls });
+      await postsService.TaoBaiViet({ content: buildPostContent(data), mediaUrls });
 
       clearDraft();
       setPublished(true);
@@ -318,7 +319,7 @@ export default function CreatePostPage() {
             <input ref={photoRef} type="file" accept="image/*" multiple className="hidden" onChange={e => { handlePhotos(e.target.files); e.target.value = ''; }} />
             <input ref={videoRef} type="file" accept="video/*" multiple className="hidden" onChange={e => { handleVideos(e.target.files); e.target.value = ''; }} />
             <div className="flex gap-2">
-              <button type="button" onClick={() => photoRef.current?.click()} className="text-xs font-bold text-sky-400 px-3 py-2 rounded-lg border border-sky-500/30 bg-sky-500/10">+ Ảnh ({data.photos.length})</button>
+              <button type="button" disabled={data.photos.length >= 1} onClick={() => photoRef.current?.click()} className="text-xs font-bold text-sky-400 px-3 py-2 rounded-lg border border-sky-500/30 bg-sky-500/10 disabled:opacity-50">+ Ảnh ({data.photos.length}/1)</button>
               <button type="button" onClick={() => videoRef.current?.click()} className="text-xs font-bold text-violet-400 px-3 py-2 rounded-lg border border-violet-500/30 bg-violet-500/10">+ Video ({data.videos.length})</button>
             </div>
             {(data.photos.length > 0 || data.videos.length > 0) && (

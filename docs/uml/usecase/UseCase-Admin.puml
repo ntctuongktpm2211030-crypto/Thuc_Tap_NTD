@@ -1,0 +1,89 @@
+@startuml UseCase_Admin
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Actors
+actor "Quản trị viên\n(Administrator)" as Admin
+
+' External Systems
+actor "Cloud Storage" as CloudStorage <<System>>
+actor "Vector Database" as VectorDB <<System>>
+
+rectangle "Phân hệ Quản trị Hệ thống" {
+  
+  package "Quản trị Người dùng & Phân quyền" {
+    usecase "Quản lý tài khoản người dùng" as UC_ManageUsers
+    usecase "Quản lý vai trò người dùng" as UC_ManageRoles
+    usecase "Quản lý quyền hạn chi tiết" as UC_ManagePermissions
+  }
+  
+  package "Quản trị Dữ liệu Danh thắng & Dịch vụ" {
+    usecase "Quản lý tỉnh thành điểm đến" as UC_ManageDestinations
+    usecase "Quản lý điểm tham quan" as UC_ManageAttractions
+    usecase "Quản lý di tích lịch sử" as UC_ManageHistoricalSites
+    usecase "Quản lý văn hóa phi vật thể" as UC_ManageCultures
+    usecase "Quản lý lễ hội truyền thống" as UC_ManageFestivals
+    usecase "Quản lý món ăn đặc sản" as UC_ManageFoods
+    usecase "Quản lý khách sạn lưu trú" as UC_ManageHotels
+    usecase "Quản lý nhà hàng ẩm thực" as UC_ManageRestaurants
+    usecase "Quản lý phương tiện di chuyển" as UC_ManageTransportation
+  }
+  
+  package "Quản trị Tri thức AI RAG" {
+    usecase "Quản lý kho tri thức RAG" as UC_ManageKB
+    usecase "Nạp tài liệu tri thức (Upload)" as UC_UploadDocs
+    usecase "Tái xây dựng cơ sở dữ liệu vector" as UC_RebuildVector
+  }
+  
+  package "Kiểm duyệt Cộng đồng & Sự kiện" {
+    usecase "Quản lý bài đăng chia sẻ" as UC_ManagePosts
+    usecase "Kiểm duyệt bình luận vi phạm" as UC_ModerateComments
+    usecase "Xử lý báo cáo nội dung xấu" as UC_HandleReports
+    usecase "Quản lý thông báo hệ thống" as UC_ManageNotif
+  }
+  
+  package "Giám sát & An toàn Hệ thống" {
+    usecase "Xem bảng điều khiển Dashboard" as UC_ViewDashboard
+    usecase "Xem biểu đồ thống kê Analytics" as UC_ViewAnalytics
+    usecase "Sao lưu cơ sở dữ liệu" as UC_BackupDB
+    usecase "Phục hồi cơ sở dữ liệu" as UC_RestoreDB
+    usecase "Xem nhật ký hệ thống (System Logs)" as UC_SystemLogs
+    usecase "Xem nhật ký kiểm toán (Audit Logs)" as UC_AuditLogs
+  }
+}
+
+' Admin Associations
+Admin --> UC_ManageUsers
+Admin --> UC_ManageRoles
+Admin --> UC_ManageDestinations
+Admin --> UC_ManageAttractions
+Admin --> UC_ManageHistoricalSites
+Admin --> UC_ManageCultures
+Admin --> UC_ManageFestivals
+Admin --> UC_ManageFoods
+Admin --> UC_ManageHotels
+Admin --> UC_ManageRestaurants
+Admin --> UC_ManageTransportation
+Admin --> UC_ManageKB
+Admin --> UC_ManagePosts
+Admin --> UC_ModerateComments
+Admin --> UC_HandleReports
+Admin --> UC_ViewDashboard
+Admin --> UC_BackupDB
+Admin --> UC_SystemLogs
+
+' Relationships (include / extend)
+UC_ManageRoles ..> UC_ManagePermissions : <<include>>
+UC_ManageKB ..> UC_UploadDocs : <<include>>
+UC_ManageKB ..> UC_RebuildVector : <<include>>
+UC_ViewDashboard <.. UC_ViewAnalytics : <<extend>>
+UC_BackupDB <.. UC_RestoreDB : <<extend>>
+UC_SystemLogs <.. UC_AuditLogs : <<extend>>
+UC_HandleReports ..> UC_ManageNotif : <<extend>>
+
+' External System Associations
+UC_UploadDocs --> CloudStorage
+UC_RebuildVector --> VectorDB
+@enduml

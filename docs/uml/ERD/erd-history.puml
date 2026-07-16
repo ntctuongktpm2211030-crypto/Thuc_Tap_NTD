@@ -1,0 +1,189 @@
+@startuml
+!startsub HISTORY
+entity AIHistory {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * promptText : String
+  * responseJson : String
+  * type : String
+  * createdAt : DateTime
+}
+
+entity LocationHistory {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * latitude : Float <<index: lat, lng>>
+  * longitude : Float <<index: lat, lng>>
+  accuracy : Float <<nullable>>
+  speed : Float <<nullable>>
+  heading : Float <<nullable>>
+  * createdAt : DateTime <<index>>
+}
+
+entity TravelHistory {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * location : String
+  * time : DateTime
+  rating : String <<nullable>>
+  * cost : Float
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity FavoriteFood {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * name : String
+  region : String <<nullable>>
+  description : String <<nullable>>
+  rating : Float <<nullable>>
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity ToolCall {
+  * id : String <<PK>>
+  --
+  * messageId : String <<FK>> <<index>>
+  * toolName : String
+  * input : String
+  output : String <<nullable>>
+  * status : String
+  * createdAt : DateTime
+}
+
+entity UserRecommendation {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * location : String
+  * priority : String
+  reason : String <<nullable>>
+  * type : String
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity Recommendation {
+  * id : String <<PK>>
+  --
+  * tripId : String <<FK>> <<index>>
+  * destinationId : String <<FK>>
+  * score : Float
+  recommendationReason : String <<nullable>>
+}
+
+entity Trip {
+  * id : String <<PK>>
+  --
+  * ownerId : String <<FK>> <<index>>
+  * title : String
+  description : String <<nullable>>
+  * destinationName : String
+  * startDate : DateTime
+  * endDate : DateTime
+  * totalBudget : Float
+  * travelStyle : String
+  * isPublic : Boolean
+  cloneSourceId : String <<FK>> <<index>> <<nullable>>
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity TripDay {
+  * id : String <<PK>>
+  --
+  * tripId : String <<FK>> <<unique: tripId, dayIndex>>
+  * dayIndex : Int <<unique: tripId, dayIndex>>
+  * date : DateTime
+}
+
+entity TripActivity {
+  * id : String <<PK>>
+  --
+  * tripDayId : String <<FK>> <<index>>
+  * destinationId : String <<FK>> <<index>>
+  * startTime : String
+  * endTime : String
+  * estimatedCost : Float
+  * sequenceOrder : Int
+  notes : String <<nullable>>
+}
+
+entity Itinerary {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>> <<index>>
+  * title : String
+  description : String <<nullable>>
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity ItineraryDay {
+  * id : String <<PK>>
+  --
+  * itineraryId : String <<FK>> <<index>>
+  * dayIndex : Int
+  date : DateTime <<nullable>>
+}
+
+entity ItineraryActivity {
+  * id : String <<PK>>
+  --
+  * itineraryDayId : String <<FK>> <<index>>
+  * title : String
+  description : String <<nullable>>
+  startTime : String <<nullable>>
+  endTime : String <<nullable>>
+  location : String <<nullable>>
+  cost : Float <<nullable>>
+}
+
+Trip ||--o{ TripDay : "splits days"
+Trip ||--o{ Post : "tagged in posts"
+Trip ||--o{ Recommendation : "scores suggestions"
+Trip |o--o| Trip : "clones from (cloneSource)"
+TripDay ||--o{ TripActivity : "contains activities"
+Destination ||--o{ TripActivity : "scheduled in activity"
+Destination ||--o{ Recommendation : "recommended destination"
+Itinerary ||--o{ ItineraryDay : "splits template days"
+ItineraryDay ||--o{ ItineraryActivity : "lists template activities"
+
+User ||--o{ Trip : "owns trips"
+User ||--o{ AIHistory : "has prompt logs"
+User ||--o{ LocationHistory : "streams GPS points"
+User ||--o{ TravelHistory : "records trips history"
+User ||--o{ FavoriteFood : "saves foods"
+User ||--o{ Itinerary : "creates itineraries"
+User ||--o{ UserRecommendation : "requests suggestions"
+ChatMessage ||--o{ ToolCall : "triggers agent tool runs"
+!endsub
+
+!startsub HISTORY_OVERVIEW
+entity Trip {
+  * id : String <<PK>>
+  --
+  * ownerId : String <<FK>>
+  * title : String
+  * destinationName : String
+  * startDate : DateTime
+  * endDate : DateTime
+}
+
+entity Itinerary {
+  * id : String <<PK>>
+  --
+  * userId : String <<FK>>
+  * title : String
+}
+
+User ||--o{ Trip : "owns trips"
+User ||--o{ Itinerary : "creates itineraries"
+!endsub
+@enduml

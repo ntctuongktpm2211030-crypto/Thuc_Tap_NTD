@@ -47,6 +47,12 @@ export class ChatbotRepository {
     });
   }
 
+  async deleteConversation(id: string) {
+    return prisma.chatConversation.delete({
+      where: { id },
+    });
+  }
+
   // ─── Messages & Versions ────────────────────────────────────
   async createMessage(conversationId: string, role: string) {
     return prisma.chatMessage.create({

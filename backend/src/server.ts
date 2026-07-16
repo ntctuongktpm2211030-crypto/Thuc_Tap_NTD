@@ -75,11 +75,43 @@ runGeocodingPipeline()
   .then(() => {
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+      startCacheCleanupJob();
     });
   })
   .catch(err => {
     console.error('Failed to start server components:', err);
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
+      startCacheCleanupJob();
     });
   });
+
+// Tác vụ dọn dẹp các bản ghi Cache đã hết hạn định kỳ
+import { CacheService } from './modules/cache/services/cache.service';
+const cacheService = new CacheService();
+
+function startCacheCleanupJob() {
+  console.log('[CacheCleanupJob] Đã kích hoạt tác vụ quét dọn cache hết hạn định kỳ.');
+  
+  // Chạy ngay lần đầu tiên sau khi khởi động server
+  setTimeout(cleanExpiredCache, 5000); // Trì hoãn 5 giây để db ổn định
+
+  // Thiết lập chu kỳ 6 giờ chạy một lần (21600000 ms)
+  setInterval(cleanExpiredCache, 6 * 60 * 60 * 1000);
+}
+
+async function cleanExpiredCache() {
+  console.log(`[CacheCleanupJob] [${new Date().toISOString()}] Bắt đầu dọn dẹp cache quá hạn...`);
+  try {
+    const resPlace = await cacheService.clearExpired('place');
+    const resFood = await cacheService.clearExpired('food');
+    const resBlog = await cacheService.clearExpired('blog');
+    console.log(`[CacheCleanupJob] Dọn dẹp cache hoàn tất.`, {
+      placeDeleted: resPlace?.count || 0,
+      foodDeleted: resFood?.count || 0,
+      blogDeleted: resBlog?.count || 0
+    });
+  } catch (err) {
+    console.error('[CacheCleanupJob] Gặp lỗi khi dọn dẹp cache:', err);
+  }
+}

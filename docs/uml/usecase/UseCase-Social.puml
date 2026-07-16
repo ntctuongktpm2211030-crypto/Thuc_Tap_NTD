@@ -1,0 +1,68 @@
+@startuml UseCase_Social
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Actors
+actor "Khách vãng lai\n(Guest)" as Guest
+actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
+
+' External Systems
+actor "Cloud Storage" as CloudStorage <<System>>
+actor "Notification Service" as PushNotification <<System>>
+
+rectangle "Phân hệ Mạng xã hội & Cộng đồng" {
+  usecase "Xem bảng tin cộng đồng" as UC_ViewFeed
+  usecase "Tìm kiếm bài viết" as UC_SearchPosts
+  usecase "Tìm kiếm người dùng" as UC_SearchUsers
+  
+  usecase "Tạo bài viết chia sẻ mới" as UC_CreatePost
+  usecase "Tải hình ảnh bài đăng" as UC_UploadImage
+  usecase "Chỉnh sửa bài viết cá nhân" as UC_EditPost
+  usecase "Xóa bài viết cá nhân" as UC_DeletePost
+  
+  usecase "Thích bài viết" as UC_Like
+  usecase "Bỏ thích bài viết" as UC_Unlike
+  usecase "Đánh dấu lưu bài viết" as UC_Bookmark
+  usecase "Báo cáo nội dung vi phạm" as UC_ReportContent
+  usecase "Chia sẻ bài viết" as UC_SharePost
+  
+  usecase "Viết bình luận bài đăng" as UC_Comment
+  usecase "Viết phản hồi bình luận" as UC_Reply
+  
+  usecase "Theo dõi thành viên khác" as UC_Follow
+  usecase "Hủy theo dõi thành viên" as UC_Unfollow
+  usecase "Nhận thông báo tương tác" as UC_ReceiveNotif
+}
+
+' Guest Associations
+Guest --> UC_ViewFeed
+Guest --> UC_SearchPosts
+Guest --> UC_SearchUsers
+
+' Registered User Associations
+RegisteredUser --> UC_CreatePost
+RegisteredUser --> UC_EditPost
+RegisteredUser --> UC_DeletePost
+RegisteredUser --> UC_Like
+RegisteredUser --> UC_Unlike
+RegisteredUser --> UC_Bookmark
+RegisteredUser --> UC_ReportContent
+RegisteredUser --> UC_SharePost
+RegisteredUser --> UC_Comment
+RegisteredUser --> UC_Follow
+RegisteredUser --> UC_Unfollow
+RegisteredUser --> UC_ReceiveNotif
+
+' Relationships (include / extend)
+UC_CreatePost ..> UC_UploadImage : <<include>>
+UC_Comment <.. UC_Reply : <<extend>>
+UC_Like ..> UC_ReceiveNotif : <<extend>>
+UC_Comment ..> UC_ReceiveNotif : <<extend>>
+UC_Follow ..> UC_ReceiveNotif : <<extend>>
+
+' External System Associations
+UC_UploadImage --> CloudStorage
+UC_ReceiveNotif --> PushNotification
+@enduml

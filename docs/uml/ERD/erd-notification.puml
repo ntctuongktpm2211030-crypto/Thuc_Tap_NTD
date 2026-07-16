@@ -1,0 +1,27 @@
+@startuml
+!startsub NOTIFICATION
+entity Notification {
+  * id : String <<PK>>
+  --
+  * recipientId : String <<FK>> <<index>>
+  * type : String
+  * content : String
+  * isRead : Boolean
+  * createdAt : DateTime
+}
+
+User ||--o{ Notification : "receives notifications"
+!endsub
+
+!startsub NOTIFICATION_OVERVIEW
+entity Notification {
+  * id : String <<PK>>
+  --
+  * recipientId : String <<FK>>
+  * type : String
+  * isRead : Boolean
+}
+
+User ||--o{ Notification : "receives notifications"
+!endsub
+@enduml

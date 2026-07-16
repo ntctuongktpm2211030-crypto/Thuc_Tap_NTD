@@ -15,6 +15,10 @@ export interface RetrievedDoc {
   category: string;
   score: number;
   similarity?: number;
+  /** Human-readable source attribution (e.g. "Nguồn: Danh mục Văn hóa") */
+  source?: string;
+  /** Optional URL reference for the source document */
+  url?: string;
 }
 
 export interface QueryRagDto {

@@ -1,0 +1,61 @@
+@startuml UseCase_AI
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' Actors
+actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
+
+' External Systems
+actor "LLM Service" as LLM <<System>>
+actor "Vector Database" as VectorDB <<System>>
+
+rectangle "Phân hệ Trợ lý ảo AI & RAG" {
+  usecase "Khởi tạo cuộc hội thoại mới" as UC_StartConv
+  usecase "Xem lịch sử trò chuyện" as UC_ConvHistory
+  usecase "Đặt câu hỏi du lịch" as UC_AskQuestion
+  usecase "Nhận câu trả lời từ AI" as UC_ReceiveAnswer
+  usecase "Truy xuất ngữ cảnh RAG" as UC_RetrieveContext
+  usecase "Tìm kiếm ngữ nghĩa tri thức" as UC_SemanticSearch
+  usecase "Tìm kiếm tương đồng vector" as UC_SimilaritySearch
+  usecase "Sinh câu trả lời LLM" as UC_GenerateResponse
+  
+  usecase "Đề xuất điểm đến du lịch" as UC_RecDest
+  usecase "Đề xuất ẩm thực đặc sản" as UC_RecFood
+  usecase "Đề xuất lễ hội truyền thống" as UC_RecFestival
+  usecase "Đề xuất nét văn hóa di sản" as UC_RecCulture
+  usecase "Đề xuất khách sạn lưu trú" as UC_RecHotel
+  usecase "Đề xuất lộ trình tối ưu" as UC_RecRoute
+  usecase "Cung cấp lời khuyên an toàn" as UC_TravelAdvice
+  
+  usecase "Gửi đánh giá câu trả lời AI" as UC_FeedbackResponse
+}
+
+' Registered User Associations
+RegisteredUser --> UC_StartConv
+RegisteredUser --> UC_ConvHistory
+RegisteredUser --> UC_AskQuestion
+RegisteredUser --> UC_ReceiveAnswer
+RegisteredUser --> UC_FeedbackResponse
+
+' Relationships (include / extend)
+UC_AskQuestion ..> UC_ReceiveAnswer : <<include>>
+UC_ReceiveAnswer ..> UC_GenerateResponse : <<include>>
+UC_GenerateResponse ..> UC_RetrieveContext : <<include>>
+UC_RetrieveContext ..> UC_SemanticSearch : <<include>>
+UC_SemanticSearch ..> UC_SimilaritySearch : <<include>>
+
+' Extensions (gợi ý)
+UC_ReceiveAnswer <.. UC_RecDest : <<extend>>
+UC_ReceiveAnswer <.. UC_RecFood : <<extend>>
+UC_ReceiveAnswer <.. UC_RecFestival : <<extend>>
+UC_ReceiveAnswer <.. UC_RecCulture : <<extend>>
+UC_ReceiveAnswer <.. UC_RecHotel : <<extend>>
+UC_ReceiveAnswer <.. UC_RecRoute : <<extend>>
+UC_ReceiveAnswer <.. UC_TravelAdvice : <<extend>>
+
+' External System Associations
+UC_GenerateResponse --> LLM
+UC_SimilaritySearch --> VectorDB
+@enduml

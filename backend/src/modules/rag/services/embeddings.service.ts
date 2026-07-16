@@ -16,6 +16,7 @@ export class EmbeddingsService {
 
     if (this.apiKey && !isGroq && !isGoogle) {
       try {
+        const EMBEDDING_TIMEOUT_MS = parseInt(process.env.EMBEDDING_TIMEOUT_MS || '15000', 10);
         const response = await fetch('https://api.openai.com/v1/embeddings', {
           method: 'POST',
           headers: {
@@ -26,6 +27,7 @@ export class EmbeddingsService {
             model: 'text-embedding-3-small',
             input: text,
           }),
+          signal: AbortSignal.timeout(EMBEDDING_TIMEOUT_MS),
         });
 
         if (response.ok) {

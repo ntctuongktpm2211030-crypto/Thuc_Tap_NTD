@@ -9,7 +9,7 @@ export class SavedPlaceController {
     this.service = new SavedPlaceService();
   }
 
-  create = async (req: AuthRequest, res: Response) => {
+  TaoDiaDiemDaLuu = async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user!.sub;
       const data = req.body;
@@ -21,7 +21,7 @@ export class SavedPlaceController {
     }
   };
 
-  list = async (req: AuthRequest, res: Response) => {
+  LayDanhSachDiaDiemDaLuu = async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user!.sub;
       const list = await this.service.list(userId);
@@ -32,7 +32,7 @@ export class SavedPlaceController {
     }
   };
 
-  update = async (req: AuthRequest, res: Response) => {
+  CapNhatDiaDiemDaLuu = async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user!.sub;
       const id = req.params.id;
@@ -45,7 +45,7 @@ export class SavedPlaceController {
     }
   };
 
-  delete = async (req: AuthRequest, res: Response) => {
+  XoaDiaDiemDaLuu = async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user!.sub;
       const id = req.params.id;
