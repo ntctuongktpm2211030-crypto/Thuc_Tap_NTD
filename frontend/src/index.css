@@ -4080,6 +4080,8 @@ body::before {
   border: 1px solid var(--border-normal);
   border-radius: 1rem;
   overflow: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
   transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
@@ -4118,6 +4120,7 @@ body::before {
 }
 .blog-article__body {
   flex: 1;
+  min-width: 0;
   padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, Heart, MessageSquare, UserPlus, CheckSquare, ArrowLeft } from 'lucide-react';
+import { Bell, Heart, MessageSquare, UserPlus, CheckSquare, ArrowLeft, Clock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLang } from '../../contexts/LanguageContext';
 import { socialService } from '../../services/smartTravel.service';
@@ -10,6 +10,95 @@ export default function NotificationsPage() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const getRelativeTime = (dateInput: string | Date) => {
+    const date = new Date(dateInput);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSecs < 60) return vi ? 'Vừa xong' : 'Just now';
+    if (diffMins < 60) return vi ? `${diffMins} phút trước` : `${diffMins}m ago`;
+    if (diffHours < 24) return vi ? `${diffHours} giờ trước` : `${diffHours}h ago`;
+    if (diffDays === 1) return vi ? 'Hôm qua' : 'Yesterday';
+    if (diffDays < 7) return vi ? `${diffDays} ngày trước` : `${diffDays}d ago`;
+
+    return date.toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
+
+  const renderNotificationContent = (content: string) => {
+    if (vi) {
+      const match = content.match(/^(.*?)\s+(đã\s+.*)$/);
+      if (match) {
+        return (
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            <span className="font-bold text-[var(--text-primary)]">{match[1]}</span>{' '}
+            <span>{match[2]}</span>
+          </p>
+        );
+      }
+    } else {
+      const verbs = ['liked', 'commented', 'started', 'sent', 'followed'];
+      for (const verb of verbs) {
+        if (content.includes(` ${verb} `)) {
+          const parts = content.split(` ${verb} `);
+          return (
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+              <span className="font-bold text-[var(--text-primary)]">{parts[0]}</span>{' '}
+              <span>{verb} {parts.slice(1).join(` ${verb} `)}</span>
+            </p>
+          );
+        }
+      }
+    }
+    return <p className="text-sm text-[var(--text-primary)] leading-relaxed">{content}</p>;
+  };
+
+  const getNotifIcon = (type: string) => {
+    switch (type) {
+      case 'like':
+        return <Heart size={15} className="fill-rose-500 text-rose-500" />;
+      case 'comment':
+        return <MessageSquare size={15} className="text-blue-500 fill-blue-500/5" />;
+      case 'friend_request':
+        return <UserPlus size={15} className="text-emerald-500" />;
+      default:
+        return <Bell size={15} className="text-[var(--gold)]" />;
+    }
+  };
+
+  const getNotifIconBg = (type: string) => {
+    switch (type) {
+      case 'like':
+        return 'bg-rose-500/10 text-rose-500';
+      case 'comment':
+        return 'bg-blue-500/10 text-blue-500';
+      case 'friend_request':
+        return 'bg-emerald-500/10 text-emerald-500';
+      default:
+        return 'bg-[var(--gold-glow)] text-[var(--gold)]';
+    }
+  };
+
+  const getNotifBorderAccent = (type: string) => {
+    switch (type) {
+      case 'like':
+        return 'border-l-[3px] border-l-rose-500';
+      case 'comment':
+        return 'border-l-[3px] border-l-blue-500';
+      case 'friend_request':
+        return 'border-l-[3px] border-l-emerald-500';
+      default:
+        return 'border-l-[3px] border-l-[var(--gold)]';
+    }
+  };
 
   const getNotifLink = (notif: any) => {
     if (notif.type === 'like' || notif.type === 'comment') {
@@ -59,19 +148,6 @@ export default function NotificationsPage() {
     }
   };
 
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'like':
-        return <Heart className="text-rose-500 fill-rose-500" size={18} />;
-      case 'comment':
-        return <MessageSquare className="text-blue-500 fill-blue-500/10" size={18} />;
-      case 'friend_request':
-        return <UserPlus className="text-emerald-500" size={18} />;
-      default:
-        return <Bell className="text-[var(--gold)]" size={18} />;
-    }
-  };
-
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 min-h-[70vh]">
       {/* Header */}
@@ -110,38 +186,34 @@ export default function NotificationsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {notifications.map(notif => (
-            <div
-              key={notif.id}
-              onClick={() => handleNotificationClick(notif)}
-              className={`flex items-start gap-4 p-4.5 rounded-2xl border cursor-pointer hover:bg-[var(--bg-elevated)] transition-all ${
-                notif.isRead
-                  ? 'bg-[var(--bg-surface)] border-[var(--border-subtle)] opacity-70'
-                  : 'bg-[var(--bg-surface)] border-[var(--gold)]/30 shadow-lg shadow-[var(--gold-glow)]/5 ring-1 ring-[var(--gold)]/5'
-              }`}
-            >
-              <div className="p-2.5 rounded-xl bg-[var(--bg-elevated)] flex-shrink-0">
-                {getIcon(notif.type)}
+          {notifications.map(notif => {
+            const isUnread = !notif.isRead;
+            return (
+              <div
+                key={notif.id}
+                onClick={() => handleNotificationClick(notif)}
+                className={`group flex items-start gap-4 p-4.5 rounded-2xl border cursor-pointer hover:bg-[var(--bg-elevated)] transition-all duration-200 ${
+                  isUnread
+                    ? `bg-[var(--bg-surface)] border-[var(--gold)]/20 shadow-md ring-1 ring-[var(--gold)]/5 ${getNotifBorderAccent(notif.type)}`
+                    : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] opacity-70'
+                }`}
+              >
+                <div className={`p-2.5 rounded-xl flex-shrink-0 flex items-center justify-center transition-transform group-hover:scale-105 duration-200 ${getNotifIconBg(notif.type)}`}>
+                  {getNotifIcon(notif.type)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  {renderNotificationContent(notif.content)}
+                  <div className="flex items-center gap-1 text-[10px] text-[var(--text-muted)] font-medium mt-2">
+                    <Clock size={11} className="opacity-75" />
+                    <span>{getRelativeTime(notif.createdAt)}</span>
+                  </div>
+                </div>
+                {isUnread && (
+                  <div className="w-2 h-2 rounded-full bg-rose-500 mt-2 flex-shrink-0 animate-pulse" />
+                )}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-[var(--text-primary)] font-medium leading-relaxed">
-                  {notif.content}
-                </p>
-                <span className="text-[10px] text-[var(--text-muted)] font-medium mt-2 block">
-                  {new Date(notif.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </span>
-              </div>
-              {!notif.isRead && (
-                <div className="w-2 h-2 rounded-full bg-rose-500 mt-2 flex-shrink-0 animate-pulse" />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

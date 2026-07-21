@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import {
   Map, Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe, Loader2,
-  Menu, X, User, Send, Utensils, Bot, Search, Bookmark,
+  Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './store/authSlice';
@@ -75,6 +75,70 @@ function App() {
   };
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const getRelativeTime = (dateInput: string | Date, currentLang: string) => {
+    const date = new Date(dateInput);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    const vi = currentLang === 'vi';
+
+    if (diffSecs < 60) return vi ? 'Vừa xong' : 'Just now';
+    if (diffMins < 60) return vi ? `${diffMins} phút trước` : `${diffMins}m ago`;
+    if (diffHours < 24) return vi ? `${diffHours} giờ trước` : `${diffHours}h ago`;
+    if (diffDays === 1) return vi ? 'Hôm qua' : 'Yesterday';
+    if (diffDays < 7) return vi ? `${diffDays} ngày trước` : `${diffDays}d ago`;
+
+    return date.toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
+      day: 'numeric',
+      month: 'short',
+    });
+  };
+
+  const getNotifIcon = (type: string) => {
+    switch (type) {
+      case 'like':
+        return <Heart size={13} className="fill-rose-500 text-rose-500" />;
+      case 'comment':
+        return <MessageSquare size={13} className="text-blue-500 fill-blue-500/5" />;
+      case 'friend_request':
+        return <UserPlus size={13} className="text-emerald-500" />;
+      default:
+        return <Bell size={13} className="text-[var(--gold)]" />;
+    }
+  };
+
+  const renderNotificationContent = (content: string, currentLang: string) => {
+    if (currentLang === 'vi') {
+      const match = content.match(/^(.*?)\s+(đã\s+.*)$/);
+      if (match) {
+        return (
+          <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
+            <span className="font-bold text-[var(--text-primary)]">{match[1]}</span>{' '}
+            <span>{match[2]}</span>
+          </p>
+        );
+      }
+    } else {
+      const verbs = ['liked', 'commented', 'started', 'sent', 'followed'];
+      for (const verb of verbs) {
+        if (content.includes(` ${verb} `)) {
+          const parts = content.split(` ${verb} `);
+          return (
+            <p className="text-[11.5px] text-[var(--text-secondary)] leading-relaxed">
+              <span className="font-bold text-[var(--text-primary)]">{parts[0]}</span>{' '}
+              <span>{verb} {parts.slice(1).join(` ${verb} `)}</span>
+            </p>
+          );
+        }
+      }
+    }
+    return <p className="text-[11.5px] text-[var(--text-primary)] leading-relaxed">{content}</p>;
+  };
 
   const fetchNotifications = () => {
     if (isAuthenticated && user) {
@@ -239,9 +303,9 @@ function App() {
             <div className="hidden sm:flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
               {(['vi', 'en'] as const).map(l => (
                 <button key={l} onClick={() => setLang(l)} title={l === 'vi' ? 'Tiếng Việt' : 'English'}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all ${
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none ${
                     lang === l
-                      ? 'bg-[var(--gold)] text-black shadow-sm'
+                      ? 'bg-[var(--gold)] text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}>
                   <Globe size={10} />
@@ -276,11 +340,18 @@ function App() {
               {notifOpen && (
                 <>
                   <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setNotifOpen(false)} />
-                  <div className="absolute right-0 mt-3.5 w-80 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-2xl p-4.5 z-50 transition-all duration-200">
-                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-[var(--border-subtle)]">
-                      <h4 className="font-bold text-[10px] text-[var(--text-primary)] uppercase tracking-wider">
-                        {lang === 'vi' ? 'Thông báo' : 'Notifications'}
-                      </h4>
+                  <div className="absolute right-0 mt-3.5 w-[360px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-4 z-50 transition-all duration-200">
+                    <div className="flex justify-between items-center mb-3.5 pb-2.5 border-b border-[var(--border-subtle)]/60">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-bold text-xs text-[var(--text-primary)] uppercase tracking-wider">
+                          {lang === 'vi' ? 'Thông báo' : 'Notifications'}
+                        </h4>
+                        {unreadCount > 0 && (
+                          <span className="px-1.5 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full leading-none animate-pulse">
+                            {unreadCount}
+                          </span>
+                        )}
+                      </div>
                       {unreadCount > 0 && (
                         <button
                           onClick={async () => {
@@ -291,49 +362,76 @@ function App() {
                               console.error('Mark all read failed:', err);
                             }
                           }}
-                          className="text-[10px] font-black text-[var(--gold)] hover:underline hover:text-[var(--gold-light)]"
+                          className="text-[11px] font-bold text-[var(--gold)] hover:text-[var(--gold-light)] transition-colors hover:underline"
                         >
                           {lang === 'vi' ? 'Đọc tất cả' : 'Mark all read'}
                         </button>
                       )}
                     </div>
-                    <div className="max-h-72 overflow-y-auto space-y-2.5 pr-1">
+                    <div className="max-h-[340px] overflow-y-auto space-y-2.5 pr-1.5 scrollbar-thin">
                       {notifications.length === 0 ? (
-                        <p className="text-center text-xs text-[var(--text-muted)] py-6">
-                          {lang === 'vi' ? 'Không có thông báo nào.' : 'No notifications.'}
-                        </p>
+                        <div className="text-center py-8">
+                          <Bell size={28} className="mx-auto text-[var(--text-muted)] opacity-60 mb-2" />
+                          <p className="text-xs text-[var(--text-muted)] font-medium">
+                            {lang === 'vi' ? 'Không có thông báo nào.' : 'No notifications.'}
+                          </p>
+                        </div>
                       ) : (
-                        notifications.map(notif => (
-                          <div
-                            key={notif.id}
-                            onClick={() => handleNotificationClick(notif)}
-                            className={`flex items-start gap-3 p-3 rounded-xl transition-all border cursor-pointer hover:bg-[var(--bg-elevated)] ${
-                              notif.isRead ? 'opacity-65 border-transparent' : 'bg-[var(--gold-glow)]/20 border-[var(--border-glow)] shadow-sm'
-                            }`}
-                          >
-                            <div className="mt-0.5 p-1.5 rounded-lg bg-[var(--bg-elevated)] text-[var(--gold)]">
-                              <Bell size={12} />
+                        notifications.map(notif => {
+                          const isUnread = !notif.isRead;
+                          return (
+                            <div
+                              key={notif.id}
+                              onClick={() => handleNotificationClick(notif)}
+                              className={`group flex items-start gap-3 p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
+                                isUnread
+                                  ? 'bg-[var(--gold-glow)] border-[var(--gold)]/20 hover:bg-[var(--gold-glow-strong)] shadow-sm hover:shadow-md'
+                                  : 'bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] border-transparent hover:border-[var(--border-subtle)]'
+                              }`}
+                            >
+                              {/* Accent Left Line for Unread */}
+                              {isUnread && (
+                                <div className={`w-0.5 self-stretch rounded-full ${
+                                  notif.type === 'like' ? 'bg-rose-500' :
+                                  notif.type === 'comment' ? 'bg-blue-500' :
+                                  notif.type === 'friend_request' ? 'bg-emerald-500' : 'bg-[var(--gold)]'
+                                }`} />
+                              )}
+
+                              {/* Icon container */}
+                              <div className={`flex-shrink-0 p-2 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 duration-200 ${
+                                notif.type === 'like' ? 'bg-rose-500/10 text-rose-500' :
+                                notif.type === 'comment' ? 'bg-blue-500/10 text-blue-500' :
+                                notif.type === 'friend_request' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-[var(--gold-glow)] text-[var(--gold)]'
+                              }`}>
+                                {getNotifIcon(notif.type)}
+                              </div>
+
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
+                                {renderNotificationContent(notif.content, lang)}
+                                <div className="flex items-center gap-1 text-[9px] text-[var(--text-muted)] mt-1.5 font-medium">
+                                  <Clock size={10} className="opacity-75" />
+                                  <span>{getRelativeTime(notif.createdAt, lang)}</span>
+                                </div>
+                              </div>
+
+                              {/* Unread Status Dot */}
+                              {isUnread && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0" />
+                              )}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-[11px] text-[var(--text-primary)] font-medium leading-relaxed">{notif.content}</p>
-                              <p className="text-[9px] text-[var(--text-muted)] mt-1.5">
-                                {new Date(notif.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', {
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                              </p>
-                            </div>
-                          </div>
-                        ))
+                          );
+                        })
                       )}
                     </div>
-                    <div className="mt-3.5 pt-2 border-t border-[var(--border-subtle)] text-center">
+                    <div className="mt-3 pt-2.5 border-t border-[var(--border-subtle)]/60 text-center">
                       <Link
                         to="/notifications"
                         onClick={() => setNotifOpen(false)}
-                        className="text-xs font-bold text-[var(--gold)] hover:underline hover:text-[var(--gold-light)] block w-full"
+                        className="text-xs font-bold text-[var(--gold)] hover:text-[var(--gold-light)] block w-full hover:underline transition-colors"
                       >
-                        {lang === 'vi' ? 'Xem tất cả' : 'View all'}
+                        {lang === 'vi' ? 'Xem tất cả thông báo' : 'View all notifications'}
                       </Link>
                     </div>
                   </div>
@@ -427,7 +525,7 @@ function App() {
                 <div className="flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
                   {(['vi', 'en'] as const).map(l => (
                     <button key={l} onClick={() => setLang(l)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang === l ? 'bg-[var(--gold)] text-black' : 'text-[var(--text-muted)]'}`}>
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none ${lang === l ? 'bg-[var(--gold)] text-white' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}>
                       {l.toUpperCase()}
                     </button>
                   ))}

@@ -3420,3 +3420,682 @@ Unknown argument `userId`. Available options are marked with ?.
     at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
     at autoSeed (D:\Thuc_Tap_NDT\backend\src\config\seed.ts:39:7)
 
+[Console Error Logged] 2026-07-21T08:04:07.230Z - Error: Cannot find module '@supabase/supabase-js'
+Require stack:
+- D:\Thuc_Tap_NTD\backend\src\config\supabase.ts
+- D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts
+- D:\Thuc_Tap_NTD\backend\src\app.ts
+- D:\Thuc_Tap_NTD\backend\src\server.ts
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.require (node:internal/modules/cjs/loader:1487:12)
+    at require (node:internal/modules/helpers:135:16)
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\config\supabase.ts:1:1)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1730:14)
+
+[Console Error Logged] 2026-07-21T08:12:44.061Z - Error: Cannot find module '@supabase/supabase-js'
+Require stack:
+- D:\Thuc_Tap_NTD\backend\src\config\supabase.ts
+- D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts
+- D:\Thuc_Tap_NTD\backend\src\app.ts
+- D:\Thuc_Tap_NTD\backend\src\server.ts
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.require (node:internal/modules/cjs/loader:1487:12)
+    at require (node:internal/modules/helpers:135:16)
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\config\supabase.ts:1:1)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1730:14)
+
+[Console Error Logged] 2026-07-21T08:13:24.108Z - Error: supabaseUrl is required.
+    at validateSupabaseUrl (D:\Thuc_Tap_NTD\backend\node_modules\@supabase\supabase-js\src\lib\helpers.ts:111:11)
+    at new SupabaseClient (D:\Thuc_Tap_NTD\backend\node_modules\@supabase\supabase-js\src\SupabaseClient.ts:316:21)
+    at createClient (D:\Thuc_Tap_NTD\backend\node_modules\@supabase\supabase-js\src\index.ts:65:10)
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\config\supabase.ts:6:37)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1730:14)
+    at Module._compile (D:\Thuc_Tap_NTD\backend\node_modules\source-map-support\source-map-support.js:568:25)
+    at Module.m._compile (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-19198862016033336.js:69:33)
+    at node:internal/modules/cjs/loader:1895:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-19198862016033336.js:114:20)
+    at require.extensions.<computed> (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-19198862016033336.js:71:20)
+
+[Console Error Logged] 2026-07-21T08:14:45.102Z - ❌ Error during auto-seed: 
+Invalid `prisma.comment.deleteMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\config\seed.ts:39:28
+
+  36 });
+  37 
+  38 // Delete comments
+→ 39 await prisma.comment.deleteMany({
+       where: {
+         userId: {
+         ~~~~~~
+           in: [
+             "127f5203-86bb-44aa-b943-f76f0d27e756",
+             "cdffa4ec-6be3-4bf1-89dd-429ccaba5298",
+             "84519475-384d-478c-9db9-3468263d9123",
+             "a578aba9-2619-49b1-9a19-6d81ce7a7f3c",
+             "855bb5d3-0617-4c64-afec-3e4a8416f6bf",
+             "fd41158f-6476-49d0-b06c-f8d08aa322b2",
+             "2c0044a3-fea1-4544-a180-af80aa816f96"
+           ]
+         },
+     ?   AND?: CommentWhereInput | CommentWhereInput[],
+     ?   OR?: CommentWhereInput[],
+     ?   NOT?: CommentWhereInput | CommentWhereInput[],
+     ?   id?: StringFilter | String,
+     ?   postId?: StringFilter | String,
+     ?   authorId?: StringFilter | String,
+     ?   content?: StringFilter | String,
+     ?   parentId?: StringNullableFilter | String | Null,
+     ?   createdAt?: DateTimeFilter | DateTime,
+     ?   post?: PostRelationFilter | PostWhereInput,
+     ?   author?: UserRelationFilter | UserWhereInput,
+     ?   parent?: CommentNullableRelationFilter | CommentWhereInput | Null,
+     ?   replies?: CommentListRelationFilter
+       }
+     })
+
+Unknown argument `userId`. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.comment.deleteMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\config\seed.ts:39:28
+
+  36 });
+  37 
+  38 // Delete comments
+→ 39 await prisma.comment.deleteMany({
+       where: {
+         userId: {
+         ~~~~~~
+           in: [
+             "127f5203-86bb-44aa-b943-f76f0d27e756",
+             "cdffa4ec-6be3-4bf1-89dd-429ccaba5298",
+             "84519475-384d-478c-9db9-3468263d9123",
+             "a578aba9-2619-49b1-9a19-6d81ce7a7f3c",
+             "855bb5d3-0617-4c64-afec-3e4a8416f6bf",
+             "fd41158f-6476-49d0-b06c-f8d08aa322b2",
+             "2c0044a3-fea1-4544-a180-af80aa816f96"
+           ]
+         },
+     ?   AND?: CommentWhereInput | CommentWhereInput[],
+     ?   OR?: CommentWhereInput[],
+     ?   NOT?: CommentWhereInput | CommentWhereInput[],
+     ?   id?: StringFilter | String,
+     ?   postId?: StringFilter | String,
+     ?   authorId?: StringFilter | String,
+     ?   content?: StringFilter | String,
+     ?   parentId?: StringNullableFilter | String | Null,
+     ?   createdAt?: DateTimeFilter | DateTime,
+     ?   post?: PostRelationFilter | PostWhereInput,
+     ?   author?: UserRelationFilter | UserWhereInput,
+     ?   parent?: CommentNullableRelationFilter | CommentWhereInput | Null,
+     ?   replies?: CommentListRelationFilter
+       }
+     })
+
+Unknown argument `userId`. Available options are marked with ?.
+    at wn (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at autoSeed (D:\Thuc_Tap_NTD\backend\src\config\seed.ts:39:7)
+
+[Console Error Logged] 2026-07-21T08:15:17.323Z - ❌ Error during auto-seed: Cannot read properties of undefined (reading 'deleteMany')
+Stack: TypeError: Cannot read properties of undefined (reading 'deleteMany')
+    at autoSeed (D:\Thuc_Tap_NTD\backend\src\config\seed.ts:64:26)
+
+[Console Error Logged] 2026-07-21T09:04:14.838Z - [DashboardController/getTrending] 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:31:24
+
+  28 // 1. Checkin current vs previous
+  29 const [currCheckins, prevCheckins] = await Promise.all([
+  30   prisma.checkIn.count({ where: { destinationId: dest.id, createdAt: { gte: sevenDaysAgo, lte: now } } }),
+→ 31   prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:31:24
+
+  28 // 1. Checkin current vs previous
+  29 const [currCheckins, prevCheckins] = await Promise.all([
+  30   prisma.checkIn.count({ where: { destinationId: dest.id, createdAt: { gte: sevenDaysAgo, lte: now } } }),
+→ 31   prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async Promise.all (index 1)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:29:44
+    at async Promise.all (index 97)
+    at getTrendingDestinations (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:26:24)
+    at getTrending (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:193:22)
+
+[Console Error Logged] 2026-07-21T09:04:23.478Z - [DashboardController/getGis] 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "6bb7df18-1973-4536-a28d-3f239f63b38b",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "6bb7df18-1973-4536-a28d-3f239f63b38b",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+    at wn (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:21
+    at async Promise.all (index 5)
+    at getGisHotspots (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:41:20)
+    at getGis (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:182:22)
+
+[Console Error Logged] 2026-07-21T09:05:50.890Z - [DashboardController/getTrending] 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:30:24
+
+  27 destinations.map(async (dest) => {
+  28   // 1. Checkin current vs previous
+  29   const [currCheckins, prevCheckins] = await Promise.all([
+→ 30     prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:30:24
+
+  27 destinations.map(async (dest) => {
+  28   // 1. Checkin current vs previous
+  29   const [currCheckins, prevCheckins] = await Promise.all([
+→ 30     prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async Promise.all (index 0)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:29:44
+    at async Promise.all (index 91)
+    at getTrendingDestinations (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:26:24)
+    at getTrending (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:193:22)
+
+[Console Error Logged] 2026-07-21T09:05:58.194Z - [DashboardController/getGis] 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "fb19703a-5e62-4a5b-8e4f-630ca357d9a6",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "fb19703a-5e62-4a5b-8e4f-630ca357d9a6",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+    at wn (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:21
+    at async Promise.all (index 1)
+    at getGisHotspots (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:41:20)
+    at getGis (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:182:22)
+
+[Console Error Logged] 2026-07-21T09:06:15.205Z - [DashboardController/getTrending] 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:31:24
+
+  28 // 1. Checkin current vs previous
+  29 const [currCheckins, prevCheckins] = await Promise.all([
+  30   prisma.checkIn.count({ where: { destinationId: dest.id, createdAt: { gte: sevenDaysAgo, lte: now } } }),
+→ 31   prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.checkIn.count()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:31:24
+
+  28 // 1. Checkin current vs previous
+  29 const [currCheckins, prevCheckins] = await Promise.all([
+  30   prisma.checkIn.count({ where: { destinationId: dest.id, createdAt: { gte: sevenDaysAgo, lte: now } } }),
+→ 31   prisma.checkIn.count(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 9)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async Promise.all (index 1)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:29:44
+    at async Promise.all (index 7)
+    at getTrendingDestinations (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.trending.ts:26:24)
+    at getTrending (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:193:22)
+
+[Console Error Logged] 2026-07-21T09:06:30.690Z - [DashboardController/getGis] 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "d2f20aa6-f562-4776-b5cc-ccbdc6108464",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+Stack: PrismaClientValidationError: 
+Invalid `prisma.post.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:39
+
+  41 const hotspots = await Promise.all(
+  42   destinations.map(async (dest) => {
+  43     // Find posts written at this destination to get images and likes
+→ 44     const posts = await prisma.post.findMany({
+           where: {
+             locationId: "d2f20aa6-f562-4776-b5cc-ccbdc6108464",
+             deletedAt: null
+           },
+           take: 5,
+           include: {
+             author: {
+               select: {
+                 name: true,
+                 ~~~~
+         ?       id?: true,
+         ?       email?: true,
+         ?       passwordHash?: true,
+         ?       role?: true,
+         ?       isVerified?: true,
+         ?       verificationToken?: true,
+         ?       resetPasswordToken?: true,
+         ?       createdAt?: true,
+         ?       updatedAt?: true,
+         ?       profile?: true,
+         ?       preferences?: true,
+         ?       trips?: true,
+         ?       posts?: true,
+         ?       comments?: true,
+         ?       likes?: true,
+         ?       bookmarks?: true,
+         ?       checkIns?: true,
+         ?       notifications?: true,
+         ?       aiHistories?: true,
+         ?       liveLocation?: true,
+         ?       chatbotConversations?: true,
+         ?       aiMemory?: true,
+         ?       userRecommendations?: true,
+         ?       travelHistories?: true,
+         ?       favoriteFoods?: true,
+         ?       savedPlaces?: true,
+         ?       aiFeedbacks?: true,
+         ?       followers?: true,
+         ?       following?: true,
+         ?       conversations?: true,
+         ?       messages?: true,
+         ?       journeys?: true,
+         ?       locationHistory?: true,
+         ?       organizedEvents?: true,
+         ?       eventAttendances?: true,
+         ?       travelerMatchesUser?: true,
+         ?       travelerMatchesTarget?: true,
+         ?       _count?: true
+               }
+             },
+             _count: {
+               select: {
+                 likes: true,
+                 comments: true
+               }
+             }
+           }
+         })
+
+Unknown field `name` for select statement on model `User`. Available options are marked with ?.
+    at wn (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:44:21
+    at async Promise.all (index 2)
+    at getGisHotspots (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\services\dashboard.gis.ts:41:20)
+    at getGis (D:\Thuc_Tap_NTD\backend\src\modules\dashboard\controllers\dashboard.controller.ts:182:22)
+
+[Console Error Logged] 2026-07-21T09:08:19.746Z - [posts/bookmark] 
+Invalid `prisma.bookmark.create()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts:312:29
+
+  309   await prisma.bookmark.delete({ where: { postId_userId: { postId, userId } } });
+  310   return res.json({ bookmarked: false });
+  311 } else {
+→ 312   await prisma.bookmark.create(
+Foreign key constraint violated: `Bookmark_postId_fkey (index)`
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.bookmark.create()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts:312:29
+
+  309   await prisma.bookmark.delete({ where: { postId_userId: { postId, userId } } });
+  310   return res.json({ bookmarked: false });
+  311 } else {
+→ 312   await prisma.bookmark.create(
+Foreign key constraint violated: `Bookmark_postId_fkey (index)`
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts:312:7
+

@@ -37,7 +37,7 @@ export async function autoSeed() {
 
       // Delete comments
       await prisma.comment.deleteMany({
-        where: { userId: { in: mockUserIds } }
+        where: { authorId: { in: mockUserIds } }
       });
 
       // Delete likes
@@ -61,7 +61,7 @@ export async function autoSeed() {
       });
 
       // Delete stories
-      await prisma.story.deleteMany({
+      await prisma.journey.deleteMany({
         where: { userId: { in: mockUserIds } }
       });
 

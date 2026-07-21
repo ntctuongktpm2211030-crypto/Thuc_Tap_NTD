@@ -172,7 +172,7 @@ export default function CultureFoodGuidePage() {
               { n: '4.8', l: vi ? 'ĐÁNH GIÁ TB' : 'AVG RATING' },
             ].map(s => (
               <div key={s.l} className="bg-white/10 backdrop-blur-md border border-white/10 hover:border-white/20 rounded-2xl p-5 text-center shadow-[0_4px_12px_rgba(255,255,255,0.02)] flex-1 sm:flex-initial sm:w-[130px] flex flex-col justify-center items-center transition-all duration-200 hover:-translate-y-0.5">
-                <span className="text-blue-400 font-bold text-2.5xl sm:text-3xl tracking-tight">{s.n}</span>
+                <span className="text-amber-400 font-bold text-2.5xl sm:text-3xl tracking-tight">{s.n}</span>
                 <span className="text-[9px] font-bold text-slate-300 tracking-wider uppercase mt-2">{s.l}</span>
               </div>
             ))}
