@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import {
   Map, Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe, Loader2,
   Menu, X, User, Send, Utensils, Bot, Search, Bookmark,
@@ -13,6 +13,7 @@ import { useLang } from './contexts/LanguageContext';
 import AuthPage from './features/auth/AuthPage';
 import logoImg from './assets/logo.png';
 import UserMenuDropdown from './components/layout/UserMenuDropdown';
+import { io } from 'socket.io-client';
 
 // ─── Page imports ──────────────────────────────────────────
 import SocialFeedPage from './features/feed/SocialFeedPage';
@@ -34,10 +35,12 @@ import ChatbotPage from './features/chatbot/ChatbotPage';
 const MapDashboard = lazy(() => import('./features/map/MapDashboard'));
 const TripPlanner = lazy(() => import('./features/trips/TripPlanner'));
 const AdminDashboard = lazy(() => import('./features/admin/AdminDashboard'));
+const MotionPlayground = lazy(() => import('./features/admin/MotionPlayground'));
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((s: RootState) => s.auth);
   const { toggleTheme, isDark } = useTheme();
   const { lang, setLang, t } = useLang();
@@ -45,6 +48,31 @@ function App() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [toastMessage, setToastMessage] = useState('');
+  const [newNotifObj, setNewNotifObj] = useState<any>(null);
+
+  const getNotifLink = (notif: any) => {
+    if (notif.type === 'like' || notif.type === 'comment') {
+      return notif.targetId ? `/?postId=${notif.targetId}` : '/';
+    }
+    if (notif.type === 'friend_request') {
+      return '/profile/following';
+    }
+    return '/notifications';
+  };
+
+  const handleNotificationClick = async (notif: any) => {
+    try {
+      if (!notif.isRead) {
+        await socialService.markAsRead(notif.id);
+        setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, isRead: true } : n));
+      }
+    } catch (err) {
+      console.error('Mark notification read failed:', err);
+    }
+    setNotifOpen(false);
+    navigate(getNotifLink(notif));
+  };
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -65,6 +93,37 @@ function App() {
       return () => clearInterval(interval);
     } else {
       setNotifications([]);
+    }
+  }, [isAuthenticated, user]);
+
+  // Connect to Notification socket room and listen for real-time notifications
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      const socketUrl = process.env.NODE_ENV === 'production' 
+        ? window.location.origin 
+        : 'http://localhost:5000';
+
+      const socket = io(socketUrl, {
+        transports: ['websocket'],
+        autoConnect: true
+      });
+
+      socket.on('connect', () => {
+        console.log('[Socket.IO] Notification socket connected');
+        socket.emit('register_user', user.id);
+      });
+
+      socket.on('new_notification', (newNotif: any) => {
+        console.log('[Socket.IO] Received new notification:', newNotif);
+        setNotifications(prev => [newNotif, ...prev]);
+        setNewNotifObj(newNotif);
+        setToastMessage(newNotif.content);
+        setTimeout(() => setToastMessage(''), 4000);
+      });
+
+      return () => {
+        socket.disconnect();
+      };
     }
   }, [isAuthenticated, user]);
 
@@ -247,7 +306,8 @@ function App() {
                         notifications.map(notif => (
                           <div
                             key={notif.id}
-                            className={`flex items-start gap-3 p-3 rounded-xl transition-all border ${
+                            onClick={() => handleNotificationClick(notif)}
+                            className={`flex items-start gap-3 p-3 rounded-xl transition-all border cursor-pointer hover:bg-[var(--bg-elevated)] ${
                               notif.isRead ? 'opacity-65 border-transparent' : 'bg-[var(--gold-glow)]/20 border-[var(--border-glow)] shadow-sm'
                             }`}
                           >
@@ -430,6 +490,16 @@ function App() {
               <AdminDashboard />
             </Suspense>
           } />
+          <Route path="/motion-playground" element={
+            <Suspense fallback={
+              <div className="flex items-center justify-center p-20 text-xs text-[var(--text-muted)] gap-2">
+                <Loader2 size={16} className="animate-spin" />
+                <span>Loading Playground...</span>
+              </div>
+            }>
+              <MotionPlayground />
+            </Suspense>
+          } />
           <Route path="/admin" element={<Navigate to="/analytics" replace />} />
           <Route path="/auth" element={<AuthPage />} />
         </Routes>
@@ -448,6 +518,22 @@ function App() {
 
         </div>
       </footer>
+      )}
+
+      {/* Real-time Toast Notification */}
+      {toastMessage && (
+        <div 
+          onClick={() => {
+            if (newNotifObj) handleNotificationClick(newNotifObj);
+            setToastMessage('');
+          }}
+          className="fixed bottom-6 right-6 z-[999999] flex items-center gap-3 bg-[var(--bg-surface)] text-[var(--text-primary)] text-xs font-bold px-4.5 py-3.5 rounded-2xl border border-[var(--gold)]/50 shadow-2xl shadow-[var(--gold-glow)]/15 animate-fade-in cursor-pointer hover:border-[var(--gold)] transition-all"
+        >
+          <div className="p-1.5 rounded-lg bg-[var(--gold-glow)]/20 text-[var(--gold)]">
+            <Bell size={14} className="animate-bounce" />
+          </div>
+          <span>{toastMessage}</span>
+        </div>
       )}
     </div>
   );

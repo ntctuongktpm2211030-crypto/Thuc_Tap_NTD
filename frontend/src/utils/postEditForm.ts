@@ -41,7 +41,9 @@ export function parseFeedPostForEdit(post: FeedPost): EditPostFormState {
     destName = post.destination ? post.destination.replace(/^📍\s*/, '') : '';
   }
 
-  if (post.displayType === 'social') {
+  if (post.images && post.images.length > 0) {
+    photosList = [...post.images];
+  } else if (post.displayType === 'social') {
     photosList = post.images ? [...post.images] : [];
   } else if ('image' in post && post.image) {
     photosList = [post.image];

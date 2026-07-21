@@ -92,25 +92,47 @@ const HeroCard = ({
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevLiked = liked;
+    const prevLikeCount = likeCount;
+    const newLiked = !liked;
+    const newLikeCount = newLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
+
+    setLiked(newLiked);
+    setLikeCount(newLikeCount);
+    onEngagementChange?.(post.id, { isLiked: newLiked, likes: newLikeCount });
+
     try {
-      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      const next = await syncToggleLike(post.id, { liked: prevLiked, likes: prevLikeCount });
       setLiked(next.liked);
       setLikeCount(next.likes);
       onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
+      setLiked(prevLiked);
+      setLikeCount(prevLikeCount);
+      onEngagementChange?.(post.id, { isLiked: prevLiked, likes: prevLikeCount });
     }
   };
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevSaved = saved;
+    const newSaved = !saved;
+
+    setSaved(newSaved);
+    onEngagementChange?.(post.id, { isBookmarked: newSaved });
+
     try {
-      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      const next = await syncToggleBookmark(post.id, { bookmarked: prevSaved });
       setSaved(next.bookmarked);
       onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
+      setSaved(prevSaved);
+      onEngagementChange?.(post.id, { isBookmarked: prevSaved });
     }
   };
 
@@ -249,25 +271,47 @@ const MagazineCard = ({
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevLiked = liked;
+    const prevLikeCount = likeCount;
+    const newLiked = !liked;
+    const newLikeCount = newLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
+
+    setLiked(newLiked);
+    setLikeCount(newLikeCount);
+    onEngagementChange?.(post.id, { isLiked: newLiked, likes: newLikeCount });
+
     try {
-      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      const next = await syncToggleLike(post.id, { liked: prevLiked, likes: prevLikeCount });
       setLiked(next.liked);
       setLikeCount(next.likes);
       onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
+      setLiked(prevLiked);
+      setLikeCount(prevLikeCount);
+      onEngagementChange?.(post.id, { isLiked: prevLiked, likes: prevLikeCount });
     }
   };
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevSaved = saved;
+    const newSaved = !saved;
+
+    setSaved(newSaved);
+    onEngagementChange?.(post.id, { isBookmarked: newSaved });
+
     try {
-      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      const next = await syncToggleBookmark(post.id, { bookmarked: prevSaved });
       setSaved(next.bookmarked);
       onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
+      setSaved(prevSaved);
+      onEngagementChange?.(post.id, { isBookmarked: prevSaved });
     }
   };
 
@@ -391,25 +435,47 @@ const SocialPostCard = ({
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevLiked = liked;
+    const prevLikeCount = likeCount;
+    const newLiked = !liked;
+    const newLikeCount = newLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
+
+    setLiked(newLiked);
+    setLikeCount(newLikeCount);
+    onEngagementChange?.(post.id, { isLiked: newLiked, likes: newLikeCount });
+
     try {
-      const next = await syncToggleLike(post.id, { liked, likes: likeCount });
+      const next = await syncToggleLike(post.id, { liked: prevLiked, likes: prevLikeCount });
       setLiked(next.liked);
       setLikeCount(next.likes);
       onEngagementChange?.(post.id, { isLiked: next.liked, likes: next.likes });
     } catch (err) {
       console.error(err);
+      setLiked(prevLiked);
+      setLikeCount(prevLikeCount);
+      onEngagementChange?.(post.id, { isLiked: prevLiked, likes: prevLikeCount });
     }
   };
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!requireAuth('/')) return;
+
+    const prevSaved = saved;
+    const newSaved = !saved;
+
+    setSaved(newSaved);
+    onEngagementChange?.(post.id, { isBookmarked: newSaved });
+
     try {
-      const next = await syncToggleBookmark(post.id, { bookmarked: saved });
+      const next = await syncToggleBookmark(post.id, { bookmarked: prevSaved });
       setSaved(next.bookmarked);
       onEngagementChange?.(post.id, { isBookmarked: next.bookmarked });
     } catch (err) {
       console.error(err);
+      setSaved(prevSaved);
+      onEngagementChange?.(post.id, { isBookmarked: prevSaved });
     }
   };
 
@@ -891,6 +957,29 @@ export default function SocialFeedPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
 
+  // Automatically open post detail modal if query parameter `postId` is present
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const queryPostId = query.get('postId');
+    if (queryPostId) {
+      setFeedLoading(true);
+      postsService.get(queryPostId)
+        .then(apiPost => {
+          const feedPost = mapApiPostToFeedPost(apiPost);
+          if (feedPost) {
+            setDetailPost(feedPost);
+          }
+          navigate('/', { replace: true });
+        })
+        .catch(err => {
+          console.error('Failed to load query post details:', err);
+        })
+        .finally(() => {
+          setFeedLoading(false);
+        });
+    }
+  }, [location.search, navigate]);
+
   useEffect(() => {
     if (!user?.id) {
       setFollowingIds(new Set());
@@ -970,33 +1059,50 @@ export default function SocialFeedPage() {
           <div className="surface-elevated p-3 sm:p-4">
             <div className="stories-container">
               {/* Add story */}
-              <button type="button" onClick={openStoryCreator} className="story-item group">
-                <div className="story-ring">
-                  <div className="story-ring-inner story-add flex items-center justify-center group-hover:border-[var(--gold)] transition-colors">
-                    <Plus size={22} className="text-[var(--text-muted)] group-hover:text-[var(--gold)]" />
-                  </div>
+              <button 
+                type="button" 
+                onClick={openStoryCreator} 
+                className="fb-story-card fb-story-add group relative flex flex-col cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white"
+              >
+                <div className="fb-story-add-image-wrap w-full h-[135px] overflow-hidden bg-slate-100">
+                  <img 
+                    src={user?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"} 
+                    alt="current user" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--gold)] text-center transition-colors">{t('feed.addStory')}</span>
+                <div className="fb-story-add-btn absolute bottom-[35px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#1877F2] border-[3px] border-white flex items-center justify-center text-white z-10 shadow">
+                  <Plus size={18} strokeWidth={3} />
+                </div>
+                <div className="fb-story-add-text flex-1 flex items-end justify-center pb-2 bg-white">
+                  <span className="text-[11px] font-bold text-slate-700 leading-none">{t('feed.addStory')}</span>
+                </div>
               </button>
+
               {stories.map(story => (
                 <button
                   key={story.id}
                   type="button"
-                  className="story-item story-item--clickable group text-left"
+                  className="fb-story-card relative flex flex-col cursor-pointer overflow-hidden rounded-xl border border-slate-200 group text-left"
                   onClick={() => setViewStory(story)}
                 >
-                  <div className="story-ring">
-                    <div className="story-ring-inner">
-                      <img src={story.image} alt={story.user} loading="lazy" />
-                    </div>
+                  <img 
+                    src={story.image} 
+                    alt={story.user} 
+                    loading="lazy" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="fb-story-gradient absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+                  
+                  {/* User Avatar on Top Left */}
+                  <div className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full border-[2.5px] border-[#1877F2] overflow-hidden shadow-md bg-slate-200">
+                    <img src={story.avatar} alt={story.user} className="w-full h-full object-cover" />
                   </div>
-                  <span className="story-bar-name">{storyBarName(story)}</span>
-                  {story.location ? (
-                    <span className="story-bar-location">
-                      <MapPin size={8} className="flex-shrink-0" />
-                      {story.location}
-                    </span>
-                  ) : null}
+
+                  {/* User Name on Bottom Left */}
+                  <span className="absolute bottom-2.5 left-2.5 right-2.5 text-[11px] font-bold text-white leading-tight line-clamp-2 drop-shadow-sm">
+                    {story.user}
+                  </span>
                 </button>
               ))}
             </div>

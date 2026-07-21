@@ -116,6 +116,15 @@ export const authService = {
   clearSession: () => authService.XoaPhienDangNhap(),
   getStoredUser: () => authService.LayUserDaLuu(),
   isLoggedIn: () => authService.DaDangNhap(),
+
+  forgotPassword: (email: string) =>
+    apiClient.post('/auth/forgot-password', { email }).then(r => r.data),
+
+  verifyOtp: (email: string, otp: string) =>
+    apiClient.post<{ resetToken: string }>('/auth/verify-otp', { email, otp }).then(r => r.data),
+
+  resetPassword: (email: string, token: string, newPassword: string) =>
+    apiClient.post('/auth/reset-password', { email, token, newPassword }).then(r => r.data),
 };
 
 // ─────────────────────────────────────────────────────────
@@ -260,6 +269,8 @@ export const socialService = {
     apiClient.get('/social/notifications').then(r => r.data),
   DanhDauDaDocTatCa: () =>
     apiClient.put('/social/notifications/read-all').then(r => r.data),
+  DanhDauDaDoc: (id: string) =>
+    apiClient.put(`/social/notifications/${id}/read`).then(r => r.data),
   CapNhatSoThichDuLich: (prefs: Partial<TravelPreferences>) =>
     apiClient.put('/social/preferences', prefs).then(r => r.data),
   TimKiemNguoiDung: (q: string) =>
@@ -273,6 +284,7 @@ export const socialService = {
   getFollowing: (userId: string) => socialService.LayDangTheoDoi(userId),
   notifications: () => socialService.LayThongBao(),
   markAllRead: () => socialService.DanhDauDaDocTatCa(),
+  markAsRead: (id: string) => socialService.DanhDauDaDoc(id),
   updatePreferences: (prefs: Partial<TravelPreferences>) => socialService.CapNhatSoThichDuLich(prefs),
   searchUsers: (q: string) => socialService.TimKiemNguoiDung(q),
 };
@@ -418,3 +430,34 @@ export const feedbackService = {
   create: (data: { messageId: string; rating: number; comment?: string }) => feedbackService.TaoPhanHoi(data),
   update: (id: string, data: { rating: number; comment?: string }) => feedbackService.CapNhatPhanHoi(id, data),
 };
+
+// ─────────────────────────────────────────────────────────
+// DASHBOARD ANALYTICS
+// ─────────────────────────────────────────────────────────
+export const dashboardService = {
+  LaySummary: () => apiClient.get('/dashboard/summary').then(r => r.data),
+  LayUsers: (filter: string) => apiClient.get('/dashboard/users', { params: { filter } }).then(r => r.data),
+  LayPosts: () => apiClient.get('/dashboard/posts').then(r => r.data),
+  LayTopPosts: (limit?: number) => apiClient.get('/dashboard/top-posts', { params: { limit } }).then(r => r.data),
+  LayTopUsers: (limit?: number) => apiClient.get('/dashboard/top-users', { params: { limit } }).then(r => r.data),
+  LayCheckins: (limit?: number) => apiClient.get('/dashboard/checkins', { params: { limit } }).then(r => r.data),
+  LayHotLocations: (limit?: number) => apiClient.get('/dashboard/hot-locations', { params: { limit } }).then(r => r.data),
+  LayTopSearches: (limit?: number) => apiClient.get('/dashboard/top-searches', { params: { limit } }).then(r => r.data),
+  LayProvinces: () => apiClient.get('/dashboard/provinces').then(r => r.data),
+  LayInteractions: (filter: string) => apiClient.get('/dashboard/interactions', { params: { filter } }).then(r => r.data),
+  LayHeatmap: () => apiClient.get('/dashboard/heatmap').then(r => r.data),
+  LayAiInsights: () => apiClient.get('/dashboard/ai-insights').then(r => r.data),
+  
+  // Phase II Upgrades
+  LayComparison: (filter: string) => apiClient.get('/dashboard/comparison', { params: { filter } }).then(r => r.data),
+  LaySparkline: (type: string, ids: string) => apiClient.get('/dashboard/sparkline', { params: { type, ids } }).then(r => r.data),
+  LayGis: () => apiClient.get('/dashboard/gis').then(r => r.data),
+  LayTrending: (limit?: number) => apiClient.get('/dashboard/trending', { params: { limit } }).then(r => r.data),
+  LayPrediction: (metric: string) => apiClient.get('/dashboard/prediction', { params: { metric } }).then(r => r.data),
+  LayBehavior: () => apiClient.get('/dashboard/behavior').then(r => r.data),
+  LayFunnel: () => apiClient.get('/dashboard/funnel').then(r => r.data),
+  LayExport: (format: 'pdf' | 'csv' | 'excel') => apiClient.get('/dashboard/export', { params: { format }, responseType: format === 'pdf' ? 'text' : 'blob' }).then(r => r.data),
+  LayDrilldown: (type: string, id: string, page: number, limit: number, q?: string) => apiClient.get('/dashboard/drilldown', { params: { type, id, page, limit, q } }).then(r => r.data),
+  LayAiInsights2: (prompt?: string) => apiClient.get('/dashboard/insights', { params: { prompt } }).then(r => r.data),
+};
+

@@ -1,0 +1,48 @@
+@startuml Class_Itinerary
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Itinerary Module " {
+
+  class "ItineraryController" as ItineraryController {
+    - service : ItineraryService
+    + constructor()
+    + createItinerary(req: Request, res: Response): Promise<Response>
+    + getItineraries(req: Request, res: Response): Promise<Response>
+    + getItinerary(req: Request, res: Response): Promise<Response>
+    + addDay(req: Request, res: Response): Promise<Response>
+    + addActivity(req: Request, res: Response): Promise<Response>
+    + updateActivity(req: Request, res: Response): Promise<Response>
+    + deleteActivity(req: Request, res: Response): Promise<Response>
+  }
+
+  class "ItineraryService" as ItineraryService {
+    - repo : ItineraryRepository
+    + constructor()
+    + createItinerary(userId: String, data: CreateItineraryDto): Promise<Trip>
+    + getAllItineraries(userId: String): Promise<Trip[]>
+    + getItineraryDetails(itineraryId: String, userId: String): Promise<Trip>
+    + addDayToItinerary(itineraryId: String, userId: String, dayIndex: Int, dateStr?: String): Promise<TripDay>
+    + addActivityToDay(dayId: String, userId: String, data: AddActivityDto): Promise<TripActivity>
+    + updateActivity(activityId: String, userId: String, data: UpdateActivityDto): Promise<TripActivity>
+    + deleteActivity(activityId: String, userId: String): Promise<any>
+  }
+
+  class "ItineraryRepository" as ItineraryRepository {
+    + createItinerary(userId: String, title: String, description?: String): Promise<Trip>
+    + getItinerariesByUserId(userId: String): Promise<Trip[]>
+    + getItineraryById(id: String, userId: String): Promise<Trip | null>
+    + addDay(itineraryId: String, dayIndex: Int, date?: DateTime): Promise<TripDay>
+    + getDayById(dayId: String): Promise<TripDay | null>
+    + addActivity(itineraryDayId: String, data: AddActivityDto): Promise<TripActivity>
+    + getActivityById(activityId: String): Promise<TripActivity | null>
+    + updateActivity(activityId: String, data: UpdateActivityDto): Promise<TripActivity>
+    + deleteActivity(activityId: String): Promise<any>
+  }
+}
+
+ItineraryController *-- ItineraryService
+ItineraryService *-- ItineraryRepository
+
+@enduml

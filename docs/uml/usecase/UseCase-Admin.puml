@@ -4,9 +4,9 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-actor "Quản trị viên" as Admin
+actor "Người dùng đăng ký" as RegisteredUser
 
-rectangle "Phân hệ Quản trị Hệ thống" {
+rectangle "Quản trị Hệ thống" {
   package "Quản trị Người dùng & Điểm đến" {
     usecase "Quản lý tài khoản người dùng" as UC_ManageUsers
     usecase "Quản lý điểm đến & ẩm thực" as UC_ManageDests
@@ -27,14 +27,14 @@ rectangle "Phân hệ Quản trị Hệ thống" {
   }
 }
 
-Admin --> UC_ManageUsers
-Admin --> UC_ManageDests
-Admin --> UC_ManageKB
-Admin --> UC_ModelRegistry
-Admin --> UC_PromptVersion
-Admin --> UC_AuditChatLog
-Admin --> UC_DriftMonitor
-Admin --> UC_FeedbackLoop
+RegisteredUser -- UC_ManageUsers
+RegisteredUser -- UC_ManageDests
+RegisteredUser -- UC_ManageKB
+RegisteredUser -- UC_ModelRegistry
+RegisteredUser -- UC_PromptVersion
+RegisteredUser -- UC_AuditChatLog
+RegisteredUser -- UC_DriftMonitor
+RegisteredUser -- UC_FeedbackLoop
 
 UC_ManageKB ..> UC_UploadDocs : <<include>>
 @enduml

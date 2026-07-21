@@ -51,11 +51,53 @@ export default function ExploreArticlePage() {
         const liked = !!apiPost.isLiked;
         const bookmarked = !!apiPost.isBookmarked;
         const likes = apiPost._count?.likes ?? local?.likes ?? 0;
-        patchExplorePostEngagement(id, { liked, bookmarked, likes });
-        const refreshed = getExplorePostById(id);
-        if (refreshed) applyPost(refreshed);
+
+        if (local) {
+          patchExplorePostEngagement(id, { liked, bookmarked, likes });
+          const refreshed = getExplorePostById(id);
+          if (refreshed) applyPost(refreshed);
+        } else {
+          // This is a database post! Map apiPost to ExplorePost shape
+          const mappedPost: any = {
+            id: id,
+            author: apiPost.author?.profile?.fullName || apiPost.author?.email || 'Người dùng',
+            avatar: apiPost.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            handle: '@' + (apiPost.author?.email?.split('@')[0] || 'user'),
+            verified: false,
+            location: apiPost.destination?.name || 'Việt Nam',
+            date: new Date(apiPost.createdAt).toLocaleDateString('vi-VN', {
+              hour: '2-digit',
+              minute: '2-digit',
+              day: 'numeric',
+              month: 'numeric',
+              year: 'numeric',
+            }),
+            category: apiPost.destination?.category === 'restaurant' ? 'Ẩm thực' : 'Thiên nhiên',
+            title: apiPost.content?.slice(0, 50) + (apiPost.content?.length > 50 ? '...' : ''),
+            excerpt: apiPost.content,
+            content: apiPost.content,
+            images: apiPost.mediaUrls ?? [],
+            likes: likes,
+            liked: liked,
+            bookmarked: bookmarked,
+            tags: [],
+            comments: (apiPost.comments ?? []).map((c: any) => ({
+              id: c.id,
+              author: c.author?.profile?.fullName || c.author?.email || 'Người dùng',
+              avatar: c.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              text: c.content,
+              date: new Date(c.createdAt).toLocaleDateString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            }))
+          };
+          applyPost(mappedPost);
+        }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('Failed to load DB post details:', err);
+      });
   }, [id, applyPost]);
 
   if (!post) {
@@ -98,22 +140,44 @@ export default function ExploreArticlePage() {
     }
   };
 
-  const addComment = (e: React.FormEvent) => {
+  const addComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
-    const next = [
-      {
-        id: String(Date.now()),
-        author: 'Bạn',
-        avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-        text: commentText.trim(),
-        date: 'Vừa xong',
-      },
-      ...comments,
-    ];
-    setComments(next);
-    patchExplorePostEngagement(post.id, { comments: next });
-    setCommentText('');
+
+    const apiId = toApiPostId(post.id);
+    if (apiId) {
+      setEngagementLoading(true);
+      try {
+        const newApiComment = await postsService.addComment(apiId, commentText.trim());
+        const mappedComment = {
+          id: newApiComment.id,
+          author: newApiComment.author?.profile?.fullName || 'Bạn',
+          avatar: newApiComment.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          text: newApiComment.content,
+          date: 'Vừa xong'
+        };
+        setComments(prev => [mappedComment, ...prev]);
+        setCommentText('');
+      } catch (err) {
+        console.error('Failed to add comment:', err);
+      } finally {
+        setEngagementLoading(false);
+      }
+    } else {
+      const next = [
+        {
+          id: String(Date.now()),
+          author: 'Bạn',
+          avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          text: commentText.trim(),
+          date: 'Vừa xong',
+        },
+        ...comments,
+      ];
+      setComments(next);
+      patchExplorePostEngagement(post.id, { comments: next });
+      setCommentText('');
+    }
   };
 
   const catClass = CATEGORY_STYLES[post.category] ?? 'bg-slate-500/10 text-slate-400 border-slate-500/20';
@@ -196,17 +260,19 @@ export default function ExploreArticlePage() {
           </div>
 
           {/* Post Images Grid Layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
-            {[
-              post.coverImage,
-              'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=80',
-              'https://images.unsplash.com/photo-1552083375-1447ce886485?auto=format&fit=crop&w=900&q=80'
-            ].map((src, i) => (
-              <div key={`${src}-${i}`} className="aspect-[3/2] rounded-xl overflow-hidden shadow-sm border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-                <img src={src} alt="" className="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-300" loading="lazy" />
-              </div>
-            ))}
-          </div>
+          {((post.images && post.images.length > 0) || post.coverImage) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+              {(post.images && post.images.length > 0 ? post.images : [
+                post.coverImage,
+                'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1552083375-1447ce886485?auto=format&fit=crop&w=900&q=80'
+              ]).filter(Boolean).map((src: any, i: number) => (
+                <div key={`${src}-${i}`} className="aspect-[3/2] rounded-xl overflow-hidden shadow-sm border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+                  <img src={src} alt="" className="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-300" loading="lazy" />
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Post Content */}
           <div className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed space-y-4 pt-1">

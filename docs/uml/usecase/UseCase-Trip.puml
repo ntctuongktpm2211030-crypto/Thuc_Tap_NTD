@@ -5,13 +5,11 @@ skinparam actorStyle awesome
 skinparam linetype ortho
 
 actor "Khách vãng lai" as Guest
-actor "Khách du lịch" as Tourist
 actor "Người dùng đăng ký" as RegisteredUser
 
-Tourist -|> Guest
-RegisteredUser -|> Tourist
+RegisteredUser -|> Guest
 
-rectangle "Phân hệ Lập kế hoạch & Hành trình" {
+rectangle "Lập kế hoạch & Hành trình" {
   usecase "Tìm kiếm điểm đến" as UC_SearchDest
   usecase "Tìm kiếm món ăn ẩm thực" as UC_SearchFood
   usecase "Xem thông tin chi tiết địa danh" as UC_ViewDetail
@@ -33,22 +31,21 @@ rectangle "Phân hệ Lập kế hoạch & Hành trình" {
   }
 }
 
-Guest --> UC_SearchDest
-Guest --> UC_SearchFood
-Guest --> UC_ViewDetail
+Guest -- UC_SearchDest
+Guest -- UC_SearchFood
+Guest -- UC_ViewDetail
 
-Tourist --> UC_CreateTrip
-Tourist --> UC_EditTrip
-Tourist --> UC_DeleteTrip
-
-RegisteredUser --> UC_SaveFavorite
-RegisteredUser --> UC_AITrip
-RegisteredUser --> UC_CreateItin
-RegisteredUser --> UC_ListItin
-RegisteredUser --> UC_ViewItin
+RegisteredUser -- UC_CreateTrip
+RegisteredUser -- UC_EditTrip
+RegisteredUser -- UC_DeleteTrip
+RegisteredUser -- UC_SaveFavorite
+RegisteredUser -- UC_AITrip
+RegisteredUser -- UC_CreateItin
+RegisteredUser -- UC_ListItin
+RegisteredUser -- UC_ViewItin
 
 UC_ViewItin <.. UC_AddDayItin : <<extend>>
 UC_ViewItin <.. UC_ManageActItin : <<extend>>
 UC_CreateTrip <.. UC_AITrip : <<extend>>
-UC_EditTrip ..> UC_OptimizeRoute : <<extend>>
+UC_EditTrip <.. UC_OptimizeRoute : <<extend>>
 @enduml

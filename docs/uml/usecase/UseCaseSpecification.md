@@ -387,146 +387,274 @@
 
 ---
 
-## 4. Interactive Map Module (Bản đồ tương tác & Định vị)
+## 4. Interactive Map Module (Bản đồ tương tác & GIS)
 
-### UC_MAP_01: Xem bản đồ tương tác (View Interactive Map)
+### UC_MAP_01: Xem bản đồ (View Map)
 *   **Use Case ID**: UC_MAP_01
-*   **Name**: Xem bản đồ tương tác (View Interactive Map)
-*   **Goal**: Hiển thị trực quan vị trí địa lý của các điểm đến du lịch, các hoạt động check-in và cảnh báo an toàn trên nền tảng bản đồ số.
+*   **Name**: Xem bản đồ (View Map)
+*   **Goal**: Hiển thị trực quan bản đồ số cơ sở chứa các điểm du lịch cho khách vãng lai và thành viên.
 *   **Primary Actor**: Khách vãng lai (Guest)
-*   **Supporting Actors**: OpenStreetMap (OSM)
-*   **Preconditions**: Trình duyệt có kết nối internet ổn định để tải bản đồ Leaflet.
-*   **Trigger**: Người dùng truy cập mục "Bản đồ du lịch".
+*   **Supporting Actors**: Dịch vụ Bản đồ (Map Service)
+*   **Preconditions**: Người dùng truy cập vào phần mềm và có kết nối Internet hoạt động.
+*   **Trigger**: Người dùng truy cập mục "Bản đồ".
 *   **Main Success Scenario**:
-    1. Người dùng truy cập trang Bản đồ.
-    2. Frontend khởi tạo bản đồ Leaflet và tải các ô bản đồ địa lý từ máy chủ OpenStreetMap.
-    3. Frontend gọi API `GET /api/v1/map/markers` lấy toàn bộ tọa độ check-in công khai, điểm danh lam thắng cảnh và danh sách sự kiện đang hoạt động.
-    4. Backend truy vấn CSDL và trả về danh sách tọa độ cùng nhãn tiêu đề tương ứng.
-    5. Bản đồ hiển thị trực quan các biểu tượng điểm ghim (markers) và bản đồ nhiệt (heat map) của các khu vực đông check-in.
+    1. Người dùng chọn chức năng Xem bản đồ.
+    2. Hệ thống tải lớp bản đồ số thông qua Dịch vụ Bản đồ (Map Service).
+    3. Hệ thống hiển thị bản đồ toàn cảnh vùng du lịch kèm các biểu tượng địa điểm nổi bật.
 *   **Alternative Flows**: Không có.
 *   **Exception Flows**:
-    *   *Không thể kết nối đến máy chủ bản đồ*: Hệ thống hiển thị thông báo lỗi `Lỗi tải bản đồ, vui lòng kiểm tra kết nối mạng` và sử dụng bản đồ dự phòng tĩnh.
-*   **Postconditions**: Bản đồ tương tác hiển thị thành công với các điểm ghim hoạt động đầy đủ.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: `UC_MAP_02` (Check-in địa điểm du lịch).
+    *   *Không kết nối mạng*: Hệ thống hiển thị thông báo "Không thể tải bản đồ, vui lòng kiểm tra kết nối mạng".
+*   **Postconditions**: Bản đồ cơ sở được hiển thị chính xác.
+*   **Related Use Cases**: `UC_MAP_02` (Zoom Map), `UC_MAP_03` (Pan Map), `UC_MAP_04` (Switch Base Map).
 
 ---
 
-### UC_MAP_02: Check-in địa điểm du lịch (Perform Check-in)
-*   **Use Case ID**: UC_MAP_02
-*   **Name**: Check-in địa điểm du lịch (Perform Check-in)
-*   **Goal**: Lưu lại bằng chứng số của việc đã đặt chân đến một địa danh kèm theo cảm xúc, hình ảnh để chia sẻ lên bản đồ cộng đồng.
-*   **Primary Actor**: Người dùng đăng ký (Registered Traveler)
-*   **Supporting Actors**: OpenStreetMap (OSM)
-*   **Preconditions**: Thiết bị cho phép truy cập tọa độ GPS hiện tại hoặc người dùng ghim trực tiếp trên bản đồ.
-*   **Trigger**: Người dùng nhấn nút "Check-in tại đây" trên bản đồ.
-*   **Main Success Scenario**:
-    1. Người dùng cấp quyền GPS, hệ thống tự động xác định tọa độ hiện tại hoặc người dùng click chọn tọa độ thủ công trên bản đồ Leaflet.
-    2. Người dùng nhập ghi chú trải nghiệm, đánh giá chất lượng dịch vụ và tải ảnh chụp thực tế.
-    3. Người dùng chọn chế độ chia sẻ (Công khai / Chỉ bạn bè / Riêng tư).
-    4. Người dùng nhấn nút "Hoàn tất Check-in".
-    5. Backend tiếp nhận yêu cầu, lưu thông tin vào bảng `Checkin` trong CSDL.
-    6. Nếu chọn chế độ công khai, điểm check-in sẽ hiển thị ngay lập tức thành một điểm ghim mới trên bản đồ tương tác cộng đồng.
-*   **Alternative Flows**: Không có.
-*   **Exception Flows**:
-    *   *Không có quyền truy cập định vị*: Nếu trình duyệt chặn quyền định vị GPS, hệ thống yêu cầu người dùng chọn địa điểm check-in thủ công bằng cách nhấn chuột trên bản đồ.
-*   **Postconditions**: Dữ liệu check-in được cập nhật vào CSDL thành công.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ tương tác), `UC_MAP_03` (Trích xuất GPS từ siêu dữ liệu ảnh chụp).
-
----
-
-### UC_MAP_03: Trích xuất GPS từ siêu dữ liệu ảnh chụp (EXIF GPS Extraction)
-*   **Use Case ID**: UC_MAP_03
-*   **Name**: Trích xuất GPS từ siêu dữ liệu ảnh chụp (EXIF GPS Extraction)
-*   **Goal**: Hỗ trợ người dùng tự động điền thông tin địa điểm check-in dựa trên tọa độ GPS được ghi nhận khi chụp bức ảnh đó.
-*   **Primary Actor**: Người dùng đăng ký (Registered Traveler)
-*   **Supporting Actors**: -
-*   **Preconditions**: Bức ảnh tải lên phải được chụp bằng thiết bị có bật tính năng định vị lưu GPS và không bị xóa EXIF khi truyền tải.
-*   **Trigger**: Người dùng chọn nút "Tải ảnh từ thư viện để tự xác định tọa độ" tại màn hình check-in.
-*   **Main Success Scenario**:
-    1. Người dùng chọn tải lên bức ảnh phong cảnh đã chụp tại điểm đến.
-    2. Frontend sử dụng thư viện JavaScript nhị phân để giải mã khối thông tin EXIF của ảnh ngay tại phía client.
-    3. Hệ thống trích xuất thành công tọa độ vĩ độ (Latitude) và kinh độ (Longitude) từ EXIF.
-    4. Hệ thống tự động di chuyển tâm bản đồ về tọa độ vừa trích xuất và điền tọa độ vào biểu mẫu check-in.
-    5. Người dùng tiếp tục thực hiện các bước lưu check-in như luồng chính của `UC_MAP_02`.
-*   **Alternative Flows**: Không có.
-*   **Exception Flows**:
-    *   *Ảnh không chứa siêu dữ liệu GPS*: Nếu ảnh không có thông tin tọa độ EXIF, hệ thống hiển thị cảnh báo `Không tìm thấy tọa độ GPS trong ảnh này` và yêu cầu người dùng định vị thủ công trên bản đồ.
-*   **Postconditions**: Tọa độ biểu mẫu check-in được điền tự động thành công từ thông tin ảnh.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: `UC_MAP_02` (Check-in địa điểm du lịch).
-
----
-
-### UC_MAP_04: Chia sẻ & Theo dõi vị trí thời gian thực (Real-time Location Sync)
-*   **Use Case ID**: UC_MAP_04
-*   **Name**: Chia sẻ & Theo dõi vị trí thời gian thực (Real-time Location Sync)
-*   **Goal**: Cho phép các thành viên trong nhóm phượt hoặc bạn bè theo dõi vị trí live của nhau trên bản đồ trong suốt hành trình di chuyển để tránh bị thất lạc.
-*   **Primary Actor**: Người dùng đăng ký (Registered Traveler)
-*   **Supporting Actors**: -
-*   **Preconditions**: Người dùng đã kết nối WebSockets (Socket.io) thành công và bật định vị trên thiết bị di động.
-*   **Trigger**: Người dùng bật chế độ "Chia sẻ vị trí trực tiếp" trên màn hình Bản đồ.
-*   **Main Success Scenario**:
-    1. Người dùng kích hoạt nút "Chia sẻ vị trí trực tiếp".
-    2. Thiết bị tự động lấy tọa độ GPS định kỳ mỗi 15 giây và emit sự kiện `ping_location` chứa tọa độ hiện tại kèm token định danh lên máy chủ qua kết nối Socket.io.
-    3. Socket.io Server nhận dữ liệu, cập nhật tọa độ mới nhất vào bảng cache `Location` trong bộ nhớ tạm.
-    4. Server xác định danh sách các follower/bạn bè của người dùng này đang online và cùng mở bản đồ.
-    5. Server broadcast sự kiện `friend_location_updated` chứa tọa độ mới và avatar của người dùng đến thiết bị của các bạn bè tương ứng.
-    6. Trình duyệt của bạn bè nhận sự kiện, tự động di chuyển vị trí biểu tượng avatar của người dùng trên bản đồ mà không cần tải lại trang.
-*   **Alternative Flows**:
-    *   *Tắt chia sẻ vị trí (Alternative Flow A)*: Người dùng nhấn tắt nút chia sẻ, client dừng gửi tọa độ và server thông báo cho bạn bè xóa marker tương ứng.
-*   **Exception Flows**:
-    *   *Mất kết nối mạng đột ngột*: Thiết bị mất kết nối websocket, biểu tượng avatar của người dùng sẽ đứng yên tại tọa độ cuối cùng và hiển thị trạng thái "Mất kết nối" (Offline) sau 1 phút không nhận được ping.
-*   **Postconditions**: Vị trí live được cập nhật liên tục và hiển thị đồng bộ giữa các thành viên đang hoạt động.
-*   **Business Rules**: BR_MAP_01 (Tọa độ chia sẻ trực tiếp chỉ được ghi nhận vào bộ nhớ cache tạm thời và tự động xóa sạch khi người dùng ngắt kết nối WebSocket để bảo vệ quyền riêng tư).
-*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ tương tác).
-
----
-
-### UC_MAP_05: Quản lý & Tham gia sự kiện địa phương (Manage & Join Local Events)
+### UC_MAP_05: Tìm kiếm vị trí (Search Location)
 *   **Use Case ID**: UC_MAP_05
-*   **Name**: Quản lý & Tham gia sự kiện địa phương (Manage & Join Local Events)
-*   **Goal**: Cho phép người dùng kết nối, giao lưu trực tiếp thông qua các sự kiện văn hóa, lễ hội hoặc các buổi giao lưu của cộng đồng phượt thủ được tổ chức tại các địa danh cụ thể.
-*   **Primary Actor**: Người dùng đăng ký (Registered Traveler)
-*   **Supporting Actors**: -
-*   **Preconditions**: Người dùng đã đăng nhập hệ thống.
-*   **Trigger**: Người dùng tạo sự kiện mới hoặc chọn tham gia một sự kiện hiện có trên bản đồ.
+*   **Name**: Tìm kiếm vị trí (Search Location)
+*   **Goal**: Tìm và định vị vị trí địa lý dựa trên địa danh hoặc tọa độ người dùng nhập.
+*   **Primary Actor**: Khách vãng lai (Guest)
+*   **Supporting Actors**: API Địa mã hóa (Geocoding API)
+*   **Preconditions**: Người dùng đang mở màn hình bản đồ tương tác.
+*   **Trigger**: Người dùng nhập tên địa điểm vào ô tìm kiếm và nhấn Enter hoặc biểu tượng Tìm kiếm.
 *   **Main Success Scenario**:
-    *   *Tạo sự kiện mới*:
-        1. Người dùng chọn tọa độ trên bản đồ, điền tiêu đề sự kiện, mô tả hoạt động, thời gian bắt đầu, thời gian kết thúc.
-        2. Người dùng nhấn "Tạo sự kiện".
-        3. Backend ghi nhận và tạo bản ghi mới trong bảng `Event` trong CSDL, mặc định người tạo là Creator.
-        4. Điểm ghim sự kiện xuất hiện trên bản đồ để các thành viên khác có thể click vào xem và đăng ký tham gia.
-*   **Alternative Flows**:
-    *   *Đăng ký tham gia sự kiện (Alternative Flow A)*: Người dùng khác mở chi tiết sự kiện và nhấn nút "Tham gia". Backend tạo liên kết vào bảng `EventAttendee`. Danh sách người tham gia được cập nhật hiển thị công khai.
+    1. Người dùng nhập từ khóa tìm kiếm (Ví dụ: "Mũi Cà Mau").
+    2. Hệ thống gửi truy vấn đến API Địa mã hóa (Geocoding API) để tra cứu tọa độ địa lý.
+    3. Hệ thống hiển thị danh sách kết quả gợi ý.
+    4. Người dùng chọn kết quả mong muốn; hệ thống tự động di chuyển góc nhìn (Pan/Zoom) và ghim vị trí đó trên bản đồ.
+*   **Alternative Flows**: Không có.
 *   **Exception Flows**:
-    *   *Thời gian sự kiện trong quá khứ*: Hệ thống từ chối tạo và hiển thị thông báo lỗi định dạng thời gian.
-*   **Postconditions**: Sự kiện mới hoặc trạng thái tham gia sự kiện của người dùng được cập nhật trong CSDL.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ tương tác).
+    *   *Không tìm thấy vị trí*: Hệ thống hiển thị thông báo "Không tìm thấy địa điểm phù hợp".
+*   **Postconditions**: Vị trí tìm kiếm được ghim và hiển thị đúng tiêu điểm trên bản đồ.
+*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ).
 
 ---
 
-### UC_MAP_06: Quản lý địa điểm đã lưu (Manage Saved Places)
+### UC_MAP_06: Lọc danh mục địa điểm du lịch (Filter Tourist Categories)
 *   **Use Case ID**: UC_MAP_06
-*   **Name**: Quản lý địa điểm đã lưu (Manage Saved Places)
-*   **Goal**: Cho phép người dùng đánh dấu và quản lý các địa điểm cá nhân (khách sạn, quán ăn ngon, điểm ngắm cảnh đẹp) trên bản đồ để lập kế hoạch di chuyển nhanh hơn.
-*   **Primary Actor**: Người dùng đăng ký (Registered Traveler)
+*   **Name**: Lọc danh mục địa điểm du lịch (Filter Tourist Categories)
+*   **Goal**: Giới hạn hiển thị các điểm đến trên bản đồ theo nhóm loại hình (Ẩm thực, Nghỉ dưỡng, Khám phá).
+*   **Primary Actor**: Khách vãng lai (Guest)
 *   **Supporting Actors**: -
-*   **Preconditions**: Người dùng đã đăng nhập hệ thống.
-*   **Trigger**: Người dùng nhấn nút "Lưu địa điểm" (Save) khi click vào một điểm bất kỳ trên bản đồ Leaflet.
+*   **Preconditions**: Bản đồ đã tải và hiển thị danh sách điểm ghim.
+*   **Trigger**: Người dùng tick chọn một hoặc nhiều danh mục trên thanh công cụ lọc địa điểm.
 *   **Main Success Scenario**:
-    1. Người dùng chọn một điểm ghim trên bản đồ và nhấn nút "Lưu địa điểm".
-    2. Người dùng chọn nhóm lưu trữ (ví dụ: "Muốn đi", "Quán ăn ngon", "Yêu thích").
-    3. Backend nhận yêu cầu `POST /api/v1/saved-places` chứa tọa độ và tên địa điểm.
-    4. Backend ghi nhận và tạo liên kết trong bảng `SavedPlace` gắn với ID của người dùng.
-    5. Hệ thống hiển thị biểu tượng ngôi sao màu vàng tại tọa độ đó trên bản đồ cá nhân của người dùng.
+    1. Người dùng mở bảng lọc danh mục địa điểm.
+    2. Người dùng tick chọn danh mục mong muốn (Ví dụ: "Nhà hàng / Ẩm thực").
+    3. Hệ thống xử lý dữ liệu ở client và lọc bỏ các điểm ghim không khớp danh mục lựa chọn.
+    4. Bản đồ cập nhật hiển thị chỉ các điểm ghim thuộc danh mục đã lọc.
 *   **Alternative Flows**: Không có.
 *   **Exception Flows**: Không có.
-*   **Postconditions**: Địa điểm lưu trữ được ghi nhận thành công vào CSDL.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ tương tác).
+*   **Postconditions**: Bản đồ cập nhật hiển thị chính xác các danh mục được chọn lọc.
+*   **Related Use Cases**: `UC_MAP_05` (Search Location).
+
+---
+
+### UC_MAP_07: Xem chi tiết địa điểm du lịch (View Tourist Attraction Details)
+*   **Use Case ID**: UC_MAP_07
+*   **Name**: Xem chi tiết địa điểm du lịch (View Tourist Attraction Details)
+*   **Goal**: Xem thông tin giới thiệu, hình ảnh, bài đánh giá và dịch vụ của một địa điểm du lịch.
+*   **Primary Actor**: Khách vãng lai (Guest)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đang xem điểm ghim hoặc tìm thấy địa điểm đó từ thanh tìm kiếm.
+*   **Trigger**: Người dùng click vào biểu tượng điểm ghim hoặc kết quả tìm kiếm trên bản đồ.
+*   **Main Success Scenario**:
+    1. Người dùng click vào một điểm ghim địa điểm du lịch trên bản đồ.
+    2. Hệ thống gọi API lấy chi tiết địa điểm du lịch tương ứng.
+    3. Hệ thống mở bảng thông tin chi tiết (Pop-up/Slide-over) hiển thị tên địa danh, đánh giá, giờ mở cửa, hình ảnh và bài viết liên quan.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Lỗi kết nối dữ liệu*: Hệ thống báo lỗi "Không thể tải chi tiết địa điểm, vui lòng thử lại sau".
+*   **Postconditions**: Giao diện chi tiết điểm đến được hiển thị đầy đủ cho người dùng.
+*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ), `UC_MAP_05` (Search Location).
+
+---
+
+### UC_MAP_08: Xem bản đồ nhiệt check-in (View Heatmap)
+*   **Use Case ID**: UC_MAP_08
+*   **Name**: Xem bản đồ nhiệt check-in (View Heatmap)
+*   **Goal**: Hiển thị mật độ phân bố điểm check-in của các thành viên dưới dạng bản đồ nhiệt trực quan.
+*   **Primary Actor**: Khách vãng lai (Guest)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đang ở màn hình bản đồ.
+*   **Trigger**: Người dùng chọn nút "Xem Bản đồ nhiệt" trên thanh công cụ điều khiển bản đồ.
+*   **Main Success Scenario**:
+    1. Người dùng nhấn nút bật tính năng Bản đồ nhiệt.
+    2. Hệ thống thu thập các tọa độ check-in công khai của người dùng trên toàn hệ thống.
+    3. Hệ thống phủ một lớp bản đồ nhiệt (Heatmap layer) lên trên bản đồ nền cơ sở với độ chuyển màu từ xanh (mật độ thấp) sang đỏ (mật độ cao).
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**: Không có.
+*   **Postconditions**: Bản đồ hiển thị lớp bản đồ nhiệt check-in hoạt động mượt mà.
+*   **Related Use Cases**: `UC_MAP_01` (Xem bản đồ).
+
+---
+
+### UC_MAP_09: Xác định & Cập nhật vị trí hiện tại (Get & Update Current Location)
+*   **Use Case ID**: UC_MAP_09
+*   **Name**: Xác định & Cập nhật vị trí hiện tại (Get & Update Current Location)
+*   **Goal**: Định vị tọa độ thực tế của thiết bị và gửi bản ghi cập nhật lên hệ thống để lưu vết.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Thiết bị hỗ trợ định vị GPS và người dùng đã đăng nhập hệ thống.
+*   **Trigger**: Hệ thống định kỳ gửi định vị hoặc người dùng bấm nút "Định vị của tôi".
+*   **Main Success Scenario**:
+    1. Thiết bị định vị tọa độ GPS (Vĩ độ, Kinh độ).
+    2. Frontend gửi API `PUT /api/v1/map/location` lên Backend để cập nhật vị trí hiện tại.
+    3. Backend ghi nhận và lưu/cập nhật bản ghi trong bảng `Location` của người dùng.
+    4. Bản đồ di chuyển tiêu điểm (Pan) và hiển thị chấm xanh vị trí trên giao diện.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Chặn quyền định vị*: Hệ thống hiển thị cảnh báo yêu cầu bật định vị GPS trong phần cài đặt.
+*   **Postconditions**: Vị trí GPS hiện thời được định vị và cập nhật thành công lên máy chủ.
+*   **Related Use Cases**: `UC_MAP_10` (Find Nearby Places), `UC_MAP_13` (Find Nearby Users).
+
+---
+
+### UC_MAP_10: Tìm địa điểm xung quanh (Find Nearby Places)
+*   **Use Case ID**: UC_MAP_10
+*   **Name**: Tìm địa điểm xung quanh (Find Nearby Places)
+*   **Goal**: Khám phá và gợi ý danh sách các quán ăn, điểm lưu trú nằm gần vị trí hiện tại của người dùng.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đã cấp quyền xác định vị trí hiện tại (`UC_MAP_09`).
+*   **Trigger**: Người dùng chọn nút "Tìm quanh đây" trên màn hình.
+*   **Main Success Scenario**:
+    1. Người dùng chạy ca sử dụng Xác định vị trí hiện tại (`UC_MAP_09`).
+    2. Người dùng nhấn nút "Tìm quanh đây".
+    3. Hệ thống tính toán khoảng cách địa lý và truy vấn CSDL để lấy các địa điểm trong bán kính 5km.
+    4. Bản đồ hiển thị khoanh vùng bán kính và danh sách các điểm xung quanh kèm khoảng cách thực tế (ví dụ: "Cách bạn 450m").
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**: Không có.
+*   **Postconditions**: Danh sách địa điểm lân cận được hiển thị trực quan.
+*   **Related Use Cases**: `UC_MAP_09` (Get Current Location).
+
+---
+
+### UC_MAP_11: Xem chỉ đường lộ trình (View Route Directions)
+*   **Use Case ID**: UC_MAP_11
+*   **Name**: Xem chỉ đường lộ trình (View Route Directions)
+*   **Goal**: Hướng dẫn đường đi ngắn nhất giữa hai vị trí cụ thể trên bản đồ.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: API Lộ trình (Routing API)
+*   **Preconditions**: Bản đồ đã hiển thị vị trí khởi hành và điểm đến.
+*   **Trigger**: Người dùng chọn một địa điểm trên bản đồ và nhấn nút "Chỉ đường".
+*   **Main Success Scenario**:
+    1. Người dùng chọn điểm đích trên bản đồ và nhấn "Chỉ đường".
+    2   Hệ thống lấy tọa độ điểm khởi hành (mặc định là Vị trí hiện tại qua `UC_MAP_09` hoặc điểm do người dùng tự chọn).
+    3. Hệ thống gửi yêu cầu tính lộ trình chứa điểm đầu và điểm cuối tới API Lộ trình (Routing API).
+    4. API trả về danh sách các điểm nút tọa độ tạo nên tuyến đường tối ưu.
+    5. Hệ thống vẽ tuyến đường (Polyline) nổi bật trên bản đồ kèm theo thông tin tổng chiều dài (km) và thời gian di chuyển dự kiến.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Không tính được lộ trình*: API định tuyến báo lỗi do khoảng cách địa lý không hợp lệ hoặc thiếu dữ liệu mạng đường bộ, hệ thống thông báo "Không tìm thấy lộ trình di chuyển phù hợp".
+*   **Postconditions**: Lộ trình chỉ đường được vẽ trực quan trên bản đồ.
+*   **Related Use Cases**: `UC_MAP_09` (Get Current Location).
+
+---
+
+### UC_MAP_12: Hiển thị gợi ý địa điểm bằng AI trên bản đồ (Display AI Recommendations on Map)
+*   **Use Case ID**: UC_MAP_12
+*   **Name**: Hiển thị gợi ý địa điểm bằng AI trên bản đồ (Display AI Recommendations on Map)
+*   **Goal**: Hiển thị trực quan danh sách các địa điểm du lịch gợi ý cá nhân hóa do AI phân tích trên bản đồ GIS.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đã cấu hình sở thích du lịch (`UC_AUTH_04`).
+*   **Trigger**: Người dùng nhấn nút "Gợi ý AI" trên thanh công cụ bản đồ.
+*   **Main Success Scenario**:
+    1. Người dùng nhấn biểu tượng gợi ý bằng AI trên bản đồ.
+    2. Hệ thống phân tích lịch sử đi lại và sở thích để gửi yêu cầu lấy danh sách điểm đề xuất.
+    3. Hệ thống hiển thị các điểm gợi ý AI dưới dạng ghim màu vàng nổi bật kèm nhãn "Đề xuất AI dành cho bạn".
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**: Không có.
+*   **Postconditions**: Các địa danh gợi ý AI hiển thị đầy đủ và nổi bật trên giao diện bản đồ.
+*   **Related Use Cases**: `UC_AUTH_04` (Manage Profile & Preferences).
+
+---
+
+### UC_MAP_13: Tìm người lân cận chia sẻ vị trí (bán kính 100km) (Find Nearby Users Sharing Location - 100km)
+*   **Use Case ID**: UC_MAP_13
+*   **Name**: Tìm người lân cận chia sẻ vị trí (bán kính 100km) (Find Nearby Users Sharing Location - 100km)
+*   **Goal**: Cho phép người dùng đã đăng nhập tìm kiếm và xem danh sách các thành viên khác đang online và chia sẻ vị trí trực tiếp trong phạm vi 100km xung quanh.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đã đăng nhập và đã chia sẻ vị trí của mình (`UC_MAP_09`).
+*   **Trigger**: Người dùng bật chế độ "Tìm người xung quanh" trên bản đồ.
+*   **Main Success Scenario**:
+    1. Người dùng kích hoạt chức năng Tìm người lân cận.
+    2. Frontend gửi API `GET /api/v1/map/friends-locations` (hoặc api vị trí lân cận tương tự) lên Backend kèm theo tọa độ hiện tại.
+    3. Backend tính khoảng cách hình học Haversine giữa tọa độ người gửi với tọa độ lưu trong bảng `Location` của các người dùng khác.
+    4. Backend lọc danh sách người dùng trực tuyến trong bán kính 100km và trả về dữ liệu.
+    5. Bản đồ hiển thị avatar của các thành viên lân cận tại tọa độ tương ứng trên bản đồ.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Không bật GPS*: Hệ thống thông báo yêu cầu bật và cập nhật vị trí hiện thời trước khi quét người xung quanh.
+*   **Postconditions**: Avatar của các thành viên đang chia sẻ vị trí trong bán kính 100km hiển thị chính xác.
+*   **Related Use Cases**: `UC_MAP_09` (Get & Update Current Location).
+
+---
+
+### UC_MAP_14: Thực hiện check-in địa điểm (Perform Check-in)
+*   **Use Case ID**: UC_MAP_14
+*   **Name**: Thực hiện check-in địa điểm (Perform Check-in)
+*   **Goal**: Ghi nhận và lưu lại dấu chân check-in thực tế của người dùng tại các địa điểm du lịch kèm ghi chú, ảnh và tag.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: OpenStreetMap
+*   **Preconditions**: Người dùng đã đăng nhập hệ thống và đang ở giao diện Bản đồ.
+*   **Trigger**: Người dùng điền thông tin vào biểu mẫu check-in và nhấn nút "Đăng Check-In".
+*   **Main Success Scenario**:
+    1. Người dùng chọn một địa điểm từ danh sách các điểm đến trên bản đồ.
+    2. Người dùng nhập nội dung chia sẻ trải nghiệm (ghi chú) và chọn tag phân loại (Ẩm thực, Nghỉ dưỡng, Cà phê, Thiên nhiên).
+    3. Người dùng đính kèm hình ảnh thực tế (tùy chọn) và nhấn "Đăng Check-In".
+    4. Frontend đóng gói dữ liệu và gọi API `POST /api/v1/map/checkin` lên Backend.
+    5. Backend kiểm tra tính hợp lệ của địa điểm và lưu dữ liệu vào bảng `CheckIn` trong CSDL.
+    6. Hệ thống phản hồi check-in thành công và cập nhật điểm check-in mới lên bản đồ và sidebar.
+*   **Alternative Flows**:
+    *   *Check-in kèm hình ảnh (Alternative Flow A)*: Người dùng chọn tải ảnh thực tế lên biểu mẫu check-in, ảnh được đính kèm và mã hóa/gửi lên cùng payload check-in nhờ Use Case `UC_MAP_15`.
+*   **Exception Flows**:
+    *   *Chưa chọn địa điểm*: Hệ thống cảnh báo "Vui lòng chọn địa điểm!" và dừng thao tác.
+*   **Postconditions**: Bản ghi check-in mới được lưu trữ và ghim điểm lên bản đồ Leaflet.
+*   **Related Use Cases**: `UC_MAP_15` (Upload Check-in Photo), `UC_MAP_16` (View Community Check-ins).
+
+---
+
+### UC_MAP_15: Tải lên hình ảnh check-in (Upload Check-in Photo)
+*   **Use Case ID**: UC_MAP_15
+*   **Name**: Tải lên hình ảnh check-in (Upload Check-in Photo)
+*   **Goal**: Cho phép người dùng đính kèm và tải lên hình ảnh chụp thực tế tại địa điểm du lịch trong quá trình thực hiện check-in.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đang điền thông tin check-in tại `UC_MAP_14`.
+*   **Trigger**: Người dùng nhấn chọn biểu tượng tải ảnh và chọn một tệp ảnh hợp lệ.
+*   **Main Success Scenario**:
+    1. Người dùng nhấn nút "Thêm ảnh" trong biểu mẫu check-in.
+    2. Người dùng chọn một tệp ảnh từ thiết bị (định dạng JPG/PNG).
+    3. Hệ thống tải tệp ảnh lên bộ nhớ tạm của ứng dụng, hiển thị ảnh xem trước (preview) và nút xóa ảnh trên giao diện.
+    4. Khi đăng check-in, ảnh được đóng gói cùng ghi chú gửi lên server để lưu trữ.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Tệp tải lên không phải là ảnh hoặc quá kích thước*: Hệ thống hiển thị cảnh báo lỗi và từ chối nhận file.
+*   **Postconditions**: Hình ảnh được đính kèm thành công vào thông tin check-in địa điểm.
+*   **Related Use Cases**: `UC_MAP_14` (Perform Check-in).
+
+---
+
+### UC_MAP_16: Xem Community Check-Ins (View Community Check-ins)
+*   **Use Case ID**: UC_MAP_16
+*   **Name**: Xem Community Check-Ins (View Community Check-ins)
+*   **Goal**: Cho phép người dùng duyệt và xem danh sách các lượt check-in của cộng đồng phượt thủ liên quan đến khu vực đang hiển thị.
+*   **Primary Actor**: Khách vãng lai (Guest)
+*   **Supporting Actors**: -
+*   **Preconditions**: Không có.
+*   **Trigger**: Người dùng truy cập tab Bản đồ hoặc chọn một marker check-in của thành viên khác trên bản đồ.
+*   **Main Success Scenario**:
+    1. Người dùng truy cập trang Bản đồ.
+    2. Frontend tự động gọi API `GET /api/v1/map/checkins` để lấy danh sách check-in gần đây của cộng đồng.
+    3. Hệ thống hiển thị các lượt check-in dưới dạng marker đặc trưng trên bản đồ Leaflet và danh sách ở panel sidebar bên phải.
+    4. Người dùng có thể nhấp chọn một lượt check-in để xem thông tin chi tiết (Tên người dùng, Avatar, nội dung bình luận, ảnh đính kèm và thời gian check-in).
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**: Không có.
+*   **Postconditions**: Hiển thị chính xác các hoạt động check-in công khai của cộng đồng trên bản đồ và giao diện.
+*   **Related Use Cases**: `UC_MAP_14` (Perform Check-in).
 
 ---
 

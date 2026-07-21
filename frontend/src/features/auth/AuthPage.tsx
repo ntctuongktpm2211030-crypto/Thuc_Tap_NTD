@@ -10,6 +10,7 @@ import type { RootState, AppDispatch } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
 import { loginGoogle } from '../../config/firebase';
+import { authService } from '../../services/smartTravel.service';
 import logoImg from '../../assets/logo.png';
 
 // ──────────────────────────────────────────────────────────────
@@ -264,9 +265,100 @@ export default function AuthPage() {
   const redirectTo = (location.state as { from?: string } | null)?.from || '/';
   const { isLoading, error, isAuthenticated, user } = useSelector((s: RootState) => s.auth);
   const { t } = useLang();
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot' | 'otp' | 'reset'>('login');
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  // Forgot Password / OTP / Reset State
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [resetToken, setResetToken] = useState('');
+  const [resetPwdVal, setResetPwdVal] = useState(field());
+  const [resetConfirmVal, setResetConfirmVal] = useState(field());
+  const [forgotStatus, setForgotStatus] = useState<{ text: string; isError: boolean } | null>(null);
+  const [forgotLoadingState, setForgotLoadingState] = useState(false);
+
+  const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isEmail(forgotEmail)) {
+      setForgotStatus({ text: 'Email không hợp lệ', isError: true });
+      return;
+    }
+    setForgotStatus(null);
+    setForgotLoadingState(true);
+    try {
+      await authService.forgotPassword(forgotEmail);
+      setForgotStatus({ text: 'Mã OTP đã được gửi về email của bạn.', isError: false });
+      setTimeout(() => {
+        setForgotStatus(null);
+        setMode('otp');
+      }, 1500);
+    } catch (err: any) {
+      console.error('Forgot password error:', err);
+      const msg = err.response?.data?.error || 'Có lỗi xảy ra, vui lòng thử lại sau.';
+      setForgotStatus({ text: msg, isError: true });
+    } finally {
+      setForgotLoadingState(false);
+    }
+  };
+
+  const handleVerifyOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otpCode.trim().length !== 6) {
+      setForgotStatus({ text: 'Vui lòng nhập đầy đủ mã OTP 6 chữ số', isError: true });
+      return;
+    }
+    setForgotStatus(null);
+    setForgotLoadingState(true);
+    try {
+      const res = await authService.verifyOtp(forgotEmail, otpCode);
+      setResetToken(res.resetToken);
+      setForgotStatus({ text: 'Mã OTP xác thực thành công.', isError: false });
+      setTimeout(() => {
+        setForgotStatus(null);
+        setMode('reset');
+      }, 1500);
+    } catch (err: any) {
+      console.error('Verify OTP error:', err);
+      const msg = err.response?.data?.error || 'Mã OTP không hợp lệ hoặc đã hết hiệu lực.';
+      setForgotStatus({ text: msg, isError: true });
+    } finally {
+      setForgotLoadingState(false);
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isStrongPassword(resetPwdVal.value)) {
+      setResetPwdVal(p => ({ ...p, error: 'Mật khẩu phải có ít nhất 8 ký tự', touched: true }));
+      return;
+    }
+    if (resetConfirmVal.value !== resetPwdVal.value) {
+      setResetConfirmVal(p => ({ ...p, error: 'Mật khẩu nhập lại không khớp', touched: true }));
+      return;
+    }
+    setForgotStatus(null);
+    setForgotLoadingState(true);
+    try {
+      await authService.resetPassword(forgotEmail, resetToken, resetPwdVal.value);
+      setForgotStatus({ text: 'Đổi mật khẩu thành công. Đang quay lại trang đăng nhập...', isError: false });
+      setTimeout(() => {
+        setForgotStatus(null);
+        setMode('login');
+        setForgotEmail('');
+        setOtpCode('');
+        setResetToken('');
+        setResetPwdVal(field());
+        setResetConfirmVal(field());
+      }, 2000);
+    } catch (err: any) {
+      console.error('Reset password error:', err);
+      const msg = err.response?.data?.error || 'Đổi mật khẩu thất bại. Vui lòng thử lại.';
+      setForgotStatus({ text: msg, isError: true });
+    } finally {
+      setForgotLoadingState(false);
+    }
+  };
 
   // LOGIN state
   const [loginId, setLoginId] = useState(field());
@@ -302,9 +394,10 @@ export default function AuthPage() {
   };
 
   // Clear Redux error on mode switch
-  const switchMode = (m: 'login' | 'register') => {
+  const switchMode = (m: 'login' | 'register' | 'forgot' | 'otp' | 'reset') => {
     setMode(m);
     dispatch(clearError());
+    setForgotStatus(null);
   };
 
   // ──── VALIDATION ────
@@ -385,10 +478,18 @@ export default function AuthPage() {
           {/* Heading */}
           <div className="space-y-1">
             <h1 className="font-editorial text-2xl font-bold text-[var(--text-primary)]">
-              {mode === 'login' ? t('auth.welcome') : t('auth.startJourney')}
+              {mode === 'login' && t('auth.welcome')}
+              {mode === 'register' && t('auth.startJourney')}
+              {mode === 'forgot' && 'Quên mật khẩu?'}
+              {mode === 'otp' && 'Nhập mã OTP'}
+              {mode === 'reset' && 'Đặt lại mật khẩu'}
             </h1>
             <p className="text-sm text-[var(--text-muted)]">
-              {mode === 'login' ? t('auth.signInSub') : t('auth.signUpSub')}
+              {mode === 'login' && t('auth.signInSub')}
+              {mode === 'register' && t('auth.signUpSub')}
+              {mode === 'forgot' && 'Nhập email của bạn để nhận mã OTP khôi phục mật khẩu.'}
+              {mode === 'otp' && `Nhập mã xác thực 6 chữ số đã được gửi đến email ${forgotEmail}.`}
+              {mode === 'reset' && 'Nhập mật khẩu mới cho tài khoản của bạn.'}
             </p>
             {redirectTo !== '/' && (
               <p className="text-xs text-[var(--gold)] bg-[var(--gold-glow)] border border-[var(--gold)]/25 rounded-lg px-3 py-2 mt-2">
@@ -398,24 +499,38 @@ export default function AuthPage() {
           </div>
 
           {/* Mode tabs */}
-          <div className="flex bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl p-1">
-            {(['login', 'register'] as const).map(m => (
-              <button key={m} onClick={() => switchMode(m)}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  mode === m
-                    ? 'bg-[var(--gold)] text-black shadow-sm'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                }`}>
-                {m === 'login' ? t('auth.signIn') : t('auth.createAccount')}
-              </button>
-            ))}
-          </div>
+          {(mode === 'login' || mode === 'register') && (
+            <div className="flex bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl p-1">
+              {(['login', 'register'] as const).map(m => (
+                <button key={m} onClick={() => switchMode(m)}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                    mode === m
+                      ? 'bg-[var(--gold)] text-black shadow-sm'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                  }`}>
+                  {m === 'login' ? t('auth.signIn') : t('auth.createAccount')}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* API error banner */}
           {error && (
             <div className="flex items-start gap-2.5 p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-sm text-rose-400 animate-fade-in">
               <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
               <span>{error}</span>
+            </div>
+          )}
+
+          {/* OTP/Forgot password status banner */}
+          {forgotStatus && (
+            <div className={`flex items-start gap-2.5 p-3.5 border rounded-xl text-sm animate-fade-in ${
+              forgotStatus.isError 
+                ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' 
+                : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+            }`}>
+              <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+              <span>{forgotStatus.text}</span>
             </div>
           )}
 
@@ -465,7 +580,7 @@ export default function AuthPage() {
                   <input type="checkbox" className="rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)]" />
                   Ghi nhớ đăng nhập
                 </label>
-                <button type="button" className="text-xs font-semibold text-[var(--gold)] hover:underline">
+                <button type="button" onClick={() => switchMode('forgot')} className="text-xs font-semibold text-[var(--gold)] hover:underline">
                   Quên mật khẩu?
                 </button>
               </div>
@@ -479,6 +594,149 @@ export default function AuthPage() {
                   <><span className="animate-spin">⏳</span> {t('auth.loading')}</>
                 ) : (
                   <>{t('auth.signIn')} <ArrowRight size={16} /></>
+                )}
+              </button>
+            </form>
+          )}
+
+          {/* ══════════════════════════════════════════════
+              FORGOT PASSWORD FORM
+          ══════════════════════════════════════════════ */}
+          {mode === 'forgot' && (
+            <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+              <Input
+                id="forgot-email"
+                type="email"
+                label="Email của bạn"
+                placeholder="example@email.com"
+                value={forgotEmail}
+                onChange={v => setForgotEmail(v)}
+                icon={<Mail size={16} />}
+              />
+
+              <button
+                type="submit"
+                disabled={forgotLoadingState || !forgotEmail}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {forgotLoadingState ? (
+                  <><span className="animate-spin">⏳</span> Gửi...</>
+                ) : (
+                  <>Gửi mã OTP <ArrowRight size={16} /></>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => switchMode('login')}
+                className="w-full py-2.5 text-center text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:underline"
+              >
+                Quay lại đăng nhập
+              </button>
+            </form>
+          )}
+
+          {/* ══════════════════════════════════════════════
+              OTP VERIFICATION FORM
+          ══════════════════════════════════════════════ */}
+          {mode === 'otp' && (
+            <form onSubmit={handleVerifyOtpSubmit} className="space-y-4">
+              <Input
+                id="otp-code"
+                type="text"
+                label="Mã xác thực OTP (6 chữ số)"
+                placeholder="123456"
+                value={otpCode}
+                onChange={v => setOtpCode(v.replace(/\D/g, '').slice(0, 6))}
+                icon={<Lock size={16} />}
+              />
+
+              <button
+                type="submit"
+                disabled={forgotLoadingState || otpCode.length !== 6}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {forgotLoadingState ? (
+                  <><span className="animate-spin">⏳</span> Xác minh...</>
+                ) : (
+                  <>Xác minh mã OTP <ArrowRight size={16} /></>
+                )}
+              </button>
+
+              <div className="flex justify-between items-center text-xs">
+                <button
+                  type="button"
+                  onClick={() => switchMode('forgot')}
+                  className="font-semibold text-[var(--gold)] hover:underline"
+                >
+                  Gửi lại OTP khác
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchMode('login')}
+                  className="font-semibold text-[var(--text-muted)] hover:underline"
+                >
+                  Quay lại đăng nhập
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* ══════════════════════════════════════════════
+              RESET PASSWORD FORM
+          ══════════════════════════════════════════════ */}
+          {mode === 'reset' && (
+            <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  id="reset-password"
+                  type={showPwd ? 'text' : 'password'}
+                  label="Mật khẩu mới"
+                  placeholder="Tối thiểu 8 ký tự"
+                  value={resetPwdVal.value}
+                  error={resetPwdVal.error}
+                  touched={resetPwdVal.touched}
+                  autoComplete="new-password"
+                  onChange={v => setResetPwdVal(p => ({ ...p, value: v, touched: true, error: isStrongPassword(v) ? '' : 'Mật khẩu phải có ít nhất 8 ký tự' }))}
+                  onBlur={() => setResetPwdVal(p => ({ ...p, touched: true }))}
+                  icon={<Lock size={16} />}
+                  rightElement={
+                    <button type="button" onClick={() => setShowPwd(!showPwd)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+                      {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  }
+                />
+                <PasswordStrength password={resetPwdVal.value} />
+              </div>
+
+              <Input
+                id="reset-confirm"
+                type={showConfirm ? 'text' : 'password'}
+                label="Nhập lại mật khẩu mới"
+                placeholder="Nhập lại mật khẩu"
+                value={resetConfirmVal.value}
+                error={resetConfirmVal.error}
+                touched={resetConfirmVal.touched}
+                autoComplete="new-password"
+                onChange={v => setResetConfirmVal(p => ({ ...p, value: v, touched: true, error: v === resetPwdVal.value ? '' : 'Mật khẩu nhập lại không khớp' }))}
+                onBlur={() => setResetConfirmVal(p => ({ ...p, touched: true }))}
+                icon={<Lock size={16} />}
+                rightElement={
+                  <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+                    {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                }
+              />
+
+              <button
+                type="submit"
+                disabled={forgotLoadingState}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {forgotLoadingState ? (
+                  <><span className="animate-spin">⏳</span> Đang lưu...</>
+                ) : (
+                  <>Lưu mật khẩu mới <ArrowRight size={16} /></>
                 )}
               </button>
             </form>

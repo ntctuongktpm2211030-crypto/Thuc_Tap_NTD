@@ -551,9 +551,9 @@ const Step1Story = ({
           <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[10px] text-amber-700 font-semibold flex items-start gap-1.5 animate-pulse">
             <AlertCircle size={14} className="shrink-0 mt-0.5" />
             <span>
-              {isSocial && 'Vui lòng nhập nội dung chia sẻ (≥30 ký tự)'}
-              {isMagazine && 'Vui lòng nhập tiêu đề, tóm tắt (≥40 ký tự) và chọn nhất 1 danh mục'}
-              {isHero && 'Vui lòng nhập tiêu đề, tóm tắt (≥80 ký tự) và chọn nhất 1 danh mục'}
+              {isSocial && 'Vui lòng nhập nội dung chia sẻ (≥10 ký tự)'}
+              {isMagazine && 'Vui lòng nhập tiêu đề (>10 ký tự), tóm tắt và chọn ít nhất 1 danh mục'}
+              {isHero && 'Vui lòng nhập tiêu đề (>10 ký tự), tóm tắt và chọn ít nhất 1 danh mục'}
             </span>
           </div>
         )}
@@ -1171,6 +1171,29 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
     return routePoints[dayIdx % routePoints.length];
   };
 
+  const ensureActivities = (activities: DayActivity[]): DayActivity[] => {
+    const sessions = ['Buổi sáng', 'Buổi trưa', 'Buổi chiều'];
+    const normalized = [...(activities ?? [])];
+    
+    sessions.forEach((s) => {
+      const exists = normalized.some(a => a.time === s);
+      if (!exists) {
+        normalized.push({ time: s, icon: 'place', title: '', description: '' });
+      }
+    });
+
+    const order: Record<string, number> = {
+      'Buổi sáng': 1,
+      'Buổi trưa': 2,
+      'Buổi chiều': 3,
+      'Buổi tối': 4
+    };
+
+    return normalized
+      .filter(a => ['Buổi sáng', 'Buổi trưa', 'Buổi chiều', 'Buổi tối'].includes(a.time))
+      .sort((a, b) => (order[a.time] ?? 99) - (order[b.time] ?? 99));
+  };
+
   const addDay = () => {
     const n = data.days.length + 1;
     const pt = getRoutePoint(undefined, data.days.length);
@@ -1179,7 +1202,11 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
       title: `Ngày ${n}`,
       location: pt?.name ?? '',
       routePointId: pt?.id,
-      activities: [],
+      activities: [
+        { time: 'Buổi sáng', icon: 'place', title: pt?.name ?? '', description: '' },
+        { time: 'Buổi trưa', icon: 'place', title: pt?.name ?? '', description: '' },
+        { time: 'Buổi chiều', icon: 'place', title: pt?.name ?? '', description: '' },
+      ],
     };
     onChange({ days: [...data.days, newDay] });
   };
@@ -1197,7 +1224,11 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
       title: `Ngày ${data.days.length + i + 1}`,
       location: pt.name,
       routePointId: pt.id,
-      activities: [],
+      activities: [
+        { time: 'Buổi sáng', icon: 'place', title: pt.name, description: '' },
+        { time: 'Buổi trưa', icon: 'place', title: pt.name, description: '' },
+        { time: 'Buổi chiều', icon: 'place', title: pt.name, description: '' },
+      ],
     }));
     onChange({ days: [...data.days, ...newDays].map((d, i) => ({ ...d, day: i + 1 })) });
   };
@@ -1210,41 +1241,6 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
       routePointId: pointId,
       location: pt?.name ?? days[dayIdx].location,
     };
-    onChange({ days });
-  };
-
-  const addActivity = (dayIdx: number) => {
-    const newAct: DayActivity = {
-      time: '08:00',
-      title: '',
-      description: '',
-      icon: 'place',
-    };
-    const days = [...data.days];
-    days[dayIdx] = { ...days[dayIdx], activities: [...days[dayIdx].activities, newAct] };
-    onChange({ days });
-  };
-
-  const updateActivity = (dayIdx: number, actIdx: number, field: keyof DayActivity, value: string) => {
-    const days = [...data.days];
-    days[dayIdx].activities[actIdx] = { ...days[dayIdx].activities[actIdx], [field]: value };
-    onChange({ days });
-  };
-
-  const updateActivityType = (dayIdx: number, actIdx: number, iconId: string) => {
-    const type = ACTIVITY_TYPES.find(a => a.id === iconId);
-    const days = [...data.days];
-    const act = { ...days[dayIdx].activities[actIdx], icon: iconId };
-    if (type && !act.title.trim()) act.title = type.label;
-    days[dayIdx].activities[actIdx] = act;
-    onChange({ days });
-  };
-
-  const getActivityIcon = (id: string) => ACTIVITY_TYPES.find(a => a.id === id)?.icon ?? MapPin;
-
-  const removeActivity = (dayIdx: number, actIdx: number) => {
-    const days = [...data.days];
-    days[dayIdx].activities.splice(actIdx, 1);
     onChange({ days });
   };
 
@@ -1330,32 +1326,8 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
                         onChange({ days });
                       }}
                       placeholder={`Ngày ${dayIdx + 1}`}
-                      className="input-premium py-2 text-sm font-semibold min-w-0"
+                      className="input-premium py-2 text-sm font-semibold min-w-0 w-full"
                     />
-                    {routePoints.length > 0 ? (
-                      <select
-                        value={day.routePointId ?? ''}
-                        onChange={e => setDayRoutePoint(dayIdx, e.target.value)}
-                        className="input-premium py-2 text-sm min-w-0"
-                        aria-label="Khu vực trong ngày"
-                      >
-                        <option value="">Chọn khu vực…</option>
-                        {routePoints.map(p => (
-                          <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        value={day.location}
-                        onChange={e => {
-                          const days = [...data.days];
-                          days[dayIdx].location = e.target.value;
-                          onChange({ days });
-                        }}
-                        placeholder="Khu vực / địa điểm…"
-                        className="input-premium py-2 text-sm min-w-0"
-                      />
-                    )}
                   </div>
                   <button type="button" onClick={() => {
                     const days = data.days.filter((_, i) => i !== dayIdx).map((d, i) => ({ ...d, day: i + 1 }));
@@ -1366,70 +1338,179 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
                 </div>
 
                 <div className="p-4 space-y-3">
-                  {day.activities.map((act, actIdx) => {
-                    const ActIcon = getActivityIcon(act.icon);
+                  {(() => {
+                    const sessions = ensureActivities(day.activities);
+                    const hasEvening = sessions.some(a => a.time === 'Buổi tối');
+                    
                     return (
-                      <div key={actIdx} className="journey-activity-card group">
-                        <div className="journey-activity-type-col">
-                          <div className="journey-activity-icon-badge" aria-hidden>
-                            <ActIcon size={16} strokeWidth={2} />
-                          </div>
-                          <select
-                            value={act.icon}
-                            onChange={e => updateActivityType(dayIdx, actIdx, e.target.value)}
-                            className="input-premium journey-activity-type-select"
-                            aria-label="Loại hoạt động"
+                      <div className="space-y-3">
+                        {sessions.map((act) => {
+                          const isEvening = act.time === 'Buổi tối';
+                          const label = act.time;
+                          const foodPlaceholder =
+                            label === 'Buổi sáng' ? 'Địa điểm ăn sáng (nếu có)...' :
+                            label === 'Buổi trưa' ? 'Địa điểm ăn trưa (nếu có)...' :
+                            label === 'Buổi chiều' ? 'Địa điểm ăn chiều (nếu có)...' :
+                            'Địa điểm ăn tối (nếu có)...';
+                          
+                          return (
+                            <div key={act.time} className="p-3 bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl space-y-2 relative">
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                                  {label === 'Buổi sáng' ? '🌅' : label === 'Buổi trưa' ? '☀️' : label === 'Buổi chiều' ? '🌇' : '🌙'} {label}
+                                </span>
+                                {isEvening && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newActivities = day.activities.filter(a => a.time !== 'Buổi tối');
+                                      const days = [...data.days];
+                                      days[dayIdx] = { ...day, activities: newActivities };
+                                      onChange({ days });
+                                    }}
+                                    className="text-[10px] text-rose-500 hover:text-rose-600 border-none bg-transparent cursor-pointer font-semibold"
+                                  >
+                                    ✕ Xóa buổi tối
+                                  </button>
+                                )}
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {/* Khu vực */}
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Khu vực / Điểm dừng</label>
+                                  {routePoints.length > 0 ? (
+                                    <select
+                                      value={act.title}
+                                      onChange={e => {
+                                        const newActivities = [...day.activities];
+                                        const targetIdx = newActivities.findIndex(a => a.time === act.time);
+                                        if (targetIdx !== -1) {
+                                          newActivities[targetIdx] = { ...newActivities[targetIdx], title: e.target.value };
+                                        } else {
+                                          newActivities.push({ time: act.time, icon: 'place', title: e.target.value, description: '' });
+                                        }
+                                        const days = [...data.days];
+                                        days[dayIdx] = { ...day, activities: newActivities };
+                                        onChange({ days });
+                                      }}
+                                      className="w-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+                                    >
+                                      <option value="">-- Chọn khu vực --</option>
+                                      {routePoints.map(p => (
+                                        <option key={p.id} value={p.name}>{p.name}</option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={act.title}
+                                      onChange={e => {
+                                        const newActivities = [...day.activities];
+                                        const targetIdx = newActivities.findIndex(a => a.time === act.time);
+                                        if (targetIdx !== -1) {
+                                          newActivities[targetIdx] = { ...newActivities[targetIdx], title: e.target.value };
+                                        } else {
+                                          newActivities.push({ time: act.time, icon: 'place', title: e.target.value, description: '' });
+                                        }
+                                        const days = [...data.days];
+                                        days[dayIdx] = { ...day, activities: newActivities };
+                                        onChange({ days });
+                                      }}
+                                      placeholder="Nhập khu vực..."
+                                      className="w-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+                                    />
+                                  )}
+                                </div>
+
+                                {/* Địa điểm ăn uống */}
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Ăn uống</label>
+                                  <input
+                                    type="text"
+                                    value={act.cost || ''}
+                                    onChange={e => {
+                                      const val = e.target.value;
+                                      const newActivities = [...day.activities];
+                                      const targetIdx = newActivities.findIndex(a => a.time === act.time);
+                                      if (targetIdx !== -1) {
+                                        newActivities[targetIdx] = {
+                                          ...newActivities[targetIdx],
+                                          cost: val,
+                                          icon: val.trim() ? 'food' : 'place'
+                                        };
+                                      } else {
+                                        newActivities.push({
+                                          time: act.time,
+                                          icon: val.trim() ? 'food' : 'place',
+                                          title: '',
+                                          cost: val,
+                                          description: ''
+                                        });
+                                      }
+                                      const days = [...data.days];
+                                      days[dayIdx] = { ...day, activities: newActivities };
+                                      onChange({ days });
+                                    }}
+                                    placeholder={foodPlaceholder}
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Chi tiết / Trải nghiệm */}
+                              <div className="space-y-1 pt-1.5">
+                                <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Chi tiết / Trải nghiệm</label>
+                                <input
+                                  type="text"
+                                  value={act.description || ''}
+                                  onChange={e => {
+                                    const val = e.target.value;
+                                    const newActivities = [...day.activities];
+                                    const targetIdx = newActivities.findIndex(a => a.time === act.time);
+                                    if (targetIdx !== -1) {
+                                      newActivities[targetIdx] = {
+                                        ...newActivities[targetIdx],
+                                        description: val
+                                      };
+                                    } else {
+                                      newActivities.push({
+                                        time: act.time,
+                                        icon: 'place',
+                                        title: '',
+                                        cost: '',
+                                        description: val
+                                      });
+                                    }
+                                    const days = [...data.days];
+                                    days[dayIdx] = { ...day, activities: newActivities };
+                                    onChange({ days });
+                                  }}
+                                  placeholder="Mô tả trải nghiệm, mẹo nhỏ hoặc lưu ý của buổi..."
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        {!hasEvening && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newActivities = [...day.activities, { time: 'Buổi tối', icon: 'place', title: '', cost: '', description: '' }];
+                              const days = [...data.days];
+                              days[dayIdx] = { ...day, activities: newActivities };
+                              onChange({ days });
+                            }}
+                            className="w-full flex items-center justify-center gap-2 py-2 border border-dashed border-[var(--border-normal)] rounded-xl text-xs font-semibold text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all"
                           >
-                            {ACTIVITY_TYPES.map(a => (
-                              <option key={a.id} value={a.id}>{a.label}</option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="journey-activity-card__body">
-                          <div className="journey-activity-row-primary">
-                            <input
-                              type="time"
-                              value={act.time}
-                              onChange={e => updateActivity(dayIdx, actIdx, 'time', e.target.value)}
-                              className="input-premium journey-activity-time"
-                              aria-label="Giờ"
-                            />
-                            <input
-                              value={act.title}
-                              onChange={e => updateActivity(dayIdx, actIdx, 'title', e.target.value)}
-                              placeholder="Chi tiết (tuỳ chọn)…"
-                              className="input-premium journey-activity-title"
-                            />
-                            <input
-                              value={act.cost || ''}
-                              onChange={e => updateActivity(dayIdx, actIdx, 'cost', e.target.value)}
-                              placeholder="Chi phí"
-                              className="input-premium journey-activity-cost"
-                            />
-                          </div>
-                          <input
-                            value={act.description}
-                            onChange={e => updateActivity(dayIdx, actIdx, 'description', e.target.value)}
-                            placeholder="Mô tả ngắn (tuỳ chọn)…"
-                            className="input-premium journey-activity-desc"
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeActivity(dayIdx, actIdx)}
-                          className="journey-activity-remove"
-                          aria-label="Xóa hoạt động"
-                        >
-                          <X size={14} />
-                        </button>
+                            🌙 Thêm Buổi tối
+                          </button>
+                        )}
                       </div>
                     );
-                  })}
-
-                  <button type="button" onClick={() => addActivity(dayIdx)}
-                    className="w-full flex items-center justify-center gap-2 py-2 border border-dashed border-[var(--border-normal)] rounded-xl text-xs font-semibold text-[var(--text-muted)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all">
-                    <Plus size={13} /> Thêm hoạt động
-                  </button>
+                  })()}
                 </div>
               </div>
             ))}

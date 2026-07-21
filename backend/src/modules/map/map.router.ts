@@ -3,6 +3,7 @@ import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
 import { calculateBoundingBox, calculateHaversineDistance } from './gis-helper';
 import { WeatherTool } from '../ai-agents/tools/agent.tools';
+import { broadcastDashboardEvent } from '../dashboard/services/dashboard.socket';
 
 const router = Router();
 
@@ -27,6 +28,14 @@ router.post('/checkin', requireAuth, async (req: AuthRequest, res: Response) => 
         user: { include: { profile: true } },
         destination: true,
       },
+    });
+
+    broadcastDashboardEvent(req, 'checkin', { 
+      checkinId: checkin.id, 
+      destinationId: checkin.destinationId, 
+      locationName: checkin.destination.name,
+      userName: checkin.user.name,
+      province: checkin.destination.address || 'Việt Nam'
     });
 
     return res.status(201).json(checkin);

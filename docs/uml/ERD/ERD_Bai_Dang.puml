@@ -9,60 +9,64 @@ hide methods
 hide stereotype
 
 package "Module Bài viết & Tương tác" {
-  entity "Bài đăng" as BaiDang {
-    * ma_bai_dang : String <<PK>>
+  entity "Post" as Post {
+    * id : String <<PK>>
     --
-    * ma_tac_gia : String <<FK>> <<INDEX>>
-    * noi_dung : String
-    * danh_sach_anh : String[]
-    ma_chuyen_di : String <<FK>> <<INDEX>>
-    ma_dia_diem : String
-    * ngay_tao : DateTime
-    ngay_xoa : DateTime
+    * authorId : String <<FK>> <<INDEX>>
+    * content : String
+    * mediaUrls : String[]
+    tripId : String <<FK>> <<INDEX>>
+    locationId : String
+    * createdAt : DateTime
+    deletedAt : DateTime
   }
 
-  entity "Bình luận" as BinhLuan {
-    * ma_binh_luan : String <<PK>>
+  entity "Comment" as Comment {
+    * id : String <<PK>>
     --
-    * ma_bai_dang : String <<FK>> <<INDEX>>
-    * ma_tac_gia : String <<FK>> <<INDEX>>
-    * noi_dung : String
-    ma_binh_luan_cha : String <<FK>> <<INDEX>>
-    * ngay_tao : DateTime
+    * postId : String <<FK>> <<INDEX>>
+    * authorId : String <<FK>> <<INDEX>>
+    * content : String
+    parentId : String <<FK>> <<INDEX>>
+    * createdAt : DateTime
   }
 
-  entity "Lượt thích" as LuotThich {
-    * ma_luot_thich : String <<PK>>
+  entity "Like" as Like {
+    * id : String <<PK>>
     --
-    * ma_bai_dang : String <<FK>> <<UNIQUE>>
-    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
-    * ngay_tao : DateTime
+    * postId : String <<FK>>
+    * userId : String <<FK>>
+    * createdAt : DateTime
+    --
+    UNIQUE(postId, userId)
   }
 
-  entity "Đánh dấu" as DanhDau {
-    * ma_danh_dau : String <<PK>>
+  entity "Bookmark" as Bookmark {
+    * id : String <<PK>>
     --
-    * ma_bai_dang : String <<FK>> <<UNIQUE>>
-    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
-    * ngay_tao : DateTime
+    * postId : String <<FK>>
+    * userId : String <<FK>>
+    * createdAt : DateTime
+    --
+    UNIQUE(postId, userId)
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Người dùng" as NguoiDung <<External>>
-entity "Chuyến đi" as ChuyenDi <<External>>
+entity "User" as User <<External>>
+entity "Trip" as Trip <<External>>
 
-NguoiDung ||--o{ BaiDang : "đăng"
-NguoiDung ||--o{ BinhLuan : "viết"
-NguoiDung ||--o{ LuotThich : "thích"
-NguoiDung ||--o{ DanhDau : "lưu"
+User ||--o{ Post : "author"
+User ||--o{ Comment : "author"
+User ||--o{ Like : "user"
+User ||--o{ Bookmark : "user"
 
-ChuyenDi ||--o{ BaiDang : "chia sẻ"
+Trip ||--o{ Post : "trip"
 
-BaiDang ||--o{ BinhLuan : "có"
-BaiDang ||--o{ LuotThich : "nhận"
-BaiDang ||--o{ DanhDau : "nhận lưu"
+Post ||--o{ Comment : "comments"
+Post ||--o{ Like : "likes"
+Post ||--o{ Bookmark : "bookmarks"
 
-BinhLuan ||--o{ BinhLuan : "phản hồi"
+Comment ||--o{ Comment : "replies"
 
 @enduml

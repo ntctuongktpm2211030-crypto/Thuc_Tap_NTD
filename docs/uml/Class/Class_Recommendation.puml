@@ -1,0 +1,49 @@
+@startuml Class_Recommendation
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Recommendations Module " {
+
+  class "RecommendationController" as RecommendationController {
+    - service : RecommendationService
+    + constructor()
+    + create(req: Request, res: Response): Promise<Response>
+    + listAll(req: Request, res: Response): Promise<Response>
+    + listByUser(req: Request, res: Response): Promise<Response>
+    + getDetails(req: Request, res: Response): Promise<Response>
+    + update(req: Request, res: Response): Promise<Response>
+    + delete(req: Request, res: Response): Promise<Response>
+    + getPreferences(req: Request, res: Response): Promise<Response>
+    + updatePreferences(req: Request, res: Response): Promise<Response>
+  }
+
+  class "RecommendationService" as RecommendationService {
+    - repo : RecommendationRepository
+    + constructor()
+    + create(userId: String, data: CreateRecommendationDto): Promise<Recommendation>
+    + listAll(): Promise<Recommendation[]>
+    + listByUser(userId: String): Promise<Recommendation[]>
+    + getDetails(id: String): Promise<Recommendation>
+    + update(id: String, userId: String, data: UpdateRecommendationDto): Promise<Recommendation>
+    + delete(id: String, userId: String): Promise<void>
+    + getPreferences(userId: String): Promise<TravelPreferences | null>
+    + updatePreferences(userId: String, data: UpdatePreferencesDto): Promise<TravelPreferences>
+  }
+
+  class "RecommendationRepository" as RecommendationRepository {
+    + create(userId: String, data: CreateRecommendationDto): Promise<Recommendation>
+    + findMany(): Promise<Recommendation[]>
+    + findManyByUserId(userId: String): Promise<Recommendation[]>
+    + findById(id: String): Promise<Recommendation | null>
+    + update(id: String, data: UpdateRecommendationDto): Promise<Recommendation>
+    + delete(id: String): Promise<void>
+    + getPreferences(userId: String): Promise<TravelPreferences | null>
+    + upsertPreferences(userId: String, data: UpdatePreferencesDto): Promise<TravelPreferences>
+  }
+}
+
+RecommendationController *-- RecommendationService
+RecommendationService *-- RecommendationRepository
+
+@enduml

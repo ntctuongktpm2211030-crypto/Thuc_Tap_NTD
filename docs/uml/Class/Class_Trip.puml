@@ -1,0 +1,87 @@
+@startuml Class_Trip
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Trip Entities " {
+
+  class "Trip" as Trip {
+    + id: String <<PK>>
+    + ownerId: String <<FK>>
+    + title: String
+    + description: String [0..1]
+    + destinationName: String
+    + startDate: DateTime [0..1]
+    + endDate: DateTime [0..1]
+    + totalBudget: Float
+    + travelStyle: String
+    + isPublic: Boolean
+    + status: TripStatus
+    + cloneSourceId: String [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "TripDay" as TripDay {
+    + id: String <<PK>>
+    + tripId: String <<FK>>
+    + dayIndex: Int
+    + date: DateTime [0..1]
+  }
+
+  class "TripActivity" as TripActivity {
+    + id: String <<PK>>
+    + tripDayId: String <<FK>>
+    + destinationId: String <<FK>> [0..1]
+    + title: String [0..1]
+    + location: String [0..1]
+    + description: String [0..1]
+    + startTime: String [0..1]
+    + endTime: String [0..1]
+    + estimatedCost: Float
+    + sequenceOrder: Int
+    + notes: String [0..1]
+  }
+
+  class "Destination" as Destination {
+    + id: String <<PK>>
+    + name: String
+    + description: String [0..1]
+    + latitude: Float
+    + longitude: Float
+    + category: String
+    + averageRating: Float
+    + address: String [0..1]
+    + openingHours: String [0..1]
+  }
+
+  class "SavedPlace" as SavedPlace {
+    + id: String <<PK>>
+    + userId: String <<FK>>
+    + name: String
+    + category: String
+    + latitude: Float
+    + longitude: Float
+    + address: String [0..1]
+    + imageUrl: String [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "FavoriteFood" as FavoriteFood {
+    + id: String <<PK>>
+    + userId: String <<FK>>
+    + name: String
+    + region: String [0..1]
+    + description: String [0..1]
+    + rating: Float [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+}
+
+Trip "1" *-- "0..*" TripDay : "has"
+TripDay "1" *-- "0..*" TripActivity : "contains"
+Destination "1" -- "0..*" TripActivity : "at"
+
+@enduml

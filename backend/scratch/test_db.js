@@ -3,19 +3,29 @@ const prisma = new PrismaClient();
 
 async function run() {
   try {
-    console.log("Connecting to DB...");
-    const conn = await prisma.chatConversation.create({
-      data: {
-        userId: '00000000-0000-0000-0000-000000000000', // Mock UUID if FK constraints exist
-        title: 'Test Conversation',
+    console.log("Connecting to DB and checking posts...");
+    const posts = await prisma.post.findMany({
+      take: 2,
+      include: {
+        author: { include: { profile: true } },
       }
     });
-    console.log("Created successfully:", conn);
-    await prisma.chatConversation.delete({ where: { id: conn.id } });
-    console.log("Deleted successfully.");
+    console.log("Fetched posts successfully:", posts.length);
   } catch (err) {
-    console.error("DB Error:", err);
-  } finally {
+    console.error("DB Posts Error:", err);
+  }
+
+  try {
+    console.log("Checking notifications...");
+    const notifications = await prisma.notification.findMany({
+      take: 2,
+    });
+    console.log("Fetched notifications successfully:", notifications.length);
+  } catch (err) {
+    console.error("DB Notifications Error:", err);
+  }
+
+  finally {
     await prisma.$disconnect();
   }
 }

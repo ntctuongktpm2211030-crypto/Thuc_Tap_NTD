@@ -1,6 +1,9 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
+import { DashboardService } from '../dashboard/services/dashboard.service';
+
+const dashboardService = new DashboardService();
 import { calculateBoundingBox, calculateHaversineDistance } from '../map/gis-helper';
 
 const router = Router();
@@ -93,6 +96,12 @@ router.get('/nearby', async (req: AuthRequest, res: Response) => {
 router.get('/destinations', async (req: AuthRequest, res: Response) => {
   try {
     const { category, q, page = '1', limit = '20' } = req.query as Record<string, string>;
+
+    if (q) {
+      dashboardService.logSearchKeyword(q).catch(err => 
+        console.error('[Recommendations/Search] Failed to log search:', err)
+      );
+    }
 
     const where: any = {};
     if (category) where.category = category;

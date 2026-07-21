@@ -1,8 +1,12 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, optionalAuth, AuthRequest } from '../auth/auth.middleware';
+import { DashboardService } from '../dashboard/services/dashboard.service';
+import { broadcastDashboardEvent, sendRealTimeNotification } from '../dashboard/services/dashboard.socket';
+import { uploadBase64ToSupabase } from '../../config/supabase';
 
 const router = Router();
+const dashboardService = new DashboardService();
 
 function extractBodyText(content: string): string {
   try {
@@ -23,6 +27,12 @@ function extractBodyText(content: string): string {
 router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { page = '1', limit = '10', q } = req.query as Record<string, string>;
+
+    if (q) {
+      dashboardService.logSearchKeyword(q).catch(err => 
+        console.error('[Posts/Search] Failed to log search:', err)
+      );
+    }
 
     // Permanently delete posts trashed more than 15 days ago
     const fifteenDaysAgo = new Date();
@@ -171,11 +181,24 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
     }
 
+    let finalMediaUrls: string[] = [];
+    if (mediaUrls && Array.isArray(mediaUrls)) {
+      const uploadPromises = mediaUrls.map(async (url) => {
+        if (url.startsWith('data:image/')) {
+          const uploaded = await uploadBase64ToSupabase(url, 'posts');
+          return uploaded || null;
+        }
+        return url;
+      });
+      const results = await Promise.all(uploadPromises);
+      finalMediaUrls = results.filter((url): url is string => typeof url === 'string');
+    }
+
     const post = await prisma.post.create({
       data: {
         authorId: req.user!.sub,
         content,
-        mediaUrls: mediaUrls || [],
+        mediaUrls: finalMediaUrls,
         tripId: tripId || null,
         locationId: locationId || null,
       },
@@ -185,6 +208,8 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
         _count: { select: { likes: true, comments: true } },
       },
     });
+
+    broadcastDashboardEvent(req, 'post', { postId: post.id });
 
     return res.status(201).json(post);
   } catch (err) {
@@ -231,6 +256,8 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
     } else {
       await prisma.like.create({ data: { postId, userId } });
 
+      broadcastDashboardEvent(req, 'like', { postId, userId });
+
       try {
         const post = await prisma.post.findUnique({
           where: { id: postId }
@@ -241,12 +268,17 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
         });
         if (post && post.authorId !== userId) {
           const likerName = liker?.profile?.fullName || 'Ai đó';
-          await prisma.notification.create({
+          prisma.notification.create({
             data: {
               recipientId: post.authorId,
               type: 'like',
               content: `${likerName} đã thích bài viết của bạn.`,
+              targetId: postId,
             },
+          }).then(notification => {
+            sendRealTimeNotification(req, post.authorId, notification);
+          }).catch(err => {
+            console.error('Failed to create like notification in background:', err);
           });
         }
       } catch (err) {
@@ -303,11 +335,24 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
       }
     }
 
+    let finalMediaUrls = post.mediaUrls;
+    if (mediaUrls !== undefined && Array.isArray(mediaUrls)) {
+      const uploadPromises = mediaUrls.map(async (url) => {
+        if (url.startsWith('data:image/')) {
+          const uploaded = await uploadBase64ToSupabase(url, 'posts');
+          return uploaded || null;
+        }
+        return url;
+      });
+      const results = await Promise.all(uploadPromises);
+      finalMediaUrls = results.filter((url): url is string => typeof url === 'string');
+    }
+
     const updatedPost = await prisma.post.update({
       where: { id: req.params.id },
       data: {
         content: content !== undefined ? content : post.content,
-        mediaUrls: mediaUrls !== undefined ? mediaUrls : post.mediaUrls,
+        mediaUrls: finalMediaUrls,
         tripId: tripId !== undefined ? tripId : post.tripId,
         locationId: locationId !== undefined ? locationId : post.locationId,
       },
@@ -365,6 +410,8 @@ router.post('/:id/comments', requireAuth, async (req: AuthRequest, res: Response
       include: { author: { include: { profile: true } } },
     });
 
+    broadcastDashboardEvent(req, 'comment', { postId: comment.postId, commentId: comment.id });
+
     try {
       const post = await prisma.post.findUnique({
         where: { id: req.params.id }
@@ -376,21 +423,31 @@ router.post('/:id/comments', requireAuth, async (req: AuthRequest, res: Response
           where: { id: parentId }
         });
         if (parentComment && parentComment.authorId !== req.user!.sub) {
-          await prisma.notification.create({
+          prisma.notification.create({
             data: {
               recipientId: parentComment.authorId,
               type: 'comment',
               content: `${commenterName} đã trả lời bình luận của bạn.`,
+              targetId: comment.postId,
             }
+          }).then(notification => {
+            sendRealTimeNotification(req, parentComment.authorId, notification);
+          }).catch(err => {
+            console.error('Failed to create reply notification in background:', err);
           });
         }
       } else if (post && post.authorId !== req.user!.sub) {
-        await prisma.notification.create({
+        prisma.notification.create({
           data: {
             recipientId: post.authorId,
             type: 'comment',
             content: `${commenterName} đã bình luận về bài viết của bạn.`,
+            targetId: comment.postId,
           }
+        }).then(notification => {
+          sendRealTimeNotification(req, post.authorId, notification);
+        }).catch(err => {
+          console.error('Failed to create comment notification in background:', err);
         });
       }
     } catch (err) {

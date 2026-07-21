@@ -1,0 +1,17 @@
+@startuml Class_Analytics
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Analytics Module " {
+
+  class "AnalyticsRouter" as AnalyticsRouter <<Router>> {
+    + getSystemOverview(req: Request, res: Response): Promise<Response>
+    + getUserActivities(req: Request, res: Response): Promise<Response>
+    + getTripAnalytics(req: Request, res: Response): Promise<Response>
+    + getChatbotUsage(req: Request, res: Response): Promise<Response>
+    + getRagPerformance(req: Request, res: Response): Promise<Response>
+  }
+}
+
+@enduml

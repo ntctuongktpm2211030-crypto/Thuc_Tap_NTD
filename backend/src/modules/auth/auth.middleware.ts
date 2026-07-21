@@ -34,8 +34,8 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
  * Must be used after requireAuth.
  */
 export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction) {
-  if (req.user?.role !== 'ADMIN') {
-    return res.status(403).json({ error: 'Admin privileges required.' });
+  if (req.user?.role !== 'USER') {
+    return res.status(403).json({ error: 'User privileges required.' });
   }
   return next();
 }

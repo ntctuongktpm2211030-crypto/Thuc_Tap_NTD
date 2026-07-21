@@ -6,13 +6,12 @@ skinparam linetype ortho
 
 ' Actors
 actor "Người dùng đăng ký\n(User)" as User
-actor "Quản trị viên\n(Administrator)" as Admin
 
 ' External / Supporting Systems
 actor "WebSocket Server" as WS <<System>>
 actor "Push Notification Service" as PushNotification <<System>>
 
-rectangle "Phân hệ Tính năng Thời gian thực (Real-time Features)" {
+rectangle "Tính năng Thời gian thực (Real-time Features)" {
   usecase "Nhắn tin trực tiếp thời gian thực" as UC_LiveChat
   usecase "Truyền phản hồi AI dạng stream" as UC_StreamAI
   usecase "Hiển thị trạng thái đang nhập (Typing)" as UC_Typing
@@ -28,31 +27,28 @@ rectangle "Phân hệ Tính năng Thời gian thực (Real-time Features)" {
 }
 
 ' User Associations
-User --> UC_LiveChat
-User --> UC_StreamAI
-User --> UC_LiveNotif
-User --> UC_ReceiveNotif
-User --> UC_LiveFeed
-User --> UC_InstantComment
-User --> UC_InstantLike
-
-' Admin Associations
-Admin --> UC_LiveChat
-Admin --> UC_AdminAnnouncement
+User -- UC_LiveChat
+User -- UC_StreamAI
+User -- UC_LiveNotif
+User -- UC_ReceiveNotif
+User -- UC_LiveFeed
+User -- UC_InstantComment
+User -- UC_InstantLike
+User -- UC_AdminAnnouncement
 
 ' Relationships (include / extend)
-UC_LiveChat ..> UC_Typing : <<extend>>
+UC_LiveChat <.. UC_Typing : <<extend>>
 UC_LiveChat ..> UC_OnlineStatus : <<include>>
 UC_LiveNotif ..> UC_ReceiveNotif : <<include>>
 UC_AdminAnnouncement ..> UC_LiveNotif : <<include>>
 
 ' WebSocket Server Mappings
-UC_LiveChat --> WS
-UC_StreamAI --> WS
-UC_LiveFeed --> WS
-UC_InstantComment --> WS
-UC_InstantLike --> WS
+UC_LiveChat -- WS
+UC_StreamAI -- WS
+UC_LiveFeed -- WS
+UC_InstantComment -- WS
+UC_InstantLike -- WS
 
 ' Push Notification Mappings
-UC_LiveNotif --> PushNotification
+UC_LiveNotif -- PushNotification
 @enduml

@@ -51,6 +51,44 @@ const MapDashboard = () => {
 
   // Browser real GPS location state
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [selectedRadius, setSelectedRadius] = useState<number>(0);
+
+  const handleFindNearby = async () => {
+    const lat = userLocation ? userLocation[0] : selectedCenter[0];
+    const lng = userLocation ? userLocation[1] : selectedCenter[1];
+
+    if (!lat || !lng) {
+      alert(vi ? 'Vui lòng xác định vị trí hiện tại hoặc di chuyển tâm bản đồ!' : 'Please locate yourself or center the map first!');
+      return;
+    }
+
+    if (selectedRadius === 0) {
+      try {
+        const dests = await mapService.destinations();
+        if (Array.isArray(dests)) {
+          setDestinations(dests);
+          alert(vi ? 'Đã hiển thị lại toàn bộ địa điểm.' : 'Showing all destinations.');
+        }
+      } catch (err) {
+        console.error('Failed to load destinations:', err);
+      }
+      return;
+    }
+
+    try {
+      const dests = await mapService.destinations({ lat, lng, radius: selectedRadius });
+      if (Array.isArray(dests)) {
+        setDestinations(dests);
+        alert(vi 
+          ? `Đã tìm thấy ${dests.length} địa điểm trong bán kính ${selectedRadius}km.` 
+          : `Found ${dests.length} destinations within ${selectedRadius}km.`
+        );
+      }
+    } catch (err) {
+      console.error('Failed to find nearby places:', err);
+      alert(vi ? 'Không thể tìm địa điểm xung quanh. Hãy thử lại.' : 'Failed to search nearby places. Please try again.');
+    }
+  };
 
   const loadMapData = async () => {
     try {
@@ -66,6 +104,11 @@ const MapDashboard = () => {
   };
 
   const requestMyLocation = () => {
+    if (!isAuthenticated) {
+      alert(vi ? 'Bạn cần đăng nhập để định vị vị trí của mình!' : 'You need to log in to acquire your location!');
+      navigate('/auth', { state: { from: '/map' } });
+      return;
+    }
     if (!navigator.geolocation) {
       alert(vi ? 'Trình duyệt của bạn không hỗ trợ định vị GPS.' : 'Geolocation is not supported by your browser.');
       return;
@@ -94,12 +137,17 @@ const MapDashboard = () => {
   };
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      alert(vi ? 'Bạn cần đăng nhập để truy cập trang Bản đồ!' : 'You need to log in to access the Map page!');
+      navigate('/auth', { state: { from: '/map' } });
+      return;
+    }
     loadMapData();
-  }, []);
+  }, [isAuthenticated, navigate, vi]);
 
-  // Request actual browser geolocation on mount & track moves
+  // Request actual browser geolocation on mount & track moves if logged in
   useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation || !isAuthenticated) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -128,7 +176,7 @@ const MapDashboard = () => {
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
-  }, []);
+  }, [isAuthenticated]);
 
   // WebSocket connection & location heartbeat
   useEffect(() => {
@@ -218,33 +266,55 @@ const MapDashboard = () => {
       };
     });
 
-    const mappedFriends: MapLocation[] = Object.values(liveFriends).map(f => ({
-      id: `live-${f.userId}`,
-      name: `Vị trí trực tiếp của ${f.fullName}`,
-      lat: f.lat,
-      lng: f.lng,
-      user: f.fullName,
-      avatar: f.avatarUrl,
-      category: 'LIVE_FRIEND',
-      time: new Date(f.updatedAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
-    }));
+    const mappedFriends: MapLocation[] = [];
+    if (isAuthenticated && user) {
+      const userLat = userLocation ? userLocation[0] : selectedCenter[0];
+      const userLng = userLocation ? userLocation[1] : selectedCenter[1];
 
-    // If real geolocation is active, add current user pulsing dot
-    if (userLocation && user) {
-      mappedFriends.push({
-        id: `live-current-user-${user.id}`,
-        name: vi ? 'Vị trí của bạn (Thực tế)' : 'Your Location (Actual GPS)',
-        lat: userLocation[0],
-        lng: userLocation[1],
-        user: user.fullName || user.email,
-        avatar: user.avatarUrl,
-        category: 'CURRENT_USER',
-        time: vi ? 'Trực tiếp' : 'Live'
-      });
+      Object.values(liveFriends)
+        .map((f: any) => {
+          // Haversine distance
+          const R = 6371; // km
+          const dLat = (f.lat - userLat) * Math.PI / 180;
+          const dLon = (f.lng - userLng) * Math.PI / 180;
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(userLat * Math.PI / 180) * Math.cos(f.lat * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const cDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const distance = R * cDistance;
+          return { ...f, distance };
+        })
+        .filter(f => f.distance <= 100) // Within 100km radius limit
+        .forEach(f => {
+          mappedFriends.push({
+            id: `live-${f.userId}`,
+            name: `${f.fullName} (${f.distance.toFixed(1)} km)`,
+            lat: f.lat,
+            lng: f.lng,
+            user: f.fullName,
+            avatar: f.avatarUrl,
+            category: 'LIVE_FRIEND',
+            time: new Date(f.updatedAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
+          });
+        });
+
+      if (userLocation) {
+        mappedFriends.push({
+          id: `live-current-user-${user.id}`,
+          name: vi ? 'Vị trí của bạn (Thực tế)' : 'Your Location (Actual GPS)',
+          lat: userLocation[0],
+          lng: userLocation[1],
+          user: user.fullName || user.email,
+          avatar: user.avatarUrl,
+          category: 'CURRENT_USER',
+          time: vi ? 'Trực tiếp' : 'Live'
+        });
+      }
     }
 
     setLocations([...mappedDests, ...mappedCheckins, ...mappedFriends]);
-  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user]);
+  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user, isAuthenticated]);
 
   const parseEXIFGPS = (file: File): Promise<[number, number] | null> => {
     return new Promise((resolve) => {
@@ -435,6 +505,11 @@ const MapDashboard = () => {
   };
 
   const handleGetAiRecommendations = async () => {
+    if (!isAuthenticated) {
+      alert(vi ? 'Bạn cần đăng nhập để sử dụng tính năng Đề xuất AI lân cận!' : 'You need to log in to use AI Recommendations!');
+      navigate('/auth', { state: { from: '/map' } });
+      return;
+    }
     setLoadingAiRecs(true); setAiRecs([]);
     try {
       const response = await mapService.aiRecommendations({ lat: selectedCenter[0], lng: selectedCenter[1], weather: 'Sunny', temp: 28 });
@@ -676,6 +751,26 @@ const MapDashboard = () => {
             🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
           </button>
 
+          <div className="flex items-center gap-1">
+            <select
+              value={selectedRadius}
+              onChange={e => setSelectedRadius(Number(e.target.value))}
+              className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+            >
+              <option value="0">-- {vi ? 'Bán kính' : 'Radius'} --</option>
+              <option value="5">5 km</option>
+              <option value="10">10 km</option>
+              <option value="15">15 km</option>
+              <option value="20">20 km</option>
+            </select>
+            <button
+              onClick={handleFindNearby}
+              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
+            >
+              🔍 {vi ? 'Tìm quanh đây' : 'Find Nearby'}
+            </button>
+          </div>
+
           <button
             onClick={handleOptimizeTSP}
             disabled={routeQueue.length < 3}
@@ -795,16 +890,7 @@ const MapDashboard = () => {
               </div>
             )}
 
-            <div className="flex gap-2 items-center justify-between">
-              <label className="flex items-center gap-1 px-2.5 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--text-secondary)] rounded text-[9px] font-bold cursor-pointer transition-all">
-                📷 {isExtractingGps ? 'GPS...' : (vi ? 'Trích GPS Ảnh' : 'Extract GPS')}
-                <input
-                  type="file"
-                  accept="image/jpeg"
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
-              </label>
+            <div className="flex gap-2 items-center justify-end">
               <button
                 type="submit"
                 className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold uppercase rounded-lg cursor-pointer border-none transition-all shadow-sm"

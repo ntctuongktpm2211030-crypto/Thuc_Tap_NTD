@@ -1,0 +1,153 @@
+@startuml Class_DomainModel
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Domain Model (Prisma Database Schema)" {
+
+  class "User" as User {
+    + id: String <<PK>>
+    + email: String <<UNIQUE>>
+    + passwordHash: String
+    + role: UserRole
+    + isVerified: Boolean
+    + verificationToken: String [0..1]
+    + resetPasswordToken: String [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "Profile" as Profile {
+    + id: String <<PK>>
+    + userId: String <<FK>> <<UNIQUE>>
+    + fullName: String
+    + avatarUrl: String [0..1]
+    + coverUrl: String [0..1]
+    + bio: String [0..1]
+    + phoneNumber: String [0..1]
+    + homeLocation: String [0..1]
+  }
+
+  class "TravelPreferences" as TravelPreferences {
+    + id: String <<PK>>
+    + userId: String <<FK>> <<UNIQUE>>
+    + preferredPace: String
+    + dailyBudget: Float
+    + activities: String[]
+    + destinationTypes: String[]
+    + foodPreferences: String[]
+  }
+
+  class "Trip" as Trip {
+    + id: String <<PK>>
+    + ownerId: String <<FK>>
+    + title: String
+    + description: String [0..1]
+    + destinationName: String
+    + startDate: DateTime [0..1]
+    + endDate: DateTime [0..1]
+    + totalBudget: Float
+    + travelStyle: String
+    + isPublic: Boolean
+    + status: TripStatus
+    + cloneSourceId: String [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "TripDay" as TripDay {
+    + id: String <<PK>>
+    + tripId: String <<FK>>
+    + dayIndex: Int
+    + date: DateTime [0..1]
+  }
+
+  class "TripActivity" as TripActivity {
+    + id: String <<PK>>
+    + tripDayId: String <<FK>>
+    + destinationId: String <<FK>> [0..1]
+    + title: String [0..1]
+    + location: String [0..1]
+    + description: String [0..1]
+    + startTime: String [0..1]
+    + endTime: String [0..1]
+    + estimatedCost: Float
+    + sequenceOrder: Int
+    + notes: String [0..1]
+  }
+
+  class "Destination" as Destination {
+    + id: String <<PK>>
+    + name: String
+    + description: String [0..1]
+    + latitude: Float
+    + longitude: Float
+    + category: String
+    + averageRating: Float
+    + address: String [0..1]
+    + openingHours: String [0..1]
+  }
+
+  class "Post" as Post {
+    + id: String <<PK>>
+    + authorId: String <<FK>>
+    + content: String
+    + mediaUrls: String[]
+    + tripId: String <<FK>> [0..1]
+    + locationId: String [0..1]
+    + createdAt: DateTime
+    + deletedAt: DateTime [0..1]
+  }
+
+  class "Comment" as Comment {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + authorId: String <<FK>>
+    + content: String
+    + parentId: String <<FK>> [0..1]
+    + createdAt: DateTime
+  }
+
+  class "Like" as Like {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + userId: String <<FK>>
+    + createdAt: DateTime
+  }
+
+  class "Bookmark" as Bookmark {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + userId: String <<FK>>
+    + createdAt: DateTime
+  }
+}
+
+note bottom of Like
+  Composite Unique constraint:
+  @@unique([postId, userId])
+  onDelete: Cascade
+end note
+
+note bottom of Bookmark
+  Composite Unique constraint:
+  @@unique([postId, userId])
+  onDelete: Cascade
+end note
+
+User "1" *-- "0..1" Profile : "owns"
+User "1" *-- "0..1" TravelPreferences : "has"
+User "1" *-- "0..*" Trip : "plans"
+
+Trip "1" *-- "0..*" TripDay : "consists of"
+TripDay "1" *-- "0..*" TripActivity : "contains"
+Destination "1" -- "0..*" TripActivity : "at"
+
+User "1" -- "0..*" Post : "authors"
+Trip "1" -- "0..*" Post : "shared on"
+
+Post "1" *-- "0..*" Comment : "receives"
+Post "1" *-- "0..*" Like : "liked by"
+Post "1" *-- "0..*" Bookmark : "bookmarked by"
+
+@enduml

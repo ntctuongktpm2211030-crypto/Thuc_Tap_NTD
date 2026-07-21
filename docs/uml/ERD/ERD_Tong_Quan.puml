@@ -9,62 +9,62 @@ hide methods
 hide stereotype
 
 package "Người dùng và Cá nhân hóa" {
-  entity "Người dùng" as NguoiDung
-  entity "Hồ sơ" as HoSo
-  entity "Sở thích du lịch" as SoThichDuLich
-  entity "Bộ nhớ AI" as BoNhoAI
+  entity "User" as User
+  entity "Profile" as Profile
+  entity "TravelPreferences" as TravelPreferences
+  entity "AIMemory" as AIMemory
 }
 
 package "Hành trình và Chuyến đi" {
-  entity "Chuyến đi" as ChuyenDi
-  entity "Nhật ký hành trình" as NhatKyHanhTrinh
+  entity "Trip" as Trip
+  entity "Journey" as Journey
 }
 
 package "Địa điểm và GIS" {
-  entity "Điểm đến" as DiemDen
-  entity "Cảnh báo an toàn" as CanhBaoAnToan
+  entity "Destination" as Destination
+  entity "SafetyWarning" as SafetyWarning
 }
 
 package "Mạng xã hội và Tương tác" {
-  entity "Bài đăng" as BaiDang
+  entity "Post" as Post
 }
 
 package "Sự kiện và Kết nối" {
-  entity "Sự kiện" as SuKien
-  entity "Ghép đôi du khách" as GhepDoiDuKhach
+  entity "Event" as Event
+  entity "TravelerMatch" as TravelerMatch
 }
 
 package "Trợ lý Chatbot AI" {
-  entity "Cuộc hội thoại AI" as CuocHoiThoaiAI
+  entity "ChatConversation" as ChatConversation
 }
 
 package "Hệ thống RAG và Tri thức" {
-  entity "Nội dung tri thức" as NoiDungTriThuc
+  entity "KnowledgeContent" as KnowledgeContent
 }
 
 package "Đệm Cache và Nhật ký" {
-  entity "Món ăn yêu thích" as MonAnYeuThich
-  entity "Đệm hệ thống" as SystemCache
+  entity "FavoriteFood" as FavoriteFood
+  entity "SystemCache" as SystemCache
 }
 
 ' ─── QUAN HỆ TỔNG QUAN GIỮA CÁC MODULES ───
 
-NguoiDung ||--|| HoSo : "sở hữu"
-NguoiDung ||--|| SoThichDuLich : "cấu hình"
-NguoiDung ||--|| BoNhoAI : "lưu sở thích"
+User ||--|| Profile : "profile"
+User ||--|| TravelPreferences : "preferences"
+User ||--|| AIMemory : "aiMemory"
 
-NguoiDung ||--o{ ChuyenDi : "lập"
-NguoiDung ||--o{ BaiDang : "đăng"
-NguoiDung ||--o{ NhatKyHanhTrinh : "ghi chép"
-NguoiDung ||--o{ SuKien : "tổ chức"
-NguoiDung ||--o{ CuocHoiThoaiAI : "trò chuyện"
-NguoiDung ||--o{ MonAnYeuThich : "thích ăn"
-NguoiDung ||--o{ GhepDoiDuKhach : "gợi ý ghép"
+User ||--o{ Trip : "trips"
+User ||--o{ Post : "posts"
+User ||--o{ Journey : "journeys"
+User ||--o{ Event : "organizedEvents"
+User ||--o{ ChatConversation : "chatbotConversations"
+User ||--o{ FavoriteFood : "favoriteFoods"
+User ||--o{ TravelerMatch : "matches"
 
-ChuyenDi }o--|| DiemDen : "ghé thăm"
-ChuyenDi ||--o{ BaiDang : "được chia sẻ qua"
+Trip }o--|| Destination : "destination"
+Trip ||--o{ Post : "posts"
 
-SuKien }o--|| DiemDen : "diễn ra tại"
-NguoiDung }o--o{ SuKien : "đăng ký tham gia"
+Event }o--|| Destination : "destination"
+User }o--o{ Event : "eventAttendances"
 
 @enduml

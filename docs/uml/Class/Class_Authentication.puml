@@ -1,0 +1,42 @@
+@startuml Class_Authentication
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Authentication Module " {
+  
+  interface "AuthRequest" as AuthRequest {
+    + user : { sub: String, role: String } [0..1]
+  }
+
+  class "EmailService" as EmailService {
+    - transporter : Transporter
+    + constructor()
+    + sendVerificationEmail(email: String, token: String): Promise<void>
+    + sendPasswordResetEmail(email: String, token: String): Promise<void>
+  }
+
+  class "AuthMiddleware" as AuthMiddleware <<Middleware>> {
+    + requireAuth(req: Request, res: Response, next: NextFunction): void
+    + requireAdmin(req: Request, res: Response, next: NextFunction): void
+    + optionalAuth(req: Request, res: Response, next: NextFunction): void
+  }
+
+  class "AuthRouter" as AuthRouter <<Router>> {
+    - emailService : EmailService
+    + register(req: Request, res: Response): Promise<void>
+    + login(req: Request, res: Response): Promise<void>
+    + googleLogin(req: Request, res: Response): Promise<void>
+    + refreshToken(req: Request, res: Response): Promise<void>
+    + getMe(req: Request, res: Response): Promise<void>
+    + verifyEmail(req: Request, res: Response): Promise<void>
+    + forgotPassword(req: Request, res: Response): Promise<void>
+    + resetPassword(req: Request, res: Response): Promise<void>
+  }
+}
+
+AuthRouter ..> EmailService : <<use>>
+AuthRouter ..> AuthRequest : <<use>>
+AuthMiddleware ..> AuthRequest : <<use>>
+
+@enduml

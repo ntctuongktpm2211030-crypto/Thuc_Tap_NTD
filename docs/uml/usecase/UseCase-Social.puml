@@ -9,10 +9,13 @@ actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
 ' External Systems
-actor "Cloud Storage" as CloudStorage <<System>>
+actor "Supabase Storage" as SupabaseStorage <<System>>
 actor "Notification Service" as PushNotification <<System>>
 
-rectangle "Phân hệ Mạng xã hội & Cộng đồng" {
+' Actor Inheritance
+RegisteredUser -|> Guest
+
+rectangle "Mạng xã hội & Cộng đồng" {
   usecase "Xem bảng tin cộng đồng" as UC_ViewFeed
   usecase "Tìm kiếm bài viết" as UC_SearchPosts
   usecase "Tìm kiếm người dùng" as UC_SearchUsers
@@ -25,6 +28,7 @@ rectangle "Phân hệ Mạng xã hội & Cộng đồng" {
   usecase "Thích bài viết" as UC_Like
   usecase "Bỏ thích bài viết" as UC_Unlike
   usecase "Đánh dấu lưu bài viết" as UC_Bookmark
+  usecase "Xem bộ sưu tập đã lưu" as UC_ViewSaved
   usecase "Báo cáo nội dung vi phạm" as UC_ReportContent
   usecase "Chia sẻ bài viết" as UC_SharePost
   
@@ -37,32 +41,33 @@ rectangle "Phân hệ Mạng xã hội & Cộng đồng" {
 }
 
 ' Guest Associations
-Guest --> UC_ViewFeed
-Guest --> UC_SearchPosts
-Guest --> UC_SearchUsers
+Guest -- UC_ViewFeed
+Guest -- UC_SearchPosts
+Guest -- UC_SearchUsers
 
 ' Registered User Associations
-RegisteredUser --> UC_CreatePost
-RegisteredUser --> UC_EditPost
-RegisteredUser --> UC_DeletePost
-RegisteredUser --> UC_Like
-RegisteredUser --> UC_Unlike
-RegisteredUser --> UC_Bookmark
-RegisteredUser --> UC_ReportContent
-RegisteredUser --> UC_SharePost
-RegisteredUser --> UC_Comment
-RegisteredUser --> UC_Follow
-RegisteredUser --> UC_Unfollow
-RegisteredUser --> UC_ReceiveNotif
+RegisteredUser -- UC_CreatePost
+RegisteredUser -- UC_EditPost
+RegisteredUser -- UC_DeletePost
+RegisteredUser -- UC_Like
+RegisteredUser -- UC_Unlike
+RegisteredUser -- UC_Bookmark
+RegisteredUser -- UC_ViewSaved
+RegisteredUser -- UC_ReportContent
+RegisteredUser -- UC_SharePost
+RegisteredUser -- UC_Comment
+RegisteredUser -- UC_Follow
+RegisteredUser -- UC_Unfollow
+RegisteredUser -- UC_ReceiveNotif
 
 ' Relationships (include / extend)
 UC_CreatePost ..> UC_UploadImage : <<include>>
 UC_Comment <.. UC_Reply : <<extend>>
-UC_Like ..> UC_ReceiveNotif : <<extend>>
-UC_Comment ..> UC_ReceiveNotif : <<extend>>
-UC_Follow ..> UC_ReceiveNotif : <<extend>>
+UC_Like <.. UC_ReceiveNotif : <<extend>>
+UC_Comment <.. UC_ReceiveNotif : <<extend>>
+UC_Follow <.. UC_ReceiveNotif : <<extend>>
 
 ' External System Associations
-UC_UploadImage --> CloudStorage
-UC_ReceiveNotif --> PushNotification
+UC_UploadImage -- SupabaseStorage
+UC_ReceiveNotif -- PushNotification
 @enduml

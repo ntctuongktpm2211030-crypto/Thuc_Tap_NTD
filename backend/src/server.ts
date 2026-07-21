@@ -31,9 +31,19 @@ const io = new Server(server, {
   },
 });
 
+app.set('io', io);
+
 // Event-driven WebSocket Manager
 io.on('connection', (socket) => {
   console.log(`Socket Client Connected: ${socket.id}`);
+
+  // Register user for real-time alerts & notifications
+  socket.on('register_user', (userId: string) => {
+    if (userId) {
+      socket.join(`user:${userId}`);
+      console.log(`[Socket.IO] Socket client ${socket.id} registered to user room: user:${userId}`);
+    }
+  });
 
   // User online heartbeat
   socket.on('ping_location', (data: { userId: string; lat: number; lng: number }) => {
@@ -66,6 +76,7 @@ io.on('connection', (socket) => {
   });
 });
 
+import { startStatsAggregationScheduler } from './modules/dashboard/scheduler/dashboard.scheduler';
 import { autoSeed } from './config/seed';
 import { runGeocodingPipeline } from './scripts/extract-and-geocode';
 
@@ -76,6 +87,7 @@ runGeocodingPipeline()
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
       startCacheCleanupJob();
+      startStatsAggregationScheduler();
     });
   })
   .catch(err => {
@@ -83,6 +95,7 @@ runGeocodingPipeline()
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
       startCacheCleanupJob();
+      startStatsAggregationScheduler();
     });
   });
 

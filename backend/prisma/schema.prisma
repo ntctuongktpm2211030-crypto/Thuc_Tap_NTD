@@ -15,7 +15,6 @@ datasource db {
 
 enum UserRole {
   USER
-  ADMIN
 }
 
 model User {
@@ -169,6 +168,7 @@ model Destination {
   events        Event[]
   travelHistories     TravelHistory[]
   userRecommendations UserRecommendation[]
+  posts               Post[]
 
   // Compound index to speed up spatial bounding box searches
   @@index([latitude, longitude])
@@ -184,14 +184,16 @@ model Post {
   createdAt  DateTime   @default(now())
   deletedAt  DateTime?
   
-  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  trip       Trip?      @relation(fields: [tripId], references: [id], onDelete: SetNull)
-  comments   Comment[]
-  likes      Like[]
-  bookmarks  Bookmark[]
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  trip        Trip?        @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  destination Destination? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  comments    Comment[]
+  likes       Like[]
+  bookmarks   Bookmark[]
 
   @@index([authorId])
   @@index([tripId])
+  @@index([locationId])
 }
 
 model Comment {
@@ -276,6 +278,7 @@ model Notification {
   type        String   // "like", "comment", "friend_request", "invitation"
   content     String
   isRead      Boolean  @default(false)
+  targetId    String?
   createdAt   DateTime @default(now())
   
   recipient   User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
@@ -850,5 +853,66 @@ model AuditTrail {
   ipAddress      String?
   createdAt      DateTime           @default(now())
 }
+
+// ─────────────────────────────────────────────────────────
+// DASHBOARD ANALYTICS PHASE II
+// ─────────────────────────────────────────────────────────
+
+model DailyStatistics {
+  id             String   @id @default(uuid())
+  date           DateTime @unique
+  newUsers       Int      @default(0)
+  activeUsers    Int      @default(0)
+  newPosts       Int      @default(0)
+  newLikes       Int      @default(0)
+  newComments    Int      @default(0)
+  newReviews     Int      @default(0)
+  newCheckins    Int      @default(0)
+  newFollowers   Int      @default(0)
+  totalSearches  Int      @default(0)
+  createdAt      DateTime @default(now())
+}
+
+model HourlyStatistics {
+  id        String   @id @default(uuid())
+  dayOfWeek Int
+  hour      Int
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([dayOfWeek, hour])
+}
+
+model ProvinceStatistics {
+  id           String   @id @default(uuid())
+  date         DateTime
+  province     String
+  checkinCount Int      @default(0)
+  postCount    Int      @default(0)
+  likeCount    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@unique([date, province])
+}
+
+model SearchStatistics {
+  id          String   @id @default(uuid())
+  date        DateTime
+  keyword     String
+  searchCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@unique([date, keyword])
+}
+
+model PredictionCache {
+  id             String   @id @default(uuid())
+  metric         String
+  targetDays     Int
+  predictedValue Float
+  historicalData Json
+  createdAt      DateTime @default(now())
+}
+
 
 

@@ -2,6 +2,22 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import path from 'path';
+import fs from 'fs';
+
+const originalConsoleError = console.error;
+console.error = (...args: any[]) => {
+  try {
+    const logPath = path.resolve(__dirname, '../db_error.txt');
+    const logMessage = `[Console Error Logged] ${new Date().toISOString()} - ${args.map(a => {
+      if (a instanceof Error) {
+        return `${a.message}\nStack: ${a.stack}`;
+      }
+      return typeof a === 'object' ? JSON.stringify(a) : String(a);
+    }).join(' ')}\n\n`;
+    fs.appendFileSync(logPath, logMessage, 'utf8');
+  } catch (_) {}
+  originalConsoleError.apply(console, args);
+};
 
 // ─── Import all module routers ───
 import authRouter from './modules/auth/auth.router';
@@ -11,6 +27,7 @@ import mapRouter from './modules/map/map.router';
 import recommendationsRouter from './modules/recommendations/recommendations.router';
 import socialRouter from './modules/social/social.router';
 import analyticsRouter from './modules/analytics/analytics.router';
+import dashboardRouter from './modules/dashboard/routes/dashboard.router';
 import chatbotRouter from './modules/chatbot/routes/chatbot.router';
 import itineraryRouter from './modules/itinerary/routes/itinerary.router';
 import userRecommendationRouter from './modules/recommendations/routes/recommendation.router';
@@ -548,6 +565,9 @@ app.use('/api/v1/social', socialRouter);
 
 // Analytics: platform stats, AI usage, GIS heatmap, trip trends
 app.use('/api/v1/analytics', analyticsRouter);
+
+// Dashboard Analytics
+app.use('/api/v1/dashboard', dashboardRouter);
 
 // Chatbot: Core AI Conversation + AI Memory
 app.use('/api/v1/chatbot', chatbotRouter);

@@ -1,0 +1,40 @@
+@startuml Class_ToolCalls
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Tool Calls Module " {
+
+  class "ToolCallController" as ToolCallController {
+    - service : ToolCallService
+    + constructor()
+    + createToolCall(req: Request, res: Response): Promise<Response>
+    + getToolCallList(req: Request, res: Response): Promise<Response>
+    + getToolCallDetails(req: Request, res: Response): Promise<Response>
+    + updateToolCall(req: Request, res: Response): Promise<Response>
+    + deleteToolCall(req: Request, res: Response): Promise<Response>
+  }
+
+  class "ToolCallService" as ToolCallService {
+    - repo : ToolCallRepository
+    + constructor()
+    + create(userId: String, data: CreateToolCallDto): Promise<ToolCall>
+    + getList(userId: String): Promise<ToolCall[]>
+    + getDetails(id: String, userId: String): Promise<ToolCall>
+    + update(id: String, userId: String, data: UpdateToolCallDto): Promise<ToolCall>
+    + delete(id: String, userId: String): Promise<void>
+  }
+
+  class "ToolCallRepository" as ToolCallRepository {
+    + create(userId: String, data: CreateToolCallDto): Promise<ToolCall>
+    + findByUserId(userId: String): Promise<ToolCall[]>
+    + findByIdAndUserId(id: String, userId: String): Promise<ToolCall | null>
+    + update(id: String, data: UpdateToolCallDto): Promise<ToolCall>
+    + delete(id: String): Promise<void>
+  }
+}
+
+ToolCallController *-- ToolCallService
+ToolCallService *-- ToolCallRepository
+
+@enduml

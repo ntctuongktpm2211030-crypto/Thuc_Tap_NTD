@@ -9,44 +9,44 @@ hide methods
 hide stereotype
 
 package "Module Sự kiện & Giao lưu" {
-  entity "Sự kiện" as SuKien {
-    * ma_su_kien : String <<PK>>
+  entity "Event" as Event {
+    * id : String <<PK>>
     --
-    * tieu_de : String
-    mo_ta : String
-    anh_bia : String
-    ma_diem_den : String <<FK>>
-    * vi_do : Float <<INDEX>>
-    * kinh_do : Float <<INDEX>>
-    * ngay_bat_dau : DateTime <<INDEX>>
-    ngay_ket_thuc : DateTime
-    * the_loai : String <<INDEX>>
-    so_nguoi_toi_da : Int
-    * so_nguoi_hien_tai : Int
-    * ma_nguoi_to_chuc : String <<FK>> <<INDEX>>
-    * cong_khai : Boolean
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * title : String
+    description : String
+    coverImageUrl : String
+    destinationId : String <<FK>>
+    * latitude : Float <<INDEX>>
+    * longitude : Float <<INDEX>>
+    * startDate : DateTime <<INDEX>>
+    endDate : DateTime
+    * category : String <<INDEX>>
+    maxAttendees : Int
+    * currentCount : Int
+    * organizerId : String <<FK>> <<INDEX>>
+    * isPublic : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Người tham gia sự kiện" as NguoiThamGiaSuKien {
-    * ma_tham_gia : String <<PK>>
+  entity "EventAttendee" as EventAttendee {
+    * id : String <<PK>>
     --
-    * ma_su_kien : String <<FK>> <<UNIQUE>>
-    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
-    * trang_thai : String
-    * ngay_tao : DateTime
+    * eventId : String <<FK>> <<UNIQUE>>
+    * userId : String <<FK>> <<UNIQUE>>
+    * status : String
+    * createdAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Người dùng" as NguoiDung <<External>>
-entity "Điểm đến" as DiemDen <<External>>
+entity "User" as User <<External>>
+entity "Destination" as Destination <<External>>
 
-NguoiDung ||--o{ SuKien : "tổ chức"
-NguoiDung ||--o{ NguoiThamGiaSuKien : "tham gia"
-DiemDen ||--o{ SuKien : "nơi tổ chức"
+User ||--o{ Event : "organizedEvents"
+User ||--o{ EventAttendee : "attendees"
+Destination ||--o{ Event : "events"
 
-SuKien ||--o{ NguoiThamGiaSuKien : "thu hút"
+Event ||--o{ EventAttendee : "attendees"
 
 @enduml

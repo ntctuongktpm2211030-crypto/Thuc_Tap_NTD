@@ -1,0 +1,23 @@
+@startuml Class_Posts
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Posts Module " {
+
+  class "PostsRouter" as PostsRouter <<Router>> {
+    + getPosts(req: Request, res: Response): Promise<Response>
+    + getPostById(req: Request, res: Response): Promise<Response>
+    + createPost(req: Request, res: Response): Promise<Response>
+    + updatePost(req: Request, res: Response): Promise<Response>
+    + deletePost(req: Request, res: Response): Promise<Response>
+    + toggleLike(req: Request, res: Response): Promise<Response>
+    + toggleBookmark(req: Request, res: Response): Promise<Response>
+    + getComments(req: Request, res: Response): Promise<Response>
+    + addComment(req: Request, res: Response): Promise<Response>
+    + deleteComment(req: Request, res: Response): Promise<Response>
+    + getMyBookmarks(req: Request, res: Response): Promise<Response>
+  }
+}
+
+@enduml

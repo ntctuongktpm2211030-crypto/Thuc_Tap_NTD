@@ -9,14 +9,14 @@ hide methods
 hide stereotype
 
 package "Module Caching Lớp đệm" {
-  entity "Đệm hệ thống" as SystemCache {
-    * khoa : String <<PK>>
-    * phan_loai : String <<PK>> (place | food | blog | hotel)
+  entity "SystemCache" as SystemCache {
+    * key : String <<PK>>
+    * type : String <<PK>>
     --
-    * gia_tri : String
-    * thoi_gian_het_han : DateTime
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * value : String
+    * expiresAt : DateTime
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 }
 

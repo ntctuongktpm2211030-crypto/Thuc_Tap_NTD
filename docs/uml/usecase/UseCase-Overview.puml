@@ -7,7 +7,6 @@ skinparam linetype ortho
 ' Human Actors
 actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered Traveler)" as User
-actor "Quản trị viên\n(Admin)" as Admin
 
 ' External Systems
 actor "Firebase Auth" as Firebase <<System>>
@@ -17,7 +16,6 @@ actor "vietnamadminunits" as AdminUnits <<System>>
 
 ' Actor Inheritance
 User -|> Guest
-Admin -|> User
 
 rectangle "Nền tảng TerraHolic SmartTravel " {
   usecase "Xác thực & Quản lý Thành viên" as UC_Auth
@@ -29,23 +27,21 @@ rectangle "Nền tảng TerraHolic SmartTravel " {
 }
 
 ' Guest Associations
-Guest --> UC_Auth
-Guest --> UC_Map
+Guest -- UC_Auth
+Guest -- UC_Map
 
 ' User Associations
-User --> UC_Trip
-User --> UC_Community
-User --> UC_Chatbot
-
-' Admin Associations
-Admin --> UC_Admin
+User -- UC_Trip
+User -- UC_Community
+User -- UC_Chatbot
+User -- UC_Admin
 
 ' External System Associations
-UC_Auth --> Firebase
-UC_Auth --> AdminUnits
-UC_Trip --> OpenAI
-UC_Map --> OSM
-UC_Chatbot --> OpenAI
-UC_Chatbot --> AdminUnits
-UC_Admin --> OpenAI
+UC_Auth -- Firebase
+UC_Auth -- AdminUnits
+UC_Trip -- OpenAI
+UC_Map -- OSM
+UC_Chatbot -- OpenAI
+UC_Chatbot -- AdminUnits
+UC_Admin -- OpenAI
 @enduml

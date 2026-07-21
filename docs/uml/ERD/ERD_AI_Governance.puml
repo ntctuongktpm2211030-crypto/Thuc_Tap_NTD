@@ -8,8 +8,8 @@ hide circle
 hide methods
 hide stereotype
 
-package "Phân hệ Quản trị & Kiểm toán AI" {
-  entity "Đăng ký mô hình" as ModelRegistry {
+package "Quản trị & Kiểm toán AI" {
+  entity "ModelRegistry" as ModelRegistry {
     * id : String <<PK>>
     --
     * name : String <<UNIQUE>>
@@ -17,18 +17,21 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     * type : String
     * version : String
     * isActive : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Phiên bản Prompt" as PromptVersion {
+  entity "PromptVersion" as PromptVersion {
     * id : String <<PK>>
     --
     * templateName : String
     * versionHash : String <<UNIQUE>>
     * templateText : String
     * isActive : Boolean
+    * createdAt : DateTime
   }
 
-  entity "Nhật ký AI Chat" as AIChatLog {
+  entity "AIChatLog" as AIChatLog {
     * id : String <<PK>>
     --
     * messageId : String <<FK>> <<UNIQUE>>
@@ -48,9 +51,14 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     * totalTokens : Int
     * apiCostUsd : Float
     * latencyMs : Int
+    * ttftMs : Int
+    * guardrailsBlocked : Boolean
+    securityThreatType : String
+    unsupportedClaims : Int
+    * createdAt : DateTime
   }
 
-  entity "Phản hồi học tập" as UserFeedback {
+  entity "UserFeedback" as UserFeedback {
     * id : String <<PK>>
     --
     * chatLogId : String <<FK>>
@@ -58,9 +66,10 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     comment : String
     correctedText : String
     * isProcessed : Boolean
+    * createdAt : DateTime
   }
 
-  entity "Lịch sử đánh giá" as EvaluationHistory {
+  entity "EvaluationHistory" as EvaluationHistory {
     * id : String <<PK>>
     --
     * chatLogId : String <<FK>>
@@ -68,9 +77,10 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     * score : Float
     * evaluatorModel : String
     reasoning : String
+    * createdAt : DateTime
   }
 
-  entity "Sự kiện Guardrail" as GuardrailEvent {
+  entity "GuardrailEvent" as GuardrailEvent {
     * id : String <<PK>>
     --
     chatLogId : String <<FK>>
@@ -78,16 +88,18 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     * severity : String
     * payloadBlocked : String
     * actionTaken : String
+    * createdAt : DateTime
   }
 
-  entity "Phiên bản Tri thức" as KnowledgeVersion {
+  entity "KnowledgeVersion" as KnowledgeVersion {
     * id : String <<PK>>
     --
     * versionNumber : Int <<UNIQUE>>
     commitMessage : String
+    * createdAt : DateTime
   }
 
-  entity "Độ tươi mới Tri thức" as KnowledgeFreshness {
+  entity "KnowledgeFreshness" as KnowledgeFreshness {
     * id : String <<PK>>
     --
     * contentId : String
@@ -95,26 +107,28 @@ package "Phân hệ Quản trị & Kiểm toán AI" {
     * knowledgeCat : String
     * lastCheckedAt : DateTime
     * driftDetected : Boolean
+    sourceHash : String
   }
 
-  entity "Vết kiểm toán hệ thống" as AuditTrail {
+  entity "AuditTrail" as AuditTrail {
     * id : String <<PK>>
     --
     * actionType : String
     * actorName : String
     * description : String
     ipAddress : String
+    * createdAt : DateTime
   }
 }
 
-entity "Tin nhắn AI" as ChatMessage <<External>>
+entity "ChatMessage" as ChatMessage <<External>>
 
-ChatMessage ||--|| AIChatLog : "ghi nhật ký"
-ModelRegistry ||--o{ AIChatLog : "chạy bằng"
-PromptVersion ||--o{ AIChatLog : "sử dụng"
-AIChatLog ||--o{ UserFeedback : "có phản hồi"
-AIChatLog ||--o{ EvaluationHistory : "được đánh giá"
-AIChatLog ||--o{ GuardrailEvent : "kích hoạt"
-KnowledgeVersion ||--o{ KnowledgeFreshness : "được đánh dấu ở"
+ChatMessage ||--|| AIChatLog : "chatLog"
+ModelRegistry ||--o{ AIChatLog : "chatLogs"
+PromptVersion ||--o{ AIChatLog : "chatLogs"
+AIChatLog ||--o{ UserFeedback : "userFeedbacks"
+AIChatLog ||--o{ EvaluationHistory : "evalHistories"
+AIChatLog ||--o{ GuardrailEvent : "guardrailEvents"
+KnowledgeVersion ||--o{ KnowledgeFreshness : "freshnessLogs"
 
 @enduml

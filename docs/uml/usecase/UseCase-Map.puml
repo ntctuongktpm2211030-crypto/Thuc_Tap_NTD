@@ -6,59 +6,77 @@ skinparam linetype ortho
 
 ' Actors
 actor "Khách vãng lai\n(Guest)" as Guest
-actor "Khách du lịch\n(Tourist)" as Tourist
+actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
 ' External Systems
-actor "OpenStreetMap" as OSM <<System>>
-actor "Geocoding API" as GeocodingAPI <<System>>
+actor "Dịch vụ Bản đồ\n(Map Service)" as MapService <<System>>
+actor "API Địa mã hóa\n(Geocoding API)" as GeocodingAPI <<System>>
+actor "API Lộ trình\n(Routing API)" as RoutingAPI <<System>>
 
 ' Actor Inheritance
-Tourist -|> Guest
+RegisteredUser -|> Guest
 
-rectangle "Phân hệ Bản đồ Tương tác & GIS" {
-  usecase "Hiển thị bản đồ Leaflet" as UC_DisplayMap
-  usecase "Phóng to / Thu nhỏ bản đồ" as UC_Zoom
-  usecase "Di chuyển góc nhìn bản đồ" as UC_Pan
-  usecase "Chuyển đổi lớp bản đồ nền" as UC_LayerSwitch
+rectangle "Bản đồ Tương tác & GIS" {
+  package "Điều hướng Bản đồ\n(Map Navigation)" {
+    usecase "Xem bản đồ\n(View Map)" as UC_ViewMap
+    usecase "Phóng to / Thu nhỏ bản đồ\n(Zoom Map)" as UC_ZoomMap
+    usecase "Di chuyển bản đồ\n(Pan Map)" as UC_PanMap
+    usecase "Thay đổi bản đồ nền\n(Switch Base Map)" as UC_SwitchBaseMap
+  }
   
-  usecase "Tìm kiếm vị trí bản đồ" as UC_SearchLocation
-  usecase "Lọc danh mục điểm tham quan" as UC_FilterAttractions
-  usecase "Tìm địa điểm xung quanh" as UC_NearbySearch
+  package "Khám phá Địa điểm\n(Location Discovery)" {
+    usecase "Tìm kiếm vị trí\n(Search Location)" as UC_SearchLocation
+    usecase "Lọc danh mục địa điểm du lịch\n(Filter Tourist Categories)" as UC_FilterCategories
+    usecase "Xem chi tiết địa điểm du lịch\n(View Tourist Attraction Details)" as UC_ViewAttractionDetail
+    usecase "Xem bản đồ nhiệt check-in\n(View Heatmap)" as UC_ViewHeatmap
+    usecase "Tìm địa điểm xung quanh\n(Find Nearby Places)" as UC_FindNearbyPlaces
+    usecase "Hiển thị gợi ý địa điểm bằng AI trên bản đồ\n(Display AI Recommendations on Map)" as UC_AIRecommendations
+    usecase "Tìm người lân cận chia sẻ vị trí (bán kính 100km)\n(Find Nearby Users Sharing Location - 100km)" as UC_FindNearbyUsers
+  }
   
-  usecase "Hiển thị ghim marker địa điểm" as UC_DisplayMarker
-  usecase "Gôm nhóm ghim markers" as UC_ClusterMarker
-  usecase "Xem bản đồ nhiệt độ check-in" as UC_Heatmap
-  usecase "Xem chi tiết điểm tham quan" as UC_ViewAttractionDetail
-  
-  usecase "Xác định vị trí hiện tại" as UC_CurrentLocation
-  usecase "Địa mã hóa ngược (Tọa độ -> Địa chỉ)" as UC_ReverseGeocoding
-  usecase "Tính khoảng cách di chuyển" as UC_DistanceCalc
-  usecase "Xem chỉ đường lộ trình di chuyển" as UC_RouteNav
+  package "Hoạch định Lộ trình\n(Route Planning)" {
+    usecase "Xác định & Cập nhật vị trí hiện tại\n(Get & Update Current Location)" as UC_GetCurrentLocation
+    usecase "Xem chỉ đường lộ trình\n(View Route Directions)" as UC_ViewRouteDirections
+  }
+
+  package "Tương tác & Check-in\n(Interaction & Check-in)" {
+    usecase "Thực hiện check-in địa điểm\n(Perform Check-in)" as UC_PerformCheckin
+    usecase "Tải lên hình ảnh check-in\n(Upload Check-in Photo)" as UC_UploadCheckinPhoto
+    usecase "Xem Community Check-Ins\n(View Community Check-ins)" as UC_ViewCommunityCheckins
+  }
 }
 
 ' Guest Associations
-Guest --> UC_DisplayMap
-Guest --> UC_Zoom
-Guest --> UC_Pan
-Guest --> UC_LayerSwitch
-Guest --> UC_SearchLocation
-Guest --> UC_FilterAttractions
+Guest -- UC_ViewMap
+Guest -- UC_ZoomMap
+Guest -- UC_PanMap
+Guest -- UC_SwitchBaseMap
+Guest -- UC_SearchLocation
+Guest -- UC_FilterCategories
+Guest -- UC_ViewAttractionDetail
+Guest -- UC_ViewHeatmap
+Guest -- UC_ViewCommunityCheckins
 
-' Tourist Associations
-Tourist --> UC_NearbySearch
-Tourist --> UC_CurrentLocation
-Tourist --> UC_RouteNav
+' Registered User Associations
+RegisteredUser -- UC_GetCurrentLocation
+RegisteredUser -- UC_FindNearbyPlaces
+RegisteredUser -- UC_ViewRouteDirections
+RegisteredUser -- UC_AIRecommendations
+RegisteredUser -- UC_FindNearbyUsers
+RegisteredUser -- UC_PerformCheckin
 
 ' Relationships (include / extend)
-UC_DisplayMap ..> UC_DisplayMarker : <<include>>
-UC_DisplayMarker <.. UC_ClusterMarker : <<extend>>
-UC_DisplayMap <.. UC_Heatmap : <<extend>>
-UC_SearchLocation ..> UC_ReverseGeocoding : <<include>>
-UC_NearbySearch ..> UC_ReverseGeocoding : <<include>>
-UC_RouteNav ..> UC_DistanceCalc : <<include>>
-UC_DisplayMarker ..> UC_ViewAttractionDetail : <<extend>>
+UC_FilterCategories ..> UC_ViewMap : <<extend>>
+UC_ViewHeatmap ..> UC_ViewMap : <<extend>>
+UC_ViewAttractionDetail ..> UC_ViewMap : <<extend>>
+UC_FindNearbyPlaces ..> UC_GetCurrentLocation : <<include>>
+
+' Check-in relationships
+UC_PerformCheckin <.. UC_UploadCheckinPhoto : <<extend>>
+UC_ViewCommunityCheckins ..> UC_ViewMap : <<extend>>
 
 ' External System Associations
-UC_DisplayMap --> OSM
-UC_ReverseGeocoding --> GeocodingAPI
+UC_ViewMap -- MapService
+UC_SearchLocation -- GeocodingAPI
+UC_ViewRouteDirections -- RoutingAPI
 @enduml

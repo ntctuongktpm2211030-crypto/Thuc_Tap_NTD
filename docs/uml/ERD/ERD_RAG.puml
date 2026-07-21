@@ -9,38 +9,38 @@ hide methods
 hide stereotype
 
 package "Module Hệ thống RAG và Tri thức" {
-  entity "Nội dung tri thức" as NoiDungTriThuc {
-    * ma_tri_thuc : String <<PK>>
+  entity "KnowledgeContent" as KnowledgeContent {
+    * id : String <<PK>>
     --
-    * tieu_de : String
-    * noi_dung_goc : String
-    * the_loai : String <<INDEX>>
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * title : String
+    * body : String
+    * category : String <<INDEX>>
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Câu hỏi tri thức" as CauHoiTriThuc {
-    * ma_cau_hoi : String <<PK>>
+  entity "KnowledgeQuestion" as KnowledgeQuestion {
+    * id : String <<PK>>
     --
-    * ma_tri_thuc : String <<FK>> <<INDEX>>
-    * noi_dung_cau_hoi : String
-    vecto_openai : Unsupported
-    vecto_local : Unsupported
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * contentId : String <<FK>> <<INDEX>>
+    * questionText : String
+    embeddingOpenAI : Unsupported
+    embeddingLocal : Unsupported
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Đáp án tri thức" as DapAnTriThuc {
-    * ma_dap_an : String <<PK>>
+  entity "KnowledgeAnswer" as KnowledgeAnswer {
+    * id : String <<PK>>
     --
-    * ma_tri_thuc : String <<FK>> <<INDEX>>
-    * noi_dung_dap_an : String
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * contentId : String <<FK>> <<INDEX>>
+    * answerText : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 }
 
-NoiDungTriThuc ||--o{ CauHoiTriThuc : "chứa"
-NoiDungTriThuc ||--o{ DapAnTriThuc : "chứa"
+KnowledgeContent ||--o{ KnowledgeQuestion : "questions"
+KnowledgeContent ||--o{ KnowledgeAnswer : "answers"
 
 @enduml

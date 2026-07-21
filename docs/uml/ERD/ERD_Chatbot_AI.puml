@@ -58,6 +58,31 @@ package "Module Trợ lý Chatbot AI" {
     * ngay_tao : DateTime
     * ngay_cap_nhat : DateTime
   }
+
+  entity "Bộ nhớ AI" as BoNhoAI {
+    * ma_bo_nho : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
+    so_thich_du_lich : String[]
+    mon_an_yeu_thich : String[]
+    ngan_sach : String
+    phuong_tien : String[]
+    dia_diem_yeu_thich : String[]
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
+
+  entity "Món ăn yêu thích" as MonAnYeuThich {
+    * ma_mon_an_yeu_thich : String <<PK>>
+    --
+    * ma_nguoi_dung : String <<FK>> <<INDEX>>
+    * ten_mon_an : String
+    khu_vuc : String
+    mo_ta : String
+    diem_danh_gia : Float
+    * ngay_tao : DateTime
+    * ngay_cap_nhat : DateTime
+  }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
@@ -69,5 +94,8 @@ TinNhanAI ||--o{ PhienBanTinNhanAI : "có phiên bản"
 TinNhanAI ||--o{ GoiCongCuAI : "gọi"
 TinNhanAI ||--|| DanhGiaTinNhanAI : "được đánh giá"
 NguoiDung ||--o{ DanhGiaTinNhanAI : "đánh giá"
+
+NguoiDung ||--|| BoNhoAI : "sở hữu"
+NguoiDung ||--o{ MonAnYeuThich : "yêu thích"
 
 @enduml

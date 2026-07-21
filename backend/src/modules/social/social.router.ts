@@ -1,6 +1,8 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
+import { broadcastDashboardEvent, sendRealTimeNotification } from '../dashboard/services/dashboard.socket';
+import { uploadBase64ToSupabase } from '../../config/supabase';
 
 const router = Router();
 
@@ -43,13 +45,35 @@ router.put('/profile', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { fullName, bio, avatarUrl, coverUrl, homeLocation, phoneNumber } = req.body;
 
+    let finalAvatarUrl = avatarUrl;
+    let finalCoverUrl = coverUrl;
+
+    const uploadPromises: Promise<any>[] = [];
+    if (avatarUrl && avatarUrl.startsWith('data:image/')) {
+      uploadPromises.push(
+        uploadBase64ToSupabase(avatarUrl, 'avatars').then(url => {
+          if (url) finalAvatarUrl = url;
+        })
+      );
+    }
+    if (coverUrl && coverUrl.startsWith('data:image/')) {
+      uploadPromises.push(
+        uploadBase64ToSupabase(coverUrl, 'covers').then(url => {
+          if (url) finalCoverUrl = url;
+        })
+      );
+    }
+    if (uploadPromises.length > 0) {
+      await Promise.all(uploadPromises);
+    }
+
     const updated = await prisma.profile.update({
       where: { userId: req.user!.sub },
       data: {
         fullName: fullName ?? undefined,
         bio: bio ?? undefined,
-        avatarUrl: avatarUrl ?? undefined,
-        coverUrl: coverUrl ?? undefined,
+        avatarUrl: finalAvatarUrl ?? undefined,
+        coverUrl: finalCoverUrl ?? undefined,
         homeLocation: homeLocation ?? undefined,
         phoneNumber: phoneNumber ?? undefined,
       },
@@ -85,17 +109,31 @@ router.post('/follow/:targetUserId', requireAuth, async (req: AuthRequest, res: 
       });
       return res.json({ following: false });
     } else {
-      // Follow + create notification
-      await prisma.$transaction([
-        prisma.follower.create({ data: { followerId, followingId } }),
-        prisma.notification.create({
-          data: {
-            recipientId: followingId,
-            type: 'friend_request',
-            content: `Someone started following you!`,
-          },
-        }),
-      ]);
+      // Fetch follower profile for better notification content
+      const follower = await prisma.user.findUnique({
+        where: { id: followerId },
+        include: { profile: true }
+      });
+      const followerName = follower?.profile?.fullName || 'Ai đó';
+
+      // Follow + create notification in background
+      await prisma.follower.create({ data: { followerId, followingId } });
+      
+      prisma.notification.create({
+        data: {
+          recipientId: followingId,
+          type: 'friend_request',
+          content: `${followerName} đã bắt đầu theo dõi bạn!`,
+          targetId: followerId,
+        },
+      }).then(notification => {
+        sendRealTimeNotification(req, followingId, notification);
+      }).catch(err => {
+        console.error('Failed to create follow notification in background:', err);
+      });
+
+      broadcastDashboardEvent(req, 'follower', { followerId, followingId });
+
       return res.json({ following: true });
     }
   } catch (err) {
@@ -168,6 +206,22 @@ router.put('/notifications/read-all', requireAuth, async (req: AuthRequest, res:
   } catch (err) {
     console.error('[social/notifications PUT]', err);
     return res.status(500).json({ error: 'Failed to update notifications.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
+// PUT /api/v1/social/notifications/:id/read  — mark single notification as read
+// ─────────────────────────────────────────────────────────
+router.put('/notifications/:id/read', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const updated = await prisma.notification.update({
+      where: { id: req.params.id, recipientId: req.user!.sub },
+      data: { isRead: true },
+    });
+    return res.json(updated);
+  } catch (err) {
+    console.error('[social/notifications/:id/read PUT]', err);
+    return res.status(500).json({ error: 'Failed to update notification.' });
   }
 });
 

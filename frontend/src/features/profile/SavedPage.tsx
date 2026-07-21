@@ -192,6 +192,24 @@ const SavedRightSidebar = () => {
   );
 };
 
+function parsePostContent(content: string) {
+  try {
+    const parsed = JSON.parse(content);
+    if (parsed && typeof parsed === 'object') {
+      return {
+        headline: parsed.headline || parsed.title || '',
+        body: parsed.body || parsed.excerpt || '',
+        category: parsed.category || ''
+      };
+    }
+  } catch (e) {}
+  return {
+    headline: '',
+    body: content,
+    category: ''
+  };
+}
+
 // ── MAIN PAGE ─────────────────────────────────────────────────
 export default function SavedPage() {
   const { lang } = useLang();
@@ -436,6 +454,7 @@ export default function SavedPage() {
                   const avatar = post.author.profile?.avatarUrl;
                   const hasMedia = post.mediaUrls && post.mediaUrls.length > 0;
                   const dateString = new Date(post.createdAt).toLocaleDateString('vi-VN');
+                  const parsed = parsePostContent(post.content);
 
                   if (viewMode === 'list') {
                     return (
@@ -449,7 +468,8 @@ export default function SavedPage() {
                               <span className="text-[11px] font-bold text-[var(--text-secondary)]">{authorName}</span>
                               <span className="text-[10px] text-[var(--text-muted)]">· {dateString}</span>
                             </div>
-                            <p className="text-xs text-[var(--text-primary)] font-semibold leading-relaxed line-clamp-2">{post.content}</p>
+                            {parsed.headline && <h4 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1 mb-1">{parsed.headline}</h4>}
+                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed line-clamp-2">{parsed.body}</p>
                           </div>
                           <div className="flex items-center justify-between pt-2 text-[10px] text-[var(--text-muted)]">
                             <div className="flex gap-3">
@@ -481,7 +501,8 @@ export default function SavedPage() {
                             {avatar ? <img src={avatar} alt="" className="w-5 h-5 rounded-full object-cover border border-[var(--border-subtle)]" /> : <div className="w-5 h-5 rounded-full bg-[var(--gold)] text-black font-bold flex items-center justify-center text-[9px]">{authorName.charAt(0)}</div>}
                             <span className="text-[11px] font-bold text-[var(--text-secondary)] truncate">{authorName}</span>
                           </div>
-                          <p className="text-xs text-[var(--text-primary)] font-semibold leading-normal line-clamp-3">{post.content}</p>
+                          {parsed.headline && <h3 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1">{parsed.headline}</h3>}
+                          <p className="text-[11px] text-[var(--text-secondary)] leading-normal line-clamp-3">{parsed.body}</p>
                         </div>
                         <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-3">
                           <div className="flex gap-3">

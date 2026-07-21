@@ -11,7 +11,7 @@ actor "Geocoding API" as GeocodingAPI <<System>>
 actor "Weather API" as WeatherAPI <<System>>
 actor "LLM Service" as LLM <<System>>
 actor "Vector Database" as VectorDB <<System>>
-actor "Cloud Storage" as CloudStorage <<System>>
+actor "Supabase Storage" as SupabaseStorage <<System>>
 actor "Email Service" as EmailService <<System>>
 actor "Push Notification Service" as PushNotification <<System>>
 
@@ -28,13 +28,13 @@ rectangle "Cổng tích hợp ngoại vi (External Integration Gateway)" {
 }
 
 ' Mappings
-UC_Ext_Auth --> GoogleOAuth
-UC_Ext_Map --> OSM
-UC_Ext_Geocode --> GeocodingAPI
-UC_Ext_Weather --> WeatherAPI
-UC_Ext_LLM --> LLM
-UC_Ext_Vector --> VectorDB
-UC_Ext_Storage --> CloudStorage
-UC_Ext_Email --> EmailService
-UC_Ext_Push --> PushNotification
+UC_Ext_Auth -- GoogleOAuth
+UC_Ext_Map -- OSM
+UC_Ext_Geocode -- GeocodingAPI
+UC_Ext_Weather -- WeatherAPI
+UC_Ext_LLM -- LLM
+UC_Ext_Vector -- VectorDB
+UC_Ext_Storage -- SupabaseStorage
+UC_Ext_Email -- EmailService
+UC_Ext_Push -- PushNotification
 @enduml

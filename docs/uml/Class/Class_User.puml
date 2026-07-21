@@ -1,0 +1,84 @@
+@startuml Class_User
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "User Entities " {
+
+  class "User" as User {
+    + id: String <<PK>>
+    + email: String <<UNIQUE>>
+    + passwordHash: String
+    + role: UserRole
+    + isVerified: Boolean
+    + verificationToken: String [0..1]
+    + resetPasswordToken: String [0..1]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "Profile" as Profile {
+    + id: String <<PK>>
+    + userId: String <<FK>> <<UNIQUE>>
+    + fullName: String
+    + avatarUrl: String [0..1]
+    + coverUrl: String [0..1]
+    + bio: String [0..1]
+    + phoneNumber: String [0..1]
+    + homeLocation: String [0..1]
+  }
+
+  class "TravelPreferences" as TravelPreferences {
+    + id: String <<PK>>
+    + userId: String <<FK>> <<UNIQUE>>
+    + preferredPace: String
+    + dailyBudget: Float
+    + activities: String[]
+    + destinationTypes: String[]
+    + foodPreferences: String[]
+  }
+
+  class "AIMemory" as AIMemory {
+    + id: String <<PK>>
+    + userId: String <<FK>> <<UNIQUE>>
+    + travelPreferences: String[]
+    + favoriteFoods: String[]
+    + budget: String [0..1]
+    + transportation: String[]
+    + favoriteLocations: String[]
+    + createdAt: DateTime
+    + updatedAt: DateTime
+  }
+
+  class "Follower" as Follower {
+    + id: String <<PK>>
+    + followerId: String <<FK>>
+    + followingId: String <<FK>>
+    + createdAt: DateTime
+  }
+
+  class "Notification" as Notification {
+    + id: String <<PK>>
+    + recipientId: String <<FK>>
+    + type: String
+    + content: String
+    + isRead: Boolean
+    + createdAt: DateTime
+  }
+}
+
+note bottom of Follower
+  Composite Unique constraint:
+  @@unique([followerId, followingId])
+  onDelete: Cascade
+end note
+
+User "1" *-- "0..1" Profile : "has"
+User "1" *-- "0..1" TravelPreferences : "declares"
+User "1" *-- "0..1" AIMemory : "tracks AI memory"
+User "1" *-- "0..*" Notification : "receives"
+
+User "1" -- "0..*" Follower : "acts as follower"
+User "1" -- "0..*" Follower : "acts as following"
+
+@enduml

@@ -23,11 +23,11 @@ rectangle "Phân hệ Trợ lý ảo AI & RAG (CIM-enhanced)" {
   usecase "Gửi đánh giá câu trả lời AI" as UC_FeedbackResponse
 }
 
-RegisteredUser --> UC_StartConv
-RegisteredUser --> UC_ConvHistory
-RegisteredUser --> UC_AskQuestion
-RegisteredUser --> UC_ReceiveAnswer
-RegisteredUser --> UC_FeedbackResponse
+RegisteredUser -- UC_StartConv
+RegisteredUser -- UC_ConvHistory
+RegisteredUser -- UC_AskQuestion
+RegisteredUser -- UC_ReceiveAnswer
+RegisteredUser -- UC_FeedbackResponse
 
 UC_AskQuestion ..> UC_Guardrails : <<include>>
 UC_ReceiveAnswer ..> UC_EmotionAnalysis : <<include>>

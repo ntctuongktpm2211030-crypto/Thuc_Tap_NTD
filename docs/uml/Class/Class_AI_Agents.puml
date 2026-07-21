@@ -1,0 +1,109 @@
+@startuml Class_AI_Agents
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "AI Agents Module " {
+
+  class "AgentController" as AgentController {
+    - executor : AgentExecutorService
+    + constructor()
+    + chat(req: Request, res: Response): Promise<Response>
+    + executePlan(req: Request, res: Response): Promise<Response>
+    + getAgentState(req: Request, res: Response): Promise<Response>
+  }
+
+  class "AgentExecutorService" as AgentExecutorService {
+    - strategies : Record<AgentType, AgentStrategy>
+    - addressService : AddressService
+    - stateService : ConversationStateService
+    - rerankerService : TravelRerankerService
+    - responsePlanner : ResponsePlanner
+    - intentService : TravelIntentService
+    - slotService : SlotFillingService
+    - suggestionService : SuggestionBuilderService
+    - formatterService : ResponseFormatterService
+    + constructor()
+    + execute(userId: String, input: String, agentType?: AgentType): Promise<AgentResponse>
+    + getStateService(): ConversationStateService
+  }
+
+  class "AddressService" as AddressService {
+    + parseAddress(address: String): Promise<ParsedAddress>
+    + cleanAddress(address: String): String
+  }
+
+  interface "AgentStrategy" as AgentStrategy {
+    + execute(input: String, context: AgentContext): Promise<AgentResponse>
+  }
+
+  class "TravelAgent" as TravelAgent implements AgentStrategy {
+    - itineraryTool : ItineraryTool
+    - mapTool : MapTool
+    - weatherTool : WeatherTool
+    + constructor(itineraryTool: ItineraryTool, mapTool: MapTool, weatherTool: WeatherTool)
+    + execute(input: String, context: AgentContext): Promise<AgentResponse>
+  }
+
+  class "FoodAgent" as FoodAgent implements AgentStrategy {
+    - foodTool : FoodTool
+    + constructor(foodTool: FoodTool)
+    + execute(input: String, context: AgentContext): Promise<AgentResponse>
+  }
+
+  class "CultureAgent" as CultureAgent implements AgentStrategy {
+    - cultureTool : CultureTool
+    + constructor(cultureTool: CultureTool)
+    + execute(input: String, context: AgentContext): Promise<AgentResponse>
+  }
+
+  class "RecommendationAgent" as RecommendationAgent implements AgentStrategy {
+    - recommendationTool : RecommendationTool
+    + constructor(recommendationTool: RecommendationTool)
+    + execute(input: String, context: AgentContext): Promise<AgentResponse>
+  }
+
+  ' ─── AGENT TOOLS ───
+  class "BaseTool" as BaseTool {
+    + name : String
+    + description : String
+    + run(args: any): Promise<any>
+  }
+
+  class "MapTool" as MapTool extends BaseTool {
+    + run(args: { query: String }): Promise<any>
+  }
+
+  class "WeatherTool" as WeatherTool extends BaseTool {
+    + run(args: { location: String, date: String }): Promise<any>
+  }
+
+  class "FoodTool" as FoodTool extends BaseTool {
+    + run(args: { query: String, category?: String }): Promise<any>
+  }
+
+  class "CultureTool" as CultureTool extends BaseTool {
+    + run(args: { region: String }): Promise<any>
+  }
+
+  class "RecommendationTool" as RecommendationTool extends BaseTool {
+    + run(args: { userId: String }): Promise<any>
+  }
+
+  class "ItineraryTool" as ItineraryTool extends BaseTool {
+    + run(args: { destination: String, days: Int }): Promise<any>
+  }
+}
+
+AgentController *-- AgentExecutorService
+AgentExecutorService *-- AddressService
+AgentExecutorService *-- AgentStrategy
+
+TravelAgent *-- ItineraryTool
+TravelAgent *-- MapTool
+TravelAgent *-- WeatherTool
+FoodAgent *-- FoodTool
+CultureAgent *-- CultureTool
+RecommendationAgent *-- RecommendationTool
+
+@enduml

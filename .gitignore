@@ -50,3 +50,6 @@ llm_error.log
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Dynamic cache directories
+backend/deps/

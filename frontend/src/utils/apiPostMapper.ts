@@ -151,6 +151,7 @@ export function mapApiPostToFeedPost(post: Post): FeedPost | null {
     journeyPayload,
     routePoints,
     isFeatured: Boolean(payload.isFeatured),
+    images: media,
   };
 
   if (type === 'journey' && displayType === 'social') {

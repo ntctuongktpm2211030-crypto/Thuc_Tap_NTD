@@ -1,14 +1,37 @@
 import { useState, useEffect } from 'react';
 import { Bell, Heart, MessageSquare, UserPlus, CheckSquare, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLang } from '../../contexts/LanguageContext';
 import { socialService } from '../../services/smartTravel.service';
 
 export default function NotificationsPage() {
   const { lang } = useLang();
   const vi = lang === 'vi';
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const getNotifLink = (notif: any) => {
+    if (notif.type === 'like' || notif.type === 'comment') {
+      return notif.targetId ? `/?postId=${notif.targetId}` : '/';
+    }
+    if (notif.type === 'friend_request') {
+      return '/profile/following';
+    }
+    return '/notifications';
+  };
+
+  const handleNotificationClick = async (notif: any) => {
+    try {
+      if (!notif.isRead) {
+        await socialService.markAsRead(notif.id);
+        setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, isRead: true } : n));
+      }
+    } catch (err) {
+      console.error('Failed to mark notification as read:', err);
+    }
+    navigate(getNotifLink(notif));
+  };
 
   const fetchNotifications = async () => {
     try {
@@ -90,7 +113,8 @@ export default function NotificationsPage() {
           {notifications.map(notif => (
             <div
               key={notif.id}
-              className={`flex items-start gap-4 p-4.5 rounded-2xl border transition-all ${
+              onClick={() => handleNotificationClick(notif)}
+              className={`flex items-start gap-4 p-4.5 rounded-2xl border cursor-pointer hover:bg-[var(--bg-elevated)] transition-all ${
                 notif.isRead
                   ? 'bg-[var(--bg-surface)] border-[var(--border-subtle)] opacity-70'
                   : 'bg-[var(--bg-surface)] border-[var(--gold)]/30 shadow-lg shadow-[var(--gold-glow)]/5 ring-1 ring-[var(--gold)]/5'

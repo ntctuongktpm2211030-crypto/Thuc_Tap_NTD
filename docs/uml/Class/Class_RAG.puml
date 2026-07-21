@@ -1,0 +1,97 @@
+@startuml Class_RAG
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "RAG & Knowledge Module " {
+
+  class "RagController" as RagController {
+    - orchestrator : RagOrchestratorService
+    + constructor()
+    + queryKnowledge(req: Request, res: Response): Promise<Response>
+    + indexDocument(req: Request, res: Response): Promise<Response>
+    + getAuditLogs(req: Request, res: Response): Promise<Response>
+  }
+
+  class "RagOrchestratorService" as RagOrchestratorService {
+    - pipeline : RagPipelineService
+    - auditRepo : RagAuditRepository
+    + constructor()
+    + processQuery(userId: String, query: String): Promise<RagResponse>
+  }
+
+  class "RagPipelineService" as RagPipelineService {
+    - embeddings : EmbeddingsService
+    - vectorStore : VectorStoreService
+    - retriever : RetrieverService
+    - promptBuilder : PromptBuilderService
+    - semanticCache : SemanticCacheService
+    - guardrails : GuardrailsService
+    - factVerifier : FactVerifierService
+    - citationGenerator : CitationGeneratorService
+    - knowledgeRepo : KnowledgeRepository
+    + constructor()
+    + executePipeline(query: String): Promise<PipelineResult>
+  }
+
+  class "EmbeddingsService" as EmbeddingsService {
+    + generateEmbeddings(text: String): Promise<Float[]>
+  }
+
+  class "VectorStoreService" as VectorStoreService {
+    + similaritySearch(embedding: Float[], limit?: Int): Promise<VectorDocument[]>
+    + insertDocument(id: String, embedding: Float[], metadata: any): Promise<void>
+  }
+
+  class "RetrieverService" as RetrieverService {
+    + retrieveRelevantDocuments(query: String, embeddings: Float[]): Promise<Document[]>
+  }
+
+  class "PromptBuilderService" as PromptBuilderService {
+    + buildPrompt(query: String, contextDocs: Document[]): String
+  }
+
+  class "SemanticCacheService" as SemanticCacheService {
+    + get(query: String): Promise<CacheResponse | null>
+    + set(query: String, response: any): Promise<void>
+  }
+
+  class "GuardrailsService" as GuardrailsService {
+    + checkInput(query: String): Promise<CheckResult>
+    + checkOutput(response: String): Promise<CheckResult>
+  }
+
+  class "FactVerifierService" as FactVerifierService {
+    + verifyFacts(response: String, sourceDocs: Document[]): Promise<VerificationResult>
+  }
+
+  class "CitationGeneratorService" as CitationGeneratorService {
+    + generateCitations(response: String, sourceDocs: Document[]): Promise<Citation[]>
+  }
+
+  class "KnowledgeRepository" as KnowledgeRepository {
+    + getDocById(id: String): Promise<KnowledgeContent | null>
+    + saveDoc(doc: KnowledgeContent): Promise<KnowledgeContent>
+  }
+
+  class "RagAuditRepository" as RagAuditRepository {
+    + logAudit(data: AuditData): Promise<AuditTrail>
+    + getLogs(): Promise<AuditTrail[]>
+  }
+}
+
+RagController *-- RagOrchestratorService
+RagOrchestratorService *-- RagPipelineService
+RagOrchestratorService *-- RagAuditRepository
+
+RagPipelineService *-- EmbeddingsService
+RagPipelineService *-- VectorStoreService
+RagPipelineService *-- RetrieverService
+RagPipelineService *-- PromptBuilderService
+RagPipelineService *-- SemanticCacheService
+RagPipelineService *-- GuardrailsService
+RagPipelineService *-- FactVerifierService
+RagPipelineService *-- CitationGeneratorService
+RagPipelineService *-- KnowledgeRepository
+
+@enduml

@@ -187,39 +187,58 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
       showToast('Bạn cần đăng nhập để thích bài viết!');
       return;
     }
+
+    const previousLiked = liked;
+    const previousLikeCount = likeCount;
+    const isNowLiked = !liked;
+
+    setLiked(isNowLiked);
+    setLikeCount(prev => {
+      const newCount = isNowLiked ? prev + 1 : Math.max(0, prev - 1);
+      if (onPostUpdated) {
+        onPostUpdated(post.id, newCount, commentCount, isNowLiked);
+      }
+      return newCount;
+    });
+
+    if (isNowLiked) {
+      if (user) {
+        const currentLiker = {
+          id: user.id,
+          name: user.fullName || user.email.split('@')[0],
+          avatar: user.avatarUrl
+        };
+        setLikers(prev => {
+          if (prev.some(l => l.id === user.id)) return prev;
+          return [...prev, currentLiker];
+        });
+      }
+    } else {
+      if (user) {
+        setLikers(prev => prev.filter(l => l.id !== user.id));
+      }
+    }
+
     try {
       const res = await postsService.toggleLike(post.id);
-      const isNowLiked = res.liked;
-      setLiked(isNowLiked);
-      
-      setLikeCount(prev => {
-        const newCount = isNowLiked ? prev + 1 : Math.max(0, prev - 1);
-        if (onPostUpdated) {
-          onPostUpdated(post.id, newCount, commentCount, isNowLiked);
-        }
-        return newCount;
-      });
-
-      // Update likers list immediately
-      if (isNowLiked) {
-        if (user) {
-          const currentLiker = {
-            id: user.id,
-            name: user.fullName || user.email.split('@')[0],
-            avatar: user.avatarUrl
-          };
-          setLikers(prev => {
-            if (prev.some(l => l.id === user.id)) return prev;
-            return [...prev, currentLiker];
-          });
-        }
-      } else {
-        if (user) {
-          setLikers(prev => prev.filter(l => l.id !== user.id));
-        }
+      const serverLiked = res.liked;
+      if (serverLiked !== isNowLiked) {
+        setLiked(serverLiked);
+        setLikeCount(prev => {
+          const newCount = serverLiked ? prev + 1 : Math.max(0, prev - 1);
+          if (onPostUpdated) {
+            onPostUpdated(post.id, newCount, commentCount, serverLiked);
+          }
+          return newCount;
+        });
       }
     } catch (err) {
       console.error(err);
+      setLiked(previousLiked);
+      setLikeCount(previousLikeCount);
+      if (onPostUpdated) {
+        onPostUpdated(post.id, previousLikeCount, commentCount, previousLiked);
+      }
     }
   };
 
@@ -229,14 +248,24 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
       showToast('Bạn cần đăng nhập để lưu bài viết!');
       return;
     }
+
+    const previousSaved = saved;
+    const isNowSaved = !saved;
+
+    setSaved(isNowSaved);
+    if (onPostUpdated) {
+      onPostUpdated(post.id, likeCount, commentCount, liked);
+    }
+
     try {
       const res = await postsService.toggleBookmark(post.id);
       setSaved(res.bookmarked);
+    } catch (err) {
+      console.error(err);
+      setSaved(previousSaved);
       if (onPostUpdated) {
         onPostUpdated(post.id, likeCount, commentCount, liked);
       }
-    } catch (err) {
-      console.error(err);
     }
   };
 

@@ -9,76 +9,76 @@ hide methods
 hide stereotype
 
 package "Module Hệ gợi ý & Đề xuất" {
-  entity "Đề xuất chuyến đi" as DeXuatChuyenDi {
-    * ma_de_xuat : String <<PK>>
+  entity "Recommendation" as Recommendation {
+    * id : String <<PK>>
     --
-    * ma_chuyen_di : String <<FK>> <<INDEX>>
-    * ma_diem_den : String <<FK>>
-    * diem_tuong_thich : Float
-    ly_do_de_xuat : String
+    * tripId : String <<FK>> <<INDEX>>
+    * destinationId : String <<FK>>
+    * score : Float
+    recommendationReason : String
   }
 
-  entity "Đề xuất cá nhân" as DeXuatCaNhan {
-    * ma_de_xuat_rieng : String <<PK>>
+  entity "UserRecommendation" as UserRecommendation {
+    * id : String <<PK>>
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * dia_diem : String
-    ma_diem_den : String <<FK>> <<INDEX>>
-    * do_uu_tien : String
-    ly_do : String
-    * loai_de_xuat : String
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * userId : String <<FK>> <<INDEX>>
+    * location : String
+    destinationId : String <<FK>> <<INDEX>>
+    * priority : String
+    reason : String
+    * type : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Món ăn yêu thích" as MonAnYeuThich {
-    * ma_mon_an : String <<PK>>
+  entity "FavoriteFood" as FavoriteFood {
+    * id : String <<PK>>
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * ten_mon_an : String
-    vung_mien : String
-    mo_ta : String
-    diem_danh_gia : Float
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * userId : String <<FK>> <<INDEX>>
+    * name : String
+    region : String
+    description : String
+    rating : Float
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Lịch sử chuyến đi" as LichSuChuyenDi {
-    * ma_lich_su : String <<PK>>
+  entity "TravelHistory" as TravelHistory {
+    * id : String <<PK>>
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * dia_diem : String
-    ma_diem_den : String <<FK>> <<INDEX>>
-    * thoi_gian : DateTime
-    danh_gia : String
-    * chi_phi : Float
-    * ngay_tao : DateTime
+    * userId : String <<FK>> <<INDEX>>
+    * location : String
+    destinationId : String <<FK>> <<INDEX>>
+    * time : DateTime
+    rating : String
+    * cost : Float
+    * createdAt : DateTime
   }
 
-  entity "Lịch sử gọi AI" as LichSuGoiAI {
-    * ma_nhat_ky : String <<PK>>
+  entity "AIHistory" as AIHistory {
+    * id : String <<PK>>
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * cau_lenh_prompt : String
-    * ket_qua_json : String
-    * loai_tac_vu : String
-    * ngay_tao : DateTime
+    * userId : String <<FK>> <<INDEX>>
+    * promptText : String
+    * responseJson : String
+    * type : String
+    * createdAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Người dùng" as NguoiDung <<External>>
-entity "Chuyến đi" as ChuyenDi <<External>>
-entity "Điểm đến" as DiemDen <<External>>
+entity "User" as User <<External>>
+entity "Trip" as Trip <<External>>
+entity "Destination" as Destination <<External>>
 
-NguoiDung ||--o{ DeXuatCaNhan : "nhận đề xuất"
-NguoiDung ||--o{ MonAnYeuThich : "thích ăn"
-NguoiDung ||--o{ LichSuChuyenDi : "lưu"
-NguoiDung ||--o{ LichSuGoiAI : "sử dụng"
+User ||--o{ UserRecommendation : "recommendations"
+User ||--o{ FavoriteFood : "favoriteFoods"
+User ||--o{ TravelHistory : "travelHistories"
+User ||--o{ AIHistory : "aiHistories"
 
-ChuyenDi ||--o{ DeXuatChuyenDi : "gợi ý cho"
-DiemDen ||--o{ DeXuatChuyenDi : "địa điểm đề xuất"
-DiemDen ||--o{ DeXuatCaNhan : "địa danh liên kết"
-DiemDen ||--o{ LichSuChuyenDi : "địa danh liên kết"
+Trip ||--o{ Recommendation : "recommendations"
+Destination ||--o{ Recommendation : "recommendationDestination"
+Destination ||--o{ UserRecommendation : "userRecommendationDestination"
+Destination ||--o{ TravelHistory : "travelHistoryDestination"
 
 @enduml

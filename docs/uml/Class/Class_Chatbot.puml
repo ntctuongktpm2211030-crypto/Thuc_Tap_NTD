@@ -1,0 +1,130 @@
+@startuml Class_Chatbot
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Chatbot & Dialogue Layer " {
+
+  class "ChatbotController" as ChatbotController {
+    - service : ChatbotService
+    + constructor()
+    + createConversation(req: Request, res: Response): Promise<Response>
+    + getConversations(req: Request, res: Response): Promise<Response>
+    + getConversationDetails(req: Request, res: Response): Promise<Response>
+    + deleteConversation(req: Request, res: Response): Promise<Response>
+    + sendMessage(req: Request, res: Response): Promise<Response>
+    + regenerateResponse(req: Request, res: Response): Promise<Response>
+    + getMemory(req: Request, res: Response): Promise<Response>
+    + saveMemory(req: Request, res: Response): Promise<Response>
+    + deleteMemory(req: Request, res: Response): Promise<Response>
+  }
+
+  class "ChatbotService" as ChatbotService {
+    - repo : ChatbotRepository
+    - agentExecutor : AgentExecutorService
+    + constructor()
+    + createConversation(userId: String, title?: String): Promise<ChatConversation>
+    + getConversations(userId: String): Promise<ChatConversation[]>
+    + getConversationDetails(conversationId: String, userId: String): Promise<ChatConversation>
+    + deleteConversation(conversationId: String, userId: String): Promise<any>
+    + sendMessage(conversationId: String, userId: String, content: String): Promise<SendMessageResult>
+    + regenerateResponse(messageId: String, userId: String): Promise<any>
+    + getMemory(userId: String): Promise<AIMemory | null>
+    + saveMemory(userId: String, data: SaveMemoryDto): Promise<AIMemory>
+    + deleteMemory(userId: String): Promise<any>
+  }
+
+  class "ChatbotRepository" as ChatbotRepository {
+    + createConversation(userId: String, title?: String): Promise<ChatConversation>
+    + getConversationsByUserId(userId: String): Promise<ChatConversation[]>
+    + getConversationById(id: String, userId: String): Promise<ChatConversation | null>
+    + deleteConversation(id: String): Promise<ChatConversation>
+    + createMessage(conversationId: String, role: String): Promise<ChatMessage>
+    + createMessageVersion(messageId: String, content: String, version: Int, isActive: Boolean): Promise<ChatMessageVersion>
+    + deactivateAllVersions(messageId: String): Promise<any>
+    + getMessageById(messageId: String): Promise<ChatMessage | null>
+    + getActiveVersion(messageId: String): Promise<ChatMessageVersion | null>
+    + getMaxVersion(messageId: String): Promise<Int>
+    + getConversationHistoryForAI(conversationId: String): Promise<any[]>
+    + getMemoryByUserId(userId: String): Promise<AIMemory | null>
+    + upsertMemory(userId: String, data: SaveMemoryDto): Promise<AIMemory>
+    + deleteMemory(userId: String): Promise<any>
+  }
+
+  class "ConversationIntelligence" as ConversationIntelligence {
+    - emotionAnalyzer : EmotionAnalyzer
+    - stateMachine : ConversationStateMachine
+    - slotPolicy : SlotPolicy
+    - responsePolicy : ResponsePolicy
+    - ruleEngine : RuleOverrideEngine
+    + constructor()
+    + analyze(userId: String, text: String, state: ConversationState): Promise<IntelligenceResult>
+  }
+
+  class "EmotionAnalyzer" as EmotionAnalyzer {
+    + analyzeEmotion(text: String): Promise<EmotionResult>
+  }
+
+  class "ConversationStateMachine" as ConversationStateMachine {
+    + transition(currentState: String, event: String): String
+  }
+
+  class "SlotPolicy" as SlotPolicy {
+    + decideSlotStrategy(slots: Record<String, any>): SlotDecision
+  }
+
+  class "ResponsePolicy" as ResponsePolicy {
+    + decideResponseStyle(emotion: String, state: String): ResponseStyle
+  }
+
+  class "RuleOverrideEngine" as RuleOverrideEngine {
+    + applyRules(input: String, state: ConversationState): OverrideResult
+  }
+
+  ' ─── DIALOGUE LAYER SERVICES ───
+  class "ConversationStateService" as ConversationStateService {
+    + getState(userId: String): Promise<ConversationState>
+    + saveState(userId: String, state: ConversationState): Promise<void>
+    + resetState(userId: String): Promise<void>
+  }
+
+  class "TravelIntentService" as TravelIntentService {
+    + classifyIntent(text: String): Promise<IntentClassification>
+  }
+
+  class "TravelRerankerService" as TravelRerankerService {
+    + rerankDestinations(results: Destination[], preferences: TravelPreferences): Promise<Destination[]>
+  }
+
+  class "SuggestionBuilderService" as SuggestionBuilderService {
+    + buildSuggestions(state: ConversationState): Promise<String[]>
+  }
+
+  class "SlotFillingService" as SlotFillingService {
+    + extractSlots(text: String): Promise<SlotExtractionResult>
+  }
+
+  class "ResponsePlanner" as ResponsePlanner {
+    + planResponse(intent: String, state: ConversationState): Promise<ResponsePlan>
+  }
+
+  class "ResponseFormatterService" as ResponseFormatterService {
+    + formatResponse(plan: ResponsePlan, style: ResponseStyle): Promise<String>
+  }
+
+  class "PromptComposerService" as PromptComposerService {
+    + composePrompt(state: ConversationState, ragContext: String): String
+  }
+}
+
+ChatbotController *-- ChatbotService
+ChatbotService *-- ChatbotRepository
+ChatbotService *-- ConversationIntelligence
+
+ConversationIntelligence *-- EmotionAnalyzer
+ConversationIntelligence *-- ConversationStateMachine
+ConversationIntelligence *-- SlotPolicy
+ConversationIntelligence *-- ResponsePolicy
+ConversationIntelligence *-- RuleOverrideEngine
+
+@enduml

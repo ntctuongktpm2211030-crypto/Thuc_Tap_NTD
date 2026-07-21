@@ -1,0 +1,61 @@
+@startuml Class_Post
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Post Entities " {
+
+  class "Post" as Post {
+    + id: String <<PK>>
+    + authorId: String <<FK>>
+    + content: String
+    + mediaUrls: String[]
+    + tripId: String <<FK>> [0..1]
+    + locationId: String [0..1]
+    + createdAt: DateTime
+    + deletedAt: DateTime [0..1]
+  }
+
+  class "Comment" as Comment {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + authorId: String <<FK>>
+    + content: String
+    + parentId: String <<FK>> [0..1]
+    + createdAt: DateTime
+  }
+
+  class "Like" as Like {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + userId: String <<FK>>
+    + createdAt: DateTime
+  }
+
+  class "Bookmark" as Bookmark {
+    + id: String <<PK>>
+    + postId: String <<FK>>
+    + userId: String <<FK>>
+    + createdAt: DateTime
+  }
+}
+
+Post "1" *-- "0..*" Comment : "receives"
+Post "1" *-- "0..*" Like : "liked by"
+Post "1" *-- "0..*" Bookmark : "bookmarked by"
+
+Comment "1" -- "0..*" Comment : "replies to"
+
+note bottom of Like
+  Composite Unique:
+  @@unique([postId, userId])
+  onDelete: Cascade
+end note
+
+note bottom of Bookmark
+  Composite Unique:
+  @@unique([postId, userId])
+  onDelete: Cascade
+end note
+
+@enduml

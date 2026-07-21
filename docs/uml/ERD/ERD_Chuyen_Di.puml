@@ -9,60 +9,60 @@ hide methods
 hide stereotype
 
 package "Module Quản lý chuyến đi" {
-  entity "Chuyến đi" as ChuyenDi {
-    * ma_chuyen_di : String <<PK>>
+  entity "Trip" as Trip {
+    * id : String <<PK>>
     --
-    * ma_nguoi_so_huu : String <<FK>> <<INDEX>>
-    tieu_de : String
-    mo_ta : String
-    * ten_diem_den : String
-    ngay_bat_dau : DateTime
-    ngay_ket_thuc : DateTime
-    * tong_ngan_sach : Float
-    * phong_cach_du_lich : String
-    * cong_khai : Boolean
-    * trang_thai : String (DRAFT_AI | DRAFT_USER | CONFIRMED)
-    ma_chuyen_di_goc : String <<FK>> <<INDEX>>
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * ownerId : String <<FK>> <<INDEX>>
+    * title : String
+    description : String
+    * destinationName : String
+    startDate : DateTime
+    endDate : DateTime
+    * totalBudget : Float
+    * travelStyle : String
+    * isPublic : Boolean
+    * status : TripStatus
+    cloneSourceId : String <<FK>> <<INDEX>>
+    * createdAt : DateTime
+    * updatedAt : DateTime
   }
 
-  entity "Ngày chuyến đi" as NgayChuyenDi {
-    * ma_ngay : String <<PK>>
+  entity "TripDay" as TripDay {
+    * id : String <<PK>>
     --
-    * ma_chuyen_di : String <<FK>>
-    * chi_so_ngay : Int
-    ngay_lich : DateTime
+    * tripId : String <<FK>>
+    * dayIndex : Int
+    date : DateTime
   }
 
-  entity "Hoạt động chuyến đi" as HoatDongChuyenDi {
-    * ma_hoat_dong : String <<PK>>
+  entity "TripActivity" as TripActivity {
+    * id : String <<PK>>
     --
-    * ma_ngay : String <<FK>> <<INDEX>>
-    ma_diem_den : String <<FK>> <<INDEX>>
-    tieu_de : String
-    dia_diem : String
-    mo_ta : String
-    gio_bat_dau : String
-    gio_ket_thuc : String
-    * chi_phi_uoc_tinh : Float
-    * thu_tu_sap_xep : Int
-    ghi_chu : String
+    * tripDayId : String <<FK>> <<INDEX>>
+    destinationId : String <<FK>> <<INDEX>>
+    title : String
+    location : String
+    description : String
+    startTime : String
+    endTime : String
+    * estimatedCost : Float
+    * sequenceOrder : Int
+    notes : String
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Người dùng" as NguoiDung <<External>>
-entity "Điểm đến" as DiemDen <<External>>
-entity "Bài đăng" as BaiDang <<External>>
-entity "Đề xuất chuyến đi" as DeXuatChuyenDi <<External>>
+entity "User" as User <<External>>
+entity "Destination" as Destination <<External>>
+entity "Post" as Post <<External>>
+entity "Recommendation" as Recommendation <<External>>
 
-NguoiDung ||--o{ ChuyenDi : "lập"
-ChuyenDi ||--o{ NgayChuyenDi : "gồm"
-NgayChuyenDi ||--o{ HoatDongChuyenDi : "diễn ra"
-DiemDen ||--o{ HoatDongChuyenDi : "địa điểm"
+User ||--o{ Trip : "owner"
+Trip ||--o{ TripDay : "days"
+TripDay ||--o{ TripActivity : "activities"
+Destination ||--o{ TripActivity : "destination"
 
-ChuyenDi ||--o{ DeXuatChuyenDi : "gợi ý cho"
-ChuyenDi ||--o{ BaiDang : "chia sẻ"
+Trip ||--o{ Recommendation : "recommendations"
+Trip ||--o{ Post : "posts"
 
 @enduml

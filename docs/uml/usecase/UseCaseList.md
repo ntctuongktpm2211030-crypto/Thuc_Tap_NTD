@@ -40,16 +40,26 @@ This document catalogs the finalized business use cases for the SmartTravel appl
 
 ---
 
-## 4. Interactive Map (Phân hệ Bản đồ tương tác & Định vị)
+## 4. Interactive Map (Phân hệ Bản đồ tương tác & GIS)
 
 | ID | Use Case Name | Primary Actor | Supporting Actors | Brief Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **UC_MAP_01** | Xem bản đồ tương tác (View Interactive Map) | Khách vãng lai | OpenStreetMap (OSM) | Xem bản đồ nhiệt check-in, định vị các điểm nổi bật, danh lam thắng cảnh và cảnh báo an toàn. |
-| **UC_MAP_02** | Check-in địa điểm du lịch (Perform Check-in) | Người dùng đăng ký | OpenStreetMap (OSM) | Lưu dấu chân check-in, viết ghi chú và đánh giá trải nghiệm tại một tọa độ địa lý. |
-| **UC_MAP_03** | Trích xuất GPS từ siêu dữ liệu ảnh chụp (EXIF GPS Extraction) | Người dùng đăng ký | - | Tải ảnh chụp lên để hệ thống tự động giải mã tọa độ GPS từ dữ liệu EXIF của ảnh phục vụ check-in nhanh. |
-| **UC_MAP_04** | Chia sẻ & Theo dõi vị trí thời gian thực (Real-time Location Sync) | Người dùng đăng ký | - | Chia sẻ vị trí hiện tại của mình và theo dõi vị trí live của bạn bè trên bản đồ qua WebSockets. |
-| **UC_MAP_05** | Quản lý & Tham gia sự kiện địa phương (Manage & Join Local Events) | Người dùng đăng ký | - | Tạo hoặc tham gia các sự kiện du lịch, meetup tại một điểm tọa độ cụ thể được đánh dấu trên bản đồ. |
-| **UC_MAP_06** | Quản lý địa điểm đã lưu (Manage Saved Places) | Người dùng đăng ký | - | Ghim và quản lý danh sách các địa điểm lưu trữ yêu thích trên bản đồ để phục vụ xem và dẫn đường nhanh. |
+| **UC_MAP_01** | Xem bản đồ (View Map) | Khách vãng lai | Map Service | Xem bản đồ cơ sở hiển thị các địa điểm du lịch. |
+| **UC_MAP_02** | Phóng to / Thu nhỏ bản đồ (Zoom Map) | Khách vãng lai | - | Điều chỉnh tỷ lệ thu phóng của góc nhìn bản đồ. |
+| **UC_MAP_03** | Di chuyển bản đồ (Pan Map) | Khách vãng lai | - | Kéo hoặc di chuyển góc nhìn bản đồ để xem các khu vực khác. |
+| **UC_MAP_04** | Thay đổi bản đồ nền (Switch Base Map) | Khách vãng lai | Map Service | Đổi giao diện lớp bản đồ nền (Bản đồ vệ tinh, bản đồ địa hình...). |
+| **UC_MAP_05** | Tìm kiếm vị trí (Search Location) | Khách vãng lai | Geocoding API | Tra cứu vị trí địa lý thông qua thanh tìm kiếm. |
+| **UC_MAP_06** | Lọc danh mục địa điểm du lịch (Filter Tourist Categories) | Khách vãng lai | - | Lọc nhanh các điểm đến theo loại hình (Khách sạn, Nhà hàng, Điểm tham quan). |
+| **UC_MAP_07** | Xem chi tiết địa điểm du lịch (View Tourist Attraction Details) | Khách vãng lai | - | Xem thông tin mô tả, đánh giá và hình ảnh chi tiết của một điểm du lịch. |
+| **UC_MAP_08** | Xem bản đồ nhiệt check-in (View Heatmap) | Khách vãng lai | - | Hiển thị mật độ điểm check-in của các phượt thủ dưới dạng bản đồ nhiệt. |
+| **UC_MAP_09** | Xác định & Cập nhật vị trí hiện tại (Get & Update Current Location) | Người dùng đăng ký | - | Định vị và gửi cập nhật tọa độ GPS của thiết bị lên hệ thống. |
+| **UC_MAP_10** | Tìm địa điểm xung quanh (Find Nearby Places) | Người dùng đăng ký | - | Khám phá các địa danh và cơ sở dịch vụ lân cận vị trí hiện tại. |
+| **UC_MAP_11** | Xem chỉ đường lộ trình (View Route Directions) | Người dùng đăng ký | Routing API | Vẽ đường đi và hướng dẫn di chuyển giữa các điểm mốc trên bản đồ. |
+| **UC_MAP_12** | Hiển thị gợi ý địa điểm bằng AI trên bản đồ (Display AI Recommendations on Map) | Người dùng đăng ký | - | Hiển thị các điểm đến do AI gợi ý cá nhân hóa trực quan trên bản đồ. |
+| **UC_MAP_13** | Tìm người lân cận chia sẻ vị trí (bán kính 100km) (Find Nearby Users - 100km) | Người dùng đăng ký | - | Quét và hiển thị danh sách người dùng đang chia sẻ vị trí trực tuyến trong bán kính 100km. |
+| **UC_MAP_14** | Thực hiện check-in địa điểm (Perform Check-in) | Người dùng đăng ký | OpenStreetMap | Check-in lưu tọa độ, hình ảnh, đánh giá và ghi chú địa danh thực tế. |
+| **UC_MAP_15** | Tải lên hình ảnh check-in (Upload Check-in Photo) | Người dùng đăng ký | - | Tải hình ảnh thực tế lên kèm theo bài đăng check-in địa điểm. |
+| **UC_MAP_16** | Xem Community Check-Ins (View Community Check-ins) | Khách vãng lai | - | Tra cứu các bài đăng check-in và hình ảnh thực tế của mọi người tại các địa điểm. |
 
 ---
 

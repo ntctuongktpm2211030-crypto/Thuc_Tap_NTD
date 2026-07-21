@@ -1,0 +1,110 @@
+@startuml UseCase_SystemSummary
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+skinparam ranksep 100
+skinparam nodesep 50
+
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
+
+' Human Actors (Tác nhân con người)
+package "Human Actors" {
+  actor "Khách vãng lai\n(Guest)" as Guest
+  actor "Người dùng đăng ký\n(Registered Traveler)" as User
+}
+
+' External Systems & Supporting Services (Tác nhân hệ thống ngoại vi)
+package "External Services & Systems" {
+  actor "Firebase Auth" as Firebase <<System>>
+  actor "OpenAI API" as OpenAI <<System>>
+  actor "Dịch vụ Bản đồ\n(Map Service)" as MapService <<System>>
+  actor "API Đơn vị hành chính\n(Administrative Units API)" as AdminUnits <<System>>
+  actor "SMTP Mail Server" as SMTP <<System>>
+  actor "Supabase Storage" as SupabaseStorage <<System>>
+  actor "Push Notification" as PushNotif <<System>>
+}
+
+' Actor Inheritance (Thừa kế tác nhân)
+User -|> Guest
+
+' ==========================================
+' 2. SYSTEM BOUNDARY & DOMAINS
+' ==========================================
+rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as SystemBoundary {
+
+  package "Authentication & Profile Domain" {
+    usecase "Authentication & User Profile\n(Xác thực & Hồ sơ)" as UC_Auth
+  }
+
+  package "Trip & Recommendation Domain" {
+    usecase "Trip Planning\n(Lập kế hoạch chuyến đi)" as UC_Trip
+    usecase "Personalized Recommendation\n(Gợi ý cá nhân hóa)" as UC_Rec
+  }
+
+  package "Interactive GIS Domain" {
+    usecase "Map & GIS Services\n(Bản đồ tương tác & GIS)" as UC_Map
+    usecase "Local Events & Meetups\n(Sự kiện & Giao lưu)" as UC_Events
+  }
+
+  package "Community & Social Domain" {
+    usecase "Social Network & Feed\n(Mạng xã hội du lịch)" as UC_Social
+  }
+
+  package "AI Assistant & Knowledge Domain" {
+    usecase "AI Assistant & RAG\n(Trợ lý ảo đa Agent & RAG)" as UC_AI
+    usecase "Knowledge Management\n(Quản trị tri thức)" as UC_Knowledge
+  }
+
+  package "Administration & Governance Domain" {
+    usecase "AI Governance & Compliance\n(Kiểm toán & Quản trị AI)" as UC_AIGov
+    usecase "Administration & Analytics\n(Quản trị & Thống kê)" as UC_Admin
+  }
+
+  package "Infrastructure Services Domain" {
+    usecase "Realtime & WebSocket Services\n(Dịch vụ thời gian thực)" as UC_Realtime
+  }
+
+  ' High-level Relationships within the System
+  UC_Trip ..> UC_Map : <<include>>
+  UC_AI ..> UC_Rec : <<extend>>
+  UC_AIGov ..> UC_Admin : <<include>>
+}
+
+' ==========================================
+' 3. ASSOCIATIONS (ACTORS -> DOMAINS)
+' ==========================================
+
+' Guest Associations
+Guest -- UC_Auth
+Guest -- UC_Map
+Guest -- UC_Social
+
+' Registered Traveler Associations
+User -- UC_Trip
+User -- UC_AI
+User -- UC_Events
+User -- UC_Realtime
+User -- UC_Admin
+User -- UC_AIGov
+User -- UC_Knowledge
+
+' ==========================================
+' 4. ASSOCIATIONS (DOMAINS -> EXTERNAL SYSTEMS)
+' ==========================================
+UC_Auth -- Firebase
+UC_Auth -- SMTP
+UC_Trip -- OpenAI
+UC_Rec -- OpenAI
+UC_Map -- MapService
+UC_Events -- MapService
+UC_Social -- SupabaseStorage
+UC_AI -- OpenAI
+UC_AI -- AdminUnits
+UC_Knowledge -- OpenAI
+UC_AIGov -- OpenAI
+UC_Realtime -- PushNotif
+
+@enduml

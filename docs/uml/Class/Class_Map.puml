@@ -1,0 +1,23 @@
+@startuml Class_Map
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Map Module" {
+
+  class "MapRouter" as MapRouter <<Router>> {
+    + checkin(req: Request, res: Response): Promise<Response>
+    + getCheckins(req: Request, res: Response): Promise<Response>
+    + getNearbyCheckins(req: Request, res: Response): Promise<Response>
+    + updateLiveLocation(req: Request, res: Response): Promise<Response>
+    + getFriendsLocations(req: Request, res: Response): Promise<Response>
+    + getDestinations(req: Request, res: Response): Promise<Response>
+    + getSafetyWarnings(req: Request, res: Response): Promise<Response>
+    + createSafetyWarning(req: Request, res: Response): Promise<Response>
+    + getEvents(req: Request, res: Response): Promise<Response>
+    + createEvent(req: Request, res: Response): Promise<Response>
+    + getAIRecommendations(req: Request, res: Response): Promise<Response>
+  }
+}
+
+@enduml

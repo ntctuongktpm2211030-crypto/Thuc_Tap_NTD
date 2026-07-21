@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import type { RootState } from '../../store';
 import type { StoryLayoutId, StoryTextLayer, StoredStory, StoryFontId } from '../../types/story';
-import { validateImage, createPreviewUrl, revokePreviewUrl } from '../../utils/mediaUtils';
+import { validateImage, createPreviewUrl, revokePreviewUrl, resolveMediaUrls } from '../../utils/mediaUtils';
 import { saveUserStory } from '../../utils/storyStorage';
 import { layoutsForPhotoCount, defaultLayoutForCount, STORY_QUICK_LOCATIONS, layoutCategoryLabel } from '../../config/storyLayouts';
 import StoryLayoutGrid from './StoryLayoutGrid';
@@ -138,23 +138,29 @@ export default function StoryCreatorModal({ open, onClose, onPublished, labels }
   const handlePublish = async () => {
     if (photos.length === 0) return;
     setPublishing(true);
-    const name = user?.fullName || 'Bạn';
-    const avatar = user?.avatarUrl || '';
-    const story: StoredStory = {
-      id: `story-${Date.now()}`,
-      user: name,
-      avatar: avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80',
-      location: location.trim(),
-      coverImage: photos[0],
-      layoutId,
-      images: photos,
-      texts,
-      createdAt: Date.now(),
-    };
-    saveUserStory(story);
-    onPublished(story);
-    setPublishing(false);
-    onClose();
+    try {
+      const resolvedPhotos = await resolveMediaUrls(photos);
+      const name = user?.fullName || 'Bạn';
+      const avatar = user?.avatarUrl || '';
+      const story: StoredStory = {
+        id: `story-${Date.now()}`,
+        user: name,
+        avatar: avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80',
+        location: location.trim(),
+        coverImage: resolvedPhotos[0],
+        layoutId,
+        images: resolvedPhotos,
+        texts,
+        createdAt: Date.now(),
+      };
+      saveUserStory(story);
+      onPublished(story);
+    } catch (err) {
+      console.error('Failed to resolve story media URLs:', err);
+    } finally {
+      setPublishing(false);
+      onClose();
+    }
   };
 
   if (!open) return null;

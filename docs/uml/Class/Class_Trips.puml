@@ -1,0 +1,43 @@
+@startuml Class_Trips
+
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Trips Module " {
+
+  class "TripsRouter" as TripsRouter <<Router>> {
+    + getTrips(req: Request, res: Response): Promise<Response>
+    + getTripById(req: Request, res: Response): Promise<Response>
+    + createTrip(req: Request, res: Response): Promise<Response>
+    + generateAITrip(req: Request, res: Response): Promise<Response>
+    + regenerateAIPart(req: Request, res: Response): Promise<Response>
+    + optimizeRoute(req: Request, res: Response): Promise<Response>
+    + updateTrip(req: Request, res: Response): Promise<Response>
+    + deleteTrip(req: Request, res: Response): Promise<Response>
+    + cloneTrip(req: Request, res: Response): Promise<Response>
+  }
+
+  interface "CreateTripDto" as CreateTripDto {
+    + title: String
+    + destinationName: String
+    + startDate: DateTime [0..1]
+    + endDate: DateTime [0..1]
+    + totalBudget: Float
+    + travelStyle: String
+  }
+
+  interface "UpdateTripDto" as UpdateTripDto {
+    + title: String [0..1]
+    + destinationName: String [0..1]
+    + startDate: DateTime [0..1]
+    + endDate: DateTime [0..1]
+    + totalBudget: Float [0..1]
+    + travelStyle: String [0..1]
+    + status: String [0..1]
+  }
+}
+
+TripsRouter ..> CreateTripDto : <<use>>
+TripsRouter ..> UpdateTripDto : <<use>>
+
+@enduml

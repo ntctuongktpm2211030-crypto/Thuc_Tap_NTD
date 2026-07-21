@@ -1,0 +1,76 @@
+@startuml Class_TongQuan
+
+skinparam linetype ortho
+skinparam ranksep 100
+skinparam nodesep 80
+
+package "Client Layer" {
+  component "React Web UI" as Frontend
+}
+
+package "Routing & Security Layer" {
+  component "Express Router Core" as ExpressRouter
+  component "Auth Middleware" as AuthMiddleware
+}
+
+package "Business Layer" {
+  folder "User Management" {
+    component "Email Service" as EmailService
+    component "Saved Place Service" as SavedPlaceService
+    component "Favorite Food Service" as FavoriteFoodService
+  }
+  
+  folder "Social & Interactions" {
+    component "Social Router" as SocialRouter
+    component "Posts Router" as PostsRouter
+  }
+
+  folder "Trip & Itineraries" {
+    component "Itinerary Service" as ItineraryService
+    component "Travel History Service" as TravelHistoryService
+    component "Trips Router" as TripsRouter
+  }
+
+  folder "AI Assistant & RAG" {
+    component "Chatbot Service" as ChatbotService
+    component "Agent Executor Service" as AgentExecutorService
+    component "RAG Orchestrator Service" as RagOrchestratorService
+    component "Recommendation Service" as RecommendationService
+  }
+
+  folder "System Utilities" {
+    component "Cache Service" as CacheService
+    component "Feedback Service" as FeedbackService
+    component "Tool Call Service" as ToolCallService
+  }
+}
+
+database "PostgreSQL Database" as DB
+
+Frontend --> ExpressRouter : HTTP Request
+ExpressRouter ..> AuthMiddleware : <<validate>>
+
+ExpressRouter --> SocialRouter
+ExpressRouter --> PostsRouter
+ExpressRouter --> TripsRouter
+
+SocialRouter ..> SavedPlaceService
+SocialRouter ..> FavoriteFoodService
+
+TripsRouter ..> ItineraryService
+TripsRouter ..> TravelHistoryService
+
+ChatbotService ..> AgentExecutorService
+AgentExecutorService ..> RagOrchestratorService
+
+SavedPlaceService --> DB
+FavoriteFoodService --> DB
+ItineraryService --> DB
+TravelHistoryService --> DB
+ChatbotService --> DB
+RecommendationService --> DB
+CacheService --> DB
+FeedbackService --> DB
+ToolCallService --> DB
+
+@enduml

@@ -8,6 +8,8 @@ import App from './App';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LangProvider } from './contexts/LanguageContext';
 
+import { MotionProvider } from './animations';
+
 // Import Mapbox styles for geocoding and routes
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -29,7 +31,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <ThemeProvider>
           <LangProvider>
             <BrowserRouter>
-              <App />
+              <MotionProvider>
+                <App />
+              </MotionProvider>
             </BrowserRouter>
           </LangProvider>
         </ThemeProvider>

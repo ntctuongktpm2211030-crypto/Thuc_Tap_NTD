@@ -32,6 +32,7 @@ export interface FeedPostBase {
   journeyPayload?: string;
   isLiked?: boolean;
   isBookmarked?: boolean;
+  images?: string[];
 }
 
 /** Giới hạn ký tự preview trên thẻ feed */
@@ -223,6 +224,9 @@ export function getRoutePointsFromPost(post: FeedPost): { id: string; name: stri
 }
 
 export function getPostImages(post: FeedPost): string[] {
+  if (post.images && post.images.length > 0) {
+    return post.images;
+  }
   if (post.displayType === 'social') {
     return post.images ?? [];
   }
@@ -478,14 +482,14 @@ export const FEED_DISPLAY_OPTIONS: {
     label: 'Bài magazine',
     authorStyle: 'Ấn phẩm tạp chí',
     description: 'Ảnh bìa, tiêu đề, tóm tắt — thẻ bài ấn phẩm trên bảng tin.',
-    hint: 'Cần tiêu đề, tóm tắt (≥40 ký tự) và ảnh bìa.',
+    hint: 'Cần tiêu đề (> 10 ký tự), tóm tắt và ảnh bìa.',
   },
   {
     id: 'hero',
     label: 'Bài nổi bật',
     authorStyle: 'Hành trình nổi bật',
     description: 'Bố cục toàn màn hình, bài dài, ảnh đẹp, nổi bật toàn trang.',
-    hint: 'Tóm tắt dài hơn (≥80 ký tự), nội dung chi tiết phong phú.',
+    hint: 'Cần tiêu đề (> 10 ký tự), tóm tắt và ảnh bìa.',
   },
 ];
 
@@ -507,18 +511,11 @@ export interface JourneyPublishFields {
 export function journeyStepCanAdvance(step: number, d: JourneyPublishFields): boolean {
   if (step === 1) {
     if (d.displayType === 'social') {
-      return d.content.trim().length >= 30;
-    }
-    if (d.displayType === 'magazine') {
-      return (
-        d.title.trim().length > 0
-        && d.excerpt.trim().length >= 40
-        && d.categories.length >= 1
-      );
+      return d.content.trim().length >= 10;
     }
     return (
-      d.title.trim().length > 0
-      && d.excerpt.trim().length >= 80
+      d.title.trim().length > 10
+      && d.excerpt.trim().length > 0
       && d.categories.length >= 1
     );
   }
@@ -546,7 +543,7 @@ export function isJourneyReadyToPublish(d: JourneyPublishFields): boolean {
   return (
     journeyStepCanAdvance(1, d)
     && journeyStepCanAdvance(2, d)
-    && (d.content.length >= 120 || d.excerpt.length >= 100)
+    && d.content.trim().length > 0
   );
 }
 
@@ -560,26 +557,26 @@ export function getJourneyCompletionItems(d: JourneyPublishFields) {
   if (d.displayType === 'social') {
     return [
       ...base,
-      { label: 'Nội dung (≥30 ký tự)', done: d.content.length >= 30 },
+      { label: 'Nội dung (≥10 ký tự)', done: d.content.trim().length >= 10 },
       { label: 'Ảnh (≥1)', done: d.photos.length >= 1 || !!d.coverImage },
     ];
   }
   if (d.displayType === 'magazine') {
     return [
       ...base,
-      { label: 'Tiêu đề', done: !!d.title.trim() },
-      { label: 'Tóm tắt (≥40 ký tự)', done: d.excerpt.length >= 40 },
+      { label: 'Tiêu đề (> 10 ký tự)', done: d.title.trim().length > 10 },
+      { label: 'Tóm tắt', done: d.excerpt.trim().length > 0 },
       { label: 'Danh mục', done: d.categories.length >= 1 },
       { label: 'Ảnh bìa', done: !!d.coverImage },
     ];
   }
   return [
     ...base,
-    { label: 'Tiêu đề', done: !!d.title.trim() },
-    { label: 'Tóm tắt (≥80 ký tự)', done: d.excerpt.length >= 80 },
+    { label: 'Tiêu đề (> 10 ký tự)', done: d.title.trim().length > 10 },
+    { label: 'Tóm tắt', done: d.excerpt.trim().length > 0 },
     { label: 'Danh mục', done: d.categories.length >= 1 },
     { label: 'Ảnh bìa', done: !!d.coverImage },
-    { label: 'Nội dung / tóm tắt đủ dài', done: d.content.length >= 120 || d.excerpt.length >= 100 },
+    { label: 'Nội dung', done: d.content.trim().length > 0 },
   ];
 }
 
