@@ -53,32 +53,34 @@ package "Chatbot & Dialogue Layer " {
 
   class "ConversationIntelligence" as ConversationIntelligence {
     - emotionAnalyzer : EmotionAnalyzer
+    - ruleOverride : RuleOverrideEngine
+    - contextResolver : ContextResolver
+    - intentClassifier : IntentClassifier
     - stateMachine : ConversationStateMachine
     - slotPolicy : SlotPolicy
     - responsePolicy : ResponsePolicy
-    - ruleEngine : RuleOverrideEngine
     + constructor()
-    + analyze(userId: String, text: String, state: ConversationState): Promise<IntelligenceResult>
+    + analyzeQuery(query: String, conversationId: String, currentState: String): Promise<CIMResult>
   }
 
   class "EmotionAnalyzer" as EmotionAnalyzer {
-    + analyzeEmotion(text: String): Promise<EmotionResult>
+    + analyze(query: String): EmotionAnalysis
   }
 
   class "ConversationStateMachine" as ConversationStateMachine {
-    + transition(currentState: String, event: String): String
+    + transition(currentState: String, intent: String): String
   }
 
   class "SlotPolicy" as SlotPolicy {
-    + decideSlotStrategy(slots: Record<String, any>): SlotDecision
+    + apply(intent: String, needSlot: Boolean): SlotPolicyResult
   }
 
   class "ResponsePolicy" as ResponsePolicy {
-    + decideResponseStyle(emotion: String, state: String): ResponseStyle
+    + resolveTone(emotion: EmotionAnalysis): String
   }
 
   class "RuleOverrideEngine" as RuleOverrideEngine {
-    + applyRules(input: String, state: ConversationState): OverrideResult
+    + evaluate(query: String, emotion: EmotionAnalysis, context: ContextMemory): IntentResult
   }
 
   ' ─── DIALOGUE LAYER SERVICES ───

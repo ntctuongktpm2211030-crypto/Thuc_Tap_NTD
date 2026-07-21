@@ -8,29 +8,27 @@ package "Travel History Module " {
   class "TravelHistoryController" as TravelHistoryController {
     - service : TravelHistoryService
     + constructor()
-    + createHistory(req: Request, res: Response): Promise<Response>
-    + getHistoryList(req: Request, res: Response): Promise<Response>
-    + getHistoryDetails(req: Request, res: Response): Promise<Response>
-    + updateHistory(req: Request, res: Response): Promise<Response>
-    + deleteHistory(req: Request, res: Response): Promise<Response>
+    + create(req: Request, res: Response): Promise<Response>
+    + list(req: Request, res: Response): Promise<Response>
+    + update(req: Request, res: Response): Promise<Response>
+    + delete(req: Request, res: Response): Promise<Response>
   }
 
   class "TravelHistoryService" as TravelHistoryService {
     - repo : TravelHistoryRepository
     + constructor()
-    + create(userId: String, data: CreateHistoryDto): Promise<TravelHistory>
-    + getList(userId: String): Promise<TravelHistory[]>
-    + getDetails(id: String, userId: String): Promise<TravelHistory>
-    + update(id: String, userId: String, data: UpdateHistoryDto): Promise<TravelHistory>
-    + delete(id: String, userId: String): Promise<void>
+    + create(userId: String, data: CreateTravelHistoryDto): Promise<TravelHistory>
+    + list(userId: String): Promise<TravelHistory[]>
+    + update(id: String, userId: String, data: UpdateTravelHistoryDto): Promise<TravelHistory>
+    + delete(id: String, userId: String): Promise<any>
   }
 
   class "TravelHistoryRepository" as TravelHistoryRepository {
-    + create(userId: String, data: CreateHistoryDto): Promise<TravelHistory>
-    + findByUserId(userId: String): Promise<TravelHistory[]>
-    + findByIdAndUserId(id: String, userId: String): Promise<TravelHistory | null>
-    + update(id: String, data: UpdateHistoryDto): Promise<TravelHistory>
-    + delete(id: String): Promise<void>
+    + create(userId: String, data: CreateTravelHistoryDto): Promise<TravelHistory>
+    + list(userId: String): Promise<TravelHistory[]>
+    + getById(id: String): Promise<TravelHistory | null>
+    + update(id: String, data: UpdateTravelHistoryDto): Promise<TravelHistory>
+    + delete(id: String): Promise<any>
   }
 }
 

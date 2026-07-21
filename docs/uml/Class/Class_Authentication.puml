@@ -12,17 +12,17 @@ package "Authentication Module " {
   class "EmailService" as EmailService {
     - transporter : Transporter
     + constructor()
-    + sendVerificationEmail(email: String, token: String): Promise<void>
-    + sendPasswordResetEmail(email: String, token: String): Promise<void>
+    + sendVerificationEmail(to: String, token: String): Promise<Boolean>
+    + sendResetPasswordOtp(to: String, otp: String): Promise<Boolean>
   }
 
-  class "AuthMiddleware" as AuthMiddleware <<Middleware>> {
+  class "AuthMiddleware" as AuthMiddleware <<Middleware-Functions>> {
     + requireAuth(req: Request, res: Response, next: NextFunction): void
     + requireAdmin(req: Request, res: Response, next: NextFunction): void
     + optionalAuth(req: Request, res: Response, next: NextFunction): void
   }
 
-  class "AuthRouter" as AuthRouter <<Router>> {
+  class "AuthRouter" as AuthRouter <<Router-Object>> {
     - emailService : EmailService
     + register(req: Request, res: Response): Promise<void>
     + login(req: Request, res: Response): Promise<void>
@@ -31,6 +31,7 @@ package "Authentication Module " {
     + getMe(req: Request, res: Response): Promise<void>
     + verifyEmail(req: Request, res: Response): Promise<void>
     + forgotPassword(req: Request, res: Response): Promise<void>
+    + verifyOtp(req: Request, res: Response): Promise<void>
     + resetPassword(req: Request, res: Response): Promise<void>
   }
 }

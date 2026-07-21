@@ -822,52 +822,7 @@ Báo cáo thực hiện quét toàn bộ mã nguồn của dự án **SmartTrave
 
 ### 3.6 Phân hệ Quản trị & Vận hành (System Administration)
 
-#### UC_ADM_01: Xem biểu đồ xu hướng lập lịch trình (View Trip Trends Analytics)
-*   **Actor**: Quản trị viên
-*   **Supporting Actor**: -
-*   **Preconditions**: Đăng nhập quyền Admin.
-*   **Main Flow**: Mở trang AdminDashboard -> Hệ thống thống kê và tổng hợp các `Trip` tạo ra theo từng tháng dạng line chart.
-*   **Alternative Flow**: Chưa có dữ liệu chuyến đi -> Hiện biểu đồ trống.
-*   **Postconditions**: Biểu đồ hiển thị chính xác số liệu xu hướng.
-*   **Source File**: [analytics.router.ts:L162](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L162)
-
-#### UC_ADM_02: Xem bản đồ nhiệt độ check-in GIS (View GIS Check-in Heatmap)
-*   **Actor**: Quản trị viên
-*   **Supporting Actor**: -
-*   **Preconditions**: Quyền Admin.
-*   **Main Flow**: Truy cập tab Heatmap -> Thống kê tọa độ 500 điểm check-in gần đây -> Render các điểm màu đậm nhạt biểu thị mật độ điểm đến hot.
-*   **Alternative Flow**: -
-*   **Postconditions**: Hiển thị bản đồ nhiệt độ check-in.
-*   **Source File**: [analytics.router.ts:L134](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L134)
-
-#### UC_ADM_03: Xem biểu đồ tương tác mạng xã hội (View Social Graph Analytics)
-*   **Actor**: Quản trị viên
-*   **Supporting Actor**: -
-*   **Preconditions**: Quyền Admin.
-*   **Main Flow**: Truy cập tab Social -> Hệ thống thống kê các bài đăng có tương tác cao nhất (lượt thích, bình luận) dưới dạng bảng xếp hạng.
-*   **Alternative Flow**: -
-*   **Postconditions**: Hiển thị số liệu tương tác.
-*   **Source File**: [analytics.router.ts:L98](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L98)
-
-#### UC_ADM_04: Xem thống kê lịch sử cuộc gọi AI (View AI Usage Analytics)
-*   **Actor**: Quản trị viên
-*   **Supporting Actor**: -
-*   **Preconditions**: Quyền Admin.
-*   **Main Flow**: Truy cập tab AI Usage -> Lấy thông tin nhóm cuộc gọi AI trên bảng `AIHistory` và hiển thị lịch sử 10 câu prompt gần đây.
-*   **Alternative Flow**: -
-*   **Postconditions**: Hiển thị số liệu sử dụng AI.
-*   **Source File**: [analytics.router.ts:L71](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L71)
-
-#### UC_ADM_05: Xem thống kê hoạt động tổng thể (View Platform Stats Analytics)
-*   **Actor**: Quản trị viên
-*   **Supporting Actor**: -
-*   **Preconditions**: Quyền Admin.
-*   **Main Flow**: Truy cập Dashboard chính -> Hiển thị tổng số Users, Trips, Posts, Checkins, AI Requests.
-*   **Alternative Flow**: -
-*   **Postconditions**: Hiển thị thống kê tổng quan.
-*   **Source File**: [analytics.router.ts:L11](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L11)
-
-#### UC_ADM_06: Nạp tài liệu tri thức văn hóa RAG (Ingest RAG Knowledge Base Document)
+#### UC_ADM_01: Nạp tài liệu tri thức văn hóa RAG (Ingest RAG Knowledge Base Document)
 *   **Actor**: Quản trị viên
 *   **Supporting Actor**: OpenAI API
 *   **Preconditions**: Tài liệu nạp có định dạng văn bản hợp lệ.
@@ -876,7 +831,7 @@ Báo cáo thực hiện quét toàn bộ mã nguồn của dự án **SmartTrave
 *   **Postconditions**: Nạp tài liệu vào kho tri thức RAG thành công.
 *   **Source File**: [rag.router.ts:L8](file:///d:/Thuc_Tap_NDT/backend/src/modules/rag/routes/rag.router.ts#L8)
 
-#### UC_ADM_07: Chuẩn hóa dữ liệu thô địa phương (Sanitize Ca Mau local JSON data)
+#### UC_ADM_02: Chuẩn hóa dữ liệu thô địa phương (Sanitize Ca Mau local JSON data)
 *   **Actor**: Quản trị viên
 *   **Supporting Actor**: -
 *   **Preconditions**: File dữ liệu Cà Mau thô tồn tại trên máy chủ.
@@ -921,7 +876,7 @@ Báo cáo thực hiện quét toàn bộ mã nguồn của dự án **SmartTrave
 
 ## V. TỔNG SỐ USE CASE NGHIỆP VỤ CUỐI CÙNG (FINAL ESTIMATION METRICS)
 
-Sau khi kiểm toán và phân rã chi tiết, số lượng Use Case nghiệp vụ chính xác của hệ thống SmartTravel là **92 Use Cases** (bao gồm cả các tính năng chỉ chạy ở Frontend/Backend).
+Sau khi kiểm toán và phân rã chi tiết, số lượng Use Case nghiệp vụ chính xác của hệ thống SmartTravel là **87 Use Cases** (bao gồm cả các tính năng chỉ chạy ở Frontend/Backend).
 
 ---
 

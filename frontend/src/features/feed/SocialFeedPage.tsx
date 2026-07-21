@@ -630,7 +630,6 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
     { icon: NAV_ICONS.explore, label: t('nav.quick.explore'), href: '/explore', color: 'text-violet-400' },
     { icon: NAV_ICONS.map, label: t('nav.quick.map'), href: '/map', color: 'text-teal-400' },
     { icon: NAV_ICONS.trips, label: t('nav.quick.aiPlanner'), href: '/trips', color: 'text-sky-400' },
-    { icon: NAV_ICONS.analytics, label: t('nav.quick.analytics'), href: '/analytics', color: 'text-indigo-400' },
     { icon: NAV_ICONS.saved, label: t('nav.quick.saved'), href: '/profile/saved', color: 'text-rose-400' },
   ];
 

@@ -76,7 +76,6 @@ io.on('connection', (socket) => {
   });
 });
 
-import { startStatsAggregationScheduler } from './modules/dashboard/scheduler/dashboard.scheduler';
 import { autoSeed } from './config/seed';
 import { runGeocodingPipeline } from './scripts/extract-and-geocode';
 
@@ -87,7 +86,6 @@ runGeocodingPipeline()
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
       startCacheCleanupJob();
-      startStatsAggregationScheduler();
     });
   })
   .catch(err => {
@@ -95,7 +93,6 @@ runGeocodingPipeline()
     server.listen(PORT, () => {
       console.log(`🚀 Modular Monolith Core Server listening on port ${PORT}`);
       startCacheCleanupJob();
-      startStatsAggregationScheduler();
     });
   });
 

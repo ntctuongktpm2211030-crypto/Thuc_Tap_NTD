@@ -61,4 +61,4 @@ Mối quan hệ tham chiếu giữa các Controller, Service và Repository củ
 *   **AI Agents & Tools Dependency**:
     *   `AgentExecutorService` phụ thuộc vào các Tool thực thi (`MapTool`, `WeatherTool`, v.v.) và tiêm (`inject`) chúng vào các `AgentStrategy` khi khởi tạo.
 *   **Routers & DTOs/Entities Dependency**:
-    *   `AuthRouter`, `TripsRouter`, `PostsRouter`, `MapRouter`, `AnalyticsRouter` phụ thuộc vào các interface DTO để kiểm tra dữ liệu đầu vào và các Class Entity để ánh xạ dữ liệu đầu ra từ Prisma.
+    *   `AuthRouter`, `TripsRouter`, `PostsRouter`, `MapRouter` phụ thuộc vào các interface DTO để kiểm tra dữ liệu đầu vào và các Class Entity để ánh xạ dữ liệu đầu ra từ Prisma.

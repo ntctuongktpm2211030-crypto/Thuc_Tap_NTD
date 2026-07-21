@@ -28,10 +28,9 @@ This document describes all actors involved in the SmartTravel application. Thes
   - Manages personal favorite foods, saved places, and travel history databases.
 
 ### Quản trị viên (Administrator)
-- **Description**: A system administrator who monitors platform operations, feeds the knowledge base, and coordinates performance metrics.
+- **Description**: A system administrator who monitors platform operations, feeds the knowledge base, and manages the AI RAG tri thức.
 - **Responsibilities**:
   - Inherits all privileges of a **Người dùng đăng nhập**.
-  - Monitors real-time platform statistics, total users, check-ins, trip trends, and database latency charts in [AdminDashboard](file:///d:/Thuc_Tap_NDT/frontend/src/features/admin/AdminDashboard.tsx).
   - Uploads and ingests training documents (culture, food, festivals) into the RAG system database using [ragRouter](file:///d:/Thuc_Tap_NDT/backend/src/modules/rag/routes/rag.router.ts) or [bulk-sync.ts](file:///d:/Thuc_Tap_NDT/knowledge-builder/src/bulk-sync.ts).
   - Manages and clears platform cache databases ([cacheRouter](file:///d:/Thuc_Tap_NDT/backend/src/modules/cache/routes/cache.router.ts)).
 

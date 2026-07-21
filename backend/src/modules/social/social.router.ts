@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, AuthRequest } from '../auth/auth.middleware';
-import { broadcastDashboardEvent, sendRealTimeNotification } from '../dashboard/services/dashboard.socket';
+import { sendRealTimeNotification } from '../../socket/notification.socket';
 import { uploadBase64ToSupabase } from '../../config/supabase';
 
 const router = Router();
@@ -131,8 +131,6 @@ router.post('/follow/:targetUserId', requireAuth, async (req: AuthRequest, res: 
       }).catch(err => {
         console.error('Failed to create follow notification in background:', err);
       });
-
-      broadcastDashboardEvent(req, 'follower', { followerId, followingId });
 
       return res.json({ following: true });
     }

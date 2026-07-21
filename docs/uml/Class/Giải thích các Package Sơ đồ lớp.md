@@ -350,33 +350,7 @@ Tối ưu hóa hiệu năng và tốc độ phản hồi của toàn bộ hệ t
 
 ---
 
-# Package: Analytics Module
 
-## Mục đích
-Cung cấp các API thống kê hiệu năng, lưu lượng người dùng và hiệu suất của chatbot AI.
-
-## Chức năng
-*   Thống kê số lượng người dùng hoạt động và chuyến đi được tạo.
-*   Thống kê chi phí tokens của trợ lý ảo và hiệu suất truy xuất của RAG.
-
-## Các lớp trong package
-
-| Class | Ý nghĩa |
-| :--- | :--- |
-| **AnalyticsRouter** | Định tuyến yêu cầu lấy các chỉ số thống kê hệ thống. |
-
-## Quan hệ với package khác
-```text
-AnalyticsRouter
- ├── User Entities (thống kê tài khoản)
- ├── Trip Entities (thống kê chuyến đi)
- └── RAG & Knowledge Module (thống kê tokens và cache hit rate)
-```
-
-## Vai trò trong hệ thống
-Cung cấp thông tin trực quan cho trang quản trị hệ thống (Admin Dashboard).
-
----
 
 # Package: Travel History Module
 
@@ -607,7 +581,6 @@ Nơi tập hợp toàn bộ bộ não xử lý thông minh của chatbot và RAG
 Các dịch vụ nền tảng giúp tăng tốc và bảo mật hệ thống:
 *   `Authentication Module`
 *   `Cache Module`
-*   `Analytics Module`
 
 ---
 
@@ -625,7 +598,6 @@ Các dịch vụ nền tảng giúp tăng tốc và bảo mật hệ thống:
 **| **RAG & Knowledge Module** | Quản lý tri thức | Truy xuất Vector tri thức, xác minh sự thật chống ảo tưởng của AI. |
 **| **Feedback & Event Module** | Đánh giá đóng góp | Thu thập ý kiến của người dùng về chất lượng dịch vụ ứng dụng. |
 **| **Cache Module** | Hiệu năng hệ thống | Đệm dữ liệu giảm tải cơ sở dữ liệu vật lý và tăng tốc độ API. |
-**| **Analytics Module** | Thống kê báo cáo | Tổng hợp các chỉ số hệ thống, token AI và hoạt động của người dùng. |
 **| **Travel History Module** | Hồ sơ dấu chân | Quản lý danh sách các địa danh người dùng thực sự đã đi qua. |
 **| **Itinerary Module** | Blog du lịch tích hợp | Quản lý viết blog hành trình đi kèm tọa độ bản đồ GPS động. |
 **| **Tool Calls Module** | Kiểm toán AI | Ghi nhận và theo dõi vết kích hoạt công cụ của các đại lý AI. |

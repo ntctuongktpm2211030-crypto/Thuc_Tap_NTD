@@ -27,7 +27,7 @@
 3.  **Community & Social Feed**: Bảng tin bài viết, CRUD bài đăng, like, bookmark, bình luận, reply bình luận lồng nhau, và gợi ý bạn phượt AI.
 4.  **Interactive GIS Map & Live Tracking**: Xem bản đồ tương tác Leaflet, check-in địa điểm, trích xuất GPS ảnh EXIF, đồng bộ vị trí live websocket, sự kiện meetup địa phương, và lưu trữ địa điểm cá nhân.
 5.  **AI Chatbot & RAG**: Tạo phiên chat, CRUD phiên chat, trò chuyện trợ lý đa Agent, tái tạo câu trả lời, đánh giá chatbot, lưu món ngon ẩm thực yêu thích và AI Memory.
-6.  **System Administration**: Analytics dashboards chuyên sâu (trends, heatmap, social graph, AI usage, platform stats), nạp tri thức RAG và chuẩn hóa dữ liệu thô.
+6.  **System Administration**: Nạp tri thức RAG và chuẩn hóa dữ liệu thô.
 
 ---
 
@@ -535,43 +535,13 @@
 
 ### 3.6 System Administration Module
 
-#### UC_ADM_01: Xem biểu đồ xu hướng lập lịch trình (View Trip Trends Analytics)
-- **Primary Actor**: Quản trị viên
-- **Supporting Actors**: -
-- **Description**: Giám sát phân bổ và số lượng chuyến đi sinh ra theo thời gian.
-- **Source Code Reference**: [analytics.router.ts:L162](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L162)
-
-#### UC_ADM_02: Xem bản đồ nhiệt độ check-in GIS (View GIS Check-in Heatmap)
-- **Primary Actor**: Quản trị viên
-- **Supporting Actors**: -
-- **Description**: Theo dõi mật độ phân bố địa điểm check-in thực tế trên bản đồ nhiệt.
-- **Source Code Reference**: [analytics.router.ts:L134](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L134)
-
-#### UC_ADM_03: Xem biểu đồ mạng lưới tương tác xã hội (View Social Graph Analytics)
-- **Primary Actor**: Quản trị viên
-- **Supporting Actors**: -
-- **Description**: Xem số lượng kết nối follow và tương tác like/comment của cộng đồng.
-- **Source Code Reference**: [analytics.router.ts:L98](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L98)
-
-#### UC_ADM_04: Xem thống kê lịch sử cuộc gọi AI (View AI Usage Analytics)
-- **Primary Actor**: Quản trị viên
-- **Supporting Actors**: -
-- **Description**: Thống kê tần suất AI request phân loại theo loại tác vụ (itinerary, TSP, v.v.).
-- **Source Code Reference**: [analytics.router.ts:L71](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L71)
-
-#### UC_ADM_05: Xem thống kê hoạt động tổng thể của nền tảng (View Platform Stats Analytics)
-- **Primary Actor**: Quản trị viên
-- **Supporting Actors**: -
-- **Description**: Thống kê tổng quan lượng user, posts, checkins, trips của nền tảng.
-- **Source Code Reference**: [analytics.router.ts:L11](file:///d:/Thuc_Tap_NDT/backend/src/modules/analytics/analytics.router.ts#L11)
-
-#### UC_ADM_06: Nạp tài liệu tri thức văn hóa RAG (Ingest RAG Knowledge Base Document)
+#### UC_ADM_01: Nạp tài liệu tri thức văn hóa RAG (Ingest RAG Knowledge Base Document)
 - **Primary Actor**: Quản trị viên
 - **Supporting Actors**: OpenAI API
 - **Description**: Tải tài liệu PDF/JSON lên để hệ thống sinh embeddings vector nạp RAG.
 - **Source Code Reference**: [rag.router.ts:L8](file:///d:/Thuc_Tap_NDT/backend/src/modules/rag/routes/rag.router.ts#L8)
 
-#### UC_ADM_07: Chuẩn hóa dữ liệu thô địa phương (Sanitize Ca Mau local JSON data)
+#### UC_ADM_02: Chuẩn hóa dữ liệu thô địa phương (Sanitize Ca Mau local JSON data)
 - **Primary Actor**: Quản trị viên
 - **Supporting Actors**: -
 - **Description**: Chạy kịch bản làm sạch dữ liệu địa phương thu thập từ tỉnh Cà Mau.
@@ -600,13 +570,13 @@ Số lượng Use Case nghiệp vụ chính xác sau khi phân rã chi tiết th
 *   **Community & Social Feed**: 11 Use Cases
 *   **Interactive GIS Map & Live Tracking**: 18 Use Cases
 *   **AI Chatbot & RAG**: 14 Use Cases
-*   **System Administration**: 7 Use Cases
-*   **TỔNG CỘNG**: **87 Use Cases**
+*   **System Administration**: 2 Use Cases
+*   **TỔNG CỘNG**: **82 Use Cases**
 
 ---
 
 ## 6. Báo cáo mức độ sẵn sàng cho UML (UML Readiness Report)
 
-*   **Độ phủ nghiệp vụ**: **100%** (Tất cả 87 Use Cases đều được ánh xạ trực tiếp từ mã nguồn thực tế và được gắn địa chỉ file).
+*   **Độ phủ nghiệp vụ**: **100%** (Tất cả 82 Use Cases đều được ánh xạ trực tiếp từ mã nguồn thực tế và được gắn địa chỉ file).
 *   **Độ chính xác Actor**: **100%** (Phân rõ 3 Actor con người và 5 Actor hệ thống).
-*   **Tình trạng sơ đồ**: Các tệp tin PlantUML đã sẵn sàng cập nhật lại theo danh sách đầy đủ 87 Use Cases phân rã chi tiết để đảm bảo phản ánh chính xác 100% mã nguồn.
+*   **Tình trạng sơ đồ**: Các tệp tin PlantUML đã sẵn sàng cập nhật lại theo danh sách đầy đủ 82 Use Cases phân rã chi tiết để đảm bảo phản ánh chính xác 100% mã nguồn.

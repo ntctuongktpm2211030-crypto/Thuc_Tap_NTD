@@ -64,34 +64,34 @@ package "AI Agents Module " {
   }
 
   ' ─── AGENT TOOLS ───
-  class "BaseTool" as BaseTool {
+  interface "AgentTool" as AgentTool {
     + name : String
     + description : String
-    + run(args: any): Promise<any>
+    + execute(args: any): Promise<any>
   }
 
-  class "MapTool" as MapTool extends BaseTool {
-    + run(args: { query: String }): Promise<any>
+  class "MapTool" as MapTool implements AgentTool {
+    + execute(input: { query: String }): Promise<any>
   }
 
-  class "WeatherTool" as WeatherTool extends BaseTool {
-    + run(args: { location: String, date: String }): Promise<any>
+  class "WeatherTool" as WeatherTool implements AgentTool {
+    + execute(input: { location: String, date: String }): Promise<any>
   }
 
-  class "FoodTool" as FoodTool extends BaseTool {
-    + run(args: { query: String, category?: String }): Promise<any>
+  class "FoodTool" as FoodTool implements AgentTool {
+    + execute(input: { query: String, category?: String }): Promise<any>
   }
 
-  class "CultureTool" as CultureTool extends BaseTool {
-    + run(args: { region: String }): Promise<any>
+  class "CultureTool" as CultureTool implements AgentTool {
+    + execute(input: { region: String }): Promise<any>
   }
 
-  class "RecommendationTool" as RecommendationTool extends BaseTool {
-    + run(args: { userId: String }): Promise<any>
+  class "RecommendationTool" as RecommendationTool implements AgentTool {
+    + execute(input: { userId: String }): Promise<any>
   }
 
-  class "ItineraryTool" as ItineraryTool extends BaseTool {
-    + run(args: { destination: String, days: Int }): Promise<any>
+  class "ItineraryTool" as ItineraryTool implements AgentTool {
+    + execute(input: { destination: String, days: Int }): Promise<any>
   }
 }
 

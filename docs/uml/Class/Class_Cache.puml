@@ -8,32 +8,26 @@ package "Cache Module " {
   class "CacheController" as CacheController {
     - service : CacheService
     + constructor()
-    + getValue(req: Request, res: Response): Promise<Response>
-    + setValue(req: Request, res: Response): Promise<Response>
-    + deleteValue(req: Request, res: Response): Promise<Response>
-    + clearAll(req: Request, res: Response): Promise<Response>
-    + getKeys(req: Request, res: Response): Promise<Response>
-    + getStats(req: Request, res: Response): Promise<Response>
+    + set(req: Request, res: Response): Promise<Response>
+    + get(req: Request, res: Response): Promise<Response>
+    + delete(req: Request, res: Response): Promise<Response>
+    + clearExpired(req: Request, res: Response): Promise<Response>
   }
 
   class "CacheService" as CacheService {
     - repo : CacheRepository
     + constructor()
-    + get<T>(key: String): Promise<T | null>
-    + set<T>(key: String, value: T, ttlSeconds?: Int): Promise<void>
-    + delete(key: String): Promise<void>
-    + clear(): Promise<void>
-    + getKeys(pattern?: String): Promise<String[]>
-    + getStats(): Promise<CacheStats>
+    + get(type: CacheType, key: String): Promise<any | null>
+    + set(type: CacheType, key: String, value: any, ttlSeconds: Int): Promise<any>
+    + delete(type: CacheType, key: String): Promise<any>
+    + clearExpired(type: CacheType): Promise<any>
   }
 
   class "CacheRepository" as CacheRepository {
-    + get(key: String): Promise<String | null>
-    + set(key: String, value: String, ttlSeconds?: Int): Promise<void>
-    + delete(key: String): Promise<void>
-    + clear(): Promise<void>
-    + scanKeys(pattern: String): Promise<String[]>
-    + countKeys(): Promise<Int>
+    + get(type: CacheType, key: String): Promise<any | null>
+    + set(type: CacheType, key: String, value: String, expiresAt: DateTime): Promise<any>
+    + delete(type: CacheType, key: String): Promise<any>
+    + clearExpired(type: CacheType): Promise<any>
   }
 }
 
