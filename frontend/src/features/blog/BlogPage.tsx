@@ -11,6 +11,7 @@ import { distanceKm, type ExplorePost } from './exploreBlogData';
 import { toExplorePostId } from '../../utils/postIds';
 import { getExplorePosts, setExplorePosts } from './explorePostsStore';
 import { buildHandbook } from './exploreHandbook';
+import blogVideo from '../../../../video.mp4';
 
 const TRENDING_TAGS = ['sapa', 'hagiang', 'danang', 'ẩm thực', 'motorbiking', 'thiên nhiên', 'bãi biển', 'văn hóa'];
 const EXPLORE_LIST_PREVIEW = 3;
@@ -407,34 +408,46 @@ export default function BlogPage() {
           }
         }
       `}</style>
-      <header className="explore-hero">
-        <div className="relative container-wide py-12 sm:py-16 space-y-8">
-          <div className="text-center space-y-4 max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
-              <Sparkles size={14} className="text-amber-500" /> Terraholic Magazine
+      <header className="relative w-full rounded-[2rem] overflow-hidden mb-8 py-16 sm:py-24 px-6 sm:px-12 shadow-md flex items-center justify-center">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src={blogVideo} type="video/mp4" />
+        </video>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/45 z-10" />
+        
+        <div className="relative z-20 container-wide space-y-8 text-center text-white max-w-2xl mx-auto">
+          <div className="space-y-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-amber-300 text-xs font-bold shadow-sm">
+              <Sparkles size={14} className="text-amber-400" /> Terraholic Magazine
             </span>
-            <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
+            <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-white tracking-tight">
               Khám phá{' '}
-              <span className="text-teal-700">
+              <span className="text-teal-300">
                 câu chuyện du lịch
               </span>
             </h1>
-            <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
+            <p className="text-slate-200 text-base sm:text-lg leading-relaxed">
               Blog du lịch với góc nhìn tươi mới — hành trình thực tế, mẹo hay và cảm hứng từ cộng đồng travellers Việt Nam.
             </p>
           </div>
 
           <div className="max-w-xl mx-auto relative">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Tìm bài viết, địa điểm, tác giả..."
-              className="explore-search"
+              className="w-full bg-white/10 backdrop-blur-md border border-white/20 focus:border-white/40 focus:bg-white/20 rounded-xl py-3.5 pl-12 pr-4 text-sm placeholder-white/50 text-white focus:outline-none focus:ring-4 focus:ring-white/10 transition-all duration-200"
             />
           </div>
-
         </div>
       </header>
 

@@ -5,6 +5,7 @@ import {
   Sparkles, Calendar, Star, BookOpen,
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
+import guideVideo from '../../../../video.mp4';
 
 const CATEGORIES = [
   { id: 'all', labelVi: 'Tất cả', labelEn: 'All', icon: Sparkles },
@@ -112,22 +113,34 @@ export default function CultureFoodGuidePage() {
 
   return (
     <div className="min-h-screen bg-slate-50/40 pb-20">
-      
-      {/* Light Blue Curved Hero Header Banner */}
-      <section className="bg-gradient-to-b from-[#e0f2fe]/45 to-[#eff6ff]/60 rounded-b-[40px] border-b border-blue-100/30">
-        <div className="container-wide py-12 sm:py-16 flex flex-col lg:flex-row justify-between items-center gap-10">
+      {/* Cinematic Hero Header Banner */}
+      <section className="relative w-full rounded-[2rem] overflow-hidden mb-8 py-12 sm:py-16 shadow-md flex items-center">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src={guideVideo} type="video/mp4" />
+        </video>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/45 z-10" />
+
+        <div className="relative z-20 container-wide flex flex-col lg:flex-row justify-between items-center gap-10 text-white">
           
           <div className="flex-1 space-y-5 max-w-2xl w-full">
-            <span className="text-blue-600 font-semibold text-xs uppercase tracking-wider flex items-center gap-2">
+            <span className="text-amber-300 font-semibold text-xs uppercase tracking-wider flex items-center gap-2">
               <Utensils size={14} className="stroke-[2.5px]" /> 
               {vi ? 'HƯỚNG DẪN DU LỊCH THÔNG MINH' : 'SMART TRAVEL GUIDE'}
             </span>
             
-            <h1 className="font-editorial text-3.5xl sm:text-4.5xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
+            <h1 className="font-editorial text-3.5xl sm:text-4.5xl lg:text-5xl font-extrabold leading-tight">
               {vi ? 'Cẩm nang văn hóa — ẩm thực' : 'Culture & Culinary Guide'}
             </h1>
             
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
               {vi
                 ? 'Khám phá di sản, lễ hội và hương vị địa phương trước mỗi chuyến đi. Nội dung được biên soạn cho du khách yêu văn hóa Việt Nam.'
                 : 'Explore heritage, festivals and local flavors before every trip. Curated for culture-loving travellers in Vietnam.'}
@@ -136,16 +149,16 @@ export default function CultureFoodGuidePage() {
             {/* Search Box & Share Journey Action */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 max-w-xl w-full">
               <div className="relative flex-1">
-                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
                 <input
                   type="search"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder={vi ? 'Tìm món ăn, địa danh, lễ hội...' : 'Search dishes, places, festivals...'}
-                  className="w-full bg-white border border-blue-200 focus:border-blue-500 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-100 shadow-sm text-slate-800 transition-all duration-200"
+                  className="w-full bg-white/10 backdrop-blur-md border border-white/20 focus:border-white/40 focus:bg-white/20 rounded-xl py-3.5 pl-12 pr-4 text-xs sm:text-sm placeholder-white/50 text-white focus:outline-none focus:ring-4 focus:ring-white/10 transition-all duration-200"
                 />
               </div>
-              <Link to="/journeys/create" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 justify-center shrink-0">
+              <Link to="/journeys/create" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 justify-center shrink-0">
                 {vi ? 'Đăng hành trình' : 'Share journey'} <ChevronRight size={15} className="stroke-[2.5px]" />
               </Link>
             </div>
@@ -158,9 +171,9 @@ export default function CultureFoodGuidePage() {
               { n: '34', l: vi ? 'TỈNH THÀNH' : 'PROVINCES' },
               { n: '4.8', l: vi ? 'ĐÁNH GIÁ TB' : 'AVG RATING' },
             ].map(s => (
-              <div key={s.l} className="bg-white border border-slate-200/60 hover:border-blue-200/50 rounded-2xl p-5 text-center shadow-[0_4px_12px_rgba(37,99,235,0.02)] flex-1 sm:flex-initial sm:w-[130px] flex flex-col justify-center items-center transition-all duration-200 hover:-translate-y-0.5">
-                <span className="text-blue-600 font-bold text-2.5xl sm:text-3xl tracking-tight">{s.n}</span>
-                <span className="text-[9px] font-bold text-slate-400 tracking-wider uppercase mt-2">{s.l}</span>
+              <div key={s.l} className="bg-white/10 backdrop-blur-md border border-white/10 hover:border-white/20 rounded-2xl p-5 text-center shadow-[0_4px_12px_rgba(255,255,255,0.02)] flex-1 sm:flex-initial sm:w-[130px] flex flex-col justify-center items-center transition-all duration-200 hover:-translate-y-0.5">
+                <span className="text-blue-400 font-bold text-2.5xl sm:text-3xl tracking-tight">{s.n}</span>
+                <span className="text-[9px] font-bold text-slate-300 tracking-wider uppercase mt-2">{s.l}</span>
               </div>
             ))}
           </div>

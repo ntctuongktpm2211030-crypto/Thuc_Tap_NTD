@@ -77,10 +77,9 @@ This document catalogs the finalized business use cases for the SmartTravel appl
 ---
 
 ## 6. Administration (Phân hệ Quản trị & Vận hành)
-
 | ID | Use Case Name | Primary Actor | Supporting Actors | Brief Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **UC_ADM_01** | Xem dashboard thống kê hệ thống (View Analytics Charts) | Quản trị viên | - | Giám sát biểu đồ hiệu năng hệ thống, tốc độ phản hồi CSDL, lượng người dùng hoạt động và check-in thời gian thực. |
-| **UC_ADM_02** | Nạp kho tri thức RAG (Ingest RAG Knowledge Base) | Quản trị viên | OpenAI API | Tải các tệp tài liệu du lịch thô lên để hệ thống sinh embeddings vector lưu trữ vào kho tri thức RAG. |
-| **UC_ADM_03** | Chuẩn hóa dữ liệu địa phương (Sanitize & Clean Raw Data) | Quản trị viên | - | Chạy tiến trình tiền xử lý, chuẩn hóa địa danh và làm sạch cấu trúc dữ liệu thô Cà Mau. |
-| **UC_ADM_04** | Quản lý và làm sạch bộ nhớ cache (Manage System Caching) | Quản trị viên | - | Giám sát dung lượng cache Redis/Prisma và thực hiện xóa các khóa cache đã hết hạn để giải phóng tài nguyên. |
+| **UC_ADM_01** | Xem dashboard thống kê hệ thống (View Analytics Charts) | Người dùng đăng ký | - | Giám sát biểu đồ hiệu năng hệ thống, tốc độ phản hồi CSDL, lượng người dùng hoạt động và check-in thời gian thực. |
+| **UC_ADM_02** | Nạp kho tri thức RAG (Ingest RAG Knowledge Base) | Người dùng đăng ký | OpenAI API | Tải các tệp tài liệu du lịch thô lên để hệ thống sinh embeddings vector lưu trữ vào kho tri thức RAG. |
+| **UC_ADM_03** | Chuẩn hóa dữ liệu địa phương (Sanitize & Clean Raw Data) | Người dùng đăng ký | - | Chạy tiến trình tiền xử lý, chuẩn hóa địa danh và làm sạch cấu trúc dữ liệu thô Cà Mau. |
+| **UC_ADM_04** | Quản lý và làm sạch bộ nhớ cache (Manage System Caching) | Người dùng đăng ký | - | Giám sát dung lượng cache Redis/Prisma và thực hiện xóa các khóa cache đã hết hạn để giải phóng tài nguyên. |
