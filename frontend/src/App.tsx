@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import {
-  Map, Home, Compass, Sparkles, BarChart3, Bell, Sun, Moon, Globe, Loader2,
+  Map, Home, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
   Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +34,7 @@ import ChatbotPage from './features/chatbot/ChatbotPage';
 // Lazy-loaded heavy pages — splits bundle so initial load is fast
 const MapDashboard = lazy(() => import('./features/map/MapDashboard'));
 const TripPlanner = lazy(() => import('./features/trips/TripPlanner'));
-const AdminDashboard = lazy(() => import('./features/admin/AdminDashboard'));
+
 const MotionPlayground = lazy(() => import('./features/admin/MotionPlayground'));
 
 function App() {
@@ -223,7 +223,7 @@ function App() {
     { to: '/map',       label: t('nav.map'),        Icon: Map },
     { to: '/trips',     label: t('nav.aiPlanner'), Icon: Sparkles },
     { to: '/chat',      label: lang === 'vi' ? 'AI Trợ lý' : 'AI Chat', Icon: Bot },
-    { to: '/analytics', label: t('nav.analytics'), Icon: BarChart3 },
+
   ];
 
   const createNavItems = isAuthenticated
@@ -578,16 +578,6 @@ function App() {
           <Route path="/profile/saved" element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
           <Route path="/profile/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
-          <Route path="/analytics" element={
-            <Suspense fallback={
-              <div className="flex items-center justify-center p-20 text-xs text-[var(--text-muted)] gap-2">
-                <Loader2 size={16} className="animate-spin" />
-                <span>Loading Analytics...</span>
-              </div>
-            }>
-              <AdminDashboard />
-            </Suspense>
-          } />
           <Route path="/motion-playground" element={
             <Suspense fallback={
               <div className="flex items-center justify-center p-20 text-xs text-[var(--text-muted)] gap-2">
@@ -598,7 +588,7 @@ function App() {
               <MotionPlayground />
             </Suspense>
           } />
-          <Route path="/admin" element={<Navigate to="/analytics" replace />} />
+          <Route path="/admin" element={<Navigate to="/" replace />} />
           <Route path="/auth" element={<AuthPage />} />
         </Routes>
       </main>

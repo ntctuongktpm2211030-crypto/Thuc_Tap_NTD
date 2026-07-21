@@ -7,7 +7,7 @@ import {
   Bookmark, ExternalLink, Heart, MessageCircle, Trash2,
   Calendar, DollarSign, MapPin, Compass, Clock, Sparkles,
   FileImage, LayoutGrid, List, Globe, TrendingUp, Users, Flame,
-  Home, Search, BarChart3, Bot,
+  Home, Search, Bot,
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { postsService, tripsService, Post } from '../../services/smartTravel.service';
@@ -53,7 +53,6 @@ const SavedLeftSidebar = ({ savedCount, tripsCount }: { savedCount: number; trip
     { icon: Compass, label: t('nav.quick.explore'),   href: '/explore',        color: 'text-violet-400' },
     { icon: MapPin,  label: t('nav.quick.map'),        href: '/map',            color: 'text-teal-400' },
     { icon: Sparkles,label: t('nav.quick.aiPlanner'), href: '/trips',          color: 'text-sky-400' },
-    { icon: BarChart3,label: t('nav.quick.analytics'),href: '/analytics',      color: 'text-indigo-400' },
     { icon: Bot,     label: 'AI Trợ lý',               href: '/chat',           color: 'text-rose-400' },
   ];
 

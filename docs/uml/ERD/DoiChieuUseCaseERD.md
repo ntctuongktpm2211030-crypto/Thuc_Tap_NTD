@@ -217,17 +217,13 @@ Báo cáo này đối chiếu chi tiết giữa danh sách các Use Case nghiệ
   * **Create/Update/Delete**: Quản trị viên quản lý, đăng tải tài liệu tri thức văn hóa, lễ hội.
 * **Entity & Quan hệ thiếu**: Không có.
 
-### 25. UC-ADMIN-02: Xem số liệu thống kê Analytics
-* **Thực thể sử dụng**: Toàn bộ các bảng CSDL.
-* **Thao tác CRUD**:
-  * **Read**: Tổng hợp số lượng thực thể (User, Trip, Post, CheckIn) hiển thị biểu đồ.
-* **Entity & Quan hệ thiếu**: Không có.
 
-### 26. UC-ADMIN-03: Cấu hình và Dọn dẹp cache hệ thống
+### 25. UC-ADMIN-02: Cấu hình và Dọn dẹp cache hệ thống
 * **Thực thể sử dụng**: `PlaceCache`, `FoodCache`, `BlogCache`.
 * **Thao tác CRUD**:
   * **Delete**: Quét dọn dẹp các cache hết hạn (`expiresAt < now()`).
 * **Entity & Quan hệ thiếu**: Không có.
+
 
 ---
 

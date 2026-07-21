@@ -75,7 +75,6 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
 
   ' --- Phân hệ Quản trị hệ thống ---
   package "Quản trị hệ thống (System Administration)" {
-    usecase "Xem dashboard thống kê\n(View Analytics)" as UC_Admin_Stats
     usecase "Nạp kho tri thức RAG\n(Ingest RAG Knowledge)" as UC_Admin_Ingest
     usecase "Quản trị & Kiểm toán AI\n(AI Governance & Audit)" as UC_Admin_Gov
   }
@@ -109,7 +108,6 @@ RegisteredUser -- UC_Map_Events
 RegisteredUser -- UC_AI_Chat
 RegisteredUser -- UC_AI_Feedback
 RegisteredUser -- UC_AI_Food
-RegisteredUser -- UC_Admin_Stats
 RegisteredUser -- UC_Admin_Ingest
 RegisteredUser -- UC_Admin_Gov
 

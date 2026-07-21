@@ -28,7 +28,6 @@ Tài liệu này xác nhận kết quả kiểm toán và xác minh tính toàn 
 | **Class_RAG** | `rag/` module | Khớp cấu trúc Pipeline RAG nâng cao (Fact Verification, Embeddings, Retriever, v.v.). | **ĐẠT (PASSED)** |
 | **Class_Event** | `feedback/` module, Prisma Event | Khớp cấu trúc Feedback Controller/Service/Repo và thực thể Event. | **ĐẠT (PASSED)** |
 | **Class_Cache** | `cache/` module | Khớp cấu trúc quản lý cache hệ thống và dọn dẹp cache. | **ĐẠT (PASSED)** |
-| **Class_Analytics** | `analytics.router.ts` | Khớp cấu trúc định tuyến và các DTO thống kê hiệu năng. | **ĐẠT (PASSED)** |
 | **Class_TravelHistory** | `travel-history/` module | Khớp bộ ba Controller - Service - Repository lịch sử hành trình. | **ĐẠT (PASSED)** |
 | **Class_Itinerary** | `itinerary/` module | Khớp bộ ba Controller - Service - Repository hành trình tự do. | **ĐẠT (PASSED)** |
 | **Class_ToolCalls** | `tool-calls/` module | Khớp bộ ba Controller - Service - Repository lưu vết gọi tool của Agent. | **ĐẠT (PASSED)** |

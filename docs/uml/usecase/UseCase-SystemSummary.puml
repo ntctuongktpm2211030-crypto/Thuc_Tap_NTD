@@ -60,7 +60,7 @@ rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
 
   package "Administration & Governance Domain" {
     usecase "AI Governance & Compliance\n(Kiểm toán & Quản trị AI)" as UC_AIGov
-    usecase "Administration & Analytics\n(Quản trị & Thống kê)" as UC_Admin
+    usecase "Administration & Operations\n(Quản trị & Vận hành)" as UC_Admin
   }
 
   package "Infrastructure Services Domain" {

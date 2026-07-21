@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Home, Compass, Map, Sparkles, BarChart3, Bookmark,
+  Home, Compass, Map, Sparkles, Bookmark,
   Users, Utensils, Gem, Backpack, Mountain, Landmark, Camera,
   Plane, TrainFront, Bus, Car, Bike, Ship,
   Lightbulb, Hotel, Wallet, AlertTriangle, MapPin,
@@ -16,7 +16,6 @@ export const NAV_ICONS = {
   explore: Compass,
   map: Map,
   trips: Sparkles,
-  analytics: BarChart3,
   saved: Bookmark,
   createPost: FileText,
   createJourney: Route,

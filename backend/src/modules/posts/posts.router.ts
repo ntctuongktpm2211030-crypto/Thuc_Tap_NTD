@@ -1,12 +1,10 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
 import { requireAuth, optionalAuth, AuthRequest } from '../auth/auth.middleware';
-import { DashboardService } from '../dashboard/services/dashboard.service';
-import { broadcastDashboardEvent, sendRealTimeNotification } from '../dashboard/services/dashboard.socket';
+import { sendRealTimeNotification } from '../../socket/notification.socket';
 import { uploadBase64ToSupabase } from '../../config/supabase';
 
 const router = Router();
-const dashboardService = new DashboardService();
 
 function extractBodyText(content: string): string {
   try {
@@ -28,11 +26,7 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { page = '1', limit = '10', q } = req.query as Record<string, string>;
 
-    if (q) {
-      dashboardService.logSearchKeyword(q).catch(err => 
-        console.error('[Posts/Search] Failed to log search:', err)
-      );
-    }
+
 
     // Permanently delete posts trashed more than 15 days ago
     const fifteenDaysAgo = new Date();
@@ -209,7 +203,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       },
     });
 
-    broadcastDashboardEvent(req, 'post', { postId: post.id });
+
 
     return res.status(201).json(post);
   } catch (err) {
@@ -256,7 +250,7 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
     } else {
       await prisma.like.create({ data: { postId, userId } });
 
-      broadcastDashboardEvent(req, 'like', { postId, userId });
+
 
       try {
         const post = await prisma.post.findUnique({
@@ -410,7 +404,7 @@ router.post('/:id/comments', requireAuth, async (req: AuthRequest, res: Response
       include: { author: { include: { profile: true } } },
     });
 
-    broadcastDashboardEvent(req, 'comment', { postId: comment.postId, commentId: comment.id });
+
 
     try {
       const post = await prisma.post.findUnique({

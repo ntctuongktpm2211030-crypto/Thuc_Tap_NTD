@@ -9,12 +9,12 @@ Tài liệu này cung cấp các số liệu thống kê định lượng về l
 
 Hệ thống cơ sở dữ liệu được xây dựng trên PostgreSQL 15, sử dụng Prisma ORM làm trung gian ánh xạ thực thể. Dưới đây là các thông số tổng hợp từ tệp `schema.prisma`:
 
-* **Tổng số bảng thực thể (Tables/Entities)**: **41 bảng**.
-* **Tổng số thuộc tính (Fields/Attributes)**: **240 thuộc tính** (trung bình 5.85 thuộc tính/bảng).
+* **Tổng số bảng thực thể (Tables/Entities)**: **36 bảng**.
+* **Tổng số thuộc tính (Fields/Attributes)**: **205 thuộc tính** (trung bình 5.69 thuộc tính/bảng).
 * **Tổng số Enums tự định nghĩa**: **2 enum** (`UserRole` và `TripStatus`).
-* **Tổng số khóa chính (Primary Keys - PK)**: **41 khóa chính** (40 khóa đơn UUID và 1 khóa chính Composite `[key, type]` của `SystemCache`).
+* **Tổng số khóa chính (Primary Keys - PK)**: **36 khóa chính** (35 khóa đơn UUID và 1 khóa chính Composite `[key, type]` của `SystemCache`).
 * **Tổng số khóa ngoại vật lý (Foreign Keys - FK)**: **39 khóa ngoại**.
-* **Tổng số ràng buộc duy nhất (Unique Constraints)**: **16 ràng buộc**.
+* **Tổng số ràng buộc duy nhất (Unique Constraints)**: **12 ràng buộc**.
 * **Tổng số chỉ mục tìm kiếm (Indices)**: **20 chỉ mục**.
 
 ---

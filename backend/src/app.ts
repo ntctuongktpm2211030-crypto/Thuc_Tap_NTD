@@ -26,8 +26,6 @@ import postsRouter from './modules/posts/posts.router';
 import mapRouter from './modules/map/map.router';
 import recommendationsRouter from './modules/recommendations/recommendations.router';
 import socialRouter from './modules/social/social.router';
-import analyticsRouter from './modules/analytics/analytics.router';
-import dashboardRouter from './modules/dashboard/routes/dashboard.router';
 import chatbotRouter from './modules/chatbot/routes/chatbot.router';
 import itineraryRouter from './modules/itinerary/routes/itinerary.router';
 import userRecommendationRouter from './modules/recommendations/routes/recommendation.router';
@@ -563,11 +561,6 @@ app.use('/api/v1/recommendations', recommendationsRouter);
 // Social: profile, follow/unfollow, notifications, user search
 app.use('/api/v1/social', socialRouter);
 
-// Analytics: platform stats, AI usage, GIS heatmap, trip trends
-app.use('/api/v1/analytics', analyticsRouter);
-
-// Dashboard Analytics
-app.use('/api/v1/dashboard', dashboardRouter);
 
 // Chatbot: Core AI Conversation + AI Memory
 app.use('/api/v1/chatbot', chatbotRouter);

@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../../auth/auth.middleware';
 import { TravelHistoryService } from '../services/travel-history.service';
-import { broadcastDashboardEvent } from '../../dashboard/services/dashboard.socket';
 
 export class TravelHistoryController {
   private service: TravelHistoryService;
@@ -16,13 +15,7 @@ export class TravelHistoryController {
       const data = req.body;
       const created = await this.service.create(userId, data);
       
-      if (created && created.rating !== null) {
-        broadcastDashboardEvent(req, 'review', { 
-          userId, 
-          destinationId: created.destinationId, 
-          rating: created.rating 
-        });
-      }
+
 
       return res.status(201).json(created);
     } catch (err: any) {
@@ -49,13 +42,7 @@ export class TravelHistoryController {
       const data = req.body;
       const updated = await this.service.update(id, userId, data);
       
-      if (updated && updated.rating !== null) {
-        broadcastDashboardEvent(req, 'review', { 
-          userId, 
-          destinationId: updated.destinationId, 
-          rating: updated.rating 
-        });
-      }
+
 
       return res.json(updated);
     } catch (err: any) {

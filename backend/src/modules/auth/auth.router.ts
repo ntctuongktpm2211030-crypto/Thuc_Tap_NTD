@@ -5,8 +5,6 @@ import prisma from '../../config/db';
 import { firebaseAuth } from '../../config/firebase';
 import { EmailService } from './email.service';
 import crypto from 'crypto';
-import { broadcastDashboardEvent } from '../dashboard/services/dashboard.socket';
-
 const emailService = new EmailService();
 
 const router = Router();
@@ -58,7 +56,7 @@ router.post('/register', async (req: Request, res: Response) => {
       include: { profile: true },
     });
 
-    broadcastDashboardEvent(req, 'user', { userId: user.id });
+
 
     // Gửi email xác thực tài khoản (chạy ngầm không block luồng phản hồi đăng ký)
     emailService.sendVerificationEmail(email, verificationToken).catch(err => {

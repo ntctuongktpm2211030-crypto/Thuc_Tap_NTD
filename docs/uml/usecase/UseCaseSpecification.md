@@ -801,27 +801,6 @@
 
 ## 6. Administration Module (Quản trị & Vận hành)
 
-### UC_ADM_01: Xem dashboard thống kê hệ thống (View Analytics Charts)
-*   **Use Case ID**: UC_ADM_01
-*   **Name**: Xem dashboard thống kê hệ thống (View Analytics Charts)
-*   **Goal**: Giúp quản trị viên có cái nhìn trực quan về tình hình hoạt động của hệ thống, số lượng người dùng, tần suất check-in và hiệu suất phản hồi của server.
-*   **Primary Actor**: Quản trị viên (Admin)
-*   **Supporting Actors**: -
-*   **Preconditions**: Quản trị viên đã đăng nhập và được xác thực có quyền `ADMIN`.
-*   **Trigger**: Quản trị viên chọn mục "Báo cáo thống kê" trên thanh quản trị.
-*   **Main Success Scenario**:
-    1. Quản trị viên truy cập trang Dashboard.
-    2. Frontend gửi request lên API `GET /api/v1/analytics/stats`.
-    3. Backend thực hiện tổng hợp số liệu từ các bảng `User`, `Trip`, `Checkin`, `ChatMessage` trong CSDL.
-    4. Backend trả về tập dữ liệu thống kê phân loại theo thời gian (ngày, tuần, tháng).
-    5. Giao diện quản trị hiển thị trực quan các biểu đồ đường, biểu đồ tròn thể hiện lượng tăng trưởng người dùng, biểu đồ nhiệt check-in và thời gian phản hồi API trung bình.
-*   **Alternative Flows**: Không có.
-*   **Exception Flows**: Không có.
-*   **Postconditions**: Dashboard dữ liệu phân tích hệ thống hiển thị thành công.
-*   **Business Rules**: Không có.
-*   **Related Use Cases**: Không có.
-
----
 
 ### UC_ADM_02: Nạp kho tri thức RAG (Ingest RAG Knowledge Base)
 *   **Use Case ID**: UC_ADM_02
