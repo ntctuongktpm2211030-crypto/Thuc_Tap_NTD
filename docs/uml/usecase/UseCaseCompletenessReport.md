@@ -44,7 +44,7 @@ Qua phân tích sâu CSDL và các API Controllers, đã bổ sung các Use Case
 
 ## 3. Tổng kết độ bao phủ (Completeness Metrics)
 
-- **Tổng số tác nhân người dùng**: 3 (Khách vãng lai, Người dùng đăng ký, Admin).
-- **Tổng số tác nhân hệ thống hỗ trợ**: 4 (Firebase, OpenStreetMap, OpenAI, vietnamadminunits).
+- **Tổng số tác nhân người dùng**: 2 (Khách vãng lai, Người dùng đăng ký).
+- **Tổng số tác nhân hệ thống hỗ trợ**: 7 (Firebase, OpenStreetMap, OpenAI, vietnamadminunits, SMTP, Supabase, Push Notification).
 - **Tổng số Use Cases nghiệp vụ**: 28 Use Cases (Được phân bố hoàn hảo trên 6 phân hệ).
 - **Mức độ sẵn sàng thiết kế**: **100%** (Tất cả Use Cases đều có mã nguồn backend/frontend hoặc schema CSDL thực thi làm bằng chứng).

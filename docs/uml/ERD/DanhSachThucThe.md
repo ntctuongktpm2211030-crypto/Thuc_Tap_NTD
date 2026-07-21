@@ -17,7 +17,7 @@ Tài liệu này cung cấp từ điển dữ liệu (Data Dictionary) chi tiế
 | `id` | mã người dùng | String (UUID) | Không | Có | PK | `uuid()` | Khóa chính tự sinh dạng UUID |
 | `email` | email đăng nhập | String | Không | Có | Index | | Địa chỉ email đăng ký độc nhất |
 | `passwordHash`| mật khẩu hash | String | Không | Không | Không | | Mật khẩu đã được băm mã hóa |
-| `role` | vai trò người dùng | UserRole (Enum) | Không | Không | Không | `USER` | Quyền hạn tài khoản: USER, ADMIN |
+| `role` | vai trò người dùng | UserRole (Enum) | Không | Không | Không | `USER` | Quyền hạn tài khoản: USER |
 | `isVerified` | đã xác minh | Boolean | Không | Không | Không | `false` | Đánh dấu xác minh hòm thư điện tử |
 | `verificationToken`| mã xác minh | String | Có | Không | Không | | Mã token gửi qua email xác thực |
 | `resetPasswordToken`| mã reset mật khẩu | String | Có | Không | Không | | Mã token dùng khi quên mật khẩu |
