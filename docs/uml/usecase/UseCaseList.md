@@ -60,6 +60,9 @@ This document catalogs the finalized business use cases for the SmartTravel appl
 | **UC_MAP_14** | Thực hiện check-in địa điểm (Perform Check-in) | Người dùng đăng ký | OpenStreetMap | Check-in lưu tọa độ, hình ảnh, đánh giá và ghi chú địa danh thực tế. |
 | **UC_MAP_15** | Tải lên hình ảnh check-in (Upload Check-in Photo) | Người dùng đăng ký | - | Tải hình ảnh thực tế lên kèm theo bài đăng check-in địa điểm. |
 | **UC_MAP_16** | Xem Community Check-Ins (View Community Check-ins) | Khách vãng lai | - | Tra cứu các bài đăng check-in và hình ảnh thực tế của mọi người tại các địa điểm. |
+| **UC_MAP_17** | Xem danh sách sự kiện và lễ hội (Browse Events & Festivals) | Khách vãng lai | - | Xem các lễ hội, sự kiện văn hóa hoặc meetup giao lưu hiển thị trên bản đồ. |
+| **UC_MAP_18** | Đăng ký tham gia sự kiện (Register to Join Event) | Người dùng đăng ký | - | Đăng ký tham gia sự kiện meetup/lễ hội để cập nhật số lượng và lưu vào lịch trình. |
+| **UC_MAP_19** | Tạo sự kiện địa phương mới (Create Local Event) | Người dùng đăng ký | - | Người dùng đứng ra tổ chức một sự kiện meetup hoặc buổi giao lưu địa phương mới trên bản đồ. |
 
 ---
 

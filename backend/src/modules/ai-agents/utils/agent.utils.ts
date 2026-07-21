@@ -450,10 +450,22 @@ export async function callAgentLLM(
  * Chuẩn hóa và xóa các tiền tố địa lý phổ biến ở Việt Nam để so khớp chính xác hơn
  */
 export function cleanGeographicName(name: string): string {
-  let clean = removeDiacritics(name.toLowerCase());
+  let lower = name.toLowerCase();
+  const accentedPrefixes = [
+    'tỉnh ', 'thành phố ', 'tp. ', 'tp ', 'huyện ', 'xã ',
+    'đảo ', 'hòn ', 'vịnh ', 'khu du lịch ', 'kdl ', 'mũi ',
+    'thác ', 'núi ', 'sông ', 'hồ ', 'suối ', 'chợ ', 'bãi '
+  ];
+  for (const p of accentedPrefixes) {
+    if (lower.startsWith(p)) {
+      lower = lower.substring(p.length);
+    }
+  }
+
+  let clean = removeDiacritics(lower);
   const prefixes = [
     'tinh ', 'thanh pho ', 'tp. ', 'tp ', 'huyen ', 'xa ',
-    'dao ', 'hon ', 'vinh ', 'khu du lich ', 'kdl ', 'mui ',
+    'dao ', 'hon ', 'khu du lich ', 'kdl ', 'mui ',
     'thac ', 'nui ', 'song ', 'ho ', 'suoi ', 'cho ', 'bui '
   ];
   for (const p of prefixes) {

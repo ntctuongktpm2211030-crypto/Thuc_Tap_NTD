@@ -62,7 +62,7 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
     usecase "Xem & Tìm kiếm bản đồ\n(View & Search Map)" as UC_Map_View
     usecase "Định vị & Chia sẻ vị trí live\n(Live Location Tracking)" as UC_Map_Live
     usecase "Thực hiện check-in địa điểm\n(Perform Check-in)" as UC_Map_Checkin
-    usecase "Quản lý & Tham gia sự kiện\n(Manage Local Events)" as UC_Map_Events
+    usecase "Xem và đăng ký tham gia sự kiện\n(Browse & Join Events)" as UC_Map_Events
   }
 
   ' --- Phân hệ Trợ lý ảo AI & RAG ---

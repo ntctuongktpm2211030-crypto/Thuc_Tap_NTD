@@ -37,7 +37,7 @@ Mọi thực thể dữ liệu chính và API Router của nền tảng SmartTra
 ### B. Bổ sung các Use Case nghiệp vụ bị thiếu
 Qua phân tích sâu CSDL và các API Controllers, đã bổ sung các Use Case bị khuyết ở pha phân tích sơ bộ:
 1.  **AI Companion Matching (`UC_MatchCompanion`)**: Nghiệp vụ tính toán điểm tương đồng dựa trên Travel Preferences để ghép cặp bạn du hành (`TravelerMatch`).
-2.  **Quản lý & Tham gia sự kiện địa phương (`UC_LocalEvents`)**: Nghiệp vụ kết nối cộng đồng tại điểm đến (`Event` và `EventAttendee`).
+2.  **Xem và đăng ký tham gia sự kiện địa phương (`UC_LocalEvents`)**: Nghiệp vụ kết nối cộng đồng tại điểm đến (`Event` và `EventAttendee`).
 3.  **Quản lý cuộc hội thoại (`UC_ManageChats`)**: Cho phép người dùng liệt kê, đổi tên hoặc xóa lịch sử các luồng chat trợ lý ảo.
 
 ---

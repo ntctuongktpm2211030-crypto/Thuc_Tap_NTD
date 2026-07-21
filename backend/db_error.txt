@@ -4099,3 +4099,105 @@ Foreign key constraint violated: `Bookmark_postId_fkey (index)`
     at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
     at D:\Thuc_Tap_NTD\backend\src\modules\posts\posts.router.ts:312:7
 
+[Console Error Logged] 2026-07-21T11:35:30.507Z - ❌ Failed to regenerate itinerary part with AI: OpenAI API responded with status 429
+Stack: Error: OpenAI API responded with status 429
+    at regenerateItineraryPart (D:\Thuc_Tap_NDT\backend\src\modules\ai\ai-planner.ts:459:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at D:\Thuc_Tap_NDT\backend\src\modules\trips\trips.router.ts:297:22
+
+[Console Error Logged] 2026-07-21T11:35:32.779Z - ❌ Failed to regenerate itinerary part with AI: OpenAI API responded with status 429
+Stack: Error: OpenAI API responded with status 429
+    at regenerateItineraryPart (D:\Thuc_Tap_NDT\backend\src\modules\ai\ai-planner.ts:459:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at D:\Thuc_Tap_NDT\backend\src\modules\trips\trips.router.ts:297:22
+
+[Console Error Logged] 2026-07-21T11:35:34.210Z - ❌ Failed to regenerate itinerary part with AI: OpenAI API responded with status 429
+Stack: Error: OpenAI API responded with status 429
+    at regenerateItineraryPart (D:\Thuc_Tap_NDT\backend\src\modules\ai\ai-planner.ts:459:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at D:\Thuc_Tap_NDT\backend\src\modules\trips\trips.router.ts:297:22
+
+[Console Error Logged] 2026-07-21T14:37:14.485Z - Failed to parse AI Recommendations JSON: Dựa trên các thông tin bạn cung cấp, tôi sẽ đưa ra ba gợi ý du lịch phù hợp với điều kiện thời tiết và sở thích của bạn.
+
+{
+  "recommendations": [
+    {
+      "id": "dest---nh-b-nh-th-y-10.0725-105.7522",
+      "reason": "Đình Bình Thủy phù hợp với thời tiết nắng đẹp và là điểm du lịch hấp dẫn về kiến trúc.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-b-n-ninh-ki-u-10.0315-105.7876",
+      "reason": "Bến Ninh Kiều là điểm du lịch tuyệt vời để trải nghiệm cảnh quan sông nước và thưởng thức ẩm thực địa phương.",
+      "tag": "Ẩm Thực"
+    },
+    {
+      "id": "dest-c-u--i-b--ninh-ki-u-10.0370-105.7912",
+      "reason": "Cầu đi bộ Ninh Kiều là điểm tham quan lý tưởng về kiến trúc và cảnh quan sông nước dưới thời tiết nắng đẹp.",
+      "tag": "Tránh Mưa"
+    }
+  ]
+}
+
+[Console Error Logged] 2026-07-21T14:37:20.792Z - Failed to parse AI Recommendations JSON: Căn cứ vào thông tin người dùng và điều kiện thời tiết, tôi đưa ra 3 gợi ý du lịch như sau:
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-c-u--i-b--ninh-ki-u",
+      "reason": "Đi bộ trên cầu Ninh Kiều đẹp dưới ánh nắng mặt trời.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-ch-a-ph-t-h-c-c-n-th--",
+      "reason": "Thăm chùa Phật Học Cần Thơ và ngắm cảnh thành phố dưới ánh nắng.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-c-n-s-n-c-n-th--",
+      "reason": "Thăm Cồn Sơn Cần Thơ với phong cảnh sông nước tuyệt đẹp.",
+      "tag": "Khám Phá"
+    }
+  ]
+}
+```
+
+Tôi chọn những địa điểm này vì:
+
+* Cầu đi bộ Ninh Kiều là một điểm tham quan độc đáo và phù hợp với điều kiện thời tiết nắng đẹp.
+* Chùa Phật Học Cần Thơ là một điểm đến tâm linh và cung cấp một nơi để ngắm cảnh thành phố.
+* Cồn Sơn Cần Thơ là một điểm đến tự nhiên đẹp mắt, với phong cảnh sông nước tuyệt vời.
+
+[Console Error Logged] 2026-07-21T15:18:52.353Z - Failed to parse AI Recommendations JSON: Dưới đây là top 3 gợi ý cho người dùng dựa trên các yếu tố thời tiết, nhiệt độ và sở thích của họ:
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-b-n-ninh-ki-u-10.0315-105.7876",
+      "reason": "Khám phá bến Ninh Kiều lý tưởng lúc nắng ấm",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-c-u--i-b--ninh-ki-u-10.0370-105.7912",
+      "reason": "Khởi động bằng cầu đi bộ Ninh Kiều mát mẻ dưới nắng",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-ch-ông-c-n-th--10.0342-105.7885",
+      "reason": "Thăm quan Chùa Ông Cần Thơ với kiến trúc đẹp và mát mẻ",
+      "tag": "Khám Phá"
+    }
+  ]
+}
+```
+
+Căn cứ vào các yếu tố sau:
+
+- Thời tiết: Nắng ấm (28°C)
+- Sở thích: Khám phá, cảnh quan, ẩm thực
+- Vị trí: Đã chọn các điểm hấp dẫn tại Cần Thơ
+
+Ba gợi ý trên bao gồm bến Ninh Kiều, cầu đi bộ Ninh Kiều và chùa Ông Cần Thơ, đều nằm trong khu vực trung tâm của thành phố Cần Thơ. Các điểm này sẽ giúp người dùng tận hưởng không khí mát mẻ và khám phá vẻ đẹp của thành phố này.
+

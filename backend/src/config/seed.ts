@@ -171,7 +171,7 @@ export async function autoSeed() {
 
     // 3. Import Destinations from JSON files if not already imported
     const destCount = await prisma.destination.count();
-    if (destCount < 50) {
+    if (destCount < 3000) {
       console.log('📦 Seeding destinations from JSON files...');
       const destDir = path.resolve(__dirname, 'destinations');
       if (fs.existsSync(destDir)) {

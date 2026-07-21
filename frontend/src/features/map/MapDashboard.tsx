@@ -26,7 +26,7 @@ const MapDashboard = () => {
   const [cachingProgress, setCachingProgress] = useState<number | null>(null);
 
   // Checkin states
-  const [selectedDestId, setSelectedDestId] = useState('');
+  const [customDestName, setCustomDestName] = useState('');
   const [newNote, setNewNote] = useState('');
   const [isExtractingGps, setIsExtractingGps] = useState(false);
   const [checkinImage, setCheckinImage] = useState('');
@@ -36,6 +36,8 @@ const MapDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterRating, setFilterRating] = useState(0);
+  const [tempCategory, setTempCategory] = useState('');
+  const [tempRating, setTempRating] = useState(0);
 
   // AI recommendations states
   const [aiRecs, setAiRecs] = useState<any[]>([]);
@@ -178,6 +180,23 @@ const MapDashboard = () => {
     };
   }, [isAuthenticated]);
 
+  // Dynamically fetch destinations around the selected map center when it changes (drag end)
+  useEffect(() => {
+    const fetchLocalDestinations = async () => {
+      const [lat, lng] = selectedCenter;
+      if (!lat || !lng) return;
+      try {
+        const dests = await mapService.destinations({ lat, lng, radius: 50 });
+        if (Array.isArray(dests)) {
+          setDestinations(dests);
+        }
+      } catch (err) {
+        console.error('Failed to fetch local destinations:', err);
+      }
+    };
+    fetchLocalDestinations();
+  }, [selectedCenter[0], selectedCenter[1]]);
+
   // WebSocket connection & location heartbeat
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -240,7 +259,18 @@ const MapDashboard = () => {
       category: d.category
     }));
 
-    const mappedCheckins: MapLocation[] = checkins.map(c => {
+    const mappedCheckins: MapLocation[] = [];
+    const seenCheckins = new Set<string>();
+    
+    // Sort checkins by date descending so the most recent shows up as the primary marker
+    const sortedCheckins = [...checkins].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    
+    sortedCheckins.forEach(c => {
+      const lat = c.destination?.latitude || c.latitude || 21.0285;
+      const lng = c.destination?.longitude || c.longitude || 105.8048;
+      
+      const locKey = c.destinationId || `${lat.toFixed(5)},${lng.toFixed(5)}`;
+      
       let parsedNote = c.note || '';
       let imageUrl = '';
       let tag = '';
@@ -252,18 +282,45 @@ const MapDashboard = () => {
           tag = parsed.tag || '';
         } catch (e) {}
       }
-      return {
-        id: `checkin-${c.id}`,
-        name: c.destination?.name || 'Vị trí check-in',
-        lat: c.destination?.latitude || 21.0285,
-        lng: c.destination?.longitude || 105.8048,
+
+      const checkinTime = new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date(c.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US');
+
+      if (seenCheckins.has(locKey)) {
+        const existing = mappedCheckins.find(m => m.id === `checkin-${locKey}`);
+        if (existing) {
+          if (!existing.allCheckins) {
+            existing.allCheckins = [{
+              user: existing.user!,
+              avatar: existing.avatar!,
+              note: existing.note!,
+              time: existing.time!
+            }];
+          }
+          existing.allCheckins.push({
+            user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
+            avatar: c.user?.profile?.avatarUrl || '',
+            note: parsedNote,
+            time: checkinTime
+          });
+        }
+        return;
+      }
+
+      seenCheckins.add(locKey);
+
+      mappedCheckins.push({
+        id: `checkin-${locKey}`,
+        name: c.destination?.name || c.customName || 'Vị trí check-in',
+        lat,
+        lng,
         note: parsedNote,
         imageUrl: imageUrl,
         tag: tag,
         user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
         avatar: c.user?.profile?.avatarUrl || '',
-        time: new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
-      };
+        time: checkinTime,
+        category: c.destination?.category || 'checkin'
+      });
     });
 
     const mappedFriends: MapLocation[] = [];
@@ -314,7 +371,7 @@ const MapDashboard = () => {
     }
 
     setLocations([...mappedDests, ...mappedCheckins, ...mappedFriends]);
-  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user, isAuthenticated]);
+  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user, isAuthenticated, vi]);
 
   const parseEXIFGPS = (file: File): Promise<[number, number] | null> => {
     return new Promise((resolve) => {
@@ -414,7 +471,7 @@ const MapDashboard = () => {
           }
         });
         if (nearest) {
-          setSelectedDestId(nearest.id);
+          setCustomDestName(nearest.name);
           alert(vi 
             ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Tự chọn địa điểm gần nhất: ${nearest.name}`
             : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Selected nearest place: ${nearest.name}`
@@ -440,10 +497,13 @@ const MapDashboard = () => {
       navigate('/auth', { state: { from: '/map' } });
       return;
     }
-    if (!selectedDestId) {
-      alert(vi ? 'Vui lòng chọn địa điểm!' : 'Please select a place!');
+    if (!customDestName.trim()) {
+      alert(vi ? 'Vui lòng nhập tên địa điểm!' : 'Please enter a place name!');
       return;
     }
+
+    const lat = userLocation ? userLocation[0] : selectedCenter[0];
+    const lng = userLocation ? userLocation[1] : selectedCenter[1];
 
     try {
       const finalPayload = JSON.stringify({
@@ -451,12 +511,26 @@ const MapDashboard = () => {
         imageUrl: checkinImage,
         tag: checkinTag
       });
-      const response = await mapService.checkIn(selectedDestId, finalPayload);
+      const response = await mapService.checkIn('', finalPayload, customDestName.trim(), lat, lng);
       setCheckins(prev => [response, ...prev]);
       setNewNote('');
-      setSelectedDestId('');
+      setCustomDestName('');
       setCheckinImage('');
       setCheckinTag('');
+
+      setSelectedCenter([lat, lng]);
+      setSelectedLocation({
+        id: `checkin-${response.id}`,
+        name: response.destination?.name || customDestName.trim(),
+        lat,
+        lng,
+        note: newNote,
+        imageUrl: checkinImage,
+        tag: checkinTag,
+        user: response.user?.profile?.fullName || response.user?.email || 'Người dùng',
+        avatar: response.user?.profile?.avatarUrl || ''
+      });
+
       alert(vi ? 'Check-in thành công!' : 'Check-in successful!');
     } catch (err) {
       console.error('Checkin failed:', err);
@@ -504,6 +578,29 @@ const MapDashboard = () => {
     }, 200);
   };
 
+  const handleSearchSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    try {
+      const dests = await mapService.destinations({ q: searchQuery });
+      if (Array.isArray(dests)) {
+        setDestinations(dests);
+        if (dests.length > 0) {
+          setSelectedCenter([dests[0].latitude, dests[0].longitude]);
+        } else {
+          alert(vi ? 'Không tìm thấy địa điểm nào khớp với từ khóa.' : 'No destinations found matching keyword.');
+        }
+      }
+    } catch (err) {
+      console.error('Search failed:', err);
+    }
+  };
+
+  const handleApplyFilter = () => {
+    setFilterCategory(tempCategory);
+    setFilterRating(tempRating);
+  };
+
   const handleGetAiRecommendations = async () => {
     if (!isAuthenticated) {
       alert(vi ? 'Bạn cần đăng nhập để sử dụng tính năng Đề xuất AI lân cận!' : 'You need to log in to use AI Recommendations!');
@@ -536,24 +633,33 @@ const MapDashboard = () => {
           <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
             <Search size={12} /> {vi ? 'Tìm địa điểm' : 'Search Place'}
           </h3>
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder={vi ? 'Nhập tên địa điểm...' : 'Search place...'}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-2 pl-8 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
-            <Search size={12} className="absolute left-2.5 top-3 text-[var(--text-muted)]" />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
-              >
-                ✕
-              </button>
-            )}
-          </div>
+          <form onSubmit={handleSearchSubmit} className="flex gap-2 relative">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder={vi ? 'Nhập tên địa điểm...' : 'Search place...'}
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-2 pl-8 pr-7 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              <Search size={12} className="absolute left-2.5 top-3 text-[var(--text-muted)]" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-2.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg border-none cursor-pointer transition-all shrink-0"
+            >
+              {vi ? 'Tìm' : 'Search'}
+            </button>
+          </form>
           {searchQuery && destinations.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 && (
             <div className="absolute left-0 right-0 top-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg mt-1 max-h-40 overflow-y-auto z-30 shadow-2xl p-1">
               {destinations
@@ -583,8 +689,8 @@ const MapDashboard = () => {
           </h3>
           <div className="grid grid-cols-2 gap-2">
             <select
-              value={filterCategory}
-              onChange={e => setFilterCategory(e.target.value)}
+              value={tempCategory}
+              onChange={e => setTempCategory(e.target.value)}
               className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
             >
               <option value="">{vi ? 'Tất cả' : 'All Categories'}</option>
@@ -595,8 +701,8 @@ const MapDashboard = () => {
               <option value="festival">{vi ? 'Lễ hội / Sự kiện' : 'Festival / Event'}</option>
             </select>
             <select
-              value={filterRating}
-              onChange={e => setFilterRating(Number(e.target.value))}
+              value={tempRating}
+              onChange={e => setTempRating(Number(e.target.value))}
               className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
             >
               <option value="0">{vi ? 'Đánh giá' : 'Rating'}</option>
@@ -604,6 +710,12 @@ const MapDashboard = () => {
               <option value="4.5">★ 4.5+</option>
             </select>
           </div>
+          <button
+            onClick={handleApplyFilter}
+            className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg border-none cursor-pointer transition-all flex items-center justify-center gap-1"
+          >
+            🧭 {vi ? 'Áp dụng bộ lọc' : 'Apply Filter'}
+          </button>
         </div>
 
         {/* 3. AI Recommendations Layer */}
@@ -814,6 +926,7 @@ const MapDashboard = () => {
             onRemovePointFromRoute={removeRoutePoint}
             aiRecommendedIds={aiRecs.map(r => r.id)}
             onSelectLocation={setSelectedLocation}
+            onCenterChange={setSelectedCenter}
           />
         </div>
       </div>
@@ -826,16 +939,19 @@ const MapDashboard = () => {
             📸 {vi ? 'Check-in Địa điểm' : 'Check-In Location'}
           </h3>
           <form onSubmit={handleCheckin} className="space-y-2">
-            <select
-              value={selectedDestId}
-              onChange={e => setSelectedDestId(e.target.value)}
+            <input
+              type="text"
+              value={customDestName}
+              onChange={e => setCustomDestName(e.target.value)}
+              placeholder={vi ? 'Nhập tên địa điểm...' : 'Enter location name...'}
               className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="">-- {vi ? 'Chọn địa điểm' : 'Select location'} --</option>
-              {destinations.map(d => (
-                <option key={d.id} value={d.id}>{d.name}</option>
-              ))}
-            </select>
+              required
+            />
+            <p className="text-[9px] text-[var(--text-muted)] italic mt-1 pl-1">
+              📌 {vi 
+                ? `Vị trí ghim: ${userLocation ? 'GPS hiện tại của bạn' : 'Tâm bản đồ hiện tại'}`
+                : `Pinned at: ${userLocation ? 'Your current GPS' : 'Current map center'}`}
+            </p>
 
             <textarea
               value={newNote}

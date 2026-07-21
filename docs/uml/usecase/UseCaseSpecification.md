@@ -658,6 +658,72 @@
 
 ---
 
+### UC_MAP_17: Xem danh sách sự kiện và lễ hội (Browse Events & Festivals)
+*   **Use Case ID**: UC_MAP_17
+*   **Name**: Xem danh sách sự kiện và lễ hội (Browse Events & Festivals)
+*   **Goal**: Cho phép người dùng duyệt và xem danh sách các lễ hội văn hóa tĩnh hoặc sự kiện meetup động lân cận khu vực bản đồ đang hiển thị.
+*   **Primary Actor**: Khách vãng lai (Guest)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đang ở giao diện Bản đồ.
+*   **Trigger**: Người dùng bật chế độ "Lễ hội" (GIS Layer) hoặc di chuyển bản đồ đến khu vực mới.
+*   **Main Success Scenario**:
+    1. Người dùng bật layer "LỄ HỘI" ở góc phải bản đồ.
+    2. Frontend gửi API `GET /api/v1/map/events` và `GET /api/v1/map/destinations` lên Backend để lấy danh sách địa danh có `category` là `festival` và các sự kiện meetup hoạt động trong bán kính 30km.
+    3. Backend kiểm tra và trả về danh sách các địa điểm lễ hội và meetup.
+    4. Bản đồ hiển thị các điểm này dưới dạng marker biểu tượng Lịch màu tím.
+    5. Người dùng click vào biểu tượng Lịch để xem thông tin tóm tắt (Tên lễ hội, mô tả ngắn, ngày diễn ra, địa chỉ).
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**: Không có.
+*   **Postconditions**: Bản đồ hiển thị trực quan các điểm lễ hội và sự kiện meetup.
+*   **Related Use Cases**: `UC_MAP_18` (Register to Join Event), `UC_MAP_19` (Create Local Event).
+
+---
+
+### UC_MAP_18: Đăng ký tham gia sự kiện (Register to Join Event)
+*   **Use Case ID**: UC_MAP_18
+*   **Name**: Đăng ký tham gia sự kiện (Register to Join Event)
+*   **Goal**: Ghi nhận đăng ký tham dự của người dùng vào sự kiện/lễ hội để cập nhật sĩ số và lưu trữ trạng thái.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đã đăng nhập hệ thống và đang xem chi tiết một sự kiện meetup/lễ hội.
+*   **Trigger**: Người dùng nhấn nút "Tham gia" (Join / Going) trên popup thông tin sự kiện.
+*   **Main Success Scenario**:
+    1. Người dùng nhấn nút "Tham gia" tại chi tiết sự kiện trên bản đồ.
+    2. Frontend gửi request lên API backend để đăng ký tham gia.
+    3. Backend kiểm tra sĩ số tối đa (MaxAttendees) của sự kiện. Nếu còn chỗ, hệ thống tạo bản ghi liên kết mới trong bảng `EventAttendee` với trạng thái `status` là "going".
+    4. Backend tăng số lượng người tham gia thực tế `currentCount` ở bảng `Event` lên 1 đơn vị.
+    5. Hệ thống phản hồi đăng ký thành công và hiển thị nút trạng thái "Đã tham gia" trên giao diện.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Sự kiện đã hết chỗ*: Tại bước 3, nếu số lượng thực tế đã đạt tối đa (`currentCount` >= `maxAttendees`), hệ thống báo lỗi "Sự kiện đã đủ số lượng người đăng ký!" và dừng thao tác.
+*   **Postconditions**: Bản ghi đăng ký mới được lưu lại, trạng thái giao diện cập nhật và tăng sĩ số sự kiện.
+*   **Related Use Cases**: `UC_MAP_17` (Browse Events & Festivals).
+
+---
+
+### UC_MAP_19: Tạo sự kiện địa phương mới (Create Local Event)
+*   **Use Case ID**: UC_MAP_19
+*   **Name**: Tạo sự kiện địa phương mới (Create Local Event)
+*   **Goal**: Cho phép người dùng đứng ra tổ chức một sự kiện meetup hoặc buổi giao lưu địa phương mới trên bản đồ để cộng đồng cùng tham gia.
+*   **Primary Actor**: Người dùng đăng ký (Registered User)
+*   **Supporting Actors**: -
+*   **Preconditions**: Người dùng đã đăng nhập hệ thống và đang xem bản đồ.
+*   **Trigger**: Người dùng click chọn tọa độ trên bản đồ hoặc nhấn nút "Tạo sự kiện".
+*   **Main Success Scenario**:
+    1. Người dùng nhấn nút "Tạo sự kiện" (hoặc chọn ghim tạo sự kiện tại một địa điểm du lịch cụ thể).
+    2. Biểu mẫu tạo sự kiện hiện ra yêu cầu nhập: Tiêu đề sự kiện, Mô tả, Ngày bắt đầu, Ngày kết thúc, Thể loại và Số lượng người tham gia tối đa.
+    3. Người dùng điền đầy đủ thông tin và nhấn "Tạo".
+    4. Frontend gửi API `POST /api/v1/map/event` lên Backend.
+    5. Backend kiểm tra thông tin và lưu bản ghi mới vào bảng `Event` trong CSDL với `organizerId` là ID người dùng đang đăng nhập.
+    6. Hệ thống phản hồi tạo sự kiện thành công và tự động ghim biểu tượng Lịch màu tím tại tọa độ sự kiện lên bản đồ.
+*   **Alternative Flows**: Không có.
+*   **Exception Flows**:
+    *   *Thời gian không hợp lệ*: Tại bước 5, nếu ngày bắt đầu nằm trong quá khứ hoặc sau ngày kết thúc, Backend báo lỗi và yêu cầu nhập lại thời gian hợp lệ.
+*   **Postconditions**: Sự kiện mới được ghim lên bản đồ du lịch, sẵn sàng cho cộng đồng tìm kiếm và đăng ký tham gia.
+*   **Related Use Cases**: `UC_MAP_17` (Browse Events & Festivals).
+
+---
+
 ## 5. AI Chatbot Module (Trợ lý ảo AI & RAG)
 
 ### UC_AI_01: Trò chuyện với trợ lý ảo đa Agent (Chat with Multi-Agent Chatbot)

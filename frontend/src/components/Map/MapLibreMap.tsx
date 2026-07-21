@@ -18,6 +18,7 @@ export interface MapLocation {
   address?: string;
   imageUrl?: string;
   tag?: string;
+  allCheckins?: { user: string; avatar: string; note: string; time: string }[];
 }
 
 interface MapLibreMapProps {
@@ -32,6 +33,7 @@ interface MapLibreMapProps {
   weatherInfo?: { condition: string; temp: string };
   onSelectLocation?: (loc: MapLocation | null) => void;
   destination?: string;
+  onCenterChange?: (center: [number, number]) => void;
 }
 
 // Math helpers for client-side distance and bounding box calculations
@@ -205,12 +207,38 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
       </div>
     `;
 
+  let allCheckinsHtml = '';
+  if (loc.allCheckins && loc.allCheckins.length > 1) {
+    const listHtml = loc.allCheckins.slice(1).map(c => `
+      <div class="flex items-start gap-1.5 border-t border-slate-800/80 pt-1.5 mt-1.5">
+        <img src="${c.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="w-5 h-5 rounded-full object-cover border border-slate-800 mt-0.5" />
+        <div class="flex-1 min-w-0">
+          <p class="text-[9px] font-bold text-white leading-none">${c.user}</p>
+          <p class="text-[7.5px] text-slate-400">${c.time}</p>
+          ${c.note ? `<p class="text-[9px] text-slate-300 italic mt-0.5 leading-tight">"${c.note}"</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+    
+    allCheckinsHtml = `
+      <div class="mt-2.5 pt-2 border-t border-slate-850">
+        <div class="text-[8px] font-black text-amber-500/90 uppercase tracking-widest mb-1.5">
+          ${vi ? `Và ${loc.allCheckins.length - 1} lượt check-in khác:` : `And ${loc.allCheckins.length - 1} other check-ins:`}
+        </div>
+        <div class="max-h-28 overflow-y-auto space-y-1.5 pr-1">
+          ${listHtml}
+        </div>
+      </div>
+    `;
+  }
+
   return `
-    <div class="space-y-2.5 text-slate-100">
+    <div class="space-y-2.5 text-slate-100 max-w-[260px]">
       ${headerHtml}
       ${noteStr}
       ${imageHtml}
       <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1 mt-1">📍 ${loc.name || (isLive ? 'Live Tracking' : '')}</div>
+      ${allCheckinsHtml}
       ${hasRouteCallback ? `
       <button 
         onclick="window.addPointToRoute('${loc.id}')"
@@ -245,6 +273,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   weatherInfo = DEFAULT_WEATHER,
   onSelectLocation,
   destination,
+  onCenterChange,
 }) => {
   const { lang } = useLang();
   const vi = lang === 'vi';
@@ -333,6 +362,26 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [center[0], center[1]]);
 
+  // Fetch Safety Warnings and Events for the map area
+  useEffect(() => {
+    const fetchGISData = async () => {
+      const lat = Number(center[0]);
+      const lng = Number(center[1]);
+      if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) return;
+      try {
+        const [warns, evts] = await Promise.all([
+          mapService.safetyWarnings({ lat, lng, radius: 50 }),
+          mapService.events({ lat, lng, radius: 50 })
+        ]);
+        if (Array.isArray(warns)) setWarnings(warns);
+        if (Array.isArray(evts)) setEventsData(evts);
+      } catch (err) {
+        console.error('[MapLibreMap] Failed to fetch GIS layers:', err);
+      }
+    };
+    fetchGISData();
+  }, [center[0], center[1]]);
+
   // Setup global callback for popups
   useEffect(() => {
     (window as any).addPointToRoute = (id: string) => {
@@ -382,20 +431,24 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     };
   };
 
-  // Viewport-based fetching for warnings and events
+  // Viewport-based fetching for warnings and events (synced with static center prop)
   const lastFetchCenterRef = useRef<[number, number]>([0, 0]);
   useEffect(() => {
-    const latDiff = Math.abs(viewState.latitude - lastFetchCenterRef.current[0]);
-    const lngDiff = Math.abs(viewState.longitude - lastFetchCenterRef.current[1]);
+    const lat = Number(center[0]);
+    const lng = Number(center[1]);
+    if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) return;
+
+    const latDiff = Math.abs(lat - lastFetchCenterRef.current[0]);
+    const lngDiff = Math.abs(lng - lastFetchCenterRef.current[1]);
 
     if (latDiff > 0.03 || lngDiff > 0.03) {
-      lastFetchCenterRef.current = [viewState.latitude, viewState.longitude];
+      lastFetchCenterRef.current = [lat, lng];
       
       const fetchLayers = async () => {
         try {
           const [warns, evts] = await Promise.all([
-            mapService.safetyWarnings({ lat: viewState.latitude, lng: viewState.longitude, radius: 30 }),
-            mapService.events({ lat: viewState.latitude, lng: viewState.longitude, radius: 30 })
+            mapService.safetyWarnings({ lat, lng, radius: 30 }),
+            mapService.events({ lat, lng, radius: 30 })
           ]);
           if (Array.isArray(warns)) setWarnings(warns);
           if (Array.isArray(evts)) setEventsData(evts);
@@ -405,7 +458,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       };
       fetchLayers();
     }
-  }, [viewState.latitude, viewState.longitude]);
+  }, [center[0], center[1]]);
 
   // Geofencing Proximity Checker
   useEffect(() => {
@@ -529,6 +582,239 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }), [routePoints]);
 
+  // Memoized Main Markers to prevent lag on map movement (drag/zoom)
+  const renderedMarkers = React.useMemo(() => {
+    const baseLat = Number(center[0]) || 21.028511;
+    const baseLng = Number(center[1]) || 105.804817;
+    // Bounding box filter based on PROP center and zoom (which are static during drag)
+    const latDelta = 180 / Math.pow(2, zoom);
+    const lngDelta = 360 / Math.pow(2, zoom);
+
+    const visibleLocations = locations.filter(loc => {
+      if (loc.category === 'festival' && !showEvents) return false;
+      const latDiff = Math.abs(loc.lat - baseLat);
+      const lngDiff = Math.abs(loc.lng - baseLng);
+      return latDiff <= latDelta * 1.8 && lngDiff <= lngDelta * 1.8;
+    });
+
+    const coordCounts: Record<string, number> = {};
+    const adjustedLocations = visibleLocations.map(loc => {
+      const key = `${loc.lat.toFixed(6)},${loc.lng.toFixed(6)}`;
+      if (coordCounts[key] !== undefined) {
+        coordCounts[key]++;
+        const count = coordCounts[key];
+        const angle = count * (2 * Math.PI / 8); // Spread in 8 directions
+        const radius = 0.00012 * Math.ceil(count / 8); // Spread outwards slightly (~12m increments)
+        return {
+          ...loc,
+          lat: loc.lat + radius * Math.cos(angle),
+          lng: loc.lng + radius * Math.sin(angle)
+        };
+      } else {
+        coordCounts[key] = 0;
+        return loc;
+      }
+    });
+
+    return adjustedLocations.map(loc => {
+      const isCurrentUser = loc.id.startsWith('live-current-user-');
+      const isLive = loc.id.startsWith('live-') && !isCurrentUser;
+      const isCheckin = !!loc.user && !isLive && !isCurrentUser;
+      const isRecommended = aiRecommendedIds.includes(loc.id);
+
+      let svg = svgGoldString;
+      if (isCheckin) {
+        svg = svgRedString;
+        if (loc.tag === 'food' || loc.category === 'restaurant') svg = svgFoodString;
+        else if (loc.tag === 'hotel' || loc.category === 'hotel') svg = svgHotelString;
+        else if (loc.tag === 'cafe' || loc.category === 'cafe') svg = svgCafeString;
+        else if (loc.tag === 'nature' || loc.category === 'nature') svg = svgNatureString;
+      }
+      else if (isLive) svg = svgBlueString;
+      else if (isCurrentUser) svg = svgUserString;
+      else if (isRecommended) svg = svgGreenString;
+      else if (loc.category === 'festival') svg = svgEventString;
+
+      return (
+        <Marker
+          key={loc.id}
+          longitude={loc.lng}
+          latitude={loc.lat}
+          onClick={(e: any) => {
+            e.originalEvent.stopPropagation();
+            setActivePopup(loc);
+            if (onSelectLocation) onSelectLocation(loc);
+            const map = mapRef.current?.getMap();
+            if (map) {
+              map.easeTo({
+                center: [loc.lng, loc.lat],
+                duration: 600
+              });
+            }
+          }}
+          anchor="bottom"
+        >
+          <div 
+            className={`custom-map-marker cursor-pointer hover:scale-110 transition-transform ${isRecommended ? 'animate-bounce' : ''}`}
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        </Marker>
+      );
+    });
+  }, [locations, showEvents, aiRecommendedIds, onSelectLocation, center, zoom]);
+
+  // Memoized Safety Warning Polygons & Lines
+  const renderedSafetyPolygons = React.useMemo(() => {
+    if (!showSafety) return null;
+    return warnings.map((warn) => (
+      <Source key={warn.id} id={`safety-src-${warn.id}`} type="geojson" data={createGeoJSONCircle([warn.latitude, warn.longitude], warn.radiusKm)}>
+        <Layer
+          id={`safety-fill-${warn.id}`}
+          type="fill"
+          paint={{
+            'fill-color': warn.type === 'FLOOD' ? '#3b82f6' : '#ef4444',
+            'fill-opacity': 0.2
+          }}
+        />
+        <Layer
+          id={`safety-line-${warn.id}`}
+          type="line"
+          paint={{
+            'line-color': warn.type === 'FLOOD' ? '#1d4ed8' : '#b91c1c',
+            'line-width': 1.5
+          }}
+        />
+      </Source>
+    ));
+  }, [showSafety, warnings]);
+
+  // Memoized Safety Warnings Markers
+  const renderedSafetyMarkers = React.useMemo(() => {
+    if (!showSafety) return null;
+    return warnings.map(warn => (
+      <Marker
+        key={`warn-marker-${warn.id}`}
+        longitude={warn.longitude}
+        latitude={warn.latitude}
+        onClick={(e: any) => {
+          e.originalEvent.stopPropagation();
+          setActivePopup({
+            id: warn.id,
+            name: `CẢNH BÁO: ${warn.type}`,
+            lat: warn.latitude,
+            lng: warn.longitude,
+            note: warn.description,
+            category: 'SAFETY_WARNING'
+          });
+          const map = mapRef.current?.getMap();
+          if (map) {
+            map.easeTo({
+              center: [warn.longitude, warn.latitude],
+              duration: 600
+            });
+          }
+        }}
+        anchor="center"
+      >
+        <div className="text-xl filter drop-shadow cursor-pointer select-none">⚠️</div>
+      </Marker>
+    ));
+  }, [showSafety, warnings]);
+
+  // Memoized Route Itinerary Line
+  const renderedRouteLine = React.useMemo(() => {
+    if (routePoints.length < 2) return null;
+    return (
+      <Source id="route-line-source" type="geojson" data={routeGeoJSON}>
+        <Layer
+          id="route-line-layer"
+          type="line"
+          paint={{
+            'line-color': '#d4af37',
+            'line-width': 4,
+            'line-opacity': 0.8,
+            'line-dasharray': [2, 2]
+          }}
+        />
+      </Source>
+    );
+  }, [routePoints, routeGeoJSON]);
+
+  // Memoized Local Events Markers
+  const renderedLocalEventsMarkers = React.useMemo(() => {
+    if (!showEvents) return null;
+    return eventsData.map(evt => (
+      <Marker
+        key={`event-marker-${evt.id}`}
+        longitude={evt.longitude}
+        latitude={evt.latitude}
+        onClick={(e: any) => {
+          e.originalEvent.stopPropagation();
+          setActivePopup({
+            id: evt.id,
+            name: evt.title,
+            lat: evt.latitude,
+            lng: evt.longitude,
+            note: evt.description || '',
+            category: `LỄ HỘI: ${evt.category.toUpperCase()}`,
+            time: new Date(evt.startDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')
+          });
+          const map = mapRef.current?.getMap();
+          if (map) {
+            map.easeTo({
+              center: [evt.longitude, evt.latitude],
+              duration: 600
+            });
+          }
+        }}
+        anchor="bottom"
+      >
+        <div 
+          className="custom-event-marker cursor-pointer hover:scale-110 transition-transform"
+          dangerouslySetInnerHTML={{ __html: svgEventString }}
+        />
+      </Marker>
+    ));
+  }, [showEvents, eventsData, vi]);
+
+  // Memoized Weather Stations Layer
+  const renderedWeatherStations = React.useMemo(() => {
+    if (!showWeather) return null;
+    const baseLat = Number(center[0]) || 21.028511;
+    const baseLng = Number(center[1]) || 105.804817;
+    const stations = [
+      { id: 'w1', name: 'Trạm trung tâm', temp: weatherDataState.temp || '28', condition: (weatherDataState.condition || '').toLowerCase().includes('rain') || (weatherDataState.condition || '').toLowerCase().includes('mưa') ? '🌧️' : '☀️', lat: baseLat + 0.015, lng: baseLng - 0.015 },
+      { id: 'w2', name: 'Trạm lân cận', temp: String(Number(weatherDataState.temp || '28') - 1), condition: '☁️', lat: baseLat - 0.015, lng: baseLng + 0.015 }
+    ];
+    return stations.map(station => (
+      <Marker key={station.id} longitude={station.lng} latitude={station.lat} anchor="center">
+        <div className="bg-slate-900/90 border border-slate-700 text-white rounded-full px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold">
+          <span>{station.condition}</span>
+          <span>{station.temp}°C</span>
+        </div>
+      </Marker>
+    ));
+  }, [showWeather, center, weatherDataState]);
+
+  // Memoized Traffic Congestion Layer
+  const renderedTrafficIncidents = React.useMemo(() => {
+    if (!showTraffic) return null;
+    const baseLat = Number(center[0]) || 21.028511;
+    const baseLng = Number(center[1]) || 105.804817;
+    const incidents = [
+      { id: 't1', message: vi ? `Kẹt xe nặng - ${destination || 'Khu vực trung tâm'}` : `Heavy Traffic - ${destination || 'Center'}`, lat: baseLat + 0.01, lng: baseLng + 0.01 },
+      { id: 't2', message: vi ? 'Ùn tắc di chuyển chậm' : 'Congestion - Slow Speed', lat: baseLat - 0.01, lng: baseLng - 0.01 }
+    ];
+    return incidents.map(inc => (
+      <Marker key={inc.id} longitude={inc.lng} latitude={inc.lat} anchor="center">
+        <div className="bg-red-950/95 border border-red-500 text-white rounded-xl px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold max-w-[150px]">
+          <span>🚨</span>
+          <span>{inc.message}</span>
+        </div>
+      </Marker>
+    ));
+  }, [showTraffic, center, vi, destination]);
+
   const timelinePoints = routePoints.length > 0 ? routePoints : locations;
 
   const getGoogleMapsDirUrl = () => {
@@ -607,6 +893,11 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           mapLib={maplibregl}
           {...viewState}
           onMove={(evt: any) => setViewState(evt.viewState)}
+          onMoveEnd={(evt: any) => {
+            if (onCenterChange) {
+              onCenterChange([evt.viewState.latitude, evt.viewState.longitude]);
+            }
+          }}
           onClick={handleMapClick}
           onLoad={handleMapLoad}
           mapStyle={getStyleUrl()}
@@ -622,174 +913,25 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           )}
 
           {/* Draw Safety Warning Polygons */}
-          {showSafety && warnings.map((warn) => (
-            <Source key={warn.id} id={`safety-src-${warn.id}`} type="geojson" data={createGeoJSONCircle([warn.latitude, warn.longitude], warn.radiusKm)}>
-              <Layer
-                id={`safety-fill-${warn.id}`}
-                type="fill"
-                paint={{
-                  'fill-color': warn.type === 'FLOOD' ? '#3b82f6' : '#ef4444',
-                  'fill-opacity': 0.2
-                }}
-              />
-              <Layer
-                id={`safety-line-${warn.id}`}
-                type="line"
-                paint={{
-                  'line-color': warn.type === 'FLOOD' ? '#1d4ed8' : '#b91c1c',
-                  'line-width': 1.5
-                }}
-              />
-            </Source>
-          ))}
-
+          {renderedSafetyPolygons}
+ 
           {/* Draw Dash Route Itinerary Line */}
-          {routePoints.length >= 2 && (
-            <Source id="route-line-source" type="geojson" data={routeGeoJSON}>
-              <Layer
-                id="route-line-layer"
-                type="line"
-                paint={{
-                  'line-color': '#d4af37',
-                  'line-width': 4,
-                  'line-opacity': 0.8,
-                  'line-dasharray': [2, 2]
-                }}
-              />
-            </Source>
-          )}
-
+          {renderedRouteLine}
+ 
           {/* 2. Markers View Mode */}
-          {viewMode === 'markers' && 
-            locations.map(loc => {
-              const isCurrentUser = loc.id.startsWith('live-current-user-');
-              const isLive = loc.id.startsWith('live-') && !isCurrentUser;
-              const isCheckin = !!loc.user && !isLive && !isCurrentUser;
-              const isRecommended = aiRecommendedIds.includes(loc.id);
-
-              let svg = svgGoldString;
-              if (isCheckin) {
-                svg = svgRedString;
-                if (loc.tag === 'food' || loc.category === 'restaurant') svg = svgFoodString;
-                else if (loc.tag === 'hotel' || loc.category === 'hotel') svg = svgHotelString;
-                else if (loc.tag === 'cafe' || loc.category === 'cafe') svg = svgCafeString;
-                else if (loc.tag === 'nature' || loc.category === 'nature') svg = svgNatureString;
-              }
-              else if (isLive) svg = svgBlueString;
-              else if (isCurrentUser) svg = svgUserString;
-              else if (isRecommended) svg = svgGreenString;
-
-              return (
-                <Marker
-                  key={loc.id}
-                  longitude={loc.lng}
-                  latitude={loc.lat}
-                  onClick={(e: any) => {
-                    e.originalEvent.stopPropagation();
-                    setActivePopup(loc);
-                    if (onSelectLocation) onSelectLocation(loc);
-                    const map = mapRef.current?.getMap();
-                    if (map) {
-                      map.easeTo({
-                        center: [loc.lng, loc.lat],
-                        duration: 600
-                      });
-                    }
-                  }}
-                  anchor="bottom"
-                >
-                  <div 
-                    className={`custom-map-marker cursor-pointer hover:scale-110 transition-transform ${isRecommended ? 'animate-bounce' : ''}`}
-                    dangerouslySetInnerHTML={{ __html: svg }}
-                  />
-                </Marker>
-              );
-            })
-          }
-
+          {viewMode === 'markers' && renderedMarkers}
+ 
           {/* Safety Warnings Markers */}
-          {showSafety && warnings.map(warn => (
-            <Marker
-              key={`warn-marker-${warn.id}`}
-              longitude={warn.longitude}
-              latitude={warn.latitude}
-              onClick={(e: any) => {
-                e.originalEvent.stopPropagation();
-                setActivePopup({
-                  id: warn.id,
-                  name: `CẢNH BÁO: ${warn.type}`,
-                  lat: warn.latitude,
-                  lng: warn.longitude,
-                  note: warn.description,
-                  category: 'SAFETY_WARNING'
-                });
-                const map = mapRef.current?.getMap();
-                if (map) {
-                  map.easeTo({
-                    center: [warn.longitude, warn.latitude],
-                    duration: 600
-                  });
-                }
-              }}
-              anchor="center"
-            >
-              <div className="text-xl filter drop-shadow cursor-pointer select-none">⚠️</div>
-            </Marker>
-          ))}
-
+          {renderedSafetyMarkers}
+ 
           {/* Local Events Markers */}
-          {showEvents && eventsData.map(evt => (
-            <Marker
-              key={`event-marker-${evt.id}`}
-              longitude={evt.longitude}
-              latitude={evt.latitude}
-              onClick={(e: any) => {
-                e.originalEvent.stopPropagation();
-                setActivePopup({
-                  id: evt.id,
-                  name: evt.title,
-                  lat: evt.latitude,
-                  lng: evt.longitude,
-                  note: evt.description || '',
-                  category: `LỄ HỘI: ${evt.category.toUpperCase()}`,
-                  time: new Date(evt.startDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')
-                });
-                const map = mapRef.current?.getMap();
-                if (map) {
-                  map.easeTo({
-                    center: [evt.longitude, evt.latitude],
-                    duration: 600
-                  });
-                }
-              }}
-              anchor="bottom"
-            >
-              <div 
-                className="custom-event-marker cursor-pointer hover:scale-110 transition-transform"
-                dangerouslySetInnerHTML={{ __html: svgEventString }}
-              />
-            </Marker>
-          ))}
-
+          {renderedLocalEventsMarkers}
+ 
           {/* Weather Stations Layer */}
-          {showWeather && weatherStations.map(station => (
-            <Marker key={station.id} longitude={station.lng} latitude={station.lat} anchor="center">
-              <div className="bg-slate-900/90 border border-slate-700 text-white rounded-full px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold">
-                <span>{station.condition}</span>
-                <span>{station.temp}°C</span>
-              </div>
-            </Marker>
-          ))}
-
+          {renderedWeatherStations}
+ 
           {/* Traffic Congestion Layer */}
-          {showTraffic && trafficIncidents.map(inc => (
-            <Marker key={inc.id} longitude={inc.lng} latitude={inc.lat} anchor="center">
-              <div className="bg-red-950/95 border border-red-500 text-white rounded-xl px-2 py-1 flex items-center gap-1.5 shadow-lg text-[9px] font-bold max-w-[150px]">
-                <span>🚨</span>
-                <span>{inc.message}</span>
-              </div>
-            </Marker>
-          ))}
+          {renderedTrafficIncidents}
 
           {/* Cluster View Mode */}
           {viewMode === 'cluster' && (

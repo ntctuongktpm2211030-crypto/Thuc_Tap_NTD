@@ -11,16 +11,51 @@ const router = Router();
 // ─────────────────────────────────────────────────────────
 router.post('/checkin', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { destinationId, note } = req.body;
+    const { destinationId, note, customName, latitude, longitude } = req.body;
+
+    let finalDestId = destinationId;
 
     if (!destinationId) {
-      return res.status(400).json({ error: 'destinationId is required.' });
+      if (!customName || latitude === undefined || longitude === undefined) {
+        return res.status(400).json({ error: 'Either destinationId OR customName, latitude, and longitude are required.' });
+      }
+
+      // Check if destination with this custom name and coordinates already exists
+      let existingDest = await prisma.destination.findFirst({
+        where: {
+          name: customName,
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+        },
+      });
+
+      if (!existingDest) {
+        let category = 'checkin';
+        if (note) {
+          try {
+            const parsed = JSON.parse(note);
+            if (parsed.tag) {
+              category = parsed.tag;
+            }
+          } catch (e) {}
+        }
+        existingDest = await prisma.destination.create({
+          data: {
+            name: customName,
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+            category,
+            address: 'Vị trí tự do',
+          },
+        });
+      }
+      finalDestId = existingDest.id;
     }
 
     const checkin = await prisma.checkIn.create({
       data: {
         userId: req.user!.sub,
-        destinationId,
+        destinationId: finalDestId,
         note: note || null,
       },
       include: {
@@ -28,8 +63,6 @@ router.post('/checkin', requireAuth, async (req: AuthRequest, res: Response) => 
         destination: true,
       },
     });
-
-
 
     return res.status(201).json(checkin);
   } catch (err) {
@@ -152,30 +185,26 @@ router.get('/friends-locations', requireAuth, async (req: AuthRequest, res: Resp
 // ─────────────────────────────────────────────────────────
 router.get('/destinations', async (req: AuthRequest, res: Response) => {
   try {
-    const { lat, lng, radius = '50' } = req.query as Record<string, string>;
+    const { lat, lng, radius = '50', q } = req.query as Record<string, string>;
 
-    // If coordinates provided, use spatial filter
+    const whereClause: any = {};
+    if (q) {
+      whereClause.name = { contains: q, mode: 'insensitive' };
+    }
+
     if (lat && lng) {
       const bbox = calculateBoundingBox(
         { latitude: Number(lat), longitude: Number(lng) },
         Number(radius)
       );
-
-      const destinations = await prisma.destination.findMany({
-        where: {
-          latitude: { gte: bbox.minLatitude, lte: bbox.maxLatitude },
-          longitude: { gte: bbox.minLongitude, lte: bbox.maxLongitude },
-        },
-        orderBy: { averageRating: 'desc' },
-      });
-
-      return res.json(destinations);
+      whereClause.latitude = { gte: bbox.minLatitude, lte: bbox.maxLatitude };
+      whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
     }
 
-    // Otherwise return top-rated destinations globally
     const destinations = await prisma.destination.findMany({
+      where: whereClause,
       orderBy: { averageRating: 'desc' },
-      take: 150,
+      take: q ? 100 : 150,
     });
 
     return res.json(destinations);
@@ -280,6 +309,8 @@ router.get('/events', async (req: AuthRequest, res: Response) => {
       ]
     };
 
+    // 1. Fetch from Event table
+    let eventCandidates: any[] = [];
     if (lat && lng) {
       const center = { latitude: Number(lat), longitude: Number(lng) };
       const radiusKm = Number(radius);
@@ -296,24 +327,72 @@ router.get('/events', async (req: AuthRequest, res: Response) => {
         }
       });
 
-      const nearby = candidates
+      eventCandidates = candidates
         .map((evt) => ({
           ...evt,
           distanceKm: calculateHaversineDistance(center, { latitude: evt.latitude, longitude: evt.longitude })
         }))
-        .filter((evt) => evt.distanceKm <= radiusKm)
-        .sort((a, b) => a.distanceKm - b.distanceKm);
-
-      return res.json(nearby);
+        .filter((evt) => evt.distanceKm <= radiusKm);
+    } else {
+      eventCandidates = await prisma.event.findMany({
+        where: whereClause,
+        include: { destination: true },
+        orderBy: { startDate: 'asc' }
+      });
     }
 
-    const events = await prisma.event.findMany({
-      where: whereClause,
-      include: { destination: true },
-      orderBy: { startDate: 'asc' }
-    });
+    // 2. Fetch from Destination table where category is 'festival'
+    let destCandidates: any[] = [];
+    if (lat && lng) {
+      const center = { latitude: Number(lat), longitude: Number(lng) };
+      const radiusKm = Number(radius);
+      const bbox = calculateBoundingBox(center, radiusKm);
 
-    return res.json(events);
+      const dbDests = await prisma.destination.findMany({
+        where: {
+          category: 'festival',
+          latitude: { gte: bbox.minLatitude, lte: bbox.maxLatitude },
+          longitude: { gte: bbox.minLongitude, lte: bbox.maxLongitude },
+        }
+      });
+
+      destCandidates = dbDests
+        .map((d) => ({
+          id: d.id,
+          title: d.name,
+          description: d.description || '',
+          latitude: d.latitude,
+          longitude: d.longitude,
+          category: 'festival',
+          startDate: new Date(),
+          endDate: null,
+          isPublic: true,
+          distanceKm: calculateHaversineDistance(center, { latitude: d.latitude, longitude: d.longitude })
+        }))
+        .filter((d) => d.distanceKm <= radiusKm);
+    } else {
+      const dbDests = await prisma.destination.findMany({
+        where: { category: 'festival' }
+      });
+      destCandidates = dbDests.map((d) => ({
+        id: d.id,
+        title: d.name,
+        description: d.description || '',
+        latitude: d.latitude,
+        longitude: d.longitude,
+        category: 'festival',
+        startDate: new Date(),
+        endDate: null,
+        isPublic: true
+      }));
+    }
+
+    // 3. Merge and sort
+    const merged = [...eventCandidates, ...destCandidates];
+    if (lat && lng) {
+      merged.sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
+    }
+    return res.json(merged);
   } catch (err) {
     console.error('[map/events GET]', err);
     return res.status(500).json({ error: 'Failed to fetch events.' });

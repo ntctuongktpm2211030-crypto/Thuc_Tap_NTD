@@ -198,8 +198,8 @@ export const postsService = {
 // MAP / GIS
 // ─────────────────────────────────────────────────────────
 export const mapService = {
-  DiemDanh: (destinationId: string, note?: string) =>
-    apiClient.post('/map/checkin', { destinationId, note }).then(r => r.data),
+  DiemDanh: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
+    apiClient.post('/map/checkin', { destinationId, note, customName, latitude, longitude }).then(r => r.data),
   DiemDanhGanDay: (limit?: number) =>
     apiClient.get('/map/checkins', { params: { limit } }).then(r => r.data),
   DiemDanhLanCan: (lat: number, lng: number, radius?: number) =>
@@ -207,7 +207,7 @@ export const mapService = {
   CapNhatToaDo: (latitude: number, longitude: number) =>
     apiClient.put('/map/location', { latitude, longitude }).then(r => r.data),
   ToaDoBanBe: () => apiClient.get('/map/friends-locations').then(r => r.data),
-  LayDanhSachDiemDen: (params?: { lat?: number; lng?: number; radius?: number }) =>
+  LayDanhSachDiemDen: (params?: { lat?: number; lng?: number; radius?: number; q?: string }) =>
     apiClient.get<Destination[]>('/map/destinations', { params }).then(r => r.data),
   CanhBaoAnToan: (params?: { lat?: number; lng?: number; radius?: number }) =>
     apiClient.get('/map/safety-warnings', { params }).then(r => r.data),
@@ -221,12 +221,13 @@ export const mapService = {
     apiClient.post('/map/ai-assistant', { destinationId, question }).then(r => r.data),
 
   // Alias tương thích ngược
-  checkIn: (destinationId: string, note?: string) => mapService.DiemDanh(destinationId, note),
+  checkIn: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
+    mapService.DiemDanh(destinationId, note, customName, latitude, longitude),
   recentCheckins: (limit?: number) => mapService.DiemDanhGanDay(limit),
   nearbyCheckins: (lat: number, lng: number, radius?: number) => mapService.DiemDanhLanCan(lat, lng, radius),
   updateLocation: (latitude: number, longitude: number) => mapService.CapNhatToaDo(latitude, longitude),
   friendsLocations: () => mapService.ToaDoBanBe(),
-  destinations: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachDiemDen(params),
+  destinations: (params?: { lat?: number; lng?: number; radius?: number; q?: string }) => mapService.LayDanhSachDiemDen(params),
   safetyWarnings: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.CanhBaoAnToan(params),
   events: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachSuKien(params),
   weather: (params: { location: string }) => mapService.LayThongTinThoiTiet(params),

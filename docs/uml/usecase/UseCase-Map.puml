@@ -44,6 +44,12 @@ rectangle "Bản đồ Tương tác & GIS" {
     usecase "Tải lên hình ảnh check-in\n(Upload Check-in Photo)" as UC_UploadCheckinPhoto
     usecase "Xem Community Check-Ins\n(View Community Check-ins)" as UC_ViewCommunityCheckins
   }
+
+  package "Sự kiện & Giao lưu\n(Local Events & Meetups)" {
+    usecase "Xem danh sách sự kiện và lễ hội\n(Browse Events & Festivals)" as UC_BrowseEvents
+    usecase "Đăng ký tham gia sự kiện\n(Register to Join Event)" as UC_JoinEvent
+    usecase "Tạo sự kiện địa phương mới\n(Create Local Event)" as UC_CreateEvent
+  }
 }
 
 ' Guest Associations
@@ -56,6 +62,7 @@ Guest -- UC_FilterCategories
 Guest -- UC_ViewAttractionDetail
 Guest -- UC_ViewHeatmap
 Guest -- UC_ViewCommunityCheckins
+Guest -- UC_BrowseEvents
 
 ' Registered User Associations
 RegisteredUser -- UC_GetCurrentLocation
@@ -64,6 +71,8 @@ RegisteredUser -- UC_ViewRouteDirections
 RegisteredUser -- UC_AIRecommendations
 RegisteredUser -- UC_FindNearbyUsers
 RegisteredUser -- UC_PerformCheckin
+RegisteredUser -- UC_JoinEvent
+RegisteredUser -- UC_CreateEvent
 
 ' Relationships (include / extend)
 UC_FilterCategories ..> UC_ViewMap : <<extend>>

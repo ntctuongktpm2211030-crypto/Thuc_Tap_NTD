@@ -811,23 +811,13 @@
   },
   {
     "province": "Cần Thơ",
-    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
-    "content": "Lễ hội Kỳ yên Đình thần Uyên Hưng... tại thị xã Bến Cát...",
+    "title": "Lễ hội Kỳ yên Đình thần Bình Thủy Cần Thơ",
+    "content": "Lễ hội Kỳ yên Đình thần Bình Thủy... tại thị xã Bình Thủy...",
     "category": "festival",
     "latitude": 10.036201,
     "longitude": 105.788026,
     "costEstimate": 0,
-    "address": "Thị xã Bến Cát, Tỉnh Bình Dương (ghi chú: tên địa danh trong content có thể nhầm lẫn với Cần Thơ)"
-  },
-  {
-    "province": "Cần Thơ",
-    "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
-    "content": "Đình thần Uyên Hưng tọa lạc tại thị xã Bến Cát, tỉnh Bình Dương...",
-    "category": "attraction",
-    "latitude": 10.036201,
-    "longitude": 105.788026,
-    "costEstimate": 0,
-    "address": "Thị xã Bến Cát, Tỉnh Bình Dương"
+    "address": "Bình Thủy"
   },
   {
     "province": "Cần Thơ",
