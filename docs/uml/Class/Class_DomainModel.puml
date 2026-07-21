@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Domain Model (Prisma Database Schema)" {
+package "Mo hinh Du lieu he thong (Domain Model)" {
 
-  class "User" as User {
+  class "Du Lieu Nguoi Dung\n(User)" as User {
     + id: String <<PK>>
     + email: String <<UNIQUE>>
     + passwordHash: String
@@ -17,7 +17,7 @@ package "Domain Model (Prisma Database Schema)" {
     + updatedAt: DateTime
   }
 
-  class "Profile" as Profile {
+  class "Du Lieu Ca Nhan\n(Profile)" as Profile {
     + id: String <<PK>>
     + userId: String <<FK>> <<UNIQUE>>
     + fullName: String
@@ -28,7 +28,7 @@ package "Domain Model (Prisma Database Schema)" {
     + homeLocation: String [0..1]
   }
 
-  class "TravelPreferences" as TravelPreferences {
+  class "So Thich Du Lich\n(TravelPreferences)" as TravelPreferences {
     + id: String <<PK>>
     + userId: String <<FK>> <<UNIQUE>>
     + preferredPace: String
@@ -38,7 +38,7 @@ package "Domain Model (Prisma Database Schema)" {
     + foodPreferences: String[]
   }
 
-  class "Trip" as Trip {
+  class "Du Lieu Chuyen Di\n(Trip)" as Trip {
     + id: String <<PK>>
     + ownerId: String <<FK>>
     + title: String
@@ -55,14 +55,14 @@ package "Domain Model (Prisma Database Schema)" {
     + updatedAt: DateTime
   }
 
-  class "TripDay" as TripDay {
+  class "Ngay Chuyen Di\n(TripDay)" as TripDay {
     + id: String <<PK>>
     + tripId: String <<FK>>
     + dayIndex: Int
     + date: DateTime [0..1]
   }
 
-  class "TripActivity" as TripActivity {
+  class "Hoat Dong Chuyen Di\n(TripActivity)" as TripActivity {
     + id: String <<PK>>
     + tripDayId: String <<FK>>
     + destinationId: String <<FK>> [0..1]
@@ -76,7 +76,7 @@ package "Domain Model (Prisma Database Schema)" {
     + notes: String [0..1]
   }
 
-  class "Destination" as Destination {
+  class "Du Lieu Diem Den\n(Destination)" as Destination {
     + id: String <<PK>>
     + name: String
     + description: String [0..1]
@@ -88,7 +88,7 @@ package "Domain Model (Prisma Database Schema)" {
     + openingHours: String [0..1]
   }
 
-  class "Post" as Post {
+  class "Du Lieu Bai Dang\n(Post)" as Post {
     + id: String <<PK>>
     + authorId: String <<FK>>
     + content: String
@@ -99,7 +99,7 @@ package "Domain Model (Prisma Database Schema)" {
     + deletedAt: DateTime [0..1]
   }
 
-  class "Comment" as Comment {
+  class "Du Lieu Binh Luan\n(Comment)" as Comment {
     + id: String <<PK>>
     + postId: String <<FK>>
     + authorId: String <<FK>>
@@ -108,14 +108,14 @@ package "Domain Model (Prisma Database Schema)" {
     + createdAt: DateTime
   }
 
-  class "Like" as Like {
+  class "Du Lieu Luot Thich\n(Like)" as Like {
     + id: String <<PK>>
     + postId: String <<FK>>
     + userId: String <<FK>>
     + createdAt: DateTime
   }
 
-  class "Bookmark" as Bookmark {
+  class "Du Lieu Luot Luu\n(Bookmark)" as Bookmark {
     + id: String <<PK>>
     + postId: String <<FK>>
     + userId: String <<FK>>

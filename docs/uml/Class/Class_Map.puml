@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Map Module" {
+package "Xu ly Ban do va GIS (Map Module)" {
 
-  class "MapRouter" as MapRouter <<Router>> {
+  class "Chuc Nang Ban Do\n(MapRouter)" as MapRouter <<Router>> {
     + checkin(req: Request, res: Response): Promise<Response>
     + getCheckins(req: Request, res: Response): Promise<Response>
     + getNearbyCheckins(req: Request, res: Response): Promise<Response>

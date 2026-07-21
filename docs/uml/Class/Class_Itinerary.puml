@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Itinerary Module " {
+package "Phan he Hanh trinh tu do (Itinerary Module)" {
 
-  class "ItineraryController" as ItineraryController {
+  class "Chuc Nang Hanh Trinh Tu Do\n(ItineraryController)" as ItineraryController {
     - service : ItineraryService
     + constructor()
     + createItinerary(req: Request, res: Response): Promise<Response>
@@ -17,7 +17,7 @@ package "Itinerary Module " {
     + deleteActivity(req: Request, res: Response): Promise<Response>
   }
 
-  class "ItineraryService" as ItineraryService {
+  class "Dich Vu Hanh Trinh Tu Do\n(ItineraryService)" as ItineraryService {
     - repo : ItineraryRepository
     + constructor()
     + createItinerary(userId: String, data: CreateItineraryDto): Promise<Trip>
@@ -29,7 +29,7 @@ package "Itinerary Module " {
     + deleteActivity(activityId: String, userId: String): Promise<any>
   }
 
-  class "ItineraryRepository" as ItineraryRepository {
+  class "Luu Tru Hanh Trinh Tu Do\n(ItineraryRepository)" as ItineraryRepository {
     + createItinerary(userId: String, title: String, description?: String): Promise<Trip>
     + getItinerariesByUserId(userId: String): Promise<Trip[]>
     + getItineraryById(id: String, userId: String): Promise<Trip | null>

@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "AI Agents Module " {
+package "Dieu hanh cac Tro ly AI (AI Agents Module)" {
 
-  class "AgentController" as AgentController {
+  class "Chuc Nang Tro Ly AI\n(AgentController)" as AgentController {
     - executor : AgentExecutorService
     + constructor()
     + chat(req: Request, res: Response): Promise<Response>
@@ -13,7 +13,7 @@ package "AI Agents Module " {
     + getAgentState(req: Request, res: Response): Promise<Response>
   }
 
-  class "AgentExecutorService" as AgentExecutorService {
+  class "Dieu Hanh Tro Ly AI\n(AgentExecutorService)" as AgentExecutorService {
     - strategies : Record<AgentType, AgentStrategy>
     - addressService : AddressService
     - stateService : ConversationStateService
@@ -28,16 +28,16 @@ package "AI Agents Module " {
     + getStateService(): ConversationStateService
   }
 
-  class "AddressService" as AddressService {
+  class "Xu Ly Dia Chi\n(AddressService)" as AddressService {
     + parseAddress(address: String): Promise<ParsedAddress>
     + cleanAddress(address: String): String
   }
 
-  interface "AgentStrategy" as AgentStrategy {
+  interface "Chuc Nang Cua Tro Ly\n(AgentStrategy)" as AgentStrategy {
     + execute(input: String, context: AgentContext): Promise<AgentResponse>
   }
 
-  class "TravelAgent" as TravelAgent implements AgentStrategy {
+  class "Tro Ly Hanh Trinh AI\n(TravelAgent)" as TravelAgent implements AgentStrategy {
     - itineraryTool : ItineraryTool
     - mapTool : MapTool
     - weatherTool : WeatherTool
@@ -45,52 +45,52 @@ package "AI Agents Module " {
     + execute(input: String, context: AgentContext): Promise<AgentResponse>
   }
 
-  class "FoodAgent" as FoodAgent implements AgentStrategy {
+  class "Tro Ly Am Thuc AI\n(FoodAgent)" as FoodAgent implements AgentStrategy {
     - foodTool : FoodTool
     + constructor(foodTool: FoodTool)
     + execute(input: String, context: AgentContext): Promise<AgentResponse>
   }
 
-  class "CultureAgent" as CultureAgent implements AgentStrategy {
+  class "Tro Ly Van Hoa AI\n(CultureAgent)" as CultureAgent implements AgentStrategy {
     - cultureTool : CultureTool
     + constructor(cultureTool: CultureTool)
     + execute(input: String, context: AgentContext): Promise<AgentResponse>
   }
 
-  class "RecommendationAgent" as RecommendationAgent implements AgentStrategy {
+  class "Tro Ly Goi Y AI\n(RecommendationAgent)" as RecommendationAgent implements AgentStrategy {
     - recommendationTool : RecommendationTool
     + constructor(recommendationTool: RecommendationTool)
     + execute(input: String, context: AgentContext): Promise<AgentResponse>
   }
 
   ' ─── AGENT TOOLS ───
-  interface "AgentTool" as AgentTool {
+  interface "Cong Cu Tro Ly\n(AgentTool)" as AgentTool {
     + name : String
     + description : String
     + execute(args: any): Promise<any>
   }
 
-  class "MapTool" as MapTool implements AgentTool {
+  class "Nut Tim Ban Do\n(MapTool)" as MapTool implements AgentTool {
     + execute(input: { query: String }): Promise<any>
   }
 
-  class "WeatherTool" as WeatherTool implements AgentTool {
+  class "Nut Xem Thoi Tiet\n(WeatherTool)" as WeatherTool implements AgentTool {
     + execute(input: { location: String, date: String }): Promise<any>
   }
 
-  class "FoodTool" as FoodTool implements AgentTool {
+  class "Nut Tim Mon An\n(FoodTool)" as FoodTool implements AgentTool {
     + execute(input: { query: String, category?: String }): Promise<any>
   }
 
-  class "CultureTool" as CultureTool implements AgentTool {
+  class "Nut Xem Van Hoa\n(CultureTool)" as CultureTool implements AgentTool {
     + execute(input: { region: String }): Promise<any>
   }
 
-  class "RecommendationTool" as RecommendationTool implements AgentTool {
+  class "Nut Tim Goi Y\n(RecommendationTool)" as RecommendationTool implements AgentTool {
     + execute(input: { userId: String }): Promise<any>
   }
 
-  class "ItineraryTool" as ItineraryTool implements AgentTool {
+  class "Nut Xem Lich Trinh\n(ItineraryTool)" as ItineraryTool implements AgentTool {
     + execute(input: { destination: String, days: Int }): Promise<any>
   }
 }

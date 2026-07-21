@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Chatbot & Dialogue Layer " {
+package "Xu ly Chat bot va Hoi thoai (Chatbot & Dialogue Layer)" {
 
-  class "ChatbotController" as ChatbotController {
+  class "Xu Ly Yeu Cau Chatbot\n(ChatbotController)" as ChatbotController {
     - service : ChatbotService
     + constructor()
     + createConversation(req: Request, res: Response): Promise<Response>
@@ -19,7 +19,7 @@ package "Chatbot & Dialogue Layer " {
     + deleteMemory(req: Request, res: Response): Promise<Response>
   }
 
-  class "ChatbotService" as ChatbotService {
+  class "Dich Vu Xu Ly Chatbot\n(ChatbotService)" as ChatbotService {
     - repo : ChatbotRepository
     - agentExecutor : AgentExecutorService
     + constructor()
@@ -34,7 +34,7 @@ package "Chatbot & Dialogue Layer " {
     + deleteMemory(userId: String): Promise<any>
   }
 
-  class "ChatbotRepository" as ChatbotRepository {
+  class "Luu Tru Chatbot\n(ChatbotRepository)" as ChatbotRepository {
     + createConversation(userId: String, title?: String): Promise<ChatConversation>
     + getConversationsByUserId(userId: String): Promise<ChatConversation[]>
     + getConversationById(id: String, userId: String): Promise<ChatConversation | null>
@@ -51,7 +51,7 @@ package "Chatbot & Dialogue Layer " {
     + deleteMemory(userId: String): Promise<any>
   }
 
-  class "ConversationIntelligence" as ConversationIntelligence {
+  class "Bo Nao Chatbot\n(ConversationIntelligence)" as ConversationIntelligence {
     - emotionAnalyzer : EmotionAnalyzer
     - ruleOverride : RuleOverrideEngine
     - contextResolver : ContextResolver
@@ -63,58 +63,58 @@ package "Chatbot & Dialogue Layer " {
     + analyzeQuery(query: String, conversationId: String, currentState: String): Promise<CIMResult>
   }
 
-  class "EmotionAnalyzer" as EmotionAnalyzer {
+  class "Doc Cam Xuc Khach Hang\n(EmotionAnalyzer)" as EmotionAnalyzer {
     + analyze(query: String): EmotionAnalysis
   }
 
-  class "ConversationStateMachine" as ConversationStateMachine {
+  class "Quan Ly Buoc Hoi Thoai\n(ConversationStateMachine)" as ConversationStateMachine {
     + transition(currentState: String, intent: String): String
   }
 
-  class "SlotPolicy" as SlotPolicy {
+  class "Luat Dien Thong Tin\n(SlotPolicy)" as SlotPolicy {
     + apply(intent: String, needSlot: Boolean): SlotPolicyResult
   }
 
-  class "ResponsePolicy" as ResponsePolicy {
+  class "Luat Tra Loi\n(ResponsePolicy)" as ResponsePolicy {
     + resolveTone(emotion: EmotionAnalysis): String
   }
 
-  class "RuleOverrideEngine" as RuleOverrideEngine {
+  class "Bo Sua Loi Chatbot\n(RuleOverrideEngine)" as RuleOverrideEngine {
     + evaluate(query: String, emotion: EmotionAnalysis, context: ContextMemory): IntentResult
   }
 
   ' ─── DIALOGUE LAYER SERVICES ───
-  class "ConversationStateService" as ConversationStateService {
+  class "Luu Trang Thai Chat\n(ConversationStateService)" as ConversationStateService {
     + getState(userId: String): Promise<ConversationState>
     + saveState(userId: String, state: ConversationState): Promise<void>
     + resetState(userId: String): Promise<void>
   }
 
-  class "TravelIntentService" as TravelIntentService {
+  class "Doan Y Dinh Nguoi Dung\n(TravelIntentService)" as TravelIntentService {
     + classifyIntent(text: String): Promise<IntentClassification>
   }
 
-  class "TravelRerankerService" as TravelRerankerService {
+  class "Chon Loc Dia Diem Hot\n(TravelRerankerService)" as TravelRerankerService {
     + rerankDestinations(results: Destination[], preferences: TravelPreferences): Promise<Destination[]>
   }
 
-  class "SuggestionBuilderService" as SuggestionBuilderService {
+  class "Tao Cau Goi Y\n(SuggestionBuilderService)" as SuggestionBuilderService {
     + buildSuggestions(state: ConversationState): Promise<String[]>
   }
 
-  class "SlotFillingService" as SlotFillingService {
+  class "Ghi Nhan Thong Tin Lich Trinh\n(SlotFillingService)" as SlotFillingService {
     + extractSlots(text: String): Promise<SlotExtractionResult>
   }
 
-  class "ResponsePlanner" as ResponsePlanner {
+  class "Len Ke Hoach Cau Tra Loi\n(ResponsePlanner)" as ResponsePlanner {
     + planResponse(intent: String, state: ConversationState): Promise<ResponsePlan>
   }
 
-  class "ResponseFormatterService" as ResponseFormatterService {
+  class "Trinh Bay Cau Tra Loi\n(ResponseFormatterService)" as ResponseFormatterService {
     + formatResponse(plan: ResponsePlan, style: ResponseStyle): Promise<String>
   }
 
-  class "PromptComposerService" as PromptComposerService {
+  class "Ghep Thong Tin Gui AI\n(PromptComposerService)" as PromptComposerService {
     + composePrompt(state: ConversationState, ragContext: String): String
   }
 }

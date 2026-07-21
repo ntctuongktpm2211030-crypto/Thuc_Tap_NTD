@@ -3,26 +3,26 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Authentication Module " {
+package "Xu ly Dang nhap Dang ky (Authentication Module)" {
   
-  interface "AuthRequest" as AuthRequest {
+  interface "Yeu Cau Xac Thuc\n(AuthRequest)" as AuthRequest {
     + user : { sub: String, role: String } [0..1]
   }
 
-  class "EmailService" as EmailService {
+  class "Dich Vu Gui Email\n(EmailService)" as EmailService {
     - transporter : Transporter
     + constructor()
     + sendVerificationEmail(to: String, token: String): Promise<Boolean>
     + sendResetPasswordOtp(to: String, otp: String): Promise<Boolean>
   }
 
-  class "AuthMiddleware" as AuthMiddleware <<Middleware-Functions>> {
+  class "Kiem Tra Dang Nhap\n(AuthMiddleware)" as AuthMiddleware <<Middleware-Functions>> {
     + requireAuth(req: Request, res: Response, next: NextFunction): void
     + requireAdmin(req: Request, res: Response, next: NextFunction): void
     + optionalAuth(req: Request, res: Response, next: NextFunction): void
   }
 
-  class "AuthRouter" as AuthRouter <<Router-Object>> {
+  class "Chuc Nang Dang Nhap Dang Ky\n(AuthRouter)" as AuthRouter <<Router-Object>> {
     - emailService : EmailService
     + register(req: Request, res: Response): Promise<void>
     + login(req: Request, res: Response): Promise<void>

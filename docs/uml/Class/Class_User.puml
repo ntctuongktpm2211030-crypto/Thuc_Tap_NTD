@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "User Entities " {
+package "Du lieu Nguoi dung va Ca nhan hoa (User Entities)" {
 
-  class "User" as User {
+  class "Du Lieu Nguoi Dung\n(User)" as User {
     + id: String <<PK>>
     + email: String <<UNIQUE>>
     + passwordHash: String
@@ -17,7 +17,7 @@ package "User Entities " {
     + updatedAt: DateTime
   }
 
-  class "Profile" as Profile {
+  class "Du Lieu Ca Nhan\n(Profile)" as Profile {
     + id: String <<PK>>
     + userId: String <<FK>> <<UNIQUE>>
     + fullName: String
@@ -28,7 +28,7 @@ package "User Entities " {
     + homeLocation: String [0..1]
   }
 
-  class "TravelPreferences" as TravelPreferences {
+  class "So Thich Du Lich\n(TravelPreferences)" as TravelPreferences {
     + id: String <<PK>>
     + userId: String <<FK>> <<UNIQUE>>
     + preferredPace: String
@@ -38,7 +38,7 @@ package "User Entities " {
     + foodPreferences: String[]
   }
 
-  class "AIMemory" as AIMemory {
+  class "Bo Nho AI\n(AIMemory)" as AIMemory {
     + id: String <<PK>>
     + userId: String <<FK>> <<UNIQUE>>
     + travelPreferences: String[]
@@ -50,14 +50,14 @@ package "User Entities " {
     + updatedAt: DateTime
   }
 
-  class "Follower" as Follower {
+  class "Du Lieu Theo Doi\n(Follower)" as Follower {
     + id: String <<PK>>
     + followerId: String <<FK>>
     + followingId: String <<FK>>
     + createdAt: DateTime
   }
 
-  class "Notification" as Notification {
+  class "Du Lieu Thong Bao\n(Notification)" as Notification {
     + id: String <<PK>>
     + recipientId: String <<FK>>
     + type: String

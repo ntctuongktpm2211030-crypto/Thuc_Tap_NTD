@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Post Entities " {
+package "Du lieu Bai dang va Tuong tac (Post Entities)" {
 
-  class "Post" as Post {
+  class "Du Lieu Bai Dang\n(Post)" as Post {
     + id: String <<PK>>
     + authorId: String <<FK>>
     + content: String
@@ -16,7 +16,7 @@ package "Post Entities " {
     + deletedAt: DateTime [0..1]
   }
 
-  class "Comment" as Comment {
+  class "Du Lieu Binh Luan\n(Comment)" as Comment {
     + id: String <<PK>>
     + postId: String <<FK>>
     + authorId: String <<FK>>
@@ -25,14 +25,14 @@ package "Post Entities " {
     + createdAt: DateTime
   }
 
-  class "Like" as Like {
+  class "Du Lieu Luot Thich\n(Like)" as Like {
     + id: String <<PK>>
     + postId: String <<FK>>
     + userId: String <<FK>>
     + createdAt: DateTime
   }
 
-  class "Bookmark" as Bookmark {
+  class "Du Lieu Luot Luu\n(Bookmark)" as Bookmark {
     + id: String <<PK>>
     + postId: String <<FK>>
     + userId: String <<FK>>

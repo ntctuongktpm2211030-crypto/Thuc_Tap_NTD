@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Trip Entities " {
+package "Du lieu Hanh trinh va Dia diem (Trip Entities)" {
 
-  class "Trip" as Trip {
+  class "Du Lieu Chuyen Di\n(Trip)" as Trip {
     + id: String <<PK>>
     + ownerId: String <<FK>>
     + title: String
@@ -22,14 +22,14 @@ package "Trip Entities " {
     + updatedAt: DateTime
   }
 
-  class "TripDay" as TripDay {
+  class "Ngay Chuyen Di\n(TripDay)" as TripDay {
     + id: String <<PK>>
     + tripId: String <<FK>>
     + dayIndex: Int
     + date: DateTime [0..1]
   }
 
-  class "TripActivity" as TripActivity {
+  class "Hoat Dong Chuyen Di\n(TripActivity)" as TripActivity {
     + id: String <<PK>>
     + tripDayId: String <<FK>>
     + destinationId: String <<FK>> [0..1]
@@ -43,7 +43,7 @@ package "Trip Entities " {
     + notes: String [0..1]
   }
 
-  class "Destination" as Destination {
+  class "Du Lieu Diem Den\n(Destination)" as Destination {
     + id: String <<PK>>
     + name: String
     + description: String [0..1]
@@ -55,7 +55,7 @@ package "Trip Entities " {
     + openingHours: String [0..1]
   }
 
-  class "SavedPlace" as SavedPlace {
+  class "Du Lieu Dia Diem Da Luu\n(SavedPlace)" as SavedPlace {
     + id: String <<PK>>
     + userId: String <<FK>>
     + name: String
@@ -68,7 +68,7 @@ package "Trip Entities " {
     + updatedAt: DateTime
   }
 
-  class "FavoriteFood" as FavoriteFood {
+  class "Du Lieu Mon An Yeu Thich\n(FavoriteFood)" as FavoriteFood {
     + id: String <<PK>>
     + userId: String <<FK>>
     + name: String

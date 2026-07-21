@@ -4,44 +4,44 @@ skinparam linetype ortho
 skinparam ranksep 100
 skinparam nodesep 80
 
-package "Client Layer" {
-  component "React Web UI" as Frontend
+package "Giao dien Nguoi dung (Client Layer)" {
+  component "Giao dien Web\n(React Web UI)" as Frontend
 }
 
-package "Routing & Security Layer" {
-  component "Express Router Core" as ExpressRouter
-  component "Auth Middleware" as AuthMiddleware
+package "Kiem soat & Dinh tuyen (Routing & Security Layer)" {
+  component "Dinh tuyen Core\n(Express Router Core)" as ExpressRouter
+  component "Kiem tra Dang nhap\n(Auth Middleware)" as AuthMiddleware
 }
 
-package "Business Layer" {
-  folder "User Management" {
-    component "Email Service" as EmailService
-    component "Saved Place Service" as SavedPlaceService
-    component "Favorite Food Service" as FavoriteFoodService
+package "Phan he Nghiep vu (Business Layer)" {
+  folder "Quan ly Thanh vien" {
+    component "Dich vu gui email\n(Email Service)" as EmailService
+    component "Dich vu dia diem da luu\n(Saved Place Service)" as SavedPlaceService
+    component "Dich vu mon an yeu thich\n(Favorite Food Service)" as FavoriteFoodService
   }
   
-  folder "Social & Interactions" {
-    component "Social Router" as SocialRouter
-    component "Posts Router" as PostsRouter
+  folder "Mang xa hoi va Tuong tac" {
+    component "Chuc nang ket noi ban be\n(Social Router)" as SocialRouter
+    component "Chuc nang bai dang va binh luan\n(Posts Router)" as PostsRouter
   }
 
-  folder "Trip & Itineraries" {
-    component "Itinerary Service" as ItineraryService
-    component "Travel History Service" as TravelHistoryService
-    component "Trips Router" as TripsRouter
+  folder "Hanh trinh va Chuyen di" {
+    component "Dich vu hanh trinh tu do\n(Itinerary Service)" as ItineraryService
+    component "Dich vu lich su du lich\n(Travel History Service)" as TravelHistoryService
+    component "Chuc nang chuyen di\n(Trips Router)" as TripsRouter
   }
 
-  folder "AI Assistant & RAG" {
-    component "Chatbot Service" as ChatbotService
-    component "Agent Executor Service" as AgentExecutorService
-    component "RAG Orchestrator Service" as RagOrchestratorService
-    component "Recommendation Service" as RecommendationService
+  folder "Tro ly AI va Du lieu Ca Mau" {
+    component "Dich vu chat bot\n(Chatbot Service)" as ChatbotService
+    component "Dieu hanh cac Tro ly AI\n(Agent Executor Service)" as AgentExecutorService
+    component "Dieu Phoi RAG\n(RagOrchestratorService)" as RagOrchestratorService
+    component "Dich vu goi y\n(Recommendation Service)" as RecommendationService
   }
 
-  folder "System Utilities" {
-    component "Cache Service" as CacheService
-    component "Feedback Service" as FeedbackService
-    component "Tool Call Service" as ToolCallService
+  folder "Tien ich he thong" {
+    component "Bo nho tam\n(Cache Service)" as CacheService
+    component "Nguoi dung danh gia AI\n(Feedback Service)" as FeedbackService
+    component "Nhat ky goi AI\n(Tool Call Service)" as ToolCallService
   }
 }
 

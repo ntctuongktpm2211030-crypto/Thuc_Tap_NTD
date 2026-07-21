@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Posts Module " {
+package "Xu ly Bai dang va Binh luan (Posts Module)" {
 
-  class "PostsRouter" as PostsRouter <<Router>> {
+  class "Chuc Nang Bai Dang va Binh Luan\n(PostsRouter)" as PostsRouter <<Router>> {
     + getPosts(req: Request, res: Response): Promise<Response>
     + getPostById(req: Request, res: Response): Promise<Response>
     + createPost(req: Request, res: Response): Promise<Response>

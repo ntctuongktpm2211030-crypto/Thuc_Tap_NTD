@@ -3,9 +3,9 @@
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-package "Trips Module " {
+package "Xu ly Chuyen di du lich (Trips Module)" {
 
-  class "TripsRouter" as TripsRouter <<Router>> {
+  class "Chuc Nang Chuyen Di\n(TripsRouter)" as TripsRouter <<Router>> {
     + getTrips(req: Request, res: Response): Promise<Response>
     + getTripById(req: Request, res: Response): Promise<Response>
     + createTrip(req: Request, res: Response): Promise<Response>
@@ -17,7 +17,7 @@ package "Trips Module " {
     + cloneTrip(req: Request, res: Response): Promise<Response>
   }
 
-  interface "CreateTripDto" as CreateTripDto {
+  interface "Thong Tin Tao Chuyen Di\n(CreateTripDto)" as CreateTripDto {
     + title: String
     + destinationName: String
     + startDate: DateTime [0..1]
@@ -26,7 +26,7 @@ package "Trips Module " {
     + travelStyle: String
   }
 
-  interface "UpdateTripDto" as UpdateTripDto {
+  interface "Thong Tin Cap Nhat Chuyen Di\n(UpdateTripDto)" as UpdateTripDto {
     + title: String [0..1]
     + destinationName: String [0..1]
     + startDate: DateTime [0..1]
