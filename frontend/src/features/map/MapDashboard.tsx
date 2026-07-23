@@ -20,6 +20,113 @@ const MapDashboard = () => {
   const userLocationRef = useRef<[number, number] | null>(null);
   const selectedCenterRef = useRef<[number, number]>([21.028511, 105.804817]);
   const lastLocationSentRef = useRef<{ lat: number; lng: number; time: number }>({ lat: 0, lng: 0, time: 0 });
+  const toast = useToast();
+
+  const fetchIpLocation = async (): Promise<[number, number] | null> => {
+    // Layer 1: ip-api.com (Free, no key needed, returns lat/lon)
+    try {
+      const res = await fetch('https://ip-api.com/json/');
+      const data = await res.json();
+      if (data && data.status === 'success' && data.lat && data.lon) {
+        const coords: [number, number] = [data.lat, data.lon];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+        console.log(`🎯 IP location acquired (ip-api.com):`, coords);
+        return coords;
+      }
+    } catch (err) {
+      console.warn('ip-api.com failed, trying ipwho.is...');
+    }
+
+    // Layer 2: ipwho.is (Free 10,000 req/month, returns latitude/longitude)
+    try {
+      const res = await fetch('https://ipwho.is/');
+      const data = await res.json();
+      if (data && data.success && data.latitude && data.longitude) {
+        const coords: [number, number] = [data.latitude, data.longitude];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+        console.log(`🎯 IP location acquired (ipwho.is):`, coords);
+        return coords;
+      }
+    } catch (err) {
+      console.warn('ipwho.is failed, trying ipapi.co...');
+    }
+
+    // Layer 3: ipapi.co
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      if (data && data.latitude && data.longitude) {
+        const coords: [number, number] = [data.latitude, data.longitude];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+        console.log(`🎯 IP location acquired (ipapi.co):`, coords);
+        return coords;
+      }
+    } catch (err) {
+      console.warn('ipapi.co failed');
+    }
+
+    // Layer 4: Default fallback location (Cần Thơ)
+    const defaultCoords: [number, number] = [10.03711, 105.78825];
+    setUserLocation(defaultCoords);
+    userLocationRef.current = defaultCoords;
+    setSelectedCenter(defaultCoords);
+    return defaultCoords;
+  };
+
+  const requestMyLocation = () => {
+    if (!isAuthenticated) {
+      toast.warning(vi ? 'Bạn cần đăng nhập để định vị vị trí của mình!' : 'You need to log in to acquire your location!');
+      navigate('/auth', { state: { from: '/map' } });
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      void fetchIpLocation().then(coords => {
+        if (coords) {
+          toast.location(
+            vi ? `Đã xác định vị trí qua IP mạng!` : `Location acquired via IP!`,
+            `[${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]`,
+            { title: vi ? 'Vị trí mạng IP' : 'Network IP Location' }
+          );
+        }
+      });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const coords: [number, number] = [latitude, longitude];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+        toast.location(
+          vi ? `Đã định vị thành công vị trí GPS của bạn!` : `GPS Location acquired successfully!`,
+          `[${latitude.toFixed(4)}, ${longitude.toFixed(4)}]`,
+          { title: vi ? 'Vị trí hiện tại' : 'Current Location' }
+        );
+        console.log(`🎯 User requested GPS location: [${latitude}, ${longitude}]`);
+      },
+      async (error) => {
+        console.warn('⚠️ GPS Location denied/failed, switching to IP fallback:', error.message);
+        const coords = await fetchIpLocation();
+        if (coords) {
+          toast.location(
+            vi ? `Đã định vị vị trí của bạn qua IP mạng!` : `Location acquired via IP network!`,
+            `[${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]`,
+            { title: vi ? 'Vị trí mạng IP' : 'Network IP Location' }
+          );
+        }
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
 
   // Core map states
   const [locations, setLocations] = useState<MapLocation[]>([]);
@@ -120,62 +227,14 @@ const MapDashboard = () => {
     }
   };
 
-  const requestMyLocation = () => {
-    if (!isAuthenticated) {
-      alert(vi ? 'Bạn cần đăng nhập để định vị vị trí của mình!' : 'You need to log in to acquire your location!');
-      navigate('/auth', { state: { from: '/map' } });
-      return;
-    }
-    if (!navigator.geolocation) {
-      alert(vi ? 'Trình duyệt của bạn không hỗ trợ định vị GPS.' : 'Geolocation is not supported by your browser.');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation([latitude, longitude]);
-        setSelectedCenter([latitude, longitude]);
-        alert(vi 
-          ? `Đã nhận diện tọa độ của bạn: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]` 
-          : `Location acquired: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]`
-        );
-        console.log(`🎯 User requested location: [${latitude}, ${longitude}]`);
-      },
-      (error) => {
-        console.warn('⚠️ Real User Location denied/failed:', error.message);
-        alert(vi 
-          ? 'Không nhận được hoặc không xác nhận được tọa độ của bạn. Vui lòng đồng ý chia sẻ vị trí (GPS) trong phần cài đặt trình duyệt hoặc Windows để sử dụng tính năng này!' 
-          : 'Unable to acquire or verify your coordinates. Please grant location sharing permission (GPS) in your browser/OS settings!'
-        );
-      },
-      { enableHighAccuracy: false, timeout: 6000 }
-    );
-  };
-
   useEffect(() => {
     loadMapData();
   }, []);
 
-  // Request actual browser geolocation on mount for everyone to center the map
+  // Request actual browser geolocation on mount with IP fallback chain
   useEffect(() => {
-    const fetchIpLocation = async () => {
-      try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        if (data && data.latitude && data.longitude) {
-          setUserLocation([data.latitude, data.longitude]);
-          userLocationRef.current = [data.latitude, data.longitude];
-          setSelectedCenter([data.latitude, data.longitude]);
-          console.log(`🎯 IP-based location acquired on fallback: [${data.latitude}, ${data.longitude}]`);
-        }
-      } catch (ipErr) {
-        console.error('Failed to get IP-based location:', ipErr);
-      }
-    };
-
     if (!navigator.geolocation) {
-      fetchIpLocation();
+      void fetchIpLocation();
       return;
     }
 
@@ -189,7 +248,7 @@ const MapDashboard = () => {
       },
       (error) => {
         console.warn('⚠️ Auto-location on mount denied/failed:', error.message);
-        fetchIpLocation();
+        void fetchIpLocation();
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
