@@ -9,7 +9,7 @@ import {
   MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
   Flame, Globe,
 } from 'lucide-react';
-import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
+import { NAV_ICONS, FILTER_ICONS, ModernIconPod } from '../../config/modernIcons';
 import { FEED_POSTS, COMPANION_CANDIDATES, MOCK_STORIES } from '../../data/feedData';
 import type { FeedStoryItem, StoredStory } from '../../types/story';
 import { mergeStories, storedToFeedItem } from '../../utils/storyStorage';
@@ -674,7 +674,25 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
         ))}
       </div>
 
-      {/* Stats card */}
+      {/* Travel Tips Widget */}
+      <div className="sidebar-section space-y-3 animate-fade-in">
+        <div className="flex items-center gap-2">
+          <Sparkles size={14} className="text-amber-400" />
+          <p className="sidebar-title mb-0">Mẹo Xê Dịch Hữu Ích</p>
+        </div>
+        <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
+          <li className="flex items-start gap-2 bg-[var(--bg-elevated)]/60 p-2 rounded-xl border border-[var(--border-subtle)]">
+            <span className="text-sm">🧳</span>
+            <span><strong>Hành lý gọn nhẹ:</strong> Ưu tiên trang phục đa năng & đồ cá nhân cơ bản.</span>
+          </li>
+          <li className="flex items-start gap-2 bg-[var(--bg-elevated)]/60 p-2 rounded-xl border border-[var(--border-subtle)]">
+            <span className="text-sm">🗺️</span>
+            <span><strong>Bản đồ ngoại tuyến:</strong> Tải sẵn khu vực sắp đến để phòng mất kết nối.</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Community Stats card */}
       <div className="feature-strip text-center space-y-2 animate-fade-in">
         <div className="text-xs font-bold text-[var(--gold)] uppercase tracking-widest">Cộng đồng</div>
         <div className="grid grid-cols-3 gap-2">
@@ -776,6 +794,30 @@ const RightSidebar = ({
               </span>
             );
           })}
+        </div>
+      </div>
+
+      {/* Weather Forecast Widget */}
+      <div className="sidebar-section bg-gradient-to-br from-sky-500/10 via-brand-500/10 to-indigo-500/10 border border-sky-500/20 animate-fade-in space-y-2">
+        <div className="flex items-center justify-between">
+          <p className="sidebar-title text-sky-500 mb-0 flex items-center gap-1.5">
+            <span>☀️</span> Thời Tiết Du Lịch
+          </p>
+          <span className="text-[10px] text-[var(--text-muted)] font-bold">Hôm nay</span>
+        </div>
+        <div className="space-y-1.5 text-xs text-[var(--text-secondary)]">
+          <div className="flex justify-between items-center bg-white/50 dark:bg-slate-900/50 p-2 rounded-xl">
+            <span className="font-bold text-[var(--text-primary)]">Đà Nẵng</span>
+            <span className="text-amber-500 font-bold">28°C ☀️</span>
+          </div>
+          <div className="flex justify-between items-center bg-white/50 dark:bg-slate-900/50 p-2 rounded-xl">
+            <span className="font-bold text-[var(--text-primary)]">Sapa</span>
+            <span className="text-sky-400 font-bold">18°C 🌤️</span>
+          </div>
+          <div className="flex justify-between items-center bg-white/50 dark:bg-slate-900/50 p-2 rounded-xl">
+            <span className="font-bold text-[var(--text-primary)]">Hà Nội</span>
+            <span className="text-emerald-500 font-bold">26°C ⛅</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1015,7 +1057,32 @@ export default function SocialFeedPage() {
   ];
 
   return (
-    <div className="container-wide py-4 sm:py-6">
+    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
+      {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
+      <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="travel-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="40" cy="40" r="1.5" className="fill-brand-500/50" />
+            <path d="M0 40H80M40 0V80" strokeWidth="0.5" strokeDasharray="6 6" className="stroke-slate-300 dark:stroke-slate-800" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#travel-grid)" />
+      </svg>
+
+      {/* ── Background Compass & Flight Arc Vector Artwork ── */}
+      <svg className="absolute top-12 right-12 w-96 h-96 opacity-15 dark:opacity-10 text-brand-500 pointer-events-none" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+        <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
+        <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
+        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
+      </svg>
+
+      {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
+      <div className="absolute top-10 left-10 w-[700px] h-[700px] bg-gradient-to-tr from-brand-500/20 via-sky-500/15 to-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
       <PostDetailModal
         post={detailPost}
         onClose={closePost}
@@ -1045,8 +1112,8 @@ export default function SocialFeedPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
 
         {/* LEFT SIDEBAR */}
-        <aside className="hidden lg:block" key={sidebarTick}>
-          <div className="sticky top-[142px]">
+        <aside className="hidden lg:block h-full" key={sidebarTick}>
+          <div className="sticky top-24 space-y-4">
             <LeftSidebar myPostCount={myPostCount} />
           </div>
         </aside>
@@ -1175,12 +1242,13 @@ export default function SocialFeedPage() {
         </main>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-[142px]">
+        <aside className="hidden lg:block h-full">
+          <div className="sticky top-24 space-y-4">
             <RightSidebar hotDestinations={hotDestinations} companions={companions} />
           </div>
         </aside>
 
+      </div>
       </div>
     </div>
   );

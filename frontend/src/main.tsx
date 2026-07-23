@@ -8,6 +8,10 @@ import App from './App';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LangProvider } from './contexts/LanguageContext';
 
+import { ToastProvider } from './contexts/ToastContext';
+import { ToastContainer } from './components/common/ToastContainer';
+import { ConfirmModal } from './components/common/ConfirmModal';
+
 import { MotionProvider } from './animations';
 
 // Import Mapbox styles for geocoding and routes
@@ -30,11 +34,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <LangProvider>
-            <BrowserRouter>
-              <MotionProvider>
-                <App />
-              </MotionProvider>
-            </BrowserRouter>
+            <ToastProvider>
+              <ToastContainer />
+              <ConfirmModal />
+              <BrowserRouter>
+                <MotionProvider>
+                  <App />
+                </MotionProvider>
+              </BrowserRouter>
+            </ToastProvider>
           </LangProvider>
         </ThemeProvider>
       </QueryClientProvider>

@@ -92,13 +92,40 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="profile-page">
-      <div className="container-wide py-8 max-w-2xl">
-        {/* Section 1: General Settings */}
-        <div className="flex items-center gap-3 mb-6">
-          <Settings size={22} className="text-[var(--gold)]" />
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('userMenu.settings')}</h1>
-        </div>
+    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-hidden animate-fade-in">
+      {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
+      <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="travel-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="40" cy="40" r="1.5" className="fill-brand-500/50" />
+            <path d="M0 40H80M40 0V80" strokeWidth="0.5" strokeDasharray="6 6" className="stroke-slate-300 dark:stroke-slate-800" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#travel-grid)" />
+      </svg>
+
+      {/* ── Background Compass & Flight Arc Vector Artwork ── */}
+      <svg className="absolute top-12 right-12 w-96 h-96 opacity-15 dark:opacity-10 text-brand-500 pointer-events-none" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+        <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
+        <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
+        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
+      </svg>
+
+      {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
+      <div className="absolute top-10 left-10 w-[700px] h-[700px] bg-gradient-to-tr from-brand-500/20 via-sky-500/15 to-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 rounded-3xl shadow-xl space-y-6">
+          {/* Section 1: General Settings */}
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+              <Settings size={24} />
+            </div>
+            <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{t('userMenu.settings')}</h1>
+          </div>
 
         <div className="profile-section-card space-y-4">
           <div className="flex items-center justify-between py-2">
@@ -335,6 +362,7 @@ export default function SettingsPage() {
         <Link to="/profile" className="inline-block mt-6 text-sm font-semibold text-[var(--gold)] hover:underline">
           ← {vi ? 'Về hồ sơ' : 'Back to profile'}
         </Link>
+        </div>
       </div>
     </div>
   );

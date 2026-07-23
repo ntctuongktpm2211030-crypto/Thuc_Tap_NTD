@@ -4,9 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
   MoreHorizontal, Globe, Briefcase, GraduationCap, Image as ImageIcon,
-  Bell
+  Bell, Sparkles, Compass, Send, Check, ChevronRight, Eye, Bookmark, Layers
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
+import { useToast } from '../../contexts/ToastContext';
 import type { RootState, AppDispatch } from '../../store';
 import { setUser } from '../../store/authSlice';
 import { socialService } from '../../services/smartTravel.service';
@@ -32,12 +33,12 @@ const MY_POSTS = [
 ];
 
 const PHOTOS = [
-  'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1557750255-c76072a7aad1?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1557750255-c76072a7aad1?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80',
 ];
 
 const FRIENDS_PREVIEW = [
@@ -53,6 +54,7 @@ type TabId = 'posts' | 'about' | 'photos' | 'trips' | 'notifications';
 
 export default function ProfilePage() {
   const { t, lang } = useLang();
+  const { success, error } = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((s: RootState) => s.auth.user);
   const vi = lang === 'vi';
@@ -90,9 +92,10 @@ export default function ProfilePage() {
       try {
         await socialService.updateProfile({ avatarUrl: base64 });
         dispatch(setUser({ ...user, avatarUrl: base64 }));
+        success(vi ? 'Cập nhật ảnh đại diện thành công!' : 'Avatar updated successfully!');
       } catch (err) {
         console.error('Update avatar failed:', err);
-        alert(vi ? 'Cập nhật ảnh đại diện thất bại' : 'Failed to update avatar');
+        error(vi ? 'Cập nhật ảnh đại diện thất bại' : 'Failed to update avatar');
       }
     };
     reader.readAsDataURL(file);
@@ -119,184 +122,344 @@ export default function ProfilePage() {
   const statFollowers = 342;
 
   return (
-    <div className="fb-profile pt-6">
+    <div className="relative min-h-screen bg-slate-50/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
+      {/* ── Ambient Background Glow Mesh ── */}
+      <div className="absolute top-10 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-brand-500/15 via-sky-500/10 to-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-[600px] right-10 w-[500px] h-[500px] bg-gradient-to-tl from-emerald-500/10 via-brand-500/10 to-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="fb-profile-container">
-        {/* Header: avatar + info + actions */}
-        <div className="fb-profile-header">
-          <div className="fb-profile-avatar-wrap">
-            <div className="fb-profile-avatar">
-              <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" />
-            </div>
-            <label htmlFor="avatar-upload" className="fb-profile-avatar-edit cursor-pointer" aria-label="Edit avatar">
+      {/* ── Main Container matching exact page bounds ── */}
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+        
+        {/* ── Header Cover & Profile Banner Card ── */}
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden">
+          {/* Cover Photo Area */}
+          <div className="relative h-48 sm:h-64 lg:h-72 w-full overflow-hidden bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-700">
+            <img
+              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
+              alt="Cover"
+              className="w-full h-full object-cover opacity-85"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
+            <button
+              type="button"
+              className="absolute bottom-4 right-4 px-3.5 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
+            >
               <Camera size={14} />
-              <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-            </label>
+              <span>{vi ? 'Chỉnh sửa ảnh bìa' : 'Edit Cover'}</span>
+            </button>
           </div>
 
-          <div className="fb-profile-header-main">
-            <h1 className="fb-profile-name">{user.fullName}</h1>
-            <p className="fb-profile-friends">
-              <strong>{following.length > 0 ? following.length : statFriends}</strong> {vi ? 'đang theo dõi' : 'following'} · <strong>{statFollowers}</strong> {vi ? 'người theo dõi' : 'followers'}
-            </p>
-            <p className="fb-profile-location">
-              <MapPin size={14} /> {vi ? 'Hà Nội, Việt Nam' : 'Hanoi, Vietnam'}
-            </p>
-          </div>
+          {/* Profile Details & Avatar Bar */}
+          <div className="px-6 pb-6 pt-2 flex flex-col md:flex-row items-center md:items-end justify-between gap-5 relative">
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 text-center sm:text-left">
+              {/* Profile Avatar with Camera Upload Badge */}
+              <div className="relative -mt-16 sm:-mt-20 group shrink-0">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white dark:border-slate-900 shadow-2xl overflow-hidden bg-slate-200 dark:bg-slate-800">
+                  <img
+                    src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+                    alt={user.fullName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <label
+                  htmlFor="avatar-upload"
+                  className="absolute bottom-1 right-1 p-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-full shadow-lg border-2 border-white dark:border-slate-900 cursor-pointer transition-all hover:scale-110 flex items-center justify-center"
+                >
+                  <Camera size={16} />
+                  <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                </label>
+              </div>
 
-          <div className="fb-profile-actions">
-            <Link to="/profile/settings" className="fb-profile-btn fb-profile-btn--primary">
-              <Pencil size={15} /> {vi ? 'Chỉnh sửa trang cá nhân' : 'Edit profile'}
-            </Link>
-            <Link to="/profile/following" className="fb-profile-btn fb-profile-btn--secondary">
-              <Users size={15} /> {t('userMenu.following')}
-            </Link>
+              {/* User Info */}
+              <div className="space-y-1 sm:pb-2">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                  {user.fullName}
+                </h1>
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <span className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 font-extrabold">
+                    <Users size={14} className="text-brand-500" />
+                    <strong>{following.length > 0 ? following.length : statFriends}</strong> {vi ? 'đang theo dõi' : 'following'}
+                  </span>
+                  <span>·</span>
+                  <span className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 font-extrabold">
+                    <strong>{statFollowers}</strong> {vi ? 'người theo dõi' : 'followers'}
+                  </span>
+                  <span>·</span>
+                  <span className="inline-flex items-center gap-1 text-rose-500 font-bold">
+                    <MapPin size={14} /> {vi ? 'Hà Nội, Việt Nam' : 'Hanoi, Vietnam'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Action Buttons */}
+            <div className="flex items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-center">
+              <Link
+                to="/profile/settings"
+                className="flex-1 sm:flex-initial px-4 py-2.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-2xl shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2"
+              >
+                <Pencil size={15} />
+                <span>{vi ? 'Chỉnh sửa trang cá nhân' : 'Edit Profile'}</span>
+              </Link>
+              <Link
+                to="/profile/following"
+                className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-extrabold rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
+              >
+                <Users size={15} />
+                <span>{t('userMenu.following')}</span>
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="fb-profile-tabs">
+        {/* ── Modern Navigation Tabs Bar ── */}
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-2 rounded-2xl shadow-xl flex items-center gap-2 overflow-x-auto scrollbar-none">
           {tabs.map(tab => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`fb-profile-tab ${activeTab === tab.id ? 'fb-profile-tab--active' : ''}`}
+              className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                activeTab === tab.id
+                  ? 'bg-gradient-to-r from-brand-600 to-sky-500 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
             >
-              {tab.label}
+              <span>{tab.label}</span>
+              {tab.id === 'notifications' && notifications.some(n => !n.isRead) && (
+                <span className="flex h-2 w-2 rounded-full bg-rose-500" />
+              )}
             </button>
           ))}
         </div>
 
-        {/* Body: 2 columns like Facebook */}
-        <div className="fb-profile-body">
-          <aside className="fb-profile-sidebar">
-            <div className="fb-profile-card">
-              <h3 className="fb-profile-card-title">{vi ? 'Giới thiệu' : 'Intro'}</h3>
-              <p className="fb-profile-intro-text">
-                {vi
+        {/* ── 2-Column Main Content Body Layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* Left Column Sidebar */}
+          <aside className="lg:col-span-4 space-y-6">
+            
+            {/* Card 1: Giới thiệu (Intro) */}
+            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
+              <h3 className="text-xs font-black uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-2">
+                <Sparkles size={16} className="text-brand-500" />
+                {vi ? 'GIỚI THIỆU' : 'INTRO'}
+              </h3>
+
+              <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
+                "{vi
                   ? 'Yêu du lịch khám phá, ẩm thực địa phương và chia sẻ hành trình thực tế trên Terraholic.'
-                  : 'Love exploring, local food, and sharing real travel stories on Terraholic.'}
+                  : 'Love exploring, local food, and sharing real travel stories on Terraholic.'}"
               </p>
-              <ul className="fb-profile-intro-list">
-                <li><Briefcase size={16} /> {vi ? 'Làm việc tại Terraholic' : 'Works at Terraholic'}</li>
-                <li><GraduationCap size={16} /> {vi ? 'Học tại CTUT' : 'Studied at CTUT'}</li>
-                <li><MapPin size={16} /> {vi ? 'Sống tại Hà Nội' : 'Lives in Hanoi'}</li>
-                <li><Globe size={16} /> {user.email}</li>
-              </ul>
-              <Link to="/profile/settings" className="fb-profile-link-btn">
-                {vi ? 'Chỉnh sửa chi tiết' : 'Edit details'}
+
+              <div className="space-y-3 pt-1 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
+                  <Briefcase size={16} className="text-brand-500 shrink-0" />
+                  <span>{vi ? 'Làm việc tại Terraholic' : 'Works at Terraholic'}</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
+                  <GraduationCap size={16} className="text-purple-500 shrink-0" />
+                  <span>{vi ? 'Học tại CTUT' : 'Studied at CTUT'}</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
+                  <MapPin size={16} className="text-rose-500 shrink-0" />
+                  <span>{vi ? 'Sống tại Hà Nội' : 'Lives in Hanoi'}</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold truncate">
+                  <Globe size={16} className="text-emerald-500 shrink-0" />
+                  <span className="truncate">{user.email}</span>
+                </div>
+              </div>
+
+              <Link
+                to="/profile/settings"
+                className="w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <span>{vi ? 'Chỉnh sửa chi tiết' : 'Edit details'}</span>
               </Link>
             </div>
 
-            <div className="fb-profile-card">
-              <div className="fb-profile-card-head">
-                <h3 className="fb-profile-card-title">{vi ? 'Ảnh' : 'Photos'}</h3>
-                <button type="button" className="fb-profile-see-all" onClick={() => setActiveTab('photos')}>
+            {/* Card 2: Bộ sưu tập Ảnh */}
+            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-3.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-2">
+                  <ImageIcon size={16} className="text-brand-500" />
+                  {vi ? 'BỘ SƯU TẬP ẢNH' : 'PHOTOS'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('photos')}
+                  className="text-xs font-bold text-brand-600 hover:underline cursor-pointer"
+                >
                   {vi ? 'Xem tất cả' : 'See all'}
                 </button>
               </div>
-              <div className="fb-profile-photo-grid">
+
+              <div className="grid grid-cols-3 gap-2">
                 {PHOTOS.slice(0, 6).map((src, i) => (
-                  <button key={i} type="button" className="fb-profile-photo-cell" onClick={() => setActiveTab('photos')}>
-                    <img src={src} alt="" loading="lazy" />
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveTab('photos')}
+                    className="aspect-square rounded-2xl overflow-hidden group border border-slate-200 dark:border-slate-700/60 cursor-pointer"
+                  >
+                    <img
+                      src={src}
+                      alt="Thumbnail"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="fb-profile-card">
-              <div className="fb-profile-card-head">
-                <h3 className="fb-profile-card-title">{vi ? 'Đang theo dõi' : 'Following'}</h3>
-                <Link to="/profile/following" className="fb-profile-see-all">{vi ? 'Xem tất cả' : 'See all'}</Link>
+            {/* Card 3: Đang theo dõi (Following) */}
+            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-3.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-2">
+                  <Users size={16} className="text-brand-500" />
+                  {vi ? 'ĐANG THEO DÕI' : 'FOLLOWING'}
+                </h3>
+                <Link to="/profile/following" className="text-xs font-bold text-brand-600 hover:underline">
+                  {vi ? 'Xem tất cả' : 'See all'}
+                </Link>
               </div>
-              <p className="fb-profile-friends-sub">
-                {following.length > 0 ? following.length : statFriends} {vi ? 'người' : 'people'}
+
+              <p className="text-xs text-slate-500 font-medium">
+                {following.length > 0 ? following.length : statFriends} {vi ? 'người theo dõi' : 'people'}
               </p>
-              <div className="fb-profile-friends-grid">
+
+              <div className="grid grid-cols-3 gap-3">
                 {following.length > 0 ? (
                   following.slice(0, 6).map(f => {
                     const profileData = f.following?.profile || f;
                     const avatarUrl = profileData.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
                     const name = profileData.fullName || f.name || '';
                     return (
-                      <div key={f.id} className="fb-profile-friend">
-                        <img src={avatarUrl} alt={name} />
-                        <span>{name.split(' ').pop()}</span>
+                      <div key={f.id} className="text-center space-y-1 group cursor-pointer">
+                        <div className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
+                          <img src={avatarUrl} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 block truncate">{name.split(' ').pop()}</span>
                       </div>
                     );
                   })
                 ) : (
                   FRIENDS_PREVIEW.map(f => (
-                    <div key={f.name} className="fb-profile-friend">
-                      <img src={f.avatar} alt={f.name} />
-                      <span>{f.name.split(' ').pop()}</span>
+                    <div key={f.name} className="text-center space-y-1 group cursor-pointer">
+                      <div className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <img src={f.avatar} alt={f.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 block truncate">{f.name.split(' ').pop()}</span>
                     </div>
                   ))
                 )}
               </div>
             </div>
+
           </aside>
 
-          <main className="fb-profile-main">
+          {/* Right Main Column */}
+          <main className="lg:col-span-8 space-y-6">
+            
             {activeTab === 'posts' && (
               <>
-                {/* Compose */}
-                <div className="fb-profile-card fb-profile-compose">
-                  <div className="fb-profile-compose-top">
-                    <div className="fb-profile-compose-avatar">
-                      {user.fullName?.charAt(0).toUpperCase()}
+                {/* Compose Card */}
+                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-brand-500">
+                      <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
                     </div>
                     <input
                       type="text"
                       value={composeText}
                       onChange={e => setComposeText(e.target.value)}
-                      placeholder={vi ? 'Bạn đang nghĩ gì?' : "What's on your mind?"}
-                      className="fb-profile-compose-input"
+                      placeholder={vi ? 'Bạn đang nghĩ gì về chuyến đi tiếp theo?' : "What's on your mind?"}
+                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-xs text-slate-800 dark:text-white font-medium focus:outline-none focus:border-brand-500"
                     />
                   </div>
-                  <div className="fb-profile-compose-actions">
-                    <button type="button" className="fb-profile-compose-action">
-                      <ImageIcon size={18} className="text-emerald-500" /> {vi ? 'Ảnh/Video' : 'Photo/Video'}
-                    </button>
-                    <button type="button" className="fb-profile-compose-action">
-                      <MapPin size={18} className="text-rose-500" /> {vi ? 'Check in' : 'Check in'}
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <button type="button" className="px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
+                        <ImageIcon size={16} />
+                        <span>{vi ? 'Ảnh/Video' : 'Photo/Video'}</span>
+                      </button>
+                      <button type="button" className="px-3 py-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
+                        <MapPin size={16} />
+                        <span>Check-in</span>
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="px-5 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-xl shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                    >
+                      <Send size={14} />
+                      <span>{vi ? 'Đăng' : 'Post'}</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Timeline posts */}
                 {MY_POSTS.map(post => (
-                  <article key={post.id} className="fb-profile-card fb-profile-post">
-                    <div className="fb-profile-post-head">
-                      <div className="fb-profile-post-author">
-                        <div className="fb-profile-compose-avatar">{user.fullName?.charAt(0)}</div>
+                  <article key={post.id} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
+                          <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
+                        </div>
                         <div>
-                          <p className="fb-profile-post-name">{user.fullName}</p>
-                          <p className="fb-profile-post-time">{post.time} · <Globe size={11} className="inline" /></p>
+                          <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">{user.fullName}</h4>
+                          <p className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 mt-0.5">
+                            <span>{post.time}</span>
+                            <span>·</span>
+                            <Globe size={11} />
+                          </p>
                         </div>
                       </div>
-                      <button type="button" className="fb-profile-post-more"><MoreHorizontal size={18} /></button>
+                      <button type="button" className="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <MoreHorizontal size={18} />
+                      </button>
                     </div>
-                    <p className="fb-profile-post-content">{post.content}</p>
+
+                    <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">{post.content}</p>
+
                     {'image' in post && post.image && (
-                      <img src={post.image} alt="" className="fb-profile-post-image w-full" />
+                      <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                        <img src={post.image} alt="" className="w-full max-h-[420px] object-cover" />
+                      </div>
                     )}
+
                     {'images' in post && post.images && (
-                      <div className={`fb-profile-post-gallery fb-profile-post-gallery--${post.images.length}`}>
+                      <div className="grid grid-cols-2 gap-2 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
                         {post.images.map((src, i) => (
-                          <img key={i} src={src} alt="" />
+                          <img key={i} src={src} alt="" className="w-full h-48 object-cover" />
                         ))}
                       </div>
                     )}
-                    <div className="fb-profile-post-stats">
-                      <span><Heart size={14} className="inline text-rose-500 fill-rose-500" /> {post.likes}</span>
+
+                    <div className="flex items-center justify-between text-xs text-slate-500 font-semibold pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <span className="flex items-center gap-1.5">
+                        <Heart size={14} className="text-rose-500 fill-rose-500" />
+                        <span>{post.likes}</span>
+                      </span>
                       <span>{post.comments} {vi ? 'bình luận' : 'comments'}</span>
                     </div>
-                    <div className="fb-profile-post-actions">
-                      <button type="button"><Heart size={18} /> {vi ? 'Thích' : 'Like'}</button>
-                      <button type="button"><MessageCircle size={18} /> {vi ? 'Bình luận' : 'Comment'}</button>
-                      <button type="button"><Share2 size={18} /> {vi ? 'Chia sẻ' : 'Share'}</button>
+
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <button type="button" className="py-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-slate-300 hover:text-rose-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                        <Heart size={16} />
+                        <span>{vi ? 'Thích' : 'Like'}</span>
+                      </button>
+                      <button type="button" className="py-2 rounded-xl hover:bg-brand-50 dark:hover:bg-brand-950/30 text-slate-600 dark:text-slate-300 hover:text-brand-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                        <MessageCircle size={16} />
+                        <span>{vi ? 'Bình luận' : 'Comment'}</span>
+                      </button>
+                      <button type="button" className="py-2 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/30 text-slate-600 dark:text-slate-300 hover:text-purple-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                        <Share2 size={16} />
+                        <span>{vi ? 'Chia sẻ' : 'Share'}</span>
+                      </button>
                     </div>
                   </article>
                 ))}
@@ -304,24 +467,24 @@ export default function ProfilePage() {
             )}
 
             {activeTab === 'about' && (
-              <div className="fb-profile-card">
-                <h3 className="fb-profile-card-title mb-4">{vi ? 'Giới thiệu bản thân' : 'About you'}</h3>
-                <div className="space-y-4 text-sm text-[var(--text-secondary)]">
-                  <p><strong className="text-[var(--text-primary)]">{vi ? 'Họ tên:' : 'Name:'}</strong> {user.fullName}</p>
-                  <p><strong className="text-[var(--text-primary)]">Email:</strong> {user.email}</p>
-                  <p><strong className="text-[var(--text-primary)]">{vi ? 'Vai trò:' : 'Role:'}</strong> {user.role}</p>
-                  <p><strong className="text-[var(--text-primary)]">{vi ? 'Sở thích:' : 'Interests:'}</strong> {vi ? 'Du lịch, ẩm thực, nhiếp ảnh' : 'Travel, food, photography'}</p>
+              <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl shadow-xl space-y-4">
+                <h3 className="text-sm font-black uppercase text-brand-600 dark:text-brand-400">{vi ? 'Giới thiệu bản thân' : 'About you'}</h3>
+                <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                  <p><strong className="text-slate-900 dark:text-white">{vi ? 'Họ tên:' : 'Name:'}</strong> {user.fullName}</p>
+                  <p><strong className="text-slate-900 dark:text-white">Email:</strong> {user.email}</p>
+                  <p><strong className="text-slate-900 dark:text-white">{vi ? 'Vai trò:' : 'Role:'}</strong> {user.role}</p>
+                  <p><strong className="text-slate-900 dark:text-white">{vi ? 'Sở thích:' : 'Interests:'}</strong> {vi ? 'Du lịch, ẩm thực, nhiếp ảnh' : 'Travel, food, photography'}</p>
                 </div>
               </div>
             )}
 
             {activeTab === 'photos' && (
-              <div className="fb-profile-card">
-                <h3 className="fb-profile-card-title mb-4">{vi ? 'Ảnh của bạn' : 'Your photos'}</h3>
-                <div className="fb-profile-photo-grid fb-profile-photo-grid--large">
+              <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl shadow-xl space-y-4">
+                <h3 className="text-sm font-black uppercase text-brand-600 dark:text-brand-400">{vi ? 'Ảnh của bạn' : 'Your photos'}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {PHOTOS.map((src, i) => (
-                    <div key={i} className="fb-profile-photo-cell">
-                      <img src={src} alt="" loading="lazy" />
+                    <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                      <img src={src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform" />
                     </div>
                   ))}
                 </div>
@@ -329,26 +492,27 @@ export default function ProfilePage() {
             )}
 
             {activeTab === 'trips' && (
-              <div className="fb-profile-card text-center py-12">
-                <MapPin size={40} className="mx-auto text-[var(--gold)] mb-3" />
-                <p className="text-[var(--text-secondary)] text-sm">
-                  {vi ? 'Chưa có hành trình công khai.' : 'No public journeys yet.'}
+              <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-12 rounded-3xl shadow-xl text-center space-y-3">
+                <Compass size={44} className="mx-auto text-brand-500 animate-bounce" />
+                <p className="text-xs text-slate-500 font-semibold">
+                  {vi ? 'Chưa có hành trình công khai nào.' : 'No public journeys yet.'}
                 </p>
-                <Link to="/journeys/create" className="btn-gold inline-flex mt-4 px-6 py-2.5 text-sm">
-                  {vi ? 'Tạo hành trình đầu tiên' : 'Create your first journey'}
+                <Link to="/planner" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-xs font-extrabold shadow-lg shadow-brand-500/20">
+                  <Sparkles size={14} />
+                  <span>{vi ? 'Tạo hành trình đầu tiên' : 'Create your first journey'}</span>
                 </Link>
               </div>
             )}
 
             {activeTab === 'notifications' && (
-              <div className="fb-profile-card">
-                <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
-                  <h3 className="fb-profile-card-title">{vi ? 'Thông báo gần đây' : 'Recent Notifications'}</h3>
+              <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl shadow-xl space-y-4">
+                <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <h3 className="text-sm font-black uppercase text-brand-600 dark:text-brand-400">{vi ? 'Thông báo gần đây' : 'Recent Notifications'}</h3>
                   {notifications.some(n => !n.isRead) && (
                     <button
                       type="button"
                       onClick={handleMarkAllRead}
-                      className="text-xs font-bold text-[var(--gold)] hover:underline"
+                      className="text-xs font-bold text-brand-600 hover:underline cursor-pointer"
                     >
                       {vi ? 'Đánh dấu tất cả đã đọc' : 'Mark all as read'}
                     </button>
@@ -356,23 +520,23 @@ export default function ProfilePage() {
                 </div>
                 <div className="space-y-3">
                   {notifications.length === 0 ? (
-                    <p className="text-center text-sm text-[var(--text-muted)] py-8">
+                    <p className="text-center text-xs text-slate-400 py-8 font-medium">
                       {vi ? 'Không có thông báo nào.' : 'No notifications.'}
                     </p>
                   ) : (
                     notifications.map(notif => (
                       <div
                         key={notif.id}
-                        className={`flex items-start gap-3.5 p-4 rounded-xl transition-all border ${
-                          notif.isRead ? 'opacity-70 bg-transparent border-transparent' : 'bg-[var(--gold-glow)]/20 border-[var(--border-glow)] shadow-sm'
+                        className={`flex items-start gap-3.5 p-4 rounded-2xl transition-all border ${
+                          notif.isRead ? 'bg-slate-50/50 dark:bg-slate-800/40 border-slate-200/50 dark:border-slate-800' : 'bg-brand-50/50 dark:bg-brand-950/30 border-brand-200 dark:border-brand-800 shadow-sm'
                         }`}
                       >
-                        <div className="mt-0.5 p-2 rounded-xl bg-[var(--bg-elevated)] text-[var(--gold)]">
+                        <div className="mt-0.5 p-2 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
                           <Bell size={16} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-[var(--text-primary)] font-medium leading-relaxed">{notif.content}</p>
-                          <p className="text-[10px] text-[var(--text-muted)] mt-1.5">
+                          <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">{notif.content}</p>
+                          <p className="text-[10px] text-slate-400 font-semibold mt-1">
                             {new Date(notif.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US', {
                               hour: '2-digit',
                               minute: '2-digit'
@@ -385,8 +549,11 @@ export default function ProfilePage() {
                 </div>
               </div>
             )}
+
           </main>
+
         </div>
+
       </div>
     </div>
   );

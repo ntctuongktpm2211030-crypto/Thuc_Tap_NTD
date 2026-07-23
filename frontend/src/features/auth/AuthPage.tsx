@@ -8,6 +8,7 @@ import {
 import { loginThunk, registerThunk, clearError, loginGoogleThunk } from '../../store/authSlice';
 import type { RootState, AppDispatch } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
+import { useToast } from '../../contexts/ToastContext';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
 import { loginGoogle } from '../../config/firebase';
 import { authService } from '../../services/smartTravel.service';
@@ -265,6 +266,7 @@ export default function AuthPage() {
   const redirectTo = (location.state as { from?: string } | null)?.from || '/';
   const { isLoading, error, isAuthenticated, user } = useSelector((s: RootState) => s.auth);
   const { t } = useLang();
+  const { error: toastError } = useToast();
   const [mode, setMode] = useState<'login' | 'register' | 'forgot' | 'otp' | 'reset'>('login');
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -388,7 +390,7 @@ export default function AuthPage() {
     } catch (err: any) {
       console.error('Google Auth Error:', err);
       if (err.code !== 'auth/popup-closed-by-user') {
-        alert('Đăng nhập Google thất bại: ' + (err.message || err));
+        toastError('Đăng nhập Google thất bại: ' + (err.message || err));
       }
     }
   };

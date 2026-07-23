@@ -274,7 +274,32 @@ export default function SavedPage() {
   };
 
   return (
-    <div className="container-wide py-4 sm:py-6">
+    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
+      {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
+      <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="travel-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="40" cy="40" r="1.5" className="fill-brand-500/50" />
+            <path d="M0 40H80M40 0V80" strokeWidth="0.5" strokeDasharray="6 6" className="stroke-slate-300 dark:stroke-slate-800" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#travel-grid)" />
+      </svg>
+
+      {/* ── Background Compass & Flight Arc Vector Artwork ── */}
+      <svg className="absolute top-12 right-12 w-96 h-96 opacity-15 dark:opacity-10 text-brand-500 pointer-events-none" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+        <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
+        <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
+        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
+      </svg>
+
+      {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
+      <div className="absolute top-10 left-10 w-[700px] h-[700px] bg-gradient-to-tr from-brand-500/20 via-sky-500/15 to-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
 
       {/* Post Detail Modal */}
       {selectedPost && (
@@ -370,8 +395,8 @@ export default function SavedPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
 
         {/* LEFT SIDEBAR */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-[142px]">
+        <aside className="hidden lg:block h-full">
+          <div className="sticky top-24 space-y-4">
             <SavedLeftSidebar savedCount={savedPosts.length} tripsCount={savedTrips.length} />
           </div>
         </aside>
@@ -602,12 +627,13 @@ export default function SavedPage() {
         </main>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-[142px]">
+        <aside className="hidden lg:block h-full">
+          <div className="sticky top-24 space-y-4">
             <SavedRightSidebar />
           </div>
         </aside>
 
+      </div>
       </div>
     </div>
   );

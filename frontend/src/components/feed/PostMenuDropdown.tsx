@@ -6,6 +6,8 @@ import { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
 import type { FeedPost } from '../../utils/feedUtils';
 
+import { useToast } from '../../contexts/ToastContext';
+
 interface PostMenuDropdownProps {
   post: FeedPost;
   onPostDeleted?: (postId: string) => void;
@@ -17,46 +19,39 @@ export default function PostMenuDropdown({
   onPostDeleted,
 }: PostMenuDropdownProps) {
   const navigate = useNavigate();
+  const { confirm, success, error } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const isOwner = isAuthenticated && user && user.id === post.authorId;
 
+  const isOwner = isAuthenticated && user && (user.id === (post as any).authorId || user.id === (post as any).userId || user.email === (post as any).userEmail);
+
+  // Close dropdown on outside click
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
-    }
+    };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(''), 2500);
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      const link = `${window.location.origin}/posts/${post.id}`;
-      await navigator.clipboard.writeText(link);
-      showToast('Đã sao chép liên kết vào bộ nhớ tạm!');
-    } catch {
-      showToast('Không thể sao chép liên kết.');
-    }
+  const handleCopyLink = () => {
+    const shareUrl = `${window.location.origin}/?postId=${post.id}`;
+    navigator.clipboard.writeText(shareUrl);
+    success('Đã sao chép liên kết bài viết.');
     setIsOpen(false);
   };
 
   const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/posts/${post.id}`;
-    const descText = post.displayType === 'social' ? post.content : (post.body || post.excerpt || '');
+    const shareUrl = `${window.location.origin}/?postId=${post.id}`;
+    const pAny = post as any;
     const shareData = {
-      title: 'Khám phá bài viết trên Terraholic',
-      text: descText.slice(0, 100),
+      title: pAny.title || 'Bài viết từ Smart Travel',
+      text: pAny.content ? String(pAny.content).substring(0, 100) : '',
       url: shareUrl,
     };
 
@@ -65,7 +60,7 @@ export default function PostMenuDropdown({
         await navigator.share(shareData);
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
-          showToast('Chia sẻ thất bại.');
+          error('Chia sẻ thất bại.');
         }
       }
     } else {
@@ -75,16 +70,24 @@ export default function PostMenuDropdown({
     setIsOpen(false);
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) return;
-    try {
-      await postsService.delete(post.id);
-      showToast('Đã xóa bài viết thành công.');
-      if (onPostDeleted) onPostDeleted(post.id);
-    } catch {
-      showToast('Xóa bài viết thất bại.');
-    }
+  const handleDelete = () => {
     setIsOpen(false);
+    confirm({
+      title: 'Xóa bài viết',
+      message: 'Bạn có chắc chắn muốn xóa bài viết này không? Hành động này sẽ không thể hoàn tác.',
+      confirmText: 'Xóa bài viết',
+      cancelText: 'Hủy',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await postsService.delete(post.id);
+          success('Đã xóa bài viết thành công.');
+          if (onPostDeleted) onPostDeleted(post.id);
+        } catch {
+          error('Xóa bài viết thất bại.');
+        }
+      },
+    });
   };
 
   const handleEdit = () => {
@@ -94,11 +97,6 @@ export default function PostMenuDropdown({
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>
-      {toastMessage && (
-        <div className="fixed bottom-4 right-4 z-50 bg-black/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-[var(--gold)]/30 shadow-lg shadow-black/50 animate-fade-in">
-          {toastMessage}
-        </div>
-      )}
 
       <button
         onClick={() => setIsOpen(!isOpen)}

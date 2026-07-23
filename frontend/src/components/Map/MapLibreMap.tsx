@@ -4,6 +4,7 @@ import maplibregl from 'maplibre-gl';
 import { useLang } from '../../contexts/LanguageContext';
 import { mapService } from '../../services/smartTravel.service';
 import { CloudRain, Car, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
+import { toast } from '../../contexts/ToastContext';
 
 export interface MapLocation {
   id: string;
@@ -475,9 +476,14 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           const lastAlert = sessionStorage.getItem(alertKey);
           if (!lastAlert) {
             sessionStorage.setItem(alertKey, Date.now().toString());
-            alert(vi
-              ? `🔔 Bạn đang đến gần địa danh: ${loc.name}! Chỉ cách ${(dist * 1000).toFixed(0)}m.`
-              : `🔔 You are approaching: ${loc.name}! Just ${(dist * 1000).toFixed(0)}m away.`
+            toast.location(
+              vi
+                ? `Bạn đang ở rất gần điểm đến ${loc.name}. Bạn có thể khám phá hoặc check-in ngay!`
+                : `You are near ${loc.name}. Discover or check-in now!`,
+              `Cách ${(dist * 1000).toFixed(0)}m`,
+              {
+                title: vi ? `Gần địa danh: ${loc.name}` : `Approaching: ${loc.name}`,
+              }
             );
           }
           break;

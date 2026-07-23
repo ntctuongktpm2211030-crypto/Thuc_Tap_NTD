@@ -8,6 +8,7 @@ import { postsService } from '../../services/smartTravel.service';
 import { toApiPostId } from '../../utils/postIds';
 import { syncToggleBookmark, syncToggleLike } from '../../utils/postEngagement';
 import { getExplorePostById, patchExplorePostEngagement } from './explorePostsStore';
+import { toast } from '../../contexts/ToastContext';
 
 const CATEGORY_STYLES: Record<string, string> = {
   'Thiên nhiên': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
@@ -337,7 +338,7 @@ export default function ExploreArticlePage() {
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  alert('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
+                  toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
                 }}
                 className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
               >

@@ -1,3 +1,4 @@
+import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
   Home, Compass, Map, Sparkles, Bookmark,
@@ -9,6 +10,66 @@ import {
   Sun, Cloud, CloudRain, Snowflake, CloudSun,
   FileText, Calendar, Eye, BookOpen, Route,
 } from 'lucide-react';
+
+export interface ModernIconPodProps {
+  icon: LucideIcon;
+  variant?: 'brand' | 'emerald' | 'amber' | 'rose' | 'violet' | 'sky' | 'glass';
+  size?: 'sm' | 'md' | 'lg';
+  active?: boolean;
+  className?: string;
+}
+
+export const ModernIconPod: React.FC<ModernIconPodProps> = ({
+  icon: Icon,
+  variant = 'brand',
+  size = 'md',
+  active = false,
+  className = '',
+}) => {
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'emerald':
+        return 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-emerald-500/25';
+      case 'amber':
+        return 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-amber-500/25';
+      case 'rose':
+        return 'bg-gradient-to-br from-rose-500 to-pink-600 text-white shadow-rose-500/25';
+      case 'violet':
+        return 'bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-violet-500/25';
+      case 'sky':
+        return 'bg-gradient-to-br from-sky-400 to-brand-600 text-white shadow-sky-500/25';
+      case 'glass':
+        return active
+          ? 'bg-gradient-to-br from-brand-600 to-sky-500 text-white shadow-brand-500/30'
+          : 'bg-white/80 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 shadow-sm';
+      case 'brand':
+      default:
+        return 'bg-gradient-to-br from-brand-600 via-brand-500 to-sky-500 text-white shadow-brand-500/30';
+    }
+  };
+
+  const getSizeStyles = () => {
+    switch (size) {
+      case 'sm':
+        return { container: 'p-1.5 rounded-xl shadow-md', iconSize: 14 };
+      case 'lg':
+        return { container: 'p-3.5 rounded-2xl shadow-xl', iconSize: 22 };
+      case 'md':
+      default:
+        return { container: 'p-2.5 rounded-2xl shadow-lg', iconSize: 18 };
+    }
+  };
+
+  const sz = getSizeStyles();
+
+  return (
+    <div
+      className={`inline-flex items-center justify-center shrink-0 transition-all duration-300 transform group-hover:scale-110 ${sz.container} ${getVariantStyles()} ${className}`}
+    >
+      <Icon size={sz.iconSize} className="stroke-[2.25px]" />
+    </div>
+  );
+};
 
 /** Nav & quick links */
 export const NAV_ICONS = {

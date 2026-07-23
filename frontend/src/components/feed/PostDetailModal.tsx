@@ -5,6 +5,7 @@ import {
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
+import { toast } from '../../contexts/ToastContext';
 import CommentsSection from './CommentsSection';
 import type { FeedPost } from '../../utils/feedUtils';
 import {
@@ -443,7 +444,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  alert('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
+                  toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
                 }}
                 className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
               >

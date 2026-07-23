@@ -11,6 +11,7 @@ import { distanceKm, type ExplorePost } from './exploreBlogData';
 import { toExplorePostId } from '../../utils/postIds';
 import { getExplorePosts, setExplorePosts } from './explorePostsStore';
 import { buildHandbook } from './exploreHandbook';
+import { ModernIconPod } from '../../config/modernIcons';
 import blogVideo from '../../../../video.mp4';
 
 const TRENDING_TAGS = ['sapa', 'hagiang', 'danang', 'ẩm thực', 'motorbiking', 'thiên nhiên', 'bãi biển', 'văn hóa'];
@@ -372,7 +373,33 @@ export default function BlogPage() {
   }, [searchQuery, filters]);
 
   return (
-    <div className="explore-page explore-page--magazine">
+    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
+      {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
+      <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="travel-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="40" cy="40" r="1.5" className="fill-brand-500/50" />
+            <path d="M0 40H80M40 0V80" strokeWidth="0.5" strokeDasharray="6 6" className="stroke-slate-300 dark:stroke-slate-800" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#travel-grid)" />
+      </svg>
+
+      {/* ── Background Compass & Flight Arc Vector Artwork ── */}
+      <svg className="absolute top-12 right-12 w-96 h-96 opacity-15 dark:opacity-10 text-brand-500 pointer-events-none" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+        <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
+        <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
+        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
+      </svg>
+
+      {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
+      <div className="absolute top-10 left-10 w-[700px] h-[700px] bg-gradient-to-tr from-brand-500/20 via-sky-500/15 to-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+
       <style>{`
         @keyframes fade-up-reveal {
           from {
@@ -408,44 +435,45 @@ export default function BlogPage() {
           }
         }
       `}</style>
-      <header className="relative w-full rounded-[2rem] overflow-hidden mb-8 py-16 sm:py-24 px-6 sm:px-12 shadow-md flex items-center justify-center">
+      <header className="relative w-full rounded-[2.5rem] overflow-hidden mb-8 py-16 sm:py-24 px-6 sm:px-12 shadow-2xl border border-slate-200/50 dark:border-slate-800/80 flex items-center justify-center">
         {/* Background Video */}
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="absolute inset-0 w-full h-full object-cover z-0 filter brightness-90"
         >
           <source src={blogVideo} type="video/mp4" />
         </video>
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/45 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/80 z-10" />
         
         <div className="relative z-20 container-wide space-y-8 text-center text-white max-w-2xl mx-auto">
-          <div className="space-y-4">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-amber-300 text-xs font-bold shadow-sm">
-              <Sparkles size={14} className="text-amber-400" /> Terraholic Magazine
-            </span>
-            <h1 className="font-editorial text-4xl sm:text-5xl font-bold text-white tracking-tight">
-              Khám phá{' '}
-              <span className="text-teal-300">
-                câu chuyện du lịch
+          <div className="space-y-5">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-amber-300 text-xs font-extrabold shadow-lg uppercase tracking-wider">
+              <ModernIconPod icon={Sparkles} variant="amber" size="sm" />
+              <span>Smart Travel Magazine</span>
+            </div>
+            <h1 className="font-editorial text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
+              Khám Phá{' '}
+              <span className="bg-gradient-to-r from-teal-300 via-sky-300 to-brand-300 bg-clip-text text-transparent">
+                Câu Chuyện Du Lịch
               </span>
             </h1>
-            <p className="text-slate-200 text-base sm:text-lg leading-relaxed">
+            <p className="text-slate-200 text-base sm:text-lg leading-relaxed font-medium">
               Blog du lịch với góc nhìn tươi mới — hành trình thực tế, mẹo hay và cảm hứng từ cộng đồng travellers Việt Nam.
             </p>
           </div>
 
-          <div className="max-w-xl mx-auto relative">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
+          <div className="max-w-xl mx-auto relative group">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-400 transition-colors" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Tìm bài viết, địa điểm, tác giả..."
-              className="w-full bg-white/10 backdrop-blur-md border border-white/20 focus:border-white/40 focus:bg-white/20 rounded-xl py-3.5 pl-12 pr-4 text-sm placeholder-white/50 text-white focus:outline-none focus:ring-4 focus:ring-white/10 transition-all duration-200"
+              className="w-full bg-slate-900/80 backdrop-blur-xl border border-white/20 focus:border-brand-400 focus:bg-slate-900/95 rounded-2xl py-4 pl-12 pr-4 text-sm placeholder-slate-400 text-white focus:outline-none focus:ring-4 focus:ring-brand-500/20 shadow-2xl transition-all duration-300"
             />
           </div>
         </div>
@@ -455,8 +483,8 @@ export default function BlogPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
           
           {/* LEFT SIDEBAR: Explore Filters */}
-          <aside className="space-y-4">
-            <div className="sticky top-[142px] space-y-4">
+          <aside className="space-y-4 h-full">
+            <div className="sticky top-24 space-y-4">
               <ExploreFiltersPanel
                 filters={filters}
                 onChange={patchFilters}
@@ -575,8 +603,8 @@ export default function BlogPage() {
           </main>
 
           {/* RIGHT SIDEBAR: Extra Travel Info Widgets */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-[142px] space-y-4">
+          <aside className="hidden lg:block h-full">
+            <div className="sticky top-24 space-y-4">
               
               {/* Hot Topics tag list */}
               <div className="explore-sidebar-card space-y-3">
@@ -637,6 +665,7 @@ export default function BlogPage() {
           </aside>
 
         </div>
+      </div>
       </div>
     </div>
   );

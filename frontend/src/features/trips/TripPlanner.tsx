@@ -9,6 +9,7 @@ import { TRIP_ACTIVITY_ICONS } from '../../config/modernIcons';
 import { tripsService, Waypoint } from '../../services/smartTravel.service';
 import type { RootState } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
+import { useToast } from '../../contexts/ToastContext';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 
 function calculateHaversineDistance(
@@ -163,6 +164,10 @@ function calculateItineraryCosts(
 
 const TripPlanner = () => {
   const { lang, t } = useLang();
+  const { success, error } = useToast();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((s: RootState) => s.auth);
+
   const [destination, setDestination] = useState('');
   const [days, setDays] = useState<number | ''>('');
   const [budget, setBudget] = useState<number | ''>('');
@@ -170,19 +175,14 @@ const TripPlanner = () => {
   const [style, setStyle] = useState('Adventure');
   const [interests, setInterests] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingPart, setLoadingPart] = useState<string | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number>(1);
   const [itinerary, setItinerary] = useState<any>(null);
   const [optimized, setOptimized] = useState(false);
-  const [aiError, setAiError] = useState<string | null>(null);
-
-  // New state variables
-  const [selectedDay, setSelectedDay] = useState<number>(1);
-  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
-  const [loadingPart, setLoadingPart] = useState<string | null>(null);
-
-  const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((s: RootState) => s.auth);
-  const [savingTrip, setSavingTrip] = useState(false);
   const [savedTripId, setSavedTripId] = useState<string | null>(null);
+  const [savingTrip, setSavingTrip] = useState(false);
+  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+  const [aiError, setAiError] = useState<string | null>(null);
   const [expandedActivities, setExpandedActivities] = useState<Record<string, boolean>>({});
 
   const toggleExpandActivity = (key: string) => {
@@ -190,11 +190,11 @@ const TripPlanner = () => {
   };
 
   const handleSaveTrip = async () => {
-    if (!itinerary) return;
     if (!isAuthenticated) {
-      navigate('/auth');
+      navigate('/auth', { state: { from: '/planner' } });
       return;
     }
+    if (!itinerary) return;
     setSavingTrip(true);
     try {
       const trip = await tripsService.TaoChuyenDi({
@@ -212,11 +212,11 @@ const TripPlanner = () => {
       });
       if (trip && trip.id) {
         setSavedTripId(trip.id);
-        alert(lang === 'vi' ? 'Đã lưu hành trình thành công!' : 'Itinerary saved successfully!');
+        success(lang === 'vi' ? 'Đã lưu hành trình thành công!' : 'Itinerary saved successfully!');
       }
     } catch (err) {
       console.error('Failed to save trip:', err);
-      alert(lang === 'vi' ? 'Lưu hành trình thất bại.' : 'Failed to save itinerary.');
+      error(lang === 'vi' ? 'Lưu hành trình thất bại.' : 'Failed to save itinerary.');
     } finally {
       setSavingTrip(false);
     }
@@ -296,7 +296,7 @@ const TripPlanner = () => {
       }
     } catch (err) {
       console.error('Failed to regenerate part:', err);
-      alert(lang === 'vi' ? 'Không thể đổi lịch trình. Vui lòng thử lại.' : 'Failed to regenerate part. Please try again.');
+      error(lang === 'vi' ? 'Không thể đổi lịch trình. Vui lòng thử lại.' : 'Failed to regenerate part. Please try again.');
     } finally {
       setLoadingPart(null);
     }
@@ -431,7 +431,32 @@ const TripPlanner = () => {
   };
 
   return (
-    <div className="container-wide py-4 sm:py-6 space-y-8 animate-fade-in">
+    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
+      {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
+      <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="travel-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="40" cy="40" r="1.5" className="fill-brand-500/50" />
+            <path d="M0 40H80M40 0V80" strokeWidth="0.5" strokeDasharray="6 6" className="stroke-slate-300 dark:stroke-slate-800" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#travel-grid)" />
+      </svg>
+
+      {/* ── Background Compass & Flight Arc Vector Artwork ── */}
+      <svg className="absolute top-12 right-12 w-96 h-96 opacity-15 dark:opacity-10 text-brand-500 pointer-events-none" viewBox="0 0 200 200" fill="none" stroke="currentColor">
+        <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
+        <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
+        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
+      </svg>
+
+      {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
+      <div className="absolute top-10 left-10 w-[700px] h-[700px] bg-gradient-to-tr from-brand-500/20 via-sky-500/15 to-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
       {/* Title & Banner */}
       <div className="relative p-6 md:p-8 rounded-3xl overflow-hidden bg-[var(--bg-elevated)] border border-[var(--border-normal)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_45%)] pointer-events-none" />
@@ -975,7 +1000,7 @@ const TripPlanner = () => {
                 </div>
 
                 {/* Right side: Map View sticky */}
-                <div className={`md:col-span-5 ${activeTab === 'map' ? 'block' : 'hidden md:block'} sticky top-[142px]`}>
+                <div className={`md:col-span-5 ${activeTab === 'map' ? 'block' : 'hidden md:block'} sticky top-24`}>
                   {(() => {
                     const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
                     if (!currentDay) return null;
@@ -1029,6 +1054,7 @@ const TripPlanner = () => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
