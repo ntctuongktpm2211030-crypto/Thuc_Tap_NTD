@@ -465,6 +465,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [mapStyle]);
 
+  useEffect(() => {
     const checkGeofencing = () => {
       const userCoords = { latitude: center[0], longitude: center[1] };
       for (const loc of locations) {

@@ -4,11 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
   MoreHorizontal, Globe, Briefcase, GraduationCap, Image as ImageIcon,
-<<<<<<< HEAD
-  Bell, Sparkles, Compass, Send, Check, ChevronRight, Eye, Bookmark, Layers
-=======
-  Bell, Plus, Trash2, Star, Calendar, DollarSign, Loader2
->>>>>>> origin/main
+  Bell, Sparkles, Compass, Send, Check, ChevronRight, Eye, Bookmark, Layers,
+  Plus, Trash2, Star, Calendar, DollarSign, Loader2
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -602,17 +599,6 @@ export default function ProfilePage() {
             )}
 
             {activeTab === 'trips' && (
-<<<<<<< HEAD
-              <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-12 rounded-3xl shadow-xl text-center space-y-3">
-                <Compass size={44} className="mx-auto text-brand-500 animate-bounce" />
-                <p className="text-xs text-slate-500 font-semibold">
-                  {vi ? 'Chưa có hành trình công khai nào.' : 'No public journeys yet.'}
-                </p>
-                <Link to="/planner" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-xs font-extrabold shadow-lg shadow-brand-500/20">
-                  <Sparkles size={14} />
-                  <span>{vi ? 'Tạo hành trình đầu tiên' : 'Create your first journey'}</span>
-                </Link>
-=======
               <div className="fb-profile-card">
                 <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
                   <h3 className="fb-profile-card-title">{vi ? 'Chuyến đi đã lên kế hoạch' : 'Planned Trips'}</h3>
@@ -686,7 +672,6 @@ export default function ProfilePage() {
                     ))}
                   </div>
                 )}
->>>>>>> origin/main
               </div>
             )}
 
@@ -736,8 +721,6 @@ export default function ProfilePage() {
               </div>
             )}
 
-<<<<<<< HEAD
-=======
             {activeTab === 'history' && (
               <div className="fb-profile-card">
                 <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
@@ -832,7 +815,6 @@ export default function ProfilePage() {
                 )}
               </div>
             )}
->>>>>>> origin/main
           </main>
 
         </div>
