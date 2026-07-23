@@ -1,0 +1,707 @@
+I will find the location of `schema.prisma` in the workspace.
+
+Searched for "datasource db"
+
+I will view `schema.prisma` to analyze all the database tables, fields, and relationships.
+
+Viewed schema.prisma:1-800
+
+I will view the rest of `schema.prisma` to make sure we don't miss any models or relationships.
+
+Viewed schema.prisma:801-856
+
+@startuml Overview_ERD
+
+left to right direction
+hide circle
+hide methods
+hide stereotype
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 90
+skinparam dpi 300
+
+skinparam class {
+  HeaderBackgroundColor #0B3B75
+  HeaderFontColor #FFFFFF
+  BorderColor #0B3B75
+  FontSize 11
+  HeaderFontSize 12
+}
+
+package "Authentication & User" #E3F2FD {
+  entity User {
+    * id : String <<PK>>
+    --
+    * email : String <<UNIQUE>>
+    * passwordHash : String
+    role : UserRole
+    isVerified : Boolean
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity Profile {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>> <<UNIQUE>>
+    fullName : String
+    avatarUrl : String
+    coverUrl : String
+    bio : String
+    phoneNumber : String
+    homeLocation : String
+  }
+
+  entity TravelPreferences {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>> <<UNIQUE>>
+    * preferredPace : String
+    * dailyBudget : Float
+    activities : String[]
+    destinationTypes : String[]
+    foodPreferences : String[]
+  }
+
+  entity Follower {
+    * id : String <<PK>>
+    --
+    * followerId : String <<FK>>
+    * followingId : String <<FK>>
+    createdAt : DateTime
+  }
+
+  entity Location {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>> <<UNIQUE>>
+    * latitude : Float
+    * longitude : Float
+    updatedAt : DateTime
+  }
+
+  entity LocationHistory {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * latitude : Float
+    * longitude : Float
+    accuracy : Float
+    speed : Float
+    heading : Float
+    createdAt : DateTime
+  }
+
+  entity Notification {
+    * id : String <<PK>>
+    --
+    * recipientId : String <<FK>>
+    * type : String
+    * content : String
+    isRead : Boolean
+    targetId : String
+    createdAt : DateTime
+  }
+
+  entity TravelerMatch {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * matchedUserId : String <<FK>>
+    * compatScore : Float
+    matchReasons : String[]
+    status : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+}
+
+package "Travel & Trip & Map" #FFF8E1 {
+  entity Trip {
+    * id : String <<PK>>
+    --
+    * ownerId : String <<FK>>
+    * title : String
+    description : String
+    * destinationName : String
+    startDate : DateTime
+    endDate : DateTime
+    totalBudget : Float
+    travelStyle : String
+    isPublic : Boolean
+    status : TripStatus
+    cloneSourceId : String <<FK>>
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity TripDay {
+    * id : String <<PK>>
+    --
+    * tripId : String <<FK>>
+    * dayIndex : Int
+    date : DateTime
+  }
+
+  entity TripActivity {
+    * id : String <<PK>>
+    --
+    * tripDayId : String <<FK>>
+    destinationId : String <<FK>>
+    title : String
+    location : String
+    description : String
+    startTime : String
+    endTime : String
+    estimatedCost : Float
+    sequenceOrder : Int
+    notes : String
+  }
+
+  entity Destination {
+    * id : String <<PK>>
+    --
+    * name : String
+    description : String
+    * latitude : Float
+    * longitude : Float
+    * category : String
+    averageRating : Float
+    address : String
+    openingHours : String
+  }
+
+  entity Journey {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * title : String
+    description : String
+    coverImageUrl : String
+    isPublic : Boolean
+    status : String
+    startDate : DateTime
+    endDate : DateTime
+    totalDistance : Float
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity Route {
+    * id : String <<PK>>
+    --
+    * journeyId : String <<FK>>
+    * name : String
+    description : String
+    transportMode : String
+    distanceKm : Float
+    durationMin : Int
+    color : String
+    createdAt : DateTime
+  }
+
+  entity RoutePoint {
+    * id : String <<PK>>
+    --
+    * routeId : String <<FK>>
+    * latitude : Float
+    * longitude : Float
+    altitude : Float
+    sequenceOrder : Int
+    timestamp : DateTime
+    note : String
+    photoUrl : String
+  }
+
+  entity Event {
+    * id : String <<PK>>
+    --
+    * title : String
+    description : String
+    coverImageUrl : String
+    destinationId : String <<FK>>
+    * latitude : Float
+    * longitude : Float
+    * startDate : DateTime
+    endDate : DateTime
+    * category : String
+    maxAttendees : Int
+    currentCount : Int
+    * organizerId : String <<FK>>
+    isPublic : Boolean
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity EventAttendee {
+    * id : String <<PK>>
+    --
+    * eventId : String <<FK>>
+    * userId : String <<FK>>
+    status : String
+    createdAt : DateTime
+  }
+
+  entity SafetyWarning {
+    * id : String <<PK>>
+    --
+    * type : String
+    * description : String
+    * latitude : Float
+    * longitude : Float
+    radiusKm : Float
+    createdAt : DateTime
+    expiresAt : DateTime
+  }
+}
+
+package "Community & Social" #E8F5E9 {
+  entity Post {
+    * id : String <<PK>>
+    --
+    * authorId : String <<FK>>
+    * content : String
+    mediaUrls : String[]
+    tripId : String <<FK>>
+    locationId : String <<FK>>
+    createdAt : DateTime
+    deletedAt : DateTime
+  }
+
+  entity Comment {
+    * id : String <<PK>>
+    --
+    * postId : String <<FK>>
+    * authorId : String <<FK>>
+    * content : String
+    parentId : String <<FK>>
+    createdAt : DateTime
+  }
+
+  entity Like {
+    * id : String <<PK>>
+    --
+    * postId : String <<FK>>
+    * userId : String <<FK>>
+    createdAt : DateTime
+  }
+
+  entity Bookmark {
+    * id : String <<PK>>
+    --
+    * postId : String <<FK>>
+    * userId : String <<FK>>
+    createdAt : DateTime
+  }
+
+  entity CheckIn {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * destinationId : String <<FK>>
+    note : String
+    createdAt : DateTime
+  }
+
+  entity SavedPlace {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * name : String
+    * category : String
+    * latitude : Float
+    * longitude : Float
+    address : String
+    imageUrl : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity FavoriteFood {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * name : String
+    region : String
+    description : String
+    rating : Float
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity TravelHistory {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * location : String
+    destinationId : String <<FK>>
+    * time : DateTime
+    rating : String
+    cost : Float
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity Conversation {
+    * id : String <<PK>>
+    --
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity Message {
+    * id : String <<PK>>
+    --
+    * conversationId : String <<FK>>
+    * senderId : String <<FK>>
+    * content : String
+    createdAt : DateTime
+  }
+}
+
+package "AI Assistant & Chat & Memory" #F3E5F5 {
+  entity ChatConversation {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    title : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity ChatMessage {
+    * id : String <<PK>>
+    --
+    * conversationId : String <<FK>>
+    * role : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity ChatMessageVersion {
+    * id : String <<PK>>
+    --
+    * messageId : String <<FK>>
+    * content : String
+    * version : Int
+    isActive : Boolean
+    createdAt : DateTime
+  }
+
+  entity AIMemory {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>> <<UNIQUE>>
+    travelPreferences : String[]
+    favoriteFoods : String[]
+    budget : String
+    transportation : String[]
+    favoriteLocations : String[]
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity AIHistory {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * promptText : String
+    * responseJson : String
+    * type : String
+    createdAt : DateTime
+  }
+
+  entity ToolCall {
+    * id : String <<PK>>
+    --
+    * messageId : String <<FK>>
+    * toolName : String
+    * input : String
+    output : String
+    * status : String
+    createdAt : DateTime
+  }
+
+  entity UserRecommendation {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * location : String
+    destinationId : String <<FK>>
+    * priority : String
+    reason : String
+    * type : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity Recommendation {
+    * id : String <<PK>>
+    --
+    * tripId : String <<FK>>
+    * destinationId : String <<FK>>
+    * score : Float
+    recommendationReason : String
+  }
+}
+
+package "Learning & Knowledge" #FFF3E0 {
+  entity KnowledgeContent {
+    * id : String <<PK>>
+    --
+    * title : String
+    * body : String
+    * category : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity KnowledgeQuestion {
+    * id : String <<PK>>
+    --
+    * contentId : String <<FK>>
+    * questionText : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity KnowledgeAnswer {
+    * id : String <<PK>>
+    --
+    * contentId : String <<FK>>
+    * answerText : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+}
+
+package "AI Administration & Governance" #ECEFF1 {
+  entity ModelRegistry {
+    * id : String <<PK>>
+    --
+    * name : String <<UNIQUE>>
+    * provider : String
+    * type : String
+    * version : String
+    isActive : Boolean
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity KnowledgeVersion {
+    * id : String <<PK>>
+    --
+    * versionNumber : Int <<UNIQUE>>
+    commitMessage : String
+    createdAt : DateTime
+  }
+
+  entity PromptVersion {
+    * id : String <<PK>>
+    --
+    * templateName : String
+    * versionHash : String <<UNIQUE>>
+    * templateText : String
+    isActive : Boolean
+    createdAt : DateTime
+  }
+
+  entity AIChatLog {
+    * id : String <<PK>>
+    --
+    * messageId : String <<FK>> <<UNIQUE>>
+    * query : String
+    * llmPrompt : String
+    * llmResponse : String
+    * similarityScore : Float
+    * confidenceScore : Int
+    * reliabilityLevel : String
+    * groundednessScore : Int
+    * claimVerScore : Int
+    * retrievedContext : String
+    * promptTokens : Int
+    * completionTokens : Int
+    * totalTokens : Int
+    * apiCostUsd : Float
+    * latencyMs : Int
+    ttftMs : Int
+    guardrailsBlocked : Boolean
+    securityThreatType : String
+    unsupportedClaims : Int
+    * modelId : String <<FK>>
+    * promptId : String <<FK>>
+    createdAt : DateTime
+  }
+
+  entity UserFeedback {
+    * id : String <<PK>>
+    --
+    * chatLogId : String <<FK>>
+    * rating : Int
+    comment : String
+    correctedText : String
+    isProcessed : Boolean
+    createdAt : DateTime
+  }
+
+  entity CacheMetadata {
+    * id : String <<PK>>
+    --
+    * cacheKey : String <<UNIQUE>>
+    * queryText : String
+    * responseJson : String
+    hitCount : Int
+    expiresAt : DateTime
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity EvaluationHistory {
+    * id : String <<PK>>
+    --
+    * chatLogId : String <<FK>>
+    * metricName : String
+    * score : Float
+    * evaluatorModel : String
+    reasoning : String
+    createdAt : DateTime
+  }
+
+  entity GuardrailEvent {
+    * id : String <<PK>>
+    --
+    chatLogId : String <<FK>>
+    * ruleViolated : String
+    * severity : String
+    * payloadBlocked : String
+    * actionTaken : String
+    createdAt : DateTime
+  }
+
+  entity KnowledgeFreshness {
+    * id : String <<PK>>
+    --
+    * contentId : String
+    * knowledgeCat : String
+    lastCheckedAt : DateTime
+    driftDetected : Boolean
+    sourceHash : String
+    * versionId : Int <<FK>>
+  }
+
+  entity AuditTrail {
+    * id : String <<PK>>
+    --
+    * actionType : String
+    * actorName : String
+    * description : String
+    ipAddress : String
+    createdAt : DateTime
+  }
+
+  entity SystemCache {
+    * key : String <<PK>>
+    * type : String <<PK>>
+    --
+    * value : String
+    expiresAt : DateTime
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+
+  entity AIFeedback {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * messageId : String <<FK>> <<UNIQUE>>
+    * rating : Int
+    comment : String
+    createdAt : DateTime
+    updatedAt : DateTime
+  }
+}
+
+' ==========================================
+' RELATIONSHIPS
+' ==========================================
+
+User ||--o| Profile
+User ||--o| TravelPreferences
+User ||--o{ Follower : "follower"
+User ||--o{ Follower : "following"
+User ||--o| Location
+User ||--o{ LocationHistory
+User ||--o{ Notification
+User ||--o{ TravelerMatch : "user"
+User ||--o{ TravelerMatch : "matchedUser"
+
+User ||--o{ Trip
+Trip ||--o{ TripDay
+TripDay ||--o{ TripActivity
+TripActivity }o--o| Destination
+Trip ||--o| Trip : "cloneSource"
+
+User ||--o{ Journey
+Journey ||--o{ Route
+Route ||--o{ RoutePoint
+
+User ||--o{ Event : "organizer"
+Destination ||--o{ Event
+Event ||--o{ EventAttendee
+User ||--o{ EventAttendee
+
+User ||--o{ Post
+Post ||--o{ Comment
+Comment ||--o{ Comment : "replies"
+User ||--o{ Comment
+Post ||--o{ Like
+User ||--o{ Like
+Post ||--o{ Bookmark
+User ||--o{ Bookmark
+Trip ||--o{ Post
+Destination ||--o{ Post
+
+User ||--o{ CheckIn
+Destination ||--o{ CheckIn
+
+User ||--o{ SavedPlace
+User ||--o{ FavoriteFood
+User ||--o{ TravelHistory
+Destination ||--o{ TravelHistory
+
+User }o--o{ Conversation : "ConversationParticipants"
+Conversation ||--o{ Message
+User ||--o{ Message
+
+User ||--o{ ChatConversation
+ChatConversation ||--o{ ChatMessage
+ChatMessage ||--o{ ChatMessageVersion
+User ||--o| AIMemory
+User ||--o{ AIHistory
+ChatMessage ||--o{ ToolCall
+
+User ||--o{ UserRecommendation
+Destination ||--o{ UserRecommendation
+
+Trip ||--o{ Recommendation
+Destination ||--o{ Recommendation
+
+KnowledgeContent ||--o{ KnowledgeQuestion
+KnowledgeContent ||--o{ KnowledgeAnswer
+
+ModelRegistry ||--o{ AIChatLog
+PromptVersion ||--o{ AIChatLog
+ChatMessage ||--|| AIChatLog
+AIChatLog ||--o{ UserFeedback
+AIChatLog ||--o{ EvaluationHistory
+AIChatLog ||--o{ GuardrailEvent
+
+KnowledgeVersion ||--o{ KnowledgeFreshness
+
+User ||--o{ AIFeedback
+ChatMessage ||--o| AIFeedback
+
+@enduml

@@ -163,9 +163,9 @@ function App() {
   // Connect to Notification socket room and listen for real-time notifications
   useEffect(() => {
     if (isAuthenticated && user?.id) {
-      const socketUrl = process.env.NODE_ENV === 'production' 
-        ? window.location.origin 
-        : 'http://localhost:5000';
+      const socketUrl = import.meta.env.VITE_API_URL 
+        ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
+        : `${window.location.protocol}//${window.location.hostname}:5000`;
 
       const socket = io(socketUrl, {
         transports: ['websocket'],

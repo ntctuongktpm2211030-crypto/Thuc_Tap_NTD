@@ -228,8 +228,8 @@ export const mapService = {
     apiClient.get<{ status: string; temperature: string; condition: string }>('/map/weather', { params }).then(r => r.data),
   DeXuatDiaDiemAI: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
     apiClient.get('/map/ai-recommendations', { params }).then(r => r.data),
-  TroLyDiaDiemAI: (destinationId: string, question: string, destinationName?: string, category?: string) =>
-    apiClient.post('/map/ai-assistant', { destinationId, question, destinationName, category }).then(r => r.data),
+  TroLyDiaDiemAI: (destinationId: string, question: string) =>
+    apiClient.post('/map/ai-assistant', { destinationId, question }).then(r => r.data),
 
   // Alias tương thích ngược
   checkIn: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
@@ -243,8 +243,7 @@ export const mapService = {
   events: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachSuKien(params),
   weather: (params: { location: string }) => mapService.LayThongTinThoiTiet(params),
   aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) => mapService.DeXuatDiaDiemAI(params),
-  aiAssistant: (destinationId: string, question: string, destinationName?: string, category?: string) =>
-    mapService.TroLyDiaDiemAI(destinationId, question, destinationName, category),
+  aiAssistant: (destinationId: string, question: string) => mapService.TroLyDiaDiemAI(destinationId, question),
 };
 
 // ─────────────────────────────────────────────────────────

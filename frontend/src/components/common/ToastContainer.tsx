@@ -20,6 +20,12 @@ const SingleToast: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void 
   const duration = toast.duration || 4500;
 
   useEffect(() => {
+    if (progress <= 0) {
+      onDismiss(toast.id);
+    }
+  }, [progress, onDismiss, toast.id]);
+
+  useEffect(() => {
     if (isPaused) return;
 
     const intervalTime = 50;
@@ -29,7 +35,6 @@ const SingleToast: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void 
       setProgress((prev) => {
         if (prev <= decrement) {
           clearInterval(timer);
-          onDismiss(toast.id);
           return 0;
         }
         return prev - decrement;
@@ -37,7 +42,7 @@ const SingleToast: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void 
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [duration, isPaused, onDismiss, toast.id]);
+  }, [duration, isPaused, toast.id]);
 
   // Style variations based on type
   const getConfig = () => {

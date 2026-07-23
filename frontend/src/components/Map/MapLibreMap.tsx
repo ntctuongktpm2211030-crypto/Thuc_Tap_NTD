@@ -4,7 +4,6 @@ import { mapService } from '../../services/smartTravel.service';
 import { CloudRain, Car, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { toast } from '../../contexts/ToastContext';
 
 export interface MapLocation {
   id: string;
@@ -19,6 +18,7 @@ export interface MapLocation {
   address?: string;
   imageUrl?: string;
   tag?: string;
+  color?: string;
   allCheckins?: { user: string; avatar: string; note: string; time: string }[];
 }
 
@@ -33,7 +33,6 @@ interface MapLibreMapProps {
   aiRecommendedIds?: string[];
   weatherInfo?: { condition: string; temp: string };
   onSelectLocation?: (loc: MapLocation | null) => void;
-  selectedLocationId?: string | null;
   destination?: string;
   onCenterChange?: (center: [number, number]) => void;
 }
@@ -83,6 +82,12 @@ const svgBlueString = `
 const svgGreenString = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#10b981">
   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+</svg>
+`;
+
+const svgGlobeString = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#3b82f6">
+  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
 </svg>
 `;
 
@@ -318,7 +323,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   aiRecommendedIds = [],
   weatherInfo = { condition: 'Sunny', temp: '28' },
   onSelectLocation,
-  selectedLocationId,
   destination,
   onCenterChange,
 }) => {
@@ -328,7 +332,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [viewType, setViewType] = useState<'map' | 'timeline'>('map');
-  const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'dark' | 'light'>('street');
+  const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'dark' | 'light' | '3d'>('street');
 
   // GIS layers active state
   const [showWeather, setShowWeather] = useState(false);
@@ -408,7 +412,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     };
   }, [locations, onAddPointToRoute]);
 
-  // 2. Initialize Map (Pure MapLibre GL)
+  // 2. Initialize MapLibre
   useEffect(() => {
     if (!containerRef.current || mlMapRef.current) return;
     const initialCenter: [number, number] = [Number(center[1]) || 105.804817, Number(center[0]) || 21.028511];
@@ -459,43 +463,12 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [center[0], center[1]]);
 
+  // Switch styles reactively
   useEffect(() => {
     if (mlMapRef.current) {
       mlMapRef.current.setStyle(getMapLibreStyle(mapStyle));
     }
   }, [mapStyle]);
-
-  useEffect(() => {
-    const checkGeofencing = () => {
-      const userCoords = { latitude: center[0], longitude: center[1] };
-      for (const loc of locations) {
-        if (loc.id.startsWith('checkin-') || loc.id.startsWith('live-')) continue;
-
-        const dist = calculateHaversineDistance(userCoords, { latitude: loc.lat, longitude: loc.lng });
-        if (dist <= 0.3) {
-          const alertKey = `geofence-alert-${loc.id}`;
-          const lastAlert = sessionStorage.getItem(alertKey);
-          if (!lastAlert) {
-            sessionStorage.setItem(alertKey, Date.now().toString());
-            toast.location(
-              vi
-                ? `Bạn đang ở rất gần điểm đến ${loc.name}. Bạn có thể khám phá hoặc check-in ngay!`
-                : `You are near ${loc.name}. Discover or check-in now!`,
-              `Cách ${(dist * 1000).toFixed(0)}m`,
-              {
-                title: vi ? `Gần địa danh: ${loc.name}` : `Approaching: ${loc.name}`,
-              }
-            );
-          }
-          break;
-        }
-      }
-    };
-    checkGeofencing();
-  }, [center[0], center[1], locations]);
-
-  // Fit map bounds to show route
-  const routePointsKey = JSON.stringify(routePoints.map(p => p.id));
 
   // 3. Render markers & layers
   useEffect(() => {
@@ -505,7 +478,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     mlMarkersRef.current.forEach(m => m.remove());
     mlMarkersRef.current = [];
 
-    // Filter locations
+    // Filter current user and event markers if toggled off
     const nonUserLocations = locations.filter(loc => {
       if (loc.id.startsWith('live-current-user-')) return false;
       if (loc.category === 'festival' && !showEvents) return false;
@@ -532,16 +505,36 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       }
     });
 
-    const currentUserLoc = locations.find(loc => loc.id.startsWith('live-current-user-'));
-
-    // Render normal markers
+    // Draw normal markers
     adjustedLocations.forEach(loc => {
-      const svg = getSvgIcon(loc, aiRecommendedIds.includes(loc.id));
+      const isLiveFriend = loc.id.startsWith('live-');
       const el = document.createElement('div');
-      el.innerHTML = svg;
-      el.style.width = '30px';
-      el.style.height = '30px';
       el.style.cursor = 'pointer';
+
+      if (isLiveFriend) {
+        el.style.width = '36px';
+        el.style.height = '36px';
+        el.style.borderRadius = '50%';
+        el.style.border = '2px solid #ef4444';
+        el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+        el.style.backgroundColor = '#ffffff';
+        el.style.overflow = 'hidden';
+        el.style.display = 'flex';
+        el.style.alignItems = 'center';
+        el.style.justifyContent = 'center';
+
+        const img = document.createElement('img');
+        img.src = loc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        el.appendChild(img);
+      } else {
+        const svg = getSvgIcon(loc, aiRecommendedIds.includes(loc.id));
+        el.innerHTML = svg;
+        el.style.width = '30px';
+        el.style.height = '30px';
+      }
 
       const content = createPopupContent(loc, vi, !!onAddPointToRoute, locations);
       const popup = new maplibregl.Popup({ offset: 25 })
@@ -552,21 +545,41 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         .setPopup(popup)
         .addTo(map);
 
-      (marker as any).locationId = loc.id;
-
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (onSelectLocation) onSelectLocation(loc);
+        if (popup.isOpen()) {
+          popup.remove();
+        } else {
+          popup.addTo(map);
+        }
       });
 
       mlMarkersRef.current.push(marker);
     });
 
-    // Current user marker
+    // Draw current user marker
+    const currentUserLoc = locations.find(loc => loc.id.startsWith('live-current-user-'));
     if (currentUserLoc) {
       const el = document.createElement('div');
-      el.innerHTML = svgUserString;
-      el.style.width = '30px';
-      el.style.height = '30px';
+      el.style.width = '40px';
+      el.style.height = '40px';
+      el.style.borderRadius = '50%';
+      el.style.border = '3px solid #3b82f6';
+      el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+      el.style.backgroundColor = '#ffffff';
+      el.style.overflow = 'hidden';
+      el.style.cursor = 'pointer';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+
+      const img = document.createElement('img');
+      img.src = currentUserLoc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      el.appendChild(img);
 
       const content = createPopupContent(currentUserLoc, vi, !!onAddPointToRoute, locations);
       const popup = new maplibregl.Popup({ offset: 15 })
@@ -577,43 +590,19 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         .setPopup(popup)
         .addTo(map);
 
-      (userMarker as any).locationId = currentUserLoc.id;
-
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (onSelectLocation) onSelectLocation(currentUserLoc);
+        if (popup.isOpen()) {
+          popup.remove();
+        } else {
+          popup.addTo(map);
+        }
       });
 
       mlMarkersRef.current.push(userMarker);
     }
   }, [locations, viewMode, aiRecommendedIds, showEvents, loaded]);
-
-  // 3b. Open popup programmatically when selectedLocationId changes
-  useEffect(() => {
-    if (!loaded || !mlMapRef.current || !selectedLocationId) return;
-    const map = mlMapRef.current;
-    
-    // Use setTimeout to ensure markers are rendered and registered
-    const timer = setTimeout(() => {
-      const marker = mlMarkersRef.current.find(m => (m as any).locationId === selectedLocationId);
-      if (marker) {
-        // Close other open popups first
-        mlMarkersRef.current.forEach(m => {
-          const p = m.getPopup();
-          if (p && p.isOpen()) {
-            p.remove();
-          }
-        });
-        
-        // Open the selected marker's popup
-        const p = marker.getPopup();
-        if (p) {
-          p.addTo(map);
-        }
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [selectedLocationId, loaded, locations]);
 
   // 4. Route points Polyline path connector
   useEffect(() => {
@@ -674,7 +663,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [routePoints, loaded]);
 
-  // 5. Warning Circle layers (Safety Warning)
+  // 5. Warning Circle layers
   useEffect(() => {
     if (!loaded || !mlMapRef.current) return;
     const map = mlMapRef.current;
@@ -684,7 +673,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     const updateWarnings = () => {
       if (!map.isStyleLoaded()) return;
 
-      // Clear existing warning sources/layers
       warnings.forEach(warn => {
         if (map.getLayer(`warn-circle-layer-${warn.id}`)) map.removeLayer(`warn-circle-layer-${warn.id}`);
         if (map.getLayer(`warn-circle-stroke-${warn.id}`)) map.removeLayer(`warn-circle-stroke-${warn.id}`);
@@ -725,7 +713,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           }
         });
 
-        // Warning Indicator Pin
         const el = document.createElement('div');
         el.innerHTML = '<span style="font-size: 20px;">⚠️</span>';
         el.style.cursor = 'pointer';
@@ -829,11 +816,19 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [showEvents, eventsData, loaded]);
 
-  // Helper to map category to marker SVG icon
   const getSvgIcon = (loc: MapLocation, isRecommended: boolean) => {
+    if (loc.color) {
+      if (loc.color === 'red') return svgRedString;
+      if (loc.color === 'blue') return svgBlueString;
+      if (loc.color === 'gold') return svgGoldString;
+      if (loc.color === 'green') return svgGreenString;
+      if (loc.color === 'purple') return svgEventString;
+    }
+
     const isLive = loc.id.startsWith('live-');
     const isCheckin = !!loc.user && !isLive;
 
+    if (loc.id.startsWith('osm-place-')) return svgRedString;
     if (isLive) return svgBlueString;
     if (isRecommended) return svgGreenString;
     if (isCheckin) {
@@ -936,7 +931,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all no-underline shadow-sm cursor-pointer"
                 >
                   <Compass size={11} className="text-white" />
-                  <span>{vi ? 'Mở chỉ đường bằng Google Maps' : 'Open Google Maps'}</span>
+                  <span>{vi ? 'Mở Google Maps chỉ đường' : 'Open Google Maps'}</span>
                 </a>
               </div>
 
@@ -1028,9 +1023,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           <div className="absolute bottom-3 left-3 z-10 flex gap-1 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-1 rounded-xl shadow-lg">
             <button
               type="button"
-              onClick={() => {
-                setMapStyle('street');
-              }}
+              onClick={() => setMapStyle('street')}
               className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
                 mapStyle === 'street' 
                   ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
@@ -1041,9 +1034,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => {
-                setMapStyle('satellite');
-              }}
+              onClick={() => setMapStyle('satellite')}
               className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
                 mapStyle === 'satellite' 
                   ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
@@ -1054,9 +1045,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => {
-                setMapStyle('dark');
-              }}
+              onClick={() => setMapStyle('dark')}
               className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
                 mapStyle === 'dark' 
                   ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
@@ -1067,9 +1056,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => {
-                setMapStyle('light');
-              }}
+              onClick={() => setMapStyle('light')}
               className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold transition-all cursor-pointer ${
                 mapStyle === 'light' 
                   ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
@@ -1095,6 +1082,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
               <CloudRain size={10} className={showWeather ? 'text-white' : 'text-blue-500'} />
               <span>{vi ? 'Khí tượng' : 'Weather'}</span>
             </button>
+
             <button
               type="button"
               onClick={() => setShowSafety(prev => !prev)}
