@@ -239,7 +239,7 @@ const MapDashboard = () => {
 
     const socketUrl = import.meta.env.VITE_API_URL 
       ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
-      : 'http://localhost:5000';
+      : `${window.location.protocol}//${window.location.hostname}:5000`;
       
     const socket = io(socketUrl, {
       transports: ['websocket']
@@ -478,7 +478,8 @@ const MapDashboard = () => {
           const distance = R * cDistance;
           return { ...f, distance };
         })
-        .filter(f => f.distance <= 100) // Within 100km radius limit
+        // Show all online users during testing (no distance limit)
+        // .filter(f => f.distance <= 100)
         .forEach(f => {
           mappedFriends.push({
             id: `live-${f.userId}`,
