@@ -4,48 +4,71 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-actor "Khách vãng lai" as Guest
-actor "Người dùng đăng ký" as RegisteredUser
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
+actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
-RegisteredUser -|> Guest
+actor "OpenAI API\n(LLM Service)" as OpenAI <<System>>
 
-rectangle "Lập kế hoạch & Hành trình" {
-  usecase "Tìm kiếm điểm đến" as UC_SearchDest
-  usecase "Tìm kiếm món ăn ẩm thực" as UC_SearchFood
-  usecase "Xem thông tin chi tiết địa danh" as UC_ViewDetail
+' ==========================================
+' 2. SYSTEM BOUNDARY & TRIP USE CASES
+' ==========================================
+rectangle "Phân hệ Lập lịch trình & Hành trình (Trip Planning)" as TripModule {
   
-  usecase "Tạo chuyến đi mới" as UC_CreateTrip
-  usecase "Chỉnh sửa chuyến đi" as UC_EditTrip
-  usecase "Xóa chuyến đi" as UC_DeleteTrip
-  usecase "Tự động tạo lịch trình bằng AI" as UC_AITrip
-  usecase "Tối ưu hóa thứ tự lộ trình (TSP)" as UC_OptimizeRoute
-  usecase "Lưu địa điểm yêu thích" as UC_SaveFavorite
-  
-  ' Bổ sung gói hành trình tự do (Custom Itineraries)
-  package "Hành trình tự do" {
-    usecase "Tạo hành trình tự do mới" as UC_CreateItin
-    usecase "Xem danh sách hành trình tự do" as UC_ListItin
-    usecase "Xem chi tiết hành trình tự do" as UC_ViewItin
-    usecase "Thêm ngày vào hành trình tự do" as UC_AddDayItin
-    usecase "Quản lý hoạt động hành trình tự do\n(Thêm/Sửa/Xóa)" as UC_ManageActItin
+  package "Kế hoạch chuyến đi (Trips)" {
+    usecase "Xem danh sách chuyến đi\n(List Personal Trips)" as UC_ListTrips
+    usecase "Xem chi tiết chuyến đi\n(View Trip Details)" as UC_ViewTrip
+    usecase "Tạo chuyến đi thủ công\n(Create Trip Manually)" as UC_CreateTrip
+    usecase "Cập nhật/Tái tạo một phần lịch trình bằng AI\n(Update/Regenerate Part of AI Itinerary)" as UC_UpdateTrip
+    usecase "Xóa chuyến đi\n(Delete Trip)" as UC_DeleteTrip
+    
+    
+    usecase "Tự động tạo lịch trình bằng AI\n(Generate AI Trip Itinerary)" as UC_AITrip
+    usecase "Tối ưu hóa thứ tự lộ trình (TSP)\n(Optimize Route Sequence)" as UC_OptimizeRoute
   }
+  
+  
+  
+  package "Nhật ký di chuyển (Travel History)" {
+    usecase "Xem nhật ký di chuyển thực tế\n(List Travel Histories)" as UC_ListHistory
+    usecase "Tạo bản ghi lịch sử du lịch\n(Create Travel History Entry)" as UC_CreateHistory
+    usecase "Cập nhật bản ghi lịch sử\n(Update Travel History Entry)" as UC_UpdateHistory
+    usecase "Xóa bản ghi lịch sử\n(Delete Travel History Entry)" as UC_DeleteHistory
+  }
+  
+  package "Đề xuất điểm đến (AI Recommendations)" {
+    usecase "Xem đề xuất cá nhân hóa từ AI\n(View AI Recommendations)" as UC_ViewRecommend
+    usecase "Lưu địa điểm đề xuất vào chuyến đi\n(Save Recommendations to Trip)" as UC_SaveRecommend
+  }
+
+  ' Relationships (include / extend)
+  UC_CreateTrip <.. UC_AITrip : <<extend>>
+  UC_AITrip <.. UC_UpdateTrip : <<extend>>
+  UC_AITrip <.. UC_OptimizeRoute : <<extend>>
+  
+
+  
+  UC_ViewRecommend <.. UC_SaveRecommend : <<extend>>
 }
 
-Guest -- UC_SearchDest
-Guest -- UC_SearchFood
-Guest -- UC_ViewDetail
-
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
+RegisteredUser -- UC_ViewTrip
+RegisteredUser -- UC_ListTrips
 RegisteredUser -- UC_CreateTrip
-RegisteredUser -- UC_EditTrip
+RegisteredUser -- UC_UpdateTrip
 RegisteredUser -- UC_DeleteTrip
-RegisteredUser -- UC_SaveFavorite
-RegisteredUser -- UC_AITrip
-RegisteredUser -- UC_CreateItin
-RegisteredUser -- UC_ListItin
-RegisteredUser -- UC_ViewItin
 
-UC_ViewItin <.. UC_AddDayItin : <<extend>>
-UC_ViewItin <.. UC_ManageActItin : <<extend>>
-UC_CreateTrip <.. UC_AITrip : <<extend>>
-UC_EditTrip <.. UC_OptimizeRoute : <<extend>>
+RegisteredUser -- UC_ListHistory
+RegisteredUser -- UC_CreateHistory
+RegisteredUser -- UC_UpdateHistory
+RegisteredUser -- UC_DeleteHistory
+
+RegisteredUser -- UC_ViewRecommend
+
+UC_AITrip -- OpenAI
+UC_ViewRecommend -- OpenAI
+
 @enduml

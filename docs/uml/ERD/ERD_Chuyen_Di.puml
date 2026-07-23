@@ -4,65 +4,66 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Quản lý chuyến đi" {
-  entity "Trip" as Trip {
-    * id : String <<PK>>
+  entity "Chuyen di" as Trip {
+    * PK | id : String
     --
-    * ownerId : String <<FK>> <<INDEX>>
-    * title : String
-    description : String
-    * destinationName : String
-    startDate : DateTime
-    endDate : DateTime
-    * totalBudget : Float
-    * travelStyle : String
-    * isPublic : Boolean
-    * status : TripStatus
-    cloneSourceId : String <<FK>> <<INDEX>>
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | ownerId : String <<INDEX>>
+    | FK2 | cloneSourceId : String <<INDEX>>
+    * | title : String
+    | description : String
+    * | destinationName : String
+    | startDate : DateTime
+    | endDate : DateTime
+    * | totalBudget : Float
+    * | travelStyle : String
+    * | isPublic : Boolean
+    * | status : TripStatus
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "TripDay" as TripDay {
-    * id : String <<PK>>
+  entity "Ngay chuyen di" as TripDay {
+    * PK | id : String
     --
-    * tripId : String <<FK>>
-    * dayIndex : Int
-    date : DateTime
+    * FK1 | tripId : String
+    * | dayIndex : Int
+    | date : DateTime
   }
 
-  entity "TripActivity" as TripActivity {
-    * id : String <<PK>>
+  entity "Hoat dong chuyen di" as TripActivity {
+    * PK | id : String
     --
-    * tripDayId : String <<FK>> <<INDEX>>
-    destinationId : String <<FK>> <<INDEX>>
-    title : String
-    location : String
-    description : String
-    startTime : String
-    endTime : String
-    * estimatedCost : Float
-    * sequenceOrder : Int
-    notes : String
+    * FK1 | tripDayId : String <<INDEX>>
+    | FK2 | destinationId : String <<INDEX>>
+    | title : String
+    | location : String
+    | description : String
+    | startTime : String
+    | endTime : String
+    * | estimatedCost : Float
+    * | sequenceOrder : Int
+    | notes : String
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
-entity "Destination" as Destination <<External>>
-entity "Post" as Post <<External>>
-entity "Recommendation" as Recommendation <<External>>
+entity "Người dùng" as User <<External>>
+entity "Điểm đến" as Destination <<External>>
+entity "Bài đăng" as Post <<External>>
+entity "Đề xuất" as Recommendation <<External>>
 
-User ||--o{ Trip : "owner"
-Trip ||--o{ TripDay : "days"
-TripDay ||--o{ TripActivity : "activities"
-Destination ||--o{ TripActivity : "destination"
+User ||--o{ Trip : "chủ sở hữu"
+Trip ||--o{ TripDay : "ngày đi"
+TripDay ||--o{ TripActivity : "hoạt động"
+Destination ||--o{ TripActivity : "điểm đến"
 
-Trip ||--o{ Recommendation : "recommendations"
-Trip ||--o{ Post : "posts"
+Trip ||--o{ Recommendation : "đề xuất"
+Trip ||--o{ Post : "bài đăng"
 
 @enduml

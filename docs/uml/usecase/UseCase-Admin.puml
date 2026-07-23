@@ -1,40 +1,81 @@
-@startuml UseCase_Admin
+@startuml UseCase-AI-Chatbot
 left to right direction
-skinparam packageStyle rectangle
-skinparam actorStyle awesome
 skinparam linetype ortho
-
-actor "Người dùng đăng ký" as RegisteredUser
-
-rectangle "Quản trị Hệ thống" {
-  package "Quản trị Người dùng & Điểm đến" {
-    usecase "Quản lý tài khoản người dùng" as UC_ManageUsers
-    usecase "Quản lý điểm đến & ẩm thực" as UC_ManageDests
-  }
-  
-  package "Quản trị Tri thức AI RAG" {
-    usecase "Quản lý kho tri thức RAG" as UC_ManageKB
-    usecase "Nạp tài liệu tri thức (Upload)" as UC_UploadDocs
-  }
-
-  ' Bổ sung gói Quản trị & Kiểm toán AI (AI Governance)
-  package "Quản trị & Kiểm toán AI (Enterprise)" {
-    usecase "Quản lý Đăng ký mô hình\n(Model Registry)" as UC_ModelRegistry
-    usecase "Quản lý Phiên bản Prompt\n(Prompt Versioning)" as UC_PromptVersion
-    usecase "Giám sát nhật ký & chi phí AI\n(Audit Chat Log & Cost)" as UC_AuditChatLog
-    usecase "Giám sát độ lệch tri thức\n(Knowledge Drift Monitoring)" as UC_DriftMonitor
-    usecase "Xử lý phản hồi tiêu cực\n(Human-in-the-loop)" as UC_FeedbackLoop
-  }
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #FFF9D6
+    BorderColor #C0392B
 }
 
-RegisteredUser -- UC_ManageUsers
-RegisteredUser -- UC_ManageDests
-RegisteredUser -- UC_ManageKB
-RegisteredUser -- UC_ModelRegistry
-RegisteredUser -- UC_PromptVersion
-RegisteredUser -- UC_AuditChatLog
-RegisteredUser -- UC_DriftMonitor
-RegisteredUser -- UC_FeedbackLoop
+actor "Người dùng đã đăng ký" as User
+actor "LLM Service" as LLM <<System>>
 
-UC_ManageKB ..> UC_UploadDocs : <<include>>
+rectangle "AI Chatbot Module" {
+
+    package "Quản lý hội thoại" {
+
+        usecase "Khởi tạo cuộc\nhội thoại mới" as UC_NewChat
+
+        usecase "Gửi tin nhắn\ncho trợ lý AI" as UC_Send
+
+        usecase "Xem lịch sử\ntrò chuyện" as UC_History
+
+        usecase "Xem chi tiết\ncuộc hội thoại" as UC_Detail
+
+        usecase "Xóa cuộc\nhội thoại" as UC_Delete
+
+        usecase "Yêu cầu sinh lại\ncâu trả lời" as UC_Regen
+
+        usecase "Đánh giá\ncâu trả lời AI" as UC_Rating
+    }
+
+    package "Bộ nhớ AI" {
+
+        usecase "Quản lý\nbộ nhớ AI" as UC_Memory
+
+        usecase "Xem cấu hình\nbộ nhớ AI" as UC_ViewMemory
+
+        usecase "Cập nhật cấu hình\nbộ nhớ AI" as UC_EditMemory
+
+        usecase "Xóa cấu hình\nbộ nhớ AI" as UC_DeleteMemory
+    }
+
+    package "Sở thích người dùng" {
+
+        usecase "Quản lý danh sách\nmón ăn yêu thích" as UC_Favorite
+    }
+}
+
+'==========================
+' Association
+'==========================
+
+User --> UC_NewChat
+User --> UC_Send
+User --> UC_History
+User --> UC_Detail
+User --> UC_Delete
+
+User --> UC_Memory
+User --> UC_Favorite
+
+LLM --> UC_Send
+
+'==========================
+' Include
+'==========================
+
+UC_Memory ..> UC_ViewMemory : <<include>>
+UC_Memory ..> UC_EditMemory : <<include>>
+UC_Memory ..> UC_DeleteMemory : <<include>>
+
+'==========================
+' Extend
+'==========================
+
+UC_Regen ..> UC_Send : <<extend>>
+
+UC_Rating ..> UC_Send : <<extend>>
+
 @enduml

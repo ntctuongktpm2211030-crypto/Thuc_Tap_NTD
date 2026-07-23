@@ -4,36 +4,83 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
 actor "Người dùng đăng ký" as RegisteredUser
-actor "LLM Service" as LLM <<System>>
+actor "OpenAI API\n(LLM Service)" as LLM <<System>>
 
-rectangle "Phân hệ Trợ lý ảo AI & RAG (CIM-enhanced)" {
-  usecase "Khởi tạo cuộc hội thoại mới" as UC_StartConv
-  usecase "Xem lịch sử trò chuyện" as UC_ConvHistory
-  usecase "Đặt câu hỏi du lịch" as UC_AskQuestion
-  usecase "Nhận câu trả lời từ AI" as UC_ReceiveAnswer
+' ==========================================
+' 2. SYSTEM BOUNDARY & AI USE CASES
+' ==========================================
+rectangle "Phân hệ Trợ lý ảo AI & RAG (AI Chatbot & RAG)" as AIModule {
   
-  ' Bổ sung các tính năng của CIM và bảo vệ
-  usecase "Phân tích trạng thái cảm xúc" as UC_EmotionAnalysis
-  usecase "Tự động áp dụng luật đè ý định" as UC_RuleOverride
-  usecase "Áp dụng chính sách trì hoãn hỏi slot" as UC_AnswerFirst
-  usecase "Sàng lọc Guardrails chống tấn công" as UC_Guardrails
-  usecase "Xác thực Claim (Fact-checking)" as UC_FactCheck
+  package "Quản lý hội thoại (Conversation)" {
+    usecase "Khởi tạo cuộc hội thoại mới\n(Create New Chat Session)" as UC_StartConv
+    usecase "Xem danh sách lịch sử cuộc hội thoại\n(List Chat Conversations)" as UC_ConvHistory
+    usecase "Xem nội dung chi tiết cuộc hội thoại\n(View Chat Details)" as UC_ViewChatDetails
+    usecase "Xóa phiên hội thoại chat\n(Delete Chat Conversation)" as UC_DeleteConv
+  }
   
-  usecase "Gửi đánh giá câu trả lời AI" as UC_FeedbackResponse
+  package "Tương tác Chatbot & CIM (Chat & Intelligence)" {
+    usecase "Gửi tin nhắn trò chuyện với Trợ lý ảo\n(Send Message to Chatbot)" as UC_AskQuestion
+    usecase "Nhận phản hồi từ Trợ lý ảo\n(Receive AI Response)" as UC_ReceiveAnswer
+    usecase "Yêu cầu chatbot sinh lại câu trả lời khác\n(Regenerate AI Response)" as UC_RegenResponse
+    usecase "Đánh giá chất lượng câu trả lời AI\n(Rate AI Chat Response)" as UC_RateResponse
+    
+    ' CIM (Conversation Intelligence Module)
+    usecase "Tự động phân tích trạng thái cảm xúc\n(Emotion Analysis)" as UC_Emotion
+    usecase "Tự động áp dụng luật đè ý định\n(Rule Override)" as UC_RuleOverride
+    usecase "Áp dụng chính sách trì hoãn hỏi slot\n(Answer First, Ask Later)" as UC_AnswerFirst
+    usecase "Sàng lọc Guardrails chống tấn công\n(Guardrails Check)" as UC_Guardrails
+    usecase "Xác thực Claim (Fact-checking)\n(Claim Fact-Verification)" as UC_FactCheck
+  }
+  
+  package "Bộ nhớ AI (AI Memory)" {
+    usecase "Xem cấu hình Bộ nhớ AI\n(View AI Memory Configuration)" as UC_ViewMemory
+    usecase "Cập nhật cấu hình Bộ nhớ AI\n(Update AI Memory)" as UC_UpdateMemory
+    usecase "Xóa cấu hình Bộ nhớ AI\n(Clear AI Memory)" as UC_ClearMemory
+  }
+  
+  package "Cẩm nang ẩm thực (Favorite Foods)" {
+    usecase "Xem danh sách món ẩm thực yêu thích\n(View Favorite Foods List)" as UC_ViewFoods
+    usecase "Lưu món đặc sản vào mục yêu thích\n(Add Favorite Food)" as UC_AddFood
+    usecase "Cập nhật / Xóa món ăn đã lưu\n(Update/Delete Favorite Food)" as UC_ManageFood
+  }
+
+  ' Relationships (include / extend)
+  UC_AskQuestion ..> UC_Guardrails : <<include>>
+  
+  UC_ReceiveAnswer ..> UC_Emotion : <<include>>
+  UC_ReceiveAnswer ..> UC_RuleOverride : <<include>>
+  UC_ReceiveAnswer ..> UC_AnswerFirst : <<include>>
+  UC_ReceiveAnswer ..> UC_FactCheck : <<include>>
+  
+  UC_AskQuestion <.. UC_RegenResponse : <<extend>>
+  UC_ReceiveAnswer <.. UC_RateResponse : <<extend>>
+  
+  UC_ViewMemory <.. UC_UpdateMemory : <<extend>>
+  UC_ViewMemory <.. UC_ClearMemory : <<extend>>
+  UC_ViewFoods <.. UC_ManageFood : <<extend>>
 }
 
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
 RegisteredUser -- UC_StartConv
 RegisteredUser -- UC_ConvHistory
+RegisteredUser -- UC_ViewChatDetails
+RegisteredUser -- UC_DeleteConv
+
 RegisteredUser -- UC_AskQuestion
 RegisteredUser -- UC_ReceiveAnswer
-RegisteredUser -- UC_FeedbackResponse
+RegisteredUser -- UC_RateResponse
 
-UC_AskQuestion ..> UC_Guardrails : <<include>>
-UC_ReceiveAnswer ..> UC_EmotionAnalysis : <<include>>
-UC_ReceiveAnswer ..> UC_RuleOverride : <<include>>
-UC_ReceiveAnswer ..> UC_AnswerFirst : <<include>>
-UC_ReceiveAnswer ..> UC_FactCheck : <<include>>
+RegisteredUser -- UC_ViewMemory
+RegisteredUser -- UC_ViewFoods
+RegisteredUser -- UC_AddFood
 
-UC_ReceiveAnswer --> LLM
+UC_AskQuestion -- LLM
+UC_RegenResponse -- LLM
+
 @enduml

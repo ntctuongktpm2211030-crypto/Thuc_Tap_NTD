@@ -4,19 +4,20 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Caching Lớp đệm" {
-  entity "SystemCache" as SystemCache {
-    * key : String <<PK>>
-    * type : String <<PK>>
+  entity "Dem he thong" as SystemCache {
+    * PK | key : String
+    * PK | type : String
     --
-    * value : String
-    * expiresAt : DateTime
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | value : String
+    * | expiresAt : DateTime
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 }
 

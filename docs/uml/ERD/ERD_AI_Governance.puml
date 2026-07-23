@@ -4,131 +4,144 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 100
 skinparam nodesep 80
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Quản trị & Kiểm toán AI" {
-  entity "ModelRegistry" as ModelRegistry {
-    * id : String <<PK>>
+  entity "Dang ky mo hinh" as ModelRegistry {
+    * PK | id : String
     --
-    * name : String <<UNIQUE>>
-    * provider : String
-    * type : String
-    * version : String
-    * isActive : Boolean
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | name : String <<UNIQUE>>
+    * | provider : String
+    * | type : String
+    * | version : String
+    * | isActive : Boolean
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "PromptVersion" as PromptVersion {
-    * id : String <<PK>>
+  entity "Phien ban prompt" as PromptVersion {
+    * PK | id : String
     --
-    * templateName : String
-    * versionHash : String <<UNIQUE>>
-    * templateText : String
-    * isActive : Boolean
-    * createdAt : DateTime
+    * | templateName : String
+    * | versionHash : String <<UNIQUE>>
+    * | templateText : String
+    * | isActive : Boolean
+    * | createdAt : DateTime
   }
 
-  entity "AIChatLog" as AIChatLog {
-    * id : String <<PK>>
+  entity "Nhat ky chat AI" as AIChatLog {
+    * PK | id : String
     --
-    * messageId : String <<FK>> <<UNIQUE>>
-    * modelId : String <<FK>>
-    * promptId : String <<FK>>
-    * query : String
-    * llmPrompt : String
-    * llmResponse : String
-    * similarityScore : Float
-    * confidenceScore : Int
-    * reliabilityLevel : String
-    * groundednessScore : Int
-    * claimVerScore : Int
-    * retrievedContext : String
-    * promptTokens : Int
-    * completionTokens : Int
-    * totalTokens : Int
-    * apiCostUsd : Float
-    * latencyMs : Int
-    * ttftMs : Int
-    * guardrailsBlocked : Boolean
-    securityThreatType : String
-    unsupportedClaims : Int
-    * createdAt : DateTime
+    * FK1 | messageId : String <<UNIQUE>>
+    * FK2 | modelId : String
+    * FK3 | promptId : String
+    * | query : String
+    * | llmPrompt : String
+    * | llmResponse : String
+    * | similarityScore : Float
+    * | confidenceScore : Int
+    * | reliabilityLevel : String
+    * | groundednessScore : Int
+    * | claimVerScore : Int
+    * | retrievedContext : String
+    * | promptTokens : Int
+    * | completionTokens : Int
+    * | totalTokens : Int
+    * | apiCostUsd : Float
+    * | latencyMs : Int
+    * | ttftMs : Int
+    * | guardrailsBlocked : Boolean
+    | securityThreatType : String
+    | unsupportedClaims : Int
+    * | createdAt : DateTime
   }
 
-  entity "UserFeedback" as UserFeedback {
-    * id : String <<PK>>
+  entity "Phan hoi nguoi dung" as UserFeedback {
+    * PK | id : String
     --
-    * chatLogId : String <<FK>>
-    * rating : Int
-    comment : String
-    correctedText : String
-    * isProcessed : Boolean
-    * createdAt : DateTime
+    * FK1 | chatLogId : String
+    * | rating : Int
+    | comment : String
+    | correctedText : String
+    * | isProcessed : Boolean
+    * | createdAt : DateTime
   }
 
-  entity "EvaluationHistory" as EvaluationHistory {
-    * id : String <<PK>>
+  entity "Lich su danh gia" as EvaluationHistory {
+    * PK | id : String
     --
-    * chatLogId : String <<FK>>
-    * metricName : String
-    * score : Float
-    * evaluatorModel : String
-    reasoning : String
-    * createdAt : DateTime
+    * FK1 | chatLogId : String
+    * | metricName : String
+    * | score : Float
+    * | evaluatorModel : String
+    | reasoning : String
+    * | createdAt : DateTime
   }
 
-  entity "GuardrailEvent" as GuardrailEvent {
-    * id : String <<PK>>
+  entity "Su kien guardrail" as GuardrailEvent {
+    * PK | id : String
     --
-    chatLogId : String <<FK>>
-    * ruleViolated : String
-    * severity : String
-    * payloadBlocked : String
-    * actionTaken : String
-    * createdAt : DateTime
+    | FK1 | chatLogId : String
+    * | ruleViolated : String
+    * | severity : String
+    * | payloadBlocked : String
+    * | actionTaken : String
+    * | createdAt : DateTime
   }
 
-  entity "KnowledgeVersion" as KnowledgeVersion {
-    * id : String <<PK>>
+  entity "Phien ban tri thuc" as KnowledgeVersion {
+    * PK | id : String
     --
-    * versionNumber : Int <<UNIQUE>>
-    commitMessage : String
-    * createdAt : DateTime
+    * | versionNumber : Int <<UNIQUE>>
+    | commitMessage : String
+    * | createdAt : DateTime
   }
 
-  entity "KnowledgeFreshness" as KnowledgeFreshness {
-    * id : String <<PK>>
+  entity "Do tuoi moi tri thuc" as KnowledgeFreshness {
+    * PK | id : String
     --
-    * contentId : String
-    * versionId : Int <<FK>>
-    * knowledgeCat : String
-    * lastCheckedAt : DateTime
-    * driftDetected : Boolean
-    sourceHash : String
+    * FK1 | versionId : Int
+    * | contentId : String
+    * | knowledgeCat : String
+    * | lastCheckedAt : DateTime
+    * | driftDetected : Boolean
+    | sourceHash : String
   }
 
-  entity "AuditTrail" as AuditTrail {
-    * id : String <<PK>>
+  entity "Vet kiem toan" as AuditTrail {
+    * PK | id : String
     --
-    * actionType : String
-    * actorName : String
-    * description : String
-    ipAddress : String
-    * createdAt : DateTime
+    * | actionType : String
+    * | actorName : String
+    * | description : String
+    | ipAddress : String
+    * | createdAt : DateTime
+  }
+
+  entity "Sieu du lieu cache" as CacheMetadata {
+    * PK | id : String
+    --
+    * | cacheKey : String <<UNIQUE>>
+    * | queryText : String
+    * | responseJson : String
+    * | hitCount : Int
+    * | expiresAt : DateTime
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 }
 
-entity "ChatMessage" as ChatMessage <<External>>
+entity "Tin nhắn AI" as ChatMessage <<External>>
 
-ChatMessage ||--|| AIChatLog : "chatLog"
-ModelRegistry ||--o{ AIChatLog : "chatLogs"
-PromptVersion ||--o{ AIChatLog : "chatLogs"
-AIChatLog ||--o{ UserFeedback : "userFeedbacks"
-AIChatLog ||--o{ EvaluationHistory : "evalHistories"
-AIChatLog ||--o{ GuardrailEvent : "guardrailEvents"
-KnowledgeVersion ||--o{ KnowledgeFreshness : "freshnessLogs"
+ChatMessage ||--|| AIChatLog : "nhật ký chat"
+ModelRegistry ||--o{ AIChatLog : "nhật ký chat"
+PromptVersion ||--o{ AIChatLog : "nhật ký chat"
+AIChatLog ||--o{ UserFeedback : "phản hồi người dùng"
+AIChatLog ||--o{ EvaluationHistory : "lịch sử đánh giá"
+AIChatLog ||--o{ GuardrailEvent : "sự kiện guardrail"
+KnowledgeVersion ||--o{ KnowledgeFreshness : "nhật ký độ tươi mới"
 
 @enduml

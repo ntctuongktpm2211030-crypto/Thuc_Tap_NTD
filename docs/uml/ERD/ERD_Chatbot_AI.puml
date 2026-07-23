@@ -4,84 +4,85 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Trợ lý Chatbot AI" {
-  entity "Cuộc hội thoại AI" as CuocHoiThoaiAI {
-    * ma_hoi_thoai_ai : String <<PK>>
+  entity "Cuoc hoi thoai AI" as CuocHoiThoaiAI {
+    * PK | id : String
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    tieu_de : String
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * FK1 | userId : String <<INDEX>>
+    | title : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Tin nhắn AI" as TinNhanAI {
-    * ma_tin_nhan_ai : String <<PK>>
+  entity "Tin nhan AI" as TinNhanAI {
+    * PK | id : String
     --
-    * ma_hoi_thoai_ai : String <<FK>> <<INDEX>>
-    * vai_tro : String
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * FK1 | conversationId : String <<INDEX>>
+    * | role : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Phiên bản tin nhắn AI" as PhienBanTinNhanAI {
-    * ma_phien_ban : String <<PK>>
+  entity "Phien ban tin nhan AI" as PhienBanTinNhanAI {
+    * PK | id : String
     --
-    * ma_tin_nhan_ai : String <<FK>> <<INDEX>>
-    * noi_dung : String
-    * chi_so_phien_ban : Int
-    * dang_kich_hoat : Boolean
-    * ngay_tao : DateTime
+    * FK1 | messageId : String <<INDEX>>
+    * | content : String
+    * | version : Int
+    * | isActive : Boolean
+    * | createdAt : DateTime
   }
 
-  entity "Gọi công cụ AI" as GoiCongCuAI {
-    * ma_goi_cong_cu : String <<PK>>
+  entity "Goi cong cu AI" as GoiCongCuAI {
+    * PK | id : String
     --
-    * ma_tin_nhan_ai : String <<FK>> <<INDEX>>
-    * ten_cong_cu : String
-    * du_lieu_vao : String
-    ket_qua_ra : String
-    * trang_thai : String
-    * ngay_tao : DateTime
+    * FK1 | messageId : String <<INDEX>>
+    * | toolName : String
+    * | input : String
+    | output : String
+    * | status : String
+    * | createdAt : DateTime
   }
 
-  entity "Đánh giá tin nhắn AI" as DanhGiaTinNhanAI {
-    * ma_danh_gia : String <<PK>>
+  entity "Danh gia tin nhan AI" as DanhGiaTinNhanAI {
+    * PK | id : String
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * ma_tin_nhan_ai : String <<FK>> <<UNIQUE>> <<INDEX>>
-    * diem_so : Int
-    gop_y : String
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * FK2 | messageId : String <<UNIQUE>> <<INDEX>>
+    * | rating : Int
+    | comment : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Bộ nhớ AI" as BoNhoAI {
-    * ma_bo_nho : String <<PK>>
+  entity "Bo nho AI" as BoNhoAI {
+    * PK | id : String
     --
-    * ma_nguoi_dung : String <<FK>> <<UNIQUE>>
-    so_thich_du_lich : String[]
-    mon_an_yeu_thich : String[]
-    ngan_sach : String
-    phuong_tien : String[]
-    dia_diem_yeu_thich : String[]
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * FK1 | userId : String <<UNIQUE>>
+    | travelPreferences : String[]
+    | favoriteFoods : String[]
+    | budget : String
+    | transportation : String[]
+    | favoriteLocations : String[]
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Món ăn yêu thích" as MonAnYeuThich {
-    * ma_mon_an_yeu_thich : String <<PK>>
+  entity "Mon an yeu thich" as MonAnYeuThich {
+    * PK | id : String
     --
-    * ma_nguoi_dung : String <<FK>> <<INDEX>>
-    * ten_mon_an : String
-    khu_vuc : String
-    mo_ta : String
-    diem_danh_gia : Float
-    * ngay_tao : DateTime
-    * ngay_cap_nhat : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | name : String
+    | region : String
+    | description : String
+    | rating : Float
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 }
 

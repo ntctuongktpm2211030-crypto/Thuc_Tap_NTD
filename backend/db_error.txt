@@ -4201,3 +4201,397 @@ Căn cứ vào các yếu tố sau:
 
 Ba gợi ý trên bao gồm bến Ninh Kiều, cầu đi bộ Ninh Kiều và chùa Ông Cần Thơ, đều nằm trong khu vực trung tâm của thành phố Cần Thơ. Các điểm này sẽ giúp người dùng tận hưởng không khí mát mẻ và khám phá vẻ đẹp của thành phố này.
 
+[Console Error Logged] 2026-07-21T19:46:31.871Z - D:\Thuc_Tap_NDT\backend\src\modules\ai-agents\services\agent-executor.service.ts:423
+        const convId = messageId || userId;
+              ^
+
+SyntaxError: Identifier 'convId' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1680:20)
+    at Module._compile (D:\Thuc_Tap_NDT\backend\node_modules\source-map-support\source-map-support.js:568:25)
+    at Module.m._compile (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:69:33)
+    at node:internal/modules/cjs/loader:1839:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:114:20)
+    at require.extensions.<computed> (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\Thuc_Tap_NDT\backend\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+
+[Console Error Logged] 2026-07-21T19:46:51.170Z - D:\Thuc_Tap_NDT\backend\src\modules\ai-agents\services\agent-executor.service.ts:422
+        const convId = messageId || userId;
+              ^
+
+SyntaxError: Identifier 'convId' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1680:20)
+    at Module._compile (D:\Thuc_Tap_NDT\backend\node_modules\source-map-support\source-map-support.js:568:25)
+    at Module.m._compile (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:69:33)
+    at node:internal/modules/cjs/loader:1839:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:114:20)
+    at require.extensions.<computed> (C:\Users\TUONG\AppData\Local\Temp\ts-node-dev-hook-3206298375574812.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\Thuc_Tap_NDT\backend\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+
+[Console Error Logged] 2026-07-22T07:58:08.475Z - [CacheCleanupJob] Gặp lỗi khi dọn dẹp cache: 
+Invalid `prisma.systemCache.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\cache\repositories\cache.repository.ts:46:31
+
+  43 
+  44 async clearExpired(type: CacheType) {
+  45   const now = new Date();
+→ 46   return prisma.systemCache.deleteMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.systemCache.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\cache\repositories\cache.repository.ts:46:31
+
+  43 
+  44 async clearExpired(type: CacheType) {
+  45   const now = new Date();
+→ 46   return prisma.systemCache.deleteMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at Timeout.cleanExpiredCache [as _onTimeout] (D:\Thuc_Tap_NDT\backend\src\server.ts:116:22)
+
+[Console Error Logged] 2026-07-22T10:25:41.854Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-23T02:31:17.766Z - ❌ Error during auto-seed: 
+Invalid `prisma.destination.count()` invocation in
+D:\Thuc_Tap_NDT\backend\src\config\seed.ts:173:48
+
+  170 }
+  171 
+  172 // 3. Import Destinations from JSON files if not already imported
+→ 173 const destCount = await prisma.destination.count(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.count()` invocation in
+D:\Thuc_Tap_NDT\backend\src\config\seed.ts:173:48
+
+  170 }
+  171 
+  172 // 3. Import Destinations from JSON files if not already imported
+→ 173 const destCount = await prisma.destination.count(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at autoSeed (D:\Thuc_Tap_NDT\backend\src\config\seed.ts:173:23)
+
+[Console Error Logged] 2026-07-23T02:36:30.294Z - Failed to parse AI Recommendations JSON: Dựa trên thông tin về thời tiết và nhiệt độ, tôi đã phân tích và chọn ra 3 điểm đến phù hợp cho bạn:
+
+{
+  "recommendations": [
+    {
+      "id": "dest-b-nh-an-village-resort-dalat",
+      "reason": "Bình An Village Resort là nơi lý tưởng để thư giãn dưới nắng ấm và nhìn ngắm cảnh hồ Tuyền Lâm",
+      "tag": "Khám Phá / Du Lịch"
+    },
+    {
+      "id": "dest-dalat-edensee-lake-resort---spa",
+      "reason": "Dalat Edensee Lake Resort & Spa là một điểm đến tuyệt vời để tận hưởng không gian yên tĩnh và thư giãn dưới ánh nắng",
+      "tag": "Khám Phá / Du Lịch"
+    },
+    {
+      "id": "dest-dalat-wonder-resort",
+      "reason": "Dalat Wonder Resort là nơi lý tưởng để khám phá và trải nghiệm những điểm check-in thú vị như hồ bơi vô cực và khu vui chơi Wonderland",
+      "tag": "Khám Phá / Du Lịch"
+    }
+  ]
+}
+
+[Console Error Logged] 2026-07-23T02:40:12.400Z - 2026-07-23T02:40:12.400Z [ERROR] [callNativeGemini] API error {"status":404,"error":"{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of av"}
+
+[Console Error Logged] 2026-07-23T02:40:12.401Z - 2026-07-23T02:40:12.401Z [ERROR] [callAgentLLM] Failover to native Gemini also failed {"error":"Native Gemini API error (404): {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n","retryAttempts":2}
+
+[Console Error Logged] 2026-07-23T02:40:12.402Z - 2026-07-23T02:40:12.402Z [ERROR] [callAgentLLM] All LLM attempts exhausted {"retryAttempts":2,"provider":"groq","model":"llama-3.1-8b-instant"}
+
+[Console Error Logged] 2026-07-23T02:41:06.560Z - [map/safety-warnings GET] 
+Invalid `prisma.safetyWarning.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:237:53
+
+  234 const radiusKm = Number(radius);
+  235 const bbox = calculateBoundingBox(center, radiusKm);
+  236 
+→ 237 const candidates = await prisma.safetyWarning.findMany(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.safetyWarning.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:237:53
+
+  234 const radiusKm = Number(radius);
+  235 const bbox = calculateBoundingBox(center, radiusKm);
+  236 
+→ 237 const candidates = await prisma.safetyWarning.findMany(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:237:26
+
+[Console Error Logged] 2026-07-23T02:42:50.902Z - [map/events GET] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:351:48
+
+  348 const radiusKm = Number(radius);
+  349 const bbox = calculateBoundingBox(center, radiusKm);
+  350 
+→ 351 const dbDests = await prisma.destination.findMany(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:351:48
+
+  348 const radiusKm = Number(radius);
+  349 const bbox = calculateBoundingBox(center, radiusKm);
+  350 
+→ 351 const dbDests = await prisma.destination.findMany(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:351:23
+
+[Console Error Logged] 2026-07-23T02:42:50.914Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-23T02:42:53.372Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-23T02:43:09.611Z - Failed to parse AI Recommendations JSON: Dựa trên thông tin về thời tiết và sở thích của bạn, tôi đã phân tích danh sách các địa điểm gần đó và chỉ ra 3 địa điểm phù hợp nhất:
+
+{
+  "recommendations": [
+    {
+      "id": "dest-b-n-ninh-ki-u",
+      "reason": "Khám phá thành phố Cần Thơ dưới ánh nắng mặt trời với Công viên Ninh Kiều.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-c-u--i-b--ninh-ki-u",
+      "reason": "Thưởng thức cảnh quan sông Hậu và cầu đi bộ Ninh Kiều dưới ánh nắng ấm áp.",
+      "tag": "Scenery"
+    },
+    {
+      "id": "dest-ch-a-ph-t-h-c-c-n-th-",
+      "reason": "Khám phá ngôi chùa Phật Học Cần Thơ, một điểm đến tôn giáo độc đáo.",
+      "tag": "Khám Phá"
+    }
+  ]
+}
+
+[Console Error Logged] 2026-07-23T02:43:28.536Z - Failed to parse AI Recommendations JSON: Cập nhật thông tin và phân tích dựa trên dữ liệu mới nhất. Dưới đây là 3 gợi ý về các điểm đến phù hợp với điều kiện thời tiết và sở thích của người dùng:
+
+{
+  "recommendations": [
+    {
+      "id": "dest-dalat-wonder-resort-11.9364-108.4453",
+      "reason": "Thời tiết nắng đẹp, Đà Lạt Wonder Resort là điểm đến lý tưởng để thư giãn và thư thái.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-ana-mandara-villas-dalat-resort---spa-11.9453-108.4234",
+      "reason": "Không khí mát mẻ và thoáng đãng, Ana Mandara Villas Dalat Resort & Spa là nơi lý tưởng để nghỉ ngơi và thư giãn.",
+      "tag": "Ẩm Thực"
+    },
+    {
+      "id": "dest-dalat-edensee-lake-resort---spa-11.8856-108.4236",
+      "reason": "Thời tiết đẹp, Dalat Edensee Lake Resort & Spa là điểm đến lý tưởng để khám phá và trải nghiệm.",
+      "tag": "Khám Phá"
+    }
+  ]
+}
+
+[Console Error Logged] 2026-07-23T02:46:25.461Z - Failed to parse AI Recommendations JSON: Dưới đây là danh sách 3 địa điểm được gợi ý cho người dùng dựa trên các yếu tố thời tiết, nhiệt độ và sở thích của họ:
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-dalat-edensee-lake-resort---spa",
+      "reason": "Đắm mình trong không gian lãng mạn của một ngôi làng cổ điển Đức, thư giãn tại hồ nước ấm và thưởng thức ẩm thực tinh tế.",
+      "tag": "Khám Phá / Ẩm Thực"
+    },
+    {
+      "id": "dest-dalat-wonder-resort",
+      "reason": "Thưởng thức không gian nghỉ dưỡng rộng lớn và lãng mạn của một ngôi làng cổ tích Thụy Sĩ, khám phá khu vui chơi giải trí Wonderland và đắm mình trong hồ bơi vô cực.",
+      "tag": "Khám Phá / Đi Dạo"
+    },
+    {
+      "id": "dest-ana-mandara-villas-dalat-resort---spa",
+      "reason": "Thưởng thức không gian nghỉ dưỡng biệt lập và yên tĩnh của một quần thể nghỉ dưỡng 5 sao, khám phá hệ thống tiện ích cao cấp và thưởng thức ẩm thực tinh tế.",
+      "tag": "Khám Phá / Ẩm Thực"
+    }
+  ]
+}
+```
+
+Các địa điểm này được gợi ý dựa trên các yếu tố sau:
+
+- Thời tiết: Nắng ấm và không mưa, phù hợp cho các hoạt động ngoài trời như đi dạo và tham quan.
+- Nhiệt độ: 28°C, phù hợp cho các hoạt động ngoài trời.
+- Sở thích: Người dùng có sở thích khám phá, đi dạo và thưởng thức ẩm thực, vì vậy các địa điểm được gợi ý phù hợp với các sở thích này.
+
+[Console Error Logged] 2026-07-23T02:50:10.088Z - Failed to parse AI Recommendations JSON: Dựa trên thông tin về thời tiết, nhiệt độ và sở thích của người dùng, tôi sẽ gợi ý 3 địa điểm phù hợp:
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-dalat-edensee-lake-resort---spa",
+      "reason": "Đắm chìm trong không gian lãng mạn và thư giãn dưới ánh nắng mặt trời tại Dalat Edensee Lake Resort & Spa.",
+      "tag": "Khám Phá / Ẩm Thực"
+    },
+    {
+      "id": "dest-dalat-wonder-resort",
+      "reason": "Thưởng thức không gian rộng lớn và lãng mạn tại hồ bơi vô cực của Dalat Wonder Resort.",
+      "tag": "Khám Phá / Tránh Mưa"
+    },
+    {
+      "id": "dest-dalat-palace-heritage-hotel",
+      "reason": "Thưởng thức không gian cổ kính và sang trọng tại Đà Lạt Palace Heritage Hotel.",
+      "tag": "Khám Phá / Ẩm Thực"
+    }
+  ]
+}
+```
+
+Đây là 3 địa điểm phù hợp với sở thích và thời tiết của người dùng:
+
+* Dalat Edensee Lake Resort & Spa: Địa điểm này phù hợp với người dùng muốn thư giãn và lãng mạn dưới ánh nắng mặt trời.
+* Dalat Wonder Resort: Địa điểm này phù hợp với người dùng muốn khám phá không gian rộng lớn và lãng mạn tại hồ bơi vô cực.
+* Đà Lạt Palace Heritage Hotel: Địa điểm này phù hợp với người dùng muốn thưởng thức không gian cổ kính và sang trọng.
+
+[Console Error Logged] 2026-07-23T02:50:42.600Z - Failed to parse AI Recommendations JSON: Dựa trên thông tin thời tiết và sở thích của người dùng, dưới đây là danh sách 3 gợi ý về điểm đến gần đó:
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-l--h-i--ua-thuy-n-r-ng-truy-n-th-ng-s-ng-ti-n-h-ng-10.8372-105.3633",
+      "reason": "Thời tiết nắng ấm 28°C, phù hợp cho lễ hội đua thuyền rồng truyền thống",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-d-ngx-th-p-n-10.8397-105.3712",
+      "reason": "Khám phá văn hóa địa phương dưới thời tiết nắng đẹp",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-th-p-h-ng-ng-10.8408-105.3735",
+      "reason": "Tasting ẩm thực địa phương trong thời tiết nắng ấm",
+      "tag": "Ẩm Thực"
+    }
+  ]
+}
+```
+
+Lưu ý rằng đã phân loại các điểm đến dựa trên các yếu tố như lễ hội, khám phá văn hóa, ẩm thực. Các địa điểm được chọn đều phù hợp với thời tiết nắng ấm và sở thích của người dùng.
+
+[Console Error Logged] 2026-07-23T03:50:47.345Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:27
+

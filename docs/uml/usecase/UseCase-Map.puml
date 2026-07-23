@@ -4,88 +4,77 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-' Actors
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
 actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
-' External Systems
-actor "Dịch vụ Bản đồ\n(Map Service)" as MapService <<System>>
-actor "API Địa mã hóa\n(Geocoding API)" as GeocodingAPI <<System>>
-actor "API Lộ trình\n(Routing API)" as RoutingAPI <<System>>
+actor "OpenStreetMap\n(OSM Service)" as OSM <<System>>
+actor "Socket.io\n(Realtime Server)" as SocketIo <<System>>
+actor "OpenAI API\n(LLM Service)" as OpenAI <<System>>
 
-' Actor Inheritance
 RegisteredUser -|> Guest
 
-rectangle "Bản đồ Tương tác & GIS" {
-  package "Điều hướng Bản đồ\n(Map Navigation)" {
-    usecase "Xem bản đồ\n(View Map)" as UC_ViewMap
-    usecase "Phóng to / Thu nhỏ bản đồ\n(Zoom Map)" as UC_ZoomMap
-    usecase "Di chuyển bản đồ\n(Pan Map)" as UC_PanMap
-    usecase "Thay đổi bản đồ nền\n(Switch Base Map)" as UC_SwitchBaseMap
+' ==========================================
+' 2. SYSTEM BOUNDARY & MAP USE CASES
+' ==========================================
+rectangle "Bản đồ Tương tác & GIS (Interactive Map & GIS)" as MapModule {
+  
+  package "Điều hướng & Tìm kiếm (Navigation & Search)" {
+    usecase "Xem & di chuyển bản đồ\n(View & Navigate Map)" as UC_ViewMap
+    usecase "Tìm kiếm vị trí địa lý\n(Search Location)" as UC_SearchLocation
+    usecase "Lọc danh mục & đánh giá\n(Filter Categories & Ratings)" as UC_FilterCategories
+    usecase "Xem chi tiết địa điểm\n(View Attraction Details)" as UC_ViewAttractionDetail
   }
   
-  package "Khám phá Địa điểm\n(Location Discovery)" {
-    usecase "Tìm kiếm vị trí\n(Search Location)" as UC_SearchLocation
-    usecase "Lọc danh mục địa điểm du lịch\n(Filter Tourist Categories)" as UC_FilterCategories
-    usecase "Xem chi tiết địa điểm du lịch\n(View Tourist Attraction Details)" as UC_ViewAttractionDetail
-    usecase "Xem bản đồ nhiệt check-in\n(View Heatmap)" as UC_ViewHeatmap
-    usecase "Tìm địa điểm xung quanh\n(Find Nearby Places)" as UC_FindNearbyPlaces
-    usecase "Hiển thị gợi ý địa điểm bằng AI trên bản đồ\n(Display AI Recommendations on Map)" as UC_AIRecommendations
-    usecase "Tìm người lân cận chia sẻ vị trí (bán kính 100km)\n(Find Nearby Users Sharing Location - 100km)" as UC_FindNearbyUsers
+  package "Định vị & Theo dõi Live (Live Tracking)" {
+    usecase "Cập nhật vị trí hiện tại lên bản đồ live\n(Update Current Live Location)" as UC_GetCurrentLocation
+    usecase "Xem vị trí live của bạn bè trên bản đồ\n(Track Friends Live Locations)" as UC_TrackFriends
+    usecase "Tìm bạn lân cận chia sẻ vị trí (100km)\n(Find Nearby Users - 100km)" as UC_FindNearbyUsers
   }
   
-  package "Hoạch định Lộ trình\n(Route Planning)" {
-    usecase "Xác định & Cập nhật vị trí hiện tại\n(Get & Update Current Location)" as UC_GetCurrentLocation
-    usecase "Xem chỉ đường lộ trình\n(View Route Directions)" as UC_ViewRouteDirections
-  }
-
-  package "Tương tác & Check-in\n(Interaction & Check-in)" {
+  package "Tương tác & Check-in (Check-in & Offline)" {
     usecase "Thực hiện check-in địa điểm\n(Perform Check-in)" as UC_PerformCheckin
-    usecase "Tải lên hình ảnh check-in\n(Upload Check-in Photo)" as UC_UploadCheckinPhoto
-    usecase "Xem Community Check-Ins\n(View Community Check-ins)" as UC_ViewCommunityCheckins
+    usecase "Xem bản đồ nhiệt check-in\n(View Heatmap check-ins)" as UC_ViewHeatmap
+    usecase "Tải bản đồ ngoại tuyến\n(Cache Map Tiles)" as UC_CacheMap
+    usecase "Tối ưu lộ trình di chuyển du lịch\n(Optimize Local Route - TSP)" as UC_OptimizeLocalRoute
+  }
+  
+  package "Trợ lý bản đồ AI (AI Map Assistant)" {
+    usecase "Xem gợi ý điểm dừng từ trợ lý bản đồ AI\n(Get AI Recommendations on Map)" as UC_AIRecommendations
+    usecase "Hỏi trợ lý ảo về địa điểm được chọn\n(Ask AI Assistant about Location)" as UC_AIAssistant
   }
 
-  package "Sự kiện & Giao lưu\n(Local Events & Meetups)" {
-    usecase "Xem danh sách sự kiện và lễ hội\n(Browse Events & Festivals)" as UC_BrowseEvents
-    usecase "Đăng ký tham gia sự kiện\n(Register to Join Event)" as UC_JoinEvent
-    usecase "Tạo sự kiện địa phương mới\n(Create Local Event)" as UC_CreateEvent
-  }
+  ' Relationships (include / extend)
+  UC_GetCurrentLocation <.. UC_TrackFriends : <<extend>>
+
+  UC_GetCurrentLocation <.. UC_FindNearbyUsers : <<extend>>
 }
 
-' Guest Associations
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
 Guest -- UC_ViewMap
-Guest -- UC_ZoomMap
-Guest -- UC_PanMap
-Guest -- UC_SwitchBaseMap
 Guest -- UC_SearchLocation
 Guest -- UC_FilterCategories
 Guest -- UC_ViewAttractionDetail
 Guest -- UC_ViewHeatmap
-Guest -- UC_ViewCommunityCheckins
-Guest -- UC_BrowseEvents
 
-' Registered User Associations
 RegisteredUser -- UC_GetCurrentLocation
-RegisteredUser -- UC_FindNearbyPlaces
-RegisteredUser -- UC_ViewRouteDirections
-RegisteredUser -- UC_AIRecommendations
+RegisteredUser -- UC_TrackFriends
 RegisteredUser -- UC_FindNearbyUsers
 RegisteredUser -- UC_PerformCheckin
-RegisteredUser -- UC_JoinEvent
-RegisteredUser -- UC_CreateEvent
+RegisteredUser -- UC_CacheMap
+RegisteredUser -- UC_OptimizeLocalRoute
+RegisteredUser -- UC_AIRecommendations
+RegisteredUser -- UC_AIAssistant
 
-' Relationships (include / extend)
-UC_FilterCategories ..> UC_ViewMap : <<extend>>
-UC_ViewHeatmap ..> UC_ViewMap : <<extend>>
-UC_ViewAttractionDetail ..> UC_ViewMap : <<extend>>
-UC_FindNearbyPlaces ..> UC_GetCurrentLocation : <<include>>
+UC_ViewMap -- OSM
+UC_SearchLocation -- OSM
+UC_GetCurrentLocation -- SocketIo
+UC_TrackFriends -- SocketIo
+UC_AIRecommendations -- OpenAI
+UC_AIAssistant -- OpenAI
 
-' Check-in relationships
-UC_PerformCheckin <.. UC_UploadCheckinPhoto : <<extend>>
-UC_ViewCommunityCheckins ..> UC_ViewMap : <<extend>>
-
-' External System Associations
-UC_ViewMap -- MapService
-UC_SearchLocation -- GeocodingAPI
-UC_ViewRouteDirections -- RoutingAPI
 @enduml

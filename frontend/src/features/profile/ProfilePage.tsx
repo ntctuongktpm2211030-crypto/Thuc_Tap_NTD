@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
   MoreHorizontal, Globe, Briefcase, GraduationCap, Image as ImageIcon,
-  Bell
+  Bell, Plus, Trash2, Star, Calendar, DollarSign, Loader2
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import type { RootState, AppDispatch } from '../../store';
 import { setUser } from '../../store/authSlice';
-import { socialService } from '../../services/smartTravel.service';
+import { socialService, travelHistoryService, tripsService } from '../../services/smartTravel.service';
 
 const MY_POSTS = [
   {
@@ -49,7 +49,7 @@ const FRIENDS_PREVIEW = [
   { name: 'Hương Ngô', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=80&q=80' },
 ];
 
-type TabId = 'posts' | 'about' | 'photos' | 'trips' | 'notifications';
+type TabId = 'posts' | 'about' | 'photos' | 'trips' | 'notifications' | 'history';
 
 export default function ProfilePage() {
   const { t, lang } = useLang();
@@ -64,6 +64,30 @@ export default function ProfilePage() {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [following, setFollowing] = useState<any[]>([]);
 
+  // Travel History states
+  const [historyList, setHistoryList] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<any>(null);
+
+  // Planned Trips state
+  const [plannedTrips, setPlannedTrips] = useState<any[]>([]);
+
+  const fetchPlannedTrips = async () => {
+    try {
+      const data = await tripsService.LayDanhSachChuyenDi();
+      if (Array.isArray(data)) setPlannedTrips(data);
+    } catch (err) {
+      console.error('Fetch planned trips failed:', err);
+    }
+  };
+
+  // Form states
+  const [historyLocation, setHistoryLocation] = useState('');
+  const [historyTime, setHistoryTime] = useState('');
+  const [historyRating, setHistoryRating] = useState('5');
+  const [historyCost, setHistoryCost] = useState(0);
+
   useEffect(() => {
     if (user) {
       socialService.getFollowing(user.id)
@@ -77,6 +101,8 @@ export default function ProfilePage() {
           if (Array.isArray(data)) setNotifications(data);
         })
         .catch(err => console.error('Get notifications failed:', err));
+
+      fetchPlannedTrips();
     }
   }, [user]);
 
@@ -107,11 +133,91 @@ export default function ProfilePage() {
     }
   };
 
+  const fetchHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const data = await travelHistoryService.LayDanhSachNhatKy();
+      if (Array.isArray(data)) setHistoryList(data);
+    } catch (err) {
+      console.error('Fetch travel history failed:', err);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'history') {
+      fetchHistory();
+    }
+  }, [activeTab]);
+
+  const handleHistorySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!historyLocation.trim()) {
+      alert(vi ? 'Vui lòng nhập địa điểm!' : 'Please enter location!');
+      return;
+    }
+    if (!historyTime) {
+      alert(vi ? 'Vui lòng chọn thời gian!' : 'Please choose time!');
+      return;
+    }
+
+    try {
+      const payload = {
+        location: historyLocation.trim(),
+        time: new Date(historyTime).toISOString(),
+        rating: historyRating,
+        cost: Number(historyCost),
+      };
+
+      if (editingEntry) {
+        await travelHistoryService.CapNhatNhatKy(editingEntry.id, payload);
+        alert(vi ? 'Cập nhật nhật ký thành công!' : 'Travel history updated successfully!');
+      } else {
+        await travelHistoryService.TaoNhatKy(payload);
+        alert(vi ? 'Thêm nhật ký thành công!' : 'Travel history added successfully!');
+      }
+      setShowHistoryModal(false);
+      setEditingEntry(null);
+      setHistoryLocation('');
+      setHistoryTime('');
+      setHistoryRating('5');
+      setHistoryCost(0);
+      fetchHistory();
+    } catch (err) {
+      console.error('Save history failed:', err);
+      alert(vi ? 'Lưu nhật ký thất bại!' : 'Failed to save travel history!');
+    }
+  };
+
+  const handleHistoryDelete = async (id: string) => {
+    if (!confirm(vi ? 'Bạn có chắc chắn muốn xóa nhật ký này không?' : 'Are you sure you want to delete this entry?')) return;
+    try {
+      await travelHistoryService.XoaNhatKy(id);
+      fetchHistory();
+    } catch (err) {
+      console.error('Delete history failed:', err);
+      alert(vi ? 'Xóa thất bại!' : 'Delete failed!');
+    }
+  };
+
+  const handlePlannedTripDelete = async (id: string) => {
+    if (!confirm(vi ? 'Bạn có chắc chắn muốn xóa chuyến đi này?' : 'Are you sure you want to delete this trip?')) return;
+    try {
+      await tripsService.XoaChuyenDi(id);
+      fetchPlannedTrips();
+    } catch (err) {
+      console.error('Delete planned trip failed:', err);
+      alert(vi ? 'Xóa chuyến đi thất bại!' : 'Delete trip failed!');
+    }
+  };
+
   const tabs: { id: TabId; label: string }[] = [
     { id: 'posts', label: t('profile.tab.posts') },
     { id: 'about', label: t('profile.tab.about') },
     { id: 'photos', label: t('profile.tab.photos') },
     { id: 'trips', label: t('profile.tab.trips') },
+    { id: 'history', label: vi ? 'Nhật ký di chuyển' : 'Travel History' },
     { id: 'notifications', label: vi ? 'Thông báo' : 'Notifications' },
   ];
 
@@ -329,14 +435,79 @@ export default function ProfilePage() {
             )}
 
             {activeTab === 'trips' && (
-              <div className="fb-profile-card text-center py-12">
-                <MapPin size={40} className="mx-auto text-[var(--gold)] mb-3" />
-                <p className="text-[var(--text-secondary)] text-sm">
-                  {vi ? 'Chưa có hành trình công khai.' : 'No public journeys yet.'}
-                </p>
-                <Link to="/journeys/create" className="btn-gold inline-flex mt-4 px-6 py-2.5 text-sm">
-                  {vi ? 'Tạo hành trình đầu tiên' : 'Create your first journey'}
-                </Link>
+              <div className="fb-profile-card">
+                <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
+                  <h3 className="fb-profile-card-title">{vi ? 'Chuyến đi đã lên kế hoạch' : 'Planned Trips'}</h3>
+                  <Link
+                    to="/trips"
+                    className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-[var(--gold)] to-blue-700 hover:shadow-md hover:shadow-blue-600/10 text-white rounded-xl text-xs font-bold transition-all hover:scale-[1.02]"
+                  >
+                    <Plus size={14} />
+                    {vi ? 'Lên kế hoạch mới' : 'Plan New Trip'}
+                  </Link>
+                </div>
+
+                {plannedTrips.length === 0 ? (
+                  <div className="text-center py-12 text-[var(--text-muted)] text-sm">
+                    <MapPin size={40} className="mx-auto text-[var(--gold)]/40 mb-3" />
+                    <p>{vi ? 'Chưa có chuyến đi nào được lên kế hoạch.' : 'No planned trips yet.'}</p>
+                    <Link to="/trips" className="btn-gold inline-flex mt-4 px-6 py-2.5 text-sm">
+                      {vi ? 'Lên lịch trình bằng AI ngay' : 'Plan trip with AI now'}
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {plannedTrips.map(trip => (
+                      <div key={trip.id} className="p-4 rounded-xl border border-[var(--border-normal)] bg-[var(--bg-elevated)] relative hover:border-[var(--gold)]/50 transition-all flex flex-col justify-between group shadow-sm">
+                        <div>
+                          <h4 className="font-bold text-sm text-[var(--text-primary)]">
+                            ✈ {trip.title}
+                          </h4>
+                          <p className="text-xs text-[var(--text-muted)] mt-1">
+                            {vi ? 'Điểm đến:' : 'Destination:'} <span className="font-semibold text-[var(--text-secondary)]">{trip.destinationName}</span>
+                          </p>
+                          <div className="mt-3 space-y-1.5 text-xs text-[var(--text-secondary)]">
+                            <p className="flex items-center gap-1.5">
+                              <Calendar size={12} className="opacity-75" />
+                              <span>
+                                {new Date(trip.startDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')} - {new Date(trip.endDate).toLocaleDateString(vi ? 'vi-VN' : 'en-US')}
+                              </span>
+                            </p>
+                            <p className="flex items-center gap-1.5">
+                              <DollarSign size={12} className="opacity-75 text-emerald-500" />
+                              <span>{vi ? 'Ngân sách dự kiến:' : 'Budget estimate:'} <strong className="text-[var(--text-primary)]">{Number(trip.totalBudget).toLocaleString(vi ? 'vi-VN' : 'en-US')} {vi ? 'VND' : 'USD'}</strong></span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setHistoryLocation(trip.destinationName || trip.title);
+                              const dateStr = trip.startDate ? trip.startDate.split('T')[0] : '';
+                              setHistoryTime(dateStr);
+                              setHistoryCost(trip.totalBudget || 0);
+                              setEditingEntry(null);
+                              setActiveTab('history');
+                              setShowHistoryModal(true);
+                            }}
+                            className="flex-1 text-center px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:shadow-md text-white text-[11px] font-bold transition-all hover:scale-[1.02] cursor-pointer"
+                          >
+                            ⭐ {vi ? 'Đánh giá & Lưu Nhật ký' : 'Rate & Log'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handlePlannedTripDelete(trip.id)}
+                            className="px-3 py-2 rounded-xl border border-red-500/30 text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
+                            title={vi ? 'Xóa chuyến đi' : 'Delete Trip'}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -385,9 +556,232 @@ export default function ProfilePage() {
                 </div>
               </div>
             )}
+
+            {activeTab === 'history' && (
+              <div className="fb-profile-card">
+                <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
+                  <h3 className="fb-profile-card-title">{vi ? 'Nhật ký di chuyển' : 'Travel History'}</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingEntry(null);
+                      setHistoryLocation('');
+                      setHistoryTime('');
+                      setHistoryRating('5');
+                      setHistoryCost(0);
+                      setShowHistoryModal(true);
+                    }}
+                    className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-[var(--gold)] to-blue-700 hover:shadow-md hover:shadow-blue-600/10 text-white rounded-xl text-xs font-bold transition-all hover:scale-[1.02]"
+                  >
+                    <Plus size={14} />
+                    {vi ? 'Thêm nhật ký' : 'Add History'}
+                  </button>
+                </div>
+
+                {loadingHistory ? (
+                  <div className="flex items-center justify-center py-12 text-[var(--text-muted)] text-xs gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>{vi ? 'Đang tải nhật ký di chuyển...' : 'Loading travel history...'}</span>
+                  </div>
+                ) : historyList.length === 0 ? (
+                  <div className="text-center py-12 text-[var(--text-muted)] text-sm">
+                    <MapPin size={32} className="mx-auto text-[var(--gold)]/40 mb-3" />
+                    <p>{vi ? 'Chưa có bản ghi nhật ký di chuyển nào.' : 'No travel history entries yet.'}</p>
+                    <p className="text-xs mt-1 text-[var(--text-muted)]/70">
+                      {vi ? 'Hãy thêm những chuyến hành trình thực tế bạn đã trải qua.' : 'Add real travel journeys you have experienced.'}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {historyList.map(item => (
+                      <div key={item.id} className="p-4 rounded-xl border border-[var(--border-normal)] bg-[var(--bg-elevated)] relative hover:border-[var(--gold)]/50 transition-all flex flex-col justify-between group shadow-sm">
+                        <div>
+                          <div className="flex justify-between items-start gap-4">
+                            <h4 className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-1.5">
+                              📍 {item.location}
+                            </h4>
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-amber-500 font-bold flex items-center gap-0.5">
+                                ★ {item.rating || '5'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="mt-3 space-y-1.5 text-xs text-[var(--text-secondary)]">
+                            <p className="flex items-center gap-1.5">
+                              <Calendar size={12} className="opacity-75" />
+                              <span>{new Date(item.time).toLocaleDateString(vi ? 'vi-VN' : 'en-US')}</span>
+                            </p>
+                            <p className="flex items-center gap-1.5">
+                              <DollarSign size={12} className="opacity-75 text-emerald-500" />
+                              <span className="font-semibold text-[var(--text-primary)]">
+                                {Number(item.cost).toLocaleString(vi ? 'vi-VN' : 'en-US')} {vi ? 'VND' : 'USD'}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingEntry(item);
+                              setHistoryLocation(item.location);
+                              const dateObj = new Date(item.time);
+                              const formattedDate = dateObj.toISOString().split('T')[0];
+                              setHistoryTime(formattedDate);
+                              setHistoryRating(item.rating || '5');
+                              setHistoryCost(item.cost || 0);
+                              setShowHistoryModal(true);
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg border border-[var(--border-normal)] text-[10px] font-bold text-[var(--text-secondary)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all cursor-pointer"
+                          >
+                            {vi ? 'Sửa' : 'Edit'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleHistoryDelete(item.id)}
+                            className="px-2.5 py-1.5 rounded-lg border border-red-500/30 text-[10px] font-bold text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
+                          >
+                            <Trash2 size={11} className="inline mr-0.5" />
+                            {vi ? 'Xóa' : 'Delete'}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </main>
         </div>
       </div>
+
+      {/* ─── MODAL: THÊM / SỬA NHẬT KÝ DI CHUYỂN ─── */}
+      {showHistoryModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-scale-up">
+            <div className="px-5 py-4 border-b border-[var(--border-subtle)] flex justify-between items-center bg-[var(--bg-elevated)]">
+              <h3 className="font-bold text-sm text-[var(--text-primary)]">
+                {editingEntry ? (vi ? 'Cập nhật nhật ký' : 'Update Travel History') : (vi ? 'Thêm nhật ký di chuyển' : 'Add Travel History')}
+              </h3>
+              <button
+                type="button"
+                onClick={() => { setShowHistoryModal(false); setEditingEntry(null); }}
+                className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-transparent border-none cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleHistorySubmit} className="p-5 space-y-4">
+              {!editingEntry && plannedTrips.length > 0 && (
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                    {vi ? 'Liên kết với chuyến đi đã lên kế hoạch' : 'Link to a planned trip'}
+                  </label>
+                  <select
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === 'custom') {
+                        setHistoryLocation('');
+                        setHistoryTime('');
+                        setHistoryCost(0);
+                      } else {
+                        const selected = plannedTrips.find(t => t.id === val);
+                        if (selected) {
+                          setHistoryLocation(selected.destinationName || selected.title);
+                          const dateStr = selected.startDate ? selected.startDate.split('T')[0] : '';
+                          setHistoryTime(dateStr);
+                          setHistoryCost(selected.totalBudget || 0);
+                        }
+                      }
+                    }}
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)]"
+                  >
+                    <option value="custom">{vi ? '-- Tự nhập địa điểm tự do --' : '-- Enter custom location --'}</option>
+                    {plannedTrips.map(t => (
+                      <option key={t.id} value={t.id}>
+                        {t.title} ({t.destinationName})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Địa điểm đã đi' : 'Location Visited'}
+                </label>
+                <input
+                  type="text"
+                  value={historyLocation}
+                  onChange={e => setHistoryLocation(e.target.value)}
+                  placeholder={vi ? 'Ví dụ: Hạ Long, Sapa...' : 'e.g. Sapa, Ha Long...'}
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                    {vi ? 'Thời gian' : 'Time'}
+                  </label>
+                  <input
+                    type="date"
+                    value={historyTime}
+                    onChange={e => setHistoryTime(e.target.value)}
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)]"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                    {vi ? 'Đánh giá (sao)' : 'Rating (stars)'}
+                  </label>
+                  <select
+                    value={historyRating}
+                    onChange={e => setHistoryRating(e.target.value)}
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)]"
+                  >
+                    <option value="5">★★★★★ (5)</option>
+                    <option value="4">★★★★☆ (4)</option>
+                    <option value="3">★★★☆☆ (3)</option>
+                    <option value="2">★★☆☆☆ (2)</option>
+                    <option value="1">★☆☆☆☆ (1)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Chi phí chuyến đi (VND)' : 'Trip Cost (VND)'}
+                </label>
+                <input
+                  type="number"
+                  value={historyCost}
+                  onChange={e => setHistoryCost(Number(e.target.value))}
+                  placeholder="0"
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setShowHistoryModal(false); setEditingEntry(null); }}
+                  className="px-4 py-2 border border-[var(--border-normal)] text-xs font-semibold text-[var(--text-secondary)] rounded-xl hover:bg-[var(--bg-elevated)] transition-all cursor-pointer"
+                >
+                  {vi ? 'Hủy' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white text-xs font-bold rounded-xl hover:shadow-lg transition-all cursor-pointer"
+                >
+                  {editingEntry ? (vi ? 'Cập nhật' : 'Update') : (vi ? 'Thêm mới' : 'Add')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

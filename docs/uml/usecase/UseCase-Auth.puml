@@ -1,59 +1,64 @@
-@startuml UseCase_Auth
+@startuml UseCase_Authentication
 left to right direction
 skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-' Actors
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
 actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
-' External Systems
-actor "Google OAuth" as GoogleOAuth <<System>>
-actor "Email Service" as EmailService <<System>>
+actor "SMTP Mail Server" as SMTP <<System>>
+actor "Firebase Auth" as Firebase <<System>>
+actor "vietnamadminunits API" as AdminUnits <<System>>
 
-' Actor Inheritance
 RegisteredUser -|> Guest
 
-rectangle "Xác thực & Quản lý Hồ sơ" {
-  usecase "Đăng ký tài khoản" as UC_Register
-  usecase "Xác thực email" as UC_VerifyEmail
-  usecase "Đăng nhập truyền thống" as UC_Login
-  usecase "Đăng nhập qua Google" as UC_GoogleLogin
-  usecase "Đăng xuất tài khoản" as UC_Logout
-  usecase "Yêu cầu quên mật khẩu" as UC_ForgotPassword
-  usecase "Xác thực mã OTP quên mật khẩu" as UC_VerifyOTP
-  usecase "Đặt lại mật khẩu mới" as UC_ResetPassword
-  usecase "Xem hồ sơ cá nhân" as UC_ViewProfile
-  usecase "Cập nhật thông tin cá nhân" as UC_UpdateProfile
-  usecase "Đổi mật khẩu bảo mật" as UC_ChangePassword
-  usecase "Quản lý ảnh đại diện" as UC_ManageAvatar
-  usecase "Quản lý sở thích du lịch" as UC_ManagePreferences
+' ==========================================
+' 2. SYSTEM BOUNDARY & AUTH USE CASES
+' ==========================================
+rectangle "Phân hệ Xác thực & Thành viên (Authentication & Profile)" as AuthModule {
+
+  usecase "Đăng ký tài khoản\n(Register)" as UC_Reg
+  usecase "Xác thực tài khoản qua Email\n(Verify Email)" as UC_Verify
+  usecase "Đăng nhập tài khoản\n(Log In)" as UC_Login
+  usecase "Đăng nhập truyền thống\n(Password Log In)" as UC_PassLogin
+  usecase "Đăng nhập Google SSO\n(Google SSO Log In)" as UC_GLogin
+  
+  usecase "Quản lý hồ sơ & sở thích\n(Manage Profile & Preferences)" as UC_Pref
+  usecase "Tìm kiếm thành viên\n(Search Profiles)" as UC_Search
+  usecase "Theo dõi thành viên khác\n(Follow Members)" as UC_Follow
+  usecase "Hủy theo dõi thành viên\n(Unfollow Members)" as UC_Unfollow
+  
+  usecase "Xem lịch sử thông báo\n(View Notifications)" as UC_Notif
+  usecase "Đánh dấu đã đọc tất cả\n(Mark All as Read)" as UC_MarkRead
+
+  ' Generalizations
+  UC_PassLogin -|> UC_Login
+  UC_GLogin -|> UC_Login
+  
+  ' Extends / Includes
+  UC_Follow <.. UC_Unfollow : <<extend>>
+  UC_Notif <.. UC_MarkRead : <<extend>>
 }
 
-' Guest Associations
-Guest -- UC_Register
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
+Guest -- UC_Reg
+Guest -- UC_Verify
 Guest -- UC_Login
-Guest -- UC_GoogleLogin
-Guest -- UC_ForgotPassword
+Guest -- UC_Search
 
-' Registered User Associations
-RegisteredUser -- UC_ViewProfile
-RegisteredUser -- UC_Logout
-RegisteredUser -- UC_UpdateProfile
-RegisteredUser -- UC_ChangePassword
-RegisteredUser -- UC_ManageAvatar
-RegisteredUser -- UC_ManagePreferences
+RegisteredUser -- UC_Pref
+RegisteredUser -- UC_Follow
+RegisteredUser -- UC_Notif
 
-' Relationships (include / extend)
-UC_Register ..> UC_VerifyEmail : <<include>>
-UC_ForgotPassword ..> UC_VerifyOTP : <<include>>
-UC_VerifyOTP ..> UC_ResetPassword : <<include>>
-UC_UpdateProfile <.. UC_ManageAvatar : <<extend>>
-UC_UpdateProfile <.. UC_ManagePreferences : <<extend>>
+UC_Reg -- SMTP
+UC_Verify -- SMTP
+UC_Login -- Firebase
+UC_Pref -- AdminUnits
 
-' External System Associations
-UC_Register -- EmailService
-UC_ForgotPassword -- EmailService
-UC_GoogleLogin -- GoogleOAuth
 @enduml

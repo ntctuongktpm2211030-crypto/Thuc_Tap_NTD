@@ -19,7 +19,6 @@ rectangle "Tính năng Thời gian thực (Real-time Features)" {
   
   usecase "Thông báo trực tiếp tức thời" as UC_LiveNotif
   usecase "Nhận thông báo tương tác" as UC_ReceiveNotif
-  usecase "Nhận thông báo khẩn từ Admin" as UC_AdminAnnouncement
   
   usecase "Cập nhật bảng tin tức thời" as UC_LiveFeed
   usecase "Bình luận tức thời" as UC_InstantComment
@@ -34,13 +33,11 @@ User -- UC_ReceiveNotif
 User -- UC_LiveFeed
 User -- UC_InstantComment
 User -- UC_InstantLike
-User -- UC_AdminAnnouncement
 
 ' Relationships (include / extend)
 UC_LiveChat <.. UC_Typing : <<extend>>
 UC_LiveChat ..> UC_OnlineStatus : <<include>>
 UC_LiveNotif ..> UC_ReceiveNotif : <<include>>
-UC_AdminAnnouncement ..> UC_LiveNotif : <<include>>
 
 ' WebSocket Server Mappings
 UC_LiveChat -- WS

@@ -1,60 +1,54 @@
-# Actor List - SmartTravel Platform
+# Danh sách Tác nhân (Actor List) - Nền tảng SmartTravel (Terraholic)
 
-This document describes all actors involved in the SmartTravel application. These actors are mapped directly to roles, permissions, and internal modules of the codebase.
-
-## 1. Human Actors
-
-### Khách vãng lai (Guest / Anonymous Traveler)
-- **Description**: An unauthenticated user who visits the platform.
-- **Responsibilities**:
-  - Browses public community blog posts and search feeds in [SocialFeedPage](file:///d:/Thuc_Tap_NDT/frontend/src/features/feed/SocialFeedPage.tsx).
-  - Explores general travel handbooks, local guidelines, and destination articles in [BlogPage](file:///d:/Thuc_Tap_NDT/frontend/src/features/blog/BlogPage.tsx).
-  - Searches and discovers public itineraries shared by other travelers via [tripsRouter](file:///d:/Thuc_Tap_NDT/backend/src/modules/trips/trips.router.ts#L474-L507).
-  - Views public check-ins and safety warnings on the interactive map in [MapDashboard](file:///d:/Thuc_Tap_NDT/frontend/src/features/map/MapDashboard.tsx).
-  - Performs account registration and logs into the platform.
-
-### Người dùng đăng ký (Registered Traveler)
-- **Description**: An authenticated user who has full access to the core personalized features of the platform.
-- **Responsibilities**:
-  - Inherits all privileges of a **Khách vãng lai**.
-  - Manages personal profiles, bio, and specific travel preferences in [SettingsPage](file:///d:/Thuc_Tap_NDT/frontend/src/features/profile/SettingsPage.tsx).
-  - Creates, modifies, clones, and deletes personal trip plans.
-  - Generates AI-designed itineraries via [ai-planner.ts](file:///d:/Thuc_Tap_NDT/backend/src/modules/ai/ai-planner.ts) and regenerates specific segments/days.
-  - Sắp xếp và tối ưu hóa đường đi di chuyển bằng thuật toán TSP qua [route-optimizer.ts](file:///d:/Thuc_Tap_NDT/backend/src/modules/optimizer/route-optimizer.ts).
-  - Publishes blog posts and journey stories with photos, likes posts, writes nested comments, and bookmarks favorites.
-  - Performs live check-ins at destinations, tracks friends' live locations, and uploads photos to extract GPS coordinates via EXIF parsing in [MapDashboard](file:///d:/Thuc_Tap_NDT/frontend/src/features/map/MapDashboard.tsx).
-  - Consults the Multi-Agent Chatbot in [ChatbotPage](file:///d:/Thuc_Tap_NDT/frontend/src/features/chatbot/ChatbotPage.tsx) to ask questions on local food, culture, routing, and reviews.
-  - Switches between different message versions, rates AI replies, and updates long-term learning settings ([AIMemory](file:///d:/Thuc_Tap_NDT/backend/prisma/schema.prisma#L513-L524)).
-  - Manages personal favorite foods, saved places, and travel history databases.
-
-### Quản trị viên (Administrator)
-- **Description**: A system administrator who monitors platform operations, feeds the knowledge base, and manages the AI RAG tri thức.
-- **Responsibilities**:
-  - Inherits all privileges of a **Người dùng đăng nhập**.
-  - Uploads and ingests training documents (culture, food, festivals) into the RAG system database using [ragRouter](file:///d:/Thuc_Tap_NDT/backend/src/modules/rag/routes/rag.router.ts) or [bulk-sync.ts](file:///d:/Thuc_Tap_NDT/knowledge-builder/src/bulk-sync.ts).
-  - Manages and clears platform cache databases ([cacheRouter](file:///d:/Thuc_Tap_NDT/backend/src/modules/cache/routes/cache.router.ts)).
+Tài liệu này định nghĩa chi tiết tất cả các tác nhân (Actors) tương tác với hệ thống SmartTravel, bao gồm Tác nhân con người (Human Actors) và Tác nhân hệ thống/ngoại vi (External Systems).
 
 ---
 
-## 2. External System Actors
+## 1. Tác nhân con người (Human Actors)
 
-### Dịch vụ định danh (Google Firebase Auth / Firebase Admin SDK)
-- **Description**: The external authentication provider used for Google OAuth sign-in flow.
-- **Responsibilities**:
-  - Verifies Client-side ID Tokens and matches email/picture attributes to authenticate users on the backend via [auth.router.ts](file:///d:/Thuc_Tap_NDT/backend/src/modules/auth/auth.router.ts#L216-L293).
+### Khách vãng lai (Guest / Anonymous Traveler)
+*   **Mô tả**: Người dùng chưa xác thực truy cập vào nền tảng.
+*   **Vai trò & Trách nhiệm**:
+    *   **Xác thực**: Đăng ký tài khoản mới và kích hoạt tài khoản thông qua mã liên kết email.
+    *   **Bản đồ & GIS**: Xem bản đồ cơ sở, thu phóng/di chuyển camera, tra cứu địa điểm và lọc danh mục địa danh (Khách sạn, Nhà hàng, Điểm tham quan). Xem bản đồ nhiệt check-in và bảng tin check-in cộng đồng.
+    *   **Mạng xã hội**: Xem bảng tin chia sẻ kinh nghiệm du lịch công khai của các thành viên khác.
+    *   **Lịch trình**: (Không được phép truy cập phân hệ Lập lịch trình).
 
-### Dịch vụ định vị địa lý (OpenStreetMap Nominatim API)
-- **Description**: The geographic geocoding lookup engine used to validate the physical existence and resolve coordinates for destination strings.
-- **Responsibilities**:
-  - Resolves textual names (e.g. "Đất Mũi") into latitude/longitude coordinates and address attributes during geocoding check in [MapTool](file:///d:/Thuc_Tap_NDT/backend/src/modules/ai-agents/tools/agent.tools.ts).
+### Người dùng đăng ký (Registered Traveler)
+*   **Mô tả**: Thành viên đã đăng nhập hệ thống, được tiếp cận toàn bộ tính năng cá nhân hóa của nền tảng.
+*   **Vai trò & Trách nhiệm**:
+    *   Thừa hưởng toàn bộ quyền của **Khách vãng lai**.
+    *   **Hồ sơ**: Quản lý thông tin cá nhân, ảnh đại diện, và sở thích du lịch (ngân sách, tốc độ di chuyển, thể loại ưu tiên). Theo dõi hoặc hủy theo dõi (Follow/Unfollow) thành viên khác.
+    *   **Lịch trình**:
+        *   Tự lên kế hoạch và quản lý các chuyến đi cá nhân (Trips).
+        *   Tạo lịch trình tự động bằng AI và tối ưu hóa lộ trình ngắn nhất (TSP Solver).
+        *   Xem gợi ý điểm dừng từ AI và lưu vào kế hoạch chuyến đi.
+        *   Quản lý lịch sử đi lại thực tế (Nhật ký di chuyển - Travel History).
+    *   **Mạng xã hội**: Tạo mới, chỉnh sửa, xóa các bài viết chia sẻ kinh nghiệm du lịch (Blogs/Stories), tương tác thích/bình luận/lưu bài viết của người khác. Sử dụng AI để tìm kiếm bạn đồng hành tương thích.
+    *   **Bản đồ & GIS**:
+        *   Chia sẻ tọa độ vị trí live, định vị vị trí hiện tại trên bản đồ.
+        *   Quét và tìm kiếm bạn bè trực tuyến lân cận trong bán kính 100km.
+        *   Thực hiện check-in địa điểm thực tế (tự điền tên địa điểm tùy chọn, tự động lấy tọa độ GPS thực tế của thiết bị, tải lên hình ảnh và lời bình).
+        *   Đăng ký tham gia các sự kiện, lễ hội hoặc các buổi meetup địa phương. Tạo sự kiện meetup mới.
+    *   **AI Chatbot**: Tra cứu tri thức, thời tiết, món ăn đặc sản qua AI Multi-Agent, đánh giá câu trả lời và lưu danh sách món ăn yêu thích.
 
-### Dịch vụ suy luận AI (OpenAI API / Groq API)
-- **Description**: External Large Language Model and Embedding provider.
-- **Responsibilities**:
-  - Serves text embeddings creation (using `text-embedding-3-small` in [EmbedderService](file:///d:/Thuc_Tap_NDT/ai-service/app/services/embedder.py)).
-  - Processes chatbot prompts and runs reasoning calls to generate answers (using `gpt-4o-mini` or alternative model in [LlmGeneratorService](file:///d:/Thuc_Tap_NDT/ai-service/app/services/llm_generator.py)).
 
-### Bộ máy chuẩn hóa địa danh (vietnamadminunits API)
-- **Description**: Local Python web service wrapping the administrative division database of Vietnam.
-- **Responsibilities**:
-  - Parses raw address inputs into standardized Province, District, and Ward objects via the FastAPI endpoints `/api/v1/address/parse` and `/api/v1/address/convert` in [main.py](file:///d:/Thuc_Tap_NDT/ai-service/app/main.py#L236-L293).
+## 2. Tác nhân hệ thống và ngoại vi (External Systems)
+
+### Firebase Auth / Firebase Admin SDK
+*   **Mô tả**: Dịch vụ xác thực ngoại vi hỗ trợ xác thực tokens Google SSO phía máy chủ.
+
+### OpenStreetMap (OSM Nominatim API)
+*   **Mô tả**: Dịch vụ bản đồ nền và geocoding hỗ trợ hiển thị giao diện bản đồ, tìm kiếm tọa độ địa danh và định vị ngược địa chỉ.
+
+### OpenAI API / Groq API
+*   **Mô tả**: Dịch vụ trí tuệ nhân tạo (LLM và Embeddings Vector) phục vụ sinh lịch trình tự động, phân tích bạn đồng hành, suy luận chatbot đa Agent và trích xuất vector embeddings RAG.
+
+### vietnamadminunits API
+*   **Mô tả**: Dịch vụ chuẩn hóa phân cấp hành chính của Việt Nam để phân tích các chuỗi địa chỉ đầu vào thành Tỉnh/Huyện/Xã chính xác.
+
+### SMTP Mail Server
+*   **Mô tả**: Máy chủ gửi thư điện tử giúp chuyển phát mã kích hoạt hoặc liên kết xác thực tài khoản qua email.
+
+### Supabase Storage
+*   **Mô tả**: Kho lưu trữ tệp đám mây (Cloud Bucket) để lưu trữ hình ảnh check-in địa điểm và hình ảnh bài viết du lịch của người dùng.

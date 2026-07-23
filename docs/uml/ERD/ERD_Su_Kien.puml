@@ -4,49 +4,52 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Sự kiện & Giao lưu" {
-  entity "Event" as Event {
-    * id : String <<PK>>
+  entity "Su kien" as Event {
+    * PK | id : String
     --
-    * title : String
-    description : String
-    coverImageUrl : String
-    destinationId : String <<FK>>
-    * latitude : Float <<INDEX>>
-    * longitude : Float <<INDEX>>
-    * startDate : DateTime <<INDEX>>
-    endDate : DateTime
-    * category : String <<INDEX>>
-    maxAttendees : Int
-    * currentCount : Int
-    * organizerId : String <<FK>> <<INDEX>>
-    * isPublic : Boolean
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    | FK1 | destinationId : String
+    * FK2 | organizerId : String <<INDEX>>
+    * | title : String
+    | description : String
+    | coverImageUrl : String
+    * | latitude : Float <<INDEX>>
+    * | longitude : Float <<INDEX>>
+    * | startDate : DateTime <<INDEX>>
+    | endDate : DateTime
+    * | category : String <<INDEX>>
+    | maxAttendees : Int
+    * | currentCount : Int
+    * | isPublic : Boolean
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "EventAttendee" as EventAttendee {
-    * id : String <<PK>>
+  entity "Nguoi tham gia su kien" as EventAttendee {
+    * PK | id : String
     --
-    * eventId : String <<FK>> <<UNIQUE>>
-    * userId : String <<FK>> <<UNIQUE>>
-    * status : String
-    * createdAt : DateTime
+    * FK1 | eventId : String
+    * FK2 | userId : String
+    * | status : String
+    * | createdAt : DateTime
+    --
+    UNIQUE(eventId, userId)
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
-entity "Destination" as Destination <<External>>
+entity "Người dùng" as User <<External>>
+entity "Điểm đến" as Destination <<External>>
 
-User ||--o{ Event : "organizedEvents"
-User ||--o{ EventAttendee : "attendees"
-Destination ||--o{ Event : "events"
+User ||--o{ Event : "sự kiện tổ chức"
+User ||--o{ EventAttendee : "người tham gia"
+Destination ||--o{ Event : "sự kiện"
 
-Event ||--o{ EventAttendee : "attendees"
+Event ||--o{ EventAttendee : "người tham gia"
 
 @enduml

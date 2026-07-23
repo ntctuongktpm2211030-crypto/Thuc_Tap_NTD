@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  MapPin, Users, Search, Sparkles, Loader2, Flame, Sun, Moon, BarChart3
+  MapPin, Users, Search, Sparkles, Loader2, Flame, Sun, Moon, BarChart3, Globe
 } from 'lucide-react';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { mapService } from '../../services/smartTravel.service';
@@ -16,6 +16,12 @@ const MapDashboard = () => {
   const { t } = useLang();
   const vi = t('nav.feed') === 'Bảng tin';
 
+  const socketRef = useRef<any>(null);
+  const userLocationRef = useRef<[number, number] | null>(null);
+  const selectedCenterRef = useRef<[number, number]>([21.028511, 105.804817]);
+  const lastLocationSentRef = useRef<{ lat: number; lng: number; time: number }>({ lat: 0, lng: 0, time: 0 });
+  const [osmSuggestions, setOsmSuggestions] = useState<any[]>([]);
+
   // Core map states
   const [locations, setLocations] = useState<MapLocation[]>([]);
   const [checkins, setCheckins] = useState<any[]>([]);
@@ -25,11 +31,11 @@ const MapDashboard = () => {
   const [selectedCenter, setSelectedCenter] = useState<[number, number]>([21.028511, 105.804817]);
   const [cachingProgress, setCachingProgress] = useState<number | null>(null);
 
-  // Checkin states
   const [customDestName, setCustomDestName] = useState('');
   const [newNote, setNewNote] = useState('');
-  const [isExtractingGps, setIsExtractingGps] = useState(false);
   const [checkinImage, setCheckinImage] = useState('');
+
+
   const [checkinTag, setCheckinTag] = useState('');
 
   // Advanced search & filter states
@@ -38,6 +44,7 @@ const MapDashboard = () => {
   const [filterRating, setFilterRating] = useState(0);
   const [tempCategory, setTempCategory] = useState('');
   const [tempRating, setTempRating] = useState(0);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   // AI recommendations states
   const [aiRecs, setAiRecs] = useState<any[]>([]);
@@ -54,6 +61,15 @@ const MapDashboard = () => {
   // Browser real GPS location state
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [selectedRadius, setSelectedRadius] = useState<number>(0);
+
+  // Sync refs with latest state to prevent Socket.io recreation loop
+  useEffect(() => {
+    userLocationRef.current = userLocation;
+  }, [userLocation]);
+
+  useEffect(() => {
+    selectedCenterRef.current = selectedCenter;
+  }, [selectedCenter]);
 
   const handleFindNearby = async () => {
     const lat = userLocation ? userLocation[0] : selectedCenter[0];
@@ -139,30 +155,30 @@ const MapDashboard = () => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      alert(vi ? 'Bạn cần đăng nhập để truy cập trang Bản đồ!' : 'You need to log in to access the Map page!');
-      navigate('/auth', { state: { from: '/map' } });
-      return;
-    }
     loadMapData();
-  }, [isAuthenticated, navigate, vi]);
+  }, []);
 
-  // Request actual browser geolocation on mount & track moves if logged in
+  // Request actual browser geolocation on mount for everyone to center the map
   useEffect(() => {
-    if (!navigator.geolocation || !isAuthenticated) return;
+    if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setUserLocation([latitude, longitude]);
         setSelectedCenter([latitude, longitude]);
-        console.log(`🎯 Real User Location acquired: [${latitude}, ${longitude}]`);
+        console.log(`🎯 Auto-location on mount acquired: [${latitude}, ${longitude}]`);
       },
       (error) => {
-        console.warn('⚠️ Real User Location denied/failed:', error.message);
+        console.warn('⚠️ Auto-location on mount denied/failed:', error.message);
       },
       { enableHighAccuracy: false, timeout: 6000 }
     );
+  }, []);
+
+  // Request high-accuracy watch position when authenticated to keep updating userLocation
+  useEffect(() => {
+    if (!navigator.geolocation || !isAuthenticated) return;
 
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -197,7 +213,7 @@ const MapDashboard = () => {
     fetchLocalDestinations();
   }, [selectedCenter[0], selectedCenter[1]]);
 
-  // WebSocket connection & location heartbeat
+  // WebSocket connection stable setup
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
@@ -209,11 +225,18 @@ const MapDashboard = () => {
       transports: ['websocket']
     });
 
+    socketRef.current = socket;
+
     socket.on('connect', () => {
       console.log('⚡ Connected to Map WebSocket server:', socket.id);
+      socket.emit('register_user', user.id);
+      sendLocation();
     });
 
     socket.on('friend_location_updated', (data: any) => {
+      // Don't display ourselves as a friend
+      if (data.userId === user.id) return;
+
       setLiveFriends(prev => ({
         ...prev,
         [data.userId]: {
@@ -223,24 +246,95 @@ const MapDashboard = () => {
       }));
     });
 
-    const sendLocation = () => {
-      socket.emit('ping_location', {
-        userId: user.id,
-        fullName: user.fullName || user.email,
-        avatarUrl: user.avatarUrl,
-        lat: userLocation ? userLocation[0] : selectedCenter[0],
-        lng: userLocation ? userLocation[1] : selectedCenter[1]
+    socket.on('friend_offline', (data: { userId: string }) => {
+      setLiveFriends(prev => {
+        const copy = { ...prev };
+        delete copy[data.userId];
+        return copy;
       });
+    });
+
+    const sendLocation = () => {
+      const lat = userLocationRef.current ? userLocationRef.current[0] : selectedCenterRef.current[0];
+      const lng = userLocationRef.current ? userLocationRef.current[1] : selectedCenterRef.current[1];
+      if (lat && lng) {
+        socket.emit('ping_location', {
+          userId: user.id,
+          fullName: user.fullName || user.email,
+          avatarUrl: user.avatarUrl,
+          lat,
+          lng
+        });
+        lastLocationSentRef.current = { lat, lng, time: Date.now() };
+      }
     };
-    sendLocation();
 
     const interval = setInterval(sendLocation, 10000);
 
     return () => {
       socket.disconnect();
       clearInterval(interval);
+      socketRef.current = null;
     };
-  }, [isAuthenticated, user, selectedCenter[0], selectedCenter[1], userLocation]);
+  }, [isAuthenticated, user]);
+
+  // Separate effect to immediately push location changes, but throttled
+  useEffect(() => {
+    if (!isAuthenticated || !user || !socketRef.current) return;
+
+    const lat = userLocation ? userLocation[0] : selectedCenter[0];
+    const lng = userLocation ? userLocation[1] : selectedCenter[1];
+    if (!lat || !lng) return;
+
+    const now = Date.now();
+    const dist = Math.hypot(lat - lastLocationSentRef.current.lat, lng - lastLocationSentRef.current.lng);
+    
+    // Send update if moved significantly (> ~10 meters) or if last sent was over 5s ago
+    if (dist > 0.0001 || now - lastLocationSentRef.current.time > 5000) {
+      if (socketRef.current.connected) {
+        socketRef.current.emit('ping_location', {
+          userId: user.id,
+          fullName: user.fullName || user.email,
+          avatarUrl: user.avatarUrl,
+          lat,
+          lng
+        });
+        lastLocationSentRef.current = { lat, lng, time: now };
+      }
+    }
+  }, [userLocation, selectedCenter, isAuthenticated, user]);
+
+  // Fetch from Nominatim (OpenStreetMap Search) when typing (debounced)
+  useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.length < 3) {
+      setOsmSuggestions([]);
+      return;
+    }
+
+    const delayDebounce = setTimeout(async () => {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=5`, {
+          headers: {
+            'Accept-Language': vi ? 'vi,en' : 'en'
+          }
+        });
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setOsmSuggestions(data.map(item => ({
+            id: `osm-place-${item.place_id}-${Date.now()}`,
+            name: item.display_name,
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lon),
+            category: item.type || 'place'
+          })));
+        }
+      } catch (err) {
+        console.error('OSM Nominatim search failed:', err);
+      }
+    }, 600);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, vi]);
 
   // Filter and merge locations
   useEffect(() => {
@@ -258,6 +352,16 @@ const MapDashboard = () => {
       lng: d.longitude,
       category: d.category
     }));
+
+    if (selectedLocation && !selectedLocation.id.startsWith('live-') && !mappedDests.some(d => d.id === selectedLocation.id)) {
+      mappedDests.push({
+        id: selectedLocation.id,
+        name: selectedLocation.name,
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
+        category: selectedLocation.category || 'search-result'
+      });
+    }
 
     const mappedCheckins: MapLocation[] = [];
     const seenCheckins = new Set<string>();
@@ -328,7 +432,13 @@ const MapDashboard = () => {
       const userLat = userLocation ? userLocation[0] : selectedCenter[0];
       const userLng = userLocation ? userLocation[1] : selectedCenter[1];
 
+      const now = Date.now();
       Object.values(liveFriends)
+        .filter((f: any) => {
+          // Keep only updates from last 30 seconds to prevent ghost pins
+          const lastUpdated = new Date(f.updatedAt).getTime();
+          return now - lastUpdated < 30000;
+        })
         .map((f: any) => {
           // Haversine distance
           const R = 6371; // km
@@ -371,125 +481,7 @@ const MapDashboard = () => {
     }
 
     setLocations([...mappedDests, ...mappedCheckins, ...mappedFriends]);
-  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user, isAuthenticated, vi]);
-
-  const parseEXIFGPS = (file: File): Promise<[number, number] | null> => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const buffer = e.target?.result as ArrayBuffer;
-          const view = new DataView(buffer);
-          if (view.getUint16(0) !== 0xFFD8) return resolve(null);
-          let offset = 2;
-          const length = view.byteLength;
-          while (offset < length) {
-            if (view.getUint16(offset) === 0xFFE1) {
-              const exifOffset = offset + 4;
-              if (view.getUint32(exifOffset) === 0x45786966) {
-                const tiffOffset = exifOffset + 6;
-                const bigEndian = view.getUint16(tiffOffset) === 0x4D4D;
-                const read16 = (off: number) => bigEndian ? view.getUint16(off) : view.getUint16(off, true);
-                const read32 = (off: number) => bigEndian ? view.getUint32(off) : view.getUint32(off, true);
-                
-                let ifdOffset = tiffOffset + read32(tiffOffset + 4);
-                const numEntries = read16(ifdOffset);
-                let gpsIFDOffset = 0;
-                for (let i = 0; i < numEntries; i++) {
-                  const entryOffset = ifdOffset + 2 + i * 12;
-                  const tag = read16(entryOffset);
-                  if (tag === 0x8825) {
-                    gpsIFDOffset = tiffOffset + read32(entryOffset + 8);
-                    break;
-                  }
-                }
-                if (gpsIFDOffset) {
-                  const numGpsEntries = read16(gpsIFDOffset);
-                  let latParts: number[] = [];
-                  let lngParts: number[] = [];
-                  let latRef = 'N';
-                  let lngRef = 'E';
-                  const readRational = (off: number) => {
-                    const num = read32(off);
-                    const den = read32(off + 4);
-                    return den ? num / den : num;
-                  };
-                  for (let i = 0; i < numGpsEntries; i++) {
-                    const entryOffset = gpsIFDOffset + 2 + i * 12;
-                    const tag = read16(entryOffset);
-                    const valOffset = tiffOffset + read32(entryOffset + 8);
-                    if (tag === 1) {
-                      latRef = String.fromCharCode(view.getUint8(entryOffset + 8));
-                    } else if (tag === 2) {
-                      for (let j = 0; j < 3; j++) latParts.push(readRational(valOffset + j * 8));
-                    } else if (tag === 3) {
-                      lngRef = String.fromCharCode(view.getUint8(entryOffset + 8));
-                    } else if (tag === 4) {
-                      for (let j = 0; j < 3; j++) lngParts.push(readRational(valOffset + j * 8));
-                    }
-                  }
-                  if (latParts.length === 3 && lngParts.length === 3) {
-                    let lat = latParts[0] + latParts[1] / 60 + latParts[2] / 3600;
-                    let lng = lngParts[0] + lngParts[1] / 60 + lngParts[2] / 3600;
-                    if (latRef === 'S') lat = -lat;
-                    if (lngRef === 'W') lng = -lng;
-                    return resolve([lat, lng]);
-                  }
-                }
-              }
-              break;
-            }
-            offset += 2 + view.getUint16(offset + 2);
-          }
-        } catch (err) {
-          console.error('GPS EXIF Parse fail:', err);
-        }
-        resolve(null);
-      };
-      reader.readAsArrayBuffer(file.slice(0, 128 * 1024));
-    });
-  };
-
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsExtractingGps(true);
-    const coords = await parseEXIFGPS(file);
-    setIsExtractingGps(false);
-
-    if (coords) {
-      setSelectedCenter(coords);
-      if (destinations.length > 0) {
-        let nearest = destinations[0];
-        let minDist = Infinity;
-        destinations.forEach(d => {
-          const dist = Math.hypot(d.latitude - coords[0], d.longitude - coords[1]);
-          if (dist < minDist) {
-            minDist = dist;
-            nearest = d;
-          }
-        });
-        if (nearest) {
-          setCustomDestName(nearest.name);
-          alert(vi 
-            ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Tự chọn địa điểm gần nhất: ${nearest.name}`
-            : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]. Selected nearest place: ${nearest.name}`
-          );
-        }
-      } else {
-        alert(vi 
-          ? `Đã tìm thấy GPS trong ảnh: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}].`
-          : `GPS found in photo: [${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}].`
-        );
-      }
-    } else {
-      alert(vi 
-        ? 'Không tìm thấy tọa độ GPS EXIF trong bức ảnh này.' 
-        : 'No GPS EXIF coordinates found in this image.'
-      );
-    }
-  };
+  }, [destinations, checkins, liveFriends, filterCategory, filterRating, searchQuery, userLocation, user, isAuthenticated, vi, selectedLocation]);
 
   const handleCheckin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -580,13 +572,37 @@ const MapDashboard = () => {
 
   const handleSearchSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    setShowSuggestions(false);
     if (!searchQuery.trim()) return;
     try {
+      // 1. First try local database
       const dests = await mapService.destinations({ q: searchQuery });
-      if (Array.isArray(dests)) {
+      if (Array.isArray(dests) && dests.length > 0) {
         setDestinations(dests);
-        if (dests.length > 0) {
-          setSelectedCenter([dests[0].latitude, dests[0].longitude]);
+        setSelectedCenter([dests[0].latitude, dests[0].longitude]);
+      } else {
+        // 2. Fallback to OpenStreetMap Nominatim API
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`);
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const item = data[0];
+          const lat = parseFloat(item.lat);
+          const lng = parseFloat(item.lon);
+          setSelectedCenter([lat, lng]);
+
+          const osmDest: MapLocation = {
+            id: `osm-place-${item.place_id}-${Date.now()}`,
+            name: item.display_name.split(',')[0],
+            lat: lat,
+            lng: lng,
+            category: item.type || 'attraction'
+          };
+
+          setLocations(prev => {
+            const filtered = prev.filter(l => !l.id.startsWith('osm-place-'));
+            return [...filtered, osmDest];
+          });
+          setSelectedLocation(osmDest);
         } else {
           alert(vi ? 'Không tìm thấy địa điểm nào khớp với từ khóa.' : 'No destinations found matching keyword.');
         }
@@ -619,7 +635,7 @@ const MapDashboard = () => {
     setLoadingAiAssistant(true); setAiAssistantAnswer('');
     try {
       const destId = selectedLocation.id.replace('checkin-', '').replace('live-', '');
-      const response = await mapService.aiAssistant(destId, question);
+      const response = await mapService.aiAssistant(destId, question, selectedLocation.name, selectedLocation.category);
       if (response && response.answer) setAiAssistantAnswer(response.answer);
     } catch (err) { console.error('Failed to get AI Assistant answer:', err); setAiAssistantAnswer(vi ? 'Có lỗi xảy ra khi hỏi Trợ lý AI.' : 'Failed to ask AI Assistant.'); } finally { setLoadingAiAssistant(false); }
   };
@@ -638,7 +654,11 @@ const MapDashboard = () => {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
                 placeholder={vi ? 'Nhập tên địa điểm...' : 'Search place...'}
                 className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-2 pl-8 pr-7 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -646,7 +666,10 @@ const MapDashboard = () => {
               {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setShowSuggestions(false);
+                  }}
                   className="absolute right-2 top-2.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
                 >
                   ✕
@@ -660,24 +683,74 @@ const MapDashboard = () => {
               {vi ? 'Tìm' : 'Search'}
             </button>
           </form>
-          {searchQuery && destinations.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 && (
-            <div className="absolute left-0 right-0 top-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg mt-1 max-h-40 overflow-y-auto z-30 shadow-2xl p-1">
+          {showSuggestions && searchQuery && (destinations.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 || osmSuggestions.length > 0) && (
+            <div className="absolute left-0 right-0 top-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-xl mt-1.5 max-h-60 overflow-y-auto z-30 shadow-2xl p-1.5 backdrop-blur-md">
+              {/* Local DB suggestions */}
               {destinations
                 .filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()))
-                .slice(0, 5)
+                .slice(0, 3)
                 .map(d => (
                   <div
                     key={d.id}
                     onClick={() => {
                       setSelectedCenter([d.latitude, d.longitude]);
                       setSelectedLocation({ id: d.id, name: d.name, lat: d.latitude, lng: d.longitude, category: d.category });
-                      setSearchQuery('');
+                      setSearchQuery(d.name);
+                      setShowSuggestions(false);
                     }}
-                    className="px-3 py-1.5 hover:bg-[var(--bg-overlay)] text-[10px] text-[var(--text-primary)] rounded cursor-pointer truncate"
+                    className="px-3 py-2 hover:bg-slate-500/10 text-xs text-[var(--text-primary)] rounded-lg cursor-pointer transition-all flex items-center gap-3 mb-1 last:mb-0"
                   >
-                    📍 {d.name} <span className="text-[8px] text-slate-400">({d.category})</span>
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 shrink-0">
+                      <MapPin size={13} className="stroke-[2.5]" />
+                    </div>
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-semibold truncate text-[11px] m-0">{d.name}</p>
+                        <span className="text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-500 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                          {vi ? 'Hệ thống' : 'Local'}
+                        </span>
+                      </div>
+                      <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider font-semibold m-0 mt-0.5">{d.category}</p>
+                    </div>
                   </div>
                 ))}
+              
+              {/* OSM Nominatim Suggestions */}
+              {osmSuggestions.map((item, idx) => {
+                const parts = item.name.split(',');
+                const title = parts[0];
+                const subtitle = parts.slice(1).join(',').trim();
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      setSelectedCenter([item.lat, item.lng]);
+                      setSelectedLocation(item);
+                      setSearchQuery(title);
+                      setLocations(prev => {
+                        const filtered = prev.filter(l => !l.id.startsWith('osm-place-'));
+                        return [...filtered, item];
+                      });
+                      setOsmSuggestions([]);
+                      setShowSuggestions(false);
+                    }}
+                    className={`px-3 py-2 hover:bg-slate-500/10 text-xs text-[var(--text-primary)] rounded-lg cursor-pointer transition-all flex items-start gap-3 mb-1 last:mb-0 text-left ${idx > 0 || destinations.length > 0 ? 'border-t border-[var(--border-normal)]/30 pt-2.5 mt-1.5' : ''}`}
+                  >
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 shrink-0 mt-0.5">
+                      <Globe size={13} className="stroke-[2.5]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-semibold truncate text-[11px] m-0 text-blue-600 dark:text-blue-400">{title}</p>
+                        <span className="text-[8px] bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                          {vi ? 'Bản đồ' : 'Global'}
+                        </span>
+                      </div>
+                      {subtitle && <p className="text-[9px] text-[var(--text-muted)] truncate m-0 mt-0.5">{subtitle}</p>}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
@@ -739,7 +812,12 @@ const MapDashboard = () => {
                 return (
                   <div
                     key={rec.id}
-                    onClick={() => dest && setSelectedCenter([dest.latitude, dest.longitude])}
+                    onClick={() => {
+                      if (dest) {
+                        setSelectedCenter([dest.latitude, dest.longitude]);
+                        setSelectedLocation({ id: dest.id, name: dest.name, lat: dest.latitude, lng: dest.longitude, category: dest.category });
+                      }
+                    }}
                     className="p-2.5 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100/70 dark:border-blue-900/30 rounded-lg hover:bg-blue-100/50 dark:hover:bg-blue-950/30 transition-all cursor-pointer"
                   >
                     <h4 className="text-[10px] font-bold text-blue-600 dark:text-blue-400 flex items-center justify-between">
@@ -926,6 +1004,7 @@ const MapDashboard = () => {
             onRemovePointFromRoute={removeRoutePoint}
             aiRecommendedIds={aiRecs.map(r => r.id)}
             onSelectLocation={setSelectedLocation}
+            selectedLocationId={selectedLocation?.id}
             onCenterChange={setSelectedCenter}
           />
         </div>

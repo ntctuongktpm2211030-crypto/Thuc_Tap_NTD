@@ -487,10 +487,26 @@ export function extractLastDestinationFromHistory(
   
   for (let i = history.length - 1; i >= 0; i--) {
     const content = history[i].content;
+    const cleanContent = removeDiacritics(content.toLowerCase());
+    
+    // 1. Quét tìm địa danh xuất hiện trong tin nhắn (chấp nhận viết thường)
+    for (const dest of dests) {
+      const cleanDest = removeDiacritics(dest.toLowerCase());
+      const strippedDest = cleanGeographicName(dest);
+      if (
+        cleanDest.length > 2 &&
+        (cleanContent.includes(cleanDest) || cleanContent.includes(removeDiacritics(strippedDest.toLowerCase())))
+      ) {
+        return dest;
+      }
+    }
+    
+    // 2. Dự phòng: so khớp mờ nguyên câu
     const matched = findFuzzyMatch(content, dests, 0.7);
     if (matched) return matched;
     
-    const match = content.match(/(?:đến|đi|tại|ở|du lịch|khám phá|về|của)\s+([A-ZÀ-Ỹ][a-zà-ỹ]+(?:\s+[A-ZÀ-Ỹ][a-zà-ỹ]+){0,3})/u);
+    // 3. Dự phòng: regex tìm từ theo sau giới từ
+    const match = content.match(/(?:đến|đi|tại|ở|du lịch|khám phá|về|của)\s+([\p{L}\s]{2,15})/iu);
     if (match && match[1]) {
       return match[1].trim();
     }

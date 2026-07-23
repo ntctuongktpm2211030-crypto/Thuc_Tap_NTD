@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Brain, Check, Pencil, Trash2, Plus, X, Loader2,
   Utensils, MapPin, Bike, Wallet, Star, AlertTriangle,
-  CheckCircle2, XCircle, Save,
+  CheckCircle2, XCircle, Save, Coins, Crown,
 } from 'lucide-react';
+
 import { chatbotService, AIMemory } from '../../services/smartTravel.service';
 import { useLang } from '../../contexts/LanguageContext';
 
@@ -293,6 +294,9 @@ export default function MemoryManager({
       (editingMemory.budget ? 1 : 0)
     : 0;
 
+  const arrayCategories = categories.filter(c => c.isArray);
+  const budgetCategory = categories.find(c => c.key === 'budget');
+
   // ─── Render: Loading ──────────────────────────────────
   if (loading) {
     return (
@@ -367,37 +371,37 @@ export default function MemoryManager({
 
   // ─── Render: Main view ────────────────────────────────
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-[var(--bg-surface)]">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between p-5 border-b border-[var(--border-subtle)]">
+      <div className="flex items-center justify-between p-5 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]/30">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/15 flex items-center justify-center border border-amber-500/20">
-            <Brain size={16} className="text-amber-400" />
+          <div className="w-8 h-8 rounded-xl bg-[var(--gold-glow)]/15 flex items-center justify-center border border-[var(--gold)]/20 shadow-sm shadow-[var(--gold-glow)]/10 animate-pulse">
+            <Brain size={16} className="text-[var(--gold)]" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
               {vi ? 'AI Ghi nhớ' : 'AI Remembers'}
-              <span className="text-[10px] font-normal text-[var(--text-muted)] bg-[var(--bg-elevated)] px-1.5 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold text-[var(--gold)] bg-[var(--gold-glow)]/10 border border-[var(--gold)]/20 px-1.5 py-0.5 rounded-full">
                 {totalItems} {vi ? 'mục' : 'items'}
               </span>
             </h3>
-            <p className="text-[10px] text-[var(--text-muted)]">
+            <p className="text-[10px] text-[var(--text-muted)] font-medium">
               {vi
                 ? 'Những thông tin này được dùng để cá nhân hóa câu trả lời'
                 : 'This information personalizes your AI responses'}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2.5">
           {hasChanges && (
-            <span className="text-[10px] text-amber-400 font-semibold animate-pulse px-1">
+            <span className="text-[10px] text-[var(--gold)] font-bold animate-pulse px-2 py-0.5 rounded-full bg-[var(--gold-glow)]/5 border border-[var(--gold)]/10">
               {vi ? 'Chưa lưu' : 'Unsaved'}
             </span>
           )}
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer border-none"
+            className="p-1.5 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer border-none bg-transparent"
           >
             <X size={16} />
           </button>
@@ -405,240 +409,222 @@ export default function MemoryManager({
       </div>
 
       {/* ── Scrollable content ── */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pr-1.5">
         {/* ── Success / Error toast ── */}
         {saveSuccess && (
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-400 font-medium animate-fadeIn">
+          <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-400 font-semibold animate-fadeIn">
             <CheckCircle2 size={14} />
             {vi ? 'Đã lưu bộ nhớ thành công!' : 'Memory saved successfully!'}
           </div>
         )}
         {saveError && (
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-400 font-medium">
+          <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-400 font-semibold">
             <XCircle size={14} />
             {saveError}
           </div>
         )}
 
-        {categories.map((cat) => {
-          const isArray = cat.isArray;
-          const isEditing = editing.field === cat.key;
-          const isAdding = adding.field === cat.key;
-          const items: string[] = isArray
-            ? getArrayValue(cat.key as MemoryKey)
-            : [getBudgetValue()];
-          const isEmpty = items.length === 0 || (cat.key === 'budget' && !items[0]);
+        {/* ── Lưới 2 cột cho các thuộc tính mảng ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {arrayCategories.map((cat) => {
+            const items = getArrayValue(cat.key as MemoryKey);
 
-          return (
-            <div
-              key={cat.key}
-              className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-hidden transition-all hover:border-[var(--border-normal)]"
-            >
-              {/* Category header */}
-              <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]/50">
-                <div className="flex items-center gap-2">
-                  <span className="text-amber-400">{cat.icon}</span>
-                  <span className="text-xs font-bold text-[var(--text-primary)]">
-                    {vi ? cat.labelVi : cat.labelEn}
-                  </span>
-                  {isArray && items.length > 0 && (
-                    <span className="text-[10px] text-[var(--text-muted)] bg-[var(--bg-primary)] px-1.5 py-0.5 rounded-full">
-                      {items.length}
+            return (
+              <div
+                key={cat.key}
+                className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-hidden transition-all hover:border-[var(--border-normal)] shadow-sm hover:shadow-md flex flex-col justify-between"
+              >
+                {/* Category Header */}
+                <div className="flex items-center justify-between px-3.5 py-3 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]/40">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[var(--gold)] flex items-center">{cat.icon}</span>
+                    <span className="text-[11px] font-bold text-[var(--text-primary)] tracking-wide uppercase">
+                      {vi ? cat.labelVi : cat.labelEn}
                     </span>
-                  )}
-                </div>
-                {isArray && (
+                  </div>
                   <button
                     type="button"
                     onClick={() => setAdding({ field: cat.key as MemoryField, value: '' })}
-                    className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-amber-500/10 text-[10px] text-amber-400 font-semibold transition-all cursor-pointer border-none"
+                    className="flex items-center gap-1 px-2 py-0.5 rounded bg-[var(--gold-glow)]/10 hover:bg-[var(--gold-glow)]/20 text-[10px] text-[var(--gold)] font-bold transition-all border-none cursor-pointer"
                   >
-                    <Plus size={12} />
+                    <Plus size={10} />
                     {vi ? 'Thêm' : 'Add'}
                   </button>
-                )}
-              </div>
+                </div>
 
-              {/* Items list */}
-              <div className="px-3.5 py-2 space-y-1.5">
-                {isEmpty ? (
-                  <p className="text-[11px] text-[var(--text-muted)] italic py-2 text-center">
-                    {vi ? 'Chưa có thông tin' : 'No information yet'}
-                  </p>
-                ) : (
-                  items.map((item, idx) => {
-                    const isThisEditing = isEditing && editing.index === idx;
-                    const isConfirmingDelete =
-                      confirmDelete?.field === cat.key && confirmDelete?.index === idx;
+                {/* Category Content */}
+                <div className="p-3.5 flex-1 flex flex-col justify-between min-h-[90px]">
+                  <div className="space-y-3">
+                    {items.length === 0 ? (
+                      <p className="text-[11px] text-[var(--text-muted)] italic text-center py-3 bg-[var(--bg-primary)]/30 rounded-xl">
+                        {vi ? 'Chưa được ghi nhận' : 'No entries yet'}
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-1.5">
+                        {items.map((item, idx) => {
+                          const isThisEditing = editing.field === cat.key && editing.index === idx;
+                          if (isThisEditing) {
+                            return (
+                              <div key={`edit-${idx}`} className="flex items-center gap-1 bg-[var(--bg-primary)] border border-[var(--gold)]/50 pl-2 pr-1 py-0.5 rounded-full text-[11px] animate-pulse">
+                                <input
+                                  type="text"
+                                  value={editing.value}
+                                  onChange={(e) => setEditing({ ...editing, value: e.target.value })}
+                                  className="bg-transparent border-none text-[11px] text-[var(--text-primary)] focus:outline-none w-16 py-0"
+                                  autoFocus
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') saveEditedItem();
+                                    if (e.key === 'Escape') setEditing({ field: null, index: null, value: '' });
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={saveEditedItem}
+                                  className="p-0.5 rounded-full hover:bg-emerald-500/10 text-emerald-400 border-none cursor-pointer flex items-center justify-center"
+                                >
+                                  <Check size={10} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditing({ field: null, index: null, value: '' })}
+                                  className="p-0.5 rounded-full hover:bg-rose-500/10 text-rose-400 border-none cursor-pointer flex items-center justify-center"
+                                >
+                                  <X size={10} />
+                                </button>
+                              </div>
+                            );
+                          }
 
-                    if (isThisEditing) {
-                      // ── Inline edit mode ──
-                      return (
-                        <div key={`edit-${idx}`} className="flex items-center gap-2">
-                          {cat.key === 'budget' && cat.options ? (
-                            <select
-                              value={editing.value}
-                              onChange={(e) => setEditing({ ...editing, value: e.target.value })}
-                              className="flex-1 bg-[var(--bg-primary)] border border-amber-500/30 rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-amber-400"
-                              autoFocus
+                          return (
+                            <div
+                              key={`tag-${idx}`}
+                              className="group flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--bg-primary)] hover:bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all shadow-sm"
                             >
-                              {cat.options.map((opt) => (
-                                <option key={opt.value} value={opt.value}>
-                                  {vi ? opt.labelVi : opt.labelEn}
-                                </option>
-                              ))}
-                            </select>
-                          ) : (
-                            <input
-                              type="text"
-                              value={editing.value}
-                              onChange={(e) => setEditing({ ...editing, value: e.target.value })}
-                              className="flex-1 bg-[var(--bg-primary)] border border-amber-500/30 rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-amber-400"
-                              autoFocus
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') saveEditedItem();
-                                if (e.key === 'Escape') setEditing({ field: null, index: null, value: '' });
-                              }}
-                            />
-                          )}
-                          <button
-                            type="button"
-                            onClick={saveEditedItem}
-                            className="p-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 transition-all cursor-pointer border-none"
-                            title={vi ? 'Lưu' : 'Save'}
-                          >
-                            <CheckCircle2 size={14} />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setEditing({ field: null, index: null, value: '' })}
-                            className="p-1.5 rounded-lg hover:bg-rose-500/15 text-rose-400 transition-all cursor-pointer border-none"
-                            title={vi ? 'Hủy' : 'Cancel'}
-                          >
-                            <XCircle size={14} />
-                          </button>
-                        </div>
-                      );
-                    }
+                              <span
+                                className="cursor-pointer font-semibold hover:text-[var(--gold)] transition-colors select-none truncate max-w-[110px]"
+                                onClick={() => setEditing({ field: cat.key, index: idx, value: item })}
+                                title={vi ? 'Nhấn để sửa' : 'Click to edit'}
+                              >
+                                {item}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => deleteArrayItem(cat.key as MemoryKey, idx)}
+                                className="p-0.5 rounded-full hover:bg-rose-500/10 text-[var(--text-muted)] hover:text-rose-500 border-none cursor-pointer transition-colors"
+                                title={vi ? 'Xóa' : 'Delete'}
+                              >
+                                <X size={9} />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
 
-                    if (isConfirmingDelete) {
-                      // ── Delete confirmation ──
-                      return (
-                        <div
-                          key={`confirm-${idx}`}
-                          className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[11px]"
-                        >
-                          <AlertTriangle size={12} className="text-rose-400 shrink-0" />
-                          <span className="flex-1 text-rose-300">
-                            {vi
-                              ? `Xóa "${item}"?`
-                              : `Delete "${item}"?`}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => deleteArrayItem(cat.key as MemoryKey, idx)}
-                            className="px-2 py-0.5 rounded-md bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-[10px] font-semibold transition-all cursor-pointer border-none"
-                          >
-                            {vi ? 'Xóa' : 'Delete'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setConfirmDelete(null)}
-                            className="px-2 py-0.5 rounded-md hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] text-[10px] transition-all cursor-pointer border-none"
-                          >
-                            {vi ? 'Hủy' : 'Cancel'}
-                          </button>
-                        </div>
-                      );
-                    }
-
-                    // ── Normal display mode ──
-                    return (
-                      <div
-                        key={`item-${idx}`}
-                        className="group flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[var(--bg-elevated)] transition-all"
-                      >
-                        <Check size={12} className="text-emerald-400 shrink-0" />
-                        <span className="flex-1 text-xs text-[var(--text-primary)]">
-                          {cat.key === 'budget' && cat.options
-                            ? (vi
-                                ? cat.options.find((o) => o.value === item)?.labelVi
-                                : cat.options.find((o) => o.value === item)?.labelEn) || item
-                            : item}
-                        </span>
-
-                        {/* Edit button */}
+                  {/* Inline Add input */}
+                  {adding.field === cat.key && (
+                    <div className="flex items-center gap-1.5 bg-[var(--bg-primary)] border border-[var(--gold)]/30 rounded-lg pl-2 pr-1 py-1 mt-3 transition-all shadow-inner animate-fadeIn">
+                      <input
+                        type="text"
+                        value={adding.value}
+                        onChange={(e) => setAdding({ ...adding, value: e.target.value })}
+                        placeholder={vi ? cat.placeholderVi : cat.placeholderEn}
+                        className="flex-1 bg-transparent border-none text-[11px] text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] py-0.5"
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') addArrayItem(cat.key as MemoryKey);
+                          if (e.key === 'Escape') setAdding({ field: null, value: '' });
+                        }}
+                      />
+                      <div className="flex items-center gap-0.5 shrink-0">
                         <button
                           type="button"
-                          onClick={() =>
-                            setEditing({ field: cat.key, index: idx, value: item })
-                          }
-                          className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-amber-500/15 text-amber-400 transition-all cursor-pointer border-none"
-                          title={vi ? 'Sửa' : 'Edit'}
+                          onClick={() => addArrayItem(cat.key as MemoryKey)}
+                          disabled={!adding.value.trim()}
+                          className="p-1 rounded bg-[var(--gold)] hover:bg-[var(--gold-dark)] disabled:opacity-40 text-white border-none cursor-pointer transition-all active:scale-95 flex items-center justify-center"
                         >
-                          <Pencil size={11} />
+                          <Plus size={10} className="text-white" />
                         </button>
-
-                        {/* Delete button (not for budget) */}
-                        {isArray && (
-                          <button
-                            type="button"
-                            onClick={() => setConfirmDelete({ field: cat.key, index: idx, value: item })}
-                            className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-rose-500/15 text-rose-400 transition-all cursor-pointer border-none"
-                            title={vi ? 'Xóa' : 'Delete'}
-                          >
-                            <Trash2 size={11} />
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => setAdding({ field: null, value: '' })}
+                          className="p-1 rounded hover:bg-rose-500/10 text-rose-400 border-none cursor-pointer flex items-center justify-center"
+                        >
+                          <X size={10} />
+                        </button>
                       </div>
-                    );
-                  })
-                )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-                {/* ── Add new item input ── */}
-                {isAdding && isArray && (
-                  <div className="flex items-center gap-2 pt-1">
-                    <input
-                      type="text"
-                      value={adding.value}
-                      onChange={(e) => setAdding({ ...adding, value: e.target.value })}
-                      placeholder={vi ? cat.placeholderVi : cat.placeholderEn}
-                      className="flex-1 bg-[var(--bg-primary)] border border-amber-500/30 rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-amber-400"
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') addArrayItem(cat.key as MemoryKey);
-                        if (e.key === 'Escape') setAdding({ field: null, value: '' });
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem(cat.key as MemoryKey)}
-                      disabled={!adding.value.trim()}
-                      className="p-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 disabled:opacity-30 transition-all cursor-pointer border-none"
-                    >
-                      <Plus size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAdding({ field: null, value: '' })}
-                      className="p-1.5 rounded-lg hover:bg-rose-500/15 text-rose-400 transition-all cursor-pointer border-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
+        {/* ── Cột riêng cho Ngân sách (Full-width) ── */}
+        {budgetCategory && (
+          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-hidden transition-all hover:border-[var(--border-normal)] shadow-sm hover:shadow-md">
+            {/* Category Header */}
+            <div className="flex items-center justify-between px-4 py-3.5 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]/40">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[var(--gold)] flex items-center">{budgetCategory.icon}</span>
+                <span className="text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+                  {vi ? budgetCategory.labelVi : budgetCategory.labelEn}
+                </span>
               </div>
             </div>
-          );
-        })}
+
+            {/* Category Content */}
+            <div className="p-4">
+              <div className="grid grid-cols-3 gap-3">
+                {budgetCategory.options?.map((opt) => {
+                  const budgetVal = getBudgetValue();
+                  const isSelected = budgetVal === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => {
+                        setEditingMemory(prev => prev ? { ...prev, budget: opt.value } : null);
+                        markChanged();
+                      }}
+                      className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer relative overflow-hidden active:scale-95 group/btn ${
+                        isSelected
+                          ? 'bg-[var(--gold-glow)]/10 border-[var(--gold)] shadow-sm shadow-[var(--gold-glow)]'
+                          : 'bg-[var(--bg-primary)] border-[var(--border-subtle)] hover:border-[var(--border-normal)]'
+                      }`}
+                    >
+                      <div className={`mb-1.5 transition-all duration-300 ${isSelected ? 'text-[var(--gold)] scale-110' : 'text-[var(--text-muted)] group-hover/btn:text-[var(--text-secondary)]'}`}>
+                        {opt.value === 'thấp' ? <Coins size={16} /> : opt.value === 'trung bình' ? <Wallet size={16} /> : <Crown size={16} />}
+                      </div>
+                      <span className={`text-[10px] font-bold block ${isSelected ? 'text-[var(--gold)]' : 'text-[var(--text-secondary)]'}`}>
+                        {opt.value === 'thấp' ? (vi ? 'Tiết kiệm' : 'Low') : opt.value === 'trung bình' ? (vi ? 'Phổ thông' : 'Moderate') : (vi ? 'Sang chảnh' : 'Luxury')}
+                      </span>
+                      <span className="text-[8px] text-[var(--text-muted)] mt-1 font-semibold tracking-wider">
+                        {opt.value === 'thấp' ? '0-2M' : opt.value === 'trung bình' ? '3-7M' : '7M+'}
+                      </span>
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[var(--gold)] shadow-sm shadow-[var(--gold)] animate-pulse" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Memory insights footer ── */}
         {totalItems > 1 && (
-          <div className="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/5 to-transparent border border-amber-500/10 text-[10px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-semibold text-amber-400">💡 {vi ? 'Mẹo:' : 'Tip:'}</span>{' '}
-            {vi
-              ? 'AI sẽ tự động gợi ý các địa điểm, món ăn và hoạt động phù hợp với sở thích bạn đã lưu.'
-              : 'AI will automatically suggest places, foods, and activities matching your saved preferences.'}
+          <div className="px-3.5 py-3 rounded-xl bg-gradient-to-r from-[var(--gold-glow)]/10 to-transparent border border-[var(--gold)]/10 text-[10px] text-[var(--text-muted)] leading-relaxed flex items-start gap-2 animate-fadeIn">
+            <span className="text-[var(--gold)] font-bold">💡</span>
+            <div>
+              <span className="font-bold text-[var(--text-primary)]">{vi ? 'Gợi ý cá nhân hóa:' : 'Personalized Tip:'}</span>{' '}
+              {vi
+                ? 'Trợ lý AI sẽ tự động điều chỉnh lộ trình, ưu tiên gợi ý các điểm đến và món ăn khớp với hồ sơ sở thích của bạn.'
+                : 'The AI assistant will customize trip itineraries, prioritizing attractions and local dishes matching your saved memory profile.'}
+            </div>
           </div>
         )}
       </div>
@@ -647,9 +633,9 @@ export default function MemoryManager({
       <div className="p-4 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]/50 space-y-2">
         {/* Delete all memory */}
         {confirmDeleteAll ? (
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20">
+          <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 animate-fadeIn">
             <AlertTriangle size={14} className="text-rose-400 shrink-0" />
-            <span className="flex-1 text-[11px] text-rose-300">
+            <span className="flex-1 text-[11px] text-rose-300 font-medium">
               {vi
                 ? 'Xóa toàn bộ bộ nhớ AI? AI sẽ quên mọi sở thích của bạn.'
                 : 'Delete all AI memory? AI will forget all your preferences.'}
@@ -658,14 +644,14 @@ export default function MemoryManager({
               type="button"
               onClick={handleDeleteAll}
               disabled={deleting}
-              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-[10px] font-semibold transition-all cursor-pointer border-none disabled:opacity-40"
+              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-[10px] font-bold transition-all cursor-pointer border-none disabled:opacity-40 shrink-0"
             >
               {deleting ? <Loader2 size={12} className="animate-spin" /> : vi ? 'Xóa tất cả' : 'Delete all'}
             </button>
             <button
               type="button"
               onClick={() => setConfirmDeleteAll(false)}
-              className="px-2.5 py-1 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] text-[10px] transition-all cursor-pointer border-none"
+              className="px-2.5 py-1 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] text-[10px] font-bold transition-all cursor-pointer border-none bg-transparent shrink-0"
             >
               {vi ? 'Hủy' : 'Cancel'}
             </button>
@@ -676,7 +662,7 @@ export default function MemoryManager({
               type="button"
               onClick={handleSave}
               disabled={!hasChanges || saving}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-xs font-bold text-black disabled:opacity-40 transition-all cursor-pointer active:scale-[0.98] border-none shadow-lg shadow-amber-500/20"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[var(--gold)] hover:bg-[var(--gold-dark)] disabled:opacity-40 text-xs font-bold text-white transition-all cursor-pointer active:scale-[0.98] border-none shadow-md shadow-[var(--gold-glow)]/30"
             >
               {saving ? (
                 <>
@@ -696,7 +682,7 @@ export default function MemoryManager({
               <button
                 type="button"
                 onClick={() => setConfirmDeleteAll(true)}
-                className="p-2.5 rounded-xl hover:bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:text-rose-300 transition-all cursor-pointer border-none"
+                className="p-2.5 rounded-xl hover:bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:text-rose-300 transition-all cursor-pointer border-none bg-transparent"
                 title={vi ? 'Xóa toàn bộ bộ nhớ' : 'Delete all memory'}
               >
                 <Trash2 size={16} />
@@ -708,3 +694,4 @@ export default function MemoryManager({
     </div>
   );
 }
+

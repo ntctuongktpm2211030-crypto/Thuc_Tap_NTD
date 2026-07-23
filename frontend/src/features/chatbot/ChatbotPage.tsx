@@ -568,7 +568,7 @@ export default function ChatbotPage() {
 
         {/* ─── MODAL: CHI TIẾT NGUỒN THAM KHẢO (CITATION) ─── */}
         {showCitationModal && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
             <div className="surface-elevated rounded-2xl p-5 border border-[var(--border-subtle)] w-full max-w-lg space-y-3.5 shadow-2xl relative">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2.5">
@@ -635,7 +635,7 @@ export default function ChatbotPage() {
 
         {/* ─── MODAL: ĐÁNH GIÁ CÂU TRẢ LỜI (FEEDBACK) ─── */}
         {activeFeedbackMsgId && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
             <div className="surface-elevated rounded-2xl p-6 border border-[var(--border-subtle)] w-full max-w-sm space-y-4 shadow-2xl relative">
               <h3 className="font-editorial text-sm font-bold text-cream">
                 {vi ? 'Đánh giá câu trả lời của AI' : 'Rate AI Response'}
@@ -694,8 +694,8 @@ export default function ChatbotPage() {
 
         {/* ─── PANEL: BỘ NHỚ CÁ NHÂN (AI PREFERENCES MEMORY) ─── */}
         {showMemoryPanel && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
-            <div className="surface-elevated rounded-2xl border border-[var(--border-subtle)] w-full max-w-md shadow-2xl overflow-hidden max-h-[85vh]">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+            <div className="surface-elevated rounded-2xl border border-[var(--border-subtle)] w-full max-w-2xl shadow-2xl overflow-hidden max-h-[90vh]">
               <MemoryManager
                 initialMemory={memory}
                 onClose={() => setShowMemoryPanel(false)}
@@ -711,7 +711,7 @@ export default function ChatbotPage() {
         )}
         {/* ─── MODAL: XÁC NHẬN XÓA LỊCH SỬ CHAT ─── */}
         {deleteConfirmId && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fadeIn">
             <div className="surface-elevated rounded-2xl p-6 border border-[var(--border-subtle)] w-full max-w-sm space-y-4 shadow-2xl relative">
               <div className="flex items-center gap-3 text-rose-500">
                 <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">

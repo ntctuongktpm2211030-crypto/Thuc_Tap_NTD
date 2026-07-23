@@ -33,6 +33,8 @@ const io = new Server(server, {
 
 app.set('io', io);
 
+const socketUserMap = new Map<string, string>();
+
 // Event-driven WebSocket Manager
 io.on('connection', (socket) => {
   console.log(`Socket Client Connected: ${socket.id}`);
@@ -41,12 +43,16 @@ io.on('connection', (socket) => {
   socket.on('register_user', (userId: string) => {
     if (userId) {
       socket.join(`user:${userId}`);
+      socketUserMap.set(socket.id, userId);
       console.log(`[Socket.IO] Socket client ${socket.id} registered to user room: user:${userId}`);
     }
   });
 
   // User online heartbeat
   socket.on('ping_location', (data: { userId: string; lat: number; lng: number }) => {
+    if (data && data.userId) {
+      socketUserMap.set(socket.id, data.userId);
+    }
     // Broadcast user location to friends/subscribers
     socket.broadcast.emit('friend_location_updated', data);
   });
@@ -73,6 +79,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log(`Socket Client Disconnected: ${socket.id}`);
+    const userId = socketUserMap.get(socket.id);
+    if (userId) {
+      io.emit('friend_offline', { userId });
+      socketUserMap.delete(socket.id);
+      console.log(`[Socket.IO] Socket client ${socket.id} left. Broadcasted friend_offline for user: ${userId}`);
+    }
   });
 });
 
@@ -125,3 +137,4 @@ async function cleanExpiredCache() {
     console.error('[CacheCleanupJob] Gặp lỗi khi dọn dẹp cache:', err);
   }
 }
+

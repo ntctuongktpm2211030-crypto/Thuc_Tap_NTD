@@ -4,72 +4,73 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Xác thực & Cá nhân hóa" {
-  entity "User" as User {
-    * id : String <<PK>>
+  entity "Nguoi dung" as User {
+    * PK | id : String
     --
-    * email : String <<UNIQUE>> <<INDEX>>
-    * passwordHash : String
-    * role : UserRole
-    * isVerified : Boolean
-    verificationToken : String
-    resetPasswordToken : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | email : String <<UNIQUE>> <<INDEX>>
+    * | passwordHash : String
+    * | role : UserRole
+    * | isVerified : Boolean
+    | verificationToken : String
+    | resetPasswordToken : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Profile" as Profile {
-    * id : String <<PK>>
+  entity "Ho so" as Profile {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<UNIQUE>>
-    * fullName : String
-    avatarUrl : String
-    coverUrl : String
-    bio : String
-    phoneNumber : String
-    homeLocation : String
+    * FK1 | userId : String <<UNIQUE>>
+    * | fullName : String
+    | avatarUrl : String
+    | coverUrl : String
+    | bio : String
+    | phoneNumber : String
+    | homeLocation : String
   }
 
-  entity "TravelPreferences" as TravelPreferences {
-    * id : String <<PK>>
+  entity "So thich du lich" as TravelPreferences {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<UNIQUE>>
-    * preferredPace : String
-    * dailyBudget : Float
-    * activities : String[]
-    * destinationTypes : String[]
-    * foodPreferences : String[]
+    * FK1 | userId : String <<UNIQUE>>
+    * | preferredPace : String
+    * | dailyBudget : Float
+    * | activities : String[]
+    * | destinationTypes : String[]
+    * | foodPreferences : String[]
   }
 
-  entity "AIMemory" as AIMemory {
-    * id : String <<PK>>
+  entity "Bo nho AI" as AIMemory {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<UNIQUE>>
-    travelPreferences : String[]
-    favoriteFoods : String[]
-    budget : String
-    transportation : String[]
-    favoriteLocations : String[]
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<UNIQUE>>
+    | travelPreferences : String[]
+    | favoriteFoods : String[]
+    | budget : String
+    | transportation : String[]
+    | favoriteLocations : String[]
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Trip" as Trip <<External>>
-entity "Post" as Post <<External>>
-entity "ChatConversation" as ChatConversation <<External>>
+entity "Chuyến đi" as Trip <<External>>
+entity "Bài đăng" as Post <<External>>
+entity "Cuộc hội thoại AI" as ChatConversation <<External>>
 
-User ||--|| Profile : "profile"
-User ||--|| TravelPreferences : "preferences"
-User ||--|| AIMemory : "aiMemory"
+User ||--|| Profile : "hồ sơ"
+User ||--|| TravelPreferences : "sở thích"
+User ||--|| AIMemory : "bộ nhớ AI"
 
-User ||--o{ Trip : "trips"
-User ||--o{ Post : "posts"
-User ||--o{ ChatConversation : "chatbotConversations"
+User ||--o{ Trip : "chuyến đi"
+User ||--o{ Post : "bài đăng"
+User ||--o{ ChatConversation : "hội thoại AI"
 
 @enduml

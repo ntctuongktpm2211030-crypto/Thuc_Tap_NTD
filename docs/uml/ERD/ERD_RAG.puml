@@ -4,43 +4,44 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Hệ thống RAG và Tri thức" {
-  entity "KnowledgeContent" as KnowledgeContent {
-    * id : String <<PK>>
+  entity "Noi dung tri thuc" as KnowledgeContent {
+    * PK | id : String
     --
-    * title : String
-    * body : String
-    * category : String <<INDEX>>
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | title : String
+    * | body : String
+    * | category : String <<INDEX>>
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "KnowledgeQuestion" as KnowledgeQuestion {
-    * id : String <<PK>>
+  entity "Cau hoi tri thuc" as KnowledgeQuestion {
+    * PK | id : String
     --
-    * contentId : String <<FK>> <<INDEX>>
-    * questionText : String
-    embeddingOpenAI : Unsupported
-    embeddingLocal : Unsupported
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | contentId : String <<INDEX>>
+    * | questionText : String
+    | embeddingOpenAI : Unsupported
+    | embeddingLocal : Unsupported
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "KnowledgeAnswer" as KnowledgeAnswer {
-    * id : String <<PK>>
+  entity "Dap an tri thuc" as KnowledgeAnswer {
+    * PK | id : String
     --
-    * contentId : String <<FK>> <<INDEX>>
-    * answerText : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | contentId : String <<INDEX>>
+    * | answerText : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 }
 
-KnowledgeContent ||--o{ KnowledgeQuestion : "questions"
-KnowledgeContent ||--o{ KnowledgeAnswer : "answers"
+KnowledgeContent ||--o{ KnowledgeQuestion : "câu hỏi"
+KnowledgeContent ||--o{ KnowledgeAnswer : "đáp án"
 
 @enduml

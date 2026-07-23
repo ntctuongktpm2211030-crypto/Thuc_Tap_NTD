@@ -156,7 +156,18 @@ export const tripsService = {
   aiRegeneratePart: (payload: any) => tripsService.TaoLaiMotPhanChuyenDiBangAI(payload),
   optimizeRoute: (waypoints: Waypoint[]) => tripsService.ToiUuDuongDi(waypoints),
   clone: (tripId: string) => tripsService.SaoChepChuyenDi(tripId),
-  discoverPublic: (params?: { destination?: string; page?: number }) => tripsService.KhamPhaChuyenDiCongKhai(params),
+  };
+
+// ─────────────────────────────────────────────────────────
+// TRAVEL HISTORY
+// ─────────────────────────────────────────────────────────
+export const travelHistoryService = {
+  LayDanhSachNhatKy: () => apiClient.get('/travel-history').then(r => r.data),
+  TaoNhatKy: (data: { location: string; time: string; rating?: string; cost?: number }) =>
+    apiClient.post('/travel-history', data).then(r => r.data),
+  CapNhatNhatKy: (id: string, data: { location?: string; time?: string; rating?: string; cost?: number }) =>
+    apiClient.put(`/travel-history/${id}`, data).then(r => r.data),
+  XoaNhatKy: (id: string) => apiClient.delete(`/travel-history/${id}`).then(r => r.data),
 };
 
 // ─────────────────────────────────────────────────────────
@@ -217,8 +228,8 @@ export const mapService = {
     apiClient.get<{ status: string; temperature: string; condition: string }>('/map/weather', { params }).then(r => r.data),
   DeXuatDiaDiemAI: (params: { lat: number; lng: number; weather?: string; temp?: number }) =>
     apiClient.get('/map/ai-recommendations', { params }).then(r => r.data),
-  TroLyDiaDiemAI: (destinationId: string, question: string) =>
-    apiClient.post('/map/ai-assistant', { destinationId, question }).then(r => r.data),
+  TroLyDiaDiemAI: (destinationId: string, question: string, destinationName?: string, category?: string) =>
+    apiClient.post('/map/ai-assistant', { destinationId, question, destinationName, category }).then(r => r.data),
 
   // Alias tương thích ngược
   checkIn: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
@@ -232,7 +243,8 @@ export const mapService = {
   events: (params?: { lat?: number; lng?: number; radius?: number }) => mapService.LayDanhSachSuKien(params),
   weather: (params: { location: string }) => mapService.LayThongTinThoiTiet(params),
   aiRecommendations: (params: { lat: number; lng: number; weather?: string; temp?: number }) => mapService.DeXuatDiaDiemAI(params),
-  aiAssistant: (destinationId: string, question: string) => mapService.TroLyDiaDiemAI(destinationId, question),
+  aiAssistant: (destinationId: string, question: string, destinationName?: string, category?: string) =>
+    mapService.TroLyDiaDiemAI(destinationId, question, destinationName, category),
 };
 
 // ─────────────────────────────────────────────────────────
