@@ -8,7 +8,10 @@ import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { mapService } from '../../services/smartTravel.service';
 import type { RootState } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
+import { useToast } from '../../contexts/ToastContext';
 import { io } from 'socket.io-client';
+
+const CAN_THO_COORDS: [number, number] = [10.03711, 105.78825];
 
 const MapDashboard = () => {
   const navigate = useNavigate();
@@ -18,8 +21,83 @@ const MapDashboard = () => {
 
   const socketRef = useRef<any>(null);
   const userLocationRef = useRef<[number, number] | null>(null);
-  const selectedCenterRef = useRef<[number, number]>([21.028511, 105.804817]);
+  const selectedCenterRef = useRef<[number, number]>(CAN_THO_COORDS);
   const lastLocationSentRef = useRef<{ lat: number; lng: number; time: number }>({ lat: 0, lng: 0, time: 0 });
+  const toast = useToast();
+
+  const fetchIpLocation = async (): Promise<[number, number] | null> => {
+    try {
+      const res = await fetch('https://ip-api.com/json/');
+      const data = await res.json();
+      if (data && data.status === 'success' && data.lat && data.lon) {
+        const coords: [number, number] = [data.lat, data.lon];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+        console.log(`🎯 IP-based automatic location acquired:`, coords);
+        return coords;
+      }
+    } catch (err) {
+      console.warn('IP location fetch failed:', err);
+    }
+    return null;
+  };
+
+  const requestMyLocation = () => {
+    if (!isAuthenticated) {
+      toast.warning(vi ? 'Bạn cần đăng nhập để định vị vị trí của mình!' : 'You need to log in to acquire your location!');
+      navigate('/auth', { state: { from: '/map' } });
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      void fetchIpLocation().then((coords) => {
+        if (coords) {
+          toast.location(
+            vi ? `Đã định vị tự động vị trí mạng (IP)!` : `Location acquired via IP!`,
+            `[${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]`,
+            { title: vi ? 'Vị trí tự động' : 'Automatic Location' }
+          );
+        }
+      });
+      return;
+    }
+
+    toast.info(vi ? 'Đang tự động xác định vị trí GPS thực tế...' : 'Acquiring real GPS coordinates...');
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const coords: [number, number] = [latitude, longitude];
+        setUserLocation(coords);
+        userLocationRef.current = coords;
+        setSelectedCenter(coords);
+
+        toast.location(
+          vi ? `Đã định vị tự động vị trí của bạn!` : `Automatic Location Acquired!`,
+          `[${latitude.toFixed(4)}, ${longitude.toFixed(4)}]`,
+          { title: vi ? 'Định vị tự động' : 'Auto Location' }
+        );
+        console.log(`🎯 Pure automatic geolocation: [${latitude}, ${longitude}]`);
+      },
+      async (error) => {
+        console.warn('⚠️ GPS Location failed, fetching IP location:', error.message);
+        const coords = await fetchIpLocation();
+        if (coords) {
+          toast.location(
+            vi ? `Đã tự động xác định vị trí qua mạng IP!` : `Location acquired via IP!`,
+            `[${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}]`,
+            { title: vi ? 'Vị trí tự động' : 'Auto Location' }
+          );
+        } else {
+          toast.error(
+            vi ? `Không thể định vị tự động. Vui lòng bật quyền truy cập vị trí trên trình duyệt!` : `Unable to acquire location automatically. Enable browser GPS.`
+          );
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
 
   // Core map states
   const [locations, setLocations] = useState<MapLocation[]>([]);
@@ -27,7 +105,7 @@ const MapDashboard = () => {
   const [destinations, setDestinations] = useState<any[]>([]);
   const [routeQueue, setRouteQueue] = useState<MapLocation[]>([]);
   const [viewMode, setViewMode] = useState<'markers' | 'cluster' | 'heatmap'>('markers');
-  const [selectedCenter, setSelectedCenter] = useState<[number, number]>([21.028511, 105.804817]);
+  const [selectedCenter, setSelectedCenter] = useState<[number, number]>(CAN_THO_COORDS);
   const [cachingProgress, setCachingProgress] = useState<number | null>(null);
 
   const [customDestName, setCustomDestName] = useState('');
@@ -96,8 +174,8 @@ const MapDashboard = () => {
       const dests = await mapService.destinations({ lat, lng, radius: selectedRadius });
       if (Array.isArray(dests)) {
         setDestinations(dests);
-        alert(vi 
-          ? `Đã tìm thấy ${dests.length} địa điểm trong bán kính ${selectedRadius}km.` 
+        alert(vi
+          ? `Đã tìm thấy ${dests.length} địa điểm trong bán kính ${selectedRadius}km.`
           : `Found ${dests.length} destinations within ${selectedRadius}km.`
         );
       }
@@ -120,62 +198,14 @@ const MapDashboard = () => {
     }
   };
 
-  const requestMyLocation = () => {
-    if (!isAuthenticated) {
-      alert(vi ? 'Bạn cần đăng nhập để định vị vị trí của mình!' : 'You need to log in to acquire your location!');
-      navigate('/auth', { state: { from: '/map' } });
-      return;
-    }
-    if (!navigator.geolocation) {
-      alert(vi ? 'Trình duyệt của bạn không hỗ trợ định vị GPS.' : 'Geolocation is not supported by your browser.');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation([latitude, longitude]);
-        setSelectedCenter([latitude, longitude]);
-        alert(vi 
-          ? `Đã nhận diện tọa độ của bạn: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]` 
-          : `Location acquired: [${latitude.toFixed(4)}, ${longitude.toFixed(4)}]`
-        );
-        console.log(`🎯 User requested location: [${latitude}, ${longitude}]`);
-      },
-      (error) => {
-        console.warn('⚠️ Real User Location denied/failed:', error.message);
-        alert(vi 
-          ? 'Không nhận được hoặc không xác nhận được tọa độ của bạn. Vui lòng đồng ý chia sẻ vị trí (GPS) trong phần cài đặt trình duyệt hoặc Windows để sử dụng tính năng này!' 
-          : 'Unable to acquire or verify your coordinates. Please grant location sharing permission (GPS) in your browser/OS settings!'
-        );
-      },
-      { enableHighAccuracy: false, timeout: 6000 }
-    );
-  };
-
   useEffect(() => {
     loadMapData();
   }, []);
 
-  // Request actual browser geolocation on mount for everyone to center the map
+  // Request actual browser geolocation on mount with IP fallback chain
   useEffect(() => {
-    const fetchIpLocation = async () => {
-      try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        if (data && data.latitude && data.longitude) {
-          setUserLocation([data.latitude, data.longitude]);
-          userLocationRef.current = [data.latitude, data.longitude];
-          setSelectedCenter([data.latitude, data.longitude]);
-          console.log(`🎯 IP-based location acquired on fallback: [${data.latitude}, ${data.longitude}]`);
-        }
-      } catch (ipErr) {
-        console.error('Failed to get IP-based location:', ipErr);
-      }
-    };
-
     if (!navigator.geolocation) {
-      fetchIpLocation();
+      void fetchIpLocation();
       return;
     }
 
@@ -189,7 +219,7 @@ const MapDashboard = () => {
       },
       (error) => {
         console.warn('⚠️ Auto-location on mount denied/failed:', error.message);
-        fetchIpLocation();
+        void fetchIpLocation();
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -239,7 +269,7 @@ const MapDashboard = () => {
 
     const socketUrl = import.meta.env.VITE_API_URL 
       ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
-      : `${window.location.protocol}//${window.location.hostname}:5000`;
+      : 'http://localhost:5000';
       
     const socket = io(socketUrl, {
       transports: ['websocket']
@@ -308,7 +338,7 @@ const MapDashboard = () => {
 
     const now = Date.now();
     const dist = Math.hypot(lat - lastLocationSentRef.current.lat, lng - lastLocationSentRef.current.lng);
-    
+
     // Send update if moved significantly (> ~10 meters) or if last sent was over 5s ago
     if (dist > 0.0001 || now - lastLocationSentRef.current.time > 5000) {
       if (socketRef.current.connected) {
@@ -376,16 +406,16 @@ const MapDashboard = () => {
 
     const mappedCheckins: MapLocation[] = [];
     const seenCheckins = new Set<string>();
-    
+
     // Sort checkins by date descending so the most recent shows up as the primary marker
     const sortedCheckins = [...checkins].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    
+
     sortedCheckins.forEach(c => {
       const lat = c.destination?.latitude || c.latitude || 21.0285;
       const lng = c.destination?.longitude || c.longitude || 105.8048;
-      
+
       const locKey = c.destinationId || `${lat.toFixed(5)},${lng.toFixed(5)}`;
-      
+
       let parsedNote = c.note || '';
       let imageUrl = '';
       let tag = '';
@@ -395,7 +425,7 @@ const MapDashboard = () => {
           parsedNote = parsed.text || '';
           imageUrl = parsed.imageUrl || '';
           tag = parsed.tag || '';
-        } catch (e) {}
+        } catch (e) { }
       }
 
       const checkinTime = new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date(c.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US');
@@ -496,9 +526,9 @@ const MapDashboard = () => {
 
     const finalLocations = [...mappedDests, ...mappedCheckins, ...mappedFriends];
 
-    if (selectedLocation && 
-        (selectedLocation.id.startsWith('osm-place-') || selectedLocation.id.startsWith('google-place-')) &&
-        !finalLocations.some(l => l.id === selectedLocation.id)) {
+    if (selectedLocation &&
+      (selectedLocation.id.startsWith('osm-place-') || selectedLocation.id.startsWith('google-place-')) &&
+      !finalLocations.some(l => l.id === selectedLocation.id)) {
       finalLocations.push({ ...selectedLocation, color: selectedPinColor });
     }
 
@@ -605,7 +635,7 @@ const MapDashboard = () => {
         }
       });
       const data = await res.json();
-      
+
       if (Array.isArray(data) && data.length > 0) {
         const osmLocations: MapLocation[] = data.map((item: any, idx: number) => ({
           id: `osm-place-${item.place_id || idx}-${Date.now()}`,
@@ -772,9 +802,8 @@ const MapDashboard = () => {
                     key={color}
                     type="button"
                     onClick={() => setSelectedPinColor(color)}
-                    className={`w-3.5 h-3.5 rounded-full border-2 cursor-pointer transition-all ${colorBg} ${
-                      selectedPinColor === color ? 'border-white scale-125 shadow-md' : 'border-transparent hover:scale-115'
-                    }`}
+                    className={`w-3.5 h-3.5 rounded-full border-2 cursor-pointer transition-all ${colorBg} ${selectedPinColor === color ? 'border-white scale-125 shadow-md' : 'border-transparent hover:scale-115'
+                      }`}
                     title={color.toUpperCase()}
                   />
                 );
@@ -887,7 +916,7 @@ const MapDashboard = () => {
               </button>
             </h3>
             <p className="text-[10px] font-bold text-[var(--text-primary)] truncate">{selectedLocation.name}</p>
-            
+
             <div className="grid grid-cols-2 gap-1.5">
               {[
                 [vi ? 'Nổi bật?' : 'Highlights?'],
@@ -936,33 +965,30 @@ const MapDashboard = () => {
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setViewMode('markers')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
-                viewMode === 'markers' 
-                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${viewMode === 'markers'
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent'
                   : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
-              }`}
+                }`}
             >
               <MapPin size={12} className={viewMode === 'markers' ? 'text-white' : 'text-blue-500'} />
               <span>{vi ? 'Ghim' : 'Pins'}</span>
             </button>
             <button
               onClick={() => setViewMode('cluster')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
-                viewMode === 'cluster' 
-                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${viewMode === 'cluster'
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent'
                   : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
-              }`}
+                }`}
             >
               <Users size={12} className={viewMode === 'cluster' ? 'text-white' : 'text-blue-500'} />
               <span>{vi ? 'Nhóm' : 'Clusters'}</span>
             </button>
             <button
               onClick={() => setViewMode('heatmap')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
-                viewMode === 'heatmap' 
-                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${viewMode === 'heatmap'
+                  ? 'bg-blue-600 text-white shadow-sm border border-transparent'
                   : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-normal)]'
-              }`}
+                }`}
             >
               <Flame size={12} className={viewMode === 'heatmap' ? 'text-white' : 'text-orange-500'} />
               <span>{vi ? 'Nhiệt' : 'Heatmap'}</span>
@@ -974,10 +1000,12 @@ const MapDashboard = () => {
         <div className="flex flex-wrap gap-2 items-center bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-xl shadow-sm">
           <button
             onClick={requestMyLocation}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1.5 shrink-0"
           >
             🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
           </button>
+
+
 
           <div className="flex items-center gap-1">
             <select
@@ -1006,7 +1034,7 @@ const MapDashboard = () => {
           >
             ⚡ {vi ? 'Tối ưu tuyến đường (TSP)' : 'Optimize Route (TSP)'}
           </button>
-          
+
           <button
             onClick={handleCacheTiles}
             disabled={cachingProgress !== null}
@@ -1064,7 +1092,7 @@ const MapDashboard = () => {
               required
             />
             <p className="text-[9px] text-[var(--text-muted)] italic mt-1 pl-1">
-              📌 {vi 
+              📌 {vi
                 ? `Vị trí ghim: ${userLocation ? 'GPS hiện tại của bạn' : 'Tâm bản đồ hiện tại'}`
                 : `Pinned at: ${userLocation ? 'Your current GPS' : 'Current map center'}`}
             </p>
@@ -1157,7 +1185,7 @@ const MapDashboard = () => {
                     parsedNote = parsed.text || '';
                     imageUrl = parsed.imageUrl || '';
                     tag = parsed.tag || '';
-                  } catch (e) {}
+                  } catch (e) { }
                 }
                 return (
                   <div

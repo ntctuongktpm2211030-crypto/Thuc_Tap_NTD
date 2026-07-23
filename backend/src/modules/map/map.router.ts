@@ -210,7 +210,7 @@ router.get('/destinations', async (req: AuthRequest, res: Response) => {
     return res.json(destinations);
   } catch (err) {
     console.error('[map/destinations]', err);
-    return res.status(500).json({ error: 'Failed to fetch destinations.' });
+    return res.json([]);
   }
 });
 
@@ -395,7 +395,7 @@ router.get('/events', async (req: AuthRequest, res: Response) => {
     return res.json(merged);
   } catch (err) {
     console.error('[map/events GET]', err);
-    return res.status(500).json({ error: 'Failed to fetch events.' });
+    return res.json([]);
   }
 });
 
