@@ -46,7 +46,6 @@ rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
 
   package "Interactive GIS Domain" {
     usecase "Map & GIS Services\n(Bản đồ tương tác & GIS)" as UC_Map
-    usecase "Local Events & Meetups\n(Sự kiện & Giao lưu)" as UC_Events
   }
 
   package "Community & Social Domain" {
@@ -55,12 +54,6 @@ rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
 
   package "AI Assistant & Knowledge Domain" {
     usecase "AI Assistant & RAG\n(Trợ lý ảo đa Agent & RAG)" as UC_AI
-    usecase "Knowledge Management\n(Quản trị tri thức)" as UC_Knowledge
-  }
-
-  package "Administration & Governance Domain" {
-    usecase "AI Governance & Compliance\n(Kiểm toán & Quản trị AI)" as UC_AIGov
-    usecase "Administration & Operations\n(Quản trị & Vận hành)" as UC_Admin
   }
 
   package "Infrastructure Services Domain" {
@@ -70,7 +63,6 @@ rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
   ' High-level Relationships within the System
   UC_Trip ..> UC_Map : <<include>>
   UC_AI ..> UC_Rec : <<extend>>
-  UC_AIGov ..> UC_Admin : <<include>>
 }
 
 ' ==========================================
@@ -85,11 +77,7 @@ Guest -- UC_Social
 ' Registered Traveler Associations
 User -- UC_Trip
 User -- UC_AI
-User -- UC_Events
 User -- UC_Realtime
-User -- UC_Admin
-User -- UC_AIGov
-User -- UC_Knowledge
 
 ' ==========================================
 ' 4. ASSOCIATIONS (DOMAINS -> EXTERNAL SYSTEMS)
@@ -99,12 +87,10 @@ UC_Auth -- SMTP
 UC_Trip -- OpenAI
 UC_Rec -- OpenAI
 UC_Map -- MapService
-UC_Events -- MapService
 UC_Social -- SupabaseStorage
 UC_AI -- OpenAI
 UC_AI -- AdminUnits
-UC_Knowledge -- OpenAI
-UC_AIGov -- OpenAI
 UC_Realtime -- PushNotif
+
 
 @enduml

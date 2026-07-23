@@ -4,81 +4,83 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Hệ gợi ý & Đề xuất" {
-  entity "Recommendation" as Recommendation {
-    * id : String <<PK>>
+  entity "De xuat" as Recommendation {
+    * PK | id : String
     --
-    * tripId : String <<FK>> <<INDEX>>
-    * destinationId : String <<FK>>
-    * score : Float
-    recommendationReason : String
+    * FK1 | tripId : String <<INDEX>>
+    * FK2 | destinationId : String
+    * | score : Float
+    | recommendationReason : String
   }
 
-  entity "UserRecommendation" as UserRecommendation {
-    * id : String <<PK>>
+  entity "De xuat nguoi dung" as UserRecommendation {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * location : String
-    destinationId : String <<FK>> <<INDEX>>
-    * priority : String
-    reason : String
-    * type : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | location : String
+    | FK2 | destinationId : String <<INDEX>>
+    * | priority : String
+    | reason : String
+    * | type : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "FavoriteFood" as FavoriteFood {
-    * id : String <<PK>>
+  entity "Mon an yeu thich" as FavoriteFood {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * name : String
-    region : String
-    description : String
-    rating : Float
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | name : String
+    | region : String
+    | description : String
+    | rating : Float
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "TravelHistory" as TravelHistory {
-    * id : String <<PK>>
+  entity "Lich su du lich" as TravelHistory {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * location : String
-    destinationId : String <<FK>> <<INDEX>>
-    * time : DateTime
-    rating : String
-    * cost : Float
-    * createdAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | location : String
+    | FK2 | destinationId : String <<INDEX>>
+    * | time : DateTime
+    | rating : String
+    * | cost : Float
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "AIHistory" as AIHistory {
-    * id : String <<PK>>
+  entity "Lich su AI" as AIHistory {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * promptText : String
-    * responseJson : String
-    * type : String
-    * createdAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | promptText : String
+    * | responseJson : String
+    * | type : String
+    * | createdAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
-entity "Trip" as Trip <<External>>
-entity "Destination" as Destination <<External>>
+entity "Người dùng" as User <<External>>
+entity "Chuyến đi" as Trip <<External>>
+entity "Điểm đến" as Destination <<External>>
 
-User ||--o{ UserRecommendation : "recommendations"
-User ||--o{ FavoriteFood : "favoriteFoods"
-User ||--o{ TravelHistory : "travelHistories"
-User ||--o{ AIHistory : "aiHistories"
+User ||--o{ UserRecommendation : "đề xuất"
+User ||--o{ FavoriteFood : "món ăn yêu thích"
+User ||--o{ TravelHistory : "lịch sử du lịch"
+User ||--o{ AIHistory : "lịch sử AI"
 
-Trip ||--o{ Recommendation : "recommendations"
-Destination ||--o{ Recommendation : "recommendationDestination"
-Destination ||--o{ UserRecommendation : "userRecommendationDestination"
-Destination ||--o{ TravelHistory : "travelHistoryDestination"
+Trip ||--o{ Recommendation : "đề xuất"
+Destination ||--o{ Recommendation : "đề xuất điểm đến"
+Destination ||--o{ UserRecommendation : "đề xuất điểm đến"
+Destination ||--o{ TravelHistory : "lịch sử điểm đến"
 
 @enduml

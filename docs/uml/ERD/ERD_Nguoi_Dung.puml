@@ -4,95 +4,97 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Người dùng & Kết nối" {
-  entity "User" as User {
-    * id : String <<PK>>
+  entity "Nguoi dung" as User {
+    * PK | id : String
     --
-    * email : String <<UNIQUE>> <<INDEX>>
-    * passwordHash : String
-    * role : UserRole
-    * isVerified : Boolean
-    verificationToken : String
-    resetPasswordToken : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | email : String <<UNIQUE>> <<INDEX>>
+    * | passwordHash : String
+    * | role : UserRole
+    * | isVerified : Boolean
+    | verificationToken : String
+    | resetPasswordToken : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Follower" as Follower {
-    * id : String <<PK>>
+  entity "Nguoi theo doi" as Follower {
+    * PK | id : String
     --
-    * followerId : String <<FK>> <<INDEX>>
-    * followingId : String <<FK>> <<INDEX>>
-    * createdAt : DateTime
+    * FK1 | followerId : String <<INDEX>>
+    * FK2 | followingId : String <<INDEX>>
+    * | createdAt : DateTime
   }
 
-  entity "Notification" as Notification {
-    * id : String <<PK>>
+  entity "Thong bao" as Notification {
+    * PK | id : String
     --
-    * recipientId : String <<FK>> <<INDEX>>
-    * type : String
-    * content : String
-    * isRead : Boolean
-    * createdAt : DateTime
+    * FK1 | recipientId : String <<INDEX>>
+    * | type : String
+    * | content : String
+    * | isRead : Boolean
+    | targetId : String
+    * | createdAt : DateTime
   }
 
-  entity "Location" as Location {
-    * id : String <<PK>>
+  entity "Vi tri" as Location {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<UNIQUE>>
-    * latitude : Float
-    * longitude : Float
-    * updatedAt : DateTime
+    * FK1 | userId : String <<UNIQUE>>
+    * | latitude : Float
+    * | longitude : Float
+    * | updatedAt : DateTime
   }
 
-  entity "TravelerMatch" as TravelerMatch {
-    * id : String <<PK>>
+  entity "Ghep doi du khach" as TravelerMatch {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * targetId : String <<FK>> <<INDEX>>
-    * matchScore : Float <<INDEX>>
-    reasons : String[]
-    * status : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * FK2 | matchedUserId : String <<INDEX>>
+    * | compatScore : Float <<INDEX>>
+    | matchReasons : String[]
+    * | status : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Conversation" as Conversation {
-    * id : String <<PK>>
+  entity "Cuoc hoi thoai" as Conversation {
+    * PK | id : String
     --
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Message" as Message {
-    * id : String <<PK>>
+  entity "Tin nhan" as Message {
+    * PK | id : String
     --
-    * conversationId : String <<FK>> <<INDEX>>
-    * senderId : String <<FK>>
-    * content : String
-    * createdAt : DateTime
+    * FK1 | conversationId : String <<INDEX>>
+    * FK2 | senderId : String
+    * | content : String
+    * | createdAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "Profile" as Profile <<External>>
-entity "Event" as Event <<External>>
+entity "Hồ sơ" as Profile <<External>>
+entity "Sự kiện" as Event <<External>>
 
-User ||--|| Profile : "profile"
-User ||--o{ Event : "organizedEvents"
+User ||--|| Profile : "hồ sơ"
+User ||--o{ Event : "sự kiện tổ chức"
 
-User ||--o{ Follower : "followers"
-User ||--o{ Follower : "following"
-User ||--o{ Notification : "notifications"
-User ||--|| Location : "liveLocation"
-User ||--o{ TravelerMatch : "matches"
+User ||--o{ Follower : "người theo dõi"
+User ||--o{ Follower : "đang theo dõi"
+User ||--o{ Notification : "thông báo"
+User ||--|| Location : "vị trí trực tiếp"
+User ||--o{ TravelerMatch : "kết nối"
 
-Conversation ||--o{ Message : "messages"
-User ||--o{ Message : "messages"
-User }o--o{ Conversation : "participants"
+Conversation ||--o{ Message : "tin nhắn"
+User ||--o{ Message : "tin nhắn"
+User }o--o{ Conversation : "thành viên"
 
 @enduml

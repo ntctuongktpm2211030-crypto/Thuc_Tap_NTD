@@ -546,14 +546,29 @@ ${placeListStr}`;
 // ─────────────────────────────────────────────────────────
 router.post('/ai-assistant', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { destinationId, question } = req.body;
+    const { destinationId, question, destinationName, category } = req.body;
     if (!destinationId || !question) {
       return res.status(400).json({ error: 'destinationId and question are required.' });
     }
 
-    const dest = await prisma.destination.findUnique({ where: { id: destinationId } });
+    let dest = await prisma.destination.findUnique({ where: { id: destinationId } });
     if (!dest) {
-      return res.status(404).json({ error: 'Destination not found.' });
+      if (destinationName) {
+        dest = {
+          id: destinationId,
+          name: destinationName,
+          category: category || 'place',
+          description: 'Địa điểm tìm kiếm tự do trên bản đồ.',
+          averageRating: 5.0,
+          address: destinationName,
+          latitude: 0,
+          longitude: 0,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        } as any;
+      } else {
+        return res.status(404).json({ error: 'Destination not found.' });
+      }
     }
 
     const systemPrompt = `You are a Smart Travel Assistant. Provide a helpful, engaging, and concise Vietnamese response (under 250 characters) to the user's question about the destination: ${dest.name} (${dest.category}).

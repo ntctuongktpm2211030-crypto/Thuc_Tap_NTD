@@ -4,70 +4,62 @@ skinparam packageStyle rectangle
 skinparam actorStyle awesome
 skinparam linetype ortho
 
-' Actors
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
 actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
-' External Systems
 actor "Supabase Storage" as SupabaseStorage <<System>>
 actor "Notification Service" as PushNotification <<System>>
 
-' Actor Inheritance
 RegisteredUser -|> Guest
 
-rectangle "Mạng xã hội & Cộng đồng" {
-  usecase "Xem bảng tin cộng đồng" as UC_ViewFeed
-  usecase "Tìm kiếm bài viết" as UC_SearchPosts
-  usecase "Tìm kiếm người dùng" as UC_SearchUsers
+' ==========================================
+' 2. SYSTEM BOUNDARY & SOCIAL USE CASES
+' ==========================================
+rectangle "Phân hệ Mạng xã hội & Cộng đồng (Social & Community)" as SocialModule {
   
-  usecase "Tạo bài viết chia sẻ mới" as UC_CreatePost
-  usecase "Tải hình ảnh bài đăng" as UC_UploadImage
-  usecase "Chỉnh sửa bài viết cá nhân" as UC_EditPost
-  usecase "Xóa bài viết cá nhân" as UC_DeletePost
-  
-  usecase "Thích bài viết" as UC_Like
-  usecase "Bỏ thích bài viết" as UC_Unlike
-  usecase "Đánh dấu lưu bài viết" as UC_Bookmark
-  usecase "Xem bộ sưu tập đã lưu" as UC_ViewSaved
-  usecase "Báo cáo nội dung vi phạm" as UC_ReportContent
-  usecase "Chia sẻ bài viết" as UC_SharePost
-  
-  usecase "Viết bình luận bài đăng" as UC_Comment
-  usecase "Viết phản hồi bình luận" as UC_Reply
-  
-  usecase "Theo dõi thành viên khác" as UC_Follow
-  usecase "Hủy theo dõi thành viên" as UC_Unfollow
-  usecase "Nhận thông báo tương tác" as UC_ReceiveNotif
+  package "Bài đăng & Tương tác (Posts)" {
+    usecase "Xem bảng tin cộng đồng\n(Browse Community Feed)" as UC_ViewFeed
+    usecase "Xem chi tiết bài viết\n(View Post Details)" as UC_ViewPostDetail
+    usecase "Tạo bài viết mới kèm hình ảnh\n(Create Post with Media)" as UC_CreatePost
+    usecase "Tải hình ảnh bài đăng\n(Upload Post Image)" as UC_UploadImage
+    usecase "Chỉnh sửa bài viết cá nhân\n(Edit Post)" as UC_EditPost
+    usecase "Xóa bài viết cá nhân\n(Delete Post)" as UC_DeletePost
+    
+    usecase "Thích bài viết\n(Like Post)" as UC_Like
+    usecase "Bỏ thích bài viết\n(Unlike Post)" as UC_Unlike
+    usecase "Đánh dấu lưu trữ bài viết\n(Bookmark Post)" as UC_Bookmark
+    usecase "Xem danh sách đã lưu trữ\n(View Bookmarked Posts)" as UC_ViewSaved
+    
+    usecase "Xem bình luận bài viết\n(List Comments on Post)" as UC_ListComments
+    usecase "Viết bình luận bài viết\n(Write Comment on Post)" as UC_Comment
+    usecase "Viết phản hồi bình luận\n(Reply to Comment)" as UC_Reply
+  }
+
+  ' Relationships (include / extend)
+  UC_CreatePost ..> UC_UploadImage : <<include>>
+  UC_Comment <.. UC_Reply : <<extend>>
+  UC_Like ..> UC_Unlike : <<extend>>
 }
 
-' Guest Associations
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
 Guest -- UC_ViewFeed
-Guest -- UC_SearchPosts
-Guest -- UC_SearchUsers
+Guest -- UC_ViewPostDetail
+Guest -- UC_ListComments
 
-' Registered User Associations
 RegisteredUser -- UC_CreatePost
 RegisteredUser -- UC_EditPost
 RegisteredUser -- UC_DeletePost
 RegisteredUser -- UC_Like
-RegisteredUser -- UC_Unlike
 RegisteredUser -- UC_Bookmark
 RegisteredUser -- UC_ViewSaved
-RegisteredUser -- UC_ReportContent
-RegisteredUser -- UC_SharePost
 RegisteredUser -- UC_Comment
-RegisteredUser -- UC_Follow
-RegisteredUser -- UC_Unfollow
-RegisteredUser -- UC_ReceiveNotif
 
-' Relationships (include / extend)
-UC_CreatePost ..> UC_UploadImage : <<include>>
-UC_Comment <.. UC_Reply : <<extend>>
-UC_Like <.. UC_ReceiveNotif : <<extend>>
-UC_Comment <.. UC_ReceiveNotif : <<extend>>
-UC_Follow <.. UC_ReceiveNotif : <<extend>>
-
-' External System Associations
 UC_UploadImage -- SupabaseStorage
-UC_ReceiveNotif -- PushNotification
+
 @enduml
+

@@ -4,68 +4,69 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Địa điểm & GIS" {
-  entity "Destination" as Destination {
-    * id : String <<PK>>
+  entity "Diem den" as Destination {
+    * PK | id : String
     --
-    * name : String
-    description : String
-    * latitude : Float <<INDEX>>
-    * longitude : Float <<INDEX>>
-    * category : String
-    * averageRating : Float
-    address : String
-    openingHours : String
+    * | name : String
+    | description : String
+    * | latitude : Float <<INDEX>>
+    * | longitude : Float <<INDEX>>
+    * | category : String
+    * | averageRating : Float
+    | address : String
+    | openingHours : String
   }
 
-  entity "CheckIn" as CheckIn {
-    * id : String <<PK>>
+  entity "Check in" as CheckIn {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * destinationId : String <<FK>> <<INDEX>>
-    note : String
-    * createdAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * FK2 | destinationId : String <<INDEX>>
+    | note : String
+    * | createdAt : DateTime
   }
 
-  entity "SavedPlace" as SavedPlace {
-    * id : String <<PK>>
+  entity "Dia diem da luu" as SavedPlace {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * name : String
-    * category : String
-    * latitude : Float
-    * longitude : Float
-    address : String
-    imageUrl : String
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | name : String
+    * | category : String
+    * | latitude : Float
+    * | longitude : Float
+    | address : String
+    | imageUrl : String
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "SafetyWarning" as SafetyWarning {
-    * id : String <<PK>>
+  entity "Canh bao an toan" as SafetyWarning {
+    * PK | id : String
     --
-    * type : String
-    * description : String
-    * latitude : Float <<INDEX>>
-    * longitude : Float <<INDEX>>
-    * radiusKm : Float
-    * createdAt : DateTime
-    expiresAt : DateTime
+    * | type : String
+    * | description : String
+    * | latitude : Float <<INDEX>>
+    * | longitude : Float <<INDEX>>
+    * | radiusKm : Float
+    * | createdAt : DateTime
+    | expiresAt : DateTime
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
-entity "TripActivity" as TripActivity <<External>>
+entity "Người dùng" as User <<External>>
+entity "Hoạt động chuyến đi" as TripActivity <<External>>
 
-User ||--o{ CheckIn : "check-ins"
-User ||--o{ SavedPlace : "savedPlaces"
+User ||--o{ CheckIn : "check-in"
+User ||--o{ SavedPlace : "địa điểm đã lưu"
 
-Destination ||--o{ CheckIn : "checkIns"
-Destination ||--o{ TripActivity : "activities"
+Destination ||--o{ CheckIn : "check-in"
+Destination ||--o{ TripActivity : "hoạt động"
 
 @enduml

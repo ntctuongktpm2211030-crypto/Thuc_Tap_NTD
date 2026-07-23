@@ -4,73 +4,74 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Nhật trình di chuyển" {
-  entity "Journey" as Journey {
-    * id : String <<PK>>
+  entity "Hanh trinh" as Journey {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * title : String
-    description : String
-    coverImageUrl : String
-    * isPublic : Boolean
-    * status : String <<INDEX>>
-    startDate : DateTime
-    endDate : DateTime
-    * totalDistance : Float
-    * createdAt : DateTime
-    * updatedAt : DateTime
+    * FK1 | userId : String <<INDEX>>
+    * | title : String
+    | description : String
+    | coverImageUrl : String
+    * | isPublic : Boolean
+    * | status : String <<INDEX>>
+    | startDate : DateTime
+    | endDate : DateTime
+    * | totalDistance : Float
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
   }
 
-  entity "Route" as Route {
-    * id : String <<PK>>
+  entity "Tuyen duong" as Route {
+    * PK | id : String
     --
-    * journeyId : String <<FK>> <<INDEX>>
-    * name : String
-    description : String
-    * transportMode : String
-    * distanceKm : Float
-    * durationMin : Int
-    * color : String
-    * createdAt : DateTime
+    * FK1 | journeyId : String <<INDEX>>
+    * | name : String
+    | description : String
+    * | transportMode : String
+    * | distanceKm : Float
+    * | durationMin : Int
+    * | color : String
+    * | createdAt : DateTime
   }
 
-  entity "RoutePoint" as RoutePoint {
-    * id : String <<PK>>
+  entity "Diem tuyen duong" as RoutePoint {
+    * PK | id : String
     --
-    * routeId : String <<FK>> <<INDEX>>
-    * latitude : Float <<INDEX>>
-    * longitude : Float <<INDEX>>
-    altitude : Float
-    * sequenceOrder : Int
-    * timestamp : DateTime
-    note : String
-    photoUrl : String
+    * FK1 | routeId : String <<INDEX>>
+    * | latitude : Float <<INDEX>>
+    * | longitude : Float <<INDEX>>
+    | altitude : Float
+    * | sequenceOrder : Int
+    * | timestamp : DateTime
+    | note : String
+    | photoUrl : String
   }
 
-  entity "LocationHistory" as LocationHistory {
-    * id : String <<PK>>
+  entity "Lich su vi tri" as LocationHistory {
+    * PK | id : String
     --
-    * userId : String <<FK>> <<INDEX>>
-    * latitude : Float <<INDEX>>
-    * longitude : Float <<INDEX>>
-    accuracy : Float
-    speed : Float
-    heading : Float
-    * createdAt : DateTime <<INDEX>>
+    * FK1 | userId : String <<INDEX>>
+    * | latitude : Float <<INDEX>>
+    * | longitude : Float <<INDEX>>
+    | accuracy : Float
+    | speed : Float
+    | heading : Float
+    * | createdAt : DateTime <<INDEX>>
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
+entity "Người dùng" as User <<External>>
 
-User ||--o{ Journey : "user"
-User ||--o{ LocationHistory : "locationHistory"
+User ||--o{ Journey : "người dùng"
+User ||--o{ LocationHistory : "lịch sử vị trí"
 
-Journey ||--o{ Route : "routes"
-Route ||--o{ RoutePoint : "points"
+Journey ||--o{ Route : "tuyến đường"
+Route ||--o{ RoutePoint : "điểm tọa độ"
 
 @enduml

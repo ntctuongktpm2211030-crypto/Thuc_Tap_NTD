@@ -89,6 +89,24 @@ export class AgentExecutorService {
     let classifierFailed = false;
     let isPlanningIntent = true;
 
+    // ✅ Resolve actual conversationId from messageId to prevent dialogue state loss
+    let convId = userId;
+    if (messageId) {
+      try {
+        const msgObj = await prisma.chatMessage.findUnique({
+          where: { id: messageId },
+          select: { conversationId: true }
+        });
+        if (msgObj) {
+          convId = msgObj.conversationId;
+        } else {
+          convId = messageId;
+        }
+      } catch (_) {
+        convId = messageId;
+      }
+    }
+
     logger.info('AgentExecutor', 'execute — starting', { userId, inputLength: input.length, hasPredefinedType: !!agentType }, requestId);
 
     // Kiểm tra câu tương tác xã giao đơn giản (Greetings, Thanks, Bye, Identity, Praise, Smalltalk, Complaint) để phản hồi tự nhiên ngay lập tức
@@ -179,7 +197,6 @@ export class AgentExecutorService {
       const originalInput = input;
 
       // ─── Tích hợp Conversation Intelligence Module (CIM) ───
-      const convId = messageId || userId;
       const stateObj = this.conversationState.getState(convId);
       const currentState = stateObj && stateObj.intent ? 'RECOMMENDATION' : 'DISCOVERY';
       const cim = new ConversationIntelligence();
@@ -407,6 +424,21 @@ export class AgentExecutorService {
           };
         }
       }
+
+      // Nếu câu hỏi hiện tại không chứa điểm đến nhưng có lịch sử, trích xuất từ lịch sử để giữ ngữ cảnh
+      if (!extractedDestination && history && history.length > 0) {
+        try {
+          const dbDests = await getDynamicRegions();
+          const lastDest = extractLastDestinationFromHistory(history, dbDests);
+          if (lastDest) {
+            extractedDestination = lastDest;
+            logger.info('AgentExecutor', 'Fallback destination from history', { extractedDestination }, requestId);
+          }
+        } catch (historyErr) {
+          logger.warn('AgentExecutor', 'Failed to extract fallback destination from history', { error: (historyErr as Error).message }, requestId);
+        }
+      }
+
       logger.info('AgentExecutor', 'Intent classification result',
         { intent: selectedType, destination: extractedDestination, confidence: confidence.toFixed(2), reasoning },
         requestId
@@ -456,7 +488,6 @@ Hãy luôn giữ thái độ nhiệt tình, ấm áp, lắng nghe người dùng
     logger.info('AgentExecutor', 'Selected agent', { agent: agent.name, type: selectedType }, requestId);
 
     // ─── DIALOGUE LAYER: Conversation State + Slot Filling + Intent Detection ───
-    const convId = messageId || userId;
     
     // 1. Slot Filling: extract structured info from user message
     const slotUpdates = this.slotFilling.extract(input, extractedDestination);

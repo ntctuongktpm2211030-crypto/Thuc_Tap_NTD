@@ -21,16 +21,6 @@
   },
   {
     "file": "thanh-pho-can-tho.json",
-    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
-    "expectedProvince": "Cần Thơ",
-    "jsonCoords": "10.036201, 105.788026",
-    "matchedUnit": "Xã Phương Bình, Cần Thơ",
-    "unitCoords": "9.71564, 105.688",
-    "distance": "37 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
-  {
-    "file": "thanh-pho-can-tho.json",
     "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
     "expectedProvince": "Cần Thơ",
     "jsonCoords": "10.036201, 105.788026",
@@ -59,16 +49,7 @@
     "distance": "20 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "thanh-pho-can-tho.json",
-    "title": "Lễ hội Kỳ yên Đình thần Uyên Hưng Bến Cát Cần Thơ",
-    "expectedProvince": "Cần Thơ",
-    "jsonCoords": "10.036201, 105.788026",
-    "matchedUnit": "Xã Phương Bình, Cần Thơ",
-    "unitCoords": "9.71564, 105.688",
-    "distance": "37 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "thanh-pho-can-tho.json",
     "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần Uyên Hưng Bến Cát Cần Thơ",
@@ -1379,16 +1360,7 @@
     "distance": "24 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-ca-mau.json",
-    "title": "Lễ hội Kỳ yên Đình thần Phú Hưng Cái Nước Cà Mau",
-    "expectedProvince": "Cà Mau",
-    "jsonCoords": "9.17722, 105.151059",
-    "matchedUnit": "Xã Cái Nước, Cà Mau",
-    "unitCoords": "8.91576, 105.025",
-    "distance": "32 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-ca-mau.json",
     "title": "Quán Cơm tấm sườn nướng mật ong bốc khói cô Hồng",
@@ -1399,16 +1371,7 @@
     "distance": "63 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-ca-mau.json",
-    "title": "Lễ hội Kỳ yên Đình thần Phú Hội Cái Nước Cà Mau",
-    "expectedProvince": "Cà Mau",
-    "jsonCoords": "9.17722, 105.151059",
-    "matchedUnit": "Xã Cái Nước, Cà Mau",
-    "unitCoords": "8.91576, 105.025",
-    "distance": "32 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-ca-mau.json",
     "title": "Khu sinh thái Bãi cát Khai Long Ngọc Hiển",
@@ -1419,16 +1382,7 @@
     "distance": "26 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-ca-mau.json",
-    "title": "Lễ hội Kỳ yên Đình thần An Trạch Thới Bình Cà Mau",
-    "expectedProvince": "Cà Mau",
-    "jsonCoords": "9.17722, 105.151059",
-    "matchedUnit": "Xã An Trạch, Cà Mau",
-    "unitCoords": "9.16773, 105.36",
-    "distance": "23 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-ca-mau.json",
     "title": "Di tích lịch sử Kiến trúc nghệ thuật Đình thần An Trạch Thới Bình Cà Mau",
@@ -1459,16 +1413,7 @@
     "distance": "38 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-ca-mau.json",
-    "title": "Lễ hội Kỳ yên Đình thần Tân Tiến Đầm Dơi Cà Mau",
-    "expectedProvince": "Cà Mau",
-    "jsonCoords": "9.17722, 105.151059",
-    "matchedUnit": "Xã Đầm Dơi, Cà Mau",
-    "unitCoords": "8.96261, 105.198",
-    "distance": "24 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-ca-mau.json",
     "title": "Khách sạn Palace Cà Mau",
@@ -1519,16 +1464,7 @@
     "distance": "43 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-ca-mau.json",
-    "title": "Lễ hội Kỳ yên Đình thần Phú Thuận Cái Nước Cà Mau",
-    "expectedProvince": "Cà Mau",
-    "jsonCoords": "9.17722, 105.151059",
-    "matchedUnit": "Xã Cái Nước, Cà Mau",
-    "unitCoords": "8.91576, 105.025",
-    "distance": "32 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-ca-mau.json",
     "title": "Quán Bánh canh cua biển nước cốt dừa béo ngậy cô Huệ",
@@ -2471,16 +2407,6 @@
   },
   {
     "file": "tinh-dong-nai.json",
-    "title": "Lễ hội Kỳ yên Đình thần Long Thiền Bửu Long Biên Hòa",
-    "expectedProvince": "Đồng Nai",
-    "jsonCoords": "10.950186, 106.821741",
-    "matchedUnit": "Xã Thuận Lợi, Đồng Nai",
-    "unitCoords": "11.6055, 106.867",
-    "distance": "73 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
-  {
-    "file": "tinh-dong-nai.json",
     "title": "Khu sinh thái Hang đá basalt tự nhiên Thác Mai Định Quán Đồng Nai",
     "expectedProvince": "Đồng Nai",
     "jsonCoords": "11.775626, 107.333615",
@@ -2489,16 +2415,7 @@
     "distance": "71 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-dong-nai.json",
-    "title": "Lễ hội Kỳ yên Đình thần Phú Cường Trảng Bom Đồng Nai",
-    "expectedProvince": "Đồng Nai",
-    "jsonCoords": "11.775626, 107.333615",
-    "matchedUnit": "Xã La Ngà, Đồng Nai",
-    "unitCoords": "11.1497, 107.216",
-    "distance": "71 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-dong-nai.json",
     "title": "Khách sạn Royal Palace Hotel Long Thành Đồng Nai",
@@ -2529,16 +2446,7 @@
     "distance": "76 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-dong-nai.json",
-    "title": "Lễ hội Kỳ yên Đình thần Long Phước Long Thành Đồng Nai",
-    "expectedProvince": "Đồng Nai",
-    "jsonCoords": "11.775626, 107.333615",
-    "matchedUnit": "Phường Phước Long, Đồng Nai",
-    "unitCoords": "11.819, 107.018",
-    "distance": "35 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-dong-nai.json",
     "title": "Khách sạn Plaza Hotel Long Thành Đồng Nai",
@@ -2562,16 +2470,6 @@
   {
     "file": "tinh-dong-nai.json",
     "title": "Khách sạn Emerald Hotel Biên Hòa Đồng Nai",
-    "expectedProvince": "Đồng Nai",
-    "jsonCoords": "11.775626, 107.333615",
-    "matchedUnit": "Xã Thuận Lợi, Đồng Nai",
-    "unitCoords": "11.6055, 106.867",
-    "distance": "54 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
-  {
-    "file": "tinh-dong-nai.json",
-    "title": "Lễ hội Kỳ yên Đình thần Phú Hưng Đầm Dơi Cà Mau Đồng Nai",
     "expectedProvince": "Đồng Nai",
     "jsonCoords": "11.775626, 107.333615",
     "matchedUnit": "Xã Thuận Lợi, Đồng Nai",
@@ -2849,16 +2747,7 @@
     "distance": "40 km",
     "reason": "Lệch phường/xã (> 20km)"
   },
-  {
-    "file": "tinh-dong-thap.json",
-    "title": "Lễ hội Kỳ yên Đình thần Định An Lấp Vò Đồng Tháp",
-    "expectedProvince": "Đồng Tháp",
-    "jsonCoords": "10.459218, 105.631675",
-    "matchedUnit": "Phường Thanh Hòa, Đồng Tháp",
-    "unitCoords": "10.4213, 106.105",
-    "distance": "52 km",
-    "reason": "Lệch phường/xã (> 20km)"
-  },
+
   {
     "file": "tinh-dong-thap.json",
     "title": "Lễ hội nghinh ông Vàm Láng",
@@ -3977,16 +3866,6 @@
     "matchedUnit": "Đắk Nông",
     "unitCoords": "12.0006, 107.6845",
     "distance": "55 km",
-    "reason": "Lệch ranh giới tỉnh (> 40km)"
-  },
-  {
-    "file": "tinh-lam-dong.json",
-    "title": "Lễ hội Kỳ yên Đình thần Đắk Mil Đắk Nông",
-    "expectedProvince": "Đắk Nông",
-    "jsonCoords": "12.44957, 107.62237",
-    "matchedUnit": "Đắk Nông",
-    "unitCoords": "12.0006, 107.6845",
-    "distance": "50 km",
     "reason": "Lệch ranh giới tỉnh (> 40km)"
   },
   {

@@ -2,69 +2,148 @@
 
 left to right direction
 skinparam linetype ortho
-skinparam ranksep 90
-skinparam nodesep 70
+skinparam ranksep 100
+skinparam nodesep 80
 hide circle
 hide methods
 hide stereotype
 
 package "Người dùng và Cá nhân hóa" {
-  entity "User" as User
-  entity "Profile" as Profile
-  entity "TravelPreferences" as TravelPreferences
-  entity "AIMemory" as AIMemory
+  entity "Nguoi dung" as User
+  entity "Ho so" as Profile
+  entity "So thich du lich" as TravelPreferences
+  entity "Bo nho AI" as AIMemory
+  entity "Mon an yeu thich" as FavoriteFood
+  entity "Dia diem da luu" as SavedPlace
+  entity "Vi tri truc tiep" as LiveLocation
+  entity "Thong bao" as Notification
+  entity "Nguoi theo doi" as Follower
+  entity "Lich su du lich" as TravelHistory
 }
 
 package "Hành trình và Chuyến đi" {
-  entity "Trip" as Trip
-  entity "Journey" as Journey
+  entity "Chuyen di" as Trip
+  entity "Ngay chuyen di" as TripDay
+  entity "Hoat dong chuyen di" as TripActivity
+  entity "Hanh trinh" as Journey
+  entity "Tuyen duong" as Route
+  entity "Diem tuyen duong" as RoutePoint
 }
 
 package "Địa điểm và GIS" {
-  entity "Destination" as Destination
-  entity "SafetyWarning" as SafetyWarning
+  entity "Diem den" as Destination
+  entity "Canh bao an toan" as SafetyWarning
 }
 
 package "Mạng xã hội và Tương tác" {
-  entity "Post" as Post
+  entity "Bai dang" as Post
+  entity "Binh luan" as Comment
+  entity "Thich" as Like
+  entity "Luu tru" as Bookmark
+}
+
+package "Trò chuyện P2P" {
+  entity "Cuoc hoi thoai" as Conversation
+  entity "Tin nhan" as Message
 }
 
 package "Sự kiện và Kết nối" {
-  entity "Event" as Event
-  entity "TravelerMatch" as TravelerMatch
+  entity "Su kien" as Event
+  entity "Nguoi tham gia su kien" as EventAttendee
+  entity "Ghep doi du khach" as TravelerMatch
 }
 
 package "Trợ lý Chatbot AI" {
-  entity "ChatConversation" as ChatConversation
+  entity "Cuoc hoi thoai AI" as ChatConversation
+  entity "Tin nhan AI" as ChatMessage
+  entity "Phien ban tin nhan AI" as ChatMessageVersion
+  entity "Goi cong cu AI" as ToolCall
+  entity "Danh gia tin nhan AI" as AIFeedback
 }
 
 package "Hệ thống RAG và Tri thức" {
-  entity "KnowledgeContent" as KnowledgeContent
+  entity "Noi dung tri thuc" as KnowledgeContent
+  entity "Cau hoi tri thuc" as KnowledgeQuestion
+  entity "Dap an tri thuc" as KnowledgeAnswer
 }
 
-package "Đệm Cache và Nhật ký" {
-  entity "FavoriteFood" as FavoriteFood
-  entity "SystemCache" as SystemCache
+package "Hệ thống Đệm & Analytics" {
+  entity "Dem he thong" as SystemCache
+  entity "Sieu du lieu cache" as CacheMetadata
+  entity "Nhat ky chat AI" as AIChatLog
+  entity "Lich su vi tri" as LocationHistory
+  entity "De xuat" as Recommendation
+  entity "De xuat nguoi dung" as UserRecommendation
+  entity "Lich su AI" as AIHistory
+  entity "Check in" as CheckIn
 }
 
-' ─── QUAN HỆ TỔNG QUAN GIỮA CÁC MODULES ───
+' ─── QUAN HỆ NGƯỜI DÙNG & CÁ NHÂN HÓA ───
+User ||--|| Profile : "hồ sơ"
+User ||--|| TravelPreferences : "sở thích"
+User ||--|| AIMemory : "bộ nhớ AI"
+User ||--o{ FavoriteFood : "món ăn yêu thích"
+User ||--o{ SavedPlace : "địa điểm đã lưu"
+User ||--|| LiveLocation : "vị trí trực tiếp"
+User ||--o{ Notification : "thông báo"
+User ||--o{ LocationHistory : "lịch sử vị trí"
+User ||--o{ Follower : "người theo dõi"
+User ||--o{ Follower : "đang theo dõi"
+User ||--o{ TravelHistory : "lịch sử du lịch"
+TravelHistory }o--|| Destination : "điểm đến"
 
-User ||--|| Profile : "profile"
-User ||--|| TravelPreferences : "preferences"
-User ||--|| AIMemory : "aiMemory"
+' ─── QUAN HỆ HÀNH TRÌNH & CHUYẾN ĐI ───
+User ||--o{ Trip : "chuyến đi"
+Trip ||--|{ TripDay : "ngày đi"
+TripDay ||--|{ TripActivity : "hoạt động"
+TripActivity }o--|| Destination : "điểm đến"
 
-User ||--o{ Trip : "trips"
-User ||--o{ Post : "posts"
-User ||--o{ Journey : "journeys"
-User ||--o{ Event : "organizedEvents"
-User ||--o{ ChatConversation : "chatbotConversations"
-User ||--o{ FavoriteFood : "favoriteFoods"
-User ||--o{ TravelerMatch : "matches"
+User ||--o{ Journey : "hành trình"
+Journey ||--|{ Route : "tuyến đường"
+Route ||--|{ RoutePoint : "điểm tọa độ"
 
-Trip }o--|| Destination : "destination"
-Trip ||--o{ Post : "posts"
+' ─── QUAN HỆ MẠNG XÃ HỘI & TƯƠNG TÁC ───
+User ||--o{ Post : "bài đăng"
+Post }o--|| Destination : "địa điểm"
+Post }o--|| Trip : "chuyến đi"
+Post ||--o{ Comment : "bình luận"
+Post ||--o{ Like : "lượt thích"
+Post ||--o{ Bookmark : "lượt lưu"
+User ||--o{ Comment : "bình luận"
+User ||--o{ Like : "lượt thích"
+User ||--o{ Bookmark : "lượt lưu"
 
-Event }o--|| Destination : "destination"
-User }o--o{ Event : "eventAttendances"
+' ─── QUAN HỆ TRÒ CHUYỆN P2P ───
+User }o--o{ Conversation : "thành viên"
+Conversation ||--|{ Message : "tin nhắn"
+User ||--o{ Message : "tin nhắn đã gửi"
+
+' ─── QUAN HỆ SỰ KIỆN & KẾT NỐI ───
+User ||--o{ Event : "sự kiện tổ chức"
+User ||--o{ EventAttendee : "sự kiện tham gia"
+Event ||--o{ EventAttendee : "người tham gia"
+Event }o--|| Destination : "điểm đến"
+User ||--o{ TravelerMatch : "kết nối"
+
+' ─── QUAN HỆ CHATBOT AI ───
+User ||--o{ ChatConversation : "hội thoại AI"
+ChatConversation ||--|{ ChatMessage : "tin nhắn"
+ChatMessage ||--|| AIChatLog : "nhật ký chat"
+ChatMessage ||--|| AIFeedback : "phản hồi"
+ChatMessage ||--o{ ChatMessageVersion : "phiên bản"
+ChatMessage ||--o{ ToolCall : "gọi công cụ"
+
+' ─── QUAN HỆ RAG & TRI THỨC ───
+KnowledgeContent ||--o{ KnowledgeQuestion : "câu hỏi"
+KnowledgeContent ||--o{ KnowledgeAnswer : "đáp án"
+
+' ─── QUAN HỆ GỢI Ý & ĐỆM ───
+Trip ||--o{ Recommendation : "đề xuất"
+Recommendation }o--|| Destination : "điểm đến"
+User ||--o{ CheckIn : "check-in"
+CheckIn }o--|| Destination : "điểm đến"
+User ||--o{ UserRecommendation : "đề xuất người dùng"
+UserRecommendation }o--|| Destination : "điểm đến"
+User ||--o{ AIHistory : "lịch sử AI"
 
 @enduml

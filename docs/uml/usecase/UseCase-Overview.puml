@@ -23,7 +23,6 @@ rectangle "Nền tảng TerraHolic SmartTravel " {
   usecase "Mạng xã hội du lịch" as UC_Community
   usecase "Bản đồ tương tác & Định vị" as UC_Map
   usecase "Trợ lý ảo AI & RAG" as UC_Chatbot
-  usecase "Quản trị & Vận hành" as UC_Admin
 }
 
 ' Guest Associations
@@ -34,7 +33,6 @@ Guest -- UC_Map
 User -- UC_Trip
 User -- UC_Community
 User -- UC_Chatbot
-User -- UC_Admin
 
 ' External System Associations
 UC_Auth -- Firebase
@@ -43,5 +41,5 @@ UC_Trip -- OpenAI
 UC_Map -- OSM
 UC_Chatbot -- OpenAI
 UC_Chatbot -- AdminUnits
-UC_Admin -- OpenAI
 @enduml
+

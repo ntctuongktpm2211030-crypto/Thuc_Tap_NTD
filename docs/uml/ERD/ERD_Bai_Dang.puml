@@ -4,69 +4,72 @@ left to right direction
 skinparam linetype ortho
 skinparam ranksep 90
 skinparam nodesep 70
+skinparam monochrome true
 hide circle
 hide methods
 hide stereotype
 
 package "Module Bài viết & Tương tác" {
-  entity "Post" as Post {
-    * id : String <<PK>>
+  entity "Bai dang" as Post {
+    * PK | id : String
     --
-    * authorId : String <<FK>> <<INDEX>>
-    * content : String
-    * mediaUrls : String[]
-    tripId : String <<FK>> <<INDEX>>
-    locationId : String
-    * createdAt : DateTime
-    deletedAt : DateTime
+    * FK1 | authorId : String <<INDEX>>
+    | FK2 | tripId : String <<INDEX>>
+    | FK3 | locationId : String <<INDEX>>
+    * | content : String
+    * | mediaUrls : String[]
+    * | createdAt : DateTime
+    | deletedAt : DateTime
   }
 
-  entity "Comment" as Comment {
-    * id : String <<PK>>
+  entity "Binh luan" as Comment {
+    * PK | id : String
     --
-    * postId : String <<FK>> <<INDEX>>
-    * authorId : String <<FK>> <<INDEX>>
-    * content : String
-    parentId : String <<FK>> <<INDEX>>
-    * createdAt : DateTime
+    * FK1 | postId : String <<INDEX>>
+    * FK2 | authorId : String <<INDEX>>
+    | FK3 | parentId : String <<INDEX>>
+    * | content : String
+    * | createdAt : DateTime
   }
 
-  entity "Like" as Like {
-    * id : String <<PK>>
+  entity "Thich" as Like {
+    * PK | id : String
     --
-    * postId : String <<FK>>
-    * userId : String <<FK>>
-    * createdAt : DateTime
+    * FK1 | postId : String
+    * FK2 | userId : String
+    * | createdAt : DateTime
     --
     UNIQUE(postId, userId)
   }
 
-  entity "Bookmark" as Bookmark {
-    * id : String <<PK>>
+  entity "Luu tru" as Bookmark {
+    * PK | id : String
     --
-    * postId : String <<FK>>
-    * userId : String <<FK>>
-    * createdAt : DateTime
+    * FK1 | postId : String
+    * FK2 | userId : String
+    * | createdAt : DateTime
     --
     UNIQUE(postId, userId)
   }
 }
 
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
-entity "User" as User <<External>>
-entity "Trip" as Trip <<External>>
+entity "Người dùng" as User <<External>>
+entity "Chuyến đi" as Trip <<External>>
+entity "Điểm đến" as Destination <<External>>
 
-User ||--o{ Post : "author"
-User ||--o{ Comment : "author"
-User ||--o{ Like : "user"
-User ||--o{ Bookmark : "user"
+User ||--o{ Post : "tác giả"
+User ||--o{ Comment : "tác giả"
+User ||--o{ Like : "người dùng"
+User ||--o{ Bookmark : "người dùng"
 
-Trip ||--o{ Post : "trip"
+Trip ||--o{ Post : "chuyến đi"
+Destination ||--o{ Post : "địa điểm"
 
-Post ||--o{ Comment : "comments"
-Post ||--o{ Like : "likes"
-Post ||--o{ Bookmark : "bookmarks"
+Post ||--o{ Comment : "bình luận"
+Post ||--o{ Like : "lượt thích"
+Post ||--o{ Bookmark : "lượt lưu"
 
-Comment ||--o{ Comment : "replies"
+Comment ||--o{ Comment : "phản hồi"
 
 @enduml
