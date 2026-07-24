@@ -4595,3 +4595,9 @@ Please make sure your database server is running at `aws-1-ap-northeast-2.pooler
     at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
     at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:27
 
+[Console Error Logged] 2026-07-24T08:58:27.429Z - Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at D:\Thuc_Tap_NDT\backend\src\server.ts:101:12
+

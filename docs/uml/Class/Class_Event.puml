@@ -1,4 +1,5 @@
-@startuml Class_Event
+@startuml Class_Feedback
+' NOTE: File retains the physical name Class_Event.puml but correctly models the Feedback classes.
 
 skinparam linetype ortho
 skinparam classAttributeIconSize 0

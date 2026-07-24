@@ -24,7 +24,6 @@ package "External Services & Systems" {
   actor "API Đơn vị hành chính\n(Administrative Units API)" as AdminUnits <<System>>
   actor "SMTP Mail Server" as SMTP <<System>>
   actor "Supabase Storage" as SupabaseStorage <<System>>
-  actor "Push Notification" as PushNotif <<System>>
 }
 
 ' Actor Inheritance (Thừa kế tác nhân)
@@ -90,7 +89,5 @@ UC_Map -- MapService
 UC_Social -- SupabaseStorage
 UC_AI -- OpenAI
 UC_AI -- AdminUnits
-UC_Realtime -- PushNotif
-
 
 @enduml

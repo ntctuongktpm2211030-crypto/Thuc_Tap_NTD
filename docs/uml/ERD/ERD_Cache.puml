@@ -19,6 +19,18 @@ package "Module Caching Lớp đệm" {
     * | createdAt : DateTime
     * | updatedAt : DateTime
   }
+
+  entity "Sieu du lieu cache" as CacheMetadata {
+    * PK | id : String
+    --
+    * | cacheKey : String <<UNIQUE>>
+    * | queryText : String
+    * | responseJson : String
+    * | hitCount : Int
+    * | expiresAt : DateTime
+    * | createdAt : DateTime
+    * | updatedAt : DateTime
+  }
 }
 
 @enduml

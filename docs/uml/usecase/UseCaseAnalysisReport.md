@@ -8,14 +8,13 @@
 ## 1. Danh sách Tác nhân (Actor List)
 
 ### A. Tác nhân con người (Human Actors)
-1.  **Khách vãng lai (Guest / Anonymous Traveler)**: Người dùng chưa định danh, duyệt bảng tin công khai, xem bản đồ nhiệt check-in, xem các lịch trình chia sẻ mẫu và đăng ký/đăng nhập.
-2.  **Người dùng đăng ký (Registered Traveler)**: Thành viên đã đăng nhập thành công, quản lý thông tin preferences du lịch, CRUD chuyến đi và custom itineraries hành trình tự do, đăng bài viết, tương tác (like, comment, reply, bookmark), check-in, chia sẻ vị trí live thời gian thực, trò chuyện chatbot đa Agent, cập nhật AI memory.
-3.  **Quản trị viên (Administrator)**: Kiểm soát nền tảng, xem dashboard phân tích biểu đồ trends, nạp tài liệu RAG tri thức du lịch địa phương, thực thi chuẩn hóa dữ liệu địa phương từ CSDL Cà Mau thô.
+1.  **Khách vãng lai (Guest / Anonymous Traveler)**: Người dùng chưa định danh, duyệt bảng tin công khai, xem các lịch trình chia sẻ mẫu và đăng ký/đăng nhập.
+2.  **Người dùng đăng ký (Registered Traveler)**: Thành viên đã đăng nhập thành công, quản lý sở thích du lịch, CRUD chuyến đi và custom itineraries hành trình tự do, đăng bài viết, tương tác (like, comment, reply, bookmark), check-in, chia sẻ vị trí live thời gian thực, trò chuyện chatbot AI, cập nhật AI memory.
 
 ### B. Tác nhân hệ thống ngoại vi (System Actors)
 1.  **Firebase Auth**: Trợ giúp xác thực Google OAuth token.
-2.  **OpenStreetMap (OSM) / Nominatim**: Dịch vụ bản đồ Leaflet, geocoding điểm đến, tính toán khoảng cách Haversine.
-3.  **OpenAI API**: Dịch vụ suy luận LLM cho Chatbot đa Agent, tạo vector embeddings cho RAG, chấm điểm tương hợp companion.
+2.  **OpenStreetMap (OSM) / Nominatim**: Dịch vụ bản đồ MapLibre GL, geocoding điểm đến, tính toán khoảng cách Haversine.
+3.  **OpenAI API (hoặc Groq compatible)**: Dịch vụ suy luận LLM cho Chatbot đa Agent, tạo vector embeddings cho RAG, chấm điểm tương hợp companion.
 4.  **vietnamadminunits API**: Phân tích, chuẩn hóa cấu trúc địa giới hành chính Việt Nam.
 5.  **SMTP Mail Server (NodeMailer)**: Gửi email chứa token kích hoạt tài khoản.
 
@@ -24,10 +23,9 @@
 ## 2. Danh sách Phân hệ Nghiệp vụ (Module List)
 1.  **Authentication & Profile**: Đăng ký, đăng nhập (truyền thống & Google SSO), theo dõi bạn bè, quản lý hồ sơ, cấu hình sở thích du lịch và lịch sử thông báo.
 2.  **Trip Planning & Custom Itineraries**: Lập kế hoạch lịch trình tự lập hoặc tạo tự động bằng AI, tối ưu hóa TSP, nhân bản chuyến đi, quản lý hành trình tự do (custom itineraries), và lưu trữ lịch sử chuyến đi thực tế.
-3.  **Community & Social Feed**: Bảng tin bài viết, CRUD bài đăng, like, bookmark, bình luận, reply bình luận lồng nhau, và gợi ý bạn phượt AI.
-4.  **Interactive GIS Map & Live Tracking**: Xem bản đồ tương tác Leaflet, check-in địa điểm, trích xuất GPS ảnh EXIF, đồng bộ vị trí live websocket, sự kiện meetup địa phương, và lưu trữ địa điểm cá nhân.
-5.  **AI Chatbot & RAG**: Tạo phiên chat, CRUD phiên chat, trò chuyện trợ lý đa Agent, tái tạo câu trả lời, đánh giá chatbot, lưu món ngon ẩm thực yêu thích và AI Memory.
-6.  **System Administration**: Nạp tri thức RAG và chuẩn hóa dữ liệu thô.
+3.  **Community & Social Feed**: Bảng tin bài viết, CRUD bài đăng, like, bookmark, bình luận, reply bình luận lồng nhau.
+4.  **Interactive GIS Map & Live Tracking**: Xem bản đồ tương tác MapLibre GL, check-in địa điểm, đồng bộ vị trí live websocket, sự kiện meetup địa phương, và lưu trữ địa điểm cá nhân.
+5.  **AI Chatbot & RAG**: Tạo phiên chat, CRUD phiên chat, trò chuyện trợ lý AI, tái tạo câu trả lời, đánh giá chatbot, lưu món ngon ẩm thực yêu thích và AI Memory.
 
 ---
 
@@ -335,7 +333,7 @@
 
 ### 3.4 Interactive GIS Map & Live Tracking Module
 
-#### UC_MAP_01: Xem bản đồ tương tác Leaflet (View Interactive GIS Map)
+#### UC_MAP_01: Xem bản đồ tương tác MapLibre GL (View Interactive GIS Map)
 - **Primary Actor**: Khách vãng lai
 - **Supporting Actors**: OpenStreetMap
 - **Description**: Xem bản đồ địa giới du lịch, địa điểm nổi bật và dấu chân check-in.
@@ -533,16 +531,16 @@
 
 ---
 
-### 3.6 System Administration Module
+### 3.6 Phân hệ Tiện ích & Tri thức RAG
 
 #### UC_ADM_01: Nạp tài liệu tri thức văn hóa RAG (Ingest RAG Knowledge Base Document)
-- **Primary Actor**: Quản trị viên
+- **Primary Actor**: Người dùng đăng ký
 - **Supporting Actors**: OpenAI API
 - **Description**: Tải tài liệu PDF/JSON lên để hệ thống sinh embeddings vector nạp RAG.
 - **Source Code Reference**: [rag.router.ts:L8](file:///d:/Thuc_Tap_NDT/backend/src/modules/rag/routes/rag.router.ts#L8)
 
 #### UC_ADM_02: Chuẩn hóa dữ liệu thô địa phương (Sanitize Ca Mau local JSON data)
-- **Primary Actor**: Quản trị viên
+- **Primary Actor**: Developer / System
 - **Supporting Actors**: -
 - **Description**: Chạy kịch bản làm sạch dữ liệu địa phương thu thập từ tỉnh Cà Mau.
 - **Source Code Reference**: [main.py:L37](file:///d:/Thuc_Tap_NDT/ai-service/app/main.py#L37)

@@ -1,15 +1,3 @@
-I will find the location of `schema.prisma` in the workspace.
-
-Searched for "datasource db"
-
-I will view `schema.prisma` to analyze all the database tables, fields, and relationships.
-
-Viewed schema.prisma:1-800
-
-I will view the rest of `schema.prisma` to make sure we don't miss any models or relationships.
-
-Viewed schema.prisma:801-856
-
 @startuml Overview_ERD
 
 left to right direction
@@ -39,6 +27,8 @@ package "Authentication & User" #E3F2FD {
     * passwordHash : String
     role : UserRole
     isVerified : Boolean
+    verificationToken : String
+    resetPasswordToken : String
     createdAt : DateTime
     updatedAt : DateTime
   }

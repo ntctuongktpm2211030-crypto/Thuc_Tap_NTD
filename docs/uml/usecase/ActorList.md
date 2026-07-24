@@ -10,7 +10,7 @@ Tài liệu này định nghĩa chi tiết tất cả các tác nhân (Actors) t
 *   **Mô tả**: Người dùng chưa xác thực truy cập vào nền tảng.
 *   **Vai trò & Trách nhiệm**:
     *   **Xác thực**: Đăng ký tài khoản mới và kích hoạt tài khoản thông qua mã liên kết email.
-    *   **Bản đồ & GIS**: Xem bản đồ cơ sở, thu phóng/di chuyển camera, tra cứu địa điểm và lọc danh mục địa danh (Khách sạn, Nhà hàng, Điểm tham quan). Xem bản đồ nhiệt check-in và bảng tin check-in cộng đồng.
+    *   **Bản đồ & GIS**: Xem bản đồ cơ sở, thu phóng/di chuyển camera, tra cứu địa điểm và lọc danh mục địa danh (Khách sạn, Nhà hàng, Điểm tham quan). Xem bảng tin check-in cộng đồng.
     *   **Mạng xã hội**: Xem bảng tin chia sẻ kinh nghiệm du lịch công khai của các thành viên khác.
     *   **Lịch trình**: (Không được phép truy cập phân hệ Lập lịch trình).
 
@@ -20,16 +20,15 @@ Tài liệu này định nghĩa chi tiết tất cả các tác nhân (Actors) t
     *   Thừa hưởng toàn bộ quyền của **Khách vãng lai**.
     *   **Hồ sơ**: Quản lý thông tin cá nhân, ảnh đại diện, và sở thích du lịch (ngân sách, tốc độ di chuyển, thể loại ưu tiên). Theo dõi hoặc hủy theo dõi (Follow/Unfollow) thành viên khác.
     *   **Lịch trình**:
-        *   Tự lên kế hoạch và quản lý các chuyến đi cá nhân (Trips).
+        *   Tự lên kế hoạch và quản lý các chuyến đi cá nhân (Trips) thông qua CRUD chuyến đi và custom itineraries hành trình tự do.
         *   Tạo lịch trình tự động bằng AI và tối ưu hóa lộ trình ngắn nhất (TSP Solver).
         *   Xem gợi ý điểm dừng từ AI và lưu vào kế hoạch chuyến đi.
         *   Quản lý lịch sử đi lại thực tế (Nhật ký di chuyển - Travel History).
     *   **Mạng xã hội**: Tạo mới, chỉnh sửa, xóa các bài viết chia sẻ kinh nghiệm du lịch (Blogs/Stories), tương tác thích/bình luận/lưu bài viết của người khác. Sử dụng AI để tìm kiếm bạn đồng hành tương thích.
     *   **Bản đồ & GIS**:
-        *   Chia sẻ tọa độ vị trí live, định vị vị trí hiện tại trên bản đồ.
-        *   Quét và tìm kiếm bạn bè trực tuyến lân cận trong bán kính 100km.
-        *   Thực hiện check-in địa điểm thực tế (tự điền tên địa điểm tùy chọn, tự động lấy tọa độ GPS thực tế của thiết bị, tải lên hình ảnh và lời bình).
-        *   Đăng ký tham gia các sự kiện, lễ hội hoặc các buổi meetup địa phương. Tạo sự kiện meetup mới.
+        *   Định vị vị trí hiện tại trên bản đồ, cập nhật vị trí live qua WebSocket.
+        *   Thực hiện check-in địa điểm thực tế (tự điền tên địa điểm tùy chọn, tải lên hình ảnh và lời bình).
+        *   Tạo sự kiện meetup mới.
     *   **AI Chatbot**: Tra cứu tri thức, thời tiết, món ăn đặc sản qua AI Multi-Agent, đánh giá câu trả lời và lưu danh sách món ăn yêu thích.
 
 

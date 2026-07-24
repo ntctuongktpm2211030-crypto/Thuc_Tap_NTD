@@ -41,7 +41,6 @@ rectangle "Phân hệ Mạng xã hội & Cộng đồng (Social & Community)" as
   ' Relationships (include / extend)
   UC_CreatePost ..> UC_UploadImage : <<include>>
   UC_Comment <.. UC_Reply : <<extend>>
-  UC_Like ..> UC_Unlike : <<extend>>
 }
 
 ' ==========================================
@@ -55,6 +54,7 @@ RegisteredUser -- UC_CreatePost
 RegisteredUser -- UC_EditPost
 RegisteredUser -- UC_DeletePost
 RegisteredUser -- UC_Like
+RegisteredUser -- UC_Unlike
 RegisteredUser -- UC_Bookmark
 RegisteredUser -- UC_ViewSaved
 RegisteredUser -- UC_Comment

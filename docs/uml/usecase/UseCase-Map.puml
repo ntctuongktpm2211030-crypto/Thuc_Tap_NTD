@@ -11,9 +11,7 @@ actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
 
 actor "OpenStreetMap\n(OSM Service)" as OSM <<System>>
-actor "Socket.io\n(Realtime Server)" as SocketIo <<System>>
 actor "OpenAI API\n(LLM Service)" as OpenAI <<System>>
-
 RegisteredUser -|> Guest
 
 ' ==========================================
@@ -72,8 +70,6 @@ RegisteredUser -- UC_AIAssistant
 
 UC_ViewMap -- OSM
 UC_SearchLocation -- OSM
-UC_GetCurrentLocation -- SocketIo
-UC_TrackFriends -- SocketIo
 UC_AIRecommendations -- OpenAI
 UC_AIAssistant -- OpenAI
 

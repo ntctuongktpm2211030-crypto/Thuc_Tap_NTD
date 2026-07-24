@@ -48,13 +48,17 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Terr
     usecase "Tạo lịch trình qua AI\n(AI Itinerary Generation)" as UC_Trip_AI
     usecase "Tối ưu lộ trình TSP\n(Route Optimization)" as UC_Trip_TSP
     usecase "Quản lý lịch sử đi lại\n(Manage Travel History)" as UC_Trip_History
+    usecase "Tạo hành trình tự do mới\n(Create Custom Itinerary)" as UC_Trip_Custom
+    usecase "Quản lý hoạt động hành trình\n(Manage Custom Activities)" as UC_Trip_Act
   }
 
   ' --- Phân hệ Mạng xã hội ---
   package "Mạng xã hội & Cộng đồng (Social & Community)" {
     usecase "Xem bảng tin cộng đồng\n(Browse Feed)" as UC_Soc_Feed
     usecase "Quản lý bài viết chia sẻ\n(Manage Posts)" as UC_Soc_Posts
-    usecase "Tương tác bài đăng\n(Interact with Posts)" as UC_Soc_Interact
+    usecase "Thích/Bỏ thích bài đăng\n(Like/Unlike Posts)" as UC_Soc_Like
+    usecase "Bình luận bài viết\n(Comment on Posts)" as UC_Soc_Comment
+    usecase "Lưu trữ bài đăng\n(Bookmark Posts)" as UC_Soc_Bookmark
   }
 
   ' --- Phân hệ Bản đồ ---
@@ -64,11 +68,11 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Terr
     usecase "Tìm kiếm vị trí\n(Search Location)" as UC_Map_Search
     usecase "Lọc danh mục địa điểm\n(Filter Categories)" as UC_Map_Filter
     usecase "Xem chi tiết địa điểm\n(View Attraction Details)" as UC_Map_Detail
-    usecase "Xem bản đồ nhiệt check-in\n(View Heatmap)" as UC_Map_Heatmap
     usecase "Định vị & Chia sẻ vị trí live\n(Live Location Tracking)" as UC_Map_Live
-    usecase "Tìm bạn lân cận - 100km\n(Find Nearby Users)" as UC_Map_Friends
     usecase "Xem chỉ đường lộ trình\n(View Route Directions)" as UC_Map_Route
     usecase "Thực hiện check-in địa điểm\n(Perform Check-in)" as UC_Map_Checkin
+    usecase "Tạo sự kiện local\n(Create Local Event)" as UC_Map_CreateEvent
+    usecase "Xem sự kiện địa phương\n(View Local Events)" as UC_Map_ViewEvents
   }
 
   ' --- Phân hệ Trợ lý ảo AI ---
@@ -108,19 +112,23 @@ Guest -- UC_Map_Style
 Guest -- UC_Map_Search
 Guest -- UC_Map_Filter
 Guest -- UC_Map_Detail
-Guest -- UC_Map_Heatmap
+Guest -- UC_Map_ViewEvents
 
 ' Registered User Associations
 RegisteredUser -- UC_Auth_Pref
 RegisteredUser -- UC_Auth_Follow
 RegisteredUser -- UC_Trip_Manage
 RegisteredUser -- UC_Trip_History
+RegisteredUser -- UC_Trip_Custom
+RegisteredUser -- UC_Trip_Act
 RegisteredUser -- UC_Soc_Posts
-RegisteredUser -- UC_Soc_Interact
+RegisteredUser -- UC_Soc_Like
+RegisteredUser -- UC_Soc_Comment
+RegisteredUser -- UC_Soc_Bookmark
 RegisteredUser -- UC_Map_Live
-RegisteredUser -- UC_Map_Friends
 RegisteredUser -- UC_Map_Route
 RegisteredUser -- UC_Map_Checkin
+RegisteredUser -- UC_Map_CreateEvent
 RegisteredUser -- UC_AI_Chat
 RegisteredUser -- UC_AI_Conv
 RegisteredUser -- UC_AI_Regen

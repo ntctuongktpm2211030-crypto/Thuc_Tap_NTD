@@ -28,7 +28,13 @@ rectangle "Phân hệ Lập lịch trình & Hành trình (Trip Planning)" as Tri
     usecase "Tối ưu hóa thứ tự lộ trình (TSP)\n(Optimize Route Sequence)" as UC_OptimizeRoute
   }
   
-  
+  package "Hành trình tự do (Custom Itineraries)" {
+    usecase "Tạo hành trình tự do mới\n(Create Custom Itinerary)" as UC_CreateItinerary
+    usecase "Thêm ngày vào hành trình\n(Add Day to Itinerary)" as UC_AddDay
+    usecase "Thêm hoạt động vào ngày\n(Add Activity to Day)" as UC_AddActivity
+    usecase "Cập nhật hoạt động hành trình\n(Update Itinerary Activity)" as UC_UpdateActivity
+    usecase "Xóa hoạt động hành trình\n(Delete Itinerary Activity)" as UC_DeleteActivity
+  }
   
   package "Nhật ký di chuyển (Travel History)" {
     usecase "Xem nhật ký di chuyển thực tế\n(List Travel Histories)" as UC_ListHistory
@@ -60,6 +66,12 @@ RegisteredUser -- UC_ListTrips
 RegisteredUser -- UC_CreateTrip
 RegisteredUser -- UC_UpdateTrip
 RegisteredUser -- UC_DeleteTrip
+
+RegisteredUser -- UC_CreateItinerary
+RegisteredUser -- UC_AddDay
+RegisteredUser -- UC_AddActivity
+RegisteredUser -- UC_UpdateActivity
+RegisteredUser -- UC_DeleteActivity
 
 RegisteredUser -- UC_ListHistory
 RegisteredUser -- UC_CreateHistory

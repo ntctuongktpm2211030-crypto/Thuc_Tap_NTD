@@ -27,13 +27,6 @@ rectangle "Phân hệ Trợ lý ảo AI & RAG (AI Chatbot & RAG)" as AIModule {
     usecase "Nhận phản hồi từ Trợ lý ảo\n(Receive AI Response)" as UC_ReceiveAnswer
     usecase "Yêu cầu chatbot sinh lại câu trả lời khác\n(Regenerate AI Response)" as UC_RegenResponse
     usecase "Đánh giá chất lượng câu trả lời AI\n(Rate AI Chat Response)" as UC_RateResponse
-    
-    ' CIM (Conversation Intelligence Module)
-    usecase "Tự động phân tích trạng thái cảm xúc\n(Emotion Analysis)" as UC_Emotion
-    usecase "Tự động áp dụng luật đè ý định\n(Rule Override)" as UC_RuleOverride
-    usecase "Áp dụng chính sách trì hoãn hỏi slot\n(Answer First, Ask Later)" as UC_AnswerFirst
-    usecase "Sàng lọc Guardrails chống tấn công\n(Guardrails Check)" as UC_Guardrails
-    usecase "Xác thực Claim (Fact-checking)\n(Claim Fact-Verification)" as UC_FactCheck
   }
   
   package "Bộ nhớ AI (AI Memory)" {
@@ -48,14 +41,21 @@ rectangle "Phân hệ Trợ lý ảo AI & RAG (AI Chatbot & RAG)" as AIModule {
     usecase "Cập nhật / Xóa món ăn đã lưu\n(Update/Delete Favorite Food)" as UC_ManageFood
   }
 
+  ' Notes describing internal automated pipelines (instead of functional decomposition)
+  note right of UC_AskQuestion
+    Pipeline xử lý tự động:
+    - Guardrails Check
+  end note
+
+  note right of UC_ReceiveAnswer
+    Pipeline xử lý tự động:
+    - Emotion Analysis
+    - Rule Override
+    - Answer First, Ask Later
+    - Fact Verification
+  end note
+
   ' Relationships (include / extend)
-  UC_AskQuestion ..> UC_Guardrails : <<include>>
-  
-  UC_ReceiveAnswer ..> UC_Emotion : <<include>>
-  UC_ReceiveAnswer ..> UC_RuleOverride : <<include>>
-  UC_ReceiveAnswer ..> UC_AnswerFirst : <<include>>
-  UC_ReceiveAnswer ..> UC_FactCheck : <<include>>
-  
   UC_AskQuestion <.. UC_RegenResponse : <<extend>>
   UC_ReceiveAnswer <.. UC_RateResponse : <<extend>>
   

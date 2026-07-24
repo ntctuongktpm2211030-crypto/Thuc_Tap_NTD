@@ -1,76 +1,95 @@
 @startuml Class_TongQuan
 
 skinparam linetype ortho
-skinparam ranksep 100
-skinparam nodesep 80
+skinparam classAttributeIconSize 0
+skinparam ranksep 80
+skinparam nodesep 50
 
-package "Giao dien Nguoi dung (Client Layer)" {
-  component "Giao dien Web\n(React Web UI)" as Frontend
-}
-
-package "Kiem soat & Dinh tuyen (Routing & Security Layer)" {
-  component "Dinh tuyen Core\n(Express Router Core)" as ExpressRouter
-  component "Kiem tra Dang nhap\n(Auth Middleware)" as AuthMiddleware
-}
-
-package "Phan he Nghiep vu (Business Layer)" {
-  folder "Quan ly Thanh vien" {
-    component "Dich vu gui email\n(Email Service)" as EmailService
-    component "Dich vu dia diem da luu\n(Saved Place Service)" as SavedPlaceService
-    component "Dich vu mon an yeu thich\n(Favorite Food Service)" as FavoriteFoodService
-  }
-  
-  folder "Mang xa hoi va Tuong tac" {
-    component "Chuc nang ket noi ban be\n(Social Router)" as SocialRouter
-    component "Chuc nang bai dang va binh luan\n(Posts Router)" as PostsRouter
-  }
-
-  folder "Hanh trinh va Chuyen di" {
-    component "Dich vu hanh trinh tu do\n(Itinerary Service)" as ItineraryService
-    component "Dich vu lich su du lich\n(Travel History Service)" as TravelHistoryService
-    component "Chuc nang chuyen di\n(Trips Router)" as TripsRouter
-  }
-
-  folder "Tro ly AI va Du lieu Ca Mau" {
-    component "Dich vu chat bot\n(Chatbot Service)" as ChatbotService
-    component "Dieu hanh cac Tro ly AI\n(Agent Executor Service)" as AgentExecutorService
-    component "Dieu Phoi RAG\n(RagOrchestratorService)" as RagOrchestratorService
-    component "Dich vu goi y\n(Recommendation Service)" as RecommendationService
-  }
-
-  folder "Tien ich he thong" {
-    component "Bo nho tam\n(Cache Service)" as CacheService
-    component "Nguoi dung danh gia AI\n(Feedback Service)" as FeedbackService
-    component "Nhat ky goi AI\n(Tool Call Service)" as ToolCallService
+package "Kiem soat & Dinh tuyen (Routing & Security)" {
+  class AuthMiddleware {
+    + requireAuth(req, res, next)
+    + requireAdmin(req, res, next)
+    + optionalAuth(req, res, next)
   }
 }
 
-database "PostgreSQL Database" as DB
+package "Phan he Nguoi dung (User & Auth Module)" {
+  class AuthController
+  class AuthService
+  class AuthRepository
+}
 
-Frontend --> ExpressRouter : HTTP Request
-ExpressRouter ..> AuthMiddleware : <<validate>>
+package "Phan he Hanh trinh tu do (Itinerary Module)" {
+  class ItineraryController
+  class ItineraryService
+  class ItineraryRepository
+}
 
-ExpressRouter --> SocialRouter
-ExpressRouter --> PostsRouter
-ExpressRouter --> TripsRouter
+package "Phan he Chuyen di (Trips Module)" {
+  class TripsRouter
+}
 
-SocialRouter ..> SavedPlaceService
-SocialRouter ..> FavoriteFoodService
+package "Phan he Mang xa hoi (Posts & Social Module)" {
+  class PostsRouter
+  class SocialRouter
+}
 
-TripsRouter ..> ItineraryService
-TripsRouter ..> TravelHistoryService
+package "Phan he AI Chatbot (AI Chatbot Module)" {
+  class ChatbotController
+  class ChatbotService
+}
 
-ChatbotService ..> AgentExecutorService
-AgentExecutorService ..> RagOrchestratorService
+package "Phan he RAG & Tri thuc (RAG Module)" {
+  class RagController
+  class RagOrchestratorService
+  class VectorStoreService
+}
 
-SavedPlaceService --> DB
-FavoriteFoodService --> DB
-ItineraryService --> DB
-TravelHistoryService --> DB
+package "Phan he AI Agents (AI Agents Module)" {
+  class AgentController
+  class AgentExecutorService
+}
+
+package "Phan he Phan hoi (Feedback Module)" {
+  class FeedbackController
+  class FeedbackService
+  class FeedbackRepository
+}
+
+package "Phan he Bo nho tam (Cache Module)" {
+  class CacheService
+  class CacheRepository
+}
+
+class "PostgreSQL Database" as DB <<Database>>
+
+AuthController ..> AuthService
+AuthService ..> AuthRepository
+AuthRepository --> DB
+
+ItineraryController ..> ItineraryService
+ItineraryService ..> ItineraryRepository
+ItineraryRepository --> DB
+
+TripsRouter --> DB
+PostsRouter --> DB
+SocialRouter --> DB
+
+ChatbotController ..> ChatbotService
 ChatbotService --> DB
-RecommendationService --> DB
-CacheService --> DB
-FeedbackService --> DB
-ToolCallService --> DB
+
+RagController ..> RagOrchestratorService
+RagOrchestratorService ..> VectorStoreService
+VectorStoreService --> DB
+
+AgentController ..> AgentExecutorService
+
+FeedbackController ..> FeedbackService
+FeedbackService ..> FeedbackRepository
+FeedbackRepository --> DB
+
+CacheService ..> CacheRepository
+CacheRepository --> DB
 
 @enduml
+

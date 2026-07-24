@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  MapPin, Users, Search, Sparkles, Loader2, Flame, Sun, Moon, BarChart3
+  MapPin, Users, Search, Sparkles, Loader2, Flame
 } from 'lucide-react';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { mapService } from '../../services/smartTravel.service';
@@ -284,12 +284,12 @@ const MapDashboard = () => {
     });
 
     socket.on('friend_location_updated', (data: any) => {
-      // Don't display ourselves as a friend
-      if (data.userId === user.id) return;
+      // Don't display our exact same socket connection
+      if (data.socketId === socket.id) return;
 
       setLiveFriends(prev => ({
         ...prev,
-        [data.userId]: {
+        [data.socketId || data.userId]: {
           ...data,
           updatedAt: new Date()
         }
@@ -299,7 +299,11 @@ const MapDashboard = () => {
     socket.on('friend_offline', (data: { userId: string }) => {
       setLiveFriends(prev => {
         const copy = { ...prev };
-        delete copy[data.userId];
+        Object.keys(copy).forEach(key => {
+          if (copy[key].userId === data.userId) {
+            delete copy[key];
+          }
+        });
         return copy;
       });
     });
@@ -512,7 +516,7 @@ const MapDashboard = () => {
         // .filter(f => f.distance <= 100)
         .forEach(f => {
           mappedFriends.push({
-            id: `live-${f.userId}`,
+            id: `live-${f.socketId || f.userId}`,
             name: `${f.fullName} (${f.distance.toFixed(1)} km)`,
             lat: f.lat,
             lng: f.lng,

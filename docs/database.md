@@ -108,29 +108,25 @@ Cơ sở dữ liệu được xây dựng trên nền tảng PostgreSQL và sử
 - **status**: Trạng thái chạy công cụ.
 - **createdAt**: Thời gian tạo tin nhắn.
 
-### PlaceCache
+### SystemCache
 
-- **key**: Khóa tìm kiếm cache.
-- **value**: Dữ liệu JSON của địa điểm được cache.
+- **key**: Khóa tìm kiếm cache (String).
+- **type**: Phân loại cache (String, làm part of composite key).
+- **value**: Dữ liệu JSON được đệm.
 - **expiresAt**: Thời gian hết hạn của cache.
 - **createdAt**: Thời gian tạo cache.
 - **updatedAt**: Thời gian cập nhật cache.
 
-### FoodCache
+### CacheMetadata
 
-- **key**: Khóa tìm kiếm cache.
-- **value**: Dữ liệu JSON của món ăn được cache.
-- **expiresAt**: Thời gian hết hạn của cache.
-- **createdAt**: Thời gian tạo cache.
-- **updatedAt**: Thời gian cập nhật cache.
-
-### BlogCache
-
-- **key**: Khóa tìm kiếm cache.
-- **value**: Dữ liệu JSON của blog được cache.
-- **expiresAt**: Thời gian hết hạn của cache.
-- **createdAt**: Thời gian tạo cache.
-- **updatedAt**: Thời gian cập nhật cache.
+- **id**: Khóa chính, là một chuỗi UUID.
+- **cacheKey**: Khóa băm vector embedding hoặc query.
+- **queryText**: Văn bản truy vấn tìm kiếm tri thức RAG gốc.
+- **responseJson**: Kết quả JSON đệm.
+- **hitCount**: Số lượt truy xuất trúng.
+- **expiresAt**: Thời gian sống của cache.
+- **createdAt**: Thời gian tạo.
+- **updatedAt**: Thời gian cập nhật.
 
 ### Follower
 

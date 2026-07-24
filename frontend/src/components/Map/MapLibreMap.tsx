@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLang } from '../../contexts/LanguageContext';
 import { mapService } from '../../services/smartTravel.service';
-import { CloudRain, Car, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
+import { CloudRain, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -85,22 +85,9 @@ const svgGreenString = `
 </svg>
 `;
 
-const svgGlobeString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#3b82f6">
-  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
-</svg>
-`;
-
 const svgEventString = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#a855f7">
   <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/>
-</svg>
-`;
-
-const svgUserString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
-  <circle cx="12" cy="12" r="10" fill="#3b82f6" fill-opacity="0.3" />
-  <circle cx="12" cy="12" r="6" fill="#3b82f6" stroke="#ffffff" stroke-width="2" />
 </svg>
 `;
 
@@ -211,7 +198,7 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
 };
 
 // MapLibre OS Tile Styles
-const getMapLibreStyle = (style: string) => {
+const getMapLibreStyle = (style: string): any => {
   switch (style) {
     case 'satellite':
       return {
@@ -487,13 +474,19 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
 
     // Circular spreading logic for overlapping coordinates
     const coordCounts: Record<string, number> = {};
+    const currentUserLoc = locations.find(loc => loc.id.startsWith('live-current-user-'));
+    if (currentUserLoc) {
+      const key = `${currentUserLoc.lat.toFixed(6)},${currentUserLoc.lng.toFixed(6)}`;
+      coordCounts[key] = 0;
+    }
+
     const adjustedLocations = nonUserLocations.map(loc => {
       const key = `${loc.lat.toFixed(6)},${loc.lng.toFixed(6)}`;
       if (coordCounts[key] !== undefined) {
         coordCounts[key]++;
         const count = coordCounts[key];
         const angle = count * ((2 * Math.PI) / 8);
-        const radius = 0.00012 * Math.ceil(count / 8);
+        const radius = 0.00015 * Math.ceil(count / 8);
         return {
           ...loc,
           lat: loc.lat + radius * Math.cos(angle),
@@ -559,7 +552,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     });
 
     // Draw current user marker
-    const currentUserLoc = locations.find(loc => loc.id.startsWith('live-current-user-'));
     if (currentUserLoc) {
       const el = document.createElement('div');
       el.style.width = '40px';

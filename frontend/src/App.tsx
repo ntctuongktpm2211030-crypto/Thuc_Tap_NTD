@@ -237,7 +237,6 @@ function App() {
 
   // Trang auth = fullscreen standalone, không cần navbar/footer
   const isAuthPage = location.pathname === '/auth';
-  const isCreateJourneyPage = location.pathname === '/journeys/create';
   const isEditPostPage = /^\/posts\/[^/]+\/edit$/.test(location.pathname);
   const isExploreReader =
     location.pathname.startsWith('/explore/post/') ||

@@ -1,7 +1,7 @@
 # TÀI LIỆU DANH SÁCH THỰC THỂ CƠ SỞ DỮ LIỆU CHUYÊN SÂU (DATA DICTIONARY)
 ## HỆ THỐNG THÔNG TIN DU LỊCH VIỆT NAM (SMARTTRAVEL / TERRAHOLIC)
 
-Tài liệu này cung cấp từ điển dữ liệu (Data Dictionary) chi tiết cho toàn bộ **46 thực thể** của hệ thống, được rút trích trực tiếp từ tệp cấu hình cơ sở dữ liệu `schema.prisma`.
+Tài liệu này cung cấp từ điển dữ liệu (Data Dictionary) chi tiết cho toàn bộ **51 thực thể** của hệ thống, được rút trích trực tiếp từ tệp cấu hình cơ sở dữ liệu `schema.prisma`.
 
 ---
 
@@ -688,6 +688,93 @@ Tài liệu này cung cấp từ điển dữ liệu (Data Dictionary) chi tiế
 | `answerText` | câu trả lời chuẩn | String | Không | Không | Không | | Nội dung câu trả lời |
 | `createdAt` | ngày tạo | DateTime | Không | Không | Không | `now()` | Ngày tạo |
 | `updatedAt` | ngày sửa | DateTime | Không | Không | Không | | Ngày sửa |
+
+---
+
+## 9. MÔ-ĐUN: GIÁM SÁT AI & BỘ NHỚ ĐỆM (AI GOVERNANCE & CACHING)
+
+### 9.1. Thực thể: `ModelRegistry` (Danh mục mô hình LLM)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: Không có.
+* **Chi tiết thuộc tính**:
+
+| Tên Thuộc tính | Tên Tiếng Việt | Kiểu dữ liệu | Nullable | Unique | Chỉ mục (Index) | Giá trị mặc định | Mô tả chi tiết |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `id` | mã mô hình | String (UUID) | Không | Có | PK | `uuid()` | Khóa chính |
+| `modelName` | tên mô hình | String | Không | Có | Unique | | Tên định danh mô hình LLM |
+| `provider` | nhà cung cấp | String | Không | Không | Không | | OpenAI, Google, Anthropic, v.v. |
+| `isActive` | đang hoạt động | Boolean | Không | Không | Không | `true` | Đánh dấu mô hình mặc định |
+
+### 9.2. Thực thể: `KnowledgeVersion` (Phiên bản tri thức)
+* **Khóa chính (PK)**: `versionNumber` (Int - Tự tăng)
+* **Khóa ngoại (FK)**: Không có.
+* **Chi tiết thuộc tính**:
+
+| Tên Thuộc tính | Tên Tiếng Việt | Kiểu dữ liệu | Nullable | Unique | Chỉ mục (Index) | Giá trị mặc định | Mô tả chi tiết |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `versionNumber`| số hiệu phiên bản | Int | Không | Có | PK | | Khóa chính tự tăng |
+| `description` | mô tả cập nhật | String | Có | Không | Không | | Nhật ký thay đổi tri thức |
+| `createdAt` | ngày cập nhật | DateTime | Không | Không | Không | `now()` | Ngày xuất bản phiên bản |
+
+### 9.3. Thực thể: `PromptVersion` (Phiên bản Prompt)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: Không có.
+* **Chi tiết thuộc tính**:
+
+| Tên Thuộc tính | Tên Tiếng Việt | Kiểu dữ liệu | Nullable | Unique | Chỉ mục (Index) | Giá trị mặc định | Mô tả chi tiết |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `id` | mã prompt | String (UUID) | Không | Có | PK | `uuid()` | Khóa chính |
+| `systemPrompt` | nội dung prompt | String | Không | Không | Không | | Nội dung văn bản Prompt hệ thống |
+| `version` | số phiên bản | Int | Không | Không | Không | | Số hiệu phiên bản prompt |
+| `isActive` | đang hoạt động | Boolean | Không | Không | Không | `true` | Đánh dấu prompt đang áp dụng |
+
+### 9.4. Thực thể: `AIChatLog` (Nhật ký gọi AI)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: `modelId` (trỏ tới `ModelRegistry.id`), `userId` (trỏ tới `User.id`)
+* **Chi tiết thuộc tính**:
+
+| Tên Thuộc tính | Tên Tiếng Việt | Kiểu dữ liệu | Nullable | Unique | Chỉ mục (Index) | Giá trị mặc định | Mô tả chi tiết |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `id` | mã log chat | String (UUID) | Không | Có | PK | `uuid()` | Khóa chính |
+| `userId` | mã người dùng | String (UUID) | Không | Không | FK, Index | | Người gọi dịch vụ |
+| `modelId` | mã mô hình LLM | String (UUID) | Không | Không | FK, Index | | Mô tả LLM chạy chính |
+| `promptTokens` | số token vào | Int | Không | Không | Không | `0` | Chi phí token prompt |
+| `completionTokens`| số token ra | Int | Không | Không | Không | `0` | Chi phí token phản hồi |
+| `latencyMs` | độ trễ phản hồi | Int | Không | Không | Không | `0` | Thời gian thực thi (milliseconds) |
+
+### 9.5. Thực thể: `UserFeedback` (Đánh giá dịch vụ AI)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: `chatLogId` (trỏ tới `AIChatLog.id`)
+
+### 9.6. Thực thể: `EvaluationHistory` (Lịch sử đánh giá tự động)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: `chatLogId` (trỏ tới `AIChatLog.id`)
+
+### 9.7. Thực thể: `GuardrailEvent` (Nhật ký vi phạm an toàn)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: `chatLogId` (trỏ tới `AIChatLog.id`)
+
+### 9.8. Thực thể: `KnowledgeFreshness` (Độ tươi mới tri thức)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: `versionId` (trỏ tới `KnowledgeVersion.versionNumber`)
+
+### 9.9. Thực thể: `AuditTrail` (Vết kiểm toán hệ thống)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: Không có.
+
+### 9.10. Thực thể: `CacheMetadata` (Siêu dữ liệu Caching ngữ nghĩa)
+* **Khóa chính (PK)**: `id` (String - UUID)
+* **Khóa ngoại (FK)**: Không có.
+* **Chi tiết thuộc tính**:
+
+| Tên Thuộc tính | Tên Tiếng Việt | Kiểu dữ liệu | Nullable | Unique | Chỉ mục (Index) | Giá trị mặc định | Mô tả chi tiết |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `id` | mã cache | String (UUID) | Không | Có | PK | `uuid()` | Khóa chính |
+| `cacheKey` | khóa băm cache | String | Không | Có | Unique | | Hash đặc trưng embedding của câu hỏi |
+| `queryText` | câu hỏi gốc | String | Không | Không | Không | | Nội dung câu hỏi dạng text thô |
+| `responseJson` | đệm kết quả JSON | String | Không | Không | Không | | Phản hồi dạng JSON |
+| `hitCount` | số lượt hit | Int | Không | Không | Không | `1` | Thống kê số lần trúng cache đệm |
+| `expiresAt` | ngày hết hạn | DateTime | Không | Không | Không | | Thời gian sống của cache |
 
 ---
 *Kết thúc từ điển danh sách thực thể dữ liệu.*

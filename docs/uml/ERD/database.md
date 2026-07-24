@@ -46,68 +46,74 @@ Hệ thống sử dụng mô hình kiến trúc phân tầng dữ liệu hiện 
 
 ## 3. DANH SÁCH TOÀN BỘ CÁC THỰC THỂ (ENTITY LIST)
 
-CSDL hệ thống bao gồm **46 thực thể (tables)** được phân chia theo 8 mô-đun chức năng chính:
+CSDL hệ thống bao gồm **51 thực thể (tables)** được phân chia theo các phân hệ chức năng:
 
-### 3.1. Mô-đun Người dùng & Cá nhân hóa
-1. **User**: Lưu tài khoản đăng nhập, email, hash mật khẩu và vai trò phân quyền.
-2. **Profile**: Thông tin cá nhân cơ bản hiển thị (họ tên, ảnh đại diện, tiểu sử).
-3. **TravelPreferences**: Tùy chọn sở thích du lịch cá nhân (ngân sách, loại hình hoạt động).
-4. **AIMemory**: Bộ nhớ sở thích du lịch lâu dài được AI tự động bóc tách từ các hội thoại chat.
-5. **Follower**: Bảng liên kết trung gian quản lý theo dõi chéo giữa các người dùng.
-6. **Notification**: Thông báo hệ thống gửi tới người dùng về tương tác xã hội hoặc an toàn.
-7. **Location**: Tọa độ vị trí GPS trực tiếp phục vụ hiển thị bản đồ trực quan.
+### 3.1. Phân hệ Người dùng & Cá nhân hóa
+1. **User**: Lưu tài khoản đăng nhập, email, hash mật khẩu, vai trò, trạng thái xác thực và các token OTP (`verificationToken`, `resetPasswordToken`).
+2. **Profile**: Thông tin cá nhân mở rộng (họ tên, số điện thoại, ảnh đại diện, bio).
+3. **TravelPreferences**: Lưu trữ sở thích du lịch cá nhân (budget, pace, activities, food).
+4. **AIMemory**: Bộ nhớ động do AI tự động bóc tách từ các cuộc hội thoại chat.
+5. **Follower**: Quản lý quan hệ theo dõi chéo giữa các người dùng.
+6. **Notification**: Lưu trữ thông báo gửi đến người dùng.
+7. **Location**: Tọa độ GPS trực tiếp của người dùng.
+8. **LocationHistory**: Nhật ký lưu vết tọa độ GPS di chuyển thô.
+9. **TravelHistory**: Quản lý nhật ký di chuyển thực tế (đánh giá, chi phí chuyến đi đã qua).
+10. **FavoriteFood**: Lưu trữ danh mục món ăn địa phương yêu thích của người dùng.
 
-### 3.2. Mô-đun Hành trình & Chuyến đi
-8. **Trip**: Bản ghi chuyến đi chính thức (tên điểm đến, ngày đi, tổng ngân sách, phong cách).
-9. **TripDay**: Ngày đi thuộc chuyến đi (chia ngày 1, ngày 2...).
-10. **TripActivity**: Chi tiết hoạt động tham quan (thời gian, thứ tự di chuyển, chi phí ước tính).
-11. **Itinerary**: Lịch trình AI sinh tạm thời (bản nháp lịch trình) khi đang khảo sát thông tin.
-12. **ItineraryDay**: Ngày đi thuộc lịch trình AI nháp.
-13. **ItineraryActivity**: Hoạt động tham quan thuộc lịch trình AI nháp.
-14. **Journey**: Bản ghi câu chuyện du lịch di chuyển thực tế (du ký).
+### 3.2. Phân hệ Lập lịch trình & Hành trình du lịch
+11. **Trip**: Chuyến đi chính thức (tên điểm đến, ngày đi, tổng ngân sách, phong cách, trạng thái `TripStatus` như `DRAFT_USER`, `PUBLISHED`).
+12. **TripDay**: Các ngày cụ thể trong một chuyến đi.
+13. **TripActivity**: Chi tiết hoạt động tham quan từng ngày (thời gian, thứ tự di chuyển, chi phí).
+14. **Journey**: Bản ghi du ký, chia sẻ hành trình di chuyển thực tế của người dùng.
 15. **Route**: Chặng đường di chuyển nằm trong hành trình du ký.
-16. **RoutePoint**: Điểm tọa độ GPS cụ thể vẽ sơ đồ đường đi thực tế của phượt thủ.
-17. **LocationHistory**: Nhật ký tọa độ GPS lưu vết chuyển động thô của người dùng.
+16. **RoutePoint**: Các điểm tọa độ GPS cụ thể vẽ cung đường thực tế của phượt thủ.
 
-### 3.3. Mô-đun Địa điểm & GIS
-18. **Destination**: Danh mục điểm đến, di tích lịch sử, nhà hàng, khách sạn Việt Nam.
-19. **CheckIn**: Nhật ký check-in thực tế của du khách tại điểm đến.
-20. **SavedPlace**: Địa chỉ địa danh do người dùng đánh dấu lưu lại cá nhân.
-21. **Recommendation**: Gợi ý điểm đến tương ứng đính kèm chuyến đi.
-22. **UserRecommendation**: Gợi ý địa điểm hệ thống tự đề xuất riêng cho người dùng.
-23. **SafetyWarning**: Cảnh báo nguy hiểm thời tiết, lũ lụt, thiên tai theo tọa độ GPS.
+### 3.3. Phân hệ Địa điểm & GIS
+17. **Destination**: Danh mục điểm đến, di tích lịch sử, nhà hàng, khách sạn.
+18. **CheckIn**: Nhật ký check-in thực tế của du khách tại điểm đến kèm ảnh.
+19. **SavedPlace**: Địa chỉ địa danh do người dùng lưu lại cá nhân.
+20. **Recommendation**: Gợi ý điểm đến tương ứng đính kèm chuyến đi.
+21. **UserRecommendation**: Gợi ý địa điểm hệ thống tự đề xuất riêng cho người dùng.
+22. **SafetyWarning**: Cảnh báo nguy hiểm thời tiết, thiên tai theo tọa độ GPS.
 
-### 3.4. Mô-đun Mạng xã hội & Tương tác
-24. **Post**: Bài chia sẻ trải nghiệm chuyến đi (Blog/Story) kèm hình ảnh.
-25. **Comment**: Bình luận dưới bài viết (hỗ trợ đệ quy replies).
-26. **Like**: Lượt thích bài viết của người dùng.
-27. **Bookmark**: Đánh dấu lưu trữ bài viết của người khác vào thư viện cá nhân.
+### 3.4. Phân hệ Mạng xã hội & Tương tác
+23. **Post**: Bài chia sẻ trải nghiệm chuyến đi (Blog/Story) kèm hình ảnh.
+24. **Comment**: Bình luận dưới bài viết.
+25. **Like**: Lượt thích bài viết của người dùng.
+26. **Bookmark**: Đánh dấu lưu trữ bài viết của người khác vào thư viện cá nhân.
 
-### 3.5. Mô-đun Sự kiện & Kết nối
-28. **Event**: Lễ hội văn hóa, meetup hoặc tour du lịch kết nối tại điểm đến.
-29. **EventAttendee**: Danh sách người đăng ký tham dự sự kiện.
-30. **TravelerMatch**: Cặp đôi du khách có chung sở thích được AI ghép cặp kết bạn đồng hành.
-31. **Conversation**: Cuộc trò chuyện nhắn tin trực tiếp giữa những người dùng.
-32. **Message**: Tin nhắn gửi đi trong cuộc trò chuyện giữa những người dùng.
+### 3.5. Phân hệ Sự kiện & Kết nối
+27. **Event**: Lễ hội văn hóa, meetup hoặc giao lưu địa phương trên bản đồ.
+28. **EventAttendee**: Danh sách người đăng ký tham dự sự kiện.
+29. **TravelerMatch**: AI tự động so khớp bạn đồng hành dựa trên TravelPreferences.
+30. **Conversation**: Cuộc trò chuyện nhắn tin P2P trực tiếp giữa những người dùng.
+31. **Message**: Tin nhắn gửi đi trong cuộc trò chuyện P2P.
 
-### 3.6. Mô-đun Trợ lý Chatbot AI
-33. **ChatConversation**: Phiên hội thoại giữa người dùng và chatbot Terraholic AI.
-34. **ChatMessage**: Tin nhắn hỏi/đáp thuộc phiên trò chuyện AI.
-35. **ChatMessageVersion**: Các phiên bản câu trả lời khác nhau khi người dùng regenerate tin nhắn AI.
-36. **ToolCall**: Nhật ký hành động gọi công cụ bổ trợ (Weather, Maps API) của tác tử AI.
-37. **AIFeedback**: Nhận xét đánh giá chất lượng câu trả lời chatbot AI.
+### 3.6. Phân hệ Trợ lý Chatbot AI & RAG
+32. **ChatConversation**: Phiên hội thoại giữa người dùng và chatbot AI.
+33. **ChatMessage**: Tin nhắn hỏi/đáp thuộc phiên trò chuyện AI.
+34. **ChatMessageVersion**: Các phiên bản câu trả lời khác nhau khi người dùng regenerate phản hồi AI.
+35. **ToolCall**: Nhật ký hành động gọi công cụ (Weather, Maps API) của tác tử AI.
+36. **AIFeedback**: Đánh giá chất lượng câu trả lời chatbot AI.
+37. **KnowledgeContent**: Tài liệu văn bản tri thức văn hóa, ẩm thực địa phương.
+38. **KnowledgeQuestion**: Câu hỏi mẫu tương ứng tài liệu tri thức, chứa vector đặc trưng ngữ nghĩa.
+39. **KnowledgeAnswer**: Câu trả lời mẫu chuẩn đã được biên soạn.
 
-### 3.7. Mô-đun Đệm Caching & Nhật ký phụ trợ
-38. **PlaceCache**: Đệm lưu trữ thông tin địa điểm từ API ngoài.
-39. **FoodCache**: Đệm lưu trữ thông tin món ăn ngon địa phương.
-40. **BlogCache**: Đệm lưu trữ danh sách bài viết blog ngoài.
-41. **FavoriteFood**: Lưu món ăn yêu thích cá nhân hóa của người dùng.
-42. **AIHistory**: Thống kê số lượng, hành vi và kết quả gọi dịch vụ sinh lịch trình của AI.
+### 3.7. Phân hệ Quản trị & Giám sát AI (AI Governance)
+40. **ModelRegistry**: Đăng ký danh mục các mô hình LLM được sử dụng trong hệ thống.
+41. **KnowledgeVersion**: Quản lý lịch sử các phiên bản tri thức RAG được cập nhật.
+42. **PromptVersion**: Quản lý các phiên bản prompt hệ thống.
+43. **AIChatLog**: Lưu chi tiết log gọi AI phục vụ thống kê chi phí token và giám sát.
+44. **UserFeedback**: Phản hồi đánh giá tổng quan của người dùng về dịch vụ AI.
+45. **EvaluationHistory**: Nhật ký đánh giá tự động (faithfulness, answer_relevance, v.v.).
+46. **GuardrailEvent**: Nhật ký sự kiện vi phạm an toàn prompt hoặc độc hại bị block.
+47. **KnowledgeFreshness**: Giám sát độ tươi mới tri thức RAG để tránh trôi dạt thông tin.
+48. **AuditTrail**: Nhật ký vết kiểm toán các hành động quản trị hệ thống AI.
+49. **AIHistory**: Thống kê số lượng gọi dịch vụ sinh lịch trình của AI.
 
-### 3.8. Mô-đun RAG & Cơ sở Tri thức
-43. **KnowledgeContent**: Tài liệu văn bản tri thức văn hóa, ẩm thực Việt Nam thô.
-44. **KnowledgeQuestion**: Câu hỏi mẫu tương ứng tài liệu tri thức, chứa vector đặc trưng ngữ nghĩa.
-45. **KnowledgeAnswer**: Câu trả lời mẫu chuẩn đã được biên soạn.
+### 3.8. Phân hệ Bộ nhớ đệm (Caching)
+50. **SystemCache**: Đệm lưu trữ các phản hồi API hoặc dữ liệu nặng với khóa composite `[key, type]`.
+51. **CacheMetadata**: Siêu dữ liệu Caching ngữ nghĩa phục vụ tìm kiếm embeddings.
 
 ---
 
@@ -131,7 +137,7 @@ CSDL tích hợp các ràng buộc nghiệp vụ để duy trì chất lượng 
 1. **Ràng buộc thời gian hành trình**: Ngày bắt đầu chuyến đi `startDate` luôn nhỏ hơn hoặc bằng ngày kết thúc `endDate` trong bảng `Trip`.
 2. **Quy tắc duy nhất tương tác**: Một người dùng chỉ được phép Thích hoặc Bookmark bài viết duy nhất một lần (được bảo vệ bằng chỉ mục phức hợp `@unique([postId, userId])`).
 3. **Quy tắc sĩ số sự kiện**: Khi người dùng đăng ký vào bảng `EventAttendee`, hệ thống phải kiểm tra xem số lượng tham gia thực tế `currentCount` ở bảng `Event` có vượt quá giới hạn tối đa `maxAttendees` hay không.
-4. **Quy tắc dọn dẹp Cache**: Mọi dữ liệu cache (`PlaceCache`, `FoodCache`, `BlogCache`) đều có thời hạn hết hiệu lực `expiresAt`. Khi đọc cache, hệ thống sẽ từ chối trả về nếu `expiresAt` nhỏ hơn thời gian hiện tại. Có tiến trình chạy ngầm dọn sạch các cache hết hạn định kỳ.
+4. **Quy tắc dọn dẹp Cache**: Mọi dữ liệu cache (`SystemCache`, `CacheMetadata`) đều có thời hạn hết hiệu lực `expiresAt`. Khi đọc cache, hệ thống sẽ từ chối trả về nếu `expiresAt` nhỏ hơn thời gian hiện tại. Có tiến trình chạy ngầm dọn sạch các cache hết hạn định kỳ.
 5. **Quy tắc phiên bản câu trả lời AI**: Trong danh sách các phiên bản câu trả lời `ChatMessageVersion` thuộc về một tin nhắn `ChatMessage`, chỉ được phép có tối đa duy nhất một phiên bản được gán trạng thái đang hoạt động `isActive = true`.
 
 ---
@@ -178,7 +184,7 @@ LIMIT 5;
 
 Để hệ thống vận hành tối ưu ở quy mô doanh nghiệp lớn, đề xuất áp dụng 3 khuyến nghị cải tiến:
 
-1. **Di chuyển Cache lên Redis**: Thay thế các bảng cache vật lý (`PlaceCache`, `FoodCache`, `BlogCache`) trong PostgreSQL bằng một cơ sở dữ liệu RAM chuyên biệt như **Redis**. Điều này giúp giải phóng hoàn toàn tài nguyên đọc/ghi đĩa của PostgreSQL, hỗ trợ tự động hết hạn cache (TTL) ở mức hạ tầng mà không cần viết cron-job quét thủ công.
+1. **Di chuyển Cache lên Redis**: Thay thế các bảng cache vật lý (`SystemCache`, `CacheMetadata`) trong PostgreSQL bằng một cơ sở dữ liệu RAM chuyên biệt như **Redis**. Điều này giúp giải phóng hoàn toàn tài nguyên đọc/ghi đĩa của PostgreSQL, hỗ trợ tự động hết hạn cache (TTL) ở mức hạ tầng mà không cần viết cron-job quét thủ công.
 2. **Hợp nhất thực thể nháp và thực thể chính**: Hợp nhất cấu trúc bảng lịch trình AI nháp `Itinerary` vào bảng `Trip` chính thức bằng việc sử dụng một trường trạng thái phân loại (`TripStatus`). Việc này giúp tinh gọn lược đồ thực thể quan hệ, giảm thiểu việc viết các câu lệnh chuyển đổi dữ liệu phức tạp trên mã nguồn Backend.
 3. **Áp dụng Chỉ mục GIN cho thuộc tính mảng**: Đối với các thuộc tính mảng nguyên thủy trong `TravelPreferences` và `AIMemory`, cần bổ sung chỉ mục **GIN (Generalized Inverted Index)** trong PostgreSQL để tối ưu hóa hiệu năng cho các truy vấn lọc chéo sở thích người dùng.
 

@@ -9,13 +9,13 @@ Tài liệu này cung cấp các số liệu thống kê định lượng về l
 
 Hệ thống cơ sở dữ liệu được xây dựng trên PostgreSQL 15, sử dụng Prisma ORM làm trung gian ánh xạ thực thể. Dưới đây là các thông số tổng hợp từ tệp `schema.prisma`:
 
-* **Tổng số bảng thực thể (Tables/Entities)**: **36 bảng**.
-* **Tổng số thuộc tính (Fields/Attributes)**: **205 thuộc tính** (trung bình 5.69 thuộc tính/bảng).
+* **Tổng số bảng thực thể (Tables/Entities)**: **51 bảng**.
+* **Tổng số thuộc tính (Fields/Attributes)**: **285 thuộc tính** (trung bình 5.59 thuộc tính/bảng).
 * **Tổng số Enums tự định nghĩa**: **2 enum** (`UserRole` và `TripStatus`).
-* **Tổng số khóa chính (Primary Keys - PK)**: **36 khóa chính** (35 khóa đơn UUID và 1 khóa chính Composite `[key, type]` của `SystemCache`).
-* **Tổng số khóa ngoại vật lý (Foreign Keys - FK)**: **39 khóa ngoại**.
-* **Tổng số ràng buộc duy nhất (Unique Constraints)**: **12 ràng buộc**.
-* **Tổng số chỉ mục tìm kiếm (Indices)**: **20 chỉ mục**.
+* **Tổng số khóa chính (Primary Keys - PK)**: **51 khóa chính** (50 khóa đơn UUID và 1 khóa chính Composite `[key, type]` của `SystemCache`).
+* **Tổng số khóa ngoại vật lý (Foreign Keys - FK)**: **48 khóa ngoại**.
+* **Tổng số ràng buộc duy nhất (Unique Constraints)**: **15 ràng buộc**.
+* **Tổng số chỉ mục tìm kiếm (Indices)**: **28 chỉ mục**.
 
 ---
 
@@ -27,14 +27,14 @@ Lược đồ cơ sở dữ liệu được phân chia thành **8 nhóm chức n
   ┌──────────────────────────────────────────────────────────┐
   │              MẬT ĐỘ PHÂN BỔ THỰC THỂ THEO MÔ-ĐUN         │
   │                                                          │
-  │  Hành trình & Chuyến đi : ▓▓▓▓▓▓▓▓▓▓▓ (7 bảng)           │
-  │  Người dùng & Cá nhân   : ▓▓▓▓▓▓▓▓▓▓█ (7 bảng)           │
-  │  Địa điểm & GIS         : ▓▓▓▓▓▓▓▓ (6 bảng)              │
-  │  AI Chatbot Trợ lý      : ▓▓▓▓▓▓▓▓ (5 bảng)              │
-  │  Sự kiện & Kết nối      : ▓▓▓▓▓▓▓▓ (5 bảng)              │
-  │  Mạng xã hội Tương tác  : ▓▓▓▓▓▓ (4 bảng)                │
-  │  Đệm Cache & Nhật ký    : ▓▓▓▓ (4 bảng)                  │
-  │  Hệ RAG & Tri thức      : ▓▓▓▓ (3 bảng)                  │
+  │  Quản trị & Giám sát AI : ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ (10 bảng)      │
+  │  Người dùng & Cá nhân   : ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ (10 bảng)      │
+  │  AI Chatbot & RAG       : ▓▓▓▓▓▓▓▓▓▓▓▓ (8 bảng)          │
+  │  Hành trình & Chuyến đi : ▓▓▓▓▓▓▓▓▓ (6 bảng)             │
+  │  Địa điểm & GIS         : ▓▓▓▓▓▓▓▓▓ (6 bảng)             │
+  │  Sự kiện & Kết nối      : ▓▓▓▓▓▓▓ (5 bảng)               │
+  │  Mạng xã hội Tương tác  : ▓▓▓▓▓ (4 bảng)                 │
+  │  Bộ nhớ đệm & Caching   : ▓▓ (2 bảng)                    │
   └──────────────────────────────────────────────────────────┘
 ```
 

@@ -7,22 +7,18 @@ skinparam linetype ortho
 ' Actors
 actor "Người dùng đăng ký\n(User)" as User
 
-' External / Supporting Systems
-actor "WebSocket Server" as WS <<System>>
-actor "Push Notification Service" as PushNotification <<System>>
-
 rectangle "Tính năng Thời gian thực (Real-time Features)" {
-  usecase "Nhắn tin trực tiếp thời gian thực" as UC_LiveChat
-  usecase "Truyền phản hồi AI dạng stream" as UC_StreamAI
-  usecase "Hiển thị trạng thái đang nhập (Typing)" as UC_Typing
-  usecase "Cập nhật trạng thái trực tuyến (Online)" as UC_OnlineStatus
+  usecase "Nhắn tin trực tiếp thời gian thực\n(Real-time Messaging)" as UC_LiveChat
+  usecase "Truyền phản hồi AI dạng stream\n(Stream AI Responses)" as UC_StreamAI
+  usecase "Hiển thị trạng thái đang nhập\n(Typing Indicator)" as UC_Typing
+  usecase "Cập nhật trạng thái trực tuyến\n(Online Status)" as UC_OnlineStatus
   
-  usecase "Thông báo trực tiếp tức thời" as UC_LiveNotif
-  usecase "Nhận thông báo tương tác" as UC_ReceiveNotif
+  usecase "Thông báo trực tiếp tức thời\n(Instant Notification)" as UC_LiveNotif
+  usecase "Nhận thông báo tương tác\n(Receive Interactive Alerts)" as UC_ReceiveNotif
   
-  usecase "Cập nhật bảng tin tức thời" as UC_LiveFeed
-  usecase "Bình luận tức thời" as UC_InstantComment
-  usecase "Thích bài viết tức thời" as UC_InstantLike
+  usecase "Cập nhật bảng tin tức thời\n(Instant Feed Updates)" as UC_LiveFeed
+  usecase "Bình luận tức thời\n(Instant Commenting)" as UC_InstantComment
+  usecase "Thích bài viết tức thời\n(Instant Liking)" as UC_InstantLike
 }
 
 ' User Associations
@@ -39,13 +35,4 @@ UC_LiveChat <.. UC_Typing : <<extend>>
 UC_LiveChat ..> UC_OnlineStatus : <<include>>
 UC_LiveNotif ..> UC_ReceiveNotif : <<include>>
 
-' WebSocket Server Mappings
-UC_LiveChat -- WS
-UC_StreamAI -- WS
-UC_LiveFeed -- WS
-UC_InstantComment -- WS
-UC_InstantLike -- WS
-
-' Push Notification Mappings
-UC_LiveNotif -- PushNotification
 @enduml

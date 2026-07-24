@@ -54,7 +54,10 @@ io.on('connection', (socket) => {
       socketUserMap.set(socket.id, data.userId);
     }
     // Broadcast user location to friends/subscribers
-    socket.broadcast.emit('friend_location_updated', data);
+    socket.broadcast.emit('friend_location_updated', {
+      ...data,
+      socketId: socket.id
+    });
   });
 
   // Collaborative trip editing room coordination

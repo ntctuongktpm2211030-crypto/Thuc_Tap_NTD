@@ -57,6 +57,12 @@ Mối quan hệ cha-con tiêu chuẩn, cho phép một cha quản lý nhiều co
 | 30 | `User` | `Event` (Organizer) | `organizerId` | Cascade | Người dùng tổ chức nhiều lễ hội/sự kiện kết nối. |
 | 31 | `Event` | `EventAttendee` | `eventId` | Cascade | Sự kiện có nhiều người tham dự đăng ký. |
 | 32 | `Conversation` | `Message` | `conversationId` | Cascade | Phòng chat chứa nhiều tin nhắn trò chuyện trực tiếp. |
+| 33 | `User` | `AIChatLog` | `userId` | Cascade | Người dùng thực hiện các cuộc gọi hội thoại AI. |
+| 34 | `ModelRegistry` | `AIChatLog` | `modelId` | Cascade | Các cuộc gọi AI sử dụng mô hình LLM tương ứng. |
+| 35 | `AIChatLog` | `UserFeedback` | `chatLogId` | Cascade | Người dùng gửi feedback đánh giá chất lượng phiên AI log. |
+| 36 | `AIChatLog` | `EvaluationHistory` | `chatLogId` | Cascade | Lưu vết chi tiết điểm số đánh giá tự động cho log chat AI. |
+| 37 | `AIChatLog` | `GuardrailEvent` | `chatLogId` | SetNull | Log chat AI vi phạm các luật an toàn hệ thống. |
+| 38 | `KnowledgeVersion` | `KnowledgeFreshness` | `versionId` | Cascade | Giám sát độ tươi mới của phiên bản tri thức RAG. |
 
 ---
 
