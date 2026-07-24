@@ -55,6 +55,7 @@ export default {
         'fade-in':    'fadeInUp 0.4s ease forwards',
         'shimmer':    'shimmer 1.5s infinite',
         'ping-slow':  'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'rippling':   'rippling var(--duration, 600ms) ease-out',
       },
       keyframes: {
         fadeInUp: {
@@ -64,6 +65,10 @@ export default {
         shimmer: {
           '0%':   { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
+        },
+        rippling: {
+          '0%':   { opacity: '1' },
+          '100%': { transform: 'scale(2)', opacity: '0' },
         },
       },
       backgroundImage: {

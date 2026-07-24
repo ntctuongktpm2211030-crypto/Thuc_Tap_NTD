@@ -2,7 +2,7 @@ let scriptPromise: Promise<void> | null = null;
 
 export function loadGoogleMaps(apiKey?: string): Promise<void> {
   if (typeof window === 'undefined') return Promise.resolve();
-  if (window.google && window.google.maps) return Promise.resolve();
+  if ((window as any).google && (window as any).google.maps) return Promise.resolve();
   if (scriptPromise) return scriptPromise;
 
   scriptPromise = new Promise((resolve, reject) => {

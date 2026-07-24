@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { RippleButton } from '@/components/ui/ripple-button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -594,17 +595,18 @@ const TripPlanner = () => {
             </div>
 
             {/* Generate Button */}
-            <button 
+            <RippleButton 
               onClick={handleGenerate} 
               disabled={loading || !destination || days === '' || budget === ''} 
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all cursor-pointer border border-transparent disabled:cursor-not-allowed"
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all border border-transparent disabled:cursor-not-allowed"
+              rippleColor="rgba(255,255,255,0.4)"
             >
               {loading ? (
                 <><Loader2 size={14} className="animate-spin" /> {t('planner.generating')}</>
               ) : (
                 <><Sparkles size={14} /> {t('planner.generate')}</>
               )}
-            </button>
+            </RippleButton>
 
           </div>
         </div>
@@ -722,14 +724,15 @@ const TripPlanner = () => {
                     )}
                   </button>
                   
-                  <button 
+                  <RippleButton 
                     onClick={handleSaveTrip}
                     disabled={savingTrip || savedTripId !== null}
-                    className={`px-5 py-3 text-xs font-bold rounded-xl border active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-5 py-3 text-xs font-bold rounded-xl border active:scale-95 transition-all flex items-center gap-1.5 ${
                       savedTripId 
                         ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400' 
                         : 'bg-blue-600 hover:bg-blue-700 text-white font-bold border-transparent shadow-md'
                     }`}
+                    rippleColor={savedTripId ? "rgba(16,185,129,0.4)" : "rgba(255,255,255,0.4)"}
                   >
                     {savingTrip ? (
                       <><Loader2 size={13} className="animate-spin" /> {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}</>
@@ -738,7 +741,7 @@ const TripPlanner = () => {
                     ) : (
                       <><Bookmark size={13} /> {lang === 'vi' ? 'Lưu hành trình' : 'Save Trip'}</>
                     )}
-                  </button>
+                  </RippleButton>
                 </div>
               </div>
 

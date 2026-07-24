@@ -264,7 +264,12 @@ router.get('/search', async (req: AuthRequest, res: Response) => {
     const { q, limit = '10' } = req.query as Record<string, string>;
 
     if (!q || q.trim().length < 2) {
-      return res.status(400).json({ error: 'Search query must be at least 2 characters.' });
+      const users = await prisma.user.findMany({
+        include: { profile: true, _count: { select: { posts: true, followers: true } } },
+        take: Number(limit),
+        orderBy: { createdAt: 'desc' },
+      });
+      return res.json(users.map(({ passwordHash, verificationToken, resetPasswordToken, ...u }: any) => u));
     }
 
     const users = await prisma.user.findMany({

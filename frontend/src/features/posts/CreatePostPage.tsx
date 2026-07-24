@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { RippleButton } from '@/components/ui/ripple-button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -13,7 +14,7 @@ import { postsService } from '../../services/smartTravel.service';
 import type { RootState } from '../../store';
 import {
   validateImage, validateVideo, createPreviewUrl, revokePreviewUrl,
-  resolveMediaUrl, MAX_PHOTOS, MAX_VIDEOS, cleanDeadBlobUrls,
+  resolveMediaUrl, MAX_VIDEOS, cleanDeadBlobUrls,
 } from '../../utils/mediaUtils';
 
 const DRAFT_KEY = 'smarttravel_post_draft';
@@ -197,9 +198,9 @@ export default function CreatePostPage() {
           <button type="button" onClick={handleSaveDraft} className="btn-outline text-xs px-3 py-2 hidden sm:flex items-center gap-1.5">
             <Sparkles size={13} /> {draftSaved ? 'Đã lưu!' : 'Lưu nháp'}
           </button>
-          <button onClick={handlePublish} disabled={!isReady || publishing} className="btn-post px-4 py-2 text-sm flex items-center gap-2 disabled:opacity-50">
+          <RippleButton onClick={handlePublish} disabled={!isReady || publishing} className="btn-post px-4 py-2 text-sm flex items-center gap-2 disabled:opacity-50" rippleColor="rgba(255,255,255,0.4)">
             {publishing ? 'Đang đăng...' : <><Send size={14} /> Đăng bài</>}
-          </button>
+          </RippleButton>
         </>
       }
     >

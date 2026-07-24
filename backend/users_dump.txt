@@ -1,0 +1,8 @@
+=== DATABASE USERS ===
+[ID: 0db3ef3e-0fde-4ace-bc52-31ded43cdf16] Email: tuongcat080304@gmail.com | Name: Tường Nguyễn | Role: USER
+[ID: 41667f89-eb06-4ea3-a311-fc0bc78fbe00] Email: ngocvo3052k3@gmail.com | Name: Hân Ngọc | Role: USER
+[ID: 0b93cada-8c03-475c-b3b1-9e32e712b400] Email: b.anguyen.bau@gmail.com | Name: Ân Nguyễn Bảo | Role: USER
+[ID: d6b3e397-4ad6-475c-94b2-f3e2d13b5dee] Email: mythanhthaithi943@gmail.com | Name: mythanh thaithi | Role: USER
+[ID: 5ed08693-f6d4-4ae8-98f1-fda9bef050a4] Email: testuser@example.com | Name: Test User | Role: USER
+[ID: 1da03038-a80b-417e-bac0-42dc80315d91] Email: le.tuan.lt987@gmail.com | Name: Lê Tuấn Nguyễn | Role: USER
+[ID: 3f93e07e-24a1-4d3e-9488-64b6e7cf019c] Email: tuongnguyen0834@gmail.com | Name: Tường Nguyễn | Role: USER

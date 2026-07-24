@@ -29,8 +29,5 @@ export function storedToFeedItem(s: StoredStory): FeedStoryItem {
 }
 
 export function mergeStories(mock: FeedStoryItem[]): FeedStoryItem[] {
-  const user = loadUserStories().map(storedToFeedItem);
-  const mockIds = new Set(mock.map(m => m.id));
-  const onlyUser = user.filter(u => !mockIds.has(u.id));
-  return [...onlyUser, ...mock];
+  return loadUserStories().map(storedToFeedItem);
 }

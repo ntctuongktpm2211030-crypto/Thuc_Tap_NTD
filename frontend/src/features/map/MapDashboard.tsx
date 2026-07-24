@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  MapPin, Users, Search, Sparkles, Loader2, Flame
+  MapPin, Users, Search, Sparkles, Loader2, Flame, Image, Navigation, Compass,
+  CloudRain, AlertTriangle, Calendar
 } from 'lucide-react';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { mapService } from '../../services/smartTravel.service';
@@ -10,6 +11,8 @@ import type { RootState } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import { io } from 'socket.io-client';
+import PostDetailModal from '../../components/feed/PostDetailModal';
+import { journeyCategoryToFeedLabel, type FeedPost } from '../../utils/feedUtils';
 
 const CAN_THO_COORDS: [number, number] = [10.03711, 105.78825];
 
@@ -110,10 +113,16 @@ const MapDashboard = () => {
 
   const [customDestName, setCustomDestName] = useState('');
   const [newNote, setNewNote] = useState('');
-  const [checkinImage, setCheckinImage] = useState('');
+  const [checkinImages, setCheckinImages] = useState<string[]>([]);
+  const [checkinTags, setCheckinTags] = useState<string[]>([]);
+  const [availableTags, setAvailableTags] = useState(['cafe', 'viewdep', 'food', 'nature', 'dulich', 'checkin']);
+  const [showAddTagInput, setShowAddTagInput] = useState(false);
+  const [newTagName, setNewTagName] = useState('');
 
-
-  const [checkinTag, setCheckinTag] = useState('');
+  // GIS layers active state (lifted up to control from dashboard)
+  const [showWeather, setShowWeather] = useState(false);
+  const [showSafety, setShowSafety] = useState(true);
+  const [showEvents, setShowEvents] = useState(true);
 
   // Advanced search & filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -131,6 +140,8 @@ const MapDashboard = () => {
   const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(null);
   const [aiAssistantAnswer, setAiAssistantAnswer] = useState<string>('');
   const [loadingAiAssistant, setLoadingAiAssistant] = useState(false);
+  const [detailPost, setDetailPost] = useState<FeedPost | null>(null);
+  const closePost = () => setDetailPost(null);
 
   // WebSocket Live Friends locations
   const [liveFriends, setLiveFriends] = useState<Record<string, any>>({});
@@ -147,6 +158,34 @@ const MapDashboard = () => {
   useEffect(() => {
     selectedCenterRef.current = selectedCenter;
   }, [selectedCenter]);
+
+  useEffect(() => {
+    if (selectedLocation && selectedLocation.id.startsWith('checkin-')) {
+      const feedPost: FeedPost = {
+        id: selectedLocation.id,
+        displayType: 'social',
+        destination: `📍 ${selectedLocation.name}`,
+        destinationKey: selectedLocation.name.toLowerCase().replace(/\s+/g, '-'),
+        postedAt: new Date(selectedLocation.time || Date.now()),
+        date: selectedLocation.time || 'Trực tiếp',
+        author: {
+          name: selectedLocation.user || 'Người dùng',
+          avatar: selectedLocation.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          verified: false,
+        },
+        content: selectedLocation.note || '',
+        likes: 0,
+        comments: 0,
+        bookmarks: 0,
+        images: selectedLocation.imageUrl ? [selectedLocation.imageUrl] : [],
+        category: selectedLocation.tag ? journeyCategoryToFeedLabel(selectedLocation.tag) : 'Check-in',
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+      };
+      setDetailPost(feedPost);
+      setSelectedLocation(null);
+    }
+  }, [selectedLocation]);
 
   const handleFindNearby = async () => {
     const lat = userLocation ? userLocation[0] : selectedCenter[0];
@@ -422,13 +461,17 @@ const MapDashboard = () => {
 
       let parsedNote = c.note || '';
       let imageUrl = '';
+      let imageUrls: string[] = [];
       let tag = '';
+      let tags: string[] = [];
       if (c.note && c.note.startsWith('{') && c.note.endsWith('}')) {
         try {
           const parsed = JSON.parse(c.note);
           parsedNote = parsed.text || '';
           imageUrl = parsed.imageUrl || '';
+          imageUrls = parsed.imageUrls || (parsed.imageUrl ? [parsed.imageUrl] : []);
           tag = parsed.tag || '';
+          tags = parsed.tags || (parsed.tag ? [parsed.tag] : []);
         } catch (e) { }
       }
 
@@ -464,7 +507,9 @@ const MapDashboard = () => {
         lng,
         note: parsedNote,
         imageUrl: imageUrl,
+        imageUrls: imageUrls,
         tag: tag,
+        tags: tags,
         user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
         avatar: c.user?.profile?.avatarUrl || '',
         time: checkinTime,
@@ -556,15 +601,17 @@ const MapDashboard = () => {
     try {
       const finalPayload = JSON.stringify({
         text: newNote,
-        imageUrl: checkinImage,
-        tag: checkinTag
+        imageUrl: checkinImages[0] || '',
+        imageUrls: checkinImages,
+        tag: checkinTags[0] || '',
+        tags: checkinTags
       });
       const response = await mapService.checkIn('', finalPayload, customDestName.trim(), lat, lng);
       setCheckins(prev => [response, ...prev]);
       setNewNote('');
       setCustomDestName('');
-      setCheckinImage('');
-      setCheckinTag('');
+      setCheckinImages([]);
+      setCheckinTags([]);
 
       setSelectedCenter([lat, lng]);
       setSelectedLocation({
@@ -573,8 +620,10 @@ const MapDashboard = () => {
         lat,
         lng,
         note: newNote,
-        imageUrl: checkinImage,
-        tag: checkinTag,
+        imageUrl: checkinImages[0] || '',
+        imageUrls: checkinImages,
+        tag: checkinTags[0] || '',
+        tags: checkinTags,
         user: response.user?.profile?.fullName || response.user?.email || 'Người dùng',
         avatar: response.user?.profile?.avatarUrl || ''
       });
@@ -1000,22 +1049,68 @@ const MapDashboard = () => {
           </div>
         </div>
 
-        {/* Route Planner Action Bar */}
-        <div className="flex flex-wrap gap-2 items-center bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-xl shadow-sm">
-          <button
-            onClick={requestMyLocation}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1.5 shrink-0"
-          >
-            🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
-          </button>
+        {/* Unified Map & GIS Control Panel */}
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3 rounded-2xl shadow-sm space-y-3">
+          {/* Row 1: GIS switcher */}
+          <div className="flex items-center gap-2 pb-2.5 border-b border-[var(--border-normal)]/40">
+            <span className="text-xs font-bold text-[var(--text-secondary)] pl-2 pr-1 select-none">GIS:</span>
+            
+            {/* Weather Station */}
+            <button
+              type="button"
+              onClick={() => setShowWeather(prev => !prev)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                showWeather 
+                  ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)]/30 shadow-sm' 
+                  : 'bg-transparent text-[var(--gold)]/80 border-[var(--border-subtle)] hover:bg-[var(--bg-overlay)]'
+              }`}
+            >
+              <CloudRain size={13} className={showWeather ? 'text-[var(--gold)]' : 'text-[var(--gold)]/80'} />
+              <span>{vi ? 'Khí tượng' : 'Weather'}</span>
+            </button>
 
+            {/* Safety Warning */}
+            <button
+              type="button"
+              onClick={() => setShowSafety(prev => !prev)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                showSafety 
+                  ? 'bg-red-500/15 text-red-500 border-red-500/30 shadow-sm' 
+                  : 'bg-transparent text-red-500/75 border-[var(--border-subtle)] hover:bg-[var(--bg-overlay)]'
+              }`}
+            >
+              <AlertTriangle size={13} className={showSafety ? 'text-red-500' : 'text-red-500/75'} />
+              <span>{vi ? 'Cảnh báo' : 'Safety'}</span>
+            </button>
 
+            {/* Events */}
+            <button
+              type="button"
+              onClick={() => setShowEvents(prev => !prev)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                showEvents 
+                  ? 'bg-purple-500/15 text-purple-500 border-purple-500/30 shadow-sm' 
+                  : 'bg-transparent text-purple-500/75 border-[var(--border-subtle)] hover:bg-[var(--bg-overlay)]'
+              }`}
+            >
+              <Calendar size={13} className={showEvents ? 'text-purple-500' : 'text-purple-500/75'} />
+              <span>{vi ? 'Lễ hội' : 'Events'}</span>
+            </button>
+          </div>
 
-          <div className="flex items-center gap-1">
+          {/* Row 2: Route Planner Actions */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <button
+              onClick={requestMyLocation}
+              className="h-[34px] px-3.5 bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-bold uppercase rounded-xl transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
+            >
+              🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
+            </button>
+
             <select
               value={selectedRadius}
               onChange={e => setSelectedRadius(Number(e.target.value))}
-              className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500"
+              className="bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3 py-1 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer h-[34px] font-medium"
             >
               <option value="0">-- {vi ? 'Bán kính' : 'Radius'} --</option>
               <option value="5">5 km</option>
@@ -1023,38 +1118,47 @@ const MapDashboard = () => {
               <option value="15">15 km</option>
               <option value="20">20 km</option>
             </select>
+
             <button
               onClick={handleFindNearby}
-              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
+              className="h-[34px] px-3.5 bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-bold uppercase rounded-xl transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
             >
               🔍 {vi ? 'Tìm quanh đây' : 'Find Nearby'}
             </button>
-          </div>
 
-          <button
-            onClick={handleOptimizeTSP}
-            disabled={routeQueue.length < 3}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:text-slate-500 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1"
-          >
-            ⚡ {vi ? 'Tối ưu tuyến đường (TSP)' : 'Optimize Route (TSP)'}
-          </button>
-
-          <button
-            onClick={handleCacheTiles}
-            disabled={cachingProgress !== null}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white text-[10px] font-bold uppercase rounded-lg transition-all border-none cursor-pointer flex items-center gap-1 ml-auto"
-          >
-            💾 {vi ? 'Tải bản đồ ngoại tuyến' : 'Cache Offline Map'}
-          </button>
-
-          {routeQueue.length > 0 && (
             <button
-              onClick={() => setRouteQueue([])}
-              className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 text-[10px] font-bold uppercase rounded-lg transition-all border border-red-200 dark:border-red-800/30 cursor-pointer"
+              onClick={handleOptimizeTSP}
+              disabled={routeQueue.length < 3}
+              className={`h-[34px] px-3.5 text-[10.5px] font-bold uppercase rounded-xl transition-all flex items-center justify-center gap-1.5 border-none cursor-pointer active:scale-95 ${
+                routeQueue.length < 3
+                  ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 border border-[var(--border-subtle)] cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md hover:shadow-blue-600/20'
+              }`}
             >
-              {vi ? 'Xoá lộ trình' : 'Clear Route'}
+              ⚡ {vi ? 'Tối ưu tuyến đường (TSP)' : 'Optimize Route (TSP)'}
             </button>
-          )}
+
+            <button
+              onClick={handleCacheTiles}
+              disabled={cachingProgress !== null}
+              className={`h-[34px] px-3.5 text-[10.5px] font-bold uppercase rounded-xl transition-all flex items-center justify-center gap-1.5 border-none cursor-pointer active:scale-95 ${
+                cachingProgress !== null
+                  ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 border border-[var(--border-subtle)] cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md hover:shadow-blue-600/20'
+              }`}
+            >
+              💾 {vi ? 'Tải bản đồ ngoại tuyến' : 'Cache Offline Map'}
+            </button>
+
+            {routeQueue.length > 0 && (
+              <button
+                onClick={() => setRouteQueue([])}
+                className="h-[34px] px-3 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 text-[10.5px] font-bold uppercase rounded-xl transition-all border border-red-200 dark:border-red-800/30 cursor-pointer flex items-center justify-center"
+              >
+                {vi ? 'Xoá lộ trình' : 'Clear Route'}
+              </button>
+            )}
+          </div>
         </div>
 
         {cachingProgress !== null && (
@@ -1075,6 +1179,9 @@ const MapDashboard = () => {
             aiRecommendedIds={aiRecs.map(r => r.id)}
             onSelectLocation={setSelectedLocation}
             onCenterChange={setSelectedCenter}
+            showWeather={showWeather}
+            showSafety={showSafety}
+            showEvents={showEvents}
           />
         </div>
       </div>
@@ -1082,86 +1189,186 @@ const MapDashboard = () => {
       {/* COLUMN 3: Live Friends & Check-Ins (Right Column, span 3) */}
       <div className="lg:col-span-3 flex flex-col gap-5 h-[620px]">
         {/* check-in form */}
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-3 rounded-xl shadow-sm">
-          <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
-            📸 {vi ? 'Check-in Địa điểm' : 'Check-In Location'}
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-3.5 space-y-2.5 rounded-xl shadow-sm">
+          <h3 className="font-ui text-xs font-bold uppercase tracking-wider text-blue-600 flex items-center gap-1.5">
+            <MapPin size={14} className="text-blue-600" /> {vi ? 'CHECK-IN ĐỊA ĐIỂM' : 'CHECK-IN LOCATION'}
           </h3>
-          <form onSubmit={handleCheckin} className="space-y-2">
-            <input
-              type="text"
-              value={customDestName}
-              onChange={e => setCustomDestName(e.target.value)}
-              placeholder={vi ? 'Nhập tên địa điểm...' : 'Enter location name...'}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              required
-            />
-            <p className="text-[9px] text-[var(--text-muted)] italic mt-1 pl-1">
-              📌 {vi
-                ? `Vị trí ghim: ${userLocation ? 'GPS hiện tại của bạn' : 'Tâm bản đồ hiện tại'}`
-                : `Pinned at: ${userLocation ? 'Your current GPS' : 'Current map center'}`}
-            </p>
+          <form onSubmit={handleCheckin} className="space-y-2.5">
+            <div>
+              <input
+                type="text"
+                value={customDestName}
+                onChange={e => setCustomDestName(e.target.value)}
+                placeholder={vi ? 'Nhập tên địa điểm...' : 'Enter location name...'}
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-[var(--text-muted)]"
+                required
+              />
+              <p className="text-[9px] text-[var(--text-muted)] mt-1 pl-1 flex items-center gap-1 font-medium">
+                <span className="text-rose-500">📍</span> {vi
+                  ? `Vị trí ghim: ${userLocation ? 'GPS hiện tại của bạn' : 'Tâm bản đồ hiện tại'}`
+                  : `Pinned at: ${userLocation ? 'Your current GPS' : 'Current map center'}`}
+              </p>
+            </div>
 
             <textarea
               value={newNote}
               onChange={e => setNewNote(e.target.value)}
               placeholder={vi ? 'Bạn đang nghĩ gì về nơi này?...' : 'What do you think about this place?...'}
               rows={2}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-[var(--text-muted)]"
             />
 
-            <div className="flex gap-2">
-              <select
-                value={checkinTag}
-                onChange={e => setCheckinTag(e.target.value)}
-                className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-2 py-1.5 text-[10px] text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1"
-              >
-                <option value="">-- {vi ? 'Chọn Tag check-in' : 'Select Tag'} --</option>
-                <option value="food">{vi ? 'Ẩm thực' : 'Food'}</option>
-                <option value="hotel">{vi ? 'Nghỉ dưỡng' : 'Hotel'}</option>
-                <option value="cafe">{vi ? 'Cà phê' : 'Cafe'}</option>
-                <option value="nature">{vi ? 'Thiên nhiên' : 'Nature'}</option>
-              </select>
+            {/* Hashtag Buttons */}
+            <div className="flex flex-wrap gap-1 pt-0.5 items-center">
+              {availableTags.map(tag => {
+                const active = checkinTags.includes(tag);
+                return (
+                  <div key={tag} className="relative inline-block mr-1 my-0.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCheckinTags(prev => 
+                          prev.includes(tag)
+                            ? prev.filter(t => t !== tag)
+                            : [...prev, tag]
+                        );
+                      }}
+                      className={`px-2.5 py-0.5 rounded-full text-[9.5px] font-semibold transition-all cursor-pointer border ${
+                        active
+                          ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)]/40 shadow-sm'
+                          : 'bg-[var(--gold-glow)]/20 text-[var(--gold)]/80 border-[var(--gold)]/5 hover:bg-[var(--gold-glow)]/40'
+                      }`}
+                    >
+                      #{tag}
+                    </button>
+                    {/* Delete Tag Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Remove from active selection
+                        setCheckinTags(prev => prev.filter(t => t !== tag));
+                        // Remove from available tags list
+                        setAvailableTags(prev => prev.filter(t => t !== tag));
+                      }}
+                      className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center text-[7px] font-extrabold cursor-pointer border-none shadow-sm transition-colors z-10"
+                      title={vi ? 'Xóa tag' : 'Delete tag'}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                );
+              })}
 
-              <label className="flex items-center justify-center px-2 py-1.5 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] text-[var(--text-secondary)] rounded text-[9px] font-bold cursor-pointer transition-all truncate max-w-[120px]">
-                📁 {checkinImage ? (vi ? 'Đã chọn ảnh' : 'Photo Selected') : (vi ? 'Thêm ảnh' : 'Add Photo')}
+              {showAddTagInput ? (
+                <input
+                  type="text"
+                  value={newTagName}
+                  onChange={e => setNewTagName(e.target.value)}
+                  placeholder={vi ? 'Nhập tag...' : 'Tag...'}
+                  autoFocus
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const cleanTag = newTagName.trim().toLowerCase().replace(/^#/, '');
+                      if (cleanTag) {
+                        if (!availableTags.includes(cleanTag)) {
+                          setAvailableTags(prev => [...prev, cleanTag]);
+                        }
+                        if (!checkinTags.includes(cleanTag)) {
+                          setCheckinTags(prev => [...prev, cleanTag]);
+                        }
+                      }
+                      setNewTagName('');
+                      setShowAddTagInput(false);
+                    } else if (e.key === 'Escape') {
+                      setNewTagName('');
+                      setShowAddTagInput(false);
+                    }
+                  }}
+                  onBlur={() => {
+                    const cleanTag = newTagName.trim().toLowerCase().replace(/^#/, '');
+                    if (cleanTag) {
+                      if (!availableTags.includes(cleanTag)) {
+                        setAvailableTags(prev => [...prev, cleanTag]);
+                      }
+                      if (!checkinTags.includes(cleanTag)) {
+                        setCheckinTags(prev => [...prev, cleanTag]);
+                      }
+                    }
+                    setNewTagName('');
+                    setShowAddTagInput(false);
+                  }}
+                  className="bg-[var(--bg-primary)] border border-blue-500 rounded-full px-2 py-0.5 text-[9.5px] text-[var(--text-primary)] focus:outline-none w-[75px] transition-all"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowAddTagInput(true)}
+                  className="px-2.5 py-0.5 rounded-full text-[9.5px] font-semibold bg-transparent text-[var(--text-muted)] border border-dashed border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:border-blue-500/50 hover:bg-[var(--bg-overlay)] transition-all cursor-pointer"
+                >
+                  + {vi ? 'Thêm tag' : 'Tag'}
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center justify-center gap-1.5 w-full px-3 py-1.5 bg-transparent hover:bg-[var(--bg-overlay)] border border-dashed border-[var(--border-normal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-blue-500/50 rounded-full text-xs font-semibold cursor-pointer transition-all">
+                <Image size={13} className="text-[var(--text-muted)]" />
+                <span>
+                  {checkinImages.length > 0 
+                    ? (vi ? `Đã chọn ${checkinImages.length}/3 ảnh` : `${checkinImages.length}/3 Photos Selected`)
+                    : (vi ? 'Thêm ảnh (Tối đa 3)' : 'Add Photos (Max 3)')}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
+                  disabled={checkinImages.length >= 3}
                   onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setCheckinImage(reader.result as string);
-                    };
-                    reader.readAsDataURL(file);
+                    const files = Array.from(e.target.files || []);
+                    const remaining = 3 - checkinImages.length;
+                    const toProcess = files.slice(0, remaining);
+                    for (const file of toProcess) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setCheckinImages(prev => {
+                          if (prev.length >= 3) return prev;
+                          return [...prev, reader.result as string];
+                        });
+                      };
+                      reader.readAsDataURL(file);
+                    }
                   }}
                   className="hidden"
                 />
               </label>
+
+              {checkinImages.length > 0 && (
+                <div className="flex gap-1.5 flex-wrap">
+                  {checkinImages.map((img, idx) => (
+                    <div key={idx} className="relative w-12 h-12 rounded-lg overflow-hidden border border-[var(--border-normal)] shadow-sm font-sans">
+                      <img src={img} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setCheckinImages(prev => prev.filter((_, i) => i !== idx))}
+                        className="absolute top-0.5 right-0.5 bg-red-600/80 hover:bg-red-600 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center text-[8px] font-bold cursor-pointer border-none transition-colors"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {checkinImage && (
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-[var(--border-normal)]">
-                <img src={checkinImage} className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => setCheckinImage('')}
-                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] font-bold cursor-pointer border-none"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-
-            <div className="flex gap-2 items-center justify-end">
-              <button
-                type="submit"
-                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold uppercase rounded-lg cursor-pointer border-none transition-all shadow-sm"
-              >
-                {vi ? 'Đăng Check-In' : 'Post Check-In'}
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-1.5 py-2 bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white text-xs font-bold uppercase rounded-lg transition-all shadow-md hover:shadow-blue-600/20 active:scale-[0.98] cursor-pointer border-none"
+            >
+              <Navigation size={12} className="fill-white" />
+              <span>{vi ? 'Đăng Check-In' : 'Post Check-In'}</span>
+            </button>
           </form>
         </div>
 
@@ -1182,13 +1389,17 @@ const MapDashboard = () => {
                 const lng = chk.destination?.longitude || 105.8048;
                 let parsedNote = chk.note || '';
                 let imageUrl = '';
+                let imageUrls: string[] = [];
                 let tag = '';
+                let tags: string[] = [];
                 if (chk.note && chk.note.startsWith('{') && chk.note.endsWith('}')) {
                   try {
                     const parsed = JSON.parse(chk.note);
                     parsedNote = parsed.text || '';
                     imageUrl = parsed.imageUrl || '';
+                    imageUrls = parsed.imageUrls || (parsed.imageUrl ? [parsed.imageUrl] : []);
                     tag = parsed.tag || '';
+                    tags = parsed.tags || (parsed.tag ? [parsed.tag] : []);
                   } catch (e) { }
                 }
                 return (
@@ -1203,7 +1414,9 @@ const MapDashboard = () => {
                         lng,
                         note: parsedNote,
                         imageUrl: imageUrl,
+                        imageUrls: imageUrls,
                         tag: tag,
+                        tags: tags,
                         user: chk.user?.profile?.fullName || chk.user?.email || 'Người dùng',
                         avatar: chk.user?.profile?.avatarUrl || ''
                       });
@@ -1211,11 +1424,17 @@ const MapDashboard = () => {
                     className="p-2 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] rounded-xl transition-all cursor-pointer space-y-1.5 group"
                   >
                     <div className="flex items-center gap-1.5">
-                      <img
-                        src={chk.user?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
-                        alt={chk.user?.profile?.fullName || 'User'}
-                        className="w-6 h-6 rounded-full object-cover border border-[var(--border-normal)]"
-                      />
+                      <Link
+                        to={chk.user?.id ? `/profile/${chk.user.id}` : '#'}
+                        onClick={(e) => e.stopPropagation()}
+                        className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0"
+                      >
+                        <img
+                          src={chk.user?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+                          alt={chk.user?.profile?.fullName || 'User'}
+                          className="w-6 h-6 rounded-full object-cover border border-[var(--border-normal)]"
+                        />
+                      </Link>
                       <div className="min-w-0 flex-1">
                         <h4 className="text-[10px] font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors truncate">
                           {chk.user?.profile?.fullName || chk.user?.email || 'User'}
@@ -1247,6 +1466,16 @@ const MapDashboard = () => {
           </div>
         </div>
       </div>
+      <PostDetailModal
+        post={detailPost}
+        onClose={closePost}
+        labels={{
+          close: vi ? 'Đóng' : 'Close',
+          readTime: '',
+          likes: vi ? 'lượt thích' : 'likes',
+          comments: vi ? 'bình luận' : 'comments',
+        }}
+      />
     </div>
   );
 };

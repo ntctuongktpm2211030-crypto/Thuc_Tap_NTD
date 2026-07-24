@@ -33,6 +33,8 @@ export interface FeedPostBase {
   isLiked?: boolean;
   isBookmarked?: boolean;
   images?: string[];
+  latitude?: number;
+  longitude?: number;
 }
 
 /** Giới hạn ký tự preview trên thẻ feed */
@@ -393,14 +395,21 @@ export function computeHotDestinationsThisMonth(
   referenceDate = new Date(),
   limit = 5,
 ): HotDestination[] {
-  const counts = new Map<string, { key: string; raw: string; count: number }>();
+  const counts = new Map<string, { key: string; raw: string; count: number; image?: string }>();
 
   for (const post of posts) {
-    if (!isSameMonth(post.postedAt, referenceDate)) continue;
     const key = post.destinationKey;
     const existing = counts.get(key);
-    if (existing) existing.count += 1;
-    else counts.set(key, { key, raw: post.destination, count: 1 });
+    const postImage = post.images && post.images.length > 0 ? post.images[0] : undefined;
+
+    if (existing) {
+      existing.count += 1;
+      if (!existing.image && postImage) {
+        existing.image = postImage;
+      }
+    } else {
+      counts.set(key, { key, raw: post.destination, count: 1, image: postImage });
+    }
   }
 
   const sorted = [...counts.values()].sort((a, b) => b.count - a.count).slice(0, limit);
@@ -411,7 +420,7 @@ export function computeHotDestinationsThisMonth(
     return {
       name,
       country,
-      image: DEST_IMAGES[item.key] ?? DEST_IMAGES['hà giang'],
+      image: item.image ?? DEST_IMAGES[item.key] ?? DEST_IMAGES['hà giang'],
       postCount: item.count,
       hot: item.count >= Math.max(2, Math.ceil(maxCount * 0.6)),
       color: DEST_GRADIENTS[i % DEST_GRADIENTS.length],

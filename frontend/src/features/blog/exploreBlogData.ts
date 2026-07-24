@@ -2,6 +2,7 @@
 
 export interface ExplorePost {
   id: string;
+  authorId?: string;
   author: string;
   handle: string;
   avatar: string;
@@ -10,6 +11,7 @@ export interface ExplorePost {
   excerpt: string;
   content: string;
   coverImage: string;
+  images?: string[];
   tags: string[];
   category: string;
   location: string;
@@ -23,7 +25,7 @@ export interface ExplorePost {
   date: string;
   readTime: number;
   likes: number;
-  comments: { id: string; author: string; avatar: string; text: string; date: string }[];
+  comments: { id: string; authorId?: string; author: string; avatar: string; text: string; date: string }[];
   bookmarked: boolean;
   liked: boolean;
 }

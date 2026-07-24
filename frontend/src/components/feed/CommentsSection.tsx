@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { postsService, Comment } from '../../services/smartTravel.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -35,6 +36,11 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   };
 
   const loadComments = async () => {
+    if (postId.startsWith('checkin-')) {
+      setComments([]);
+      if (onCommentCountChange) onCommentCountChange(0);
+      return;
+    }
     setLoading(true);
     setError('');
     try {
@@ -64,6 +70,25 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
     if (!isAuthenticated) return;
     if (!newCommentText.trim()) return;
 
+    if (postId.startsWith('checkin-')) {
+      const mockComment = {
+        id: `mock-comment-${Date.now()}`,
+        content: newCommentText,
+        createdAt: new Date().toISOString(),
+        author: {
+          profile: {
+            fullName: user?.fullName || 'Bạn',
+            avatarUrl: user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          }
+        },
+        replies: [],
+      };
+      setComments(prev => [mockComment as any, ...prev]);
+      setNewCommentText('');
+      if (onCommentCountChange) onCommentCountChange(comments.length + 1);
+      return;
+    }
+
     try {
       const newComment = await postsService.addComment(postId, newCommentText);
       // Backend returns the comment, we insert it at the top of comments
@@ -87,6 +112,39 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   const handleAddReply = async (parentId: string) => {
     if (!isAuthenticated) return;
     if (!replyText.trim()) return;
+
+    if (postId.startsWith('checkin-')) {
+      const mockReply = {
+        id: `mock-reply-${Date.now()}`,
+        content: replyText,
+        createdAt: new Date().toISOString(),
+        author: {
+          profile: {
+            fullName: user?.fullName || 'Bạn',
+            avatarUrl: user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          }
+        },
+      };
+      setComments(prev => prev.map(c => {
+        if (c.id === parentId) {
+          return {
+            ...c,
+            replies: [...(c.replies || []), mockReply as any]
+          };
+        }
+        return c;
+      }));
+      setReplyText('');
+      setActiveReplyId(null);
+
+      // Recalculate total count
+      let totalCount = comments.length + 1;
+      comments.forEach(c => {
+        if (c.replies) totalCount += c.replies.length;
+      });
+      if (onCommentCountChange) onCommentCountChange(totalCount);
+      return;
+    }
 
     try {
       const newReply = await postsService.addComment(postId, replyText, parentId);
@@ -159,19 +217,38 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
 
       {/* Write Comment Form */}
       {isAuthenticated ? (
-        <form onSubmit={handleAddComment} className="flex gap-2 items-start mt-2">
+        <form onSubmit={handleAddComment} className="flex gap-2.5 items-start mt-2 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-2xl p-3 shadow-sm focus-within:border-[var(--gold)]/50 transition-colors">
           <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
-          <div className="flex-1 flex items-center bg-[var(--bg-elevated)] border border-[var(--border-subtle)] focus-within:border-[var(--gold)] rounded-2xl px-3 transition-colors">
-            <input
-              type="text"
+          <div className="flex-1 flex flex-col gap-2">
+            <textarea
               value={newCommentText}
               onChange={e => setNewCommentText(e.target.value)}
-              placeholder="Viết bình luận công khai..."
-              className="flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)]"
+              placeholder="Chia sẻ suy nghĩ của bạn về bài viết này..."
+              rows={2}
+              className="w-full bg-transparent border-none text-sm text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] resize-none"
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  void handleAddComment(e as any);
+                }
+              }}
             />
-            <button type="submit" disabled={!newCommentText.trim()} className={`p-1.5 transition-colors ${newCommentText.trim() ? 'text-[var(--gold)]' : 'text-[var(--text-muted)]'}`}>
-              <Send size={14} />
-            </button>
+            <div className="flex justify-between items-center border-t border-[var(--border-subtle)] pt-2 mt-1">
+              <span className="text-[9px] text-[var(--text-muted)] italic">
+                Nhấn Enter để gửi · Shift+Enter để xuống dòng
+              </span>
+              <button 
+                type="submit" 
+                disabled={!newCommentText.trim()} 
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1 cursor-pointer ${
+                  newCommentText.trim() 
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm' 
+                    : 'bg-slate-200 dark:bg-slate-800 text-[var(--text-muted)] cursor-not-allowed'
+                }`}
+              >
+                <Send size={10} /> Gửi
+              </button>
+            </div>
           </div>
         </form>
       ) : (
@@ -209,7 +286,9 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
               <div key={c.id} className="space-y-2 group/comment relative">
                 {/* Main Parent Comment */}
                 <div className="flex gap-2 items-start relative z-10">
-                  <img src={c.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
+                  <Link to={`/profile/${c.author.id}`} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                    <img src={c.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)]" />
+                  </Link>
                   <div className="flex-1">
                     <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                       <p className="font-bold text-[var(--text-primary)] text-xs mb-0.5">{c.author.profile?.fullName || 'Người dùng'}</p>
@@ -303,7 +382,9 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                         {/* Horizontal branch line from vertical thread to child avatar */}
                         <div className="absolute left-[-25px] top-[14px] w-[20px] h-[1.5px] bg-[var(--border-subtle)]" />
                         
-                        <img src={reply.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
+                        <Link to={`/profile/${reply.author.id}`} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                          <img src={reply.author.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-7 h-7 rounded-full object-cover border border-[var(--border-subtle)]" />
+                        </Link>
                         <div className="flex-1">
                           <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-1.5 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                             <p className="font-bold text-[var(--text-primary)] text-[11px] mb-0.5">{reply.author.profile?.fullName || 'Người dùng'}</p>

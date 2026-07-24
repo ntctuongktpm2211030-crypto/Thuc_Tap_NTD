@@ -24,10 +24,6 @@ function extractBodyText(content: string): string {
 // ─────────────────────────────────────────────────────────
 router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { page = '1', limit = '10', q } = req.query as Record<string, string>;
-
-
-
     // Permanently delete posts trashed more than 15 days ago
     const fifteenDaysAgo = new Date();
     fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
@@ -43,7 +39,12 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
       console.error('Failed to clean up expired trashed posts:', err);
     }
 
+    const { page = '1', limit = '10', q, authorId } = req.query as Record<string, string>;
+
     const where: any = { deletedAt: null };
+    if (authorId) {
+      where.authorId = authorId;
+    }
     if (q) {
       where.content = { contains: q, mode: 'insensitive' };
     }

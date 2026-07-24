@@ -1,0 +1,5 @@
+=== DATABASE COMMENTS ===
+[ID: 50a86aca-69eb-4f0e-adc4-d74d071875bd] Post: 4004b440-7100-4aaf-80ef-1d8360d9bef3 | Author: Tường Nguyễn | Content: quá tueyetj
+[ID: 23843ab8-8516-4161-a4b4-6152ece50cba] Post: 4004b440-7100-4aaf-80ef-1d8360d9bef3 | Author: Tường Nguyễn | Content: vị hen
+[ID: 11aee6c1-3c80-43e3-b403-efc6bb978448] Post: 4004b440-7100-4aaf-80ef-1d8360d9bef3 | Author: Hân Ngọc | Content: Cho mình xin mấy địa điểm checkin đẹp với ạ
+[ID: 72a13cd5-6cee-492b-ac58-0eef78139934] Post: 4004b440-7100-4aaf-80ef-1d8360d9bef3 | Author: Hân Ngọc | Content: Cho mình xin mấy địa điểm checkin đẹp với ạ

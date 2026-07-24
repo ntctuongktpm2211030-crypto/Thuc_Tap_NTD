@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { RippleButton } from '@/components/ui/ripple-button';
 import { useSelector } from 'react-redux';
 import { X, ImagePlus, MapPin, Send, Navigation, Trash2, Loader2 } from 'lucide-react';
 import type { RootState } from '../../store';
@@ -357,15 +358,16 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
           <button type="button" className="btn-outline flex-1 py-3" onClick={handleClose}>
             {labels.cancel}
           </button>
-          <button
+          <RippleButton
             type="button"
-            className="btn-gold flex-1 py-3 flex items-center justify-center gap-2"
+            className="btn-gold flex-1 py-3 flex items-center justify-center gap-2 text-white"
             onClick={handlePublish}
             disabled={publishing}
+            rippleColor="rgba(255,255,255,0.4)"
           >
             <Send size={16} />
-            {publishing ? labels.publishing : labels.publish}
-          </button>
+            <span>{publishing ? labels.publishing : labels.publish}</span>
+          </RippleButton>
         </footer>
       </div>
     </div>

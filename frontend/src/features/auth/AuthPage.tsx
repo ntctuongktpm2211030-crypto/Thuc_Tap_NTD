@@ -13,6 +13,7 @@ import LoadingOverlay from '../../components/common/LoadingOverlay';
 import { loginGoogle } from '../../config/firebase';
 import { authService } from '../../services/smartTravel.service';
 import logoImg from '../../assets/logo.png';
+import { RippleButton } from '@/components/ui/ripple-button';
 
 // ──────────────────────────────────────────────────────────────
 // BACKGROUND SLIDES — travel imagery carousel
@@ -587,7 +588,7 @@ export default function AuthPage() {
                 </button>
               </div>
 
-              <button
+              <RippleButton
                 type="submit"
                 disabled={isLoading}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white font-bold text-sm hover:shadow-xl hover:shadow-blue-600/25 transition-all hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
@@ -597,7 +598,7 @@ export default function AuthPage() {
                 ) : (
                   <>{t('auth.signIn')} <ArrowRight size={16} /></>
                 )}
-              </button>
+              </RippleButton>
             </form>
           )}
 

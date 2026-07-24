@@ -1,4 +1,5 @@
 import { Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
+import { RippleButton } from '@/components/ui/ripple-button';
 import FeedCommentsPreview from './FeedCommentsPreview';
 
 interface PostEngagementBlockProps {
@@ -30,16 +31,17 @@ export default function PostEngagementBlock({
       <div className="flex items-center justify-between p-3 px-4 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] rounded-b-2xl">
         {/* Left: Like button & count */}
         <div className="flex items-center gap-2 group/like">
-          <button
+          <RippleButton
             type="button"
             onClick={onLike}
-            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all p-0 border-0 ${
               liked ? 'bg-rose-500 hover:bg-rose-600 scale-105' : 'bg-rose-500/10 hover:bg-rose-500/20 hover:scale-105'
             }`}
             title={liked ? 'Bỏ thích' : 'Thích'}
+            rippleColor="rgba(244,63,94,0.6)"
           >
             <Heart size={10} className={liked ? 'text-white fill-white' : 'text-rose-500'} />
-          </button>
+          </RippleButton>
           <button
             type="button"
             onClick={e => {

@@ -61,6 +61,7 @@ export default function ExploreArticlePage() {
           // This is a database post! Map apiPost to ExplorePost shape
           const mappedPost: any = {
             id: id,
+            authorId: apiPost.author?.id,
             author: apiPost.author?.profile?.fullName || apiPost.author?.email || 'Người dùng',
             avatar: apiPost.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             handle: '@' + (apiPost.author?.email?.split('@')[0] || 'user'),
@@ -84,6 +85,7 @@ export default function ExploreArticlePage() {
             tags: [],
             comments: (apiPost.comments ?? []).map((c: any) => ({
               id: c.id,
+              authorId: c.authorId || c.author?.id,
               author: c.author?.profile?.fullName || c.author?.email || 'Người dùng',
               avatar: c.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
               text: c.content,
@@ -152,6 +154,7 @@ export default function ExploreArticlePage() {
         const newApiComment = await postsService.addComment(apiId, commentText.trim());
         const mappedComment = {
           id: newApiComment.id,
+          authorId: newApiComment.author?.id,
           author: newApiComment.author?.profile?.fullName || 'Bạn',
           avatar: newApiComment.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
           text: newApiComment.content,
@@ -223,13 +226,15 @@ export default function ExploreArticlePage() {
           {/* Header section (Author profile, check-in, metadata) */}
           <div className="flex items-center justify-between gap-2 border-b border-[var(--border-subtle)] pb-4">
             <div className="flex items-center gap-3">
-              <img src={post.avatar} alt="" className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/20" />
+              <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                <img src={post.avatar} alt="" className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/20" />
+              </Link>
               <div>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-bold text-[var(--text-primary)] text-sm sm:text-base flex items-center gap-1">
+                  <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} className="font-bold text-[var(--text-primary)] text-sm sm:text-base flex items-center gap-1 hover:text-[var(--gold)] transition-colors">
                     {post.author}
                     {post.verified && <Check size={13} className="text-sky-500" />}
-                  </span>
+                  </Link>
                   <span className="text-xs text-[var(--text-muted)]">{post.handle}</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[var(--text-muted)] mt-0.5">
@@ -375,13 +380,17 @@ export default function ExploreArticlePage() {
                     const commentReaction = likedComments[c.id] || null;
                     return (
                       <div key={c.id} className="flex gap-2.5 items-start group/comment relative">
-                        <img src={c.avatar} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)] flex-shrink-0" />
+                        <Link to={c.authorId ? `/profile/${c.authorId}` : '#'} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                          <img src={c.avatar} alt="" className="w-8 h-8 rounded-full object-cover border border-[var(--border-subtle)]" />
+                        </Link>
                         
                         <div className="flex-1">
                           
                           {/* Bubble */}
                           <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
-                            <span className="font-bold text-[var(--text-primary)] text-xs block mb-0.5">{c.author}</span>
+                            <Link to={c.authorId ? `/profile/${c.authorId}` : '#'} className="font-bold text-[var(--text-primary)] text-xs block mb-0.5 hover:text-[var(--gold)] transition-colors">
+                              {c.author}
+                            </Link>
                             <p className="whitespace-pre-wrap break-all leading-normal text-xs">{c.text}</p>
                             
                             {commentReaction && (

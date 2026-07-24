@@ -7,10 +7,10 @@ import type { RootState } from '../../store';
 import {
   Heart, MessageCircle, Bookmark,
   MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
-  Flame, Globe,
+  Flame, Globe, Search,
 } from 'lucide-react';
-import { NAV_ICONS, FILTER_ICONS, ModernIconPod } from '../../config/modernIcons';
-import { FEED_POSTS, COMPANION_CANDIDATES, MOCK_STORIES } from '../../data/feedData';
+import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
+
 import type { FeedStoryItem, StoredStory } from '../../types/story';
 import { mergeStories, storedToFeedItem } from '../../utils/storyStorage';
 import StoryCreatorModal from '../../components/stories/StoryCreatorModal';
@@ -22,6 +22,8 @@ import {
   partitionFeed,
   getPostPreviewText,
   isPostTruncatedOnFeed,
+  parsePostPayload,
+  formatFollowers,
   type FeedPost,
   type FeedPostBase,
   type HeroFeedPost,
@@ -147,10 +149,13 @@ const HeroCard = ({
       <div className="card-hero-overlay" />
 
       {/* Category pill top-left */}
-      <div className="absolute top-4 left-4 flex gap-2">
-        <span className="badge-category text-[11px] shadow-lg">{post.category}</span>
-        <span className="flex items-center gap-1.5 bg-white border border-slate-200/80 text-slate-700 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
-          <MapPin size={11} className="text-blue-500" /> {post.destination.replace(/^📍\s*/, '')}
+      <div className="absolute top-4 left-4 flex flex-wrap gap-1.5 max-w-[85%]">
+        <span className="badge-category text-[11px] shadow-lg flex-shrink-0">{post.category}</span>
+        <span className="flex items-center gap-1 bg-white border border-slate-200/80 text-slate-700 text-[10px] sm:text-[11px] font-bold px-2.5 py-1.5 rounded-full shadow-sm max-w-full">
+          <MapPin size={11} className="text-blue-500 flex-shrink-0" />
+          <span className="truncate" style={{ maxWidth: '140px' }} title={post.destination.replace(/^📍\s*/, '')}>
+            {post.destination.replace(/^📍\s*/, '')}
+          </span>
         </span>
       </div>
 
@@ -164,11 +169,11 @@ const HeroCard = ({
       </div>
 
       <div className="card-hero-content">
-        <h2 className="font-editorial text-white font-bold leading-tight mb-3 text-balance"
-          style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)' }}>
+        <h2 className="font-editorial text-white font-bold leading-tight mb-2 text-balance line-clamp-2"
+          style={{ fontSize: 'clamp(1.05rem, 4vw, 1.4rem)', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
           {post.headline}
         </h2>
-        <p className="text-sm text-gray-300/90 mb-4 line-clamp-2 max-w-2xl">{preview}</p>
+        <p className="text-xs sm:text-sm text-gray-300/90 mb-3 line-clamp-2 max-w-2xl" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{preview}</p>
 
         <div className="flex items-center justify-between flex-wrap gap-3" onClick={stopCardClick}>
           <div className="flex items-center gap-2.5">
@@ -346,19 +351,22 @@ const MagazineCard = ({
       </div>
 
       <div className="p-4 space-y-3">
-        <p className="text-[11px] text-[var(--text-muted)] flex items-center gap-1">
-          <MapPin size={10} className="text-[var(--gold)]" /> {post.destination}
+        <p className="text-[11px] text-[var(--text-muted)] flex items-center gap-1 min-w-0 max-w-full">
+          <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" />
+          <span className="truncate" title={post.destination}>{post.destination}</span>
         </p>
         <h3 className="font-editorial text-[var(--text-primary)] font-bold leading-snug group-hover:text-[var(--gold)] transition-colors text-balance truncate-2"
-          style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)' }}>
+          style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
           {post.headline}
         </h3>
-        <p className="text-xs text-[var(--text-secondary)] leading-relaxed line-clamp-2">{preview}</p>
+        <p className="text-xs text-[var(--text-secondary)] leading-relaxed line-clamp-2" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{preview}</p>
 
         {/* Author row */}
         <div className="flex items-center gap-2 pt-1">
-          <img src={post.author.avatar} alt={post.author.name}
-            className="w-8 h-8 rounded-full object-cover border-2 border-transparent bg-gradient-to-br from-[var(--gold)] to-violet-500 p-0.5 flex-shrink-0" />
+          <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} className="block hover:scale-105 transition-transform cursor-pointer">
+            <img src={post.author.avatar} alt={post.author.name}
+              className="w-8 h-8 rounded-full object-cover border-2 border-transparent bg-gradient-to-br from-[var(--gold)] to-violet-500 p-0.5 flex-shrink-0" />
+          </Link>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1 flex-wrap">
               <span className="text-xs font-bold text-[var(--text-primary)] truncate">{post.author.name}</span>
@@ -484,7 +492,7 @@ const SocialPostCard = ({
       {/* Header */}
       <div className="flex items-center justify-between p-4 pb-3" onClick={stopCardClick}>
         <div className="flex items-center gap-3">
-          <div className="relative">
+          <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} className="relative block hover:scale-105 transition-transform cursor-pointer">
             <img src={post.author.avatar} alt={post.author.name}
               className="w-11 h-11 rounded-full object-cover ring-2 ring-[var(--border-normal)] ring-offset-2 ring-offset-[var(--bg-surface)]" />
             {post.author.verified && (
@@ -492,7 +500,7 @@ const SocialPostCard = ({
                 <span className="text-[8px] font-bold text-white">✓</span>
               </div>
             )}
-          </div>
+          </Link>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-[var(--text-primary)]">{post.author.name}</span>
@@ -532,7 +540,7 @@ const SocialPostCard = ({
       >
       {/* Content */}
       <div className="px-4 pb-3">
-        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-4">{preview}</p>
+        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-4" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{preview}</p>
       </div>
 
       {/* Photo grid */}
@@ -614,8 +622,13 @@ const ComposeBox = ({ onOpenCompose }: { onOpenCompose: () => void }) => {
 // ──────────────────────────────────────────────────────────
 // LEFT SIDEBAR
 // ──────────────────────────────────────────────────────────
-const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
-  const { t } = useLang();
+const LeftSidebar = ({
+  myPostCount,
+}: {
+  myPostCount: number;
+}) => {
+  const { t, lang } = useLang();
+  const vi = lang === 'vi';
   const user = useSelector((s: RootState) => s.auth.user);
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const profileCache = loadUserProfileCache();
@@ -635,6 +648,7 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
 
   return (
     <div className="space-y-4">
+
       {/* Profile card */}
       <div className="profile-mini animate-fade-in">
         <div className="profile-mini-cover">
@@ -674,24 +688,6 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
         ))}
       </div>
 
-      {/* Travel Tips Widget */}
-      <div className="sidebar-section space-y-3 animate-fade-in">
-        <div className="flex items-center gap-2">
-          <Sparkles size={14} className="text-amber-400" />
-          <p className="sidebar-title mb-0">Mẹo Xê Dịch Hữu Ích</p>
-        </div>
-        <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
-          <li className="flex items-start gap-2 bg-[var(--bg-elevated)]/60 p-2 rounded-xl border border-[var(--border-subtle)]">
-            <span className="text-sm">🧳</span>
-            <span><strong>Hành lý gọn nhẹ:</strong> Ưu tiên trang phục đa năng & đồ cá nhân cơ bản.</span>
-          </li>
-          <li className="flex items-start gap-2 bg-[var(--bg-elevated)]/60 p-2 rounded-xl border border-[var(--border-subtle)]">
-            <span className="text-sm">🗺️</span>
-            <span><strong>Bản đồ ngoại tuyến:</strong> Tải sẵn khu vực sắp đến để phòng mất kết nối.</span>
-          </li>
-        </ul>
-      </div>
-
       {/* Community Stats card */}
       <div className="feature-strip text-center space-y-2 animate-fade-in">
         <div className="text-xs font-bold text-[var(--gold)] uppercase tracking-widest">Cộng đồng</div>
@@ -714,9 +710,13 @@ const LeftSidebar = ({ myPostCount }: { myPostCount: number }) => {
 const RightSidebar = ({
   hotDestinations,
   companions,
+  followingIds,
+  onToggleFollow,
 }: {
   hotDestinations: HotDestination[];
   companions: CompanionSuggestion[];
+  followingIds: Set<string>;
+  onToggleFollow: (userId: string) => void;
 }) => {
   const { t } = useLang();
   return (
@@ -764,18 +764,35 @@ const RightSidebar = ({
         <div className="space-y-3">
           {companions.map(traveler => (
             <div key={traveler.id} className="flex items-center gap-3 group">
-              <div className="relative">
+              <Link to={`/profile/${traveler.id}`} className="relative flex-shrink-0 cursor-pointer block hover:scale-105 transition-transform">
                 <img src={traveler.avatar} alt={traveler.name}
                   className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--border-normal)] group-hover:ring-[var(--gold)] transition-all" />
-              </div>
+              </Link>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-[var(--text-primary)] truncate">{traveler.name}</p>
-                <p className="text-[10px] text-[var(--text-muted)]">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-bold text-[var(--text-primary)] truncate block">
+                    {traveler.name}
+                  </span>
+                  {followingIds.has(traveler.id) && (
+                    <span className="text-[9px] font-bold text-blue-500 bg-blue-500/10 dark:bg-blue-400/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                      Đã theo dõi
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)] truncate">
                   {traveler.handle} · {traveler.followersLabel} {t('sidebar.followers')}
                 </p>
               </div>
-              <button type="button" className="btn-follow text-[10px] px-3 py-1.5 flex-shrink-0">
-                {t('sidebar.follow')}
+              <button
+                type="button"
+                onClick={() => onToggleFollow(traveler.id)}
+                className={`text-[10px] px-3 py-1.5 flex-shrink-0 rounded-full font-bold transition-all cursor-pointer border ${
+                  followingIds.has(traveler.id)
+                    ? 'bg-transparent text-[var(--text-muted)] border-[var(--border-normal)] hover:text-red-500 hover:border-red-500'
+                    : 'bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:shadow-md hover:shadow-blue-600/15'
+                }`}
+              >
+                {followingIds.has(traveler.id) ? 'Đang theo dõi' : 'Theo dõi'}
               </button>
             </div>
           ))}
@@ -869,7 +886,7 @@ export default function SocialFeedPage() {
   const user = useSelector((s: RootState) => s.auth.user);
   const [activeFilter, setActiveFilter] = useState('all');
   const [detailPost, setDetailPost] = useState<FeedPost | null>(null);
-  const [stories, setStories] = useState<FeedStoryItem[]>(() => mergeStories(MOCK_STORIES as FeedStoryItem[]));
+  const [stories, setStories] = useState<FeedStoryItem[]>(() => mergeStories([]));
   const [storyCreatorOpen, setStoryCreatorOpen] = useState(false);
   const [viewStory, setViewStory] = useState<FeedStoryItem | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
@@ -878,6 +895,9 @@ export default function SocialFeedPage() {
   const [feedError, setFeedError] = useState('');
   const [sidebarTick, setSidebarTick] = useState(0);
   const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+  const queryParams = new URLSearchParams(location.search);
+  const feedSearchQuery = queryParams.get('search') || '';
+  const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
 
   const openPost = (post: FeedPost) => setDetailPost(post);
   const closePost = () => setDetailPost(null);
@@ -985,6 +1005,19 @@ export default function SocialFeedPage() {
     }
     return story.user.split(' ')[0];
   };
+  // Load registered users from API to use as companions suggestions
+  useEffect(() => {
+    socialService.searchUsers('')
+      .then(users => {
+        if (Array.isArray(users)) {
+          setRegisteredUsers(users);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to load registered users for suggestions:', err);
+      });
+  }, [sidebarTick]);
+
   useEffect(() => {
     void loadFeedFromApi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1033,10 +1066,7 @@ export default function SocialFeedPage() {
   }, [user?.id]);
 
   const allPosts = useMemo(() => {
-    if (apiPosts.length > 0) {
-      return apiPosts;
-    }
-    return FEED_POSTS;
+    return apiPosts;
   }, [apiPosts]);
 
   const myPostCount = useMemo(() => {
@@ -1044,9 +1074,106 @@ export default function SocialFeedPage() {
     return apiPosts.filter(p => p.authorId === user.id).length;
   }, [apiPosts, user?.id]);
 
-  const { hero, feed } = useMemo(() => partitionFeed(allPosts), [allPosts]);
-  const hotDestinations = useMemo(() => computeHotDestinationsThisMonth(allPosts), [allPosts]);
-  const companions = useMemo(() => sortCompanionsByFollowers(COMPANION_CANDIDATES), []);
+  const handleToggleFollowUser = async (userId: string) => {
+    if (!user?.id) {
+      navigate('/auth', { state: { from: '/' } });
+      return;
+    }
+    try {
+      const res = await socialService.toggleFollow(userId);
+      handleFollowChange(userId, res.following);
+    } catch (err) {
+      console.error('Failed to toggle follow user:', err);
+    }
+  };
+
+  const filteredPosts = useMemo(() => {
+    let posts = allPosts;
+    if (activeFilter === 'following') {
+      posts = posts.filter(p => p.authorId && followingIds.has(p.authorId));
+    } else if (activeFilter !== 'all') {
+      const categoryMap: Record<string, string> = {
+        adventure: 'Phiêu Lưu',
+        food: 'Ẩm Thực',
+        luxury: 'Sang Trọng'
+      };
+      const vietnameseLabel = categoryMap[activeFilter] || activeFilter;
+      posts = posts.filter(p => {
+        const cat = p.category?.toLowerCase() || '';
+        const payload = parsePostPayload(p);
+        const hasTag = payload?.tags?.some((t: string) => t.toLowerCase() === activeFilter.toLowerCase()) || false;
+        const hasCat = payload?.categories?.some((c: string) => c.toLowerCase() === activeFilter.toLowerCase()) || false;
+        return cat.includes(vietnameseLabel.toLowerCase()) || cat.includes(activeFilter.toLowerCase()) || hasTag || hasCat;
+      });
+    }
+    
+    if (feedSearchQuery.trim()) {
+      const q = feedSearchQuery.toLowerCase();
+      posts = posts.filter(p => {
+        const authorName = p.author?.name || '';
+        const content = p.displayType === 'social' ? p.content : '';
+        const headline = 'headline' in p ? p.headline || '' : '';
+        const body = p.body || '';
+        const destination = p.destination || '';
+        return (
+          authorName.toLowerCase().includes(q) ||
+          content.toLowerCase().includes(q) ||
+          headline.toLowerCase().includes(q) ||
+          body.toLowerCase().includes(q) ||
+          destination.toLowerCase().includes(q)
+        );
+      });
+    }
+    return posts;
+  }, [allPosts, activeFilter, followingIds, feedSearchQuery]);
+
+  const { hero, feed } = useMemo(() => partitionFeed(filteredPosts), [filteredPosts]);
+  const hotDestinations = useMemo(() => computeHotDestinationsThisMonth(filteredPosts), [filteredPosts]);
+
+  const dynamicCompanions = useMemo(() => {
+    const seen = new Set<string>();
+    const list: CompanionSuggestion[] = [];
+    const currentUserId = user?.id;
+
+    // 1. Map registeredUsers from backend
+    registeredUsers.forEach(u => {
+      if (u.id !== currentUserId && !seen.has(u.id)) {
+        seen.add(u.id);
+        const name = u.profile?.fullName || u.email?.split('@')[0] || 'Người dùng';
+        const followers = u._count?.followers ?? 0;
+        const postsCount = u._count?.posts ?? 0;
+        list.push({
+          id: u.id,
+          name,
+          handle: `@${name.toLowerCase().replace(/\s+/g, '') || 'traveler'}`,
+          avatar: u.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          followers,
+          followersLabel: formatFollowers(followers),
+          tag: postsCount > 0 ? 'Người viết bài' : 'Thành viên',
+          tagColor: postsCount > 0 ? 'bg-emerald-500' : 'bg-blue-500',
+        });
+      }
+    });
+
+    // 2. Extract authors from all posts
+    apiPosts.forEach(post => {
+      if (post.authorId && post.authorId !== currentUserId && !seen.has(post.authorId)) {
+        seen.add(post.authorId);
+        list.push({
+          id: post.authorId,
+          name: post.author.name || 'Người dùng',
+          handle: `@${post.author.name?.toLowerCase().replace(/\s+/g, '') || 'traveler'}`,
+          avatar: post.author.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          followers: 120,
+          followersLabel: '120',
+          tag: 'Đồng hành',
+          tagColor: 'bg-blue-500',
+        });
+      }
+    });
+
+    return sortCompanionsByFollowers(list);
+  }, [registeredUsers, apiPosts, user?.id]);
 
   const filters = [
     { key: 'all',       label: t('feed.filter.all'),       icon: FILTER_ICONS.all },
@@ -1113,7 +1240,7 @@ export default function SocialFeedPage() {
 
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block h-full" key={sidebarTick}>
-          <div className="sticky top-24 space-y-4">
+          <div className="sticky top-24 space-y-4 max-h-[calc(100vh-110px)] overflow-y-auto pr-1 pb-10 scrollbar-hide">
             <LeftSidebar myPostCount={myPostCount} />
           </div>
         </aside>
@@ -1132,7 +1259,7 @@ export default function SocialFeedPage() {
               >
                 <div className="fb-story-add-image-wrap w-full h-[135px] overflow-hidden bg-slate-100">
                   <img 
-                    src={user?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"} 
+                    src={user?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"} 
                     alt="current user" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -1167,7 +1294,7 @@ export default function SocialFeedPage() {
 
                   {/* User Name on Bottom Left */}
                   <span className="absolute bottom-2.5 left-2.5 right-2.5 text-[11px] font-bold text-white leading-tight line-clamp-2 drop-shadow-sm">
-                    {story.user}
+                    {storyBarName(story)}
                   </span>
                 </button>
               ))}
@@ -1243,8 +1370,8 @@ export default function SocialFeedPage() {
 
         {/* RIGHT SIDEBAR */}
         <aside className="hidden lg:block h-full">
-          <div className="sticky top-24 space-y-4">
-            <RightSidebar hotDestinations={hotDestinations} companions={companions} />
+          <div className="sticky top-24 space-y-4 max-h-[calc(100vh-110px)] overflow-y-auto pr-1 pb-10 scrollbar-hide">
+            <RightSidebar hotDestinations={hotDestinations} companions={dynamicCompanions} followingIds={followingIds} onToggleFollow={handleToggleFollowUser} />
           </div>
         </aside>
 

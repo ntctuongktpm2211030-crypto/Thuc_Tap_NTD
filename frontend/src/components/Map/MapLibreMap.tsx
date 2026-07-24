@@ -35,6 +35,9 @@ interface MapLibreMapProps {
   onSelectLocation?: (loc: MapLocation | null) => void;
   destination?: string;
   onCenterChange?: (center: [number, number]) => void;
+  showWeather?: boolean;
+  showSafety?: boolean;
+  showEvents?: boolean;
 }
 
 declare global {
@@ -312,6 +315,9 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   onSelectLocation,
   destination,
   onCenterChange,
+  showWeather = false,
+  showSafety = true,
+  showEvents = true,
 }) => {
   const { lang } = useLang();
   const vi = lang === 'vi';
@@ -320,11 +326,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   const [loaded, setLoaded] = useState(false);
   const [viewType, setViewType] = useState<'map' | 'timeline'>('map');
   const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'dark' | 'light' | '3d'>('street');
-
-  // GIS layers active state
-  const [showWeather, setShowWeather] = useState(false);
-  const [showSafety, setShowSafety] = useState(true);
-  const [showEvents, setShowEvents] = useState(true);
 
   // Dynamic GIS fetched data
   const [warnings, setWarnings] = useState<any[]>([]);
@@ -408,6 +409,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       style: getMapLibreStyle(mapStyle),
       center: initialCenter,
       zoom: zoom,
+      maxZoom: 18, // Cap maximum zoom to prevent map from going blank/white
       pitchWithRotate: true,
       dragRotate: true
     });
@@ -476,17 +478,17 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     const coordCounts: Record<string, number> = {};
     const currentUserLoc = locations.find(loc => loc.id.startsWith('live-current-user-'));
     if (currentUserLoc) {
-      const key = `${currentUserLoc.lat.toFixed(6)},${currentUserLoc.lng.toFixed(6)}`;
+      const key = `${currentUserLoc.lat.toFixed(4)},${currentUserLoc.lng.toFixed(4)}`;
       coordCounts[key] = 0;
     }
 
     const adjustedLocations = nonUserLocations.map(loc => {
-      const key = `${loc.lat.toFixed(6)},${loc.lng.toFixed(6)}`;
+      const key = `${loc.lat.toFixed(4)},${loc.lng.toFixed(4)}`;
       if (coordCounts[key] !== undefined) {
         coordCounts[key]++;
         const count = coordCounts[key];
         const angle = count * ((2 * Math.PI) / 8);
-        const radius = 0.00015 * Math.ceil(count / 8);
+        const radius = 0.0003 * Math.ceil(count / 8); // Slightly larger spread (approx 33m) for clear visual separation
         return {
           ...loc,
           lat: loc.lat + radius * Math.cos(angle),
@@ -1056,48 +1058,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
               }`}
             >
               {vi ? 'Sáng' : 'Light'}
-            </button>
-          </div>
-
-          {/* GIS Layers Switcher */}
-          <div className="absolute bottom-20 right-3 z-10 flex flex-col gap-1 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-1.5 rounded-xl shadow-lg w-[105px]">
-            <span className="text-[7.5px] font-black text-[var(--text-muted)] uppercase tracking-widest block text-center mb-1">GIS Layers</span>
-            <button
-              type="button"
-              onClick={() => setShowWeather(prev => !prev)}
-              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
-                showWeather 
-                  ? 'bg-blue-600 text-white shadow-sm border border-transparent' 
-                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
-              }`}
-            >
-              <CloudRain size={10} className={showWeather ? 'text-white' : 'text-blue-500'} />
-              <span>{vi ? 'Khí tượng' : 'Weather'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowSafety(prev => !prev)}
-              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
-                showSafety 
-                  ? 'bg-red-600 text-white shadow-sm border border-transparent' 
-                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
-              }`}
-            >
-              <AlertTriangle size={10} className={showSafety ? 'text-white' : 'text-red-500'} />
-              <span>{vi ? 'Cảnh báo' : 'Safety'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowEvents(prev => !prev)}
-              className={`px-2 py-1.5 rounded-lg text-[8px] font-bold uppercase tracking-wider transition-all cursor-pointer text-left flex items-center gap-1.5 ${
-                showEvents 
-                  ? 'bg-purple-600 text-white shadow-sm border border-transparent' 
-                  : 'bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-normal)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]'
-              }`}
-            >
-              <Calendar size={10} className={showEvents ? 'text-white' : 'text-purple-500'} />
-              <span>{vi ? 'Lễ hội' : 'Events'}</span>
             </button>
           </div>
 

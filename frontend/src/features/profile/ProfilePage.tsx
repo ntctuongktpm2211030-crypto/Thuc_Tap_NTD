@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
@@ -11,45 +11,9 @@ import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import type { RootState, AppDispatch } from '../../store';
 import { setUser } from '../../store/authSlice';
-import { socialService, travelHistoryService, tripsService } from '../../services/smartTravel.service';
+import { socialService, travelHistoryService, tripsService, postsService } from '../../services/smartTravel.service';
 
-const MY_POSTS = [
-  {
-    id: '1',
-    time: '2 giờ trước',
-    content: 'Vừa hoàn thành chuyến đi Hà Giang Loop 4 ngày — cảnh đèo đẹp không tưởng! Ai có kế hoạch đi tháng 9 thì nhắn mình chia lịch trình chi tiết nhé.',
-    image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=900&q=80',
-    likes: 48, comments: 12,
-  },
-  {
-    id: '2',
-    time: '3 ngày trước',
-    content: 'Mẹo nhỏ khi đến Hội An: thuê xe đạp sáng sớm, ghé chợ trước 7h để tránh đông. Ăn cao lầu bà Phương — xếp hàng nhưng xứng đáng!',
-    images: [
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=500&q=80',
-      'https://images.unsplash.com/photo-1540202403-b7abd6747a18?auto=format&fit=crop&w=500&q=80',
-    ],
-    likes: 124, comments: 31,
-  },
-];
 
-const PHOTOS = [
-  'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1557750255-c76072a7aad1?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80',
-];
-
-const FRIENDS_PREVIEW = [
-  { name: 'Minh Quân', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80' },
-  { name: 'Sarah Lee', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80' },
-  { name: 'Linh Trần', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&q=80' },
-  { name: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=80&q=80' },
-  { name: 'Tom Vũ', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80' },
-  { name: 'Hương Ngô', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=80&q=80' },
-];
 
 type TabId = 'posts' | 'about' | 'photos' | 'trips' | 'notifications' | 'history';
 
@@ -57,12 +21,20 @@ export default function ProfilePage() {
   const { t, lang } = useLang();
   const { success, error } = useToast();
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((s: RootState) => s.auth.user);
+  const navigate = useNavigate();
+  const { userId } = useParams<{ userId?: string }>();
+  const loggedInUser = useSelector((s: RootState) => s.auth.user);
   const vi = lang === 'vi';
+
+  const [profileUser, setProfileUser] = useState<any>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [followingIdsState, setFollowingIdsState] = useState<Set<string>>(new Set());
+
+  const isOwnProfile = !userId || userId === loggedInUser?.id;
+  const user = profileUser || loggedInUser;
+
   const [activeTab, setActiveTab] = useState<TabId>('posts');
   const [composeText, setComposeText] = useState('');
-
-  if (!user) return null;
 
   const [notifications, setNotifications] = useState<any[]>([]);
   const [following, setFollowing] = useState<any[]>([]);
@@ -91,23 +63,110 @@ export default function ProfilePage() {
   const [historyRating, setHistoryRating] = useState('5');
   const [historyCost, setHistoryCost] = useState(0);
 
+  // Real user posts states
+  const [profilePosts, setProfilePosts] = useState<any[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+
+  const fetchProfilePosts = async (targetUserId: string) => {
+    setLoadingPosts(true);
+    try {
+      const res = await postsService.feed({ authorId: targetUserId, limit: 100 });
+      if (res && Array.isArray(res.posts)) {
+        // Map backend Post format to local rendering format if necessary
+        const mapped = res.posts.map((p: any) => {
+          const parsed = (() => {
+            try {
+              return JSON.parse(p.content);
+            } catch {
+              return null;
+            }
+          })();
+          return {
+            id: p.id,
+            content: parsed?.body || parsed?.content || p.content || '',
+            date: new Date(p.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            }),
+            likes: p._count?.likes || 0,
+            comments: p._count?.comments || 0,
+            bookmarks: p._count?.bookmarks || 0,
+            images: p.mediaUrls || (parsed?.mediaUrls) || []
+          };
+        });
+        setProfilePosts(mapped);
+      }
+    } catch (err) {
+      console.error('Failed to load profile posts:', err);
+    } finally {
+      setLoadingPosts(false);
+    }
+  };
+
+  // Fetch posts when the active user ID changes
   useEffect(() => {
-    if (user) {
-      socialService.getFollowing(user.id)
+    if (user?.id) {
+      fetchProfilePosts(user.id);
+    }
+  }, [user?.id, lang]);
+
+  // Fetch viewed user profile (whether own profile or someone else's)
+  useEffect(() => {
+    const targetId = userId || loggedInUser?.id;
+    if (targetId) {
+      setLoadingProfile(true);
+      socialService.getProfile(targetId)
         .then(data => {
-          if (Array.isArray(data)) setFollowing(data);
+          const normalized = {
+            id: data.id,
+            email: data.email,
+            fullName: data.profile?.fullName || data.fullName || 'Người dùng',
+            avatarUrl: data.profile?.avatarUrl || '',
+            bio: data.profile?.bio || '',
+            homeLocation: data.profile?.homeLocation || '',
+            _count: data._count,
+            preferences: data.preferences,
+          };
+          setProfileUser(normalized);
+        })
+        .catch(err => {
+          console.error('Failed to load user profile:', err);
+          error(vi ? 'Không tìm thấy người dùng này.' : 'User not found.');
+        })
+        .finally(() => {
+          setLoadingProfile(false);
+        });
+    } else {
+      setProfileUser(null);
+    }
+  }, [userId, loggedInUser?.id, vi, error]);
+
+  // Load followers list and notifications for own profile, and followingIds for logged-in user
+  useEffect(() => {
+    if (loggedInUser) {
+      socialService.getFollowing(loggedInUser.id)
+        .then(data => {
+          if (Array.isArray(data)) {
+            setFollowingIdsState(new Set(data.map(u => u.id)));
+            if (isOwnProfile) {
+              setFollowing(data);
+            }
+          }
         })
         .catch(err => console.error('Get following failed:', err));
 
-      socialService.notifications()
-        .then(data => {
-          if (Array.isArray(data)) setNotifications(data);
-        })
-        .catch(err => console.error('Get notifications failed:', err));
+      if (isOwnProfile) {
+        socialService.notifications()
+          .then(data => {
+            if (Array.isArray(data)) setNotifications(data);
+          })
+          .catch(err => console.error('Get notifications failed:', err));
 
-      fetchPlannedTrips();
+        fetchPlannedTrips();
+      }
     }
-  }, [user]);
+  }, [loggedInUser, isOwnProfile]);
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -154,6 +213,17 @@ export default function ProfilePage() {
       fetchHistory();
     }
   }, [activeTab]);
+
+  if (loadingProfile) {
+    return (
+      <div className="flex items-center justify-center p-20 text-xs text-[var(--text-muted)] gap-2">
+        <Loader2 size={16} className="animate-spin" />
+        <span>Đang tải thông tin cá nhân...</span>
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   const handleHistorySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,17 +286,21 @@ export default function ProfilePage() {
     }
   };
 
-  const tabs: { id: TabId; label: string }[] = [
+  const profilePhotos = profilePosts
+    .flatMap(p => p.images || [])
+    .filter(Boolean);
+
+  const tabs = [
     { id: 'posts', label: t('profile.tab.posts') },
     { id: 'about', label: t('profile.tab.about') },
     { id: 'photos', label: t('profile.tab.photos') },
     { id: 'trips', label: t('profile.tab.trips') },
     { id: 'history', label: vi ? 'Nhật ký di chuyển' : 'Travel History' },
-    { id: 'notifications', label: vi ? 'Thông báo' : 'Notifications' },
-  ];
+    isOwnProfile && { id: 'notifications', label: vi ? 'Thông báo' : 'Notifications' },
+  ].filter((t): t is { id: TabId; label: string } => !!t);
 
-  const statFriends = 128;
-  const statFollowers = 342;
+  const statFriends = user?._count?.following ?? 0;
+  const statFollowers = user?._count?.followers ?? 0;
 
   return (
     <div className="relative min-h-screen bg-slate-50/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-x-clip animate-fade-in">
@@ -247,13 +321,15 @@ export default function ProfilePage() {
               className="w-full h-full object-cover opacity-85"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
-            <button
-              type="button"
-              className="absolute bottom-4 right-4 px-3.5 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
-            >
-              <Camera size={14} />
-              <span>{vi ? 'Chỉnh sửa ảnh bìa' : 'Edit Cover'}</span>
-            </button>
+            {isOwnProfile && (
+              <button
+                type="button"
+                className="absolute bottom-4 right-4 px-3.5 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
+              >
+                <Camera size={14} />
+                <span>{vi ? 'Chỉnh sửa ảnh bìa' : 'Edit Cover'}</span>
+              </button>
+            )}
           </div>
 
           {/* Profile Details & Avatar Bar */}
@@ -268,13 +344,15 @@ export default function ProfilePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <label
-                  htmlFor="avatar-upload"
-                  className="absolute bottom-1 right-1 p-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-full shadow-lg border-2 border-white dark:border-slate-900 cursor-pointer transition-all hover:scale-110 flex items-center justify-center"
-                >
-                  <Camera size={16} />
-                  <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-                </label>
+                {isOwnProfile && (
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-1 right-1 p-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-full shadow-lg border-2 border-white dark:border-slate-900 cursor-pointer transition-all hover:scale-110 flex items-center justify-center"
+                  >
+                    <Camera size={16} />
+                    <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                  </label>
+                )}
               </div>
 
               {/* User Info */}
@@ -285,7 +363,7 @@ export default function ProfilePage() {
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
                   <span className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 font-extrabold">
                     <Users size={14} className="text-brand-500" />
-                    <strong>{following.length > 0 ? following.length : statFriends}</strong> {vi ? 'đang theo dõi' : 'following'}
+                    <strong>{statFriends}</strong> {vi ? 'đang theo dõi' : 'following'}
                   </span>
                   <span>·</span>
                   <span className="inline-flex items-center gap-1 text-slate-700 dark:text-slate-300 font-extrabold">
@@ -293,7 +371,7 @@ export default function ProfilePage() {
                   </span>
                   <span>·</span>
                   <span className="inline-flex items-center gap-1 text-rose-500 font-bold">
-                    <MapPin size={14} /> {vi ? 'Hà Nội, Việt Nam' : 'Hanoi, Vietnam'}
+                    <MapPin size={14} /> {user.homeLocation || (vi ? 'Chưa cập nhật quê quán' : 'Home location not set')}
                   </span>
                 </div>
               </div>
@@ -301,20 +379,58 @@ export default function ProfilePage() {
 
             {/* Profile Action Buttons */}
             <div className="flex items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-center">
-              <Link
-                to="/profile/settings"
-                className="flex-1 sm:flex-initial px-4 py-2.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-2xl shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2"
-              >
-                <Pencil size={15} />
-                <span>{vi ? 'Chỉnh sửa trang cá nhân' : 'Edit Profile'}</span>
-              </Link>
-              <Link
-                to="/profile/following"
-                className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-extrabold rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
-              >
-                <Users size={15} />
-                <span>{t('userMenu.following')}</span>
-              </Link>
+              {isOwnProfile ? (
+                <>
+                  <Link
+                    to="/profile/settings"
+                    className="flex-1 sm:flex-initial px-4 py-2.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-2xl shadow-md shadow-brand-500/20 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Pencil size={15} />
+                    <span>{vi ? 'Chỉnh sửa trang cá nhân' : 'Edit Profile'}</span>
+                  </Link>
+                  <Link
+                    to="/profile/following"
+                    className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-extrabold rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Users size={15} />
+                    <span>{t('userMenu.following')}</span>
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!loggedInUser) {
+                      navigate('/auth');
+                      return;
+                    }
+                    try {
+                      const res = await socialService.toggleFollow(user.id);
+                      if (res.following) {
+                        setFollowingIdsState(prev => new Set([...prev, user.id]));
+                        success(vi ? 'Đã theo dõi người dùng này!' : 'Following user!');
+                      } else {
+                        setFollowingIdsState(prev => {
+                          const next = new Set(prev);
+                          next.delete(user.id);
+                          return next;
+                        });
+                        success(vi ? 'Đã bỏ theo dõi người dùng này.' : 'Unfollowed user.');
+                      }
+                    } catch (err) {
+                      console.error('Follow failed:', err);
+                    }
+                  }}
+                  className={`px-6 py-2.5 text-xs font-extrabold rounded-2xl border transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
+                    followingIdsState.has(user.id)
+                      ? 'bg-transparent text-slate-500 border-slate-300 hover:text-red-500 hover:border-red-500'
+                      : 'bg-brand-600 text-white border-transparent hover:bg-brand-500 shadow-brand-500/25'
+                  }`}
+                >
+                  <Users size={15} />
+                  <span>{followingIdsState.has(user.id) ? (vi ? 'Đang theo dõi' : 'Following') : (vi ? 'Theo dõi' : 'Follow')}</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -354,23 +470,13 @@ export default function ProfilePage() {
               </h3>
 
               <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
-                "{vi
-                  ? 'Yêu du lịch khám phá, ẩm thực địa phương và chia sẻ hành trình thực tế trên Terraholic.'
-                  : 'Love exploring, local food, and sharing real travel stories on Terraholic.'}"
+                "{user.bio || (vi ? 'Chưa cập nhật giới thiệu bản thân' : 'No bio available')}"
               </p>
 
               <div className="space-y-3 pt-1 border-t border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
-                  <Briefcase size={16} className="text-brand-500 shrink-0" />
-                  <span>{vi ? 'Làm việc tại Terraholic' : 'Works at Terraholic'}</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
-                  <GraduationCap size={16} className="text-purple-500 shrink-0" />
-                  <span>{vi ? 'Học tại CTUT' : 'Studied at CTUT'}</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
                   <MapPin size={16} className="text-rose-500 shrink-0" />
-                  <span>{vi ? 'Sống tại Hà Nội' : 'Lives in Hanoi'}</span>
+                  <span>{user.homeLocation || (vi ? 'Chưa cập nhật quê quán' : 'Home location not set')}</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold truncate">
                   <Globe size={16} className="text-emerald-500 shrink-0" />
@@ -378,12 +484,14 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <Link
-                to="/profile/settings"
-                className="w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <span>{vi ? 'Chỉnh sửa chi tiết' : 'Edit details'}</span>
-              </Link>
+              {isOwnProfile && (
+                <Link
+                  to="/profile/settings"
+                  className="w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <span>{vi ? 'Chỉnh sửa chi tiết' : 'Edit details'}</span>
+                </Link>
+              )}
             </div>
 
             {/* Card 2: Bộ sưu tập Ảnh */}
@@ -403,20 +511,26 @@ export default function ProfilePage() {
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                {PHOTOS.slice(0, 6).map((src, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setActiveTab('photos')}
-                    className="aspect-square rounded-2xl overflow-hidden group border border-slate-200 dark:border-slate-700/60 cursor-pointer"
-                  >
-                    <img
-                      src={src}
-                      alt="Thumbnail"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </button>
-                ))}
+                {profilePhotos.length > 0 ? (
+                  profilePhotos.slice(0, 6).map((src: string, i: number) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveTab('photos')}
+                      className="aspect-square rounded-2xl overflow-hidden group border border-slate-200 dark:border-slate-700/60 cursor-pointer"
+                    >
+                      <img
+                        src={src}
+                        alt="Thumbnail"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </button>
+                  ))
+                ) : (
+                  <div className="col-span-3 text-center py-4 text-xs font-semibold text-slate-400">
+                    {vi ? 'Chưa có ảnh nào.' : 'No photos yet.'}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -433,7 +547,7 @@ export default function ProfilePage() {
               </div>
 
               <p className="text-xs text-slate-500 font-medium">
-                {following.length > 0 ? following.length : statFriends} {vi ? 'người theo dõi' : 'people'}
+                {statFriends} {vi ? 'đang theo dõi' : 'following'}
               </p>
 
               <div className="grid grid-cols-3 gap-3">
@@ -443,23 +557,18 @@ export default function ProfilePage() {
                     const avatarUrl = profileData.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
                     const name = profileData.fullName || f.name || '';
                     return (
-                      <div key={f.id} className="text-center space-y-1 group cursor-pointer">
+                      <Link to={`/profile/${f.id}`} key={f.id} className="text-center space-y-1 group cursor-pointer block">
                         <div className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
                           <img src={avatarUrl} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         </div>
                         <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 block truncate">{name.split(' ').pop()}</span>
-                      </div>
+                      </Link>
                     );
                   })
                 ) : (
-                  FRIENDS_PREVIEW.map(f => (
-                    <div key={f.name} className="text-center space-y-1 group cursor-pointer">
-                      <div className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
-                        <img src={f.avatar} alt={f.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      </div>
-                      <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 block truncate">{f.name.split(' ').pop()}</span>
-                    </div>
-                  ))
+                  <div className="col-span-3 text-center py-4 text-xs font-semibold text-slate-400">
+                    {vi ? 'Chưa theo dõi ai.' : 'Not following anyone.'}
+                  </div>
                 )}
               </div>
             </div>
@@ -472,104 +581,111 @@ export default function ProfilePage() {
             {activeTab === 'posts' && (
               <>
                 {/* Compose Card */}
-                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-brand-500">
-                      <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <input
-                      type="text"
-                      value={composeText}
-                      onChange={e => setComposeText(e.target.value)}
-                      placeholder={vi ? 'Bạn đang nghĩ gì về chuyến đi tiếp theo?' : "What's on your mind?"}
-                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-xs text-slate-800 dark:text-white font-medium focus:outline-none focus:border-brand-500"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2">
-                      <button type="button" className="px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
-                        <ImageIcon size={16} />
-                        <span>{vi ? 'Ảnh/Video' : 'Photo/Video'}</span>
-                      </button>
-                      <button type="button" className="px-3 py-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
-                        <MapPin size={16} />
-                        <span>Check-in</span>
-                      </button>
+                {isOwnProfile && (
+                  <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-brand-500">
+                        <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
+                      </div>
+                      <input
+                        type="text"
+                        value={composeText}
+                        onChange={e => setComposeText(e.target.value)}
+                        placeholder={vi ? 'Bạn đang nghĩ gì về chuyến đi tiếp theo?' : "What's on your mind?"}
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-xs text-slate-800 dark:text-white font-medium focus:outline-none focus:border-brand-500"
+                      />
                     </div>
 
-                    <button
-                      type="button"
-                      className="px-5 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-xl shadow-md cursor-pointer transition-all flex items-center gap-1.5"
-                    >
-                      <Send size={14} />
-                      <span>{vi ? 'Đăng' : 'Post'}</span>
-                    </button>
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <button type="button" className="px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
+                          <ImageIcon size={16} />
+                          <span>{vi ? 'Ảnh/Video' : 'Photo/Video'}</span>
+                        </button>
+                        <button type="button" className="px-3 py-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition-all flex items-center gap-1.5 cursor-pointer">
+                          <MapPin size={16} />
+                          <span>Check-in</span>
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="px-5 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-extrabold rounded-xl shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                      >
+                        <Send size={14} />
+                        <span>{vi ? 'Đăng' : 'Post'}</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Timeline posts */}
-                {MY_POSTS.map(post => (
-                  <article key={post.id} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
-                          <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
+                {loadingPosts ? (
+                  <div className="flex items-center justify-center p-10 text-xs text-[var(--text-muted)] gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>{vi ? 'Đang tải bài viết...' : 'Loading posts...'}</span>
+                  </div>
+                ) : profilePosts.length === 0 ? (
+                  <div className="bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 p-8 rounded-3xl text-center text-xs text-slate-500 font-bold">
+                    {vi ? 'Chưa có bài viết nào.' : 'No posts yet.'}
+                  </div>
+                ) : (
+                  profilePosts.map(post => (
+                    <article key={post.id} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-5 rounded-3xl shadow-xl space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
+                            <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">{user.fullName}</h4>
+                            <p className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 mt-0.5">
+                              <span>{post.date}</span>
+                              <span>·</span>
+                              <Globe size={11} />
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">{user.fullName}</h4>
-                          <p className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 mt-0.5">
-                            <span>{post.time}</span>
-                            <span>·</span>
-                            <Globe size={11} />
-                          </p>
+                        <button type="button" className="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                          <MoreHorizontal size={18} />
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">{post.content}</p>
+
+                      {post.images && post.images.length > 0 && (
+                        <div className={`grid ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-2 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800`}>
+                          {post.images.map((src: string, i: number) => (
+                            <img key={i} src={src} alt="" className="w-full h-48 object-cover" />
+                          ))}
                         </div>
+                      )}
+
+                      <div className="flex items-center justify-between text-xs text-slate-500 font-semibold pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <span className="flex items-center gap-1.5">
+                          <Heart size={14} className="text-rose-500 fill-rose-500" />
+                          <span>{post.likes}</span>
+                        </span>
+                        <span>{post.comments} {vi ? 'bình luận' : 'comments'}</span>
                       </div>
-                      <button type="button" className="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <MoreHorizontal size={18} />
-                      </button>
-                    </div>
 
-                    <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">{post.content}</p>
-
-                    {'image' in post && post.image && (
-                      <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                        <img src={post.image} alt="" className="w-full max-h-[420px] object-cover" />
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <button type="button" className="py-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-slate-300 hover:text-rose-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                          <Heart size={16} />
+                          <span>{vi ? 'Thích' : 'Like'}</span>
+                        </button>
+                        <button type="button" className="py-2 rounded-xl hover:bg-brand-50 dark:hover:bg-brand-950/30 text-slate-600 dark:text-slate-300 hover:text-brand-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                          <MessageCircle size={16} />
+                          <span>{vi ? 'Bình luận' : 'Comment'}</span>
+                        </button>
+                        <button type="button" className="py-2 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/30 text-slate-600 dark:text-slate-300 hover:text-purple-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                          <Share2 size={16} />
+                          <span>{vi ? 'Chia sẻ' : 'Share'}</span>
+                        </button>
                       </div>
-                    )}
-
-                    {'images' in post && post.images && (
-                      <div className="grid grid-cols-2 gap-2 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                        {post.images.map((src, i) => (
-                          <img key={i} src={src} alt="" className="w-full h-48 object-cover" />
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-between text-xs text-slate-500 font-semibold pt-2 border-t border-slate-100 dark:border-slate-800">
-                      <span className="flex items-center gap-1.5">
-                        <Heart size={14} className="text-rose-500 fill-rose-500" />
-                        <span>{post.likes}</span>
-                      </span>
-                      <span>{post.comments} {vi ? 'bình luận' : 'comments'}</span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                      <button type="button" className="py-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-slate-300 hover:text-rose-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                        <Heart size={16} />
-                        <span>{vi ? 'Thích' : 'Like'}</span>
-                      </button>
-                      <button type="button" className="py-2 rounded-xl hover:bg-brand-50 dark:hover:bg-brand-950/30 text-slate-600 dark:text-slate-300 hover:text-brand-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                        <MessageCircle size={16} />
-                        <span>{vi ? 'Bình luận' : 'Comment'}</span>
-                      </button>
-                      <button type="button" className="py-2 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/30 text-slate-600 dark:text-slate-300 hover:text-purple-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                        <Share2 size={16} />
-                        <span>{vi ? 'Chia sẻ' : 'Share'}</span>
-                      </button>
-                    </div>
-                  </article>
-                ))}
+                    </article>
+                  ))
+                )}
               </>
             )}
 
@@ -643,31 +759,33 @@ export default function ProfilePage() {
                             </p>
                           </div>
                         </div>
-                        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setHistoryLocation(trip.destinationName || trip.title);
-                              const dateStr = trip.startDate ? trip.startDate.split('T')[0] : '';
-                              setHistoryTime(dateStr);
-                              setHistoryCost(trip.totalBudget || 0);
-                              setEditingEntry(null);
-                              setActiveTab('history');
-                              setShowHistoryModal(true);
-                            }}
-                            className="flex-1 text-center px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:shadow-md text-white text-[11px] font-bold transition-all hover:scale-[1.02] cursor-pointer"
-                          >
-                            ⭐ {vi ? 'Đánh giá & Lưu Nhật ký' : 'Rate & Log'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handlePlannedTripDelete(trip.id)}
-                            className="px-3 py-2 rounded-xl border border-red-500/30 text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
-                            title={vi ? 'Xóa chuyến đi' : 'Delete Trip'}
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
+                        {isOwnProfile && (
+                          <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setHistoryLocation(trip.destinationName || trip.title);
+                                const dateStr = trip.startDate ? trip.startDate.split('T')[0] : '';
+                                setHistoryTime(dateStr);
+                                setHistoryCost(trip.totalBudget || 0);
+                                setEditingEntry(null);
+                                setActiveTab('history');
+                                setShowHistoryModal(true);
+                              }}
+                              className="flex-1 text-center px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:shadow-md text-white text-[11px] font-bold transition-all hover:scale-[1.02] cursor-pointer"
+                            >
+                              ⭐ {vi ? 'Đánh giá & Lưu Nhật ký' : 'Rate & Log'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handlePlannedTripDelete(trip.id)}
+                              className="px-3 py-2 rounded-xl border border-red-500/30 text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
+                              title={vi ? 'Xóa chuyến đi' : 'Delete Trip'}
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -725,21 +843,23 @@ export default function ProfilePage() {
               <div className="fb-profile-card">
                 <div className="flex justify-between items-center mb-6 pb-3 border-b border-[var(--border-subtle)]">
                   <h3 className="fb-profile-card-title">{vi ? 'Nhật ký di chuyển' : 'Travel History'}</h3>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingEntry(null);
-                      setHistoryLocation('');
-                      setHistoryTime('');
-                      setHistoryRating('5');
-                      setHistoryCost(0);
-                      setShowHistoryModal(true);
-                    }}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-[var(--gold)] to-blue-700 hover:shadow-md hover:shadow-blue-600/10 text-white rounded-xl text-xs font-bold transition-all hover:scale-[1.02]"
-                  >
-                    <Plus size={14} />
-                    {vi ? 'Thêm nhật ký' : 'Add History'}
-                  </button>
+                  {isOwnProfile && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingEntry(null);
+                        setHistoryLocation('');
+                        setHistoryTime('');
+                        setHistoryRating('5');
+                        setHistoryCost(0);
+                        setShowHistoryModal(true);
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-[var(--gold)] to-blue-700 hover:shadow-md hover:shadow-blue-600/10 text-white rounded-xl text-xs font-bold transition-all hover:scale-[1.02]"
+                    >
+                      <Plus size={14} />
+                      {vi ? 'Thêm nhật ký' : 'Add History'}
+                    </button>
+                  )}
                 </div>
 
                 {loadingHistory ? (
@@ -783,32 +903,34 @@ export default function ProfilePage() {
                             </p>
                           </div>
                         </div>
-                        <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingEntry(item);
-                              setHistoryLocation(item.location);
-                              const dateObj = new Date(item.time);
-                              const formattedDate = dateObj.toISOString().split('T')[0];
-                              setHistoryTime(formattedDate);
-                              setHistoryRating(item.rating || '5');
-                              setHistoryCost(item.cost || 0);
-                              setShowHistoryModal(true);
-                            }}
-                            className="px-2.5 py-1.5 rounded-lg border border-[var(--border-normal)] text-[10px] font-bold text-[var(--text-secondary)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all cursor-pointer"
-                          >
-                            {vi ? 'Sửa' : 'Edit'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleHistoryDelete(item.id)}
-                            className="px-2.5 py-1.5 rounded-lg border border-red-500/30 text-[10px] font-bold text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
-                          >
-                            <Trash2 size={11} className="inline mr-0.5" />
-                            {vi ? 'Xóa' : 'Delete'}
-                          </button>
-                        </div>
+                        {isOwnProfile && (
+                          <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingEntry(item);
+                                setHistoryLocation(item.location);
+                                const dateObj = new Date(item.time);
+                                const formattedDate = dateObj.toISOString().split('T')[0];
+                                setHistoryTime(formattedDate);
+                                setHistoryRating(item.rating || '5');
+                                setHistoryCost(item.cost || 0);
+                                setShowHistoryModal(true);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg border border-[var(--border-normal)] text-[10px] font-bold text-[var(--text-secondary)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all cursor-pointer"
+                            >
+                              {vi ? 'Sửa' : 'Edit'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleHistoryDelete(item.id)}
+                              className="px-2.5 py-1.5 rounded-lg border border-red-500/30 text-[10px] font-bold text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer"
+                            >
+                              <Trash2 size={11} className="inline mr-0.5" />
+                              {vi ? 'Xóa' : 'Delete'}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

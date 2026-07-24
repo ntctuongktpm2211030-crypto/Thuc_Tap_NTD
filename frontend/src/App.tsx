@@ -51,6 +51,21 @@ function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [newNotifObj, setNewNotifObj] = useState<any>(null);
 
+  const queryParams = new URLSearchParams(location.search);
+  const currentSearch = queryParams.get('search') || '';
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    const params = new URLSearchParams(location.search);
+    if (val) {
+      params.set('search', val);
+    } else {
+      params.delete('search');
+    }
+    const targetPath = location.pathname === '/' ? '/' : '/';
+    navigate(`${targetPath}?${params.toString()}`, { replace: true });
+  };
+
   const getNotifLink = (notif: any) => {
     if (notif.type === 'like' || notif.type === 'comment') {
       return notif.targetId ? `/?postId=${notif.targetId}` : '/';
@@ -281,6 +296,8 @@ function App() {
               <input
                 type="text"
                 placeholder={t('nav.search')}
+                value={currentSearch}
+                onChange={handleSearchChange}
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 className={`w-full bg-[var(--bg-elevated)] border rounded-full pl-9 pr-4 py-2 text-xs text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-muted)] transition-all duration-200 ${
@@ -474,14 +491,13 @@ function App() {
               const active = isActive(to);
               return (
                 <Link key={to} to={to}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 group ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 group border ${
                     active
-                      ? 'bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
+                      ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)]/30'
+                      : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
                   }`}>
-                  <Icon size={15} className={`transition-colors ${active ? 'text-[var(--gold)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`} strokeWidth={active ? 2.5 : 1.8} />
-                  {label}
-                  {active && <span className="ml-0.5 w-1 h-1 rounded-full bg-[var(--gold)]" />}
+                  <Icon size={14} className={`transition-colors ${active ? 'text-[var(--gold)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`} strokeWidth={active ? 2.2 : 1.8} />
+                  <span>{label}</span>
                 </Link>
               );
             })}
@@ -517,6 +533,8 @@ function App() {
               <div className="relative pt-2">
                 <Search size={15} className="absolute left-3.5 top-[calc(0.5rem+8px)] text-[var(--text-muted)]" />
                 <input type="text" placeholder={t('nav.search')}
+                  value={currentSearch}
+                  onChange={handleSearchChange}
                   className="w-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl pl-10 pr-4 py-3 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--gold)] placeholder:text-[var(--text-muted)]" />
               </div>
               {/* Mobile lang + theme */}
@@ -573,6 +591,7 @@ function App() {
           <Route path="/guide/culture-food" element={<CultureFoodGuidePage />} />
           <Route path="/journeys/create" element={<ProtectedRoute><CreateStoryPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/profile/following" element={<ProtectedRoute><FollowingPage /></ProtectedRoute>} />
           <Route path="/profile/saved" element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
           <Route path="/profile/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />

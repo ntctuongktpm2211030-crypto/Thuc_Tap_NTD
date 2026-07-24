@@ -56,10 +56,13 @@ export interface Post {
   _count?: { likes: number; comments: number; bookmarks: number };
   isLiked?: boolean;
   isBookmarked?: boolean;
+  destinationName?: string;
+  destination?: { id: string; name: string; category?: string; latitude?: number; longitude?: number };
+  comments?: any[];
 }
 export interface Comment {
   id: string; content: string; createdAt: string;
-  author: { profile?: { fullName: string; avatarUrl?: string } };
+  author: { id: string; profile?: { fullName: string; avatarUrl?: string } };
   replies?: Comment[];
 }
 export interface Destination {

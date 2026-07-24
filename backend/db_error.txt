@@ -4601,3 +4601,121 @@ Please make sure your database server is running at `aws-1-ap-northeast-2.pooler
     at Server.listen (node:net:2102:7)
     at D:\Thuc_Tap_NDT\backend\src\server.ts:101:12
 
+[Console Error Logged] 2026-07-24T09:53:08.227Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Server has closed the connection.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Server has closed the connection.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-24T09:53:38.896Z - Failed to parse AI Recommendations JSON: Dựa trên các thông tin về thời tiết và sở thích của người dùng, dưới đây là 3 gợi ý tốt nhất cho người dùng:
+
+{
+  "recommendations": [
+    {
+      "id": "dest-ch-u--i-b--ninh-ki-u",
+      "reason": "Chợ đi bộ Ninh Kiều lý tưởng cho thời tiết nắng đẹp và khám phá địa phương.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-b-n-ninh-ki-u",
+      "reason": "Bến Ninh Kiều phù hợp để khám phá và ngắm cảnh thời tiết nắng trong ngày.",
+      "tag": "Khám Phá"
+    },
+    {
+      "id": "dest-b-o-t-ng-c-n-th--",
+      "reason": "Bảo tàng Cần Thơ cung cấp thông tin và kiến thức về địa phương trong thời tiết tốt.",
+      "tag": "Khám Phá"
+    }
+  ]
+}
+
+[Console Error Logged] 2026-07-24T21:34:39.898Z - [social/follow POST] 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:7
+
+[Console Error Logged] 2026-07-24T21:35:02.357Z - [social/follow POST] 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:7
+
+[Console Error Logged] 2026-07-24T21:36:55.817Z - [social/follow POST] 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.follower.create()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:29
+
+  117 const followerName = follower?.profile?.fullName || 'Ai đó';
+  118 
+  119 // Follow + create notification in background
+→ 120 await prisma.follower.create(
+Foreign key constraint violated: `Follower_followingId_fkey (index)`
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:7
+

@@ -1,23 +1,23 @@
 // SavedPage v2 – 3-column layout (same as SocialFeedPage)
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 import {
   Bookmark, ExternalLink, Heart, MessageCircle, Trash2,
   Calendar, DollarSign, MapPin, Compass, Clock, Sparkles,
   FileImage, LayoutGrid, List, Globe, TrendingUp, Users, Flame,
-  Home, Search, Bot,
+  Home, Bot,
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
-import { postsService, tripsService, Post } from '../../services/smartTravel.service';
+import { postsService, tripsService, socialService, Post } from '../../services/smartTravel.service';
 import { mapApiPostsToFeed } from '../../utils/apiPostMapper';
 import { FeedPost } from '../../utils/feedUtils';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import { loadUserProfileCache } from '../../utils/feedPostStorage';
 import { loadUserStories } from '../../utils/storyStorage';
-import { COMPANION_CANDIDATES, FEED_POSTS } from '../../data/feedData';
-import { computeHotDestinationsThisMonth } from '../../utils/feedUtils';
+
+import { computeHotDestinationsThisMonth, sortCompanionsByFollowers } from '../../utils/feedUtils';
 
 function unpackActivityNotes(act: any) {
   let extra: any = {};
@@ -40,7 +40,7 @@ function unpackActivityNotes(act: any) {
 }
 
 // ── LEFT SIDEBAR ──────────────────────────────────────────────
-const SavedLeftSidebar = ({ savedCount, tripsCount }: { savedCount: number; tripsCount: number }) => {
+const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
   const { t } = useLang();
   const user = useSelector((s: RootState) => s.auth.user);
   const profileCache = loadUserProfileCache();
@@ -114,11 +114,90 @@ const SavedLeftSidebar = ({ savedCount, tripsCount }: { savedCount: number; trip
   );
 };
 
-// ── RIGHT SIDEBAR ─────────────────────────────────────────────
 const SavedRightSidebar = () => {
-  const { t } = useLang();
-  const hotDestinations = computeHotDestinationsThisMonth(FEED_POSTS);
-  const companions = COMPANION_CANDIDATES.slice(0, 5);
+  const { t, lang } = useLang();
+  const navigate = useNavigate();
+  const vi = lang === 'vi';
+
+  const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
+  const [apiPosts, setApiPosts] = useState<any[]>([]);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+
+  const loggedInUser = useSelector((s: RootState) => s.auth.user);
+
+  useEffect(() => {
+    socialService.searchUsers('')
+      .then(users => {
+        if (Array.isArray(users)) setRegisteredUsers(users);
+      })
+      .catch(err => console.error(err));
+
+    postsService.feed({ page: 1, limit: 50 })
+      .then(res => {
+        if (res && Array.isArray(res.posts)) setApiPosts(res.posts);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    if (loggedInUser?.id) {
+      socialService.getFollowing(loggedInUser.id)
+        .then((list: { id: string }[]) => setFollowingIds(new Set(list.map(u => u.id))))
+        .catch(() => setFollowingIds(new Set()));
+    }
+  }, [loggedInUser?.id]);
+
+  const hotDestinations = useMemo(() => {
+    // Map backend format to FeedPost format for computeHotDestinationsThisMonth
+    const mapped = apiPosts.map(p => {
+      const parsed = (() => {
+        try {
+          return JSON.parse(p.content);
+        } catch {
+          return null;
+        }
+      })();
+      return {
+        id: p.id,
+        destination: p.destinationName || parsed?.destination || 'Việt Nam',
+        destinationKey: (p.destinationName || parsed?.destination || 'vietnam').toLowerCase().replace(/\s+/g, '-'),
+        postedAt: new Date(p.createdAt),
+        images: p.mediaUrls || parsed?.mediaUrls || []
+      };
+    });
+    return computeHotDestinationsThisMonth(mapped as any);
+  }, [apiPosts]);
+
+  const dynamicCompanions = useMemo(() => {
+    const list = registeredUsers
+      .filter(u => u.id !== loggedInUser?.id)
+      .map(u => ({
+        id: u.id,
+        name: u.profile?.fullName || u.fullName || u.email,
+        avatar: u.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        handle: `@${(u.profile?.fullName || u.fullName || u.email).split(' ').pop().toLowerCase()}`,
+        followers: u._count?.followers || 0,
+      }));
+    return sortCompanionsByFollowers(list, 5);
+  }, [registeredUsers, loggedInUser?.id]);
+
+  const handleToggleFollowUser = async (userId: string) => {
+    if (!loggedInUser) {
+      navigate('/auth');
+      return;
+    }
+    try {
+      const res = await socialService.toggleFollow(userId);
+      setFollowingIds(prev => {
+        const next = new Set(prev);
+        if (res.following) next.add(userId);
+        else next.delete(userId);
+        return next;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -161,15 +240,30 @@ const SavedRightSidebar = () => {
           <p className="sidebar-title mb-0">{t('sidebar.suggested')}</p>
         </div>
         <div className="space-y-3">
-          {companions.map((traveler: any) => (
+          {dynamicCompanions.map((traveler: any) => (
             <div key={traveler.id} className="flex items-center gap-3 group">
-              <img src={traveler.avatar} alt={traveler.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--border-normal)] group-hover:ring-[var(--gold)] transition-all" />
+              <Link to={`/profile/${traveler.id}`} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                <img src={traveler.avatar} alt={traveler.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--border-normal)] group-hover:ring-[var(--gold)] transition-all" />
+              </Link>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-[var(--text-primary)] truncate">{traveler.name}</p>
-                <p className="text-[10px] text-[var(--text-muted)]">{traveler.handle} · {traveler.followersLabel} {t('sidebar.followers')}</p>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-bold text-[var(--text-primary)] truncate">{traveler.name}</span>
+                  {followingIds.has(traveler.id) && (
+                    <span className="text-[9px] text-blue-500 font-extrabold flex-shrink-0">
+                      {vi ? 'Đã theo dõi' : 'Followed'}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)]">{traveler.handle} · {traveler.followers} {t('sidebar.followers')}</p>
               </div>
-              <button type="button" className="btn-follow text-[10px] px-3 py-1.5 flex-shrink-0">
-                {t('sidebar.follow')}
+              <button
+                type="button"
+                onClick={() => handleToggleFollowUser(traveler.id)}
+                className={`btn-follow text-[10px] px-3 py-1.5 flex-shrink-0 cursor-pointer ${
+                  followingIds.has(traveler.id) ? 'bg-transparent text-slate-500 border border-slate-300' : ''
+                }`}
+              >
+                {followingIds.has(traveler.id) ? (vi ? 'Bỏ theo dõi' : 'Unfollow') : (vi ? 'Theo dõi' : 'Follow')}
               </button>
             </div>
           ))}
@@ -214,9 +308,10 @@ export default function SavedPage() {
   const { lang } = useLang();
   const vi = lang === 'vi';
 
-  const [activeTab, setActiveTab] = useState<'posts' | 'trips'>('posts');
+  const [activeTab, setActiveTab] = useState<'posts' | 'trips' | 'checkins'>('posts');
   const [savedPosts, setSavedPosts] = useState<Post[]>([]);
   const [savedTrips, setSavedTrips] = useState<any[]>([]);
+  const [savedCheckins, setSavedCheckins] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedPost, setSelectedPost] = useState<FeedPost | null>(null);
@@ -235,6 +330,10 @@ export default function SavedPage() {
       ]);
       setSavedPosts(posts);
       setSavedTrips(trips);
+
+      const rawCheckins = localStorage.getItem('saved_checkins');
+      const localCheckins = rawCheckins ? JSON.parse(rawCheckins) : [];
+      setSavedCheckins(localCheckins);
     } catch (err) {
       console.error(err);
       setError(vi ? 'Không thể tải bộ sưu tập đã lưu.' : 'Failed to load saved collection.');
@@ -253,6 +352,19 @@ export default function SavedPage() {
     } catch (err) { console.error(err); }
   };
 
+  const handleUnsaveCheckin = (e: React.MouseEvent, checkinId: string) => {
+    e.stopPropagation();
+    try {
+      const raw = localStorage.getItem('saved_checkins');
+      let currentSavedList = raw ? JSON.parse(raw) : [];
+      currentSavedList = currentSavedList.filter((p: any) => p.id !== checkinId);
+      localStorage.setItem('saved_checkins', JSON.stringify(currentSavedList));
+      setSavedCheckins(currentSavedList);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleDeleteTrip = (e: React.MouseEvent, tripId: string) => {
     e.stopPropagation();
     setDeleteConfirmId(tripId);
@@ -268,7 +380,11 @@ export default function SavedPage() {
     } catch (err) { console.error(err); }
   };
 
-  const handlePostClick = (post: Post) => {
+  const handlePostClick = (post: any) => {
+    if (post.id && post.id.startsWith('checkin-')) {
+      setSelectedPost(post);
+      return;
+    }
     const mapped = mapApiPostsToFeed([post])[0];
     if (mapped) setSelectedPost(mapped);
   };
@@ -305,7 +421,10 @@ export default function SavedPage() {
       {selectedPost && (
         <PostDetailModal
           post={selectedPost}
-          onClose={() => setSelectedPost(null)}
+          onClose={() => {
+            setSelectedPost(null);
+            void fetchSavedData();
+          }}
           labels={{ close: vi ? 'Đóng' : 'Close', readTime: '', likes: vi ? 'lượt thích' : 'likes', comments: vi ? 'bình luận' : 'comments' }}
         />
       )}
@@ -397,7 +516,7 @@ export default function SavedPage() {
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block h-full">
           <div className="sticky top-24 space-y-4">
-            <SavedLeftSidebar savedCount={savedPosts.length} tripsCount={savedTrips.length} />
+            <SavedLeftSidebar savedCount={savedPosts.length} />
           </div>
         </aside>
 
@@ -416,7 +535,7 @@ export default function SavedPage() {
                     {vi ? 'Bộ sưu tập đã lưu' : 'Saved Collection'}
                   </h1>
                   <p className="text-xs text-[var(--text-muted)]">
-                    {loading ? (vi ? 'Đang tải...' : 'Loading...') : (vi ? `${savedPosts.length} bài viết · ${savedTrips.length} hành trình` : `${savedPosts.length} posts · ${savedTrips.length} itineraries`)}
+                    {loading ? (vi ? 'Đang tải...' : 'Loading...') : (vi ? `${savedPosts.length} bài viết · ${savedCheckins.length} địa điểm · ${savedTrips.length} hành trình` : `${savedPosts.length} posts · ${savedCheckins.length} checkins · ${savedTrips.length} itineraries`)}
                   </p>
                 </div>
               </div>
@@ -439,6 +558,12 @@ export default function SavedPage() {
                 <Bookmark size={13} />
                 {vi ? 'Bài viết' : 'Posts'}
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${activeTab === 'posts' ? 'bg-black/20 text-white' : 'bg-[var(--bg-elevated)]'}`}>{savedPosts.length}</span>
+              </button>
+              <button onClick={() => setActiveTab('checkins')}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${activeTab === 'checkins' ? 'bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white shadow-lg' : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)]/50 hover:text-[var(--gold)]'}`}>
+                <MapPin size={13} />
+                {vi ? 'Địa điểm check-in' : 'Check-ins'}
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${activeTab === 'checkins' ? 'bg-black/20 text-white' : 'bg-[var(--bg-elevated)]'}`}>{savedCheckins.length}</span>
               </button>
               <button onClick={() => setActiveTab('trips')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${activeTab === 'trips' ? 'bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white shadow-lg' : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--gold)]/50 hover:text-[var(--gold)]'}`}>
@@ -532,6 +657,87 @@ export default function SavedPage() {
                           <div className="flex gap-3">
                             <span className="flex items-center gap-1"><Heart size={10} className="text-rose-500 fill-rose-500/30" /> {post._count?.likes ?? 0}</span>
                             <span className="flex items-center gap-1"><MessageCircle size={10} /> {post._count?.comments ?? 0}</span>
+                          </div>
+                          <span className="text-[var(--gold)] font-semibold flex items-center gap-1 group-hover:underline">{vi ? 'Xem chi tiết' : 'Details'} <ExternalLink size={9} /></span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : activeTab === 'checkins' ? (
+            savedCheckins.length === 0 ? (
+              <div className="surface-elevated py-20 flex flex-col items-center justify-center space-y-4">
+                <div className="w-16 h-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] flex items-center justify-center">
+                  <MapPin size={28} className="text-[var(--text-muted)]" />
+                </div>
+                <div className="text-center space-y-1.5 max-w-xs">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">{vi ? 'Chưa có địa điểm check-in nào được lưu' : 'No saved check-in locations yet'}</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">{vi ? 'Khám phá bản đồ và ghim lại các địa điểm check-in thú vị.' : 'Explore the map and bookmark interesting check-in locations.'}</p>
+                </div>
+                <Link to="/map" className="btn-gold inline-flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-xl">
+                  <MapPin size={13} strokeWidth={2.5} /> {vi ? 'Xem Bản Đồ' : 'View Map'}
+                </Link>
+              </div>
+            ) : (
+              <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 gap-4' : 'space-y-3'}>
+                {savedCheckins.map(post => {
+                  const authorName = post.author?.name || 'Người dùng';
+                  const avatar = post.author?.avatar;
+                  const hasMedia = post.images && post.images.length > 0;
+                  const dateString = post.date || 'Gần đây';
+
+                  if (viewMode === 'list') {
+                    return (
+                      <div key={post.id} onClick={() => handlePostClick(post)}
+                        className="surface-elevated border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-lg transition-all duration-300 flex gap-3 p-4 group">
+                        {hasMedia && <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0"><img src={post.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" /></div>}
+                        <div className="flex-1 min-w-0 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-1.5 mb-1">
+                              {avatar ? <img src={avatar} alt="" className="w-4 h-4 rounded-full object-cover" /> : <div className="w-4 h-4 rounded-full bg-[var(--gold)] text-black font-bold flex items-center justify-center text-[8px]">{authorName.charAt(0)}</div>}
+                              <span className="text-[11px] font-bold text-[var(--text-secondary)]">{authorName}</span>
+                              <span className="text-[10px] text-[var(--text-muted)]">· {dateString}</span>
+                            </div>
+                            <h4 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1 mb-1">{post.destination}</h4>
+                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed line-clamp-2">{post.content}</p>
+                          </div>
+                          <div className="flex items-center justify-between pt-2 text-[10px] text-[var(--text-muted)]">
+                            <div className="flex gap-3">
+                              <span className="flex items-center gap-1"><Heart size={10} className="text-rose-500 fill-rose-500/20" /> {post.likes}</span>
+                            </div>
+                            <button onClick={(e) => { e.stopPropagation(); handleUnsaveCheckin(e, post.id); }} className="text-[var(--text-muted)] hover:text-rose-500 transition-colors p-1"><Trash2 size={11} /></button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={post.id} onClick={() => handlePostClick(post)}
+                      className="surface-elevated overflow-hidden border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-xl transition-all duration-300 flex flex-col group">
+                      <div className="h-44 relative bg-gradient-to-br from-violet-600/20 to-rose-600/20 overflow-hidden">
+                        {hasMedia ? <img src={post.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                          : <div className="w-full h-full flex items-center justify-center"><FileImage size={28} className="text-[var(--text-muted)] opacity-30" /></div>}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                        <button onClick={(e) => { e.stopPropagation(); handleUnsaveCheckin(e, post.id); }} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100" title={vi ? 'Bỏ lưu' : 'Unsave'}>
+                          <Trash2 size={12} />
+                        </button>
+                        <span className="absolute bottom-2.5 left-2.5 bg-black/50 text-[10px] text-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">{dateString}</span>
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            {avatar ? <img src={avatar} alt="" className="w-5 h-5 rounded-full object-cover border border-[var(--border-subtle)]" /> : <div className="w-5 h-5 rounded-full bg-[var(--gold)] text-black font-bold flex items-center justify-center text-[9px]">{authorName.charAt(0)}</div>}
+                            <span className="text-[11px] font-bold text-[var(--text-secondary)] truncate">{authorName}</span>
+                          </div>
+                          <h3 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1">{post.destination}</h3>
+                          <p className="text-[11px] text-[var(--text-secondary)] leading-normal line-clamp-3">{post.content}</p>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-3">
+                          <div className="flex gap-3">
+                            <span className="flex items-center gap-1"><Heart size={10} className="text-rose-500 fill-rose-500/30" /> {post.likes}</span>
                           </div>
                           <span className="text-[var(--gold)] font-semibold flex items-center gap-1 group-hover:underline">{vi ? 'Xem chi tiết' : 'Details'} <ExternalLink size={9} /></span>
                         </div>

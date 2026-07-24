@@ -126,10 +126,12 @@ body {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Animated mesh gradient background */
@@ -5310,3 +5312,154 @@ body::before {
 .animate-float-heart {
   animation: float-heart 1.3s ease-out forwards;
 }
+
+/* Custom mobile responsive fixes for feed card layouts */
+@media (max-width: 640px) {
+  .card-hero-image {
+    height: 320px !important;
+  }
+  .card-hero-content {
+    padding: 12px 14px !important;
+  }
+}
+
+/* =========================================================
+   CHECKIN BOARDING PASS STYLE
+   ========================================================= */
+.boarding-pass-container {
+  background: linear-gradient(135deg, rgba(20, 28, 45, 0.98), rgba(8, 12, 24, 0.99));
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.boarding-pass-header {
+  border-bottom: 2px dashed rgba(212, 175, 55, 0.25);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Scissors/Cutout effects for ticket stub feel */
+.boarding-pass-container::before,
+.boarding-pass-container::after {
+  content: '';
+  position: absolute;
+  top: 90px;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-surface);
+  border-radius: 50%;
+  z-index: 10;
+}
+.boarding-pass-container::before {
+  left: -12px;
+  border-right: 1.5px solid rgba(212, 175, 55, 0.35);
+}
+.boarding-pass-container::after {
+  right: -12px;
+  border-left: 1.5px solid rgba(212, 175, 55, 0.35);
+}
+
+.boarding-pass-title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: #d4af37;
+  font-size: 11px;
+}
+
+.boarding-pass-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .boarding-pass-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.boarding-pass-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.boarding-pass-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.boarding-pass-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* Luggage tag badge style */
+.luggage-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: #0f172a;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+/* Polaroid image container */
+.polaroid-frame {
+  background: white;
+  padding: 12px 12px 28px 12px;
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+  transform: rotate(-2.5deg);
+  transition: transform 0.3s ease;
+  max-width: 320px;
+  margin: 20px auto;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.polaroid-frame:hover {
+  transform: rotate(1.5deg) scale(1.03);
+}
+
+.polaroid-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* Tape effect at the top of the polaroid */
+.polaroid-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 24px;
+  background-color: rgba(254, 240, 138, 0.45); /* translucent yellow tape */
+  backdrop-filter: blur(1px);
+  border-left: 1.5px dashed rgba(0,0,0,0.08);
+  border-right: 1.5px dashed rgba(0,0,0,0.08);
+  z-index: 10;
+}
+
+
+

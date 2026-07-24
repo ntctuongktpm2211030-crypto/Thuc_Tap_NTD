@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   X, MapPin, Clock, BookOpen, Heart, MessageCircle, Bookmark, Share2,
 } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import { RippleButton } from '../../components/ui/ripple-button';
 import type { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
 import { toast } from '../../contexts/ToastContext';
@@ -139,13 +141,21 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
     if (!post) return;
     setLiked(!!post.isLiked);
     setLikeCount(post.likes);
-    setSaved(!!post.isBookmarked);
+    
+    if (post.id.startsWith('checkin-')) {
+      const raw = localStorage.getItem('saved_checkins');
+      const currentSavedList = raw ? JSON.parse(raw) : [];
+      setSaved(currentSavedList.some((p: any) => p.id === post.id));
+    } else {
+      setSaved(!!post.isBookmarked);
+    }
+    
     setCommentCount(post.comments);
     setLikers([]);
   }, [post]);
 
   useEffect(() => {
-    if (!post) return;
+    if (!post || post.id.startsWith('checkin-')) return;
     postsService.get(post.id)
       .then(data => {
         if (data.likes) {
@@ -220,6 +230,10 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
       }
     }
 
+    if (post.id.startsWith('checkin-')) {
+      return;
+    }
+
     try {
       const res = await postsService.toggleLike(post.id);
       const serverLiked = res.liked;
@@ -256,6 +270,24 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
     setSaved(isNowSaved);
     if (onPostUpdated) {
       onPostUpdated(post.id, likeCount, commentCount, liked);
+    }
+
+    if (post.id.startsWith('checkin-')) {
+      try {
+        const raw = localStorage.getItem('saved_checkins');
+        let currentSavedList = raw ? JSON.parse(raw) : [];
+        if (isNowSaved) {
+          if (!currentSavedList.some((p: any) => p.id === post.id)) {
+            currentSavedList.push(post);
+          }
+        } else {
+          currentSavedList = currentSavedList.filter((p: any) => p.id !== post.id);
+        }
+        localStorage.setItem('saved_checkins', JSON.stringify(currentSavedList));
+      } catch (err) {
+        console.error("Failed to save checkin to localStorage:", err);
+      }
+      return;
     }
 
     try {
@@ -309,186 +341,200 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
         </button>
 
         <div className="post-detail-body-scrollable">
-          
-          {/* Header section (Author profile, check-in, metadata) */}
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <img
-                src={post.author.avatar}
-                alt={post.author.name}
-                className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/40 flex-shrink-0"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-[var(--text-primary)] text-sm sm:text-base">{post.author.name}</span>
-                  {post.author.verified && (
-                    <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] text-white font-bold">✓</span>
-                  )}
-                </div>
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--text-muted)] mt-0.5">
-                  <span className="flex items-center gap-1"><Clock size={10} />{post.date}</span>
-                  <span>·</span>
-                  <span className="flex items-center gap-1"><BookOpen size={10} />{readTime}</span>
-                  <span>·</span>
-                  <span className="flex items-center gap-1 text-[var(--gold)] font-medium">
-                    <MapPin size={10} />{post.destination.replace(/^📍\s*/, '')}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {post.displayType !== 'social' && 'category' in post && (
-              <span className="flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30">
-                {post.category}
-              </span>
-            )}
-          </div>
-
-          {/* Title and Subtitle */}
-          <h2 id="post-detail-title" className="font-editorial text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-snug mb-3">
-            {title}
-          </h2>
-
-          {showSubtitle && (
-            <p className="text-sm text-[var(--text-secondary)] font-medium mb-4 border-l-2 border-[var(--gold)] pl-3">
-              {subtitle}
-            </p>
-          )}
-
-          {payload && <PostDetailMetaRow payload={payload} />}
-          {payload?.tags && payload.tags.length > 0 && <PostDetailTags tags={payload.tags} />}
-
-          {/* Post Content */}
-          {body && (
-            <div className="post-detail-content prose-feed text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap mt-4">
-              {body}
-            </div>
-          )}
-
-          {/* Post Images Instagram-style Carousel */}
-          {images.length > 0 && (
-            <InstagramCarousel images={images} />
-          )}
-
-          {/* Map & Route points */}
-          {routePts.length >= 1 && (
-            <div className="post-detail-route mt-6">
-              <h3 className="post-detail-section-title mb-2">
-                <MapPin size={16} className="text-[var(--gold)]" />
-                Tuyến đường đề xuất
-                {routePts.length >= 2 && (
-                  <span className="post-detail-section-count">{routePts.length} điểm</span>
-                )}
-              </h3>
-              <div className="space-y-2 mb-3">
-                {routePts.map((p, i) => (
-                  <div key={p.id} className="flex gap-2 p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                    <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? 'bg-emerald-500 text-white' : 'bg-[var(--gold)] text-black'}`}>
-                      {i === 0 ? '▶' : i + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-[var(--gold)] uppercase">{routePointRoleLabel(i, routePts.length)}</p>
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
-                      {p.address && p.address !== p.name && (
-                        <p className="text-[11px] text-[var(--text-muted)] leading-snug">{p.address}</p>
+          {post.id.startsWith('checkin-') ? (
+            <CheckinBoardingPass
+              post={post}
+              likeCount={likeCount}
+              liked={liked}
+              saved={saved}
+              handleLike={handleLike}
+              handleBookmark={handleBookmark}
+              onClose={onClose}
+            />
+          ) : (
+            <>
+              {/* Header section (Author profile, check-in, metadata) */}
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} onClick={onClose} className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0">
+                    <img
+                      src={post.author.avatar}
+                      alt={post.author.name}
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--gold)]/40"
+                    />
+                  </Link>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-[var(--text-primary)] text-sm sm:text-base">{post.author.name}</span>
+                      {post.author.verified && (
+                        <span className="w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center text-[9px] text-white font-bold">✓</span>
                       )}
                     </div>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--text-muted)] mt-0.5">
+                      <span className="flex items-center gap-1"><Clock size={10} />{post.date}</span>
+                      <span>·</span>
+                      <span className="flex items-center gap-1"><BookOpen size={10} />{readTime}</span>
+                      <span>·</span>
+                      <span className="flex items-center gap-1 text-[var(--gold)] font-medium">
+                        <MapPin size={10} />{post.destination.replace(/^📍\s*/, '')}
+                      </span>
+                    </div>
                   </div>
-                ))}
+                </div>
+
+                {post.displayType !== 'social' && 'category' in post && (
+                  <span className="flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--gold-glow)] text-[var(--gold)] border border-[var(--gold)]/30">
+                    {post.category}
+                  </span>
+                )}
               </div>
-              <JourneyRouteMap points={routePts} interactive={false} height="300px" />
-            </div>
-          )}
 
-          {hasItinerary && payload && <PostDetailItinerary days={payload.days} />}
-          {hasTips && payload && <PostDetailTips tips={payload.tips} />}
+              <h2 id="post-detail-title" className="font-editorial text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-snug mb-3" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                {title}
+              </h2>
 
-          {/* Interactions bar (Screenshot 2 style layout) */}
-          <div className="flex items-center justify-between border-t border-b border-[var(--border-subtle)] py-3 px-1 mt-6">
-            {/* Left: Like Action & Count */}
-            <button
-              type="button"
-              onClick={handleLike}
-              className="flex items-center gap-2 text-xs font-bold text-[var(--text-primary)] hover:text-rose-500 transition-colors"
-            >
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                liked ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-500/10 text-[var(--text-secondary)]'
-              }`}>
-                <Heart size={16} className={liked ? 'fill-current' : ''} />
-              </span>
-              <span>{likeCount.toLocaleString()} {labels.likes}</span>
-            </button>
+              {showSubtitle && (
+                <p className="text-sm text-[var(--text-secondary)] font-medium mb-4 border-l-2 border-[var(--gold)] pl-3" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                  {subtitle}
+                </p>
+              )}
 
-            {/* Right: Comments, Save (Bookmark), Share */}
-            <div className="flex items-center gap-4 sm:gap-5 text-xs font-bold text-[var(--text-secondary)]">
-              {/* Comment Count */}
-              <span className="flex items-center gap-2 text-[var(--text-secondary)]">
-                <MessageCircle size={16} className="text-blue-500" />
-                <span>{commentCount} {labels.comments}</span>
-              </span>
+              {payload && <PostDetailMetaRow payload={payload} />}
+              {payload?.tags && payload.tags.length > 0 && <PostDetailTags tags={payload.tags} />}
 
-              {/* Bookmark (Save) */}
-              <button
-                type="button"
-                onClick={handleBookmark}
-                className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors ${
-                  saved ? 'text-[var(--gold)]' : ''
-                }`}
-              >
-                <Bookmark size={16} className={`text-amber-500 ${saved ? 'fill-current' : ''}`} />
-                <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
-              </button>
+              {body && (
+                <div className="post-detail-content prose-feed text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap mt-4" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                  {body}
+                </div>
+              )}
 
-              {/* Share link copying */}
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
-                }}
-                className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
-              >
-                <Share2 size={16} className="text-emerald-500" />
-                <span>Chia</span>
-              </button>
-            </div>
-          </div>
+              {/* Post Images Instagram-style Carousel */}
+              {images.length > 0 && (
+                <InstagramCarousel images={images} />
+              )}
 
-          {/* Likers section */}
-          {likers.length > 0 && (
-            <div className="mt-4 p-3 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] animate-fade-in">
-              <p className="text-xs font-bold text-[var(--text-secondary)] mb-2 flex items-center gap-1.5">
-                <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" /> Đã thích bởi ({likers.length})
-              </p>
-              <div className="flex flex-wrap gap-2 items-center">
-                {likers.map((liker) => (
-                  <div
-                    key={liker.id}
-                    className="flex items-center gap-1.5 bg-[var(--bg-surface)] hover:bg-[var(--bg-overlay)] px-2.5 py-1 rounded-full border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] transition-colors cursor-pointer group"
-                    title={liker.name}
-                  >
-                    {liker.avatar ? (
-                      <img
-                        src={liker.avatar}
-                        alt=""
-                        className="w-5 h-5 rounded-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                    ) : (
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 text-white flex items-center justify-center font-bold text-[10px]">
-                        {liker.name.charAt(0).toUpperCase()}
-                      </div>
+              {/* Map & Route points */}
+              {routePts.length >= 1 && (
+                <div className="post-detail-route mt-6">
+                  <h3 className="post-detail-section-title mb-2">
+                    <MapPin size={16} className="text-[var(--gold)]" />
+                    Tuyến đường đề xuất
+                    {routePts.length >= 2 && (
+                      <span className="post-detail-section-count">{routePts.length} điểm</span>
                     )}
-                    <span className="font-semibold">{liker.name}</span>
+                  </h3>
+                  <div className="space-y-2 mb-3">
+                    {routePts.map((p, i) => (
+                      <div key={p.id} className="flex gap-2 p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+                        <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? 'bg-emerald-500 text-white' : 'bg-[var(--gold)] text-black'}`}>
+                          {i === 0 ? '▶' : i + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-bold text-[var(--gold)] uppercase">{routePointRoleLabel(i, routePts.length)}</p>
+                          <p className="text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
+                          {p.address && p.address !== p.name && (
+                            <p className="text-[11px] text-[var(--text-muted)] leading-snug">{p.address}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                  <JourneyRouteMap points={routePts} interactive={false} height="300px" />
+                </div>
+              )}
 
-          {/* Comments Section */}
-          <div className="mt-8 border-t border-[var(--border-subtle)] pt-6">
-            <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
-          </div>
+              {hasItinerary && payload && <PostDetailItinerary days={payload.days} />}
+              {hasTips && payload && <PostDetailTips tips={payload.tips} />}
+
+              {/* Interactions bar (Screenshot 2 style layout) */}
+              <div className="flex items-center justify-between border-t border-b border-[var(--border-subtle)] py-3 px-1 mt-6">
+                {/* Left: Like Action & Count */}
+                <RippleButton
+                  type="button"
+                  onClick={handleLike}
+                  className="flex items-center gap-2 text-xs font-bold text-[var(--text-primary)] hover:text-rose-500 transition-colors border-0 p-0 bg-transparent"
+                  rippleColor="rgba(244,63,94,0.4)"
+                >
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                    liked ? 'bg-rose-500/10 text-rose-500' : 'bg-slate-500/10 text-[var(--text-secondary)]'
+                  }`}>
+                    <Heart size={16} className={liked ? 'fill-current' : ''} />
+                  </span>
+                  <span>{likeCount.toLocaleString()}</span>
+                </RippleButton>
+
+                {/* Right: Comments, Save (Bookmark), Share */}
+                <div className="flex items-center gap-4 sm:gap-5 text-xs font-bold text-[var(--text-secondary)]">
+                  {/* Comment Count */}
+                  <span className="flex items-center gap-2 text-[var(--text-secondary)]">
+                    <MessageCircle size={16} className="text-blue-500" />
+                    <span>{commentCount} {labels.comments}</span>
+                  </span>
+
+                  {/* Bookmark (Save) */}
+                  <button
+                    type="button"
+                    onClick={handleBookmark}
+                    className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors ${
+                      saved ? 'text-[var(--gold)]' : ''
+                    }`}
+                  >
+                    <Bookmark size={16} className={`text-amber-500 ${saved ? 'fill-current' : ''}`} />
+                    <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
+                  </button>
+
+                  {/* Share link copying */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
+                    }}
+                    className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+                  >
+                    <Share2 size={16} className="text-emerald-500" />
+                    <span>Chia</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Likers section */}
+              {likers.length > 0 && (
+                <div className="mt-4 p-3 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] animate-fade-in">
+                  <p className="text-xs font-bold text-[var(--text-secondary)] mb-2 flex items-center gap-1.5">
+                    <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" /> Đã thích bởi ({likers.length})
+                  </p>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {likers.map((liker) => (
+                      <div
+                        key={liker.id}
+                        className="flex items-center gap-1.5 bg-[var(--bg-surface)] hover:bg-[var(--bg-overlay)] px-2.5 py-1 rounded-full border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] transition-colors cursor-pointer group"
+                        title={liker.name}
+                      >
+                        {liker.avatar ? (
+                          <img
+                            src={liker.avatar}
+                            alt=""
+                            className="w-5 h-5 rounded-full object-cover group-hover:scale-105 transition-transform"
+                          />
+                        ) : (
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--gold)] to-violet-500 text-white flex items-center justify-center font-bold text-[10px]">
+                            {liker.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <span className="font-semibold">{liker.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Comments Section */}
+              <div className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+                <CommentsSection postId={post.id} onCommentCountChange={setCommentCount} />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -498,6 +544,161 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           {toastMessage}
         </div>
       )}
+    </div>
+  );
+}
+
+function CheckinBoardingPass({
+  post,
+  likeCount,
+  liked,
+  saved,
+  handleLike,
+  handleBookmark,
+  onClose,
+}: {
+  post: any;
+  likeCount: number;
+  liked: boolean;
+  saved: boolean;
+  handleLike: () => void;
+  handleBookmark: () => void;
+  onClose?: () => void;
+}) {
+  const images = getPostImages(post);
+  const singlePoint = [{
+    id: post.id,
+    name: post.destination.replace(/^📍\s*/, ''),
+    address: post.destination.replace(/^📍\s*/, ''),
+    lat: post.latitude || 21.0285,
+    lng: post.longitude || 105.8048,
+  }];
+
+  const latLabel = post.latitude ? `${post.latitude.toFixed(4)}° N` : '21.0285° N';
+  const lngLabel = post.longitude ? `${post.longitude.toFixed(4)}° E` : '105.8048° E';
+
+  return (
+    <div className="boarding-pass-container">
+      {/* Header */}
+      <div className="boarding-pass-header flex items-center justify-between">
+        <div>
+          <span className="boarding-pass-title">SMART TRAVEL BOARDING PASS</span>
+          <h2 className="text-lg font-black text-[var(--gold)] mt-1 flex items-center gap-1.5">
+            ✈️ {post.destination.replace(/^📍\s*/, '')}
+          </h2>
+        </div>
+        <div className="flex flex-col items-end">
+          <span className="text-[8px] uppercase tracking-wider text-slate-400 font-extrabold">STATUS</span>
+          <span className="inline-flex items-center gap-1 text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-black border border-emerald-500/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            LIVE CHECK-IN
+          </span>
+        </div>
+      </div>
+
+      {/* Ticket Grid Details */}
+      <div className="boarding-pass-grid">
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">PASSENGER / TRAVELER</span>
+          <div className="flex items-center gap-2 mt-1">
+            <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} onClick={onClose} className="block hover:scale-105 transition-transform cursor-pointer">
+              <img src={post.author.avatar} className="w-6 h-6 rounded-full object-cover border border-[var(--gold)]/30" />
+            </Link>
+            <span className="boarding-pass-value truncate max-w-[100px]">{post.author.name}</span>
+          </div>
+        </div>
+
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">DATE & TIME</span>
+          <span className="boarding-pass-value mt-1">{post.date}</span>
+        </div>
+
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">CATEGORY TAG</span>
+          <div className="mt-1">
+            <span className="luggage-tag">
+              🏷️ {post.category || 'CHECK-IN'}
+            </span>
+          </div>
+        </div>
+
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">GPS LATITUDE</span>
+          <span className="boarding-pass-value text-slate-300 font-mono">{latLabel}</span>
+        </div>
+
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">GPS LONGITUDE</span>
+          <span className="boarding-pass-value text-slate-300 font-mono">{lngLabel}</span>
+        </div>
+
+        <div className="boarding-pass-field">
+          <span className="boarding-pass-label">GIS VALIDATED</span>
+          <span className="boarding-pass-value text-emerald-400 font-extrabold flex items-center gap-1">🔒 YES</span>
+        </div>
+      </div>
+
+      {/* Notes / Traveler Diary */}
+      {post.content && (
+        <div className="my-4 bg-slate-900/50 border border-slate-800 rounded-xl p-3.5 italic text-slate-300 relative">
+          <div className="absolute top-0 right-3 -translate-y-1/2 text-2xl text-[var(--gold)] opacity-35 font-serif">“</div>
+          <p className="text-xs sm:text-sm leading-relaxed" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+            "{post.content}"
+          </p>
+        </div>
+      )}
+
+      {/* Polaroid photo display */}
+      {images.length > 0 && (
+        <div className="relative my-6">
+          <div className="polaroid-tape" />
+          <div className="polaroid-frame">
+            <img src={images[0]} className="polaroid-image" alt="Check-in Photo" />
+            <p className="text-slate-800 text-[10px] text-center font-serif mt-2 truncate">
+              📍 {post.destination.replace(/^📍\s*/, '')} · {post.date}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Location Map Preview */}
+      <div className="mt-6 rounded-xl overflow-hidden border border-slate-800">
+        <div className="bg-slate-900/80 px-3 py-2 text-[10px] font-black uppercase text-slate-400 flex items-center justify-between">
+          <span>🗺️ GPS Location Preview</span>
+          <span className="text-[8px] text-[var(--gold)]">14x Zoom</span>
+        </div>
+        <JourneyRouteMap points={singlePoint} interactive={false} height="200px" />
+      </div>
+
+      {/* Interaction Actions */}
+      <div className="flex items-center justify-between border-t border-slate-800 pt-4 mt-6">
+        <RippleButton
+          type="button"
+          onClick={handleLike}
+          className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-rose-500 transition-colors border-0 p-0 bg-transparent"
+          rippleColor="rgba(244,63,94,0.4)"
+        >
+          <span className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+            liked ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-850 text-slate-400'
+          }`}>
+            <Heart size={14} className={liked ? 'fill-current' : ''} />
+          </span>
+          <span>{likeCount}</span>
+        </RippleButton>
+
+        <div className="flex items-center gap-4 text-xs font-bold text-slate-400">
+          <button
+            type="button"
+            onClick={handleBookmark}
+            className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors ${
+              saved ? 'text-[var(--gold)]' : ''
+            }`}
+          >
+            <Bookmark size={14} className={`text-amber-500 ${saved ? 'fill-current' : ''}`} />
+            <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
