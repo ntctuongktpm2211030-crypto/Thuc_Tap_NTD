@@ -17,7 +17,9 @@ export interface MapLocation {
   time?: string;
   address?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   tag?: string;
+  tags?: string[];
   color?: string;
   allCheckins?: { user: string; avatar: string; note: string; time: string }[];
 }
@@ -32,6 +34,7 @@ interface MapLibreMapProps {
   onRemovePointFromRoute?: (id: string) => void;
   aiRecommendedIds?: string[];
   weatherInfo?: { condition: string; temp: string };
+  selectedLocation?: MapLocation | null;
   onSelectLocation?: (loc: MapLocation | null) => void;
   destination?: string;
   onCenterChange?: (center: [number, number]) => void;
@@ -63,59 +66,19 @@ function getCirclePolygon(center: [number, number], radiusKm: number) {
   return coords;
 }
 
-// Custom SVGs matching previous map aesthetics
-const svgRedString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#ef4444">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-</svg>
-`;
-
-const svgGoldString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#d4af37">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-</svg>
-`;
-
-const svgBlueString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#3b82f6">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-</svg>
-`;
-
-const svgGreenString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#10b981">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-</svg>
-`;
-
+// Custom SVG for Events / Cultural Festivals
 const svgEventString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#a855f7">
-  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/>
-</svg>
-`;
-
-const svgFoodString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#f97316">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm2.5 6c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-6.5.5V11H6.5v-2.5h-1c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h2.5c.28 0 .5.22.5.5v3.5c0 .28-.22.5-.5.5zm11 1.5v3c0 .55-.45 1-1 1h-1.5v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V12h-1c-.55 0-1-.45-1-1V7c0-.55.45-1 1-1H18c.28 0 .5.22.5.5v3.5c0 .28-.22.5-.5.5z"/>
-</svg>
-`;
-
-const svgHotelString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#a855f7">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm5 11c0 .55-.45 1-1 1h-2v1.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V14H9v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5V12c0-.55.45-1 1-1h7c.55 0 1 .45 1 1z"/>
-</svg>
-`;
-
-const svgCafeString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#ec4899">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm4 10h-2V9.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12H9v-2.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12c0 .55.45 1 1 1h7c.55 0 1-.45 1-1z"/>
-</svg>
-`;
-
-const svgNatureString = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#10b981">
-  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm1.75 8l-1.3-1.74c-.2-.27-.6-.27-.8 0L10.25 10H8.5c-.41 0-.75.34-.75.75s.34.75.75.75h1.15l1.05 1.4c.2.27.6.27.8 0l1.05-1.4h1.7c.41 0 .75-.34.75-.75s-.34-.75-.75-.75h-.5z"/>
-</svg>
+<div style="position: relative; width: 34px; height: 42px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.35));">
+  <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 0C7.61116 0 0 7.61116 0 17C0 27.5 17 42 17 42C17 42 34 27.5 34 17C34 7.61116 26.3888 0 17 0Z" fill="#a855f7"/>
+    <circle cx="17" cy="17" r="13" fill="white" fill-opacity="0.25"/>
+  </svg>
+  <div style="position: absolute; top: 7px; left: 7px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="white" d="M12 2L2 7v2h20V7L12 2zm-8 8v8h3v-8H4zm6 0v8h3v-8h-3zm6 0v8h3v-8h-3zM2 20v2h20v-2H2z"/>
+    </svg>
+  </div>
+</div>
 `;
 
 const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boolean, allLocations: MapLocation[] = []) => {
@@ -312,6 +275,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
   onRemovePointFromRoute,
   aiRecommendedIds = [],
   weatherInfo = { condition: 'Sunny', temp: '28' },
+  selectedLocation = null,
   onSelectLocation,
   destination,
   onCenterChange,
@@ -500,6 +464,49 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       }
     });
 
+    // Helper to generate colorful teardrop SVG pins matching Image 1
+    const getCategoryPinSvg = (loc: MapLocation, isAiRec: boolean) => {
+      const cat = (loc.category || '').toLowerCase();
+      let pinColor = '#3b82f6'; // default blue
+      let iconSvg = `<path fill="white" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>`;
+
+      if (cat.includes('food') || cat.includes('restaurant') || cat.includes('nhà hàng') || cat.includes('cà phê') || cat.includes('cafe') || cat.includes('ăn')) {
+        pinColor = '#f97316'; // Orange for food & dining
+        iconSvg = `<path fill="white" d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v6h2.5v10H21V2c-2.76 0-5 2.24-5 4z"/>`;
+      } else if (cat.includes('hotel') || cat.includes('khách sạn') || cat.includes('homestay') || cat.includes('lưu trú')) {
+        pinColor = '#3b82f6'; // Blue for hotel & stay
+        iconSvg = `<path fill="white" d="M19 7h-8v8H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4zm-9 6H3V9h7v4z"/>`;
+      } else if (cat.includes('festival') || cat.includes('lễ hội') || cat.includes('sự kiện') || cat.includes('culture') || cat.includes('văn hóa') || cat.includes('bảo tàng')) {
+        pinColor = '#a855f7'; // Purple for culture & events
+        iconSvg = `<path fill="white" d="M12 2L2 7v2h20V7L12 2zm-8 8v8h3v-8H4zm6 0v8h3v-8h-3zm6 0v8h3v-8h-3zM2 20v2h20v-2H2z"/>`;
+      } else if (cat.includes('nature') || cat.includes('thiên nhiên') || cat.includes('cồn') || cat.includes('tham quan')) {
+        pinColor = '#10b981'; // Green for nature & attractions
+        iconSvg = `<path fill="white" d="M14 6l-3.75 5 2.85 3.8L11 16l-4-5.33L1 18h22L14 6z"/>`;
+      } else if (cat.includes('photo') || cat.includes('checkin') || cat.includes('attraction')) {
+        pinColor = '#ec4899'; // Pink for photo & checkin spots
+        iconSvg = `<path fill="white" d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0a3.2 3.2 0 1 0 -6.4 0M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9z"/>`;
+      } else if (loc.color === 'red') {
+        pinColor = '#ef4444';
+      } else if (loc.color === 'gold') {
+        pinColor = '#eab308';
+      }
+
+      return `
+        <div style="position: relative; width: 34px; height: 42px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.35)); transition: transform 0.2s ease;" class="hover:scale-110">
+          <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 0C7.61116 0 0 7.61116 0 17C0 27.5 17 42 17 42C17 42 34 27.5 34 17C34 7.61116 26.3888 0 17 0Z" fill="${pinColor}"/>
+            <circle cx="17" cy="17" r="13" fill="white" fill-opacity="0.25"/>
+          </svg>
+          <div style="position: absolute; top: 7px; left: 7px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              ${iconSvg}
+            </svg>
+          </div>
+          ${isAiRec ? `<div style="position: absolute; top: -3px; right: -3px; background: #3b82f6; color: white; width: 14px; height: 14px; border-radius: 50%; font-size: 9px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 1.5px solid white;">★</div>` : ''}
+        </div>
+      `;
+    };
+
     // Draw normal markers
     adjustedLocations.forEach(loc => {
       const isLiveFriend = loc.id.startsWith('live-');
@@ -525,17 +532,16 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         img.style.objectFit = 'cover';
         el.appendChild(img);
       } else {
-        const svg = getSvgIcon(loc, aiRecommendedIds.includes(loc.id));
-        el.innerHTML = svg;
-        el.style.width = '30px';
-        el.style.height = '30px';
+        el.innerHTML = getCategoryPinSvg(loc, aiRecommendedIds.includes(loc.id));
+        el.style.width = '34px';
+        el.style.height = '42px';
       }
 
       const content = createPopupContent(loc, vi, !!onAddPointToRoute, locations);
       const popup = new maplibregl.Popup({ offset: 25 })
         .setHTML(`<div style="color:black; padding:4px;">${content}</div>`);
 
-      const marker = new maplibregl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: el, anchor: isLiveFriend ? 'center' : 'bottom' })
         .setLngLat([loc.lng, loc.lat])
         .setPopup(popup)
         .addTo(map);
@@ -553,33 +559,30 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       mlMarkersRef.current.push(marker);
     });
 
-    // Draw current user marker
+    // Draw current user marker with pulsing blue ripple halo effect (Image 1 style)
     if (currentUserLoc) {
       const el = document.createElement('div');
-      el.style.width = '40px';
-      el.style.height = '40px';
-      el.style.borderRadius = '50%';
-      el.style.border = '3px solid #3b82f6';
-      el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-      el.style.backgroundColor = '#ffffff';
-      el.style.overflow = 'hidden';
-      el.style.cursor = 'pointer';
+      el.style.position = 'relative';
+      el.style.width = '54px';
+      el.style.height = '54px';
       el.style.display = 'flex';
       el.style.alignItems = 'center';
       el.style.justifyContent = 'center';
+      el.style.cursor = 'pointer';
 
-      const img = document.createElement('img');
-      img.src = currentUserLoc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      el.appendChild(img);
+      el.innerHTML = `
+        <div style="position: absolute; width: 54px; height: 54px; border-radius: 50%; background: rgba(59, 130, 246, 0.25); animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>
+        <div style="position: absolute; width: 44px; height: 44px; border-radius: 50%; background: rgba(59, 130, 246, 0.35); animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
+        <div style="position: relative; width: 34px; height: 34px; border-radius: 50%; border: 2.5px solid white; background: #ffffff; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10;">
+          <img src="${currentUserLoc.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" style="width:100%; height:100%; object-fit:cover;" />
+        </div>
+      `;
 
       const content = createPopupContent(currentUserLoc, vi, !!onAddPointToRoute, locations);
       const popup = new maplibregl.Popup({ offset: 15 })
         .setHTML(`<div style="color:black; padding:4px;">${content}</div>`);
 
-      const userMarker = new maplibregl.Marker({ element: el })
+      const userMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat([currentUserLoc.lng, currentUserLoc.lat])
         .setPopup(popup)
         .addTo(map);
@@ -783,8 +786,8 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       eventsData.forEach(evt => {
         const el = document.createElement('div');
         el.innerHTML = svgEventString;
-        el.style.width = '30px';
-        el.style.height = '30px';
+        el.style.width = '34px';
+        el.style.height = '42px';
         el.style.cursor = 'pointer';
 
         const evtLoc = {
@@ -800,7 +803,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         const popup = new maplibregl.Popup({ offset: 25 })
           .setHTML(`<div style="color:black; padding:4px;">${content}</div>`);
 
-        const m = new maplibregl.Marker({ element: el })
+        const m = new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([evt.longitude, evt.latitude])
           .setPopup(popup)
           .addTo(map);
@@ -809,34 +812,6 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       });
     }
   }, [showEvents, eventsData, loaded]);
-
-  const getSvgIcon = (loc: MapLocation, isRecommended: boolean) => {
-    if (loc.color) {
-      if (loc.color === 'red') return svgRedString;
-      if (loc.color === 'blue') return svgBlueString;
-      if (loc.color === 'gold') return svgGoldString;
-      if (loc.color === 'green') return svgGreenString;
-      if (loc.color === 'purple') return svgEventString;
-    }
-
-    const isLive = loc.id.startsWith('live-');
-    const isCheckin = !!loc.user && !isLive;
-
-    if (loc.id.startsWith('osm-place-')) return svgRedString;
-    if (isLive) return svgBlueString;
-    if (isRecommended) return svgGreenString;
-    if (isCheckin) {
-      const tag = (loc.tag || '').toLowerCase();
-      const cat = (loc.category || '').toLowerCase();
-      if (tag === 'food' || cat === 'restaurant') return svgFoodString;
-      if (tag === 'hotel' || cat === 'hotel') return svgHotelString;
-      if (tag === 'cafe' || cat === 'cafe') return svgCafeString;
-      if (tag === 'nature' || cat === 'nature') return svgNatureString;
-      return svgRedString;
-    }
-    if (loc.category === 'festival') return svgEventString;
-    return svgGoldString;
-  };
 
   const timelinePoints = routePoints.length > 0 ? routePoints : locations;
 
@@ -1008,6 +983,58 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Floating Selected Location Card overlay (Image 1 & 2 Reference) */}
+      {selectedLocation && (
+        <div className="absolute bottom-14 right-4 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 p-3.5 rounded-2xl shadow-2xl flex items-center gap-3.5 max-w-sm animate-fade-in">
+          {/* Location Thumbnail */}
+          <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0 border border-slate-100 dark:border-slate-800 bg-slate-100">
+            <img
+              src={selectedLocation.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80'}
+              alt={selectedLocation.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Content Info */}
+          <div className="flex-1 min-w-0 pr-3">
+            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white truncate">
+              {selectedLocation.name}
+            </h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate mt-0.5">
+              {selectedLocation.category || (vi ? 'Điểm du lịch nổi bật' : 'Featured Destination')}
+            </p>
+
+            <div className="flex items-center gap-2 mt-1.5 text-xs">
+              <span className="text-amber-500 font-bold flex items-center gap-0.5">
+                ⭐ 4.8 <span className="text-[10px] text-slate-400 font-normal">(256)</span>
+              </span>
+              <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                {vi ? 'Đang mở cửa' : 'Open'}
+              </span>
+            </div>
+
+            <button
+              onClick={() => {
+                if (onAddPointToRoute) onAddPointToRoute(selectedLocation);
+              }}
+              className="mt-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 px-3.5 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            >
+              <Compass size={13} />
+              <span>{vi ? 'Xem chi tiết' : 'View Details'}</span>
+            </button>
+          </div>
+
+          {/* Close button */}
+          <button
+            onClick={() => onSelectLocation && onSelectLocation(null)}
+            className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 border-none bg-transparent cursor-pointer text-xs"
+          >
+            ✕
+          </button>
         </div>
       )}
 

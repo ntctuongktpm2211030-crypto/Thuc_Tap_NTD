@@ -13,6 +13,7 @@ import { useLang } from './contexts/LanguageContext';
 import AuthPage from './features/auth/AuthPage';
 import logoImg from './assets/logo.png';
 import UserMenuDropdown from './components/layout/UserMenuDropdown';
+import Footer from './components/layout/Footer';
 import { io } from 'socket.io-client';
 
 // ─── Page imports ──────────────────────────────────────────
@@ -612,19 +613,7 @@ function App() {
       </main>
 
       {/* ── Footer ── */}
-      {!isFullscreenCreate && (
-      <footer className="border-t border-[var(--border-subtle)] py-8 bg-[var(--bg-surface)]">
-        <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center">
-              <img src={logoImg} alt="Terraholic Logo" className="w-full h-full object-contain" />
-            </div>
-            <span className="font-editorial text-sm text-[var(--text-secondary)]">{t('footer.thesis')}</span>
-          </div>
-
-        </div>
-      </footer>
-      )}
+      {!isFullscreenCreate && <Footer />}
 
       {/* Real-time Toast Notification */}
       {toastMessage && (

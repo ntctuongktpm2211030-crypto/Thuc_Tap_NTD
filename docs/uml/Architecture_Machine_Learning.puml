@@ -1,0 +1,99 @@
+@startuml Architecture_Machine_Learning
+
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "1. Tang Thu Thap & Tien Xu Ly Du Lieu" {
+  class "User Preferences & History" as DataUser {
+    + travelHistories
+    + checkIns
+    + ratings & reviews
+  }
+  class "GIS & Destination Data" as DataDest {
+    + coordinates (lat, lng)
+    + EXIF metadata
+    + categories & tags
+  }
+  class "Knowledge Base" as DataKnowledge {
+    + culture guides
+    + local gastronomy
+  }
+}
+
+package "2. Tang Bieu Dien Vector & Retrieval" {
+  class "Embeddings Engine" as EmbeddingsEngine {
+    + generateEmbeddings(text: String): Float[]
+  }
+  class "Vector Store (PGVector)" as VectorStore {
+    + similaritySearch(embedding: Float[]): Document[]
+  }
+}
+
+package "3. Tang Mo Hinh Hoc May & AI Cot Loi" {
+  package "Recommendation Engine" {
+    class "Content-Based Filtering" as CBF {
+      + matchUserProfile(userVector, destVector)
+    }
+    class "Collaborative Filtering" as CF {
+      + matchSimilarUsers(userId)
+    }
+    class "Scoring & Ranking Model" as Scoring {
+      + calculateScore(user, destination)
+    }
+  }
+
+  package "RAG & Multi-Agent Framework" {
+    class "Intent Classifier & Slot Filling" as IntentRouter {
+      + classifyIntent(query): AgentType
+      + extractSlots(query): Slots
+    }
+    class "LLM Core (Llama / Gemini / Groq)" as LLMCore {
+      + generateResponse(prompt): String
+    }
+    class "Specialized AI Agents" as AIAgents {
+      + TravelAgent
+      + FoodAgent
+      + CultureAgent
+      + RecommendationAgent
+    }
+  }
+
+  package "Route Optimization" {
+    class "TSP Route Optimizer" as TSPOptimizer {
+      + optimizeRoute(locations: Point[]): Route
+    }
+  }
+}
+
+package "4. Tang Kiem Soat & Guardrails" {
+  class "Guardrails & Safety" as Guardrails {
+    + checkInput(prompt)
+    + checkOutput(response)
+  }
+  class "Semantic Cache (Redis)" as SemanticCache {
+    + getCachedResponse(query)
+  }
+  class "Fact Verifier & Citation" as FactVerifier {
+    + verifyFacts(response, sourceDocs)
+    + generateCitations(docs)
+  }
+}
+
+DataUser --> EmbeddingsEngine
+DataDest --> EmbeddingsEngine
+DataKnowledge --> EmbeddingsEngine
+EmbeddingsEngine --> VectorStore
+
+VectorStore --> CBF
+VectorStore --> IntentRouter
+DataUser --> CF
+CBF --> Scoring
+CF --> Scoring
+
+IntentRouter --> AIAgents
+AIAgents --> LLMCore
+LLMCore --> Guardrails
+Guardrails --> FactVerifier
+
+@enduml
