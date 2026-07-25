@@ -231,7 +231,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 // POST /api/v1/trips/ai-generate — AI itinerary generation
 // ─────────────────────────────────────────────────────────
-router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/ai-generate', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { destination, durationDays, totalBudget, dailyBudget, currency, interests, travelStyle, transportation } = req.body;
 
@@ -252,15 +252,17 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
       transportation: transportation || 'Xe máy',
     });
 
-    // 2. Persist to AIHistory table for analytics
-    await prisma.aIHistory.create({
-      data: {
-        userId: req.user!.sub,
-        promptText: `destination=${destination} days=${durationDays} budget=${calculatedTotalBudget} style=${travelStyle}`,
-        responseJson: JSON.stringify(aiResult),
-        type: 'itinerary',
-      },
-    });
+    // 2. Persist to AIHistory table for analytics if logged in
+    if (req.user?.sub) {
+      await prisma.aIHistory.create({
+        data: {
+          userId: req.user.sub,
+          promptText: `destination=${destination} days=${durationDays} budget=${calculatedTotalBudget} style=${travelStyle}`,
+          responseJson: JSON.stringify(aiResult),
+          type: 'itinerary',
+        },
+      }).catch(e => console.warn('[trips/ai-generate] AIHistory save warning:', e));
+    }
 
     return res.status(200).json(aiResult);
   } catch (err) {
@@ -272,7 +274,7 @@ router.post('/ai-generate', requireAuth, async (req: AuthRequest, res: Response)
 // ─────────────────────────────────────────────────────────
 // POST /api/v1/trips/ai-regenerate-part — AI partial regeneration (day or session)
 // ─────────────────────────────────────────────────────────
-router.post('/ai-regenerate-part', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/ai-regenerate-part', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
     const {
       destination,

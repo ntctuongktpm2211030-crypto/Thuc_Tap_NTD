@@ -227,7 +227,19 @@ const TripPlanner = () => {
     setInterests(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val]);
 
   const handleGenerate = async () => {
-    if (!destination || days === '' || budget === '') return;
+    if (!destination || !destination.trim()) {
+      error(lang === 'vi' ? 'Vui lòng nhập điểm đến (Ví dụ: Hà Giang, Đà Lạt, Đà Nẵng...)' : 'Please enter a destination!');
+      return;
+    }
+    if (days === '' || Number(days) <= 0) {
+      error(lang === 'vi' ? 'Vui lòng nhập số ngày du lịch (Ví dụ: 2, 3...)' : 'Please enter number of days!');
+      return;
+    }
+    if (budget === '' || Number(budget) <= 0) {
+      error(lang === 'vi' ? 'Vui lòng nhập tổng ngân sách dự kiến!' : 'Please enter total budget!');
+      return;
+    }
+
     setLoading(true); setOptimized(false); setAiError(null); setSelectedDay(1); setSavedTripId(null);
     try {
       const result = await tripsService.TaoChuyenDiBangAI({
@@ -597,8 +609,8 @@ const TripPlanner = () => {
             {/* Generate Button */}
             <RippleButton 
               onClick={handleGenerate} 
-              disabled={loading || !destination || days === '' || budget === ''} 
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all border border-transparent disabled:cursor-not-allowed"
+              disabled={loading} 
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all border border-transparent disabled:cursor-not-allowed cursor-pointer"
               rippleColor="rgba(255,255,255,0.4)"
             >
               {loading ? (
