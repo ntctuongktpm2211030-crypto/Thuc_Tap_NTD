@@ -148,6 +148,7 @@ export const tripsService = {
   SaoChepChuyenDi: (tripId: string) => apiClient.post(`/trips/${tripId}/clone`).then(r => r.data),
   KhamPhaChuyenDiCongKhai: (params?: { destination?: string; page?: number }) =>
     apiClient.get('/trips/discover/public', { params }).then(r => r.data),
+  LayLichSuTaoChuyenDiAI: () => apiClient.get('/trips/ai-history').then(r => r.data),
 
   // Alias tương thích ngược
   list: () => tripsService.LayDanhSachChuyenDi(),
@@ -159,6 +160,7 @@ export const tripsService = {
   aiRegeneratePart: (payload: any) => tripsService.TaoLaiMotPhanChuyenDiBangAI(payload),
   optimizeRoute: (waypoints: Waypoint[]) => tripsService.ToiUuDuongDi(waypoints),
   clone: (tripId: string) => tripsService.SaoChepChuyenDi(tripId),
+  aiHistory: () => tripsService.LayLichSuTaoChuyenDiAI(),
   };
 
 // ─────────────────────────────────────────────────────────

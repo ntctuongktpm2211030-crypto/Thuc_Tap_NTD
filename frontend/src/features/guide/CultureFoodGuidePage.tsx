@@ -7,6 +7,7 @@ import {
 import { useLang } from '../../contexts/LanguageContext';
 import { ModernIconPod } from '../../config/modernIcons';
 import guideVideo from '../../../../video.mp4';
+import { KineticText } from '../../components/ui/kinetic-text';
 
 const CATEGORIES = [
   { id: 'all', labelVi: 'Tất cả', labelEn: 'All', icon: Sparkles, variant: 'brand' as const },
@@ -142,7 +143,11 @@ export default function CultureFoodGuidePage() {
               </div>
               
               <h1 className="font-editorial text-3.5xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white drop-shadow-sm">
-                {vi ? 'Cẩm Nang Văn Hóa & Ẩm Thực' : 'Culture & Culinary Guide'}
+                {vi ? (
+                  <KineticText text="Cẩm Nang Văn Hóa & Ẩm Thực" as="span" />
+                ) : (
+                  <KineticText text="Culture & Culinary Guide" as="span" />
+                )}
               </h1>
               
               <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-medium max-w-xl">

@@ -407,7 +407,6 @@ export default function SavedPage() {
         <circle cx="100" cy="100" r="80" strokeWidth="1" strokeDasharray="6 6" />
         <circle cx="100" cy="100" r="60" strokeWidth="0.5" />
         <path d="M100 10 L100 190 M10 100 L190 100" strokeWidth="1" />
-        <polygon points="100,20 108,92 180,100 108,108 100,180 92,108 20,100 92,92" fill="currentColor" opacity="0.2" />
       </svg>
 
       {/* ── Multi-Layer Vibrant Ambient Glow Mesh ── */}
@@ -415,8 +414,7 @@ export default function SavedPage() {
       <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
-
+      {/* Modals outside relative container to prevent stacking context z-index issues with Navbar */}
       {/* Post Detail Modal */}
       {selectedPost && (
         <PostDetailModal
@@ -510,8 +508,8 @@ export default function SavedPage() {
         </div>
       )}
 
-      {/* ── 3-COLUMN LAYOUT (same as SocialFeedPage) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
 
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block h-full">

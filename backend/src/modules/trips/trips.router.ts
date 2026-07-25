@@ -59,6 +59,42 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
 });
 
 // ─────────────────────────────────────────────────────────
+// GET /api/v1/trips/ai-history  — list current user's AI history
+// ─────────────────────────────────────────────────────────
+router.get('/ai-history', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const history = await prisma.aIHistory.findMany({
+      where: {
+        userId: req.user!.sub,
+        type: 'itinerary',
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+
+    const parsed = history.map(h => {
+      let itineraryObj = null;
+      try {
+        itineraryObj = typeof h.responseJson === 'string' ? JSON.parse(h.responseJson) : h.responseJson;
+      } catch (e) {
+        console.error('Failed to parse responseJson:', e);
+      }
+      return {
+        id: h.id,
+        promptText: h.promptText,
+        createdAt: h.createdAt,
+        itinerary: itineraryObj,
+      };
+    });
+
+    return res.json(parsed);
+  } catch (err) {
+    console.error('[trips/GET /ai-history]', err);
+    return res.status(500).json({ error: 'Failed to fetch AI history.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
 // GET /api/v1/trips/:id  — get one trip with full days
 // ─────────────────────────────────────────────────────────
 router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
