@@ -4719,3 +4719,347 @@ Foreign key constraint violated: `Follower_followingId_fkey (index)`
     at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
     at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:7
 
+[Console Error Logged] 2026-07-25T16:52:28.028Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:28.036Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.024Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.029Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.381Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.392Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.399Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.412Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.424Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.431Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.441Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.447Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.456Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.464Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.473Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.478Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.484Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.493Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.499Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.507Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.515Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.524Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.529Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.534Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.544Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.549Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.559Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.564Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.569Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.578Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.583Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.594Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.599Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.608Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.613Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.617Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.627Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.632Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.640Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.648Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.658Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.663Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.672Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:52:31.679Z - [AddressService] Error parsing address: fetch failed
+
+[Console Error Logged] 2026-07-25T16:53:25.356Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-25T16:53:25.379Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-25T16:53:26.386Z - [map/events GET] 
+Invalid `prisma.event.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:45
+
+  316 const radiusKm = Number(radius);
+  317 const bbox = calculateBoundingBox(center, radiusKm);
+  318 
+→ 319 const candidates = await prisma.event.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:45
+
+  316 const radiusKm = Number(radius);
+  317 const bbox = calculateBoundingBox(center, radiusKm);
+  318 
+→ 319 const candidates = await prisma.event.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:26
+
+[Console Error Logged] 2026-07-25T16:53:29.662Z - [map/safety-warnings GET] 
+Invalid `prisma.safetyWarning.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:237:53
+
+  234 const radiusKm = Number(radius);
+  235 const bbox = calculateBoundingBox(center, radiusKm);
+  236 
+→ 237 const candidates = await prisma.safetyWarning.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.safetyWarning.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:237:53
+
+  234 const radiusKm = Number(radius);
+  235 const bbox = calculateBoundingBox(center, radiusKm);
+  236 
+→ 237 const candidates = await prisma.safetyWarning.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:237:26
+
+[Console Error Logged] 2026-07-25T16:53:30.701Z - [map/events GET] 
+Invalid `prisma.event.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:45
+
+  316 const radiusKm = Number(radius);
+  317 const bbox = calculateBoundingBox(center, radiusKm);
+  318 
+→ 319 const candidates = await prisma.event.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.event.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:45
+
+  316 const radiusKm = Number(radius);
+  317 const bbox = calculateBoundingBox(center, radiusKm);
+  318 
+→ 319 const candidates = await prisma.event.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:319:26
+
+[Console Error Logged] 2026-07-25T16:53:30.711Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-25T16:53:31.731Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-25T16:53:35.011Z - [map/destinations] 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.destination.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:51
+
+  201   whereClause.longitude = { gte: bbox.minLongitude, lte: bbox.maxLongitude };
+  202 }
+  203 
+→ 204 const destinations = await prisma.destination.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\map\map.router.ts:204:26
+
+[Console Error Logged] 2026-07-25T17:34:16.085Z - Failed to parse AI Recommendations JSON: Căn cứ vào thông tin đã được cung cấp, tôi sẽ phân tích và gợi ý top 3 điểm đến phù hợp với sở thích và điều kiện thời tiết của bạn.
+
+```json
+{
+  "recommendations": [
+    {
+      "id": "dest-n-i-c--t---ph-ng-ho-ng-s-n--10.3772-104.9928",
+      "reason": "Núi Cô Tô phù hợp với thời tiết nắng đẹp và sở thích khám phá thiên nhiên.",
+      "tag": "Khám Phá / Thiên Nhiên"
+    },
+    {
+      "id": "dest-d-l-t---b-n-t--c--ng-t-t-10.3792-104.9963",
+      "reason": "Đà Lạt luôn có khí hậu mát mẻ, lý tưởng cho việc khám phá và thưởng thức ẩm thực địa phương.",
+      "tag": "Ẩm Thực / Thiên Nhiên"
+    },
+    {
+      "id": "dest-b-n-t--c--ng-t-t-10.3693-104.9955",
+      "reason": "Không khí thanh bình và cảnh quan thiên nhiên tuyệt đẹp ở Bảy Núi phù hợp cho việc thư giãn và thưởng thức thời tiết nắng đẹp.",
+      "tag": "Thiên Nhiên"
+    }
+  ]
+}
+```
+
+Lưu ý: Thông tin về địa điểm và giá trị rating sẽ không được cập nhật trong phản hồi này.
+
+[Console Error Logged] 2026-07-25T17:42:06.192Z - 2026-07-25T17:42:06.191Z [ERROR] [callNativeGemini] API error {"status":404,"error":"{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of av"}
+
+[Console Error Logged] 2026-07-25T17:42:06.201Z - 2026-07-25T17:42:06.201Z [ERROR] [callAgentLLM] Failover to native Gemini also failed {"error":"Native Gemini API error (404): {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n","retryAttempts":2}
+
+[Console Error Logged] 2026-07-25T17:42:06.207Z - 2026-07-25T17:42:06.207Z [ERROR] [callAgentLLM] All LLM attempts exhausted {"retryAttempts":2,"provider":"groq","model":"llama-3.1-8b-instant"}
+
