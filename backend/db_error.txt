@@ -4719,3 +4719,83 @@ Foreign key constraint violated: `Follower_followingId_fkey (index)`
     at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
     at D:\Thuc_Tap_NDT\backend\src\modules\social\social.router.ts:120:7
 
+[Console Error Logged] 2026-07-25T13:09:30.489Z - Failed to clean up expired trashed posts: 
+Invalid `prisma.post.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\posts\posts.router.ts:31:25
+
+  28 const fifteenDaysAgo = new Date();
+  29 fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+  30 try {
+→ 31   await prisma.post.deleteMany(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 13)
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.post.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\posts\posts.router.ts:31:25
+
+  28 const fifteenDaysAgo = new Date();
+  29 fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+  30 try {
+→ 31   await prisma.post.deleteMany(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 13)
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NDT\backend\src\modules\posts\posts.router.ts:31:7
+
+[Console Error Logged] 2026-07-25T16:32:09.649Z - ❌ Error during auto-seed: 
+Invalid `prisma.user.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\config\seed.ts:20:41
+
+  17   'anhthu@smarttravel.com'
+  18 ];
+  19 
+→ 20 const mockUsers = await prisma.user.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+Stack: PrismaClientInitializationError: 
+Invalid `prisma.user.findMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\config\seed.ts:20:41
+
+  17   'anhthu@smarttravel.com'
+  18 ];
+  19 
+→ 20 const mockUsers = await prisma.user.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7615)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at autoSeed (D:\Thuc_Tap_NDT\backend\src\config\seed.ts:20:23)
+
+[Console Error Logged] 2026-07-25T16:32:19.688Z - [CacheCleanupJob] Gặp lỗi khi dọn dẹp cache: 
+Invalid `prisma.systemCache.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\cache\repositories\cache.repository.ts:46:31
+
+  43 
+  44 async clearExpired(type: CacheType) {
+  45   const now = new Date();
+→ 46   return prisma.systemCache.deleteMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+Stack: PrismaClientInitializationError: 
+Invalid `prisma.systemCache.deleteMany()` invocation in
+D:\Thuc_Tap_NDT\backend\src\modules\cache\repositories\cache.repository.ts:46:31
+
+  43 
+  44 async clearExpired(type: CacheType) {
+  45   const now = new Date();
+→ 46   return prisma.systemCache.deleteMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:6543`.
+    at $n.handleRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:7615)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NDT\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at Timeout.cleanExpiredCache [as _onTimeout] (D:\Thuc_Tap_NDT\backend\src\server.ts:131:22)
+

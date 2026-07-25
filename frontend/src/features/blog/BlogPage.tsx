@@ -13,6 +13,7 @@ import { getExplorePosts, setExplorePosts } from './explorePostsStore';
 import { buildHandbook } from './exploreHandbook';
 import { ModernIconPod } from '../../config/modernIcons';
 import blogVideo from '../../../../video.mp4';
+import { KineticText } from '../../components/ui/kinetic-text';
 
 const TRENDING_TAGS = ['sapa', 'hagiang', 'danang', 'ẩm thực', 'motorbiking', 'thiên nhiên', 'bãi biển', 'văn hóa'];
 const EXPLORE_LIST_PREVIEW = 3;
@@ -455,11 +456,9 @@ export default function BlogPage() {
               <ModernIconPod icon={Sparkles} variant="amber" size="sm" />
               <span>Smart Travel Magazine</span>
             </div>
-            <h1 className="font-editorial text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
-              Khám Phá{' '}
-              <span className="bg-gradient-to-r from-teal-300 via-sky-300 to-brand-300 bg-clip-text text-transparent">
-                Câu Chuyện Du Lịch
-              </span>
+            <h1 className="font-editorial text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm flex flex-wrap justify-center gap-x-3">
+              <KineticText text="Khám Phá" as="span" className="text-white" />
+              <KineticText text="Câu Chuyện Du Lịch" as="span" className="bg-gradient-to-r from-teal-300 via-sky-300 to-brand-300 bg-clip-text text-transparent" />
             </h1>
             <p className="text-slate-200 text-base sm:text-lg leading-relaxed font-medium">
               Blog du lịch với góc nhìn tươi mới — hành trình thực tế, mẹo hay và cảm hứng từ cộng đồng travellers Việt Nam.

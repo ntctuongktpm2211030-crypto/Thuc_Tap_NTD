@@ -13,6 +13,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { io } from 'socket.io-client';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import { journeyCategoryToFeedLabel, type FeedPost } from '../../utils/feedUtils';
+import { RippleButton } from '../../components/ui/ripple-button';
 
 const CAN_THO_COORDS: [number, number] = [10.03711, 105.78825];
 
@@ -908,12 +909,12 @@ const MapDashboard = () => {
               <option value="4.5">★ 4.5+</option>
             </select>
           </div>
-          <button
+          <RippleButton
             onClick={handleApplyFilter}
             className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg border-none cursor-pointer transition-all flex items-center justify-center gap-1"
           >
             🧭 {vi ? 'Áp dụng bộ lọc' : 'Apply Filter'}
-          </button>
+          </RippleButton>
         </div>
 
         {/* 3. AI Recommendations Layer */}
@@ -1100,12 +1101,12 @@ const MapDashboard = () => {
 
           {/* Row 2: Route Planner Actions */}
           <div className="flex flex-wrap gap-2 items-center">
-            <button
+            <RippleButton
               onClick={requestMyLocation}
               className="h-[34px] px-3.5 bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-bold uppercase rounded-xl transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
             >
               🎯 {vi ? 'Định vị của tôi' : 'Locate Me'}
-            </button>
+            </RippleButton>
 
             <select
               value={selectedRadius}
@@ -1119,14 +1120,14 @@ const MapDashboard = () => {
               <option value="20">20 km</option>
             </select>
 
-            <button
+            <RippleButton
               onClick={handleFindNearby}
               className="h-[34px] px-3.5 bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-bold uppercase rounded-xl transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
             >
               🔍 {vi ? 'Tìm quanh đây' : 'Find Nearby'}
-            </button>
+            </RippleButton>
 
-            <button
+            <RippleButton
               onClick={handleOptimizeTSP}
               disabled={routeQueue.length < 3}
               className={`h-[34px] px-3.5 text-[10.5px] font-bold uppercase rounded-xl transition-all flex items-center justify-center gap-1.5 border-none cursor-pointer active:scale-95 ${
@@ -1136,9 +1137,9 @@ const MapDashboard = () => {
               }`}
             >
               ⚡ {vi ? 'Tối ưu tuyến đường (TSP)' : 'Optimize Route (TSP)'}
-            </button>
+            </RippleButton>
 
-            <button
+            <RippleButton
               onClick={handleCacheTiles}
               disabled={cachingProgress !== null}
               className={`h-[34px] px-3.5 text-[10.5px] font-bold uppercase rounded-xl transition-all flex items-center justify-center gap-1.5 border-none cursor-pointer active:scale-95 ${
@@ -1148,7 +1149,7 @@ const MapDashboard = () => {
               }`}
             >
               💾 {vi ? 'Tải bản đồ ngoại tuyến' : 'Cache Offline Map'}
-            </button>
+            </RippleButton>
 
             {routeQueue.length > 0 && (
               <button
@@ -1362,13 +1363,13 @@ const MapDashboard = () => {
               )}
             </div>
 
-            <button
+            <RippleButton
               type="submit"
               className="w-full flex items-center justify-center gap-1.5 py-2 bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white text-xs font-bold uppercase rounded-lg transition-all shadow-md hover:shadow-blue-600/20 active:scale-[0.98] cursor-pointer border-none"
             >
               <Navigation size={12} className="fill-white" />
               <span>{vi ? 'Đăng Check-In' : 'Post Check-In'}</span>
-            </button>
+            </RippleButton>
           </form>
         </div>
 

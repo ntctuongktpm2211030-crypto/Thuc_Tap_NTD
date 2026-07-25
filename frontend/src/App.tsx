@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import {
   Map, Home, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
-  Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock,
+  Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock, Newspaper,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './store/authSlice';
@@ -232,7 +232,7 @@ function App() {
   }, []); // chỉ chạy 1 lần khi mount
 
   const browseNavItems = [
-    { to: '/',          label: t('nav.feed'),      Icon: Home },
+    { to: '/',          label: t('nav.feed'),      Icon: Newspaper },
     { to: '/explore',   label: t('nav.explore'),   Icon: Compass },
     { to: '/guide/culture-food', label: t('nav.cultureGuide'), Icon: Utensils },
     { to: '/map',       label: t('nav.map'),        Icon: Map },
@@ -491,12 +491,12 @@ function App() {
               const active = isActive(to);
               return (
                 <Link key={to} to={to}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 group border ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-150 group border ${
                     active
-                      ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)]/30'
+                      ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)] shadow-[0_2px_8px_rgba(37,99,235,0.08)]'
                       : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
                   }`}>
-                  <Icon size={14} className={`transition-colors ${active ? 'text-[var(--gold)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`} strokeWidth={active ? 2.2 : 1.8} />
+                  <Icon size={16} className={`transition-colors ${active ? 'text-[var(--gold)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`} strokeWidth={active ? 2 : 1.8} />
                   <span>{label}</span>
                 </Link>
               );

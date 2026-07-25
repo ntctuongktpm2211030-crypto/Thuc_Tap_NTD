@@ -7,7 +7,7 @@ import type { RootState } from '../../store';
 import {
   Heart, MessageCircle, Bookmark,
   MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
-  Flame, Globe, Search,
+  Flame, Globe, Search, Loader2,
 } from 'lucide-react';
 import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
 
@@ -43,6 +43,7 @@ import PostMenuDropdown from '../../components/feed/PostMenuDropdown';
 import AuthorFollowButton from '../../components/feed/AuthorFollowButton';
 import LikersModal from '../../components/feed/LikersModal';
 import PostEngagementBlock from '../../components/feed/PostEngagementBlock';
+import { RippleButton } from '../../components/ui/ripple-button';
 import { truncateWithEllipsis } from '../../utils/truncateText';
 
 const stopCardClick = (e: React.MouseEvent) => e.stopPropagation();
@@ -610,10 +611,10 @@ const ComposeBox = ({ onOpenCompose }: { onOpenCompose: () => void }) => {
           className="flex-1 bg-[var(--bg-elevated)] hover:bg-[var(--bg-overlay)] border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-full px-5 py-3 text-left text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-all">
           {isAuthenticated ? t('feed.composePlaceholder') : t('auth.loginToPost')}
         </button>
-        <button onClick={goCreateJourney}
+        <RippleButton onClick={goCreateJourney}
           className="hidden sm:flex items-center gap-1.5 px-4 py-3 rounded-full text-xs font-bold bg-gradient-to-r from-[var(--gold)] to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/25 transition-all whitespace-nowrap">
           <Sparkles size={14} /> {t('feed.shareJourney')}
-        </button>
+        </RippleButton>
       </div>
     </div>
   );
@@ -891,6 +892,8 @@ export default function SocialFeedPage() {
   const [viewStory, setViewStory] = useState<FeedStoryItem | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [apiPosts, setApiPosts] = useState<FeedPost[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [feedLoading, setFeedLoading] = useState(false);
   const [feedError, setFeedError] = useState('');
   const [sidebarTick, setSidebarTick] = useState(0);
@@ -923,19 +926,44 @@ export default function SocialFeedPage() {
     publishing: t('story.publishing'),
   };
 
-  const loadFeedFromApi = async () => {
-    setFeedLoading(true);
+  const loadFeed = async (pageNum: number, isAppend: boolean = false) => {
+    if (pageNum === 1) {
+      setFeedLoading(true);
+    }
     setFeedError('');
     try {
-      const { posts } = await postsService.feed({ page: 1, limit: 50 });
-      setApiPosts(mapApiPostsToFeed(posts));
+      const limit = 15;
+      const response = await postsService.feed({ page: pageNum, limit });
+      const posts = response.posts || [];
+      const pagination = response.pagination;
+      const mapped = mapApiPostsToFeed(posts);
+      
+      if (isAppend) {
+        setApiPosts(prev => [...prev, ...mapped]);
+      } else {
+        setApiPosts(mapped);
+      }
+      
+      if (pagination) {
+        setHasMore(pagination.page < pagination.totalPages);
+      } else {
+        setHasMore(mapped.length === limit);
+      }
+      setPage(pageNum);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Không tải được bài đăng từ máy chủ';
       setFeedError(msg);
-      setApiPosts([]);
+      if (!isAppend) setApiPosts([]);
     } finally {
       setFeedLoading(false);
     }
+  };
+
+  const loadFeedFromApi = () => void loadFeed(1, false);
+
+  const handleLoadMore = () => {
+    if (feedLoading || !hasMore) return;
+    void loadFeed(page + 1, true);
   };
 
   const handlePostPublished = () => {
@@ -1209,7 +1237,7 @@ export default function SocialFeedPage() {
       <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+      {/* Modals outside relative container to prevent stacking context z-index issues with Navbar */}
       <PostDetailModal
         post={detailPost}
         onClose={closePost}
@@ -1236,7 +1264,9 @@ export default function SocialFeedPage() {
         onPublished={handlePostPublished}
         labels={composeLabels}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
+
+      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] xl:grid-cols-[320px_1fr_320px] gap-4 lg:gap-5">
 
         {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block h-full" key={sidebarTick}>
@@ -1363,9 +1393,20 @@ export default function SocialFeedPage() {
           </div>
 
           {/* Load more */}
-          <button className="w-full py-4 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--gold)] transition-colors flex items-center justify-center gap-1">
-            {t('feed.loadMore')} ↓
-          </button>
+          {hasMore && (
+            <button
+              type="button"
+              onClick={handleLoadMore}
+              disabled={feedLoading}
+              className="w-full py-4 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--gold)] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {feedLoading ? (
+                <><Loader2 size={14} className="animate-spin text-[var(--gold)]" /> Đang tải thêm...</>
+              ) : (
+                <>{t('feed.loadMore')} ↓</>
+              )}
+            </button>
+          )}
         </main>
 
         {/* RIGHT SIDEBAR */}

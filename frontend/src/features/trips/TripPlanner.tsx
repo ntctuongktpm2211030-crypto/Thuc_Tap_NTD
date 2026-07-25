@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RippleButton } from '@/components/ui/ripple-button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   MapPin, BrainCircuit, Loader2, Plane, Zap, Check, AlertTriangle,
-  Compass, Sparkles, Bookmark, Calendar, DollarSign, Hash, ChevronDown, ChevronUp, Clock, ExternalLink, Navigation
+  Compass, Sparkles, Bookmark, Calendar, DollarSign, Hash, ChevronDown, ChevronUp, Clock, ExternalLink, Navigation,
+  Search, X
 } from 'lucide-react';
 import { TRIP_ACTIVITY_ICONS } from '../../config/modernIcons';
 import { tripsService, Waypoint } from '../../services/smartTravel.service';
@@ -185,6 +186,136 @@ const TripPlanner = () => {
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
   const [aiError, setAiError] = useState<string | null>(null);
   const [expandedActivities, setExpandedActivities] = useState<Record<string, boolean>>({});
+
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [aiHistory, setAiHistory] = useState<any[]>([]);
+  const [historySearch, setHistorySearch] = useState('');
+  const [showAllHistory, setShowAllHistory] = useState(false);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!isAuthenticated) return;
+      setLoadingHistory(true);
+      try {
+        const historyData = await tripsService.LayLichSuTaoChuyenDiAI();
+        setAiHistory(historyData || []);
+      } catch (err) {
+        console.error('Failed to fetch AI history:', err);
+      } finally {
+        setLoadingHistory(false);
+      }
+    };
+    fetchHistory();
+  }, [isAuthenticated, itinerary]);
+
+  const handleLoadHistoryItem = (item: any) => {
+    if (!item || !item.itinerary) return;
+    setDestination(item.destination || item.itinerary.destination?.name || '');
+    setDays(item.durationDays || item.itinerary.days?.length || '');
+    setBudget(item.totalBudget || item.itinerary.totalEstimatedCost || '');
+    setStyle(item.travelStyle || 'Adventure');
+    setInterests(item.interests || []);
+    setItinerary(item.itinerary);
+    setSelectedDay(1);
+    setSavedTripId(item.id);
+  };
+
+  const getHistoryItemTitle = (item: any) => {
+    if (item.itinerary?.title) return item.itinerary.title;
+    if (item.destination) {
+      const dayCount = item.durationDays || item.itinerary?.days?.length || 0;
+      return lang === 'vi' ? `Khám phá ${item.destination} (${dayCount} ngày)` : `Explore ${item.destination} (${dayCount} days)`;
+    }
+    return lang === 'vi' ? 'Hành trình không tên' : 'Unnamed Itinerary';
+  };
+
+  const renderHistoryList = () => {
+    const filtered = aiHistory.filter((item: any) => {
+      const title = getHistoryItemTitle(item).toLowerCase();
+      return title.includes(historySearch.toLowerCase());
+    });
+
+    const displayItems = showAllHistory ? filtered : filtered.slice(0, 5);
+
+    return (
+      <div className="flex flex-col bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-4 h-full">
+        <div className="flex justify-between items-center border-b border-[var(--border-normal)] pb-3">
+          <h3 className="font-ui text-xs font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <BrainCircuit size={15} className="text-blue-500" /> 
+            {lang === 'vi' ? 'Lịch sử AI' : 'AI History'}
+          </h3>
+          {filtered.length > 5 && (
+            <button
+              type="button"
+              onClick={() => setShowAllHistory(!showAllHistory)}
+              className="text-[9px] font-bold text-blue-500 hover:text-blue-600 hover:underline bg-transparent border-none cursor-pointer"
+            >
+              {showAllHistory ? (lang === 'vi' ? 'Thu gọn' : 'Show less') : (lang === 'vi' ? 'Xem tất cả' : 'View all')}
+            </button>
+          )}
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search size={12} className="absolute left-3 top-2.5 text-[var(--text-muted)] pointer-events-none" />
+          <input
+            type="text"
+            placeholder={lang === 'vi' ? 'Tìm kiếm hành trình...' : 'Search logs...'}
+            value={historySearch}
+            onChange={e => setHistorySearch(e.target.value)}
+            className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-9 pr-3 py-2 text-[10px] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+          />
+        </div>
+
+        {/* List */}
+        <div className="space-y-2 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
+          {loadingHistory ? (
+            <div className="flex items-center justify-center py-6 text-slate-400 gap-1.5 text-xs">
+              <Loader2 size={12} className="animate-spin" />
+              <span>{lang === 'vi' ? 'Đang tải lịch sử...' : 'Loading history...'}</span>
+            </div>
+          ) : filtered.length === 0 ? (
+            <p className="text-[10px] text-[var(--text-muted)] text-center py-6">
+              {lang === 'vi' ? 'Chưa có lịch sử tạo.' : 'No creation history yet.'}
+            </p>
+          ) : (
+            displayItems.map((item: any) => {
+              const title = getHistoryItemTitle(item);
+              const daysCount = item.itinerary?.days?.length || 0;
+              const isCurrentLoaded = itinerary && (itinerary.title === title || (itinerary.destination?.name === item.itinerary?.destination?.name && itinerary.days?.length === item.itinerary?.days?.length));
+              
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleLoadHistoryItem(item)}
+                  className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center gap-2 group cursor-pointer ${
+                    isCurrentLoaded 
+                      ? 'bg-blue-500/10 border-blue-500 shadow-sm ring-1 ring-blue-500/10' 
+                      : 'bg-[var(--bg-primary)] border-[var(--border-normal)] hover:border-blue-500/30'
+                  }`}
+                >
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                    isCurrentLoaded ? 'bg-blue-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:text-blue-500'
+                  }`}>
+                    <BrainCircuit size={13} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-[10px] font-bold text-[var(--text-primary)] truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{title}</h4>
+                    <div className="flex items-center gap-1.5 text-[8px] text-[var(--text-muted)] mt-0.5">
+                      <span>📅 {daysCount} {lang === 'vi' ? 'Ngày' : 'Days'}</span>
+                      <span>•</span>
+                      <span>{new Date(item.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const toggleExpandActivity = (key: string) => {
     setExpandedActivities(prev => ({ ...prev, [key]: !prev[key] }));
@@ -770,7 +901,7 @@ const TripPlanner = () => {
               </div>
 
               {/* Mobile View Screen Tab Toggle */}
-              <div className="flex md:hidden items-center justify-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-1">
+              <div className="flex lg:hidden items-center justify-center rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] p-1">
                 <button 
                   type="button"
                   onClick={() => setActiveTab('list')} 
@@ -788,10 +919,10 @@ const TripPlanner = () => {
               </div>
 
               {/* Main Split Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
                 {/* Left side: Timeline list of activities */}
-                <div className={`md:col-span-7 space-y-5 ${activeTab === 'list' ? 'block' : 'hidden md:block'}`}>
+                <div className={`lg:col-span-6 space-y-5 ${activeTab === 'list' ? 'block' : 'hidden lg:block'}`}>
                   {(() => {
                     const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
                     if (!currentDay) return null;
@@ -1002,57 +1133,75 @@ const TripPlanner = () => {
                   })()}
                 </div>
 
-                {/* Right side: Map View sticky */}
-                <div className={`md:col-span-5 ${activeTab === 'map' ? 'block' : 'hidden md:block'} sticky top-24`}>
-                  {(() => {
-                    const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
-                    if (!currentDay) return null;
+                {/* Right side: Map View + AI History sticky */}
+                <div className={`lg:col-span-6 ${activeTab === 'map' ? 'block' : 'hidden lg:block'} lg:sticky lg:top-24 space-y-4`}>
+                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
+                    {/* Map container */}
+                    <div className="xl:col-span-7 space-y-4">
+                      {(() => {
+                        const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
+                        if (!currentDay) return null;
 
-                    const mapLocations: MapLocation[] = currentDay.activities
-                      .filter((act: any) => act.latitude && act.longitude)
-                      .map((act: any, idx: number) => ({
-                        id: `act-${idx}`,
-                        name: act.activityName || act.name,
-                        lat: act.latitude,
-                        lng: act.longitude,
-                        category: act.category,
-                        note: act.notes || act.note,
-                      }));
+                        const mapLocations: MapLocation[] = currentDay.activities
+                          .filter((act: any) => act.latitude && act.longitude)
+                          .map((act: any, idx: number) => ({
+                            id: `act-${idx}`,
+                            name: act.activityName || act.name,
+                            lat: act.latitude,
+                            lng: act.longitude,
+                            category: act.category,
+                            note: act.notes || act.note,
+                          }));
 
-                    const mapCenter: [number, number] = mapLocations.length > 0 
-                      ? [mapLocations[0].lat, mapLocations[0].lng] 
-                      : [21.028511, 105.804817];
+                        const mapCenter: [number, number] = mapLocations.length > 0 
+                          ? [mapLocations[0].lat, mapLocations[0].lng] 
+                          : [21.028511, 105.804817];
 
-                    return (
-                      <div className="space-y-4">
-                        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 rounded-xl flex items-center justify-between text-xs font-bold text-[var(--text-primary)] shadow-sm">
-                          <span>📍 {lang === 'vi' ? `Bản đồ lộ trình Ngày ${selectedDay}` : `Itinerary Map Day ${selectedDay}`}</span>
-                          <span className="text-[10px] text-blue-600 dark:text-blue-400 bg-blue-500/5 border border-blue-500/15 dark:border-blue-500/30 px-2 py-0.5 rounded-md">{mapLocations.length} {lang === 'vi' ? 'Điểm dừng' : 'Stops'}</span>
-                        </div>
-                        <div className="h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-normal)]/40 relative">
-                          <MapLibreMap
-                            center={mapCenter}
-                            zoom={12}
-                            locations={mapLocations}
-                            viewMode="markers"
-                            routePoints={mapLocations}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })()}
+                        return (
+                          <>
+                            <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 rounded-xl flex items-center justify-between text-xs font-bold text-[var(--text-primary)] shadow-sm">
+                              <span>📍 {lang === 'vi' ? `Bản đồ lộ trình Ngày ${selectedDay}` : `Itinerary Map Day ${selectedDay}`}</span>
+                              <span className="text-[10px] text-blue-600 dark:text-blue-400 bg-blue-500/5 border border-blue-500/15 dark:border-blue-500/30 px-2 py-0.5 rounded-md">{mapLocations.length} {lang === 'vi' ? 'Điểm dừng' : 'Stops'}</span>
+                            </div>
+                            <div className="h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-normal)]/40 relative">
+                              <MapLibreMap
+                                center={mapCenter}
+                                zoom={12}
+                                locations={mapLocations}
+                                viewMode="markers"
+                                routePoints={mapLocations}
+                              />
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </div>
+
+                    {/* AI History container */}
+                    <div className="xl:col-span-5">
+                      {renderHistoryList()}
+                    </div>
+                  </div>
                 </div>
 
               </div>
 
             </div>
           ) : (
-            <div className="surface-elevated p-16 text-center space-y-6 rounded-2xl border border-[var(--border-normal)]/40 shadow-xl relative overflow-hidden">
-              <div className="absolute right-0 bottom-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
-              <Plane size={54} className="mx-auto text-blue-500/60 animate-bounce" strokeWidth={1.5} />
-              <div className="space-y-2">
-                <h3 className="headline-md !text-xl text-cream">{t('planner.noItinerary')}</h3>
-                <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">{t('planner.noItinerarySub')}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left side: Original welcome block */}
+              <div className="lg:col-span-8 bg-[var(--bg-elevated)] p-12 md:p-16 text-center space-y-6 rounded-2xl border border-[var(--border-normal)]/40 shadow-xl relative overflow-hidden flex flex-col justify-center items-center min-h-[300px]">
+                <div className="absolute right-0 bottom-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
+                <Plane size={54} className="text-blue-500/60 animate-bounce" strokeWidth={1.5} />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold font-ui text-cream">{t('planner.noItinerary')}</h3>
+                  <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">{t('planner.noItinerarySub')}</p>
+                </div>
+              </div>
+
+              {/* Right side: AI History container */}
+              <div className="lg:col-span-4 h-full">
+                {renderHistoryList()}
               </div>
             </div>
           )}
