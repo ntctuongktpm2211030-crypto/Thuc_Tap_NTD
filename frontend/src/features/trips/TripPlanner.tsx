@@ -13,6 +13,7 @@ import type { RootState } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
+import { KineticText } from '../../components/ui/kinetic-text';
 
 function calculateHaversineDistance(
   p1: { latitude: number; longitude: number },
@@ -222,9 +223,12 @@ const TripPlanner = () => {
 
   const getHistoryItemTitle = (item: any) => {
     if (item.itinerary?.title) return item.itinerary.title;
-    if (item.destination) {
-      const dayCount = item.durationDays || item.itinerary?.days?.length || 0;
-      return lang === 'vi' ? `Khám phá ${item.destination} (${dayCount} ngày)` : `Explore ${item.destination} (${dayCount} days)`;
+    const dest = item.destination || item.itinerary?.destination || item.promptText?.match(/destination=(.+?)\s+days=/)?.[1];
+    if (dest) {
+      const dayCount = item.durationDays || item.itinerary?.days?.length || Number(item.promptText?.match(/days=(\d+)/)?.[1]) || 0;
+      // Capitalize first letter of each word for clean presentation
+      const capitalizedDest = dest.replace(/\b\w/g, (c: string) => c.toUpperCase());
+      return lang === 'vi' ? `Khám phá ${capitalizedDest} (${dayCount} ngày)` : `Explore ${capitalizedDest} (${dayCount} days)`;
     }
     return lang === 'vi' ? 'Hành trình không tên' : 'Unnamed Itinerary';
   };
@@ -610,7 +614,11 @@ const TripPlanner = () => {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
             <Sparkles size={11} className="animate-pulse" /> {lang === 'vi' ? 'Công nghệ AI Thế Hệ Mới' : 'Next-Gen AI Technology'}
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-white dark:via-cream dark:to-slate-200">{t('planner.heading')}</h1>
+          <KineticText
+            text={t('planner.heading')}
+            as="h1"
+            className="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-white dark:via-cream dark:to-slate-200"
+          />
           <p className="text-xs text-[var(--text-secondary)] max-w-xl">{t('planner.subtitle')}</p>
         </div>
         

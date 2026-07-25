@@ -33,7 +33,7 @@ export default function ChatbotPage() {
   const [feedbackComment, setFeedbackComment] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageContainerRef = useRef<HTMLDivElement>(null);
 
   // Load conversation list and memory
   useEffect(() => {
@@ -49,7 +49,9 @@ export default function ChatbotPage() {
 
   // Scroll to bottom on new message
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    }
   }, [messages, loadingMsg]);
 
   const fetchConversations = async () => {
@@ -211,7 +213,7 @@ export default function ChatbotPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 sm:p-6 lg:p-8 font-sans overflow-hidden animate-fade-in">
+    <div className="relative h-full bg-slate-50/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 pt-1 pb-3 px-3 sm:pt-2 sm:pb-4.5 sm:px-5 lg:pt-2 lg:pb-6 lg:px-8 font-sans overflow-hidden animate-fade-in flex flex-col">
       {/* ── Travel Geo-Grid & Pattern Vector Overlay ── */}
       <svg className="absolute inset-0 w-full h-full opacity-25 dark:opacity-10 pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -236,35 +238,35 @@ export default function ChatbotPage() {
       <div className="absolute top-[500px] right-10 w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/18 via-pink-500/15 to-amber-500/10 rounded-full blur-[110px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 h-[calc(100vh-140px)] min-h-[550px]">
-      <style>{`
-        @keyframes bot-sway {
-          0%, 100% {
-            transform: translateY(0) rotate(0deg);
+      <div className="relative z-10 w-full max-w-[1750px] mx-auto flex-1 min-h-0 flex flex-col">
+        <style>{`
+          @keyframes bot-sway {
+            0%, 100% {
+              transform: translateY(0) rotate(0deg);
+            }
+            25% {
+              transform: translateY(-8px) rotate(4deg);
+            }
+            50% {
+              transform: translateY(-2px) rotate(0deg);
+            }
+            75% {
+              transform: translateY(-8px) rotate(-4deg);
+            }
           }
-          25% {
-            transform: translateY(-8px) rotate(4deg);
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
           }
-          50% {
-            transform: translateY(-2px) rotate(0deg);
+          .animate-bot-sway {
+            animation: bot-sway 4s ease-in-out infinite;
+            transform-origin: bottom center;
           }
-          75% {
-            transform: translateY(-8px) rotate(-4deg);
+          .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
           }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-bot-sway {
-          animation: bot-sway 4s ease-in-out infinite;
-          transform-origin: bottom center;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out forwards;
-        }
-      `}</style>
+        `}</style>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 flex-1 min-h-0">
       
       {/* ─── SIDEBAR: LỊCH SỬ CHAT ─── */}
       <div className="lg:col-span-1 surface-elevated rounded-2xl flex flex-col overflow-hidden border border-[var(--border-subtle)]">
@@ -394,14 +396,17 @@ export default function ChatbotPage() {
             </div>
 
             {/* Nội dung hội thoại */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-transparent to-[var(--bg-primary)]/15">
+            <div
+              ref={messageContainerRef}
+              className="flex-1 min-h-0 overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-transparent to-[var(--bg-primary)]/15"
+            >
               {loadingConvDetail ? (
                 <div className="flex flex-col items-center justify-center h-full space-y-3 py-20">
                   <Loader2 className="animate-spin text-[var(--gold)]" size={32} />
                   <p className="text-xs text-[var(--text-muted)]">{vi ? 'Đang tải lịch sử tin nhắn...' : 'Loading conversation history...'}</p>
                 </div>
-              ) : messages.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-lg mx-auto py-20 px-4">
+              ) : messages.filter(m => m.role !== 'system').length === 0 ? (
+                <div className="flex flex-col items-center justify-center min-h-[400px] flex-1 text-center space-y-6 max-w-lg mx-auto py-20 px-4">
                   <div className="relative group mb-4">
                     <div className="w-44 h-44 mx-auto overflow-hidden rounded-3xl bg-transparent flex items-center justify-center animate-bot-sway cursor-pointer transition-transform duration-300 group-hover:scale-102">
                       <img src={chatbotImg} alt="TravelBot" className="w-full h-full object-contain filter drop-shadow-xl" />
@@ -431,7 +436,7 @@ export default function ChatbotPage() {
                   )}
                 </div>
           ) : (
-            messages.map((msg) => {
+            messages.filter(m => m.role !== 'system').map((msg) => {
               const isUser = msg.role === 'user';
               const activeVersion = msg.versions.find(v => v.isActive) || msg.versions[0];
               
@@ -565,7 +570,6 @@ export default function ChatbotPage() {
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Hộp nhập tin nhắn nổi */}

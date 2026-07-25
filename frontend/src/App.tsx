@@ -16,11 +16,11 @@ import UserMenuDropdown from './components/layout/UserMenuDropdown';
 import Footer from './components/layout/Footer';
 import { io } from 'socket.io-client';
 
-// ─── Page imports ──────────────────────────────────────────
 import SocialFeedPage from './features/feed/SocialFeedPage';
-import BlogPage from './features/blog/BlogPage';
+import ExploreHub from './features/blog/ExploreHub';
 import ExploreArticlePage from './features/blog/ExploreArticlePage';
-import ExploreHandbookPage from './features/blog/ExploreHandbookPage';
+import ExploreHandbookHub from './features/blog/ExploreHandbookHub';
+import ProvinceDetailPage from './features/blog/ProvinceDetailPage';
 import EditPostPage from './features/posts/EditPostPage';
 import CreateStoryPage from './features/stories/CreateStoryPage';
 import CultureFoodGuidePage from './features/guide/CultureFoodGuidePage';
@@ -267,7 +267,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
+    <div className={`min-h-screen flex flex-col bg-[var(--bg-primary)] ${
+      location.pathname === '/chat' ? 'h-screen overflow-hidden' : ''
+    }`}>
 
       {/* ══════════════════════════════════════════════════
           PREMIUM NAVBAR
@@ -560,13 +562,16 @@ function App() {
 
       {/* ── Main Content ── */}
 
-      <main className="flex-1">
+      <main className={`flex-1 ${
+        location.pathname === '/chat' ? 'min-h-0 flex flex-col' : ''
+      }`}>
         <Routes>
           <Route path="/" element={<SocialFeedPage />} />
-          <Route path="/explore" element={<BlogPage />} />
+          <Route path="/explore" element={<ExploreHub />} />
           <Route path="/explore/post/:id" element={<ExploreArticlePage />} />
-          <Route path="/explore/cam-nang/:type" element={<ExploreHandbookPage />} />
-          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/explore/cam-nang/:type" element={<ExploreHandbookHub />} />
+          <Route path="/explore/province/:id" element={<ProvinceDetailPage />} />
+          <Route path="/blog" element={<ExploreHub />} />
           <Route path="/posts/:id/edit" element={<ProtectedRoute><EditPostPage /></ProtectedRoute>} />
           <Route path="/map" element={
             <Suspense fallback={
@@ -613,7 +618,7 @@ function App() {
       </main>
 
       {/* ── Footer ── */}
-      {!isFullscreenCreate && <Footer />}
+      {!isFullscreenCreate && location.pathname !== '/chat' && <Footer />}
 
       {/* Real-time Toast Notification */}
       {toastMessage && (

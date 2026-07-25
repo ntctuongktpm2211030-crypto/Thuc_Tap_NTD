@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   MapPin, Users, Search, Sparkles, Loader2, Flame, Image, Navigation, Compass,
-  CloudRain, AlertTriangle, Calendar, Locate, Route, Download, Trash2, Filter, Landmark
+  CloudRain, AlertTriangle, Trash2, Filter, Landmark
 } from 'lucide-react';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { mapService } from '../../services/smartTravel.service';
@@ -1269,7 +1269,7 @@ const MapDashboard = () => {
             className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg border-none cursor-pointer transition-all flex items-center justify-center gap-1.5"
           >
             🧭 {vi ? 'Áp dụng bộ lọc' : 'Apply Filter'}
-          </button>
+          </RippleButton>
         </div>
 
         {/* 3. AI Recommendations Layer */}

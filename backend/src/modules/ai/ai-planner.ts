@@ -58,7 +58,7 @@ export interface AIRegeneratePartParams {
  * Builds the system instructions prompt detailing constraints, layout models,
  * JSON formats, and fallback logic for OpenAI.
  */
-function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0): string {
+function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0, durationDays: number = 1): string {
   return `You are an expert enterprise-grade travel planner. You generate highly optimized itineraries for users based on destination, duration, budget, travel style, and interests.
   
   CRITICAL RULES:
@@ -66,17 +66,19 @@ function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0): s
   2. Ensure the locations are real places in the destination.
   3. Guess coordinates (latitude, longitude) as accurately as possible for MapLibre map mapping.
   4. Ensure activities map correctly to their categories ("restaurant", "hotel", "attraction", "nature", "festival").
-  5. Distribute daily costs logically so that the SUM of all activities' estimatedCost across all days does NOT exceed the total budget of ${totalBudget} ${currency}. Note: transportation and daily buffer fees will be calculated programmatically on top of this by the system, so aim for the sum of activities to be about 70-80% of the total budget.
-  6. Enforce realistic travel paths. ALL locations planned in the SAME day MUST be located within a 15km radius of each other. Do NOT plan remote/far-away spots in the same day (for instance, do not mix Mũi Cà Mau and Cà Mau city center on the same day as they are 100km apart). Plan city center activities together on one day, and remote nature spots on another day.
-  7. Respond entirely in Vietnamese. All text values (destination name, activityName, locationName, notes) MUST be in the Vietnamese language.
-  8. Do NOT use generic activity names like "Welcome walk", "Morning tour", "Eat local food", "Sightseeing experience", or "Local delicacy tasting". Always output real, actual, and famous tourist spots, monuments, streets, parks, restaurants, cafes, hotels, and specific local culinary specialties of the destination. Make notes detail-rich with actual tips.
-  9. Organize each day's activities strictly into exactly 5 activities in this order:
-     - Activity 1 (session="Sáng"): Morning sightseeing/activities. Fields: "session": "Sáng", "timeSlot" (e.g. "08:00 - 11:30"), "activityName", "locationName", "thoiGianThamQuan" (e.g. "2 tiếng"), "goiYTraiNghiem" (rich tips), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
-     - Activity 2 (session="Ăn sáng"): Breakfast. Fields: "session": "Ăn sáng", "timeSlot" (e.g. "07:00 - 08:00"), "activityName" (monAn), "locationName" (quanGoiY), "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
-     - Activity 3 (session="Trưa"): Lunch. Fields: "session": "Trưa", "timeSlot" (e.g. "12:00 - 13:30"), "activityName" (anTrua), "locationName" (quanGoiY), "monDacSan" (mon đặc sản), "thoiGianNghiNgoi" (thời gian nghỉ ngơi), "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
-     - Activity 4 (session="Chiều"): Afternoon sightseeing/activities. Fields: "session": "Chiều", "timeSlot" (e.g. "14:00 - 17:30"), "activityName", "locationName", "thoiGianLuuLai" (e.g. "3 tiếng"), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
-     - Activity 5 (session="Tối"): Dinner and Evening. Fields: "session": "Tối", "timeSlot" (e.g. "18:30 - 22:00"), "activityName", "locationName" (nghiDemODau), "anToi" (ăn tối món gì ở đâu), "diaDiemDaoChoi" (điểm đi dạo chơi), "choDem" (chợ đêm), "cafe" (quán cà phê), "hoatDongGiaiTri" (hoạt động giải trí), "nghiDemODau" (nơi nghỉ đêm), "estimatedCost", "category": "hotel" (or "restaurant"), "latitude", "longitude", "notes".
-  10. DUPLICATE & REPETITION PREVENTION: Every single activity, hotel, restaurant, and sightseeing spot generated MUST be unique. Do NOT repeat any locations or activities across different days or within the same day. Each day must feature completely different, fresh spots.
+  5. CRITICAL BUDGET MATCHING RULE: The sum of all activities' estimatedCost across all days MUST be close to the total budget of ${totalBudget} ${currency}. Do not generate cheap activities that result in a total cost far below or above the budget. The target total cost of the itinerary (sum of all days' activities) should be within a deviation of no more than 1,000,000 ${currency} from the total budget of ${totalBudget} ${currency}. Calculate realistic prices for hotels, restaurants, and tickets to meet this target. Note: transportation and daily buffer fees will be calculated programmatically on top of this by the system, so aim for the sum of activities to be about 70-80% of the total budget.
+  6. CRITICAL DURATION RULE: You MUST generate exactly ${durationDays} items in the "days" array, representing exactly Day 1 up to Day ${durationDays}. Do NOT generate fewer days or truncate the output.
+  7. CRITICAL GEOGRAPHY RULE: The total travel distance between all activities planned in a single day MUST be within a 15km radius of each other. Group nearby places on the same day to avoid long commutes.
+  8. Respond entirely in Vietnamese. All text values (destination name, activityName, locationName, notes) MUST be in the Vietnamese language.
+  9. Do NOT use generic activity names like "Welcome walk", "Morning tour", "Eat local food", "Sightseeing experience", or "Local delicacy tasting". Always output real, actual, and famous tourist spots, monuments, restaurants, cafes, hotels, and specific local culinary specialties of the destination. Make notes detail-rich with actual tips.
+  10. Organize each day's activities strictly into exactly 5 activities in this order:
+     - Activity 1 (session="Ăn sáng"): Breakfast at a local eatery/restaurant. Fields: "session": "Ăn sáng", "timeSlot" (e.g. "07:00 - 08:00"), "activityName" (monAn), "locationName" (quanGoiY), "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
+     - Activity 2 (session="Sáng"): Morning attraction/sightseeing. Fields: "session": "Sáng", "timeSlot" (e.g. "08:30 - 11:30"), "activityName", "locationName", "thoiGianThamQuan" (e.g. "2.5 tiếng"), "goiYTraiNghiem" (rich tips), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
+     - Activity 3 (session="Trưa"): Lunch at a local restaurant. Fields: "session": "Trưa", "timeSlot" (e.g. "12:00 - 13:30"), "activityName" (anTrua), "locationName" (quanGoiY), "monDacSan", "thoiGianNghiNgoi", "estimatedCost", "category": "restaurant", "latitude", "longitude", "notes".
+     - Activity 4 (session="Chiều"): Afternoon attraction/sightseeing. Fields: "session": "Chiều", "timeSlot" (e.g. "14:00 - 17:30"), "activityName", "locationName", "thoiGianLuuLai" (e.g. "3 tiếng"), "estimatedCost", "category": "attraction" (or "nature"), "latitude", "longitude", "notes".
+     - Activity 5 (session="Tối"): Dinner and lodging (hotel). Fields: "session": "Tối", "timeSlot" (e.g. "18:30 - 22:00"), "activityName", "locationName" (khachSan), "anToi" (quanAnToiGoiY), "diaDiemDaoChoi" (diemDaoChoi), "choDem", "cafe", "hoatDongGiaiTri", "nghiDemODau", "estimatedCost", "category": "hotel" (or "restaurant"), "latitude", "longitude", "notes".
+  11. CRITICAL COST SPECIFICATION: In the "notes" field for each activity, you MUST write the cost as a price range instead of a fixed number (e.g. "Chi phí khoảng 50.000 - 100.000 đ" instead of saying it costs exactly 75.000 đ). Use words like "khoảng", "trong khoảng". The "estimatedCost" field itself should contain a single numeric value representing the average of that range (for calculation).
+  12. CRITICAL UNIQUENESS RULE: Every attraction, restaurant, and hotel must be completely unique. You MUST NOT repeat any location or activity name across different days or within the same day. Each day must feature completely different, fresh spots.
   
   JSON STRUCTURE:
   {
@@ -88,7 +90,7 @@ function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0): s
         "dayIndex": 1,
         "dateIndex": "Ngày 1: Tên mô tả chủ đề ngày",
         "activities": [
-          // Gồm đúng 5 hoạt động theo thứ tự (Sáng, Ăn sáng, Trưa, Chiều, Tối) với các trường đã mô tả ở trên.
+          // Gồm đúng 5 hoạt động theo thứ tự (Ăn sáng, Sáng, Trưa, Chiều, Tối) với các trường đã mô tả ở trên.
         ]
       }
     ]
@@ -207,8 +209,9 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
   - Transportation: ${params.transportation || 'Any (Xe máy/Xe khách/Ô tô)'}
   - Interests: ${params.interests.join(', ')}
   
-  Ensure all timeslots are sequenced correctly from morning (e.g. 08:00) to evening (e.g. 21:00).
-  Group activities strictly by sessions (Sáng, Trưa, Chiều, Tối).
+  Ensure all timeslots are sequenced correctly from breakfast (e.g. 07:00) to evening (e.g. 22:00).
+  Group activities strictly by sessions (Ăn sáng, Sáng, Trưa, Chiều, Tối).
+  You MUST generate exactly ${params.durationDays} days in the JSON.
   Generate the output entirely in Vietnamese.
   ${context}`;
 }
@@ -262,7 +265,7 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
       body: JSON.stringify({
         model: modelName,
         messages: [
-          { role: 'system', content: buildSystemPrompt(params.currency || 'USD', params.totalBudget) },
+          { role: 'system', content: buildSystemPrompt(params.currency || 'USD', params.totalBudget, params.durationDays) },
           { role: 'user', content: buildUserPrompt(params, centerCoords) },
         ],
         temperature: 0.7,
@@ -695,10 +698,16 @@ async function refineItineraryCoordinates(itinerary: AIItineraryResponse, destin
 async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryResponse> {
   const isVnd = params.currency === 'VND';
   const curated = getCuratedProvince(params.destination);
+  const totalDays = Math.min(params.durationDays, 15);
+  
+  // Calculate scaling factor to distribute the budget (activities sum should be ~75% of totalBudget)
+  const targetActivityCost = params.totalBudget * 0.75;
+  const baseCostPerDay = isVnd ? 795000 : 40; // baseline sum of activities cost per day
+  const totalBaseCost = baseCostPerDay * totalDays;
+  const scaleFactor = Math.max(0.5, targetActivityCost / totalBaseCost);
 
   if (curated) {
     const days: TripDaySchema[] = [];
-    const totalDays = Math.min(params.durationDays, 15);
     
     const sightseeing = [
       ...curated.attractions,
@@ -718,7 +727,7 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
         description: 'Khách sạn sạch sẽ, đầy đủ tiện nghi.'
       };
 
-      // Lọc các điểm tham quan và quán ăn lân cận khách sạn trong bán kính dưới 15km
+      // Filter local within 15km
       const localSightseeing = sightseeing.filter(p => {
         const dist = calculateHaversineDistance(
           { latitude: hotel.latitude, longitude: hotel.longitude },
@@ -769,47 +778,54 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
         description: 'Không gian ấm cúng, phục vụ nhiều đặc sản.'
       };
 
-      // 1. Sáng
-      dayActivities.push({
-        session: 'Sáng',
-        timeSlot: '08:00 - 11:30',
-        activityName: `Khám phá ${place1.name}`,
-        locationName: `${place1.name}, ${curated.provinceName}`,
-        thoiGianThamQuan: '2.5 tiếng',
-        goiYTraiNghiem: `Tham quan, chụp hình lưu niệm tại ${place1.name}. ${place1.description}`,
-        estimatedCost: isVnd ? place1.costEstimate : Math.round(place1.costEstimate / 25000),
-        category: place1.category || 'attraction',
-        latitude: place1.latitude,
-        longitude: place1.longitude,
-        notes: place1.description,
-      });
+      // Calculate scaled costs
+      const hotelCost = Math.round((hotel.costEstimate || (isVnd ? 500000 : 25)) * scaleFactor);
+      const breakfastCost = Math.round((breakfastPlace.costEstimate || (isVnd ? 45000 : 2)) * scaleFactor);
+      const lunchCost = Math.round((lunchPlace.costEstimate || (isVnd ? 150000 : 8)) * scaleFactor);
+      const place1Cost = Math.round((place1.costEstimate || 0) * scaleFactor);
+      const place2Cost = Math.round((place2.costEstimate || 0) * scaleFactor);
 
-      // 2. Ăn sáng
+      // 1. Ăn sáng
       dayActivities.push({
         session: 'Ăn sáng',
         timeSlot: '07:00 - 08:00',
-        activityName: curated.specialties.length > 0 ? curated.specialties[(i - 1) % curated.specialties.length] : 'Bún bò Huế/Hủ tiếu',
+        activityName: curated.specialties.length > 0 ? curated.specialties[(i - 1) % curated.specialties.length] : 'Món ăn sáng đặc sản',
         locationName: breakfastPlace.name,
-        estimatedCost: isVnd ? breakfastPlace.costEstimate : Math.round(breakfastPlace.costEstimate / 25000),
+        estimatedCost: breakfastCost,
         category: 'restaurant',
         latitude: breakfastPlace.latitude,
         longitude: breakfastPlace.longitude,
-        notes: 'Thưởng thức món ăn sáng đặc sắc địa phương.',
+        notes: `Thưởng thức ẩm thực sáng đặc sản. Chi phí dự kiến khoảng ${Math.round(breakfastCost * 0.85).toLocaleString()} - ${Math.round(breakfastCost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
+      });
+
+      // 2. Sáng
+      dayActivities.push({
+        session: 'Sáng',
+        timeSlot: '08:30 - 11:30',
+        activityName: `Tham quan ${place1.name}`,
+        locationName: `${place1.name}, ${curated.provinceName}`,
+        thoiGianThamQuan: '3 tiếng',
+        goiYTraiNghiem: `Tham quan, chụp hình lưu niệm tại ${place1.name}. ${place1.description}`,
+        estimatedCost: place1Cost,
+        category: place1.category || 'attraction',
+        latitude: place1.latitude,
+        longitude: place1.longitude,
+        notes: `Tham quan ngắm cảnh. Vé vào cửa/chi phí dự kiến khoảng ${Math.round(place1Cost * 0.85).toLocaleString()} - ${Math.round(place1Cost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
       });
 
       // 3. Trưa
       dayActivities.push({
         session: 'Trưa',
         timeSlot: '12:00 - 13:30',
-        activityName: `Ăn trưa đặc sản tại ${lunchPlace.name}`,
+        activityName: `Thưởng thức món đặc sản tại ${lunchPlace.name}`,
         locationName: lunchPlace.name,
-        monDacSan: curated.specialties.length > 1 ? curated.specialties[i % curated.specialties.length] : 'Gỏi cá, lẩu thả',
-        thoiGianNghiNgoi: '12:00 - 13:30',
-        estimatedCost: isVnd ? lunchPlace.costEstimate : Math.round(lunchPlace.costEstimate / 25000),
+        monDacSan: curated.specialties.length > 1 ? curated.specialties[i % curated.specialties.length] : 'Đặc sản địa phương',
+        thoiGianNghiNgoi: '1.5 tiếng',
+        estimatedCost: lunchCost,
         category: 'restaurant',
         latitude: lunchPlace.latitude,
         longitude: lunchPlace.longitude,
-        notes: lunchPlace.description,
+        notes: `Ăn trưa, nghỉ ngơi. Chi phí khoảng ${Math.round(lunchCost * 0.85).toLocaleString()} - ${Math.round(lunchCost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
       });
 
       // 4. Chiều
@@ -818,31 +834,31 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
         timeSlot: '14:00 - 17:30',
         activityName: `Khám phá vẻ đẹp ${place2.name}`,
         locationName: `${place2.name}, ${curated.provinceName}`,
-        thoiGianLuuLai: '3 tiếng',
-        estimatedCost: isVnd ? place2.costEstimate : Math.round(place2.costEstimate / 25000),
+        thoiGianLuuLai: '3.5 tiếng',
+        estimatedCost: place2Cost,
         category: place2.category || 'nature',
         latitude: place2.latitude,
         longitude: place2.longitude,
-        notes: place2.description,
+        notes: `Vui chơi, ngắm cảnh tự nhiên. Chi phí khoảng ${Math.round(place2Cost * 0.85).toLocaleString()} - ${Math.round(place2Cost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
       });
 
       // 5. Tối
       dayActivities.push({
         session: 'Tối',
-        timeSlot: '19:00 - 22:00',
-        activityName: `Nghỉ ngơi và dạo chơi đêm tại ${hotel.name}`,
+        timeSlot: '18:30 - 22:00',
+        activityName: `Nghỉ đêm tại khách sạn ${hotel.name}`,
         locationName: hotel.name,
-        anToi: 'Thưởng thức món lẩu địa phương hoặc hải sản tươi sống',
-        diaDiemDaoChoi: 'Quảng trường trung tâm thành phố',
-        choDem: 'Chợ đêm trung tâm',
-        cafe: 'Quán cafe view sông/phố cổ',
-        hoatDongGiaiTri: 'Nghe nhạc/dạo bộ thư giãn',
+        anToi: 'Thưởng thức ẩm thực tối đặc trưng hoặc dạo phố',
+        diaDiemDaoChoi: 'Các khu mua sắm và quảng trường trung tâm',
+        choDem: 'Khám phá cuộc sống nhộn nhịp tại chợ đêm',
+        cafe: 'Cà phê thư giãn buổi tối',
+        hoatDongGiaiTri: 'Dạo bộ ngắm phố phường về đêm',
         nghiDemODau: hotel.name,
-        estimatedCost: isVnd ? hotel.costEstimate : Math.round(hotel.costEstimate / 25000),
+        estimatedCost: hotelCost,
         category: 'hotel',
         latitude: hotel.latitude,
         longitude: hotel.longitude,
-        notes: hotel.description,
+        notes: `Ăn tối, nghỉ ngơi sau ngày dài khám phá. Chi phí khách sạn khoảng ${Math.round(hotelCost * 0.9).toLocaleString()} - ${Math.round(hotelCost * 1.1).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
       });
 
       days.push({
@@ -865,76 +881,82 @@ async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryR
 
   // Generic fallback if destination is not in the curated database
   const days: TripDaySchema[] = [];
-  for (let i = 1; i <= params.durationDays; i++) {
+  for (let i = 1; i <= totalDays; i++) {
+    const hotelCost = Math.round((isVnd ? 500000 : 25) * scaleFactor);
+    const breakfastCost = Math.round((isVnd ? 45000 : 2) * scaleFactor);
+    const lunchCost = Math.round((isVnd ? 120000 : 6) * scaleFactor);
+    const place1Cost = Math.round((isVnd ? 40000 : 2) * scaleFactor);
+    const place2Cost = Math.round((isVnd ? 40000 : 2) * scaleFactor);
+
     days.push({
       dayIndex: i,
       dateIndex: `Ngày ${i}: Khám phá ${params.destination}`,
       activities: [
         {
-          session: 'Sáng',
-          timeSlot: '08:00 - 11:30',
-          activityName: `Tham quan thắng cảnh ${params.destination}`,
-          locationName: `${params.destination}`,
-          thoiGianThamQuan: '3 tiếng',
-          goiYTraiNghiem: 'Khám phá thắng cảnh và lưu lại những bức ảnh kỷ niệm.',
-          estimatedCost: 0,
-          category: 'attraction',
-          latitude: 21.028511 + (i * 0.005),
-          longitude: 105.804817 + (i * 0.005),
-          notes: 'Nên chuẩn bị mũ nón và giày đi bộ thoải mái.',
-        },
-        {
           session: 'Ăn sáng',
           timeSlot: '07:00 - 08:00',
-          activityName: 'Bún chả/Bún bò đặc sản',
-          locationName: 'Quán ăn ngon nổi tiếng',
-          estimatedCost: isVnd ? 45000 : 2,
+          activityName: 'Thưởng thức bữa sáng đặc sản',
+          locationName: 'Quán điểm tâm nổi tiếng',
+          estimatedCost: breakfastCost,
           category: 'restaurant',
           latitude: 21.028511 + (i * 0.005),
           longitude: 105.804817 + (i * 0.005),
-          notes: 'Nên thử món ăn sáng gia truyền đặc sắc.',
+          notes: `Ăn sáng món gia truyền. Chi phí khoảng ${Math.round(breakfastCost * 0.85).toLocaleString()} - ${Math.round(breakfastCost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
+        },
+        {
+          session: 'Sáng',
+          timeSlot: '08:30 - 11:30',
+          activityName: `Tham quan địa danh ${params.destination}`,
+          locationName: `Điểm tham quan tại ${params.destination}`,
+          thoiGianThamQuan: '3 tiếng',
+          goiYTraiNghiem: 'Khám phá nét đẹp thiên nhiên và chụp hình lưu niệm.',
+          estimatedCost: place1Cost,
+          category: 'attraction',
+          latitude: 21.029511 + (i * 0.005),
+          longitude: 105.805817 + (i * 0.005),
+          notes: `Điểm đến nổi tiếng. Vé vào cửa/chi phí khoảng ${Math.round(place1Cost * 0.85).toLocaleString()} - ${Math.round(place1Cost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
         },
         {
           session: 'Trưa',
           timeSlot: '12:00 - 13:30',
-          activityName: `Thưởng thức ẩm thực trưa`,
-          locationName: `Nhà hàng đặc sản ${params.destination}`,
-          monDacSan: 'Cơm niêu/Ẩm thực truyền thống',
-          thoiGianNghiNgoi: '12:00 - 13:30',
-          estimatedCost: isVnd ? 120000 : 6,
+          activityName: 'Dùng bữa trưa đặc sản vùng miền',
+          locationName: 'Nhà hàng ẩm thực truyền thống',
+          monDacSan: 'Đặc sản ẩm thực độc đáo',
+          thoiGianNghiNgoi: '1.5 tiếng',
+          estimatedCost: lunchCost,
           category: 'restaurant',
-          latitude: 21.029511 + (i * 0.005),
-          longitude: 105.805817 + (i * 0.005),
-          notes: 'Thưởng thức món ngon ẩm thực được đánh giá cao.',
+          latitude: 21.030511 + (i * 0.005),
+          longitude: 105.806817 + (i * 0.005),
+          notes: `Ăn trưa đặc sản. Chi phí khoảng ${Math.round(lunchCost * 0.85).toLocaleString()} - ${Math.round(lunchCost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
         },
         {
           session: 'Chiều',
           timeSlot: '14:00 - 17:30',
-          activityName: `Trải nghiệm văn hóa tại ${params.destination}`,
-          locationName: `Khu phố cổ/Trung tâm văn hóa`,
-          thoiGianLuuLai: '3 tiếng',
-          estimatedCost: isVnd ? 30000 : 1.5,
+          activityName: `Khám phá khu du lịch sinh thái ${params.destination}`,
+          locationName: `Địa điểm giải trí ${params.destination}`,
+          thoiGianLuuLai: '3.5 tiếng',
+          estimatedCost: place2Cost,
           category: 'attraction',
           latitude: 21.031511 + (i * 0.005),
-          longitude: 105.806817 + (i * 0.005),
-          notes: 'Khám phá văn hóa đời sống hàng ngày của người dân bản địa.',
+          longitude: 105.807817 + (i * 0.005),
+          notes: `Khám phá, dạo chơi. Chi phí khoảng ${Math.round(place2Cost * 0.85).toLocaleString()} - ${Math.round(place2Cost * 1.15).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
         },
         {
           session: 'Tối',
-          timeSlot: '19:00 - 22:00',
-          activityName: `Ăn tối & dạo chơi đêm`,
-          locationName: `Khách sạn tại ${params.destination}`,
-          anToi: 'Thưởng thức buffet lẩu nướng',
-          diaDiemDaoChoi: 'Chợ đêm và phố đi bộ',
-          choDem: 'Chợ đêm mua sắm quà tặng',
-          cafe: 'Cà phê view cao ngắm phố phường',
-          hoatDongGiaiTri: 'Xem biểu diễn nhạc nước',
-          nghiDemODau: 'Khách sạn trung tâm tiện nghi',
-          estimatedCost: isVnd ? 300000 : 15,
+          timeSlot: '18:30 - 22:00',
+          activityName: `Nghỉ đêm tại khách sạn trung tâm`,
+          locationName: 'Khách sạn trung tâm tiêu chuẩn',
+          anToi: 'Thưởng thức ẩm thực tối đường phố hoặc buffet tự chọn',
+          diaDiemDaoChoi: 'Chợ đêm trung tâm sầm uất và phố đi bộ',
+          choDem: 'Mua sắm quà lưu niệm địa phương',
+          cafe: 'Cà phê view sông thư giãn',
+          hoatDongGiaiTri: 'Đi bộ ngắm thành phố lung linh ánh đèn',
+          nghiDemODau: 'Khách sạn trung tâm',
+          estimatedCost: hotelCost,
           category: 'hotel',
           latitude: 21.032511 + (i * 0.005),
-          longitude: 105.807817 + (i * 0.005),
-          notes: 'Nghỉ ngơi sau ngày dài khám phá năng động.'
+          longitude: 105.808817 + (i * 0.005),
+          notes: `Ăn tối, nghỉ ngơi hồi sức. Chi phí khách sạn khoảng ${Math.round(hotelCost * 0.9).toLocaleString()} - ${Math.round(hotelCost * 1.1).toLocaleString()} ${isVnd ? 'đ' : 'USD'}.`,
         }
       ],
     });
