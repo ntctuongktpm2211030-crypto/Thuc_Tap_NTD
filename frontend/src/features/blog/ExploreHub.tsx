@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  MapPin, Trophy, Users, Check, Search, Sparkles, Clock, ArrowRight,
-  Utensils, Landmark, Bookmark, Heart, MessageSquare, Compass, Send, HelpCircle,
-  TrendingUp, Star, Loader2, Navigation, AlertCircle, Share2
+  MapPin, Users, Search, Sparkles, Clock, ArrowRight,
+  Utensils, Landmark, Heart, Compass,
+  Loader2, Navigation, AlertCircle
 } from 'lucide-react';
 import { searchPlaces } from '../../utils/geocodeUtils';
-import { postsService, recommendationsService, socialService } from '../../services/smartTravel.service';
+import { postsService } from '../../services/smartTravel.service';
 import ExploreFiltersPanel, { DEFAULT_EXPLORE_FILTERS, type ExploreFilterState } from './ExploreFiltersPanel';
 import { distanceKm, type ExplorePost, EXPLORE_DESTINATIONS, EXPLORE_DISHES, EXPLORE_CULTURE } from './exploreBlogData';
 import { toExplorePostId } from '../../utils/postIds';
 import { getExplorePosts, setExplorePosts } from './explorePostsStore';
-import { buildHandbook } from './exploreHandbook';
 import blogVideo from '../../../../video.mp4';
 import { KineticText } from '../../components/ui/kinetic-text';
 
@@ -126,7 +125,7 @@ export default function ExploreHub() {
     postsService
       .feed({ page: 1, limit: 30 })
       .then(({ posts: apiPosts }) => {
-        const mapped = apiPosts
+        const mapped: ExplorePost[] = apiPosts
           .map((p: any) => {
             try {
               const payload = JSON.parse(p.content);
@@ -167,7 +166,7 @@ export default function ExploreHub() {
         if (mapped.length > 0) {
           const merged = [...getExplorePosts()];
           for (const m of mapped) {
-            if (!merged.some(x => x.id === m.id)) merged.unshift(m);
+            if (m && !merged.some(x => x.id === m.id)) merged.unshift(m);
           }
           setExplorePosts(merged);
           setPosts(merged);
@@ -588,8 +587,8 @@ export default function ExploreHub() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* ── SIDEBAR: ADVANCED FILTERS PANEL ── */}
-          <aside className="lg:col-span-3 space-y-6">
+          {/* ── SIDEBAR: ADVANCED FILTERS PANEL (STICKY ON SCROLL) ── */}
+          <aside className="lg:col-span-3 space-y-6 lg:sticky lg:top-24 self-start">
             <ExploreFiltersPanel
               filters={filters}
               onChange={patch => setFilters(prev => ({ ...prev, ...patch }))}
@@ -600,34 +599,35 @@ export default function ExploreHub() {
               totalCount={posts.length}
             />
 
-            {/* AI Inspiration Card ("AI Travel Inspiration Center") */}
-            <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl border border-indigo-900/50 shadow-2xl p-5 space-y-4 relative overflow-hidden group">
-              {/* Subtle background glow */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-400/10 rounded-full blur-xl pointer-events-none group-hover:bg-amber-400/20 transition-all duration-300" />
-              
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-400 to-orange-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-400/20">
-                  <Sparkles size={16} />
+            {/* AI Inspiration Card ("AI Travel Inspiration Center") - Vivid Glassmorphic Theme */}
+            <div className="bg-gradient-to-br from-indigo-700 via-indigo-900 to-purple-950 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 text-white rounded-3xl border border-indigo-400/30 dark:border-indigo-800/50 shadow-2xl p-5 space-y-4 relative overflow-hidden group">
+              {/* Vibrant background decorative glows */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+              <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/20 rounded-full blur-xl pointer-events-none" />
+
+              <div className="flex items-center gap-2.5 relative z-10">
+                <div className="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-400/30">
+                  <Sparkles size={18} className="animate-pulse" />
                 </div>
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-wider text-amber-300">AI Inspiration Center</h4>
-                  <p className="text-[9px] text-slate-400">Bạn muốn đi đâu hôm nay?</p>
+                  <p className="text-[10px] text-indigo-100 dark:text-slate-400 font-medium">Bạn muốn đi đâu hôm nay?</p>
                 </div>
               </div>
 
               {/* Natural Query Textarea */}
-              <div className="space-y-1">
+              <div className="space-y-1 relative z-10">
                 <textarea
                   value={aiInput}
                   onChange={e => setAiInput(e.target.value)}
                   placeholder="Nhập ý kiến tự do (Ví dụ: tôi muốn săn mây ở Sapa, đi với người yêu, ngân sách 2 triệu...)"
-                  className="w-full text-[10px] bg-slate-950/50 border border-slate-800/80 rounded-xl p-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-300/60 resize-none h-16 leading-relaxed transition-all"
+                  className="w-full text-[10px] bg-white/10 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800/80 rounded-xl p-2.5 text-white placeholder-indigo-200 dark:placeholder-slate-500 focus:outline-none focus:border-amber-300/80 focus:ring-1 focus:ring-amber-300/50 resize-none h-16 leading-relaxed transition-all backdrop-blur-sm"
                 />
               </div>
 
               {/* Dynamic Mood & Style Chips */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] font-black uppercase text-slate-400 tracking-wider">Cảm xúc & Phong cách</label>
+              <div className="space-y-1.5 relative z-10">
+                <label className="block text-[9px] font-black uppercase text-indigo-200 dark:text-slate-400 tracking-wider">Cảm xúc & Phong cách</label>
                 <div className="flex flex-wrap gap-1">
                   {activeChips.map(chip => {
                     const active = selectedStyles.includes(chip.style);
@@ -638,8 +638,8 @@ export default function ExploreHub() {
                         onClick={() => toggleStyleChip(chip.style)}
                         className={`text-[9px] font-bold px-2 py-1.5 rounded-lg border transition-all cursor-pointer ${
                           active
-                            ? 'bg-amber-400 border-transparent text-slate-950 shadow-md shadow-amber-400/25 scale-102 font-extrabold'
-                            : 'bg-slate-950/30 border-slate-850 text-slate-350 hover:border-slate-700 hover:text-white'
+                            ? 'bg-amber-400 border-amber-300 text-slate-950 shadow-md shadow-amber-400/30 scale-102 font-extrabold'
+                            : 'bg-white/10 dark:bg-slate-950/40 border-white/15 dark:border-slate-800 text-white dark:text-slate-350 hover:bg-white/20 dark:hover:border-slate-700'
                         }`}
                       >
                         {chip.label}
@@ -649,7 +649,7 @@ export default function ExploreHub() {
                   <button
                     type="button"
                     onClick={shuffleChips}
-                    className="text-[9px] font-black px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-amber-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+                    className="text-[9px] font-black px-2 py-1.5 rounded-lg bg-white/20 dark:bg-slate-800 border border-white/25 dark:border-slate-700 text-amber-300 hover:bg-white/30 transition-all cursor-pointer"
                   >
                     🔄 Đổi
                   </button>
@@ -657,13 +657,13 @@ export default function ExploreHub() {
               </div>
 
               {/* Dropdowns parameters */}
-              <div className="grid grid-cols-2 gap-2 text-[9px]">
+              <div className="grid grid-cols-2 gap-2 text-[9px] relative z-10">
                 <div>
-                  <label className="block text-slate-400 mb-1 font-bold uppercase tracking-wider">Ngân sách</label>
+                  <label className="block text-indigo-200 dark:text-slate-400 mb-1 font-bold uppercase tracking-wider">Ngân sách</label>
                   <select
                     value={selectedBudget}
                     onChange={e => setSelectedBudget(e.target.value)}
-                    className="w-full bg-slate-950/60 border border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/50"
+                    className="w-full bg-white/15 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/80 cursor-pointer"
                   >
                     {BUDGET_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">{opt.label}</option>
@@ -671,11 +671,11 @@ export default function ExploreHub() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1 font-bold uppercase tracking-wider">Bạn đồng hành</label>
+                  <label className="block text-indigo-200 dark:text-slate-400 mb-1 font-bold uppercase tracking-wider">Bạn đồng hành</label>
                   <select
                     value={selectedCompanion}
                     onChange={e => setSelectedCompanion(e.target.value)}
-                    className="w-full bg-slate-950/60 border border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/50"
+                    className="w-full bg-white/15 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/80 cursor-pointer"
                   >
                     {COMPANION_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">{opt.label}</option>
@@ -689,7 +689,7 @@ export default function ExploreHub() {
                 type="button"
                 onClick={generateAiInspiration}
                 disabled={aiLoading}
-                className="w-full py-2 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-500 hover:to-orange-500 text-slate-950 text-[10px] font-black uppercase tracking-wider rounded-xl shadow-lg shadow-orange-500/10 cursor-pointer transition-all hover:scale-101 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xl shadow-amber-400/20 cursor-pointer transition-all hover:scale-101 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed relative z-10"
               >
                 {aiLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
                 Nhận gợi ý hành trình
@@ -697,25 +697,25 @@ export default function ExploreHub() {
 
               {/* Recommendation Results Display */}
               {aiLoading ? (
-                <div className="flex flex-col items-center justify-center py-6 gap-2 text-slate-400 animate-pulse border-t border-slate-800/60 pt-4">
+                <div className="flex flex-col items-center justify-center py-6 gap-2 text-indigo-200 animate-pulse border-t border-white/15 pt-4">
                   <Loader2 className="animate-spin text-amber-300" size={18} />
                   <span className="text-[9px]">AI đang phân tích ý tưởng...</span>
                 </div>
               ) : aiResult ? (
-                <div className="space-y-3 animate-fade-in border-t border-slate-800/60 pt-4">
+                <div className="space-y-3 animate-fade-in border-t border-white/15 pt-4">
                   <div>
-                    <span className="text-[8px] font-black uppercase tracking-wider text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">Đề xuất hoàn hảo</span>
+                    <span className="text-[8px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded border border-amber-300/30">Đề xuất hoàn hảo</span>
                     <h5 className="text-xs font-extrabold text-white mt-1.5">{aiResult.title}</h5>
                   </div>
                   {aiResult.reason && (
-                    <p className="text-[9px] text-slate-400 leading-normal italic bg-slate-950/30 p-2 rounded-lg border border-slate-900/50">
+                    <p className="text-[9px] text-indigo-100 dark:text-slate-400 leading-normal italic bg-white/10 dark:bg-slate-950/30 p-2 rounded-lg border border-white/10 dark:border-slate-900/50">
                       💡 {aiResult.reason}
                     </p>
                   )}
-                  <p className="text-[10px] text-slate-250 leading-relaxed">{aiResult.description}</p>
+                  <p className="text-[10px] text-white/90 dark:text-slate-250 leading-relaxed">{aiResult.description}</p>
                   
                   {aiResult.highlights && aiResult.highlights.length > 0 && (
-                    <ul className="space-y-1 text-[9px] text-slate-350">
+                    <ul className="space-y-1 text-[9px] text-indigo-100 dark:text-slate-350">
                       {aiResult.highlights.map((h: string, idx: number) => (
                         <li key={idx} className="flex items-start gap-1">
                           <span className="text-amber-300 shrink-0">•</span>
@@ -725,8 +725,8 @@ export default function ExploreHub() {
                     </ul>
                   )}
                   
-                  <div className="pt-2 flex items-center justify-between border-t border-slate-800/60">
-                    <span className="text-[8px] text-slate-400 uppercase font-black tracking-wider">Chi phí dự trù</span>
+                  <div className="pt-2 flex items-center justify-between border-t border-white/15">
+                    <span className="text-[8px] text-indigo-200 uppercase font-black tracking-wider">Chi phí dự trù</span>
                     <span className="text-[10px] font-black text-amber-300">{aiResult.budgetEstimate}</span>
                   </div>
                 </div>
@@ -775,7 +775,38 @@ export default function ExploreHub() {
               </div>
             )}
 
-            {/* ── 4. FEATURED STYLISH ARTICLE CARD (HERO CARD) ── */}
+            {/* ── 4. TRAVEL HANDBOOKS COMPILATION (PLACED ABOVE FEATURED ARTICLE) ── */}
+            <div className="grid sm:grid-cols-2 gap-6">
+              <Link
+                to="/explore/cam-nang/am-thuc"
+                className="bg-gradient-to-br from-amber-500/10 to-orange-500/5 hover:from-amber-500/15 hover:to-orange-500/10 border border-amber-500/25 rounded-3xl p-6 flex items-start gap-4 transition-all duration-300 group cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-all shrink-0">
+                  <Utensils size={22} />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">Cẩm Nang Ẩm Thực</h4>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">Khám phá vị ngon ba miền</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-normal">Tổng hợp các quán ăn gia truyền, món ngon đường phố nổi tiếng được lữ khách đánh giá cao.</p>
+                </div>
+              </Link>
+
+              <Link
+                to="/explore/cam-nang/van-hoa"
+                className="bg-gradient-to-br from-violet-500/10 to-purple-500/5 hover:from-violet-500/15 hover:to-purple-500/10 border border-violet-500/25 rounded-3xl p-6 flex items-start gap-4 transition-all duration-300 group cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-violet-500 text-white flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-105 transition-all shrink-0">
+                  <Landmark size={22} />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-violet-600 dark:text-violet-400">Di Sản & Lễ Hội</h4>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">Trải nghiệm chiều sâu văn hóa</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-normal">Khám phá các ngôi chùa cổ kính, lễ hội dân gian và văn hóa làng nghề truyền thống lâu đời.</p>
+                </div>
+              </Link>
+            </div>
+
+            {/* ── 5. FEATURED STYLISH ARTICLE CARD (HERO CARD) ── */}
             {filteredPosts.length > 0 && (
               <div
                 onClick={() => navigate(`/explore/post/${filteredPosts[0].id}`)}
@@ -824,68 +855,7 @@ export default function ExploreHub() {
               </div>
             )}
 
-            {/* ── 5. TRAVEL HANDBOOKS COMPILATION ── */}
-            <div className="grid sm:grid-cols-2 gap-6">
-              <Link
-                to="/explore/cam-nang/am-thuc"
-                className="bg-gradient-to-br from-amber-500/10 to-orange-500/5 hover:from-amber-500/15 hover:to-orange-500/10 border border-amber-500/25 rounded-3xl p-6 flex items-start gap-4 transition-all duration-300 group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-all">
-                  <Utensils size={22} />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">Cẩm Nang Ẩm Thực</h4>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">Khám phá vị ngon ba miền</p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-normal">Tổng hợp các quán ăn gia truyền, món ngon đường phố nổi tiếng được lữ khách đánh giá cao.</p>
-                </div>
-              </Link>
-
-              <Link
-                to="/explore/cam-nang/van-hoa"
-                className="bg-gradient-to-br from-violet-500/10 to-purple-500/5 hover:from-violet-500/15 hover:to-purple-500/10 border border-violet-500/25 rounded-3xl p-6 flex items-start gap-4 transition-all duration-300 group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-violet-500 text-white flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-105 transition-all">
-                  <Landmark size={22} />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-violet-600 dark:text-violet-400">Di Sản & Lễ Hội</h4>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">Trải nghiệm chiều sâu văn hóa</p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-normal">Khám phá các ngôi chùa cổ kính, lễ hội dân gian và văn hóa làng nghề truyền thống lâu đời.</p>
-                </div>
-              </Link>
-            </div>
-
-            {/* ── 6. COMMUNITY & CONTRIBUTORS CENTER ── */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Users size={16} className="text-blue-500" />
-                Cộng Đồng Lữ Khách Terraholic
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { name: 'Sarah K.', handle: '@sarahk_world', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&q=80', score: 'Level 5 Traveler', role: 'Top Contributor' },
-                  { name: 'Đức Minh', handle: '@ducminh_vn', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=80&q=80', score: 'Level 4 Explorer', role: 'Adventure Expert' },
-                  { name: 'Maya Patel', handle: '@maya_roams', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=80&q=80', score: 'Level 5 Foodie', role: 'Culinary Guru' },
-                  { name: 'Quốc Bảo', handle: '@bao_vietnam', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80', score: 'Level 4 Historian', role: 'Culture Ambassador' }
-                ].map((user, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-800/80 rounded-2xl p-4 flex flex-col items-center text-center space-y-2 hover:shadow"
-                  >
-                    <img src={user.avatar} alt="" className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-500/20" />
-                    <div>
-                      <span className="block text-xs font-bold text-slate-800 dark:text-slate-200">{user.name}</span>
-                      <span className="block text-[9px] text-slate-400">{user.handle}</span>
-                    </div>
-                    <span className="text-[8px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">
-                      {user.role}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ── 7. PAGINATED STORY FEED ── */}
+            {/* ── 6. PAGINATED STORY FEED (CÂU CHUYỆN MỚI TỪ CỘNG ĐỒNG) ── */}
             <div id="feed-start-anchor" className="space-y-6 scroll-mt-20">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Compass size={16} className="text-blue-500" />
@@ -994,6 +964,36 @@ export default function ExploreHub() {
                   )}
                 </div>
               )}
+            </div>
+
+            {/* ── 7. COMMUNITY & CONTRIBUTORS CENTER (PLACED BELOW CÂU CHUYỆN MỚI TỪ CỘNG ĐỒNG) ── */}
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Users size={16} className="text-blue-500" />
+                Cộng Đồng Lữ Khách Terraholic
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { name: 'Sarah K.', handle: '@sarahk_world', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&q=80', score: 'Level 5 Traveler', role: 'Top Contributor' },
+                  { name: 'Đức Minh', handle: '@ducminh_vn', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=80&q=80', score: 'Level 4 Explorer', role: 'Adventure Expert' },
+                  { name: 'Maya Patel', handle: '@maya_roams', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=80&q=80', score: 'Level 5 Foodie', role: 'Culinary Guru' },
+                  { name: 'Quốc Bảo', handle: '@bao_vietnam', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80', score: 'Level 4 Historian', role: 'Culture Ambassador' }
+                ].map((user, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-800/80 rounded-2xl p-4 flex flex-col items-center text-center space-y-2 hover:shadow"
+                  >
+                    <img src={user.avatar} alt="" className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-500/20" />
+                    <div>
+                      <span className="block text-xs font-bold text-slate-800 dark:text-slate-200">{user.name}</span>
+                      <span className="block text-[9px] text-slate-400">{user.handle}</span>
+                    </div>
+                    <span className="text-[8px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">
+                      {user.role}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>

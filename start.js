@@ -37,10 +37,19 @@ WriteColor('=== KHOI CHAY SONG SONG 3 DICH VU TREN CONSOLE NAY ===', '35');
 console.log('========================================================\n');
 console.log('[*] Nhan Ctrl+C de dung tat ca cac dich vu cung luc.\n');
 
+const fs = require('fs');
+
 // 36 = Cyan, 32 = Green, 33 = Yellow
 const backend = runService('Backend', 'npm', ['run', 'dev'], 'backend', '36');
 const frontend = runService('Frontend', 'npm', ['run', 'dev'], 'frontend', '32');
-const aiService = runService('AI-Service', path.join('venv', 'Scripts', 'python'), ['-m', 'uvicorn', 'app.main:app', '--host', '0.0.0.0', '--port', '8000', '--reload', '--reload-dir', 'app'], 'ai-service', '33');
+
+const aiPython = path.resolve(__dirname, 'ai-service', 'venv', 'Scripts', 'python.exe');
+let aiService = null;
+if (fs.existsSync(aiPython)) {
+  aiService = runService('AI-Service', path.join('venv', 'Scripts', 'python'), ['-m', 'uvicorn', 'app.main:app', '--host', '0.0.0.0', '--port', '8000', '--reload', '--reload-dir', 'app'], 'ai-service', '33');
+} else {
+  console.log('\x1b[33m[AI-Service]\x1b[0m Python venv not found at ai-service/venv. AI service will be skipped until venv is created.');
+}
 
 function WriteColor(text, colorCode) {
   console.log(`\x1b[${colorCode}m${text}\x1b[0m`);

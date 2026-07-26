@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BookPageReaderProps {
   title: string;
@@ -75,7 +74,7 @@ export default function BookPageReader({ title, pages, currentPage, onPageChange
     <div className="relative w-full flex flex-col">
       {/* ── 3D VIEWPORT CONTAINER ── */}
       <div 
-        className="relative w-full min-h-[520px] sm:min-h-[460px] rounded-3xl"
+        className="relative w-full min-h-[420px] sm:min-h-[440px] rounded-3xl"
         style={{ perspective: 1800, transformStyle: 'preserve-3d' }}
       >
         
@@ -140,59 +139,36 @@ export default function BookPageReader({ title, pages, currentPage, onPageChange
             </div>
 
             {/* 2-Column Responsive Body */}
-            <div className="my-6 flex-grow columns-1 md:columns-2 gap-8 text-justify leading-relaxed text-slate-700 text-xs sm:text-sm tracking-wide z-10">
+            <div className="my-4 flex-grow columns-1 md:columns-2 gap-8 text-justify leading-relaxed sm:leading-loose text-slate-800 dark:text-slate-900 text-xs sm:text-[13.5px] tracking-normal z-10 overflow-hidden">
               {pages[currentPage - 1]}
             </div>
 
             {/* Footer Pagination Controls */}
-            <div className="flex justify-between items-center border-t border-amber-900/10 pt-3 mt-auto z-10">
+            <div className="flex justify-between items-center border-t border-amber-900/10 pt-3 mt-auto z-20 bg-[#FDFCF8]">
               <button
                 onClick={handlePrev}
                 disabled={currentPage === 1 || isFlipping}
                 className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
               >
-                ◀ Previous Page
+                ◀ PREVIOUS PAGE
               </button>
               
-              <span className="text-xs font-bold text-slate-450 font-editorial">
+              <span className="text-xs font-bold text-slate-500 font-editorial">
                 Page {currentPage} / {totalPages}
               </span>
 
               <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages || isFlipping}
-                className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all font-bold"
               >
-                Next Page ▶
+                NEXT PAGE ▶
               </button>
             </div>
 
           </motion.div>
         </AnimatePresence>
       </div>
-
-      {/* Floating Side Arrow Navigation Controls */}
-      {currentPage > 1 && (
-        <button
-          onClick={handlePrev}
-          disabled={isFlipping}
-          className="absolute -left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-slate-900 shadow-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-teal-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all z-30 cursor-pointer"
-          title="Previous Page"
-        >
-          <ChevronLeft size={20} />
-        </button>
-      )}
-
-      {currentPage < totalPages && (
-        <button
-          onClick={handleNext}
-          disabled={isFlipping}
-          className="absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-slate-900 shadow-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-teal-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all z-30 cursor-pointer"
-          title="Next Page"
-        >
-          <ChevronRight size={20} />
-        </button>
-      )}
     </div>
   );
 }

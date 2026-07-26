@@ -4,8 +4,9 @@ import {
   MapPin, Compass, Sparkles, Loader2, ArrowLeft,
   AlertCircle, GraduationCap
 } from 'lucide-react';
-import { KnowledgeEngine, type KnowledgeItem } from './KnowledgeEngine';
+import { KnowledgeEngine, normalizeProvinceKey, type KnowledgeItem } from './KnowledgeEngine';
 import BookPageReader from './BookPageReader';
+import { PROVINCE_LANDMARK_SLIDESHOW, DEFAULT_SLIDESHOW_IMAGES } from './ProvinceLandmarkData';
 
 function normalizeParagraphs(text: string): string {
   if (!text) return '';
@@ -21,7 +22,6 @@ function normalizeParagraphs(text: string): string {
 export default function ProvinceDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const provinceKey = (id ?? '').toUpperCase();
 
   // AI assistant states
   const [aiQuestion, setAiQuestion] = useState('');
@@ -35,9 +35,8 @@ export default function ProvinceDetailPage() {
 
   // Fetch and cache all knowledge items for this province
   const provinceItems = useMemo(() => {
-    const map = KnowledgeEngine.groupByProvince();
-    return map.get(provinceKey) ?? [];
-  }, [provinceKey]);
+    return KnowledgeEngine.getItemsForProvince(id ?? '');
+  }, [id]);
 
   // Dynamic grouping by subCategory
   const groupedItems = useMemo(() => {
@@ -87,20 +86,20 @@ export default function ProvinceDetailPage() {
 
   const overviewPages = useMemo(() => {
     if (!overviewItem) return [];
-    const paragraphs = overviewItem.content.split('\n').map(p => p.trim()).filter(Boolean);
-    if (paragraphs.length <= 3) return [paragraphs.join('\n\n')];
-
-    // Group paragraphs into 2 or 3 pages
-    const pageCount = paragraphs.length > 6 ? 3 : 2;
-    const size = Math.ceil(paragraphs.length / pageCount);
+    const cleanText = overviewItem.content.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+    const words = cleanText.split(' ').filter(Boolean);
     
-    const pages: string[] = [];
-    for (let i = 0; i < pageCount; i++) {
-      const slice = paragraphs.slice(i * size, (i + 1) * size);
-      if (slice.length > 0) {
-        pages.push(slice.join('\n\n'));
-      }
+    // ~280 words per page fills both 2 columns from top header line down to bottom footer line
+    const wordsPerPage = 280;
+    if (words.length <= wordsPerPage) {
+      return [cleanText];
     }
+
+    const pages: string[] = [];
+    for (let i = 0; i < words.length; i += wordsPerPage) {
+      pages.push(words.slice(i, i + wordsPerPage).join(' '));
+    }
+
     return pages;
   }, [overviewItem]);
 
@@ -112,8 +111,46 @@ export default function ProvinceDetailPage() {
 
   const formattedName = useMemo(() => {
     if (!id) return '';
-    return id.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    let decoded = id;
+    try {
+      decoded = decodeURIComponent(id);
+    } catch {}
+    return decoded.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   }, [id]);
+
+  const bannerPhotos = useMemo(() => {
+    if (!formattedName) return DEFAULT_SLIDESHOW_IMAGES;
+    const normKey = normalizeProvinceKey(formattedName);
+    const upperKey = formattedName.toUpperCase();
+    const meta = PROVINCE_LANDMARK_SLIDESHOW[normKey] || 
+                 PROVINCE_LANDMARK_SLIDESHOW[upperKey] || 
+                 PROVINCE_LANDMARK_SLIDESHOW[normKey.replace(/\s*-\s*/g, '-')] || 
+                 PROVINCE_LANDMARK_SLIDESHOW[normKey.replace(/-/g, ' - ')] || {};
+    return (meta.images && meta.images.length > 0) ? meta.images : DEFAULT_SLIDESHOW_IMAGES;
+  }, [formattedName]);
+
+  const taglineText = useMemo(() => {
+    if (!formattedName) return '';
+    const normKey = normalizeProvinceKey(formattedName);
+    const upperKey = formattedName.toUpperCase();
+    const meta = PROVINCE_LANDMARK_SLIDESHOW[normKey] || 
+                 PROVINCE_LANDMARK_SLIDESHOW[upperKey] || {};
+    return meta.tagline || 'Hệ thống thông tin chính thống tổng hợp về địa lý, danh thắng di tích và các tập tục văn hóa đặc sắc bản địa.';
+  }, [formattedName]);
+
+  const [bannerSlide, setBannerSlide] = useState(0);
+
+  useEffect(() => {
+    setBannerSlide(0);
+  }, [id]);
+
+  useEffect(() => {
+    if (bannerPhotos.length <= 1) return;
+    const timer = setInterval(() => {
+      setBannerSlide(prev => (prev + 1) % bannerPhotos.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [bannerPhotos]);
 
   // Handle AI consult strictly scoped to local repository context
   const handleAiConsult = async (e: React.FormEvent) => {
@@ -236,13 +273,21 @@ export default function ProvinceDetailPage() {
     }
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/guide/culture-food');
+    }
+  };
+
   if (provinceItems.length === 0) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
         <AlertCircle className="text-red-500 mb-2" size={40} />
         <h3 className="text-lg font-bold">Không tìm thấy địa điểm</h3>
         <p className="text-sm text-slate-500">Tỉnh thành hoặc địa phương này chưa có trong cơ sở dữ liệu.</p>
-        <button onClick={() => navigate('/explore')} className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-xl text-xs font-bold">
+        <button onClick={handleBack} className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-xl text-xs font-bold cursor-pointer">
           Quay lại Cẩm nang
         </button>
       </div>
@@ -252,31 +297,58 @@ export default function ProvinceDetailPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans pb-16">
       
-      {/* ── STICKY TOP NAVIGATION BAR ── */}
-      <nav className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/80 z-40 px-4 py-3 flex items-center justify-between">
-        <button
-          onClick={() => navigate('/explore')}
-          className="flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors text-xs font-bold cursor-pointer"
-        >
-          <ArrowLeft size={16} />
-          Quay lại Cẩm nang
-        </button>
-        <span className="text-xs font-black uppercase tracking-widest text-slate-400">CHI TIẾT TRI THỨC ĐỊA PHƯƠNG</span>
-        <div className="w-16" /> {/* Spacer */}
-      </nav>
+      {/* ── HEADER BANNER WITH CRISP AUTOMATIC SLIDESHOW ── */}
+      <div className="relative min-h-[340px] sm:min-h-[380px] flex items-end pb-12 px-6 sm:px-12 shadow-2xl overflow-hidden border-b border-teal-500/20">
+        {/* Back Button Directly Inside Banner Top-Left */}
+        <div className="absolute top-6 left-6 z-30">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-950/50 hover:bg-slate-950/80 border border-white/25 text-white transition-all text-xs font-bold shadow-xl cursor-pointer hover:scale-105"
+          >
+            <ArrowLeft size={16} />
+            Quay lại Cẩm nang
+          </button>
+        </div>
 
-      {/* ── HEADER BANNER ── */}
-      <div className="bg-gradient-to-br from-slate-950 via-teal-950 to-indigo-950 text-white py-16 px-8 shadow-2xl relative overflow-hidden border-b border-teal-500/20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.15),transparent)] pointer-events-none" />
-        <div className="max-w-6xl mx-auto space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[10px] font-black uppercase tracking-wider shadow-md">
-            <MapPin size={11} className="animate-pulse" />
+        {/* Crisp Slideshow Image Layers with Smooth Cross-fade Transition */}
+        {bannerPhotos.map((imgSrc, idx) => (
+          <div
+            key={imgSrc + idx}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out bg-cover bg-center ${
+              idx === bannerSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ backgroundImage: `url(${imgSrc})` }}
+          />
+        ))}
+
+        {/* Light Transparent Gradient for Legibility - Zero Blur, Crisp Photos */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/40 z-10 pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto space-y-3 relative z-20 w-full">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/25 border border-teal-400/40 text-teal-200 text-[10px] font-black uppercase tracking-wider shadow-md">
+            <MapPin size={11} className="animate-pulse text-teal-300" />
             ĐỊA DANH VIỆT NAM
           </div>
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white drop-shadow-md">{formattedName}</h1>
-          <p className="text-xs sm:text-sm text-slate-350 max-w-2xl leading-relaxed">
-            Hệ thống thông tin chính thống tổng hợp về địa lý, danh thắng di tích và các tập tục văn hóa đặc sắc bản địa.
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white drop-shadow-xl">{formattedName}</h1>
+          <p className="text-xs sm:text-sm text-slate-100 max-w-2xl leading-relaxed drop-shadow-md font-medium">
+            {taglineText}
           </p>
+
+          {/* Slide Indicator Dots */}
+          {bannerPhotos.length > 1 && (
+            <div className="flex items-center gap-2 pt-2 z-20">
+              {bannerPhotos.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setBannerSlide(i)}
+                  className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                    i === bannerSlide ? 'w-6 bg-teal-400' : 'w-1.5 bg-white/40 hover:bg-white/70'
+                  }`}
+                  aria-label={`Slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

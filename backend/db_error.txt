@@ -5078,3 +5078,175 @@ Lưu ý: Thông tin về địa điểm và giá trị rating sẽ không đư�
 
 =======
 >>>>>>> 50a060b211591f171be1876914de997af6c38dec
+[Console Error Logged] 2026-07-26T08:41:43.088Z - ReferenceError: optionalAuth is not defined
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\modules\trips\trips.router.ts:270:29)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1730:14)
+    at Module._compile (D:\Thuc_Tap_NTD\backend\node_modules\source-map-support\source-map-support.js:568:25)
+    at Module.m._compile (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-42198635900453585.js:69:33)
+    at node:internal/modules/cjs/loader:1895:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-42198635900453585.js:114:20)
+    at require.extensions.<computed> (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-42198635900453585.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\Thuc_Tap_NTD\backend\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+
+[Console Error Logged] 2026-07-26T08:46:18.637Z - ReferenceError: optionalAuth is not defined
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\modules\trips\trips.router.ts:270:29)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1730:14)
+    at Module._compile (D:\Thuc_Tap_NTD\backend\node_modules\source-map-support\source-map-support.js:568:25)
+    at Module.m._compile (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-2693576399450264.js:69:33)
+    at node:internal/modules/cjs/loader:1895:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-2693576399450264.js:114:20)
+    at require.extensions.<computed> (C:\Users\LENOVO\AppData\Local\Temp\ts-node-dev-hook-2693576399450264.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\Thuc_Tap_NTD\backend\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+
+[Console Error Logged] 2026-07-26T08:47:53.176Z - D:\Thuc_Tap_NTD\backend\src\modules\trips\trips.router.ts:270
+router.post('/ai-generate', optionalAuth, async (req: AuthRequest, res: Response) => {
+                            ^
+
+[Console Error Logged] 2026-07-26T08:47:53.177Z - ReferenceError: optionalAuth is not defined
+    at Object.<anonymous> (D:\Thuc_Tap_NTD\backend\src\modules\trips\trips.router.ts:270:29)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Module.m._compile (D:\Thuc_Tap_NTD\backend\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1895:10
+    at Object.require.extensions.<computed> [as .ts] (D:\Thuc_Tap_NTD\backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.require (node:internal/modules/cjs/loader:1487:12)
+
+[Console Error Logged] 2026-07-26T08:48:51.759Z - Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at D:\Thuc_Tap_NTD\backend\src\server.ts:101:12 {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+
+[Console Error Logged] 2026-07-26T09:39:06.155Z - Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at D:\Thuc_Tap_NTD\backend\src\server.ts:101:12
+
+[Console Error Logged] 2026-07-26T12:17:40.562Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 30, connection limit: 20)
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 30, connection limit: 20)
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-26T12:17:53.983Z - [auth/refresh] 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:18
+
+[Console Error Logged] 2026-07-26T13:50:28.777Z - [auth/refresh] 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:18
+
+[Console Error Logged] 2026-07-26T13:50:28.855Z - [auth/refresh] 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:36
+
+  151   return res.status(401).json({ error: 'Invalid or expired refresh token.' });
+  152 }
+  153 
+→ 154 const user = await prisma.user.findUnique(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\auth\auth.router.ts:154:18
+
+[Console Error Logged] 2026-07-26T15:31:51.860Z - Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at D:\Thuc_Tap_NTD\backend\src\server.ts:101:12
+

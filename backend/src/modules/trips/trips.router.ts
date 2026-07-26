@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
 import prisma from '../../config/db';
-import { requireAuth, AuthRequest } from '../auth/auth.middleware';
+import { requireAuth, optionalAuth, AuthRequest } from '../auth/auth.middleware';
 import { generateAIItinerary, regenerateItineraryPart } from '../ai/ai-planner';
 import { optimizeRoute, Waypoint } from '../optimizer/route-optimizer';
 

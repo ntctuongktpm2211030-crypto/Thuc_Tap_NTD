@@ -248,8 +248,16 @@ function App() {
 
   const navItems = [...browseNavItems, ...createNavItems];
 
-  const isActive = (path: string) =>
-    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/explore') {
+      return (location.pathname === '/explore' || location.pathname.startsWith('/explore/post') || location.pathname.startsWith('/explore/article')) && !location.pathname.startsWith('/explore/province');
+    }
+    if (path === '/guide/culture-food') {
+      return location.pathname.startsWith('/guide') || location.pathname.startsWith('/explore/province') || location.pathname.startsWith('/explore/handbook');
+    }
+    return location.pathname.startsWith(path);
+  };
 
   // Trang auth = fullscreen standalone, không cần navbar/footer
   const isAuthPage = location.pathname === '/auth';
