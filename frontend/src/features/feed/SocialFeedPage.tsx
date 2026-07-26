@@ -547,13 +547,29 @@ const SocialPostCard = ({
       {/* Photo grid */}
       {(post.images?.length ?? 0) > 0 && (
         <div className={`${(post.images?.length ?? 0) === 1 ? '' : 'grid grid-cols-2 gap-0.5'} overflow-hidden mx-0`}>
-          {post.images!.map((img: string, i: number) => (
-            <div key={i} className="overflow-hidden relative group">
-              <img src={img} alt="" loading="lazy"
-                className={`w-full object-cover cursor-pointer group-hover:scale-105 transition-transform duration-500 ${(post.images?.length ?? 0) === 1 ? 'max-h-72 sm:max-h-96' : 'h-40 sm:h-52'}`} />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-            </div>
-          ))}
+          {post.images!.map((img: string, i: number) => {
+            if ((post.images?.length ?? 0) === 1) {
+              return (
+                <div key={i} className="relative overflow-hidden w-full max-h-[480px] bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center group select-none">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center blur-2xl opacity-30 scale-105 pointer-events-none"
+                    style={{ backgroundImage: `url(${img})` }}
+                  />
+                  <img src={img} alt="" loading="lazy" 
+                    className="relative z-10 max-h-[480px] w-auto max-w-full object-contain cursor-pointer group-hover:scale-[1.02] transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors z-20 pointer-events-none" />
+                </div>
+              );
+            }
+            return (
+              <div key={i} className="overflow-hidden relative group">
+                <img src={img} alt="" loading="lazy"
+                  className="w-full object-cover cursor-pointer group-hover:scale-105 transition-transform duration-500 h-40 sm:h-52" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+              </div>
+            );
+          })}
         </div>
       )}
       </FeedCardShell>
@@ -1033,9 +1049,9 @@ export default function SocialFeedPage() {
     }
     return story.user.split(' ')[0];
   };
-  // Load registered users from API to use as companions suggestions
+  // Load registered users from API to use as companions suggestions (Dynamic updates on search changes)
   useEffect(() => {
-    socialService.searchUsers('')
+    socialService.searchUsers(feedSearchQuery)
       .then(users => {
         if (Array.isArray(users)) {
           setRegisteredUsers(users);
@@ -1044,7 +1060,7 @@ export default function SocialFeedPage() {
       .catch(err => {
         console.error('Failed to load registered users for suggestions:', err);
       });
-  }, [sidebarTick]);
+  }, [sidebarTick, feedSearchQuery]);
 
   useEffect(() => {
     void loadFeedFromApi();
