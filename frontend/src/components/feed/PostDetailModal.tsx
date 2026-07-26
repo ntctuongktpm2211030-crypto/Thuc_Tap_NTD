@@ -51,13 +51,18 @@ function InstagramCarousel({ images }: { images: string[] }) {
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {images.map((src, i) => (
-          <img
-            key={`${src}-${i}`}
-            src={src}
-            alt=""
-            className="w-full h-full object-cover flex-shrink-0"
-            loading="lazy"
-          />
+          <div key={`${src}-${i}`} className="relative w-full h-full flex-shrink-0 bg-slate-950 flex items-center justify-center overflow-hidden">
+            <div 
+              className="absolute inset-0 bg-cover bg-center blur-2xl opacity-40 scale-105 pointer-events-none"
+              style={{ backgroundImage: `url(${src})` }}
+            />
+            <img
+              src={src}
+              alt=""
+              className="relative z-10 max-w-full max-h-full object-contain"
+              loading="lazy"
+            />
+          </div>
         ))}
       </div>
 

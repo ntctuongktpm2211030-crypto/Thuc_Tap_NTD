@@ -2,13 +2,15 @@ import * as THREE from 'three';
 
 export class PageCurlSolver {
   /**
-   * Solves the isometric page curl vertex coordinates and normal vectors.
-   * @param x Original vertex X coordinate on flat page [0, pageWidth]
-   * @param y Original vertex Y coordinate on flat page [-pageHeight/2, pageHeight/2]
-   * @param t Progress value of the page turn [0.0, 1.0]
-   * @param direction Direction of flip: -1.0 for next, 1.0 for prev
-   * @param pageWidth Width of a single page
-   * @param pageHeight Height of a single page
+   * Calculates mathematically precise developable surface coordinates (isometric bending)
+   * on the CPU for a single vertex of the turning page.
+   * 
+   * @param x Original X coordinate on the flat page [0, pageWidth] (0 at spine, pageWidth at outer edge)
+   * @param y Original Y coordinate on the flat page [-pageHeight/2, pageHeight/2]
+   * @param t Progress value [0.0, 1.0]
+   * @param direction -1.0 for next (turns left), 1.0 for prev (turns right)
+   * @param pageWidth Width of the page mesh
+   * @param pageHeight Height of the page mesh
    */
   public static solve(
     x: number,
@@ -18,24 +20,29 @@ export class PageCurlSolver {
     pageWidth: number,
     pageHeight: number
   ): { position: THREE.Vector3; normal: THREE.Vector3 } {
-    // 1. Solve page spine rotation angle
-    // Page rotates smoothly around Y-axis spine from 0 to PI (or -PI depending on direction)
-    const spineAngle = t * Math.PI * -direction;
+    // 1. Spine Rotation Angle
+    // If direction = -1.0 (next), sweeps left -> angle goes from 0 to -PI
+    // If direction = 1.0 (prev), sweeps right -> angle goes from 0 to PI
+    const spineAngle = t * Math.PI * direction;
 
-    // Normalize y position to [0.0, 1.0] for parameter variance
+    // Normalized Y coordinate [0.0, 1.0]
     const normY = (y / pageHeight) + 0.5;
 
-    // 2. Solve Page Curl geometry (Isometric Cylinder Bend)
-    // We only curl the outer 25% of the page, leaving 75% flat.
-    // Top corner curls slightly wider than bottom corner to create a subtle Y-twist.
-    const bendWidth = pageWidth * (0.24 + 0.08 * normY); 
+    // 2. Developable Surface Folding (Isometric cylinder bend)
+    // Only 28% of the page width is curled, keeping 72% completely flat.
+    const bendWidth = pageWidth * 0.28;
     
-    // Crease line position
-    const creaseX = pageWidth - bendWidth;
+    // Diagonal crease lines (Y-Twist: top folds faster)
+    const creaseX = (pageWidth - bendWidth) - 0.10 * y * Math.sin(t * Math.PI);
 
-    // Curl angle peaks in the middle of flip (t = 0.5) and lands flat (t = 1.0)
-    const maxCurlAngle = 0.65 * Math.sin(t * Math.PI); // max 37 degrees bend
-    
+    // Bending is very gentle (max 30 degrees) for the first 80% of the transition.
+    // Rapidly rolls flat onto the other side during the last 20%.
+    const maxCurlAngle = THREE.MathUtils.lerp(
+      0.52 * Math.sin(t * Math.PI), 
+      Math.PI, 
+      THREE.MathUtils.smoothstep(t, 0.80, 1.0)
+    );
+
     let xLocal = x;
     let zLocal = 0;
     let nLocal = new THREE.Vector3(0, 0, 1);
@@ -43,39 +50,42 @@ export class PageCurlSolver {
     if (x > creaseX && maxCurlAngle > 0.005) {
       const d = x - creaseX;
       const localRadius = bendWidth / maxCurlAngle;
-      const angle = (d / bendWidth) * maxCurlAngle;
 
-      // Wrap coordinates around the cylinder
-      xLocal = creaseX + localRadius * Math.sin(angle);
-      zLocal = localRadius * (1.0 - Math.cos(angle));
-
-      // Calculate perturbed normal along the cylinder curve
-      nLocal.set(-Math.sin(angle), 0, Math.cos(angle));
+      if (d < bendWidth) {
+        const theta = (d / bendWidth) * maxCurlAngle;
+        xLocal = creaseX + localRadius * Math.sin(theta);
+        zLocal = localRadius * (1.0 - Math.cos(theta));
+        nLocal.set(-Math.sin(theta), 0, Math.cos(theta));
+      } else {
+        const excess = d - bendWidth;
+        xLocal = creaseX + localRadius * Math.sin(maxCurlAngle) + excess * Math.cos(maxCurlAngle);
+        zLocal = localRadius * (1.0 - Math.cos(maxCurlAngle)) + excess * Math.sin(maxCurlAngle);
+        nLocal.set(-Math.sin(maxCurlAngle), 0, Math.cos(maxCurlAngle));
+      }
     }
 
-    // 3. Book Spine Solver: Apply global rotation around the Y-axis spine (X = 0)
+    // 3. Spine pivot rotation (Spine is at X = 0)
     const cosA = Math.cos(spineAngle);
     const sinA = Math.sin(spineAngle);
 
-    // If flipping backward, we mirror the local X coordinates
-    const sweepDir = direction; // -1 for next, 1 for prev
-    const xSpine = xLocal * sweepDir;
+    // Map local X onto book spine layout:
+    // If next (direction = -1.0): starts on the right (xSpine = xLocal)
+    // If prev (direction = 1.0): starts on the left (xSpine = -xLocal)
+    const xSpine = -xLocal * direction;
 
     const xGlobal = xSpine * cosA - zLocal * sinA;
     const zGlobal = xSpine * sinA + zLocal * cosA;
     const yGlobal = y;
 
     // Rotate normal vector accordingly
-    const nxGlobal = nLocal.x * sweepDir * cosA - nLocal.z * sinA;
-    const nzGlobal = nLocal.x * sweepDir * sinA + nLocal.z * cosA;
+    const nxGlobal = -nLocal.x * direction * cosA - nLocal.z * sinA;
+    const nzGlobal = -nLocal.x * direction * sinA + nLocal.z * cosA;
     const nyGlobal = 0;
 
-    // Adjust position of page depending on spine center offset
-    const spineOffset = direction === -1.0 ? 0.38 : -0.38;
-    const currentOffset = spineOffset * (1.0 - t);
-
+    // Note: Local position is returned relative to the group origin (Spine at X = 0).
+    // The group translation handles the Book Spine layout offsets.
     return {
-      position: new THREE.Vector3(xGlobal + currentOffset, yGlobal, zGlobal),
+      position: new THREE.Vector3(xGlobal, yGlobal, zGlobal),
       normal: new THREE.Vector3(nxGlobal, nyGlobal, nzGlobal).normalize()
     };
   }
