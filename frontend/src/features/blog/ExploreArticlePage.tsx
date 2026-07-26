@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Bookmark, Check, Heart, MapPin, MessageCircle, Loader2, Share2,
+  ArrowLeft, Bookmark, Check, Heart, MapPin, MessageCircle, Loader2, Share2, Navigation,
 } from 'lucide-react';
 import { useRequireAuth } from '../../hooks/useRequireAuth';
 import { postsService } from '../../services/smartTravel.service';
@@ -19,8 +19,6 @@ const CATEGORY_STYLES: Record<string, string> = {
   'Biển đảo': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
   'Nghỉ dưỡng': 'bg-teal-500/10 text-teal-400 border-teal-500/20',
 };
-
-
 
 export default function ExploreArticlePage() {
   const { id } = useParams<{ id: string }>();
@@ -59,6 +57,25 @@ export default function ExploreArticlePage() {
           if (refreshed) applyPost(refreshed);
         } else {
           // This is a database post! Map apiPost to ExplorePost shape
+          let parsedTitle = apiPost.content?.slice(0, 50) + (apiPost.content?.length > 50 ? '...' : '');
+          let parsedExcerpt = apiPost.content;
+          let parsedContent = apiPost.content;
+          let parsedCategory = apiPost.destination?.category === 'restaurant' ? 'Ẩm thực' : 'Thiên nhiên';
+          let parsedLocation = apiPost.destination?.name || 'Việt Nam';
+          let parsedTags: string[] = [];
+
+          if (typeof apiPost.content === 'string' && apiPost.content.trim().startsWith('{') && apiPost.content.trim().endsWith('}')) {
+            try {
+              const j = JSON.parse(apiPost.content);
+              if (j.title || j.headline) parsedTitle = j.title || j.headline;
+              if (j.excerpt) parsedExcerpt = j.excerpt;
+              if (j.body || j.description) parsedContent = j.body || j.description;
+              if (j.feedCategory || j.category) parsedCategory = j.feedCategory || j.category;
+              if (j.destination) parsedLocation = j.destination;
+              if (Array.isArray(j.tags)) parsedTags = j.tags;
+            } catch {}
+          }
+
           const mappedPost: any = {
             id: id,
             authorId: apiPost.author?.id,
@@ -66,7 +83,7 @@ export default function ExploreArticlePage() {
             avatar: apiPost.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             handle: '@' + (apiPost.author?.email?.split('@')[0] || 'user'),
             verified: false,
-            location: apiPost.destination?.name || 'Việt Nam',
+            location: parsedLocation,
             date: new Date(apiPost.createdAt).toLocaleDateString('vi-VN', {
               hour: '2-digit',
               minute: '2-digit',
@@ -74,15 +91,15 @@ export default function ExploreArticlePage() {
               month: 'numeric',
               year: 'numeric',
             }),
-            category: apiPost.destination?.category === 'restaurant' ? 'Ẩm thực' : 'Thiên nhiên',
-            title: apiPost.content?.slice(0, 50) + (apiPost.content?.length > 50 ? '...' : ''),
-            excerpt: apiPost.content,
-            content: apiPost.content,
+            category: parsedCategory,
+            title: parsedTitle,
+            excerpt: parsedExcerpt,
+            content: parsedContent,
             images: apiPost.mediaUrls ?? [],
             likes: likes,
             liked: liked,
             bookmarked: bookmarked,
-            tags: [],
+            tags: parsedTags,
             comments: (apiPost.comments ?? []).map((c: any) => ({
               id: c.id,
               authorId: c.authorId || c.author?.id,
@@ -103,7 +120,78 @@ export default function ExploreArticlePage() {
       });
   }, [id, applyPost]);
 
-  if (!post) {
+  // Safely parse JSON payload inside post content if present
+  const displayData = useMemo(() => {
+    if (!post) return null;
+
+    let jsonPayload: any = null;
+    const rawTargets = [post.content, post.excerpt, post.title];
+    for (const raw of rawTargets) {
+      if (typeof raw === 'string' && raw.trim().startsWith('{') && raw.trim().endsWith('}')) {
+        try {
+          jsonPayload = JSON.parse(raw);
+          if (jsonPayload) break;
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+
+    const title =
+      jsonPayload?.title ||
+      jsonPayload?.headline ||
+      (post.title && !post.title.trim().startsWith('{') ? post.title : 'Hành trình trải nghiệm');
+
+    const excerpt =
+      jsonPayload?.excerpt ||
+      (post.excerpt && !post.excerpt.trim().startsWith('{') ? post.excerpt : '');
+
+    const content =
+      jsonPayload?.body ||
+      jsonPayload?.content ||
+      jsonPayload?.description ||
+      (post.content && !post.content.trim().startsWith('{') ? post.content : '');
+
+    const tags: string[] =
+      Array.isArray(jsonPayload?.tags) && jsonPayload.tags.length > 0
+        ? jsonPayload.tags
+        : (post.tags ?? []);
+
+    const location =
+      jsonPayload?.destination ||
+      (typeof jsonPayload?.location === 'object' ? jsonPayload.location?.address : jsonPayload?.location) ||
+      post.location ||
+      'Việt Nam';
+
+    const category =
+      jsonPayload?.feedCategory ||
+      jsonPayload?.category ||
+      post.category ||
+      'Khám phá';
+
+    const routePoints: Array<{ order?: number; role?: string; name?: string; address?: string }> =
+      jsonPayload?.route?.points ?? [];
+
+    const dates = jsonPayload?.dates;
+    const companions = jsonPayload?.companions;
+    const transport: string[] = Array.isArray(jsonPayload?.transport) ? jsonPayload.transport : [];
+
+    return {
+      title,
+      excerpt,
+      content,
+      tags,
+      location,
+      category,
+      routePoints,
+      dates,
+      companions,
+      transport,
+      jsonPayload,
+    };
+  }, [post]);
+
+  if (!post || !displayData) {
     return (
       <div className="explore-article-page min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-[var(--text-secondary)]">Không tìm thấy bài viết.</p>
@@ -184,7 +272,7 @@ export default function ExploreArticlePage() {
     }
   };
 
-  const catClass = CATEGORY_STYLES[post.category] ?? 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+  const catClass = CATEGORY_STYLES[displayData.category] ?? 'bg-slate-500/10 text-slate-400 border-slate-500/20';
 
   return (
     <div className="explore-article-page min-h-screen bg-[var(--bg-primary)]">
@@ -239,7 +327,7 @@ export default function ExploreArticlePage() {
                 </div>
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[var(--text-muted)] mt-0.5">
                   <span className="flex items-center gap-0.5 text-[var(--gold)]">
-                    <MapPin size={12} className="flex-shrink-0" /> {post.location}
+                    <MapPin size={12} className="flex-shrink-0" /> {displayData.location}
                   </span>
                   <span>·</span>
                   <span>{post.date}</span>
@@ -248,21 +336,21 @@ export default function ExploreArticlePage() {
             </div>
 
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border ${catClass}`}>
-              {post.category}
+              {displayData.category}
             </span>
           </div>
-
-
 
           {/* Title and Excerpt */}
           <div className="space-y-3">
             <h1 className="font-editorial text-2xl sm:text-3.5xl font-bold text-[var(--text-primary)] leading-snug">
-              {post.title}
+              {displayData.title}
             </h1>
             
-            <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border border-[var(--border-subtle)] bg-[var(--bg-elevated)]/30 p-4 rounded-xl italic">
-              {post.excerpt}
-            </p>
+            {displayData.excerpt && (
+              <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border border-[var(--border-subtle)] bg-[var(--bg-elevated)]/30 p-4 rounded-xl italic">
+                {displayData.excerpt}
+              </p>
+            )}
           </div>
 
           {/* Post Images Grid Layout */}
@@ -280,17 +368,38 @@ export default function ExploreArticlePage() {
             </div>
           )}
 
+          {/* Journey Route Timeline (If journey post) */}
+          {displayData.routePoints && displayData.routePoints.length > 0 && (
+            <div className="my-6 p-4 sm:p-5 rounded-2xl bg-[var(--bg-elevated)]/60 border border-[var(--border-subtle)] space-y-3">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
+                <Navigation size={14} />
+                <span>Lộ trình chuyến đi ({displayData.routePoints.length} điểm)</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--text-primary)] font-medium">
+                {displayData.routePoints.map((pt, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center gap-1.5 shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)]" />
+                      {pt.name || pt.address || `Điểm ${idx + 1}`}
+                    </span>
+                    {idx < displayData.routePoints.length - 1 && <span className="text-[var(--text-muted)]">→</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Post Content */}
           <div className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed space-y-4 pt-1">
-            <p className="whitespace-pre-wrap">{post.content}</p>
+            <p className="whitespace-pre-wrap">{displayData.content}</p>
           </div>
 
           {/* Tags */}
-          {post.tags.length > 0 && (
+          {displayData.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-2">
-              {post.tags.map(tag => (
+              {displayData.tags.map(tag => (
                 <span key={tag} className="text-xs text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-full border border-[var(--gold)]/15 font-semibold">
-                  #{tag}
+                  {tag.startsWith('#') ? tag : `#${tag}`}
                 </span>
               ))}
             </div>

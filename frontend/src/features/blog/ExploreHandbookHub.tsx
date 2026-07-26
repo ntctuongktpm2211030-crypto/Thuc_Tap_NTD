@@ -92,7 +92,7 @@ function ProvinceCard({
               <span
                 key={i}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === activeIdx ? 'bg-[#00A896] w-3' : 'bg-white/50 w-1.5'
+                  i === activeIdx ? 'bg-[var(--gold)] w-3' : 'bg-white/50 w-1.5'
                 }`}
               />
             ))}
@@ -102,7 +102,7 @@ function ProvinceCard({
 
       {/* Middle Title & Subtitle */}
       <div className="relative z-20 space-y-0.5 my-auto">
-        <h4 className="text-xl sm:text-2xl font-black text-white drop-shadow-md tracking-tight group-hover:text-teal-300 transition-colors">
+        <h4 className="text-xl sm:text-2xl font-black text-white drop-shadow-md tracking-tight transition-colors">
           {prov.name}
         </h4>
         <p className="text-[11px] text-slate-200/90 font-medium drop-shadow">
@@ -110,12 +110,13 @@ function ProvinceCard({
         </p>
       </div>
 
-      {/* Bottom Controls Bar (Teal Badge + White Circle Arrow Button) */}
+      {/* Bottom Controls Bar (Primary Badge + Circle Arrow Button) */}
       <div className="relative z-20 flex items-center justify-between pt-2">
-        <span className="bg-[#00A896] hover:bg-teal-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1 shadow-md">
-          📍 {prov.itemRealCount} mục
+        <span className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1 shadow-md">
+          <MapPin size={11} className="shrink-0 text-white" />
+          <span>{prov.itemRealCount} mục</span>
         </span>
-        <div className="w-8 h-8 rounded-full bg-white text-slate-800 flex items-center justify-center shadow-md group-hover:bg-[#00A896] group-hover:text-white transition-all duration-300">
+        <div className="w-8 h-8 rounded-full bg-white text-slate-800 flex items-center justify-center shadow-md group-hover:bg-[var(--gold)] group-hover:text-white transition-all duration-300">
           <ChevronRight size={16} />
         </div>
       </div>
@@ -182,15 +183,21 @@ export default function ExploreHandbookHub() {
       };
     });
 
-    // Category filter
+    // Category filter with proper Vietnamese mapping
     if (activeCategory !== 'TẤT CẢ') {
       list = list.filter(p => {
         const provItems = KnowledgeEngine.getItemsForProvince(p.key);
-        return provItems.some(i => i.subCategory.toUpperCase() === activeCategory);
+        return provItems.some(i => {
+          const sub = i.subCategory.toUpperCase();
+          if (activeCategory === 'VĂN HÓA') {
+            return sub === 'VĂN HÓA' || sub === 'CULTURE' || i.category === 'culture';
+          }
+          return sub === activeCategory;
+        });
       });
     }
 
-    // Real-time search query filtering on the grid ("khi gõ chữ tìm kiếm thì sẽ đồng thời lọc")
+    // Real-time search query filtering on the grid
     if (query.trim()) {
       const q = query.toLowerCase().trim();
       list = list.filter(p => {
@@ -224,11 +231,9 @@ export default function ExploreHandbookHub() {
   // For the AI select box we want all provinces regardless of category
   const allProvincesForAi = useMemo(() => KnowledgeEngine.getProvincesList(), []);
 
-  // Unique categories extracted dynamically from parsed records
+  // Clean canonical categories in Vietnamese without raw English tokens
   const categories = useMemo(() => {
-    const all = KnowledgeEngine.loadAll();
-    const uniqueCats = new Set(all.map(x => x.subCategory.toUpperCase()));
-    return ['TẤT CẢ', ...Array.from(uniqueCats)].filter(c => c !== 'TỔNG QUAN');
+    return ['TẤT CẢ', 'THẤNG CẢNH', 'DI TÍCH', 'LỄ HỘI', 'ẨM THỰC', 'VĂN HÓA', 'DÂN TỘC'];
   }, []);
 
   // Search Results
@@ -361,7 +366,7 @@ export default function ExploreHandbookHub() {
           </span>
           <h1 className="font-editorial text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm flex flex-wrap justify-center gap-x-3 select-none">
             <KineticText text="Cẩm Nang" as="span" className="text-white" />
-            <KineticText text="Tri Thức Du Lịch" as="span" className="bg-gradient-to-r from-teal-300 via-sky-300 to-brand-300 bg-clip-text text-transparent" />
+            <KineticText text="Tri Thức Du Lịch" as="span" className="bg-gradient-to-r from-blue-400 via-sky-300 to-[var(--gold)] bg-clip-text text-transparent" />
           </h1>
           <p className="text-xs sm:text-sm text-slate-100 font-bold max-w-xl mx-auto drop-shadow">
             Hệ tri thức số hóa chuẩn quốc gia về danh thắng địa lý, di sản văn hóa, ẩm thực đặc sản, lễ hội truyền thống của 63 tỉnh thành Việt Nam.
@@ -394,7 +399,7 @@ export default function ExploreHandbookHub() {
 
         {/* ── 2. UNIVERSAL KNOWLEDGE SEARCH ── */}
         <div className="max-w-3xl mx-auto space-y-3">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-3 flex items-center gap-2 relative group focus-within:border-[#00A896] transition-all">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-3 flex items-center gap-2 relative group focus-within:border-[var(--gold)] transition-all">
             <Search className="text-slate-400 dark:text-slate-500 ml-2" size={18} />
             <input
               type="text"
@@ -434,8 +439,8 @@ export default function ExploreHandbookHub() {
 
         {/* ── 3. CATEGORY EXPLORER (STRICT SINGLE ROW FLEX NO-WRAP) ── */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 justify-center text-xs font-bold text-[#00A896]">
-            <Compass size={16} className="text-[#00A896]" />
+          <div className="flex items-center gap-2 justify-center text-xs font-bold text-[var(--gold)]">
+            <Compass size={16} className="text-[var(--gold)]" />
             <span>Khám Phá Danh Mục Tri Thức</span>
           </div>
           <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto scrollbar-none py-1.5 px-2 max-w-full">
@@ -445,8 +450,8 @@ export default function ExploreHandbookHub() {
                 onClick={() => setActiveCategory(cat)}
                 className={`shrink-0 whitespace-nowrap px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   activeCategory === cat
-                    ? 'bg-[#00A896] text-white shadow-md shadow-teal-500/20 scale-102 font-extrabold'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-teal-500/40 hover:text-teal-600'
+                    ? 'bg-[var(--gold)] text-white shadow-md shadow-blue-500/20 scale-102 font-extrabold'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)]'
                 }`}
               >
                 {cat}
@@ -457,13 +462,12 @@ export default function ExploreHandbookHub() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* ── 4. 63 PROVINCES GRAPHIC CARDS GRID ── */}
           {/* ── 4. PROVINCES & ETHNIC GROUPS CARDS GRID ── */}
           <div className="lg:col-span-9 space-y-6">
             {activeCategory === 'DÂN TỘC' ? (
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <BookOpen size={16} className="text-[#00A896]" />
+                  <BookOpen size={16} className="text-[var(--gold)]" />
                   Thư Viện 54 Dân Tộc Việt Nam ({filteredEthnicGroups.length} Dân tộc)
                 </h3>
 
@@ -472,23 +476,23 @@ export default function ExploreHandbookHub() {
                     <div
                       key={ethnic.id}
                       onClick={() => setActiveEthnicModal(ethnic)}
-                      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-lg hover:shadow-2xl hover:border-[#00A896] transition-all cursor-pointer flex flex-col justify-between"
+                      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-lg hover:shadow-2xl hover:border-[var(--gold)] transition-all cursor-pointer flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#00A896] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-md border border-teal-500/20">
-                            Căn hóa & Dân tộc
+                          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-md border border-[var(--gold)]/20">
+                            Văn hóa & Dân tộc
                           </span>
                           <Sparkles size={14} className="text-amber-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                         </div>
-                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-[#00A896] transition-colors mb-2">
+                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-[var(--gold)] transition-colors mb-2">
                           {ethnic.name}
                         </h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-4 leading-relaxed">
                           {ethnic.content.split('\n')[0]}
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-[#00A896]">
+                      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-[var(--gold)]">
                         <span>Xem chi tiết bản sắc</span>
                         <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -499,7 +503,7 @@ export default function ExploreHandbookHub() {
             ) : (
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <MapPin size={16} className="text-[#00A896]" />
+                  <MapPin size={16} className="text-[var(--gold)]" />
                   Bản Đồ Hành Chính & Thư Viện Địa Phương
                 </h3>
 
@@ -518,7 +522,7 @@ export default function ExploreHandbookHub() {
                   ))}
                 </div>
 
-                {/* Pagination Controls Matching Image 2 */}
+                {/* Pagination Controls */}
                 {totalHandbookPages > 1 && (
                   <div className="flex justify-center items-center gap-1.5 pt-6">
                     <button
@@ -544,8 +548,8 @@ export default function ExploreHandbookHub() {
                           }}
                           className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                             active
-                              ? 'bg-[#00A896] text-white shadow font-extrabold'
-                              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-teal-500/40'
+                              ? 'bg-[var(--gold)] text-white shadow font-extrabold'
+                              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-[var(--gold)]/40'
                           }`}
                         >
                           {pageNum}
@@ -571,57 +575,57 @@ export default function ExploreHandbookHub() {
 
           {/* ── 5. AI KNOWLEDGE ASSISTANT ── */}
           <aside className="lg:col-span-3">
-            <div className="bg-[#042823] text-white rounded-2xl border border-[#0a4b42] shadow-2xl p-5 space-y-4 relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-5 space-y-4 relative overflow-hidden group">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#00A896] text-slate-950 flex items-center justify-center font-bold">
-                  <Sparkles size={16} className="text-slate-950" />
+                <div className="w-8 h-8 rounded-xl bg-[var(--gold)] text-white flex items-center justify-center font-bold">
+                  <Sparkles size={16} className="text-white" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-teal-300">TRỢ LÝ TRÍ THỨC AI</h4>
-                  <p className="text-[10px] text-slate-300">Trả lời nhanh mọi thắc mắc</p>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[var(--gold)]">TRỢ LÝ TRI THỨC AI</h4>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Trả lời nhanh mọi thắc mắc</p>
                 </div>
               </div>
 
               <form onSubmit={handleAiConsult} className="space-y-3">
                 <div>
-                  <label className="block text-[9px] font-bold text-slate-300 uppercase tracking-wider mb-1">CHỌN TỈNH THÀNH</label>
+                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CHỌN TỈNH THÀNH</label>
                   <select
                     value={aiSelectedProvince}
                     onChange={e => setAiSelectedProvince(e.target.value)}
-                    className="w-full bg-[#021815] border border-[#0d5c48] rounded-xl p-3 text-xs text-white outline-none focus:border-teal-400 cursor-pointer"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-white outline-none focus:border-[var(--gold)] cursor-pointer"
                   >
-                    <option value="" className="bg-[#021815] text-white">-- Lựa chọn tỉnh --</option>
+                    <option value="" className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">-- Lựa chọn tỉnh --</option>
                     {allProvincesForAi.map((p: { key: string; name: string }) => (
-                      <option key={p.key} value={p.key} className="bg-[#021815] text-white">{p.name}</option>
+                      <option key={p.key} value={p.key} className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">{p.name}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-bold text-slate-300 uppercase tracking-wider mb-1">CÂU HỎI TRA CỨU</label>
+                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CÂU HỎI TRA CỨU</label>
                   <textarea
                     value={aiQuestion}
                     onChange={e => setAiQuestion(e.target.value)}
                     placeholder="VD: Núi Cấm ở đâu? có cảnh đẹp gi..."
                     disabled={!aiSelectedProvince}
-                    className="w-full text-xs bg-[#021815] border border-[#0d5c48] rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 resize-none h-24 disabled:opacity-40 transition-all"
+                    className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[var(--gold)] resize-none h-24 disabled:opacity-40 transition-all"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={aiLoading || !aiQuestion.trim() || !aiSelectedProvince}
-                  className="w-full py-3 bg-[#00A896] hover:bg-[#009686] text-slate-950 font-black text-[11px] uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                  className="w-full py-3 bg-[var(--gold)] hover:opacity-90 text-white font-black text-[11px] uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                 >
-                  {aiLoading ? <Loader2 size={14} className="animate-spin text-slate-950" /> : <Search size={14} className="text-slate-950" />}
+                  {aiLoading ? <Loader2 size={14} className="animate-spin text-white" /> : <Search size={14} className="text-white" />}
                   TRA CỨU TRỢ LÝ
                 </button>
               </form>
 
               {aiResponse && (
-                <div className="space-y-2 border-t border-[#0d5c48] pt-4 animate-fade-in">
-                  <span className="text-[8px] font-black uppercase text-teal-300 bg-[#00A896]/20 px-2 py-0.5 rounded border border-[#00A896]/40">KẾT QUẢ TRA CỨU</span>
-                  <p className="text-[10px] text-teal-50 leading-relaxed bg-[#021815] p-3 rounded-xl border border-[#0d5c48] max-h-[220px] overflow-y-auto whitespace-pre-wrap">
+                <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-fade-in">
+                  <span className="text-[8px] font-black uppercase text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded border border-[var(--gold)]/20">KẾT QUẢ TRA CỨU</span>
+                  <p className="text-[10px] text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[220px] overflow-y-auto whitespace-pre-wrap">
                     {aiResponse}
                   </p>
                 </div>
@@ -637,7 +641,7 @@ export default function ExploreHandbookHub() {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
             <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#00A896] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-md border border-teal-500/20">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-md border border-[var(--gold)]/20">
                   VĂN HÓA DÂN TỘC VIỆT NAM
                 </span>
                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
@@ -657,7 +661,7 @@ export default function ExploreHandbookHub() {
             <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
               <button
                 onClick={() => setActiveEthnicModal(null)}
-                className="px-5 py-2 bg-[#00A896] text-white text-xs font-bold rounded-xl hover:bg-teal-600 cursor-pointer shadow"
+                className="px-5 py-2 bg-[var(--gold)] text-white text-xs font-bold rounded-xl hover:bg-[var(--gold-dark)] cursor-pointer shadow"
               >
                 Đóng
               </button>

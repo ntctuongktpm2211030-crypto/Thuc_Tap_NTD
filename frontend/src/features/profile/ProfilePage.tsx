@@ -70,7 +70,7 @@ export default function ProfilePage() {
   const fetchProfilePosts = async (targetUserId: string) => {
     setLoadingPosts(true);
     try {
-      const res = await postsService.feed({ authorId: targetUserId, limit: 100 });
+      const res = await postsService.feed({ authorId: targetUserId, limit: 100 } as any);
       if (res && Array.isArray(res.posts)) {
         // Map backend Post format to local rendering format if necessary
         const mapped = res.posts.map((p: any) => {
@@ -705,7 +705,10 @@ export default function ProfilePage() {
               <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl shadow-xl space-y-4">
                 <h3 className="text-sm font-black uppercase text-brand-600 dark:text-brand-400">{vi ? 'Ảnh của bạn' : 'Your photos'}</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {PHOTOS.map((src, i) => (
+                  {[
+                    'https://images.unsplash.com/photo-1542291026-7eec264c27ff',
+                    'https://images.unsplash.com/photo-1518770660439-4636190af475'
+                  ].map((src, i) => (
                     <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
                       <img src={src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform" />
                     </div>

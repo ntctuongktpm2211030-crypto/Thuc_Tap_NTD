@@ -5250,3 +5250,121 @@ Please make sure your database server is running at `aws-1-ap-northeast-2.pooler
     at Server.listen (node:net:2102:7)
     at D:\Thuc_Tap_NTD\backend\src\server.ts:101:12
 
+[Console Error Logged] 2026-07-26T18:02:55.655Z - Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at D:\Thuc_Tap_NTD\backend\src\server.ts:101:12
+
+[Console Error Logged] 2026-07-26T18:58:06.211Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-26T18:58:06.553Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-26T18:58:24.472Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:27
+
+[Console Error Logged] 2026-07-26T18:58:44.784Z - [social/notifications GET] 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+Stack: PrismaClientKnownRequestError: 
+Invalid `prisma.notification.findMany()` invocation in
+D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:53
+
+  179 // ─────────────────────────────────────────────────────────
+  180 router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response) => {
+  181   try {
+→ 182     const notifications = await prisma.notification.findMany(
+Can't reach database server at `aws-1-ap-northeast-2.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-ap-northeast-2.pooler.supabase.com:5432`.
+    at $n.handleRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (D:\Thuc_Tap_NTD\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at D:\Thuc_Tap_NTD\backend\src\modules\social\social.router.ts:182:27
+

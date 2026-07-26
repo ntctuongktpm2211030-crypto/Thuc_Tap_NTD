@@ -125,7 +125,7 @@ export default function ExploreHub() {
     postsService
       .feed({ page: 1, limit: 30 })
       .then(({ posts: apiPosts }) => {
-        const mapped: ExplorePost[] = apiPosts
+        const mapped = apiPosts
           .map((p: any) => {
             try {
               const payload = JSON.parse(p.content);
@@ -161,7 +161,7 @@ export default function ExploreHub() {
               return null;
             }
           })
-          .filter((p: any): p is ExplorePost => p !== null);
+          .filter(Boolean) as ExplorePost[];
 
         if (mapped.length > 0) {
           const merged = [...getExplorePosts()];
@@ -233,7 +233,7 @@ export default function ExploreHub() {
               return null;
             }
           })
-          .filter((p: any): p is ExplorePost => p !== null);
+          .filter(Boolean) as ExplorePost[];
 
         if (mapped.length > 0) {
           setPosts(prev => [...prev, ...mapped]);

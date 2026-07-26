@@ -178,7 +178,7 @@ const SavedRightSidebar = () => {
         handle: `@${(u.profile?.fullName || u.fullName || u.email).split(' ').pop().toLowerCase()}`,
         followers: u._count?.followers || 0,
       }));
-    return sortCompanionsByFollowers(list, 5);
+    return sortCompanionsByFollowers(list as any, 5);
   }, [registeredUsers, loggedInUser?.id]);
 
   const handleToggleFollowUser = async (userId: string) => {
