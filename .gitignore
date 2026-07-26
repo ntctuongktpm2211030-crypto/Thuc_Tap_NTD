@@ -53,3 +53,6 @@ Thumbs.db
 
 # Dynamic cache directories
 backend/deps/
+
+# Local diagnostic logs
+backend/db_error.txt

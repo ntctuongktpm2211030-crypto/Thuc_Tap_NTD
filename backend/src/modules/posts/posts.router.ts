@@ -6,6 +6,52 @@ import { uploadBase64ToSupabase } from '../../config/supabase';
 
 const router = Router();
 
+// In-memory cache for feed and comments to speed up performance
+const feedCache = new Map<string, { data: { posts: any[]; total: number }; expiresAt: number }>();
+const commentsCache = new Map<string, { data: any; expiresAt: number }>();
+
+function getCachedFeed(key: string) {
+  const cached = feedCache.get(key);
+  if (!cached) return null;
+  if (Date.now() > cached.expiresAt) {
+    feedCache.delete(key);
+    return null;
+  }
+  return cached.data;
+}
+
+function setCachedFeed(key: string, data: any) {
+  feedCache.set(key, {
+    data,
+    expiresAt: Date.now() + 10000 // 10s TTL
+  });
+}
+
+function invalidateFeedCache() {
+  feedCache.clear();
+}
+
+function getCachedComments(postId: string) {
+  const cached = commentsCache.get(postId);
+  if (!cached) return null;
+  if (Date.now() > cached.expiresAt) {
+    commentsCache.delete(postId);
+    return null;
+  }
+  return cached.data;
+}
+
+function setCachedComments(postId: string, data: any) {
+  commentsCache.set(postId, {
+    data,
+    expiresAt: Date.now() + 30000 // 30s TTL
+  });
+}
+
+function invalidateCommentsCache(postId: string) {
+  commentsCache.delete(postId);
+}
+
 function extractBodyText(content: string): string {
   try {
     const parsed = JSON.parse(content);
@@ -24,20 +70,18 @@ function extractBodyText(content: string): string {
 // ─────────────────────────────────────────────────────────
 router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    // Permanently delete posts trashed more than 15 days ago
+    // Permanently delete posts trashed more than 15 days ago (Non-blocking background job)
     const fifteenDaysAgo = new Date();
     fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
-    try {
-      await prisma.post.deleteMany({
-        where: {
-          deletedAt: {
-            lt: fifteenDaysAgo
-          }
+    prisma.post.deleteMany({
+      where: {
+        deletedAt: {
+          lt: fifteenDaysAgo
         }
-      });
-    } catch (err) {
-      console.error('Failed to clean up expired trashed posts:', err);
-    }
+      }
+    }).catch(err => {
+      console.error('Failed to clean up expired trashed posts in background:', err);
+    });
 
     const { page = '1', limit = '10', q, authorId } = req.query as Record<string, string>;
 
@@ -49,24 +93,35 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
       where.content = { contains: q, mode: 'insensitive' };
     }
 
-    const [posts, total] = await Promise.all([
-      prisma.post.findMany({
-        where,
-        include: {
-          author: { include: { profile: true } },
-          _count: { select: { likes: true, comments: true, bookmarks: true } },
-        },
-        orderBy: { createdAt: 'desc' },
-        skip: (Number(page) - 1) * Number(limit),
-        take: Number(limit),
-      }),
-      prisma.post.count({ where }),
-    ]);
+    const cacheKey = `feed_${page}_${limit}_${q || ''}_${authorId || ''}`;
+    let cachedData = getCachedFeed(cacheKey);
+    let posts: any[] = [];
+    let total = 0;
+
+    if (cachedData) {
+      posts = cachedData.posts;
+      total = cachedData.total;
+    } else {
+      [posts, total] = await Promise.all([
+        prisma.post.findMany({
+          where,
+          include: {
+            author: { include: { profile: true } },
+            _count: { select: { likes: true, comments: true, bookmarks: true } },
+          },
+          orderBy: { createdAt: 'desc' },
+          skip: (Number(page) - 1) * Number(limit),
+          take: Number(limit),
+        }),
+        prisma.post.count({ where }),
+      ]);
+      setCachedFeed(cacheKey, { posts, total });
+    }
 
     let likedPostIds = new Set<string>();
     let bookmarkedPostIds = new Set<string>();
 
-    if (req.user?.sub) {
+    if (req.user?.sub && posts.length > 0) {
       const postIds = posts.map(p => p.id);
       const [likes, bookmarks] = await Promise.all([
         prisma.like.findMany({
@@ -206,6 +261,8 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 
 
 
+    invalidateFeedCache();
+
     return res.status(201).json(post);
   } catch (err) {
     console.error('[posts/POST /]', err);
@@ -226,6 +283,7 @@ router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
       where: { id: req.params.id },
       data: { deletedAt: new Date() }
     });
+    invalidateFeedCache();
     return res.status(204).send();
   } catch (err) {
     console.error('[posts/DELETE /:id]', err);
@@ -247,6 +305,7 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
 
     if (existing) {
       await prisma.like.delete({ where: { postId_userId: { postId, userId } } });
+      invalidateFeedCache();
       return res.json({ liked: false });
     } else {
       await prisma.like.create({ data: { postId, userId } });
@@ -280,6 +339,7 @@ router.post('/:id/like', requireAuth, async (req: AuthRequest, res: Response) =>
         console.error('Failed to create like notification:', err);
       }
 
+      invalidateFeedCache();
       return res.json({ liked: true });
     }
   } catch (err) {
@@ -302,9 +362,11 @@ router.post('/:id/bookmark', requireAuth, async (req: AuthRequest, res: Response
 
     if (existing) {
       await prisma.bookmark.delete({ where: { postId_userId: { postId, userId } } });
+      invalidateFeedCache();
       return res.json({ bookmarked: false });
     } else {
       await prisma.bookmark.create({ data: { postId, userId } });
+      invalidateFeedCache();
       return res.json({ bookmarked: true });
     }
   } catch (err) {
@@ -357,6 +419,8 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
       },
     });
 
+    invalidateFeedCache();
+
     return res.json(updatedPost);
   } catch (err) {
     console.error('[posts/PUT /:id]', err);
@@ -369,8 +433,14 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.get('/:id/comments', async (req: AuthRequest, res: Response) => {
   try {
+    const postId = req.params.id;
+    const cached = getCachedComments(postId);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const comments = await prisma.comment.findMany({
-      where: { postId: req.params.id, parentId: null },
+      where: { postId, parentId: null },
       include: {
         author: { include: { profile: true } },
         replies: {
@@ -380,6 +450,8 @@ router.get('/:id/comments', async (req: AuthRequest, res: Response) => {
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    setCachedComments(postId, comments);
     return res.json(comments);
   } catch (err) {
     console.error('[posts/comments GET]', err);
@@ -405,49 +477,48 @@ router.post('/:id/comments', requireAuth, async (req: AuthRequest, res: Response
       include: { author: { include: { profile: true } } },
     });
 
+    // Invalidate caches
+    invalidateCommentsCache(req.params.id);
+    invalidateFeedCache();
 
-
-    try {
-      const post = await prisma.post.findUnique({
-        where: { id: req.params.id }
-      });
-      const commenterName = comment.author.profile?.fullName || 'Ai đó';
-
-      if (parentId) {
-        const parentComment = await prisma.comment.findUnique({
-          where: { id: parentId }
+    // Async background task for notifications & Socket.IO triggers (Non-blocking)
+    (async () => {
+      try {
+        const post = await prisma.post.findUnique({
+          where: { id: req.params.id }
         });
-        if (parentComment && parentComment.authorId !== req.user!.sub) {
-          prisma.notification.create({
+        const commenterName = comment.author.profile?.fullName || 'Ai đó';
+
+        if (parentId) {
+          const parentComment = await prisma.comment.findUnique({
+            where: { id: parentId }
+          });
+          if (parentComment && parentComment.authorId !== req.user!.sub) {
+            const notification = await prisma.notification.create({
+              data: {
+                recipientId: parentComment.authorId,
+                type: 'comment',
+                content: `${commenterName} đã trả lời bình luận của bạn.`,
+                targetId: comment.postId,
+              }
+            });
+            sendRealTimeNotification(req, parentComment.authorId, notification);
+          }
+        } else if (post && post.authorId !== req.user!.sub) {
+          const notification = await prisma.notification.create({
             data: {
-              recipientId: parentComment.authorId,
+              recipientId: post.authorId,
               type: 'comment',
-              content: `${commenterName} đã trả lời bình luận của bạn.`,
+              content: `${commenterName} đã bình luận về bài viết của bạn.`,
               targetId: comment.postId,
             }
-          }).then(notification => {
-            sendRealTimeNotification(req, parentComment.authorId, notification);
-          }).catch(err => {
-            console.error('Failed to create reply notification in background:', err);
           });
-        }
-      } else if (post && post.authorId !== req.user!.sub) {
-        prisma.notification.create({
-          data: {
-            recipientId: post.authorId,
-            type: 'comment',
-            content: `${commenterName} đã bình luận về bài viết của bạn.`,
-            targetId: comment.postId,
-          }
-        }).then(notification => {
           sendRealTimeNotification(req, post.authorId, notification);
-        }).catch(err => {
-          console.error('Failed to create comment notification in background:', err);
-        });
+        }
+      } catch (err) {
+        console.error('Failed to create comment/reply notification in background:', err);
       }
-    } catch (err) {
-      console.error('Failed to create comment notification:', err);
-    }
+    })().catch(err => console.error('BG Promise failed:', err));
 
     return res.status(201).json(comment);
   } catch (err) {

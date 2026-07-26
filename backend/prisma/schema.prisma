@@ -194,6 +194,8 @@ model Post {
   @@index([authorId])
   @@index([tripId])
   @@index([locationId])
+  @@index([deletedAt, createdAt])
+  @@index([authorId, deletedAt, createdAt])
 }
 
 model Comment {
@@ -212,6 +214,7 @@ model Comment {
   @@index([postId])
   @@index([authorId])
   @@index([parentId])
+  @@index([postId, parentId, createdAt])
 }
 
 model Like {
