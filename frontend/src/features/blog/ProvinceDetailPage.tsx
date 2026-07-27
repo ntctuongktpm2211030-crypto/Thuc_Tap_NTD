@@ -2,11 +2,12 @@ import { useMemo, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   MapPin, Compass, Sparkles, Loader2, ArrowLeft,
-  AlertCircle, GraduationCap
+  AlertCircle
 } from 'lucide-react';
 import { KnowledgeEngine, normalizeProvinceKey, type KnowledgeItem } from './KnowledgeEngine';
 import BookPageReader from './BookPageReader';
 import { PROVINCE_LANDMARK_SLIDESHOW, DEFAULT_SLIDESHOW_IMAGES } from './ProvinceLandmarkData';
+import { LANDMARK_IMAGES_MAPPING } from './LandmarkData';
 
 function normalizeParagraphs(text: string): string {
   if (!text) return '';
@@ -17,6 +18,141 @@ function normalizeParagraphs(text: string): string {
     return p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
   });
   return cleaned.filter(Boolean).join('\n\n');
+}
+
+function renderFormattedContent(text: string) {
+  if (!text) return null;
+  const normalized = text.normalize('NFC');
+  const rawParagraphs = normalized.split(/\n\s*\n/);
+
+  return (
+    <div className="space-y-4 w-full">
+      {rawParagraphs.map((rawPara, idx) => {
+        const cleanedPara = rawPara.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!cleanedPara) return null;
+
+        // Detect if this line is a heading/sub-heading (e.g. "MỸ THUẬT CỔ TRUYỀN")
+        const isHeading = cleanedPara.length < 90 && (
+          cleanedPara === cleanedPara.toUpperCase() ||
+          /^[0-9IVXLCDM]+\.\s+/i.test(cleanedPara) ||
+          cleanedPara.endsWith(':')
+        );
+
+        if (isHeading) {
+          return (
+            <h4 key={idx} className="font-black text-sm sm:text-base text-slate-900 dark:text-white mt-6 mb-2 text-center border-b border-slate-200 dark:border-slate-800 pb-2 tracking-wide uppercase">
+              {cleanedPara}
+            </h4>
+          );
+        }
+
+        return (
+          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 text-center font-normal tracking-normal">
+            {cleanedPara}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+// LandmarkCard component with exact mapped images + dynamic Wikipedia lookup fallback
+function LandmarkCard({
+  item,
+  onClick,
+  fallbackBanner
+}: {
+  item: KnowledgeItem;
+  onClick: () => void;
+  fallbackBanner?: string;
+}) {
+  const [imageUrl, setImageUrl] = useState<string>(() => {
+    const upperName = item.name.toUpperCase();
+    if (LANDMARK_IMAGES_MAPPING[upperName]) {
+      return LANDMARK_IMAGES_MAPPING[upperName];
+    }
+    const matchedKey = Object.keys(LANDMARK_IMAGES_MAPPING).find(key => upperName.includes(key) || key.includes(upperName));
+    if (matchedKey) {
+      return LANDMARK_IMAGES_MAPPING[matchedKey];
+    }
+    return '';
+  });
+
+  useEffect(() => {
+    if (imageUrl) return; // Already resolved via LANDMARK_IMAGES_MAPPING
+
+    let isMounted = true;
+    const cleanQuery = item.name.replace(/^Lễ hội\s+/i, '').replace(/^Chùa\s+/i, '').replace(/^Ao\s+/i, '');
+    fetch(`https://vi.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.name)}|${encodeURIComponent(cleanQuery)}&prop=pageimages&format=json&pithumbsize=600&origin=*`)
+      .then(r => r.json())
+      .then(data => {
+        if (!isMounted) return;
+        const pages = data.query?.pages;
+        if (pages) {
+          const firstPageWithImg = Object.values(pages).find((p: any) => p.thumbnail?.source) as any;
+          if (firstPageWithImg?.thumbnail?.source) {
+            setImageUrl(firstPageWithImg.thumbnail.source);
+          } else {
+            setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
+          }
+        } else {
+          setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
+        }
+      })
+      .catch(() => {
+        if (isMounted) setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
+      });
+
+    return () => { isMounted = false; };
+  }, [item.name, fallbackBanner, imageUrl]);
+
+  const normalizedContent = normalizeParagraphs(item.content);
+  const previewText = normalizedContent.length > 130 ? normalizedContent.slice(0, 130).trim() + '...' : normalizedContent;
+
+  return (
+    <div
+      onClick={onClick}
+      className="bg-white dark:bg-slate-900 rounded-[24px] border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+    >
+      <div>
+        {/* Image Box */}
+        <div className="relative w-full h-44 rounded-[18px] overflow-hidden mb-4 bg-slate-100 dark:bg-slate-800">
+          <img
+            src={imageUrl || fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800'}
+            alt={item.name}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800';
+            }}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+
+          {/* Subcategory Pill */}
+          <div className="absolute top-3 left-3 bg-[#1859B4] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md flex items-center gap-1">
+            <Compass size={11} className="text-white" />
+            <span>{item.subCategory}</span>
+          </div>
+        </div>
+
+        <h4 className="text-base font-black text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors mb-2 line-clamp-1">
+          {item.name}
+        </h4>
+
+        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+          {previewText}
+        </p>
+      </div>
+
+      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <span className="text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:underline">
+          Xem chi tiết →
+        </span>
+        <div className="w-7 h-7 rounded-full border border-blue-200 text-blue-600 flex items-center justify-center text-xs">
+          <Sparkles size={13} />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function ProvinceDetailPage() {
@@ -298,12 +434,12 @@ export default function ProvinceDetailPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans pb-16">
       
       {/* ── HEADER BANNER WITH CRISP AUTOMATIC SLIDESHOW ── */}
-      <div className="relative min-h-[340px] sm:min-h-[380px] flex items-end pb-12 px-6 sm:px-12 shadow-2xl overflow-hidden border-b border-teal-500/20">
+      <div className="relative min-h-[400px] sm:min-h-[450px] flex items-end pb-16 px-6 sm:px-12 shadow-2xl overflow-hidden border-b border-teal-500/20">
         {/* Back Button Directly Inside Banner Top-Left */}
         <div className="absolute top-6 left-6 z-30">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-950/50 hover:bg-slate-950/80 border border-white/25 text-white transition-all text-xs font-bold shadow-xl cursor-pointer hover:scale-105"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900/60 backdrop-blur-sm hover:bg-slate-900/80 border border-white/10 text-white transition-all text-[13px] font-semibold shadow-xl cursor-pointer hover:scale-105"
           >
             <ArrowLeft size={16} />
             Quay lại Cẩm nang
@@ -322,27 +458,41 @@ export default function ProvinceDetailPage() {
         ))}
 
         {/* Light Transparent Gradient for Legibility - Zero Blur, Crisp Photos */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/40 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10 pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto space-y-3 relative z-20 w-full">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/25 border border-teal-400/40 text-teal-200 text-[10px] font-black uppercase tracking-wider shadow-md">
-            <MapPin size={11} className="animate-pulse text-teal-300" />
+        <div className="max-w-6xl mx-auto space-y-4 relative z-20 w-full">
+          {/* Blue Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1859B4] text-white text-[11px] font-bold uppercase tracking-wider shadow-md">
+            <MapPin size={12} className="text-white" />
             ĐỊA DANH VIỆT NAM
           </div>
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white drop-shadow-xl">{formattedName}</h1>
-          <p className="text-xs sm:text-sm text-slate-100 max-w-2xl leading-relaxed drop-shadow-md font-medium">
+          
+          <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white drop-shadow-xl">{formattedName}</h1>
+          
+          <p className="text-sm sm:text-base text-slate-200 max-w-2xl leading-relaxed drop-shadow-md font-medium">
             {taglineText}
           </p>
 
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex items-center gap-2 text-white/90 text-[13px] font-semibold bg-slate-900/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+              <Compass size={14} className="text-white" />
+              <span>Diện tích: 2.360 km²</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90 text-[13px] font-semibold bg-slate-900/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+              <Sparkles size={14} className="text-white" />
+              <span>Dân số: 1.006.000+</span>
+            </div>
+          </div>
+
           {/* Slide Indicator Dots */}
           {bannerPhotos.length > 1 && (
-            <div className="flex items-center gap-2 pt-2 z-20">
+            <div className="absolute right-0 bottom-0 flex items-center gap-2 z-20">
               {bannerPhotos.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setBannerSlide(i)}
                   className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                    i === bannerSlide ? 'w-6 bg-teal-400' : 'w-1.5 bg-white/40 hover:bg-white/70'
+                    i === bannerSlide ? 'w-6 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/70'
                   }`}
                   aria-label={`Slide ${i + 1}`}
                 />
@@ -370,168 +520,161 @@ export default function ProvinceDetailPage() {
           </div>
 
           {/* AI Assistant Sidebar */}
-          <aside className="lg:col-span-4 h-full">
-            <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl border border-indigo-900/50 shadow-2xl p-5 space-y-4 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-400/10 rounded-full blur-xl pointer-events-none" />
-              
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-teal-500 text-slate-950 flex items-center justify-center">
-                  <GraduationCap size={18} />
+          <aside className="lg:col-span-4 lg:sticky lg:top-24 self-start">
+            <div>
+              <div className="bg-[#0A2647] text-white rounded-[24px] shadow-2xl p-6 flex flex-col relative overflow-hidden group">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                      <Sparkles size={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-[15px] font-black uppercase tracking-wide text-white">Trợ Lý Số Địa Phương</h4>
+                      <p className="text-[11px] text-white/70">Hỏi về {formattedName} ngay tại đây!</p>
+                    </div>
+                  </div>
+                  <div className="opacity-60 group-hover:opacity-100 transition-opacity">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-teal-350">Trợ Lý Số Địa Phương</h4>
-                  <p className="text-[9px] text-slate-400">Trả lời nghiêm ngặt theo tư liệu</p>
+
+                <p className="text-[12px] text-white/80 leading-relaxed mb-6 mt-2">
+                  Trợ lý AI này được cung cấp độc quyền từ bộ tri thức chính thống của tỉnh {formattedName}. Hãy hỏi các thông tin cụ thể để nhận gợi ý phù hợp và chính xác.
+                </p>
+
+                <div className="bg-[#05162E] rounded-[20px] p-4 relative mb-4">
+                  <form onSubmit={handleAiConsult} className="flex flex-col">
+                    <textarea
+                      value={aiQuestion}
+                      onChange={e => setAiQuestion(e.target.value)}
+                      placeholder={`Hỏi về danh thắng hay lịch sử của ${formattedName}...`}
+                      className="w-full text-[13px] bg-transparent border-none text-white placeholder-white/50 focus:outline-none resize-none h-24"
+                    />
+                    
+                    {/* Decorative 3D Robot Image */}
+                    <div className="absolute right-0 bottom-0 pointer-events-none w-24 h-24 translate-x-4 translate-y-4">
+                      <img 
+                        src="https://cdn-icons-png.flaticon.com/512/8649/8649605.png" 
+                        alt="3D Robot" 
+                        className="w-full h-full object-contain drop-shadow-2xl opacity-90"
+                      />
+                    </div>
+                  </form>
                 </div>
-              </div>
 
-              <p className="text-[10px] text-slate-400 leading-normal">
-                Trợ lý AI này được cung cấp độc quyền tệp tri thức chính thống của tỉnh {formattedName}. Hãy hỏi các thông tin cụ thể về thắng cảnh, chùa chiền hay lịch sử.
-              </p>
-
-              <form onSubmit={handleAiConsult} className="space-y-3">
-                <textarea
-                  value={aiQuestion}
-                  onChange={e => setAiQuestion(e.target.value)}
-                  placeholder={`Hỏi về danh thắng hay lịch sử của ${formattedName}...`}
-                  className="w-full text-xs bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 resize-none h-16 transition-all"
-                />
                 <button
-                  type="submit"
+                  onClick={handleAiConsult}
                   disabled={aiLoading || !aiQuestion.trim()}
-                  className="w-full py-2 bg-gradient-to-r from-teal-400 to-indigo-500 text-slate-950 text-[10px] font-black uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all hover:scale-101 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                  className="w-full py-3 bg-white text-[#0A2647] text-[13px] font-bold uppercase tracking-wide rounded-xl shadow-lg cursor-pointer transition-all hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {aiLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                  {aiLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowLeft size={16} className="rotate-180" />}
                   Tra Cứu Nhanh
                 </button>
-              </form>
 
-              {aiResponse && (
-                <div className="space-y-2 border-t border-slate-850 pt-4 animate-fade-in">
-                  <span className="text-[8px] font-black uppercase text-teal-300 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/25">Phản hồi của trợ lý</span>
-                  <p className="text-[10px] text-slate-200 whitespace-pre-wrap leading-relaxed bg-slate-950/30 p-3 rounded-xl border border-slate-900/60 max-h-[220px] overflow-y-auto">
-                    {aiResponse}
-                  </p>
-                </div>
-              )}
+                {aiResponse && (
+                  <div className="mt-4 space-y-2 border-t border-white/10 pt-4 animate-fade-in">
+                    <span className="text-[10px] font-black uppercase text-blue-300 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/25">Phản hồi của trợ lý</span>
+                    <p className="text-[12px] text-slate-200 whitespace-pre-wrap leading-relaxed bg-black/20 p-3 rounded-xl border border-white/5 max-h-[150px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20">
+                      {aiResponse}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </aside>
         </div>
 
-        {/* ── BOTTOM SECTION: TABS & ITEMS GRID (FULL WIDTH) ── */}
+        {/* ── BOTTOM SECTION: TABS & ITEMS GRID (FULL WIDTH MATCHING MOCKUP) ── */}
         {subCategoriesList.length > 0 && (
-          <div className="space-y-6 pt-4 border-t border-slate-250 dark:border-slate-850">
-            {/* Dynamic Tabs (Newspaper Header Style) */}
-            <div className="flex border-b border-slate-250 dark:border-slate-850 overflow-x-auto gap-2 pb-1.5 scrollbar-none">
-              {subCategoriesList.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveTab(cat)}
-                  className={`px-4 py-2 text-xs font-black uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer ${
-                    activeTab === cat
-                      ? 'bg-teal-600 text-white rounded-lg'
-                      : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+          <div className="space-y-6 pt-8 border-t border-slate-200 dark:border-slate-800">
+            {/* Header & Tabs Row */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-600/10 text-blue-600 flex items-center justify-center">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-tight">
+                    THẮNG CẢNH & LỄ HỘI
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Khám phá những điều đặc sắc theo mùa ở {formattedName}
+                  </p>
+                </div>
+              </div>
 
-            {/* Editorial 2-Column Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch" id="province-items-anchor">
-              {paginatedCategoryItems.map((item, idx) => {
-                const normalizedContent = normalizeParagraphs(item.content);
-                const isLongText = normalizedContent.length > 200;
-                const previewText = isLongText ? normalizedContent.slice(0, 200).trim() + '...' : normalizedContent;
-
-                return (
-                  <article 
-                    key={idx} 
-                    onClick={() => setActiveModalItem(item)}
-                    className="h-full bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800/60 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-150/40 dark:shadow-none hover:shadow-2xl hover:border-teal-500/30 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden cursor-pointer"
+              {/* Blue Pill Tabs */}
+              <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+                {subCategoriesList.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveTab(cat)}
+                    className={`px-5 py-2 text-xs font-bold rounded-full transition-all cursor-pointer ${
+                      activeTab === cat
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400'
+                    }`}
                   >
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-3">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 text-[10px] font-extrabold uppercase tracking-wider">
-                          <Compass size={12} className="text-teal-500" />
-                          {item.subCategory}
-                        </span>
-                      </div>
-                      
-                      <h4 className="text-base sm:text-lg font-black text-slate-955 dark:text-white leading-snug tracking-tight group-hover:text-teal-600 dark:group-hover:text-teal-455 transition-colors">
-                        {item.name}
-                      </h4>
-                      
-                      <p className="text-xs sm:text-[13px] leading-6 text-slate-655 dark:text-slate-350 text-left whitespace-pre-wrap font-normal tracking-wide">
-                        {previewText}
-                      </p>
-
-                      {isLongText && (
-                        <span className="inline-block text-xs font-bold text-teal-600 dark:text-teal-400 group-hover:underline">
-                          Xem chi tiết &rarr;
-                        </span>
-                      )}
-                    </div>
-                  </article>
-                );
-              })}
+                    {cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Items Pagination Controls */}
-            {totalItemPages > 1 && (
-              <div className="flex justify-center items-center gap-1.5 pt-6">
+            {/* 3-Column Grid Carousel with Navigation Arrows */}
+            <div className="relative px-2 sm:px-6">
+              {/* Previous Carousel Page Button */}
+              {itemPage > 1 && (
                 <button
-                  onClick={() => {
-                    setItemPage(prev => Math.max(prev - 1, 1));
-                    document.getElementById('province-items-anchor')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  disabled={itemPage === 1}
-                  className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-white dark:bg-slate-900 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-650 dark:text-slate-200"
+                  onClick={() => setItemPage(prev => Math.max(prev - 1, 1))}
+                  className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl flex items-center justify-center text-slate-700 dark:text-white hover:scale-110 transition-all cursor-pointer"
                 >
-                  Trước
+                  &larr;
                 </button>
-                
-                {Array.from({ length: totalItemPages }).map((_, i) => {
-                  const pageNum = i + 1;
-                  const active = itemPage === pageNum;
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => {
-                        setItemPage(pageNum);
-                        document.getElementById('province-items-anchor')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className={`w-8 h-8 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                        active
-                          ? 'bg-teal-600 text-white border-transparent shadow'
-                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-650 dark:text-slate-450 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+              )}
 
+              {/* Next Carousel Page Button */}
+              {itemPage < totalItemPages && (
                 <button
-                  onClick={() => {
-                    setItemPage(prev => Math.min(prev + 1, totalItemPages));
-                    document.getElementById('province-items-anchor')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  disabled={itemPage === totalItemPages}
-                  className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold bg-white dark:bg-slate-900 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-650 dark:text-slate-200"
+                  onClick={() => setItemPage(prev => Math.min(prev + 1, totalItemPages))}
+                  className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl flex items-center justify-center text-slate-700 dark:text-white hover:scale-110 transition-all cursor-pointer"
                 >
-                  Sau
+                  &rarr;
                 </button>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch" id="province-items-anchor">
+                {paginatedCategoryItems.slice(0, 3).map((item, idx) => (
+                  <LandmarkCard
+                    key={idx}
+                    item={item}
+                    fallbackBanner={bannerPhotos[idx % bannerPhotos.length]}
+                    onClick={() => setActiveModalItem(item)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Pagination Dots */}
+            {totalItemPages > 1 && (
+              <div className="flex justify-center items-center gap-2 pt-4">
+                {Array.from({ length: totalItemPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setItemPage(i + 1)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                      itemPage === i + 1 ? 'bg-blue-600 w-5' : 'bg-slate-300 dark:bg-slate-700'
+                    }`}
+                  />
+                ))}
               </div>
             )}
           </div>
         )}
       </div>
-
-      {/* ── DETAIL MODAL POPUP FOR READING (COMPACT & PREVENTING CARD UNEVENNESS) ── */}
       {activeModalItem && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center z-[9999] p-4 animate-fade-in animate-duration-200">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative space-y-6">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center z-[99999] p-4 sm:p-6 pt-20 pb-8 animate-fade-in animate-duration-200">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative space-y-6">
             <button
               onClick={() => setActiveModalItem(null)}
               className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all text-lg font-bold"
@@ -549,9 +692,9 @@ export default function ProvinceDetailPage() {
               </h3>
             </div>
 
-            <p className="text-xs sm:text-sm leading-relaxed text-slate-655 dark:text-slate-350 whitespace-pre-wrap text-justify border-t border-slate-100 dark:border-slate-800 pt-4 font-normal">
-              {normalizeParagraphs(activeModalItem.content)}
-            </p>
+            <div className="border-t border-slate-100 dark:border-slate-800 pt-4 w-full">
+              {renderFormattedContent(activeModalItem.content)}
+            </div>
           </div>
         </div>
       )}

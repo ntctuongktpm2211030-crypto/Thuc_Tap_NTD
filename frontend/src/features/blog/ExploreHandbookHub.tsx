@@ -13,6 +13,7 @@ import {
   DEFAULT_SLIDESHOW_IMAGES,
   FALLBACK_LANDMARK_IMAGE
 } from './ProvinceLandmarkData';
+import { ETHNIC_IMAGES_MAPPING } from './EthnicGroupData';
 
 function normalizeParagraphs(text: string): string {
   if (!text) return '';
@@ -21,6 +22,42 @@ function normalizeParagraphs(text: string): string {
     return p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
   });
   return cleaned.filter(Boolean).join('\n\n');
+}
+
+function renderFormattedContent(text: string) {
+  if (!text) return null;
+  const normalized = text.normalize('NFC');
+  const rawParagraphs = normalized.split(/\n\s*\n/);
+
+  return (
+    <div className="space-y-4 w-full">
+      {rawParagraphs.map((rawPara, idx) => {
+        const cleanedPara = rawPara.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!cleanedPara) return null;
+
+        // Detect if this line is a heading/sub-heading (e.g. "MỸ THUẬT CỔ TRUYỀN")
+        const isHeading = cleanedPara.length < 90 && (
+          cleanedPara === cleanedPara.toUpperCase() ||
+          /^[0-9IVXLCDM]+\.\s+/i.test(cleanedPara) ||
+          cleanedPara.endsWith(':')
+        );
+
+        if (isHeading) {
+          return (
+            <h4 key={idx} className="font-black text-sm sm:text-base text-slate-900 dark:text-white mt-6 mb-2 text-center border-b border-slate-200 dark:border-slate-800 pb-2 tracking-wide uppercase">
+              {cleanedPara}
+            </h4>
+          );
+        }
+
+        return (
+          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 text-center font-normal tracking-normal">
+            {cleanedPara}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 // Interactive Province Card Component: Fixed Main Image by Default, Slideshow Only Starts When Hovered!
@@ -115,6 +152,61 @@ function ProvinceCard({
         <span className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1 shadow-md">
           <MapPin size={11} className="shrink-0 text-white" />
           <span>{prov.itemRealCount} mục</span>
+        </span>
+        <div className="w-8 h-8 rounded-full bg-white text-slate-800 flex items-center justify-center shadow-md group-hover:bg-[var(--gold)] group-hover:text-white transition-all duration-300">
+          <ChevronRight size={16} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Interactive Ethnic Card Component matching ProvinceCard aesthetics
+function EthnicCard({
+  ethnic,
+  onClick,
+}: {
+  ethnic: KnowledgeItem;
+  onClick: () => void;
+}) {
+  const imageUrl = ETHNIC_IMAGES_MAPPING[ethnic.name.toUpperCase()] || FALLBACK_LANDMARK_IMAGE;
+
+  return (
+    <div
+      onClick={onClick}
+      className="relative aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-lg hover:-translate-y-1 hover:shadow-2xl cursor-pointer transition-all duration-300 group flex flex-col justify-between p-4 text-white bg-slate-800"
+    >
+      <img
+        src={imageUrl}
+        alt={ethnic.name}
+        referrerPolicy="no-referrer"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = FALLBACK_LANDMARK_IMAGE;
+        }}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out group-hover:scale-105 opacity-100"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-slate-950/20 z-10 pointer-events-none" />
+
+      <div className="relative z-20 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[11px] font-bold text-white/90">
+          <BookOpen size={11} className="text-white shrink-0" />
+          <span>Văn hóa & Dân tộc</span>
+        </div>
+      </div>
+
+      <div className="relative z-20 space-y-0.5 my-auto">
+        <h4 className="text-xl sm:text-2xl font-black text-white drop-shadow-md tracking-tight transition-colors">
+          {ethnic.name}
+        </h4>
+        <p className="text-[11px] text-slate-200/90 font-medium drop-shadow line-clamp-2">
+          {ethnic.content.split('\n')[0]}
+        </p>
+      </div>
+
+      <div className="relative z-20 flex items-center justify-between pt-2">
+        <span className="bg-[var(--gold)] hover:bg-[var(--gold-dark)] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1 shadow-md">
+          <Sparkles size={11} className="shrink-0 text-white" />
+          <span>Khám phá</span>
         </span>
         <div className="w-8 h-8 rounded-full bg-white text-slate-800 flex items-center justify-center shadow-md group-hover:bg-[var(--gold)] group-hover:text-white transition-all duration-300">
           <ChevronRight size={16} />
@@ -473,30 +565,11 @@ export default function ExploreHandbookHub() {
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
                   {filteredEthnicGroups.map((ethnic) => (
-                    <div
+                    <EthnicCard
                       key={ethnic.id}
+                      ethnic={ethnic}
                       onClick={() => setActiveEthnicModal(ethnic)}
-                      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-lg hover:shadow-2xl hover:border-[var(--gold)] transition-all cursor-pointer flex flex-col justify-between"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-md border border-[var(--gold)]/20">
-                            Văn hóa & Dân tộc
-                          </span>
-                          <Sparkles size={14} className="text-amber-500 opacity-60 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-[var(--gold)] transition-colors mb-2">
-                          {ethnic.name}
-                        </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-4 leading-relaxed">
-                          {ethnic.content.split('\n')[0]}
-                        </p>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-[var(--gold)]">
-                        <span>Xem chi tiết bản sắc</span>
-                        <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
+                    />
                   ))}
                 </div>
               </>
@@ -574,7 +647,7 @@ export default function ExploreHandbookHub() {
           </div>
 
           {/* ── 5. AI KNOWLEDGE ASSISTANT ── */}
-          <aside className="lg:col-span-3">
+          <aside className="lg:col-span-3 lg:sticky lg:top-24 self-start">
             <div className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-5 space-y-4 relative overflow-hidden group">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-[var(--gold)] text-white flex items-center justify-center font-bold">
@@ -637,14 +710,14 @@ export default function ExploreHandbookHub() {
 
       {/* ── ETHNIC GROUP MODAL ── */}
       {activeEthnicModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 pt-20 pb-8">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
             <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-black uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-md border border-[var(--gold)]/20">
                   VĂN HÓA DÂN TỘC VIỆT NAM
                 </span>
-                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
                   {activeEthnicModal.name}
                 </h3>
               </div>
@@ -655,13 +728,13 @@ export default function ExploreHandbookHub() {
                 ✕
               </button>
             </div>
-            <div className="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-              {activeEthnicModal.content}
+            <div className="p-6 sm:p-8 overflow-y-auto w-full">
+              {renderFormattedContent(activeEthnicModal.content)}
             </div>
             <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
               <button
                 onClick={() => setActiveEthnicModal(null)}
-                className="px-5 py-2 bg-[var(--gold)] text-white text-xs font-bold rounded-xl hover:bg-[var(--gold-dark)] cursor-pointer shadow"
+                className="px-6 py-2.5 bg-[var(--gold)] text-white text-xs font-bold rounded-xl hover:bg-[var(--gold-dark)] cursor-pointer shadow"
               >
                 Đóng
               </button>
