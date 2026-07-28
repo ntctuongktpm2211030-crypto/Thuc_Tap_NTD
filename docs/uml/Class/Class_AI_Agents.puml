@@ -16,21 +16,33 @@ package "Dieu hanh cac Tro ly AI (AI Agents Module)" {
   class "Dieu Hanh Tro Ly AI\n(AgentExecutorService)" as AgentExecutorService {
     - strategies : Record<AgentType, AgentStrategy>
     - addressService : AddressService
-    - stateService : ConversationStateService
-    - rerankerService : TravelRerankerService
+    - conversationState : ConversationStateService
+    - travelReranker : TravelRerankerService
     - responsePlanner : ResponsePlanner
-    - intentService : TravelIntentService
-    - slotService : SlotFillingService
-    - suggestionService : SuggestionBuilderService
-    - formatterService : ResponseFormatterService
+    - travelIntent : TravelIntentService
+    - slotFilling : SlotFillingService
+    - suggestionBuilder : SuggestionBuilderService
+    - responseFormatter : ResponseFormatterService
+    - circuitBreaker : AgentCircuitBreaker
     + constructor()
-    + execute(userId: String, input: String, agentType?: AgentType): Promise<AgentResponse>
-    + getStateService(): ConversationStateService
+    + execute(userId: String, input: String, agentType?: AgentType, messageId?: String, history?: Array, memory?: UserMemory, requestId?: String): Promise<AgentResponse>
+    + getConversationStateService(): ConversationStateService
+  }
+
+  class "Bo Ngat Token Agent\n(AgentCircuitBreaker)" as AgentCircuitBreaker {
+    - history : ToolCallEntry[]
+    - maxSameCallLimit : Int = 2
+    - maxIterations : Int = 5
+    - currentIteration : Int = 0
+    - hashArgs(args: any): String
+    + checkAndRecord(toolName: String, args: any): CircuitBreakerCheckResult
+    + reset(): void
   }
 
   class "Xu Ly Dia Chi\n(AddressService)" as AddressService {
-    + parseAddress(address: String): Promise<ParsedAddress>
-    + cleanAddress(address: String): String
+    - baseUrl : String
+    + parseAddress(address: String, mode?: String): Promise<AdminUnit | null>
+    + convertAddress(address: String): Promise<AdminUnit | null>
   }
 
   interface "Chuc Nang Cua Tro Ly\n(AgentStrategy)" as AgentStrategy {
@@ -97,6 +109,7 @@ package "Dieu hanh cac Tro ly AI (AI Agents Module)" {
 
 AgentController *-- AgentExecutorService
 AgentExecutorService *-- AddressService
+AgentExecutorService *-- AgentCircuitBreaker
 AgentExecutorService *-- AgentStrategy
 
 TravelAgent *-- ItineraryTool

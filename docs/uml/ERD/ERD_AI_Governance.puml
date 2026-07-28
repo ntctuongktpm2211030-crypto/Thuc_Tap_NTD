@@ -135,6 +135,7 @@ package "Quản trị & Kiểm toán AI" {
 }
 
 entity "Tin nhắn AI" as ChatMessage <<External>>
+entity "Nội dung tri thức" as KnowledgeContent <<External>>
 
 ChatMessage ||--|| AIChatLog : "nhật ký chat"
 ModelRegistry ||--o{ AIChatLog : "nhật ký chat"
@@ -143,5 +144,6 @@ AIChatLog ||--o{ UserFeedback : "phản hồi người dùng"
 AIChatLog ||--o{ EvaluationHistory : "lịch sử đánh giá"
 AIChatLog ||--o{ GuardrailEvent : "sự kiện guardrail"
 KnowledgeVersion ||--o{ KnowledgeFreshness : "nhật ký độ tươi mới"
+KnowledgeContent ||--o{ KnowledgeFreshness : "được kiểm tra độ tươi mới"
 
 @enduml

@@ -62,11 +62,21 @@ package "Module Địa điểm & GIS" {
 ' ─── LIÊN KẾT NGOÀI MODULE (REFERENCES) ───
 entity "Người dùng" as User <<External>>
 entity "Hoạt động chuyến đi" as TripActivity <<External>>
+entity "Bài đăng" as Post <<External>>
+entity "Sự kiện" as Event <<External>>
+entity "Lịch sử du lịch" as TravelHistory <<External>>
+entity "Đề xuất người dùng" as UserRecommendation <<External>>
+entity "Đề xuất chuyến đi" as Recommendation <<External>>
 
 User ||--o{ CheckIn : "check-in"
 User ||--o{ SavedPlace : "địa điểm đã lưu"
 
 Destination ||--o{ CheckIn : "check-in"
 Destination ||--o{ TripActivity : "hoạt động"
+Destination ||--o{ Post : "bài đăng"
+Destination ||--o{ Event : "sự kiện"
+Destination ||--o{ TravelHistory : "lịch sử du lịch"
+Destination ||--o{ UserRecommendation : "đề xuất người dùng"
+Destination ||--o{ Recommendation : "đề xuất chuyến đi"
 
 @enduml

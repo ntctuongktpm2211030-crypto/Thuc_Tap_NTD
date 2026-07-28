@@ -21,17 +21,12 @@ package "Luong tim kiem du lieu Ca Mau (RAG & Knowledge Module)" {
   }
 
   class "Luong Tim Kiem Du Lieu Ca Mau\n(RagPipelineService)" as RagPipelineService {
-    - embeddings : EmbeddingsService
-    - vectorStore : VectorStoreService
+    - embeddingsService : EmbeddingsService
+    - vectorStoreService : VectorStoreService
     - retriever : RetrieverService
     - promptBuilder : PromptBuilderService
-    - semanticCache : SemanticCacheService
-    - guardrails : GuardrailsService
-    - factVerifier : FactVerifierService
-    - citationGenerator : CitationGeneratorService
-    - knowledgeRepo : KnowledgeRepository
     + constructor()
-    + executePipeline(query: String): Promise<PipelineResult>
+    + execute(options: RagPipelineOptions): Promise<RagPipelineResult>
   }
 
   class "Ma Hoa Chu Thanh So\n(EmbeddingsService)" as EmbeddingsService {
@@ -40,11 +35,15 @@ package "Luong tim kiem du lieu Ca Mau (RAG & Knowledge Module)" {
 
   class "Tim Kiem So Lieu Vector\n(VectorStoreService)" as VectorStoreService {
     + similaritySearch(embedding: Float[], limit?: Int): Promise<VectorDocument[]>
+    + searchHybrid(query: String, queryEmbedding: Float[], category?: String, topK?: Int): Promise<RetrievedDoc[]>
     + insertDocument(id: String, embedding: Float[], metadata: any): Promise<void>
   }
 
   class "Lay Thong Tin Phu Hop\n(RetrieverService)" as RetrieverService {
-    + retrieveRelevantDocuments(query: String, embeddings: Float[]): Promise<Document[]>
+    - embeddingsService : EmbeddingsService
+    - vectorStoreService : VectorStoreService
+    + constructor(embeddingsService: EmbeddingsService, vectorStoreService: VectorStoreService)
+    + retrieve(query: String, category?: KnowledgeCategory, topK?: Int): Promise<RetrievedDoc[]>
   }
 
   class "Soan Cau Hoi Cho AI\n(PromptBuilderService)" as PromptBuilderService {
@@ -57,12 +56,15 @@ package "Luong tim kiem du lieu Ca Mau (RAG & Knowledge Module)" {
   }
 
   class "Chan Cau Hoi Bay Ba\n(GuardrailsService)" as GuardrailsService {
-    + checkInput(query: String): Promise<CheckResult>
-    + checkOutput(response: String): Promise<CheckResult>
+    - emailRegex : RegExp
+    - phoneRegex : RegExp
+    - citizenIdRegex : RegExp
+    + validateInput(query: String): GuardrailResult
+    + validateOutput(response: String): GuardrailResult
   }
 
   class "Kiem Tra Thong Tin Dung Sai\n(FactVerifierService)" as FactVerifierService {
-    + verifyFacts(response: String, sourceDocs: Document[]): Promise<VerificationResult>
+    + verifyResponse(response: String, docs: RetrievedDoc[]): VerificationResult
   }
 
   class "Trich Dan Nguon Tai Lieu\n(CitationGeneratorService)" as CitationGeneratorService {

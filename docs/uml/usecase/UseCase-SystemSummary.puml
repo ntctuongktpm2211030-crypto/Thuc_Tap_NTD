@@ -14,6 +14,7 @@ skinparam nodesep 50
 package "Human Actors" {
   actor "Khách vãng lai\n(Guest)" as Guest
   actor "Người dùng đăng ký\n(Registered Traveler)" as User
+  actor "Quản trị viên\n(Admin)" as Admin
 }
 
 ' External Systems & Supporting Services (Tác nhân hệ thống ngoại vi)
@@ -59,6 +60,10 @@ rectangle "Hệ thống Trợ lý ảo Du lịch Thông minh Terraholic" as Syst
     usecase "Realtime & WebSocket Services\n(Dịch vụ thời gian thực)" as UC_Realtime
   }
 
+  package "Admin & Governance Domain" {
+    usecase "Admin Dashboard & BI Analytics\n(Quản trị & Analytics)" as UC_AdminDomain
+  }
+
   ' High-level Relationships within the System
   UC_Trip ..> UC_Map : <<include>>
   UC_AI ..> UC_Rec : <<extend>>
@@ -77,6 +82,9 @@ Guest -- UC_Social
 User -- UC_Trip
 User -- UC_AI
 User -- UC_Realtime
+
+' Admin Associations
+Admin -- UC_AdminDomain
 
 ' ==========================================
 ' 4. ASSOCIATIONS (DOMAINS -> EXTERNAL SYSTEMS)

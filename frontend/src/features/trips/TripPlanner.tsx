@@ -14,6 +14,7 @@ import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import { KineticText } from '../../components/ui/kinetic-text';
+import ParallaxHero from '../../components/ui/parallax-hero';
 
 function calculateHaversineDistance(
   p1: { latitude: number; longitude: number },
@@ -193,40 +194,62 @@ const TripPlanner = () => {
   const [historySearch, setHistorySearch] = useState('');
   const [showAllHistory, setShowAllHistory] = useState(false);
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (!isAuthenticated) return;
-      setLoadingHistory(true);
+  const loadHistory = async () => {
+    setLoadingHistory(true);
+    let loadedFromApi = false;
+    if (isAuthenticated) {
       try {
         const historyData = await tripsService.LayLichSuTaoChuyenDiAI();
-        setAiHistory(historyData || []);
+        if (Array.isArray(historyData) && historyData.length > 0) {
+          setAiHistory(historyData);
+          loadedFromApi = true;
+        }
       } catch (err) {
         console.error('Failed to fetch AI history:', err);
-      } finally {
-        setLoadingHistory(false);
       }
-    };
-    fetchHistory();
-  }, [isAuthenticated, itinerary]);
+    }
+
+    if (!loadedFromApi) {
+      try {
+        const localData = localStorage.getItem('smarttravel_ai_history');
+        if (localData) {
+          const parsed = JSON.parse(localData);
+          setAiHistory(Array.isArray(parsed) ? parsed : []);
+        } else {
+          setAiHistory([]);
+        }
+      } catch (e) {
+        setAiHistory([]);
+      }
+    }
+    setLoadingHistory(false);
+  };
+
+  useEffect(() => {
+    loadHistory();
+  }, [isAuthenticated]);
 
   const handleLoadHistoryItem = (item: any) => {
     if (!item || !item.itinerary) return;
-    setDestination(item.destination || item.itinerary.destination?.name || '');
+    setDestination(item.destination || item.itinerary.destination?.name || (typeof item.itinerary.destination === 'string' ? item.itinerary.destination : '') || '');
     setDays(item.durationDays || item.itinerary.days?.length || '');
     setBudget(item.totalBudget || item.itinerary.totalEstimatedCost || '');
     setStyle(item.travelStyle || 'Adventure');
     setInterests(item.interests || []);
     setItinerary(item.itinerary);
     setSelectedDay(1);
-    setSavedTripId(item.id);
+    if (item.id && !String(item.id).startsWith('hist-')) {
+      setSavedTripId(item.id);
+    } else {
+      setSavedTripId(null);
+    }
   };
 
   const getHistoryItemTitle = (item: any) => {
     if (item.itinerary?.title) return item.itinerary.title;
-    const dest = item.destination || item.itinerary?.destination || item.promptText?.match(/destination=(.+?)\s+days=/)?.[1];
+    const dest = item.destination || (typeof item.itinerary?.destination === 'string' ? item.itinerary.destination : item.itinerary?.destination?.name) || item.promptText?.match(/destination=(.+?)\s+days=/)?.[1];
     if (dest) {
       const dayCount = item.durationDays || item.itinerary?.days?.length || Number(item.promptText?.match(/days=(\d+)/)?.[1]) || 0;
-      // Capitalize first letter of each word for clean presentation
       const capitalizedDest = dest.replace(/\b\w/g, (c: string) => c.toUpperCase());
       return lang === 'vi' ? `Khám phá ${capitalizedDest} (${dayCount} ngày)` : `Explore ${capitalizedDest} (${dayCount} days)`;
     }
@@ -285,7 +308,7 @@ const TripPlanner = () => {
           ) : (
             displayItems.map((item: any) => {
               const title = getHistoryItemTitle(item);
-              const daysCount = item.itinerary?.days?.length || 0;
+              const daysCount = item.durationDays || item.itinerary?.days?.length || 0;
               const isCurrentLoaded = itinerary && (itinerary.title === title || (itinerary.destination?.name === item.itinerary?.destination?.name && itinerary.days?.length === item.itinerary?.days?.length));
               
               return (
@@ -376,6 +399,8 @@ const TripPlanner = () => {
     }
 
     setLoading(true); setOptimized(false); setAiError(null); setSelectedDay(1); setSavedTripId(null);
+    let finalResult: any = null;
+
     try {
       const result = await tripsService.TaoChuyenDiBangAI({
         destination,
@@ -385,31 +410,186 @@ const TripPlanner = () => {
         interests,
         travelStyle: style
       });
+      finalResult = result;
       setItinerary(result);
     } catch {
       const isVi = lang === 'vi';
       setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
-      const mockResult = {
-        destination, currency,
-        days: [
-          { dayIndex: 1, dateIndex: isVi ? 'Ngày 1: Nhận phòng & Tham quan trung tâm thành phố Thái Nguyên' : 'Day 1: Arrival & Explore Thai Nguyen Center', activities: [
-            { session: 'Sáng', timeSlot: '09:00 - 11:00', activityName: isVi ? 'Nhận phòng tại khách sạn trung tâm' : 'Check-in at center hotel', estimatedCost: Number(budget) * 0.15, category: 'hotel', notes: isVi ? 'Ổn định chỗ ở, chuẩn bị hành lý.' : 'Settle in, prepare luggage.', latitude: 21.5939, longitude: 105.8442 },
-            { session: 'Sáng', timeSlot: '11:00 - 12:00', activityName: isVi ? 'Tham quan Bảo tàng Văn hóa các Dân tộc Việt Nam' : 'Museum of Cultures of Vietnam Ethnic Groups', estimatedCost: isVi ? 30000 : 2, category: 'attraction', notes: isVi ? 'Tìm hiểu văn hóa của 54 dân tộc Việt Nam. Đây là điểm tham quan nổi bật nhất của thành phố.' : 'Learn about the cultures of 54 ethnic groups.', latitude: 21.5959, longitude: 105.8431 },
-            { session: 'Trưa', timeSlot: '12:00 - 13:30', activityName: isVi ? 'Thưởng thức ẩm thực đặc sản Thái Nguyên' : 'Thai Nguyen Specialty Lunch', estimatedCost: Number(budget) * 0.20, category: 'restaurant', notes: isVi ? 'Thưởng thức bánh chưng Bờ Đậu, gà đồi, cá sông nướng.' : 'Enjoy Bo Dau banh chung, hill chicken, grilled river fish.', latitude: 21.5925, longitude: 105.8420 },
-            { session: 'Chiều', timeSlot: '15:00 - 17:00', activityName: isVi ? 'Tham quan Chùa Hang Thái Nguyên' : 'Hang Pagoda Visit', estimatedCost: 0, category: 'attraction', notes: isVi ? 'Ghé thăm ngôi chùa cổ độc đáo trong hang đá.' : 'Visit the historic cave pagoda.', latitude: 21.6186, longitude: 105.8569 },
-            { session: 'Chiều', timeSlot: '17:00 - 18:00', activityName: isVi ? 'Thưởng thức trà Tân Cương' : 'Taste Tan Cuong Tea', estimatedCost: isVi ? 50000 : 3, category: 'restaurant', notes: isVi ? 'Thưởng thức những tách trà Tân Cương trứ danh tại quán trà địa phương.' : 'Enjoy famous Tan Cuong tea.', latitude: 21.5794, longitude: 105.7483 },
-            { session: 'Tối', timeSlot: '19:00 - 21:30', activityName: isVi ? 'Dạo quảng trường trung tâm và uống chè' : 'Walk Center Square & Drink Tea', estimatedCost: Number(budget) * 0.1, category: 'restaurant', notes: isVi ? 'Đi dạo quảng trường lớn và thưởng thức chè và ăn vặt.' : 'Walk the square, enjoy tea and snacks.', latitude: 21.5975, longitude: 105.8445 },
-          ]},
-          { dayIndex: 2, dateIndex: isVi ? 'Ngày 2: Hồ Núi Cốc – Đồi chè Tân Cương' : 'Day 2: Nui Coc Lake & Tan Cuong Tea Hill', activities: [
-            { session: 'Sáng', timeSlot: '08:00 - 11:30', activityName: isVi ? 'Khám phá Hồ Núi Cốc' : 'Explore Nui Coc Lake', estimatedCost: isVi ? 150000 : 7, category: 'nature', notes: isVi ? 'Đi thuyền trên hồ, tham quan đảo, cầu tình yêu, công viên giải trí và đền chùa.' : 'Take a boat, visit islands, love bridge and temples.', latitude: 21.5714, longitude: 105.7083 },
-            { session: 'Trưa', timeSlot: '12:00 - 13:30', activityName: isVi ? 'Ăn trưa đặc sản hồ' : 'Lake Specialties Lunch', estimatedCost: Number(budget) * 0.2, category: 'restaurant', notes: isVi ? 'Ăn cá hồ, gà nướng và rau rừng.' : 'Eat lake fish, grilled chicken, forest vegetables.', latitude: 21.5735, longitude: 105.7065 },
-            { session: 'Chiều', timeSlot: '15:00 - 18:00', activityName: isVi ? 'Trải nghiệm vùng chè Tân Cương' : 'Tan Cuong Tea Hill Experience', estimatedCost: isVi ? 100000 : 5, category: 'attraction', notes: isVi ? 'Tham quan đồi chè, hái chè cùng người dân và tìm hiểu quy trình chế biến, uống trà mới pha.' : 'Visit tea hills, pick tea leaves, learn process and buy tea.', latitude: 21.5794, longitude: 105.7483 },
-            { session: 'Tối', timeSlot: '19:00 - 21:00', activityName: isVi ? 'Ăn lẩu nướng địa phương' : 'Local BBQ/Hotpot Dinner', estimatedCost: Number(budget) * 0.25, category: 'restaurant', notes: isVi ? 'Thưởng thức bữa tối nướng lẩu thịnh soạn.' : 'Enjoy local hotpot dinner.', latitude: 21.5940, longitude: 105.8450 },
-          ]},
-        ]
+      
+      const targetDays = Math.max(1, Number(days));
+      const generatedDays = [];
+
+      const SAMPLE_ATTRACTIONS = [
+        { name: 'Cột cờ Lũng Cú', category: 'attraction', notes: 'Cột cờ thiêng liêng nơi địa đầu Tổ quốc.' },
+        { name: 'Dốc Thẩm Mã', category: 'attraction', notes: 'Cung đường đèo uốn lượn đẹp mắt.' },
+        { name: 'Dinh thự họ Vương', category: 'attraction', notes: 'Kiến trúc cổ Vua Mèo độc đáo.' },
+        { name: 'Phố cổ Đồng Văn', category: 'attraction', notes: 'Quần thể nhà cổ trăm năm ngói âm dương.' },
+        { name: 'Hẻm Tu Sản', category: 'nature', notes: 'Hẻm vực sâu nhất Đông Nam Á tráng lệ.' },
+        { name: 'Sông Nho Quế', category: 'nature', notes: 'Dòng sông xanh ngọc bích êm đềm.' },
+        { name: 'Cổng trời Quản Bạ', category: 'attraction', notes: 'Cửa ngõ vào Cao nguyên đá Đồng Văn.' },
+        { name: 'Núi Đôi Cô Tiên', category: 'nature', notes: 'Tuyệt tác thiên nhiên Núi Đôi kỳ thú.' },
+        { name: 'Rừng thông Yên Minh', category: 'nature', notes: 'Rừng thông xanh tươi mát dịu êm.' },
+        { name: 'Danh thắng Hoàng Su Phì', category: 'nature', notes: 'Ruộng bậc thang vàng óng kỳ vĩ.' },
+        { name: 'Chợ phiên Mèo Vạc', category: 'festival', notes: 'Chợ phiên sắc màu truyền thống.' },
+        { name: 'Thung lũng Sủng Là', category: 'nature', notes: 'Đóa hoa nở trên đá và Nhà của Pao.' },
+        { name: 'Làng văn hóa Lũng Cẩm', category: 'attraction', notes: 'Làng cổ H\'Mông trình tường rêu phong.' },
+        { name: 'Cây cô đơn Can Tỷ', category: 'attraction', notes: 'Cây nghiến sừng sững giữa vách núi.' },
+        { name: 'Làng Pả Vi Mèo Vạc', category: 'attraction', notes: 'Làng du lịch cộng đồng dân tộc.' },
+        { name: 'Hang Lùng Khúy', category: 'nature', notes: 'Đệ nhất hang động cao nguyên đá.' },
+        { name: 'Đèo Mã Pí Lèng', category: 'nature', notes: 'Một trong tứ đại đỉnh đèo Việt Nam.' },
+        { name: 'Thác Du Già', category: 'nature', notes: 'Dòng thác mát rượi giữa thung lũng.' },
+        { name: 'Dốc Pai Lủng', category: 'attraction', notes: 'Cung đường ngắm hoàng hôn tuyệt đẹp.' },
+        { name: 'Mốc 428 Biên Giới', category: 'attraction', notes: 'Cột mốc biên giới cực Bắc thiêng liêng.' }
+      ];
+
+      const SAMPLE_RESTAURANTS = [
+        { name: 'Phở tráng tay Đồng Văn', notes: 'Phở tráng tay thủ công nóng hổi.' },
+        { name: 'Bánh cuốn trứng Phố Cổ', notes: 'Bánh cuốn chấm nước ninh xương béo ngậy.' },
+        { name: 'Bún chả Yên Minh', notes: 'Bún chả nướng than hoa thơm lừng.' },
+        { name: 'Nhà hàng Oanh Hiệu', notes: 'Lẩu gà đen nấm rừng trứ danh.' },
+        { name: 'Cơm lam Mèo Vạc', notes: 'Cơm lam nướng ống nứa ăn kèm thịt quay.' },
+        { name: 'Lẩu thắng cố Đồng Văn', notes: 'Thắng cố men lá truyền thống đậm đà.' },
+        { name: 'Lẩu gà đen H\'Mông', notes: 'Lẩu gà đen ninh thuốc bắc rau sạch.' },
+        { name: 'Quán ăn Lũng Cú', notes: 'Ẩm thực địa phương chân Cột cờ.' },
+        { name: 'Nhà hàng Tiến Nhị', notes: 'Nhà hàng đặc sản nổi tiếng.' },
+        { name: 'Quán ăn Quản Bạ', notes: 'Thịt bò khô và rau rừng tươi ngon.' },
+        { name: 'Nhà hàng Khải Hoàn', notes: 'Nhà hàng ấm cúng thực đơn đa dạng.' },
+        { name: 'Quán cơm Hoàng Su Phì', notes: 'Cơm bình dân dẻo thơm kèm cá suối.' },
+        { name: 'Cà phê Cực Bắc Lũng Cú', notes: 'Cà phê H\'Mông không gian yên bình.' }
+      ];
+
+      const usedNamesSample = new Set<string>();
+
+      const getItem = (pool: any[], prefix: string, idx: number) => {
+        const unused = pool.filter(p => !usedNamesSample.has(p.name.toLowerCase()));
+        if (unused.length > 0) {
+          const item = unused[0];
+          usedNamesSample.add(item.name.toLowerCase());
+          return item;
+        }
+        const base = pool[idx % pool.length];
+        const dynamicName = `${prefix} ${base.name} ${destination}`;
+        usedNamesSample.add(dynamicName.toLowerCase());
+        return { ...base, name: dynamicName };
       };
-      setItinerary(calculateItineraryCosts(mockResult, style, currency));
-    } finally { setLoading(false); }
+
+      for (let i = 1; i <= targetDays; i++) {
+        const act1 = getItem(SAMPLE_ATTRACTIONS, 'Tham quan', i * 2 - 2);
+        const act2 = getItem(SAMPLE_ATTRACTIONS, 'Khám phá', i * 2 - 1);
+        const rest1 = getItem(SAMPLE_RESTAURANTS, 'Ăn sáng', i * 3 - 3);
+        const rest2 = getItem(SAMPLE_RESTAURANTS, 'Ăn trưa', i * 3 - 2);
+        const rest3 = getItem(SAMPLE_RESTAURANTS, 'Ăn tối', i * 3 - 1);
+
+        generatedDays.push({
+          dayIndex: i,
+          dateIndex: isVi ? `Ngày ${i}: Khám phá ${act1.name} & đặc sản ${destination}` : `Day ${i}: Discover ${act1.name} & ${destination} Specialties`,
+          activities: [
+            {
+              session: 'Sáng',
+              timeSlot: '07:30 - 08:30',
+              activityName: isVi ? `Bữa sáng: ${rest1.name}` : `Breakfast: ${rest1.name}`,
+              locationName: `${rest1.name}, ${destination}`,
+              estimatedCost: Number(budget) * 0.05,
+              category: 'restaurant',
+              notes: isVi ? `${rest1.notes}` : 'Enjoy delicious breakfast.',
+              latitude: 21.0285 + i * 0.005,
+              longitude: 105.8048 + i * 0.005
+            },
+            {
+              session: 'Sáng',
+              timeSlot: '08:30 - 11:30',
+              activityName: isVi ? `Tham quan ${act1.name}` : `Sightseeing ${act1.name}`,
+              locationName: `${act1.name}, ${destination}`,
+              estimatedCost: Number(budget) * 0.1,
+              category: act1.category || 'attraction',
+              notes: isVi ? `${act1.notes} Check-in chụp ảnh lưu niệm.` : 'Sightseeing and photography.',
+              latitude: 21.0305 + i * 0.005,
+              longitude: 105.8068 + i * 0.005
+            },
+            {
+              session: 'Trưa',
+              timeSlot: '11:30 - 14:00',
+              activityName: isVi ? `Ăn trưa & Cà phê tại ${rest2.name}` : `Lunch & Coffee at ${rest2.name}`,
+              locationName: `${rest2.name}, ${destination}`,
+              estimatedCost: Number(budget) * 0.15,
+              category: 'restaurant',
+              notes: isVi ? `${rest2.notes} Thưởng thức món ngon trứ danh.` : 'Enjoy lunch and relax.',
+              latitude: 21.0325 + i * 0.005,
+              longitude: 105.8088 + i * 0.005
+            },
+            {
+              session: 'Chiều',
+              timeSlot: '14:00 - 17:30',
+              activityName: isVi ? `Khám phá ${act2.name}` : `Explore ${act2.name}`,
+              locationName: `${act2.name}, ${destination}`,
+              estimatedCost: Number(budget) * 0.1,
+              category: act2.category || 'nature',
+              notes: isVi ? `${act2.notes} Trải nghiệm thiên nhiên và cảnh quan.` : 'Immerse in local nature.',
+              latitude: 21.0345 + i * 0.005,
+              longitude: 105.8108 + i * 0.005
+            },
+            {
+              session: 'Tối',
+              timeSlot: '18:30 - 20:00',
+              activityName: isVi ? `Thưởng thức bữa tối tại ${rest3.name}` : `Dinner at ${rest3.name}`,
+              locationName: `${rest3.name}, ${destination}`,
+              estimatedCost: Number(budget) * 0.15,
+              category: 'restaurant',
+              notes: isVi ? `${rest3.notes} Bữa tối ấm cúng vùng cao.` : 'Enjoy delicious dinner.',
+              latitude: 21.0355 + i * 0.005,
+              longitude: 105.8118 + i * 0.005
+            },
+            {
+              session: 'Tối',
+              timeSlot: '20:00 - 22:00',
+              activityName: isVi ? `Dạo chợ đêm & Nghỉ đêm tại Khách sạn trung tâm` : `Night Market Walk & Hotel Stay`,
+              locationName: isVi ? `Khách sạn trung tâm ${destination}` : `Center Hotel ${destination}`,
+              estimatedCost: Number(budget) * 0.2,
+              category: 'hotel',
+              notes: isVi ? 'Dạo chợ đêm, đi bộ phố đêm và nghỉ ngơi.' : 'Night market walk and relax at hotel.',
+              latitude: 21.0365 + i * 0.005,
+              longitude: 105.8128 + i * 0.005
+            }
+          ]
+        });
+      }
+
+      const mockResult = {
+        destination,
+        currency,
+        totalEstimatedCost: Number(budget),
+        days: generatedDays
+      };
+      finalResult = calculateItineraryCosts(mockResult, style, currency);
+      setItinerary(finalResult);
+    } finally {
+      setLoading(false);
+      if (finalResult) {
+        const newHistoryEntry = {
+          id: 'hist-' + Date.now(),
+          promptText: `destination=${destination} days=${days} budget=${budget} style=${style}`,
+          type: 'itinerary',
+          createdAt: new Date().toISOString(),
+          destination,
+          durationDays: Number(days),
+          totalBudget: Number(budget),
+          travelStyle: style,
+          interests,
+          itinerary: finalResult,
+        };
+
+        try {
+          const existingLocal = localStorage.getItem('smarttravel_ai_history');
+          const parsedLocal = existingLocal ? JSON.parse(existingLocal) : [];
+          const updatedLocal = [newHistoryEntry, ...parsedLocal.filter((h: any) => h.id !== newHistoryEntry.id)].slice(0, 20);
+          localStorage.setItem('smarttravel_ai_history', JSON.stringify(updatedLocal));
+        } catch (e) {
+          console.warn('Failed to save to localStorage:', e);
+        }
+
+        loadHistory();
+      }
+    }
   };
 
   const handleRegeneratePart = async (dayIdx: number, sessionName?: 'Sáng' | 'Trưa' | 'Chiều' | 'Tối') => {
@@ -1011,138 +1191,108 @@ const TripPlanner = () => {
                           </div>
                         </div>
 
-                        {/* Timeline Tree */}
+                        {/* Timeline Tree - Render tất cả hoạt động theo thứ tự tuần tự */}
                         <div className="relative border-l-2 border-dashed border-[var(--border-subtle)] ml-4 pl-6 space-y-6">
-                          {sessions.map(session => {
-                            const sessionActs = currentDay.activities.filter((act: any) => act.session === session || (!act.session && session === 'Sáng'));
-                            if (sessionActs.length === 0) return null;
+                          {currentDay.activities.map((act: any, idx: number) => {
+                            const ActIcon = getCategoryIcon(act.category);
+                            const styles = getCategoryStyles(act.category);
+                            
+                            const prevAct = idx > 0 ? currentDay.activities[idx - 1] : null;
+                            const directionsUrl = prevAct && prevAct.latitude && prevAct.longitude
+                              ? `https://www.google.com/maps/dir/?api=1&origin=${prevAct.latitude},${prevAct.longitude}&destination=${act.latitude},${act.longitude}&travelmode=driving`
+                              : `https://www.google.com/maps/dir/?api=1&destination=${act.latitude},${act.longitude}&travelmode=driving`;
+
+                            const itemKey = `${currentDay.dayIndex || currentDay.day}-${act.activityName || act.name}-${idx}`;
+                            const isExpanded = expandedActivities[itemKey];
 
                             return (
-                              <div key={session} className="space-y-4 relative">
-                                {/* Session Floating Timeline Dot Indicator */}
-                                <div className="absolute -left-[32px] top-1 w-4 h-4 rounded-full bg-[var(--bg-primary)] border-2 border-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                                </div>
-
-                                {/* Session Header */}
-                                <div className="flex justify-between items-center">
-                                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                                    {session}
-                                  </h4>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRegeneratePart(currentDay.dayIndex || currentDay.day, session)}
-                                    disabled={loadingPart !== null || loading}
-                                    className="text-[9px] font-bold text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1 bg-transparent border-none cursor-pointer disabled:opacity-50 transition-colors"
-                                  >
-                                    {loadingPart === `session-${currentDay.dayIndex || currentDay.day}-${session}` ? (
-                                      <Loader2 size={10} className="animate-spin" />
-                                    ) : (
-                                      '🔄 ' + t('planner.regenerateSession')
-                                    )}
-                                  </button>
-                                </div>
-
-                                {/* Activity Cards list */}
-                                <div className="space-y-4">
-                                  {sessionActs.map((act: any, idx: number) => {
-                                    const ActIcon = getCategoryIcon(act.category);
-                                    const styles = getCategoryStyles(act.category);
-                                    
-                                    const currentIdx = currentDay.activities.findIndex((a: any) => a === act);
-                                    const prevAct = currentIdx > 0 ? currentDay.activities[currentIdx - 1] : null;
-                                    const directionsUrl = prevAct && prevAct.latitude && prevAct.longitude
-                                      ? `https://www.google.com/maps/dir/?api=1&origin=${prevAct.latitude},${prevAct.longitude}&destination=${act.latitude},${act.longitude}&travelmode=driving`
-                                      : `https://www.google.com/maps/dir/?api=1&destination=${act.latitude},${act.longitude}&travelmode=driving`;
-
-                                    const itemKey = `${currentDay.dayIndex || currentDay.day}-${act.activityName || act.name}-${idx}`;
-                                    const isExpanded = expandedActivities[itemKey];
-
-                                    return (
-                                      <div key={idx} className="relative group animate-fade-in">
-                                        {/* Card connecting node */}
-                                        <div className={`absolute -left-[30px] top-5 w-2.5 h-2.5 rounded-full ${styles.dot} transition-transform duration-300 group-hover:scale-125`} />
-                                        
-                                        <div className={`bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl hover:shadow-md transition-all ${styles.accent} hover:border-blue-500/30 shadow-sm space-y-3`}>
-                                          <div className="flex justify-between items-start gap-4">
-                                            <div className="space-y-1">
-                                              <div className="flex items-center gap-2">
-                                                <Clock size={11} className="text-[var(--text-muted)]" />
-                                                <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wide">{act.timeSlot || act.time}</span>
-                                                <span className={`px-2 py-0.5 rounded-md text-[8px] font-extrabold uppercase tracking-wide border ${styles.bg}`}>
-                                                  {act.category || 'spot'}
-                                                </span>
-                                              </div>
-                                              <h5 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 mt-1">
-                                                <ActIcon size={14} className={`${styles.iconColor} flex-shrink-0`} />
-                                                {act.activityName || act.name}
-                                              </h5>
-                                              <span className="text-[10px] text-[var(--text-secondary)] block">📍 {act.locationName}</span>
-                                            </div>
-                                            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 dark:border-blue-500/20 shadow-sm">{formatCost(act.estimatedCost || act.cost)}</span>
-                                          </div>
-                                          
-                                          {/* Description Notes with expand action */}
-                                          {(() => {
-                                            const noteText = act.notes || act.note || '';
-                                            if (!noteText) return null;
-                                            return (
-                                              <div className="space-y-1.5 pt-1.5 border-t border-[var(--border-subtle)]/40">
-                                                <p className={`text-[11px] text-[var(--text-secondary)] leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-2'}`}>
-                                                  {noteText}
-                                                </p>
-                                                {noteText.length > 80 && (
-                                                  <button 
-                                                    type="button" 
-                                                    onClick={() => toggleExpandActivity(itemKey)}
-                                                    className="text-[10px] font-bold text-blue-400 hover:text-blue-300 hover:underline bg-transparent border-none p-0 cursor-pointer flex items-center gap-0.5 transition-colors"
-                                                  >
-                                                    {isExpanded ? (
-                                                      <>{lang === 'vi' ? 'Thu gọn' : 'Show less'} <ChevronUp size={10} /></>
-                                                    ) : (
-                                                      <>{lang === 'vi' ? 'Xem thêm' : 'Read more'} <ChevronDown size={10} /></>
-                                                    )}
-                                                  </button>
-                                                )}
-                                              </div>
-                                            );
-                                          })()}
-                                          
-                                          {/* Action Links */}
-                                          <div className="flex gap-2 flex-wrap pt-2 border-t border-[var(--border-subtle)]/40 mt-1">
-                                            <a
-                                              href={(() => {
-                                                const title = act.activityName || act.name || '';
-                                                const address = act.address || act.locationName || '';
-                                                const lat = act.latitude;
-                                                const lng = act.longitude;
-                                                if (address) {
-                                                  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + address)}`;
-                                                }
-                                                if (lat && lng) {
-                                                  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + lat + ',' + lng)}`;
-                                                }
-                                                return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title)}`;
-                                              })()}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
-                                            >
-                                              <Compass size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
-                                            </a>
-                                            <a
-                                              href={directionsUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
-                                            >
-                                              <Navigation size={10} /> {t('planner.directionsFromPrev')}
-                                            </a>
-                                          </div>
+                              <div key={idx} className="relative group animate-fade-in space-y-2">
+                                {/* Card connecting node */}
+                                <div className={`absolute -left-[31px] top-4 w-3 h-3 rounded-full ${styles.dot} transition-transform duration-300 group-hover:scale-125`} />
+                                
+                                <div className={`bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl hover:shadow-md transition-all ${styles.accent} hover:border-blue-500/30 shadow-sm space-y-3`}>
+                                  <div className="flex justify-between items-start gap-4">
+                                    <div className="space-y-1">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold text-blue-500 bg-blue-500/10 border border-blue-500/20 uppercase tracking-wide">
+                                          {act.session || 'Hoạt động'}
+                                        </span>
+                                        <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-muted)]">
+                                          <Clock size={11} className="text-[var(--text-muted)]" />
+                                          <span>{act.timeSlot || act.time || 'Thời gian'}</span>
                                         </div>
+                                        <span className={`px-2 py-0.5 rounded-md text-[8px] font-extrabold uppercase tracking-wide border ${styles.bg}`}>
+                                          {act.category || 'spot'}
+                                        </span>
+                                      </div>
+                                      <h5 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 mt-1.5">
+                                        <ActIcon size={14} className={`${styles.iconColor} flex-shrink-0`} />
+                                        {act.activityName || act.name}
+                                      </h5>
+                                      <span className="text-[10px] text-[var(--text-secondary)] block">📍 {act.locationName}</span>
+                                    </div>
+                                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 dark:border-blue-500/20 shadow-sm">
+                                      {formatCost(act.estimatedCost || act.cost)}
+                                    </span>
+                                  </div>
+                                  
+                                  {/* Description Notes with expand action */}
+                                  {(() => {
+                                    const noteText = act.notes || act.note || '';
+                                    if (!noteText) return null;
+                                    return (
+                                      <div className="space-y-1.5 pt-1.5 border-t border-[var(--border-subtle)]/40">
+                                        <p className={`text-[11px] text-[var(--text-secondary)] leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-2'}`}>
+                                          {noteText}
+                                        </p>
+                                        {noteText.length > 80 && (
+                                          <button 
+                                            type="button" 
+                                            onClick={() => toggleExpandActivity(itemKey)}
+                                            className="text-[10px] font-bold text-blue-400 hover:text-blue-300 hover:underline bg-transparent border-none p-0 cursor-pointer flex items-center gap-0.5 transition-colors"
+                                          >
+                                            {isExpanded ? (
+                                              <>{lang === 'vi' ? 'Thu gọn' : 'Show less'} <ChevronUp size={10} /></>
+                                            ) : (
+                                              <>{lang === 'vi' ? 'Xem thêm' : 'Read more'} <ChevronDown size={10} /></>
+                                            )}
+                                          </button>
+                                        )}
                                       </div>
                                     );
-                                  })}
+                                  })()}
+                                  
+                                  {/* Action Links */}
+                                  <div className="flex gap-2 flex-wrap pt-2 border-t border-[var(--border-subtle)]/40 mt-1">
+                                    <a
+                                      href={(() => {
+                                        const title = act.activityName || act.name || '';
+                                        const address = act.address || act.locationName || '';
+                                        const lat = act.latitude;
+                                        const lng = act.longitude;
+                                        if (address) {
+                                          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + address)}`;
+                                        }
+                                        if (lat && lng) {
+                                          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + lat + ',' + lng)}`;
+                                        }
+                                        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title)}`;
+                                      })()}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
+                                    >
+                                      <Compass size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
+                                    </a>
+                                    <a
+                                      href={directionsUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
+                                    >
+                                      <Navigation size={10} /> {t('planner.directionsFromPrev')}
+                                    </a>
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -1209,14 +1359,9 @@ const TripPlanner = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Left side: Original welcome block */}
-              <div className="lg:col-span-8 bg-[var(--bg-elevated)] p-12 md:p-16 text-center space-y-6 rounded-2xl border border-[var(--border-normal)]/40 shadow-xl relative overflow-hidden flex flex-col justify-center items-center min-h-[300px]">
-                <div className="absolute right-0 bottom-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
-                <Plane size={54} className="text-blue-500/60 animate-bounce" strokeWidth={1.5} />
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold font-ui text-cream">{t('planner.noItinerary')}</h3>
-                  <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">{t('planner.noItinerarySub')}</p>
-                </div>
+              {/* Left side: Parallax Hero 3D */}
+              <div className="lg:col-span-8 overflow-hidden rounded-2xl relative h-[500px] w-full shadow-xl border border-[var(--border-normal)]/40">
+                <ParallaxHero title="TERRAHOLIC" className="h-full w-full rounded-2xl" />
               </div>
 
               {/* Right side: AI History container */}

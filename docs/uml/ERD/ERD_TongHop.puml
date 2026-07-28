@@ -690,6 +690,7 @@ AIChatLog ||--o{ EvaluationHistory
 AIChatLog ||--o{ GuardrailEvent
 
 KnowledgeVersion ||--o{ KnowledgeFreshness
+KnowledgeContent ||--o{ KnowledgeFreshness
 
 User ||--o{ AIFeedback
 ChatMessage ||--o| AIFeedback

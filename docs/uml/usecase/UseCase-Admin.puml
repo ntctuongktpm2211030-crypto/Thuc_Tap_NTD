@@ -1,3 +1,72 @@
 @startuml UseCase_Admin
-note "Hệ thống thực tế không thiết lập tác nhân Admin và các chức năng quản trị trong mã nguồn." as N1
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam linetype ortho
+
+' ==========================================
+' 1. ACTORS DEFINITIONS
+' ==========================================
+actor "Quản trị viên\n(Admin)" as Admin
+actor "Hệ thống Cache & Vector Store" as CacheSystem <<System>>
+
+' ==========================================
+' 2. SYSTEM BOUNDARY & ADMIN USE CASES
+' ==========================================
+rectangle "Phân hệ Quản trị & Analytics Hệ thống (Admin Dashboard & Governance)" as AdminModule {
+
+  package "Quản trị Dashboard & Báo cáo tổng quan" {
+    usecase "Xem thông tin tổng quan hệ thống\n(View System Summary)" as UC_Dashboard_Summary
+    usecase "Xem thống kê người dùng & bài viết\n(User & Post Stats)" as UC_Dashboard_Stats
+    usecase "Xem bản đồ nhiệt hoạt động\n(Activity Heatmap)" as UC_Dashboard_Heatmap
+    usecase "Phân tích xu hướng tỉnh thành & địa điểm hot\n(Hot Locations & Province Stats)" as UC_Dashboard_Provinces
+  }
+
+  package "Phân tích kinh doanh & Dự báo (Phase II BI Analytics)" {
+    usecase "Phân tích so sánh cùng kỳ\n(Period Comparison Analytics)" as UC_BI_Comparison
+    usecase "Phân tích biểu đồ mini xu hướng\n(Sparkline Trends)" as UC_BI_Sparkline
+    usecase "Xem điểm nóng GIS Hotspots\n(GIS Hotspots Analytics)" as UC_BI_GIS
+    usecase "Xem điểm đến thịnh hành\n(Trending Destinations)" as UC_BI_Trending
+    usecase "Lập dự báo xu hướng du lịch\n(Travel Trend Predictions)" as UC_BI_Predictions
+    usecase "Phân tích hồ sơ hành vi người dùng\n(User Behavior Profiling)" as UC_BI_Behavior
+    usecase "Xem kết xuất phễu chuyển đổi\n(Funnel Analytics)" as UC_BI_Funnel
+    usecase "Phân rã dữ liệu chi tiết\n(Drilldown Analytics)" as UC_BI_Drilldown
+    usecase "Truy vấn AI Insights 2.0\n(AI Insights 2.0 Query)" as UC_BI_AiInsights
+    usecase "Xuất báo cáo hệ thống (PDF/CSV/Excel)\n(Export System Reports)" as UC_BI_Export
+  }
+
+  package "Quản trị Tri thức RAG & Hệ thống" {
+    usecase "Thêm tài liệu tri thức vào Vector Store\n(Add RAG Knowledge Document)" as UC_RAG_AddDoc
+    usecase "Truy vấn RAG Doanh nghiệp\n(Query RAG Enterprise)" as UC_RAG_QueryEnt
+    usecase "Xem nhật ký Tool Call AI Engine\n(Monitor AI Tool Call Logs)" as UC_Sys_ToolCalls
+    usecase "Quản lý & Xóa bộ nhớ đệm Redis Cache\n(Manage System Cache)" as UC_Sys_Cache
+  }
+}
+
+' ==========================================
+' 3. ASSOCIATIONS
+' ==========================================
+Admin -- UC_Dashboard_Summary
+Admin -- UC_Dashboard_Stats
+Admin -- UC_Dashboard_Heatmap
+Admin -- UC_Dashboard_Provinces
+
+Admin -- UC_BI_Comparison
+Admin -- UC_BI_Sparkline
+Admin -- UC_BI_GIS
+Admin -- UC_BI_Trending
+Admin -- UC_BI_Predictions
+Admin -- UC_BI_Behavior
+Admin -- UC_BI_Funnel
+Admin -- UC_BI_Drilldown
+Admin -- UC_BI_AiInsights
+Admin -- UC_BI_Export
+
+Admin -- UC_RAG_AddDoc
+Admin -- UC_RAG_QueryEnt
+Admin -- UC_Sys_ToolCalls
+Admin -- UC_Sys_Cache
+
+UC_Sys_Cache -- CacheSystem
+
 @enduml

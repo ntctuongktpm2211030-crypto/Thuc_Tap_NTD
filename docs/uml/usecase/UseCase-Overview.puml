@@ -7,6 +7,7 @@ skinparam linetype ortho
 ' Human Actors
 actor "Khách vãng lai\n(Guest)" as Guest
 actor "Người dùng đăng ký\n(Registered Traveler)" as User
+actor "Quản trị viên\n(Admin)" as Admin
 
 ' External Systems
 actor "Firebase Auth" as Firebase <<System>>
@@ -23,6 +24,7 @@ rectangle "Nền tảng TerraHolic SmartTravel " {
   usecase "Mạng xã hội du lịch" as UC_Community
   usecase "Bản đồ tương tác & Định vị" as UC_Map
   usecase "Trợ lý ảo AI & RAG" as UC_Chatbot
+  usecase "Quản trị Hệ thống & BI Analytics" as UC_Admin
 }
 
 ' Guest Associations
@@ -33,6 +35,9 @@ Guest -- UC_Map
 User -- UC_Trip
 User -- UC_Community
 User -- UC_Chatbot
+
+' Admin Associations
+Admin -- UC_Admin
 
 ' External System Associations
 UC_Auth -- Firebase

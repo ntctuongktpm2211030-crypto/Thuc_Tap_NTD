@@ -48,6 +48,7 @@ package "Phan he RAG & Tri thuc (RAG Module)" {
 package "Phan he AI Agents (AI Agents Module)" {
   class AgentController
   class AgentExecutorService
+  class AgentCircuitBreaker
 }
 
 package "Phan he Phan hoi (Feedback Module)" {
@@ -83,6 +84,7 @@ RagOrchestratorService ..> VectorStoreService
 VectorStoreService --> DB
 
 AgentController ..> AgentExecutorService
+AgentExecutorService ..> AgentCircuitBreaker
 
 FeedbackController ..> FeedbackService
 FeedbackService ..> FeedbackRepository

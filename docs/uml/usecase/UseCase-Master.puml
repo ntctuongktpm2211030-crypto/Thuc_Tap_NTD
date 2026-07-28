@@ -11,6 +11,7 @@ skinparam linetype ortho
 package "Tác nhân con người (Human Actors)" {
   actor "Khách vãng lai\n(Guest)" as Guest
   actor "Người dùng đăng ký\n(Registered User)" as RegisteredUser
+  actor "Quản trị viên\n(Admin)" as Admin
 }
 
 package "Hệ thống & Dịch vụ ngoại vi (External Systems)" {
@@ -85,6 +86,14 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Terr
   }
 
 
+  ' --- Phân hệ Quản trị ---
+  package "Quản trị & Analytics Hệ thống (Admin & Analytics)" {
+    usecase "Xem Dashboard tổng quan & Heatmap\n(View Admin Dashboard)" as UC_Admin_Dash
+    usecase "Phân tích dự báo & Phễu chuyển đổi\n(BI Predictions & Funnel)" as UC_Admin_BI
+    usecase "Xuất báo cáo hệ thống (PDF/CSV/Excel)\n(Export System Reports)" as UC_Admin_Export
+    usecase "Quản lý tri thức RAG & Cache\n(Manage RAG Knowledge & Cache)" as UC_Admin_RAG
+  }
+
   ' ==========================================
   ' RELATIONSHIPS BETWEEN USE CASES
   ' ==========================================
@@ -134,6 +143,12 @@ RegisteredUser -- UC_AI_Conv
 RegisteredUser -- UC_AI_Regen
 RegisteredUser -- UC_AI_Feedback
 RegisteredUser -- UC_AI_Food
+
+' Admin Associations
+Admin -- UC_Admin_Dash
+Admin -- UC_Admin_BI
+Admin -- UC_Admin_Export
+Admin -- UC_Admin_RAG
 
 ' External Systems Connections
 UC_Auth_Reg -- SMTP
