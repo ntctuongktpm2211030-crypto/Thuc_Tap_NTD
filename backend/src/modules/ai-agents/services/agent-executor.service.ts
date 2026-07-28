@@ -12,7 +12,16 @@ import {
   RecommendationTool,
   ItineraryTool,
 } from '../tools/agent.tools';
-import { removeDiacritics, classifyIntentWithLLM, cleanGeographicName, getDynamicRegions, findBestBleuMatch, buildCitationsFromDocs, callAgentLLM } from '../utils/agent.utils';
+import {
+  removeDiacritics,
+  classifyIntentWithLLM,
+  cleanGeographicName,
+  getDynamicRegions,
+  findBestBleuMatch,
+  buildCitationsFromDocs,
+  callAgentLLM,
+  extractLastDestinationFromHistory, // ✅ Đã bổ sung import bị thiếu ở đây
+} from '../utils/agent.utils';
 import prisma from '../../../config/db';
 import { RagPipelineService } from '../../rag/services/rag-pipeline.service';
 import { logger } from '../../../utils/logger';
@@ -26,6 +35,7 @@ import { ResponseFormatterService } from '../../dialogue/response-formatter.serv
 import { TravelSubIntent, SUB_INTENT_KEYWORDS } from '../../dialogue/types/dialogue.types';
 import { ConversationIntelligence } from '../../chatbot/intelligence/conversation-intelligence';
 import { ContextResolver } from '../../chatbot/intelligence/context/context-resolver';
+import { AgentCircuitBreaker } from './agent-circuit-breaker';
 
 export class AgentExecutorService {
   private strategies: Record<Exclude<AgentType, 'unknown'>, AgentStrategy>;
@@ -37,6 +47,7 @@ export class AgentExecutorService {
   private slotFilling: SlotFillingService;
   private suggestionBuilder: SuggestionBuilderService;
   private responseFormatter: ResponseFormatterService;
+  private circuitBreaker = new AgentCircuitBreaker();
 
   constructor() {
     // ─── Dependency Injection ───
@@ -418,7 +429,7 @@ export class AgentExecutorService {
             requestId
           );
           return {
-            response: `Tôi chưa hiểu rõ địa điểm \"**${extractedDestination}**\" hoặc địa điểm này không tồn tại thực tế. Bạn có thể nói rõ hơn hoặc nhập một địa điểm khác được không?`,
+            response: `Tôi chưa hiểu rõ địa điểm "**${extractedDestination}**" hoặc địa điểm này không tồn tại thực tế. Bạn có thể nói rõ hơn hoặc nhập một địa điểm khác được không?`,
             agentUsed: 'System-Clarification',
             citations: [],
           };
@@ -627,6 +638,18 @@ Hãy luôn giữ thái độ nhiệt tình, ấm áp, lắng nghe người dùng
 
     // Execute the agent
     logger.info('AgentExecutor', 'Calling agent', { agent: agent.name, hasDestination: !!extractedDestination, hasMemory: !!memory }, requestId);
+    
+    // 🛡️ CIRCUIT BREAKER RUNTIME CHECK
+    const cbCheck = this.circuitBreaker.checkAndRecord(agent.name, { destination: extractedDestination, input });
+    if (!cbCheck.allowed) {
+      logger.warn('AgentExecutor', 'Circuit breaker triggered — terminating session loop', { reason: cbCheck.reason }, requestId);
+      return {
+        response: `Dừng lại để bảo vệ hệ thống: ${cbCheck.reason}. Hãy cung cấp thông tin mới hoặc thay đổi câu hỏi của bạn.`,
+        agentUsed: 'CircuitBreaker-Guard',
+        citations: [],
+      };
+    }
+
     const agentResult = await agent.execute(userId, input, messageId, extractedDestination, history, memory);
 
     // ─── Build structured response with plan via ResponsePlanner + Formatter ───

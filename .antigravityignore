@@ -1,0 +1,46 @@
+# Thư mục Build và Dependency rác của Node.js / Frontend / Backend
+node_modules/
+dist/
+build/
+.next/
+.out/
+
+# Thư mục Python Virtual Environment & Cache (trong ai-service)
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# File nén và file giải nén dữ liệu thô (Tránh Agent quét gây tốn hàng triệu token)
+*.zip
+extract_pdf/
+
+# File nhật ký hệ thống & CSDL tạm
+*.log
+backend/backend_console.log
+backend/llm_error.log
+backend/db_error.txt
+backend/db-debug.txt
+
+# Database Migration Lock & Dump files tạm
+backend/users_dump.txt
+backend/comments_dump.txt
+destination_mismatch_report.json
+backend/prisma/migrations/migration_lock.toml
+
+# File cấu hình nhạy cảm và môi trường
+.env
+.env.*
+!.env.example
+
+# Hệ thống VCS và bộ nhớ đệm IDE
+.git/
+.svn/
+.hg/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.impeccable/
