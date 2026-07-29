@@ -20,6 +20,21 @@ export const LANDMARK_IMAGES_MAPPING: Record<string, string> = {
   'CHÙA MỘT CỘT': 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/08/chua-mot-cot-ha-noi.jpg',
   'HOÀNG THÀNH THĂNG LONG': 'https://hoangthanhthanglong.vn/wp-content/uploads/2020/05/doan-mon.jpg',
 
+  // Tuyên Quang
+  'THÀNH CỔ NHÀ MẠC': 'https://vcdn1-dulich.vnecdn.net/2022/03/15/thanh-nha-mac-tuyen-quang-1647335491.jpg',
+  'THÀNH NHÀ MẠC': 'https://vcdn1-dulich.vnecdn.net/2022/03/15/thanh-nha-mac-tuyen-quang-1647335491.jpg',
+  'CHÙA BẢO MINH SÙNG PHÚC': 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=800',
+  'CHÙA BẢO NINH SÙNG PHÚC': 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=800',
+  'ĐỀN HẠ': 'https://vcdn1-dulich.vnecdn.net/2022/03/15/den-ha-tuyen-quang-1647335492.jpg',
+  'CÂY ĐA TÂN TRÀO': 'https://vcdn1-dulich.vnecdn.net/2021/08/30/cay-da-tan-trao-1630310294.jpg',
+  'LÁN NÀ LỪA': 'https://vcdn1-dulich.vnecdn.net/2021/08/30/lan-na-lua-1630310294.jpg',
+  'HANG BỐNG': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800',
+  'HỒ NA HANG': 'https://vcdn1-dulich.vnecdn.net/2022/03/15/na-hang-tuyen-quang-1647335492.jpg',
+  'TÂN TRÀO': 'https://vcdn1-dulich.vnecdn.net/2021/08/30/tan-trao-1630310294.jpg',
+  'THÁC MƠ': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800',
+  'KHOÁNG NÓNG MỸ LÂM': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800',
+  'LỄ HỘI THÀNH TUYÊN': 'https://vcdn1-dulich.vnecdn.net/2020/11/01/ok-om-bok-1604193854-4729-1604193910.jpg',
+
   // Hà Giang
   'MÃ PÍ LÈNG': 'https://mia.vn/media/uploads/blog-du-lich/canh-dep-ha-giang-6-1722246220.jpg',
   'CỘT CỜ LŨNG CÚ': 'https://mia.vn/media/uploads/blog-du-lich/canh-dep-ha-giang-1-1722246208.jpg',
@@ -33,6 +48,11 @@ export const LANDMARK_IMAGES_MAPPING: Record<string, string> = {
   // Lào Cai / Sapa
   'ĐỈNH FANSIPAN': 'https://cdn-media.sforum.vn/storage/app/media/ctvseo_MH/%E1%BA%A3nh%20%C4%91%E1%BA%B9p%20l%C3%A0o%20cai/anh-dep-lao-cai-14.jpg',
   'THỊ TRẤN SAPA': 'https://cdn-media.sforum.vn/storage/app/media/ctvseo_MH/%E1%BA%A3nh%20%C4%91%E1%BA%B9p%20l%C3%A0o%20cai/anh-dep-lao-cai-48.jpg',
+
+  // Lai Châu
+  'ĐÈO Ô QUY HỒ': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800',
+  'ĐỈNH PUTALENG': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800',
+  'BẢN SÌN SUỐI HỒ': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800',
 
   // Đà Nẵng
   'CẦU RỒNG': 'https://danang.gov.vn/documents/10180/123456/cau-rong.jpg',
@@ -61,6 +81,60 @@ export const LANDMARK_IMAGES_MAPPING: Record<string, string> = {
   'BÃI SAO': 'https://phuquoc.gov.vn/uploads/images/baisao.jpg',
 
   // Cần Thơ
-  'CHỢ NỔI CÁI RĂNG': 'https://scontent.iocvnpt.com/resources/portal/Images/CTO/su…/DiaDiem/chonoicairang/chonoicairang3_637018249323448293.jpg',
+  'CHỢ NỔI CÁI RĂNG': 'https://vcdn1-dulich.vnecdn.net/2022/04/06/cho-noi-cai-rang-1649233633.jpg',
   'BẾN NINH KIỀU': 'https://mia.vn/media/uploads/blog-du-lich/du-lich-can-tho-17-1695981658.jpg',
+
+  // Ninh Bình
+  'TRÀNG AN': 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800',
+  'CHÙA BÁI ĐÍNH': 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=800',
+  'HANG MÚA': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=800',
+
+  // Yên Bái
+  'MÙ CANG CHẢI': 'https://images.unsplash.com/photo-1508873696983-2df515122519?q=80&w=800',
+  'SÚỐI GIÀNG': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=800',
 };
+
+// Deterministic category fallback helper ensuring no two landmarks share duplicate fallback images
+export function getCategoryFallbackImage(item: { name: string; subCategory?: string }): string {
+  const hash = item.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const sub = (item.subCategory || '').toUpperCase();
+
+  if (sub.includes('DI TÍCH') || sub.includes('LỊCH SỬ') || sub.includes('MONUMENT')) {
+    const historicalPool = [
+      'https://vcdn1-dulich.vnecdn.net/2022/03/15/thanh-nha-mac-tuyen-quang-1647335491.jpg',
+      'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?q=80&w=800',
+      'https://vcdn1-dulich.vnecdn.net/2021/08/30/lan-na-lua-1630310294.jpg',
+      'https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=800',
+      'https://vcdn1-dulich.vnecdn.net/2021/08/30/cay-da-tan-trao-1630310294.jpg',
+      'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=800',
+    ];
+    return historicalPool[hash % historicalPool.length];
+  }
+
+  if (sub.includes('LỄ HỘI') || sub.includes('FESTIVAL') || sub.includes('VĂN HÓA')) {
+    const festivalPool = [
+      'https://vcdn1-dulich.vnecdn.net/2020/11/01/ok-om-bok-1604193854-4729-1604193910.jpg',
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800',
+      'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=800',
+    ];
+    return festivalPool[hash % festivalPool.length];
+  }
+
+  if (sub.includes('ẨM THỰC') || sub.includes('SPECIALTY') || sub.includes('FOOD')) {
+    const foodPool = [
+      'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?q=80&w=800',
+      'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800',
+    ];
+    return foodPool[hash % foodPool.length];
+  }
+
+  // Scenic / Default pool
+  const scenicPool = [
+    'https://vcdn1-dulich.vnecdn.net/2022/03/15/na-hang-tuyen-quang-1647335492.jpg',
+    'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800',
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800',
+  ];
+  return scenicPool[hash % scenicPool.length];
+}

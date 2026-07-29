@@ -710,31 +710,58 @@ export default function ExploreHandbookHub() {
 
       {/* ── ETHNIC GROUP MODAL ── */}
       {activeEthnicModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 pt-20 pb-8">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
-            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2.5 py-1 rounded-md border border-[var(--gold)]/20">
-                  VĂN HÓA DÂN TỘC VIỆT NAM
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-                  {activeEthnicModal.name}
-                </h3>
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 pt-20 pb-8 animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up">
+            
+            {/* Hero Card Image Banner */}
+            <div className="relative w-full h-56 sm:h-72 overflow-hidden shrink-0 bg-slate-800">
+              <img 
+                src={ETHNIC_IMAGES_MAPPING[activeEthnicModal.name.toUpperCase()] || FALLBACK_LANDMARK_IMAGE} 
+                alt={activeEthnicModal.name}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = FALLBACK_LANDMARK_IMAGE;
+                }}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+              {/* Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/20" />
+              
+              {/* Badge & Title Overlaid on Image */}
+              <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between z-10">
+                <div className="space-y-1.5">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-white bg-[var(--gold)]/90 px-3 py-1 rounded-full shadow-md backdrop-blur-md">
+                    <BookOpen size={11} className="text-white" /> VĂN HÓA & DÂN TỘC VIỆT NAM
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white drop-shadow-lg tracking-tight">
+                    {activeEthnicModal.name}
+                  </h3>
+                </div>
               </div>
+
+              {/* Floating Close Button */}
               <button
                 onClick={() => setActiveEthnicModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center cursor-pointer"
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-950/60 hover:bg-slate-950/90 text-white backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-20 shadow-lg"
               >
                 ✕
               </button>
             </div>
-            <div className="p-6 sm:p-8 overflow-y-auto w-full">
+
+            {/* Scrollable Article Body Content */}
+            <div className="p-6 sm:p-8 overflow-y-auto w-full space-y-4">
               {renderFormattedContent(activeEthnicModal.content)}
             </div>
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+
+            {/* Modal Footer Bar */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
+                <Sparkles size={13} className="text-[var(--gold)]" />
+                Cơ sở dữ liệu tri thức 54 Dân tộc Việt Nam
+              </span>
               <button
                 onClick={() => setActiveEthnicModal(null)}
-                className="px-6 py-2.5 bg-[var(--gold)] text-white text-xs font-bold rounded-xl hover:bg-[var(--gold-dark)] cursor-pointer shadow"
+                className="px-6 py-2.5 bg-[var(--gold)] text-white text-xs font-bold rounded-xl hover:bg-[var(--gold-dark)] cursor-pointer shadow-md transition-all active:scale-95"
               >
                 Đóng
               </button>

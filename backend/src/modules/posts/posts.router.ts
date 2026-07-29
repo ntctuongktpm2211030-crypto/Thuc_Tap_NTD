@@ -56,7 +56,24 @@ function extractBodyText(content: string): string {
   try {
     const parsed = JSON.parse(content);
     if (parsed && typeof parsed === 'object') {
-      return String(parsed.body || parsed.content || '').trim();
+      const text = String(
+        parsed.body ||
+        parsed.content ||
+        parsed.headline ||
+        parsed.title ||
+        parsed.excerpt ||
+        parsed.destination ||
+        ''
+      ).trim();
+      if (text.length >= 2) return text;
+      if (parsed.type === 'journey') {
+        const title = parsed.title || parsed.headline || '';
+        const dest = parsed.destination || '';
+        const routeText = Array.isArray(parsed.route?.points)
+          ? parsed.route.points.map((p: any) => p.name || p.address).join(' ')
+          : '';
+        return `${title} ${dest} ${routeText}`.trim();
+      }
     }
   } catch {
     // Ignore, treat as plain text
@@ -222,13 +239,26 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { content, mediaUrls, tripId, locationId } = req.body;
 
+    if (!req.user?.sub) {
+      return res.status(401).json({
+        error: 'Chưa đăng nhập',
+        message: 'Bạn cần đăng nhập tài khoản để thực hiện đăng hành trình.',
+      });
+    }
+
     if (!content) {
-      return res.status(400).json({ error: 'content is required.' });
+      return res.status(400).json({
+        error: 'Thiếu dữ liệu bắt buộc',
+        message: 'Nội dung bài viết/hành trình không được để trống.',
+      });
     }
 
     const bodyText = extractBodyText(content);
     if (bodyText.length < 10) {
-      return res.status(400).json({ error: 'Nội dung bài viết phải chứa ít nhất 10 ký tự.' });
+      return res.status(400).json({
+        error: 'Nội dung quá ngắn',
+        message: 'Nội dung bài viết/hành trình phải chứa ít nhất 10 ký tự.',
+      });
     }
 
     let finalMediaUrls: string[] = [];
@@ -244,12 +274,21 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       finalMediaUrls = results.filter((url): url is string => typeof url === 'string');
     }
 
+    // Verify tripId exists if passed to avoid foreign key failure
+    let validTripId: string | null = null;
+    if (tripId) {
+      const tripExists = await prisma.trip.findUnique({ where: { id: tripId }, select: { id: true } });
+      if (tripExists) {
+        validTripId = tripId;
+      }
+    }
+
     const post = await prisma.post.create({
       data: {
-        authorId: req.user!.sub,
+        authorId: req.user.sub,
         content,
         mediaUrls: finalMediaUrls,
-        tripId: tripId || null,
+        tripId: validTripId,
         locationId: locationId || null,
       },
 
@@ -259,14 +298,16 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       },
     });
 
-
-
     invalidateFeedCache();
 
     return res.status(201).json(post);
-  } catch (err) {
+  } catch (err: any) {
     console.error('[posts/POST /]', err);
-    return res.status(500).json({ error: 'Failed to create post.' });
+    return res.status(500).json({
+      error: 'Lỗi máy chủ khi đăng bài viết',
+      message: err?.message || 'Không thể lưu bài viết vào hệ thống.',
+      details: err?.code ? `Mã lỗi DB: ${err.code}` : undefined,
+    });
   }
 });
 

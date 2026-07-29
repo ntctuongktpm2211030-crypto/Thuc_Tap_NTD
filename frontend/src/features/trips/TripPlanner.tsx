@@ -13,7 +13,6 @@ import type { RootState } from '../../store';
 import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
-import { KineticText } from '../../components/ui/kinetic-text';
 import ParallaxHero from '../../components/ui/parallax-hero';
 
 function calculateHaversineDistance(
@@ -262,16 +261,16 @@ const TripPlanner = () => {
       return title.includes(historySearch.toLowerCase());
     });
 
-    const displayItems = showAllHistory ? filtered : filtered.slice(0, 5);
+    const displayItems = showAllHistory ? filtered : filtered.slice(0, 6);
 
     return (
-      <div className="flex flex-col bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-4 h-full">
+      <div className="flex flex-col bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-3.5 h-full min-h-[480px]">
         <div className="flex justify-between items-center border-b border-[var(--border-normal)] pb-3">
           <h3 className="font-ui text-xs font-bold text-[var(--text-primary)] flex items-center gap-2">
             <BrainCircuit size={15} className="text-blue-500" /> 
             {lang === 'vi' ? 'Lịch sử AI' : 'AI History'}
           </h3>
-          {filtered.length > 5 && (
+          {filtered.length > 6 && (
             <button
               type="button"
               onClick={() => setShowAllHistory(!showAllHistory)}
@@ -295,7 +294,7 @@ const TripPlanner = () => {
         </div>
 
         {/* List */}
-        <div className="space-y-2 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
+        <div className="space-y-2.5 flex-1 overflow-y-auto max-h-[390px] pr-1 custom-scrollbar">
           {loadingHistory ? (
             <div className="flex items-center justify-center py-6 text-slate-400 gap-1.5 text-xs">
               <Loader2 size={12} className="animate-spin" />
@@ -785,67 +784,120 @@ const TripPlanner = () => {
       <div className="absolute bottom-10 left-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
-      {/* Title & Banner */}
-      <div className="relative p-6 md:p-8 rounded-3xl overflow-hidden bg-[var(--bg-elevated)] border border-[var(--border-normal)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_45%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.06),transparent_50%)] pointer-events-none" />
+      {/* Title & Ultra-Polished Animated Video Hero Banner - Brightened */}
+      <div className="relative p-8 sm:p-12 md:p-14 min-h-[260px] md:min-h-[310px] rounded-3xl overflow-hidden bg-slate-900 border border-sky-500/30 shadow-[0_25px_60px_rgba(0,0,0,0.4)] flex flex-col md:flex-row md:items-center justify-between gap-8 group transition-all duration-500">
         
-        <div className="space-y-2 relative">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-            <Sparkles size={11} className="animate-pulse" /> {lang === 'vi' ? 'Công nghệ AI Thế Hệ Mới' : 'Next-Gen AI Technology'}
+        {/* Glowing Vibrant Ambient Light Orbs */}
+        <div className="pointer-events-none absolute -top-20 -left-20 w-[500px] h-[500px] bg-sky-400/35 rounded-full blur-[100px]" />
+        <div className="pointer-events-none absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-cyan-400/30 rounded-full blur-[100px]" />
+
+        {/* Dynamic Animated Video Background - Bright & Clear */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 z-0 w-full h-full object-cover object-[center_68%] opacity-95 group-hover:scale-105 transition-transform duration-1000"
+        >
+          <source src="/video.mp4" type="video/mp4" />
+        </video>
+
+        {/* Brightened Multi-Layer Overlays so video background shines clearly */}
+        <div className="absolute inset-0 z-1 bg-gradient-to-r from-slate-950/45 via-slate-950/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-1 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.35),transparent_65%)] pointer-events-none" />
+        <div className="absolute inset-0 z-1 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-sky-400/20 to-transparent z-1" />
+        
+        {/* Left Info Column */}
+        <div className="space-y-3 relative z-10 max-w-2xl">
+          {/* Top Pill Badge with Pulse Indicator */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/15 border border-blue-400/30 text-xs font-bold text-sky-300 uppercase tracking-wider backdrop-blur-md shadow-lg shadow-blue-500/10">
+            <Sparkles size={13} className="text-cyan-300 animate-pulse" />
+            <span>{lang === 'vi' ? 'Công nghệ AI Thế Hệ Mới' : 'Next-Gen AI Technology'}</span>
           </div>
-          <KineticText
-            text={t('planner.heading')}
-            as="h1"
-            className="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-white dark:via-cream dark:to-slate-200"
-          />
-          <p className="text-xs text-[var(--text-secondary)] max-w-xl">{t('planner.subtitle')}</p>
+
+          {/* Heading */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-100 to-blue-200 drop-shadow-md">
+            {t('planner.heading')}
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed font-light">
+            {t('planner.subtitle')}
+          </p>
+
+          {/* Micro Tech Feature Badges */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-700/60 text-[11px] font-medium text-slate-300 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              Tối ưu lộ trình TSP
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-700/60 text-[11px] font-medium text-slate-300 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Mô hình GPT-4o & RAG
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/80 border border-slate-700/60 text-[11px] font-medium text-slate-300 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              63 Tỉnh thành Việt Nam
+            </span>
+          </div>
         </div>
         
-        <div className="flex-shrink-0 flex items-center gap-4 relative">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <BrainCircuit size={24} className="text-white animate-pulse" />
+        {/* Right Assistant Info Text (Directly on Banner Background without Card Box) */}
+        <div className="flex-shrink-0 flex items-center gap-3 relative z-10 self-start md:self-center">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center backdrop-blur-md shadow-md">
+            <BrainCircuit size={22} className="text-cyan-300 animate-pulse" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-[var(--text-primary)]">{lang === 'vi' ? 'Trợ lý Lộ trình AI' : 'AI Itinerary Assistant'}</h4>
-            <p className="text-[10px] text-[var(--text-muted)]">{lang === 'vi' ? 'Sẵn sàng tư vấn 24/7' : 'Ready to help 24/7'}</p>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white tracking-wide drop-shadow-md">
+                {lang === 'vi' ? 'Trợ lý Lộ trình AI' : 'AI Itinerary Assistant'}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 drop-shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                Live
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-200/90 font-medium drop-shadow-sm mt-0.5">
+              {lang === 'vi' ? 'Sẵn sàng tư vấn 24/7' : 'Ready to help 24/7'}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
-        {/* Left Form: Itinerary Parameters */}
-        <div className="lg:col-span-3 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-6 h-fit relative overflow-hidden">
+        {/* Left Form: Itinerary Parameters (Stays Compact with self-start & sticky top-24) */}
+        <div className="lg:col-span-3 bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl shadow-xl space-y-4 self-start sticky top-24 relative overflow-hidden transition-all duration-300">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-teal-500 to-indigo-500" />
           
-          <h3 className="font-ui text-sm font-bold text-[var(--text-primary)] flex items-center gap-2 border-b border-[var(--border-normal)] pb-4">
-            <Compass size={16} className="text-blue-500" /> {lang === 'vi' ? 'Thông số hành trình' : 'Itinerary Parameters'}
+          <h3 className="font-ui text-xs font-bold text-[var(--text-primary)] flex items-center gap-2 border-b border-[var(--border-normal)] pb-3">
+            <Compass size={15} className="text-blue-500" /> {lang === 'vi' ? 'Thông số hành trình' : 'Itinerary Parameters'}
           </h3>
           
-          <div className="space-y-5">
+          <div className="space-y-3.5 pt-1">
             {/* Destination Input */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.destination')}</label>
               <div className="relative group">
-                <MapPin size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
+                <MapPin size={15} className="absolute left-3 top-3 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
                 <input 
                   type="text" 
                   value={destination} 
                   onChange={e => setDestination(e.target.value)}
-                  placeholder={lang === 'vi' ? 'Nhập điểm đến (ví dụ: Hà Giang)' : 'Enter destination (e.g., Ha Giang)'}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+                  placeholder={lang === 'vi' ? 'Nhập điểm đến (vd: Hà Giang)' : 'Enter destination (e.g., Ha Giang)'}
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-9 pr-3 py-2.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
                 />
               </div>
             </div>
 
             {/* Days & Budget Grid */}
-            <div className="grid grid-cols-[100px_1fr] gap-4">
+            <div className="grid grid-cols-[90px_1fr] gap-2.5">
               {/* Days Input */}
-              <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider h-8 flex items-end">{t('planner.days')}</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{t('planner.days')}</label>
                 <div className="relative group">
-                  <Calendar size={16} className="absolute left-3 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
+                  <Calendar size={15} className="absolute left-2.5 top-3 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
                   <input 
                     type="number" 
                     value={days === '' ? '' : days} 
@@ -853,16 +905,16 @@ const TripPlanner = () => {
                     min={1} 
                     max={15}
                     placeholder="2"
-                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-9 pr-2 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-8 pr-1 py-2.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
                   />
                 </div>
               </div>
 
               {/* Budget Input */}
-              <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider h-8 flex items-end">{t('planner.budget')}</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{t('planner.budget')}</label>
                 <div className="flex rounded-xl overflow-hidden border border-[var(--border-normal)] bg-[var(--bg-primary)] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-inner relative group">
-                  <DollarSign size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
+                  <DollarSign size={15} className="absolute left-2.5 top-3 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors" />
                   <input 
                     type="text" 
                     value={budget === '' ? '' : budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} 
@@ -871,12 +923,12 @@ const TripPlanner = () => {
                       const rawVal = e.target.value.replace(/\D/g, '');
                       setBudget(rawVal === '' ? '' : Number(rawVal));
                     }} 
-                    className="w-full bg-transparent pl-11 pr-1 py-3.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none min-w-0" 
+                    className="w-full bg-transparent pl-8 pr-1 py-2.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none min-w-0" 
                   />
                   <select 
                     value={currency} 
                     onChange={e => setCurrency(e.target.value as 'USD' | 'VND')}
-                    className="bg-[var(--bg-elevated)] border-l border-[var(--border-normal)] text-[10px] text-blue-500 font-bold px-2 py-3.5 outline-none cursor-pointer hover:bg-[var(--bg-primary)] transition-all flex-shrink-0"
+                    className="bg-[var(--bg-elevated)] border-l border-[var(--border-normal)] text-[9px] text-blue-500 font-bold px-1.5 py-2.5 outline-none cursor-pointer hover:bg-[var(--bg-primary)] transition-all flex-shrink-0"
                   >
                     <option value="VND">VND</option>
                     <option value="USD">USD</option>
@@ -886,25 +938,25 @@ const TripPlanner = () => {
             </div>
 
             {/* Travel Style */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{t('planner.style')}</label>
               <div className="relative group">
-                <Sparkles size={16} className="absolute left-3.5 top-3.5 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors pointer-events-none" />
+                <Sparkles size={15} className="absolute left-3 top-3 text-[var(--text-muted)] group-focus-within:text-blue-500 transition-colors pointer-events-none" />
                 <select 
                   value={style} 
                   onChange={e => setStyle(e.target.value)}
-                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-11 pr-4 py-3.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner appearance-none cursor-pointer"
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl pl-9 pr-4 py-2.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner appearance-none cursor-pointer"
                 >
                   {styleOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
-                <div className="absolute right-3.5 top-4 pointer-events-none text-[var(--text-muted)] border-none bg-transparent">▼</div>
+                <div className="absolute right-3 top-3.5 pointer-events-none text-[9px] text-[var(--text-muted)] border-none bg-transparent">▼</div>
               </div>
             </div>
 
             {/* Interests tags */}
-            <div className="space-y-2.5">
+            <div className="space-y-1.5">
               <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{t('planner.interests')}</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {['nature', 'culture', 'food', 'hiking', 'photography', 'history'].map(tag => {
                   const isActive = interests.includes(tag);
                   return (
@@ -912,13 +964,13 @@ const TripPlanner = () => {
                       key={tag} 
                       type="button" 
                       onClick={() => toggleInterest(tag)}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-1 active:scale-95 cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1 active:scale-95 cursor-pointer ${
                         isActive 
-                          ? 'bg-blue-600 border-blue-600 text-white shadow-md' 
-                          : 'bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 hover:border-blue-500 shadow-sm'
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-sm' 
+                          : 'bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 hover:border-blue-500'
                       }`}
                     >
-                      <Hash size={10} /> {tag}
+                      <Hash size={9} /> {tag}
                     </button>
                   );
                 })}
@@ -929,13 +981,13 @@ const TripPlanner = () => {
             <RippleButton 
               onClick={handleGenerate} 
               disabled={loading} 
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all border border-transparent disabled:cursor-not-allowed cursor-pointer"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all border border-transparent disabled:cursor-not-allowed cursor-pointer text-xs mt-1"
               rippleColor="rgba(255,255,255,0.4)"
             >
               {loading ? (
-                <><Loader2 size={14} className="animate-spin" /> {t('planner.generating')}</>
+                <><Loader2 size={13} className="animate-spin" /> {t('planner.generating')}</>
               ) : (
-                <><Sparkles size={14} /> {t('planner.generate')}</>
+                <><Sparkles size={13} /> {t('planner.generate')}</>
               )}
             </RippleButton>
 
@@ -943,7 +995,7 @@ const TripPlanner = () => {
         </div>
 
         {/* Right Panel: Results / Itinerary View */}
-        <div className="lg:col-span-9 space-y-6">
+        <div className="lg:col-span-9 h-full flex flex-col justify-between">
           
           {/* Error Message */}
           {aiError && (
@@ -961,11 +1013,6 @@ const TripPlanner = () => {
                 <div className="w-20 h-20 mx-auto rounded-full bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center animate-spin duration-8000">
                   <BrainCircuit size={36} className="text-blue-400 animate-pulse" />
                 </div>
-                <div className="absolute inset-0 w-20 h-20 mx-auto rounded-full bg-blue-500/5 animate-ping" />
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold font-ui text-cream">{lang === 'vi' ? 'AI Đang Thiết Kế Hành Trình...' : 'AI Designing Your Itinerary...'}</h3>
                 <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
                   {lang === 'vi' 
                     ? `Đang tổng hợp các điểm tham quan, cơ sở lưu trú và tối ưu hóa tuyến đường cho chuyến đi tại ${destination}.`
@@ -1051,24 +1098,21 @@ const TripPlanner = () => {
                     {optimized ? (
                       <><Check size={13} strokeWidth={2.5} /> {t('planner.optimized')}</>
                     ) : (
-                      <><Zap size={13} className="animate-pulse" /> {t('planner.optimize')}</>
+                      <><Sparkles size={13} /> {t('planner.optimize')}</>
                     )}
                   </button>
                   
                   <RippleButton 
                     onClick={handleSaveTrip}
-                    disabled={savingTrip || savedTripId !== null}
-                    className={`px-5 py-3 text-xs font-bold rounded-xl border active:scale-95 transition-all flex items-center gap-1.5 ${
+                    className={`px-5 py-3 text-xs font-bold rounded-xl border border-blue-500/30 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
                       savedTripId 
                         ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400' 
-                        : 'bg-blue-600 hover:bg-blue-700 text-white font-bold border-transparent shadow-md'
+                        : 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400'
                     }`}
-                    rippleColor={savedTripId ? "rgba(16,185,129,0.4)" : "rgba(255,255,255,0.4)"}
+                    rippleColor="rgba(59,130,246,0.3)"
                   >
-                    {savingTrip ? (
-                      <><Loader2 size={13} className="animate-spin" /> {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}</>
-                    ) : savedTripId ? (
-                      <><Check size={13} strokeWidth={2.5} /> {lang === 'vi' ? 'Đã lưu' : 'Saved'}</>
+                    {savedTripId ? (
+                      <><Check size={13} strokeWidth={2.5} /> {lang === 'vi' ? 'Đã lưu hành trình' : 'Trip Saved'}</>
                     ) : (
                       <><Bookmark size={13} /> {lang === 'vi' ? 'Lưu hành trình' : 'Save Trip'}</>
                     )}
@@ -1126,7 +1170,6 @@ const TripPlanner = () => {
                   {(() => {
                     const currentDay = itinerary.days.find((d: any) => (d.dayIndex || d.day) === selectedDay);
                     if (!currentDay) return null;
-                    const sessions = ['Sáng', 'Trưa', 'Chiều', 'Tối'] as const;
 
                     return (
                       <div className="space-y-6">
@@ -1150,148 +1193,71 @@ const TripPlanner = () => {
                                 '🔄 ' + t('planner.regenerateDay')
                               )}
                             </button>
-                            
-                            {getGoogleMapsDirectionsUrl(currentDay.activities) && (
-                              <a
-                                href={getGoogleMapsDirectionsUrl(currentDay.activities)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-2 text-[10px] font-bold rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all flex items-center gap-1 shadow-sm"
-                              >
-                                <Compass size={11} className="text-blue-500" />
-                                <span>{t('planner.dayRouteGoogleMaps')}</span>
-                              </a>
-                            )}
                           </div>
                         </div>
 
-                        {/* Daily Cost Breakdown Card */}
-                        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 text-xs">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-[var(--text-primary)]">{t('planner.dailyCost')}:</span>
-                            <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400">{formatCost(currentDay.dailyEstimatedCost || 0)}</span>
-                          </div>
-                          
-                          <div className="flex flex-wrap items-center gap-4 text-[10px] text-[var(--text-muted)]">
-                            <div>
-                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Hoạt động: ' : 'Activities: '}</span>
-                              <span className="font-bold text-[var(--text-primary)]">{formatCost(currentDay.activityCost || 0)}</span>
-                            </div>
-                            <div>
-                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Di chuyển: ' : 'Transport: '}</span>
-                              <span className="font-bold text-[var(--text-primary)]">
-                                {formatCost(currentDay.transportCost || 0)}
-                                {currentDay.totalDistanceKm !== undefined && ` (${currentDay.totalDistanceKm} km)`}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="font-semibold text-[var(--text-secondary)]">{lang === 'vi' ? 'Dự phòng: ' : 'Buffer: '}</span>
-                              <span className="font-bold text-[var(--text-primary)]">{formatCost(currentDay.bufferCost || 0)}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Timeline Tree - Render tất cả hoạt động theo thứ tự tuần tự */}
-                        <div className="relative border-l-2 border-dashed border-[var(--border-subtle)] ml-4 pl-6 space-y-6">
+                        {/* Activities list for current day */}
+                        <div className="space-y-4">
                           {currentDay.activities.map((act: any, idx: number) => {
-                            const ActIcon = getCategoryIcon(act.category);
                             const styles = getCategoryStyles(act.category);
-                            
-                            const prevAct = idx > 0 ? currentDay.activities[idx - 1] : null;
-                            const directionsUrl = prevAct && prevAct.latitude && prevAct.longitude
-                              ? `https://www.google.com/maps/dir/?api=1&origin=${prevAct.latitude},${prevAct.longitude}&destination=${act.latitude},${act.longitude}&travelmode=driving`
-                              : `https://www.google.com/maps/dir/?api=1&destination=${act.latitude},${act.longitude}&travelmode=driving`;
-
-                            const itemKey = `${currentDay.dayIndex || currentDay.day}-${act.activityName || act.name}-${idx}`;
-                            const isExpanded = expandedActivities[itemKey];
+                            const IconComponent = getCategoryIcon(act.category);
+                            const directionsUrl = getGoogleMapsDirectionsUrl(currentDay.activities);
 
                             return (
-                              <div key={idx} className="relative group animate-fade-in space-y-2">
-                                {/* Card connecting node */}
-                                <div className={`absolute -left-[31px] top-4 w-3 h-3 rounded-full ${styles.dot} transition-transform duration-300 group-hover:scale-125`} />
-                                
-                                <div className={`bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-5 rounded-2xl hover:shadow-md transition-all ${styles.accent} hover:border-blue-500/30 shadow-sm space-y-3`}>
-                                  <div className="flex justify-between items-start gap-4">
-                                    <div className="space-y-1">
-                                      <div className="flex items-center gap-2 flex-wrap">
-                                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold text-blue-500 bg-blue-500/10 border border-blue-500/20 uppercase tracking-wide">
-                                          {act.session || 'Hoạt động'}
-                                        </span>
-                                        <div className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-muted)]">
-                                          <Clock size={11} className="text-[var(--text-muted)]" />
-                                          <span>{act.timeSlot || act.time || 'Thời gian'}</span>
-                                        </div>
-                                        <span className={`px-2 py-0.5 rounded-md text-[8px] font-extrabold uppercase tracking-wide border ${styles.bg}`}>
-                                          {act.category || 'spot'}
-                                        </span>
+                              <div key={idx} className="relative group">
+                                <div className={`bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all space-y-3 ${styles.accent}`}>
+                                  <div className="flex justify-between items-start gap-3">
+                                    <div className="flex items-center gap-2.5">
+                                      <div className={`p-2 rounded-xl border ${styles.bg}`}>
+                                        <IconComponent size={16} />
                                       </div>
-                                      <h5 className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 mt-1.5">
-                                        <ActIcon size={14} className={`${styles.iconColor} flex-shrink-0`} />
-                                        {act.activityName || act.name}
-                                      </h5>
-                                      <span className="text-[10px] text-[var(--text-secondary)] block">📍 {act.locationName}</span>
+                                      <div>
+                                        <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{act.session || 'Sáng'} • {act.timeSlot || '08:00'}</span>
+                                        <h4 className="text-xs font-bold text-[var(--text-primary)]">{act.activityName || act.name}</h4>
+                                      </div>
                                     </div>
-                                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 bg-blue-500/5 px-2.5 py-1 rounded-lg border border-blue-500/10 dark:border-blue-500/20 shadow-sm">
+                                    <span className="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-lg">
                                       {formatCost(act.estimatedCost || act.cost)}
                                     </span>
                                   </div>
-                                  
-                                  {/* Description Notes with expand action */}
-                                  {(() => {
-                                    const noteText = act.notes || act.note || '';
-                                    if (!noteText) return null;
-                                    return (
-                                      <div className="space-y-1.5 pt-1.5 border-t border-[var(--border-subtle)]/40">
-                                        <p className={`text-[11px] text-[var(--text-secondary)] leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-2'}`}>
-                                          {noteText}
-                                        </p>
-                                        {noteText.length > 80 && (
-                                          <button 
-                                            type="button" 
-                                            onClick={() => toggleExpandActivity(itemKey)}
-                                            className="text-[10px] font-bold text-blue-400 hover:text-blue-300 hover:underline bg-transparent border-none p-0 cursor-pointer flex items-center gap-0.5 transition-colors"
-                                          >
-                                            {isExpanded ? (
-                                              <>{lang === 'vi' ? 'Thu gọn' : 'Show less'} <ChevronUp size={10} /></>
-                                            ) : (
-                                              <>{lang === 'vi' ? 'Xem thêm' : 'Read more'} <ChevronDown size={10} /></>
-                                            )}
-                                          </button>
-                                        )}
-                                      </div>
-                                    );
-                                  })()}
-                                  
-                                  {/* Action Links */}
-                                  <div className="flex gap-2 flex-wrap pt-2 border-t border-[var(--border-subtle)]/40 mt-1">
-                                    <a
-                                      href={(() => {
-                                        const title = act.activityName || act.name || '';
-                                        const address = act.address || act.locationName || '';
-                                        const lat = act.latitude;
-                                        const lng = act.longitude;
-                                        if (address) {
-                                          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + address)}`;
-                                        }
-                                        if (lat && lng) {
-                                          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + lat + ',' + lng)}`;
-                                        }
-                                        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title)}`;
-                                      })()}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
-                                    >
-                                      <Compass size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
-                                    </a>
-                                    <a
-                                      href={directionsUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
-                                    >
-                                      <Navigation size={10} /> {t('planner.directionsFromPrev')}
-                                    </a>
+
+                                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{act.notes || act.note}</p>
+
+                                  <div className="flex items-center justify-between pt-2 border-t border-[var(--border-subtle)] text-[10px]">
+                                    <span className="text-[var(--text-muted)] flex items-center gap-1">
+                                      <MapPin size={11} className="text-blue-500" /> {act.locationName || act.address || destination}
+                                    </span>
+
+                                    <div className="flex items-center gap-2">
+                                      <a
+                                        href={(() => {
+                                          const title = act.activityName || act.name || '';
+                                          const address = act.locationName || act.address || '';
+                                          const lat = act.latitude;
+                                          const lng = act.longitude;
+                                          if (address) {
+                                            return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + address)}`;
+                                          }
+                                          if (lat && lng) {
+                                            return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title + ' ' + lat + ',' + lng)}`;
+                                          }
+                                          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title)}`;
+                                        })()}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
+                                      >
+                                        <Compass size={10} /> {t('planner.openInGoogleMaps')} <ExternalLink size={8} />
+                                      </a>
+                                      <a
+                                        href={directionsUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all shadow-sm"
+                                      >
+                                        <Navigation size={10} /> {t('planner.directionsFromPrev')}
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1358,10 +1324,10 @@ const TripPlanner = () => {
 
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-stretch">
               {/* Left side: Parallax Hero 3D */}
-              <div className="lg:col-span-8 overflow-hidden rounded-2xl relative h-[500px] w-full shadow-xl border border-[var(--border-normal)]/40">
-                <ParallaxHero title="TERRAHOLIC" className="h-full w-full rounded-2xl" />
+              <div className="lg:col-span-8 overflow-hidden rounded-2xl relative h-full min-h-[480px] w-full bg-[#1b4353] border border-[var(--border-normal)] shadow-xl">
+                <ParallaxHero title="TERRAHOLIC" className="h-full w-full border-none shadow-none rounded-2xl" />
               </div>
 
               {/* Right side: AI History container */}

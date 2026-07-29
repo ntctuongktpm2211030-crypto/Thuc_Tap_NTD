@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   MapPin, Users, Search, Sparkles, Clock, ArrowRight,
   Utensils, Landmark, Heart, Compass,
-  Loader2, Navigation, AlertCircle
+  Loader2, Navigation, AlertCircle, Bookmark, Image as ImageIcon
 } from 'lucide-react';
 import { searchPlaces } from '../../utils/geocodeUtils';
 import { postsService } from '../../services/smartTravel.service';
@@ -13,6 +13,7 @@ import { toExplorePostId } from '../../utils/postIds';
 import { getExplorePosts, setExplorePosts } from './explorePostsStore';
 import blogVideo from '../../../../video.mp4';
 import { KineticText } from '../../components/ui/kinetic-text';
+import { toast } from '../../contexts/ToastContext';
 
 // Local storage key for search history
 const HISTORY_KEY = 'terraholic_explore_search_history';
@@ -250,8 +251,14 @@ export default function ExploreHub() {
   };
 
   const handleUseMyLocation = () => {
-    if (!navigator.geolocation) return;
     setLocating(true);
+    if (!navigator.geolocation) {
+      setFilters(prev => ({ ...prev, userAddress: 'TP. Hồ Chí Minh', userLat: 10.7769, userLng: 106.7009 }));
+      toast.info('Trình duyệt không hỗ trợ định vị. Đã tự động chọn vị trí TP. Hồ Chí Minh.');
+      setLocating(false);
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       async pos => {
         const { latitude, longitude } = pos.coords;
@@ -265,13 +272,32 @@ export default function ExploreHub() {
               userLat: results[0].lat,
               userLng: results[0].lng,
             }));
+          } else {
+            setFilters(prev => ({
+              ...prev,
+              userAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+              userLat: latitude,
+              userLng: longitude,
+            }));
           }
         } catch {
-          /* ignore */
+          setFilters(prev => ({
+            ...prev,
+            userAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+            userLat: latitude,
+            userLng: longitude,
+          }));
+        } finally {
+          setLocating(false);
         }
+      },
+      () => {
+        // Fallback gracefully on GPS denial or error
+        setFilters(prev => ({ ...prev, userAddress: 'TP. Hồ Chí Minh', userLat: 10.7769, userLng: 106.7009 }));
+        toast.info('Đã bật vị trí TP. Hồ Chí Minh (Bật GPS trình duyệt để định vị chính xác).');
         setLocating(false);
       },
-      () => setLocating(false)
+      { enableHighAccuracy: true, timeout: 6000 },
     );
   };
 
@@ -810,46 +836,91 @@ export default function ExploreHub() {
             {filteredPosts.length > 0 && (
               <div
                 onClick={() => navigate(`/explore/post/${filteredPosts[0].id}`)}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row hover:-translate-y-1 hover:border-blue-500/20 cursor-pointer transition-all duration-300 group"
+                className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-md hover:shadow-xl flex flex-col md:flex-row gap-6 items-stretch cursor-pointer transition-all duration-300 group md:h-[280px]"
               >
-                <div className="md:w-1/2 aspect-[4/3] md:aspect-auto overflow-hidden relative min-h-[250px] bg-slate-100">
-                  <img src={filteredPosts[0].coverImage} alt={filteredPosts[0].title} className="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500" />
-                  <div className="absolute top-4 left-4 flex gap-1.5">
-                    <span className="bg-blue-600 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg">
+                {/* Left Column: Widescreen Rounded Image Container */}
+                <div className="md:w-[44%] aspect-[16/10] md:aspect-auto overflow-hidden relative rounded-2xl bg-slate-100 dark:bg-slate-800 shrink-0 min-h-[220px]">
+                  <img
+                    src={filteredPosts[0].coverImage}
+                    alt={filteredPosts[0].title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent pointer-events-none" />
+                  
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 flex gap-1.5 z-10 flex-wrap">
+                    <span className="bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
                       {filteredPosts[0].category}
                     </span>
-                    <span className="bg-slate-900/60 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md">
-                      ⭐ Nổi bật
+                    <span className="bg-slate-950/80 text-amber-300 border border-amber-400/50 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full backdrop-blur-md flex items-center gap-1 shadow-sm">
+                      ★ NỔI BẬT
+                    </span>
+                  </div>
+
+                  {/* Bottom Photo Count Badge */}
+                  <div className="absolute bottom-3 left-3 z-10">
+                    <span className="bg-slate-950/75 text-white text-[10px] font-bold px-2.5 py-1 rounded-xl backdrop-blur-md flex items-center gap-1.5 border border-white/10 shadow-sm">
+                      <ImageIcon size={12} /> {(filteredPosts[0] as any).dishes?.length ? (filteredPosts[0] as any).dishes.length + 2 : 3} ẢNH
                     </span>
                   </div>
                 </div>
 
-                <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      <Clock size={11} /> {filteredPosts[0].readTime} phút đọc
-                      <span>·</span>
-                      <MapPin size={11} className="text-teal-600" /> {filteredPosts[0].province}
+                {/* Right Column: Content Area */}
+                <div className="md:w-[56%] py-1 sm:py-2 flex flex-col justify-between flex-1 space-y-3">
+                  <div className="space-y-2.5">
+                    {/* Top Meta Line: Read Time + Location (Matching other posts) */}
+                    <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
+                      <div className="flex items-center gap-2 tracking-wider whitespace-nowrap overflow-hidden">
+                        <span className="inline-flex items-center gap-1.5 shrink-0 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                          <Clock size={11} className="text-slate-400 shrink-0" />
+                          {String(filteredPosts[0].readTime || '').includes('phút') ? String(filteredPosts[0].readTime) : `${filteredPosts[0].readTime} phút đọc`}
+                        </span>
+                        <span className="text-slate-300 dark:text-slate-700 shrink-0">·</span>
+                        <span className="inline-flex items-center gap-1.5 shrink-0 text-teal-600 dark:text-teal-400 font-bold uppercase tracking-wider text-[10px] truncate">
+                          <MapPin size={11} className="shrink-0 text-teal-600" />
+                          {filteredPosts[0].province}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={(e) => { e.stopPropagation(); }}
+                        className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 ml-2"
+                        title="Lưu bài viết"
+                      >
+                        <Bookmark size={15} />
+                      </button>
                     </div>
-                    <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors leading-snug">
+
+                    {/* Article Title (Matching blog card title size) */}
+                    <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
                       {filteredPosts[0].title}
                     </h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+
+                    {/* Excerpt (Matching blog card excerpt size) */}
+                    <p className="text-[11px] font-normal text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
                       {filteredPosts[0].excerpt}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                    <div className="flex items-center gap-2">
-                      <img src={filteredPosts[0].avatar} alt="" className="w-8 h-8 rounded-full object-cover" />
-                      <div>
-                        <span className="block text-xs font-bold text-slate-800 dark:text-slate-200">{filteredPosts[0].author}</span>
-                        <span className="block text-[9px] text-slate-450">{filteredPosts[0].date}</span>
+                  {/* Divider & Author Footer */}
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between mt-auto">
+                    <div className="flex items-center gap-2.5">
+                      {filteredPosts[0].avatar ? (
+                        <img src={filteredPosts[0].avatar} alt="" className="w-8 h-8 rounded-full object-cover ring-2 ring-teal-500/20" />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center justify-center">
+                          {filteredPosts[0].author?.charAt(0) || 'T'}
+                        </div>
+                      )}
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{filteredPosts[0].author}</span>
+                        <span className="text-[10px] font-medium text-slate-400 mt-0.5">{filteredPosts[0].date}</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+
+                    <button className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-1.5 group-hover:scale-102 transition-all duration-300">
                       Đọc bài viết <ArrowRight size={14} />
-                    </span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -877,10 +948,10 @@ export default function ExploreHub() {
                         </span>
                       </div>
                       <div className="p-4 space-y-2">
-                        <div className="flex items-center gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                          <Clock size={10} /> {post.readTime} phút đọc
-                          <span>·</span>
-                          <MapPin size={10} className="text-teal-600" /> {post.province}
+                        <div className="flex items-center gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap overflow-hidden">
+                          <span className="inline-flex items-center gap-1 shrink-0"><Clock size={10} className="shrink-0" /> {String(post.readTime || '').includes('phút') ? String(post.readTime) : `${post.readTime} phút đọc`}</span>
+                          <span className="text-slate-300 shrink-0">·</span>
+                          <span className="inline-flex items-center gap-1 truncate text-teal-600 dark:text-teal-400"><MapPin size={10} className="shrink-0" /> {post.province}</span>
                         </div>
                         <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white line-clamp-2 group-hover:text-blue-500 transition-colors">
                           {post.title}

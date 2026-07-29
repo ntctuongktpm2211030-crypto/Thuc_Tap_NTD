@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 import {
   MapPin, DollarSign, Users, Calendar,
   ChevronRight, ChevronLeft, Upload, X, Plus, Star, Globe,
   Lock, UserCheck, Clock,
   Check, Eye, Send, Loader2,
-  Image as ImageIcon, Lightbulb, AlertCircle, Video, Navigation, Route, BookOpen, Sparkles,
+  Image as ImageIcon, Lightbulb, AlertCircle, AlertTriangle, Video, Navigation, Route, BookOpen, Sparkles,
 } from 'lucide-react';
 import JourneyRouteMap from '../../components/Map/JourneyRouteMap';
 import { searchPlaces, type PlaceSearchResult } from '../../utils/geocodeUtils';
@@ -835,8 +836,19 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
   const [addedFlash, setAddedFlash] = useState('');
   const [mapResults, setMapResults] = useState<PlaceSearchResult[]>([]);
   const [mapQuery, setMapQuery] = useState('');
-  const [showSearchPanel, setShowSearchPanel] = useState(true);
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setShowSearchPanel(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isPointOnRoute = (lat: number, lng: number) =>
     data.routePoints.some(p => Math.abs(p.lat - lat) < 0.0002 && Math.abs(p.lng - lng) < 0.0002);
@@ -860,10 +872,12 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
     onChange({ country: d.country, emoji: d.emoji });
     const addr = `${d.name}, ${d.country}`;
     addPoint(d.name, d.lat, d.lng, addr);
+    setShowSearchPanel(false);
   };
 
   const selectRemote = (r: PlaceSearchResult) => {
     addPoint(r.name, r.lat, r.lng, r.displayName);
+    setShowSearchPanel(false);
   };
 
   const handleSearchChange = (value: string) => {
@@ -909,7 +923,7 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
 
   return (
     <div className="journey-step-content animate-fade-in">
-      <div>
+      <div ref={searchContainerRef} className="relative">
         <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
           Tìm địa điểm cụ thể trên bản đồ *
         </label>
@@ -1729,18 +1743,19 @@ function buildJourneyContent(data: StoryData) {
   const feedCategory = data.categories[0]
     ? journeyCategoryToFeedLabel(data.categories[0])
     : undefined;
+  const fallbackBody = data.content || data.title || data.excerpt || (data.routePoints.length > 0 ? `Hành trình khám phá ${data.destination || data.routePoints[0]?.name || 'các điểm đến nổi tiếng'}` : 'Hành trình chia sẻ cùng cộng đồng Terraholic.');
   return JSON.stringify({
     type: 'journey',
     displayType: data.displayType,
     layoutId: data.layoutId,
     postStyle: getPostStyleFromData(data),
     isFeatured: data.requestFeatured,
-    headline: data.title,
-    excerpt: data.excerpt || (data.displayType === 'social' ? '' : data.content.slice(0, 220)),
+    headline: data.title || 'Hành trình du lịch',
+    excerpt: data.excerpt || (data.displayType === 'social' ? '' : fallbackBody.slice(0, 220)),
     readTime,
     feedCategory,
-    title: data.title,
-    body: data.content,
+    title: data.title || 'Hành trình du lịch',
+    body: fallbackBody,
     categories: data.categories,
     category: data.categories[0] ?? '',
     tags: data.tags,
@@ -1800,6 +1815,12 @@ export default function CreateStoryPage() {
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
   const [publishError, setPublishError] = useState('');
+  const [errorModalInfo, setErrorModalInfo] = useState<{
+    title: string;
+    message: string;
+    statusCode?: number;
+    details?: string;
+  } | null>(null);
   const [draftSaved, setDraftSaved] = useState(false);
   const [draftRestored] = useState(initial.restored);
   const topRef = useRef<HTMLDivElement>(null);
@@ -1936,9 +1957,54 @@ export default function CreateStoryPage() {
 
       clearJourneyDraft();
       setPublished(true);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Không thể đăng hành trình. Vui lòng thử lại.';
-      setPublishError(msg);
+    } catch (err: any) {
+      let statusCode: number | undefined = undefined;
+      let title = 'Không thể đăng hành trình';
+      let message = 'Gặp sự cố khi lưu bài viết vào hệ thống. Vui lòng kiểm tra lại thông tin.';
+      let details: string | undefined = undefined;
+
+      if (axios.isAxiosError(err)) {
+        statusCode = err.response?.status;
+        const resData = err.response?.data as any;
+        const fullMsg = `${message} ${details || ''}`.toLowerCase();
+        const isTooLarge =
+          statusCode === 413 ||
+          fullMsg.includes('too large') ||
+          fullMsg.includes('payload too large') ||
+          fullMsg.includes('entity too large');
+
+        if (isTooLarge) {
+          statusCode = 413;
+          title = 'Tệp Video / Hình Ảnh Quá Dung Lượng';
+          message = 'Video hoặc hình ảnh bạn tải lên quá lớn, vượt quá giới hạn bộ nhớ hệ thống cho phép.';
+          details = 'Tải lên thất bại: request entity too large (payload vượt quá giới hạn bộ nhớ server)';
+        } else if (resData) {
+          if (typeof resData === 'string') {
+            message = resData;
+          } else {
+            title = resData.error || resData.title || title;
+            message = resData.message || resData.error || err.message;
+            details = resData.details || (statusCode ? `Mã HTTP Status: ${statusCode}` : undefined);
+          }
+        } else {
+          message = err.message;
+        }
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+
+      if (statusCode === 401) {
+        title = 'Chưa đăng nhập / Phiên hết hạn';
+        message = 'Bạn cần đăng nhập tài khoản của mình để có thể chia sẻ hành trình với cộng đồng.';
+      }
+
+      setPublishError(message);
+      setErrorModalInfo({
+        title,
+        message,
+        statusCode,
+        details,
+      });
     } finally {
       setPublishing(false);
     }
@@ -1996,42 +2062,47 @@ export default function CreateStoryPage() {
             <div 
               className="journey-step-banner relative overflow-hidden rounded-2xl border border-slate-200/50 p-6 flex items-center justify-between min-h-[120px] shadow-sm mb-2"
               style={{
-                backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1200&q=80')`,
+                background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.92) 100%), url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                color: '#fff'
               }}
             >
-              <div className="flex items-center gap-4 z-10">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/20 backdrop-blur-md border border-white/20 text-white shadow-md">
-                  <CurrentStepIcon size={20} strokeWidth={2.2} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-200">BƯỚC {step} / {JOURNEY_STEPS.length}</p>
-                  <h2 className="text-lg font-black text-white mt-0.5">{currentStepMeta?.label}</h2>
-                  <p className="text-xs text-slate-200 mt-0.5 max-w-lg leading-relaxed">{STEP_HINTS[step]}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-[10px] sm:text-xs font-bold text-white z-10">
-                <span>{completionPercent}% hoàn thành</span>
+              <div className="relative z-10 text-white space-y-1">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-950/60 px-2.5 py-1 rounded-full border border-amber-500/30 backdrop-blur-md">
+                  <Sparkles size={12} /> Bước {step} / {JOURNEY_STEPS.length} — {currentStepMeta?.label}
+                </span>
+                <h2 className="text-xl font-black tracking-tight drop-shadow-sm flex items-center gap-2">
+                  <CurrentStepIcon size={20} className="text-amber-400" /> {currentStepMeta?.label}
+                </h2>
+                <p className="text-xs text-slate-300 font-medium max-w-xl">
+                  {STEP_HINTS[step] ?? 'Hoàn thiện thông tin hành trình du lịch của bạn'}
+                </p>
               </div>
             </div>
 
-            {/* Content Form Wrapper: Notebook Diary Layout for Step 1, standard card panel for others */}
-            {step === 1 ? (
-              <Step1Story data={data} onChange={onChange} onNext={next} canNext={canNext()} onSaveDraft={handleSaveDraft} draftSaved={draftSaved} />
-            ) : (
-              <div className="create-panel create-panel--journey journey-form-panel">
-                {step === 2 && <Step2Photos data={data} onChange={onChange} />}
-                {step === 3 && <Step3Details data={data} onChange={onChange} />}
-                {step === 4 && <Step4Itinerary data={data} onChange={onChange} />}
-                {step === 5 && <Step5Preview data={data} onChange={onChange} />}
+            {/* Step components */}
+            {step === 1 && (
+              <Step1Story
+                data={data}
+                onChange={onChange}
+                onNext={next}
+                canNext={canNext()}
+                onSaveDraft={handleSaveDraft}
+                draftSaved={draftSaved}
+              />
+            )}
+            {step === 2 && <Step2Photos data={data} onChange={onChange} />}
+            {step === 3 && <Step3Details data={data} onChange={onChange} />}
+            {step === 4 && <Step4Itinerary data={data} onChange={onChange} />}
+            {step === 5 && (
+              <div className="space-y-6">
+                <Step5Preview data={data} onChange={onChange} />
               </div>
             )}
 
-            {/* Standard Warning / Publish Alerts for Step > 1 */}
-            {step > 1 && !canNext() && (
-              <div className="journey-alert journey-alert--warn">
+            {/* Error alerts if step invalid */}
+            {!canNext() && (
+              <div className="journey-alert journey-alert--warn mt-4">
                 <AlertCircle size={15} />
                 {step === 2 && data.displayType === 'social' && 'Vui lòng thêm ít nhất 1 ảnh (tối đa 2)'}
                 {step === 2 && data.displayType !== 'social' && 'Vui lòng chọn ảnh bìa'}
@@ -2045,7 +2116,7 @@ export default function CreateStoryPage() {
               </div>
             )}
 
-            {/* Standard Footer Navigation for Step > 1 (Step 1 handles navigation internally within notebook page) */}
+            {/* Standard Footer Navigation for Step > 1 */}
             {step > 1 && (
               <div className="journey-create-footer">
                 <button type="button" onClick={prev}
@@ -2116,6 +2187,71 @@ export default function CreateStoryPage() {
           </aside>
         </div>
       </CreatePageShell>
+
+      {/* ── EXPLICIT ERROR DIAGNOSTICS MODAL ── */}
+      {errorModalInfo && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[999999] flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-scale-up">
+            <div className="flex items-center gap-3 text-rose-500">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-100 dark:border-rose-900/50 flex items-center justify-center shrink-0">
+                <AlertTriangle size={24} />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                  Chi Tiết Lỗi Đăng Bài
+                </h3>
+                <p className="text-xs text-rose-500 font-bold mt-0.5">
+                  {errorModalInfo.statusCode ? `Mã lỗi: HTTP ${errorModalInfo.statusCode}` : 'Phát hiện sự cố'}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-rose-50/60 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/30 rounded-2xl p-4 space-y-2 text-xs">
+              <p className="font-bold text-slate-800 dark:text-slate-200 leading-relaxed">
+                {errorModalInfo.title}
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                {errorModalInfo.message}
+              </p>
+              {errorModalInfo.details && (
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 font-mono pt-2 border-t border-rose-200/50 dark:border-rose-900/40">
+                  {errorModalInfo.details}
+                </p>
+              )}
+            </div>
+
+            <div className="bg-slate-50 dark:bg-slate-950 p-3.5 rounded-2xl text-[11px] text-slate-500 dark:text-slate-400 space-y-1.5 border border-slate-100 dark:border-slate-800">
+              <p className="font-bold text-slate-800 dark:text-slate-200">💡 Hướng dẫn khắc phục:</p>
+              <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-300">
+                {errorModalInfo.statusCode === 413 ? (
+                  <>
+                    <li className="text-rose-600 dark:text-rose-400 font-bold">Video hoặc ảnh đính kèm quá dung lượng (request entity too large).</li>
+                    <li>Vui lòng xóa video hiện tại hoặc nén bớt dung lượng tệp trước khi đính kèm.</li>
+                    <li>Khuyên dùng video có dung lượng dưới 25MB - 30MB để đăng tải nhanh chóng.</li>
+                  </>
+                ) : errorModalInfo.statusCode === 401 ? (
+                  <li>Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại tài khoản của bạn.</li>
+                ) : (
+                  <>
+                    <li>Kiểm tra lại tiêu đề và thông tin bài viết.</li>
+                    <li>Đảm bảo đã chọn ít nhất 1 vị trí địa điểm hợp lệ trên bản đồ.</li>
+                  </>
+                )}
+              </ul>
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => setErrorModalInfo(null)}
+                className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all active:scale-95"
+              >
+                Tôi Đã Hiểu & Sửa Lỗi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

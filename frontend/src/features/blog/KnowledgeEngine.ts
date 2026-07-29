@@ -116,32 +116,44 @@ export const KnowledgeEngine = {
 
     const list: KnowledgeItem[] = [];
 
-    // Process rawVietnam
-    for (const item of rawVietnam as any[]) {
+    const processItem = (item: any) => {
       const parsed = parseTitle(item.title, item.category);
+
+      // Clean PDF page header artifact "CÁC TỈNH & THÀNH PHỐ" from content text
+      let cleanContent = (item.content || '')
+        .replace(/CÁC TỈNH\s*&\s*THÀNH PHỐ/gi, '')
+        .replace(/CÁC TỈNH\s*VÀ\s*THÀNH PHỐ/gi, '')
+        .trim();
+
+      // Skip empty / junk / header-only chunks
+      if (!cleanContent || cleanContent.length < 35) {
+        return;
+      }
+
+      // Skip redundant header chunks where name equals province and content is minimal
+      if (parsed.name.toUpperCase() === parsed.province.toUpperCase() && cleanContent.length < 100) {
+        return;
+      }
+
       list.push({
         id: item.id,
         title: item.title,
-        content: item.content,
+        content: cleanContent,
         category: item.category,
         province: parsed.province,
         subCategory: parsed.subCategory,
         name: parsed.name
       });
+    };
+
+    // Process rawVietnam
+    for (const item of rawVietnam as any[]) {
+      processItem(item);
     }
 
     // Process rawCities
     for (const item of rawCities as any[]) {
-      const parsed = parseTitle(item.title, item.category);
-      list.push({
-        id: item.id,
-        title: item.title,
-        content: item.content,
-        category: item.category,
-        province: parsed.province,
-        subCategory: parsed.subCategory,
-        name: parsed.name
-      });
+      processItem(item);
     }
 
     cachedItems = list;

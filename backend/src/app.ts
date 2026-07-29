@@ -45,8 +45,8 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // ─── Health check ───
 app.get('/health', (_req: Request, res: Response) => {
@@ -604,11 +604,19 @@ app.use((_req: Request, res: Response) => {
 });
 
 // ─── Centralized Error Handling ──────────────────────────
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('[Unhandled Error]', err.stack);
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('[Unhandled Error]', err.stack || err);
+  if (err.type === 'entity.too.large' || err.status === 413 || (err.message && err.message.includes('too large'))) {
+    return res.status(413).json({
+      error: 'Tệp Media Tải Lên Quá Dung Lượng',
+      message: 'Tệp video hoặc hình ảnh bạn tải lên quá lớn (vượt quá giới hạn bộ nhớ hệ thống). Vui lòng nén bớt dung lượng tệp hoặc chọn tệp nhỏ hơn (khuyên dùng dưới 25MB).',
+      details: err.message,
+    });
+  }
   res.status(500).json({
     error: 'Internal Server Error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'An unexpected error occurred.',
+    details: err.message,
   });
 });
 

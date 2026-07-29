@@ -373,11 +373,24 @@ const MapDashboard = () => {
 
   // Advanced search & filter states
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchBoxRef = useRef<HTMLDivElement>(null);
   const [filterCategory, setFilterCategory] = useState('');
   const [filterRating, setFilterRating] = useState(0);
   const [tempCategory, setTempCategory] = useState('');
   const [tempRating, setTempRating] = useState(0);
   const [selectedPinColor, setSelectedPinColor] = useState<'red' | 'blue' | 'gold' | 'green' | 'purple'>('red');
+
+  // Click outside to close search suggestions dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // AI recommendations states
   const [aiRecs, setAiRecs] = useState<any[]>([]);
@@ -1033,6 +1046,7 @@ const MapDashboard = () => {
 
   const handleSearchSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    setShowSuggestions(false);
     if (!searchQuery.trim()) return;
 
     // Use OpenStreetMap's free Nominatim geocoding API to search globally
@@ -1097,6 +1111,7 @@ const MapDashboard = () => {
   };
 
   const handleSelectDestination = (d: any) => {
+    setShowSuggestions(false);
     setSelectedCenter([d.latitude, d.longitude]);
     const newLoc: MapLocation = {
       id: d.id,
@@ -1160,7 +1175,7 @@ const MapDashboard = () => {
       {/* COLUMN 1: Search, Filter, AI Recommendations (Left Column, span 3) */}
       <div className="lg:col-span-3 flex flex-col gap-4 h-[700px] overflow-y-auto pr-1">
         {/* 1. Search Box with Autocomplete */}
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-2 relative rounded-xl shadow-sm">
+        <div ref={searchBoxRef} className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 space-y-2 relative rounded-xl shadow-sm">
           <h3 className="font-ui text-xs font-black uppercase tracking-widest text-[var(--gold)] flex items-center gap-1.5">
             <Search size={12} /> {vi ? 'Tìm địa điểm' : 'Search Place'}
           </h3>
@@ -1169,7 +1184,8 @@ const MapDashboard = () => {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
+                onFocus={() => setShowSuggestions(true)}
                 placeholder={vi ? 'Nhập tên địa điểm...' : 'Search place...'}
                 className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-lg px-3 py-2 pl-8 pr-7 text-xs text-[var(--text-primary)] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -1177,7 +1193,7 @@ const MapDashboard = () => {
               {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); setShowSuggestions(false); }}
                   className="absolute right-2 top-2.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] border-none bg-transparent cursor-pointer"
                 >
                   ✕
@@ -1219,14 +1235,14 @@ const MapDashboard = () => {
               })}
             </div>
           </div>
-          {searchQuery && suggestionsToDisplay.length > 0 && (
+          {showSuggestions && searchQuery && suggestionsToDisplay.length > 0 && (
             <div className="absolute left-0 right-0 top-full bg-[var(--bg-elevated)] border border-[var(--border-normal)] rounded-lg mt-1 max-h-40 overflow-y-auto z-30 shadow-2xl p-1">
               {suggestionsToDisplay
                 .slice(0, 5)
                 .map(d => (
                   <div
                     key={d.id}
-                    onClick={() => handleSelectDestination(d)}
+                    onMouseDown={e => { e.preventDefault(); handleSelectDestination(d); }}
                     className="px-3 py-1.5 hover:bg-[var(--bg-overlay)] text-[10px] text-[var(--text-primary)] rounded cursor-pointer truncate"
                   >
                     {d.id.startsWith('osm-place-') ? '🌐' : '📍'} {d.name} <span className="text-[8px] text-slate-400">({d.category})</span>
@@ -1868,13 +1884,6 @@ const MapDashboard = () => {
                 </p>
               </div>
             </div>
-
-            <button
-              onClick={() => navigate('/feed')}
-              className="bg-[#0f8b5f] hover:bg-[#0b6e4b] text-white font-bold text-xs px-5.5 py-2.5 rounded-full shadow-md shadow-emerald-700/20 transition-all cursor-pointer border-none shrink-0"
-            >
-              <span>{vi ? 'Xem chi tiết hành trình' : 'View Itinerary Details'}</span>
-            </button>
           </div>
 
           {/* Connected Timeline Nodes with Braided Wavy Dashed Trail (Nature Minimal style) */}

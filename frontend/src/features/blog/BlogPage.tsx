@@ -14,6 +14,7 @@ import { buildHandbook } from './exploreHandbook';
 import { ModernIconPod } from '../../config/modernIcons';
 import blogVideo from '../../../../video.mp4';
 import { KineticText } from '../../components/ui/kinetic-text';
+import { toast } from '../../contexts/ToastContext';
 
 const TRENDING_TAGS = ['sapa', 'hagiang', 'danang', 'ẩm thực', 'motorbiking', 'thiên nhiên', 'bãi biển', 'văn hóa'];
 const EXPLORE_LIST_PREVIEW = 3;
@@ -69,12 +70,10 @@ const BlogArticleCard = ({
         </div>
       </div>
       <div className="blog-article__body">
-        <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
-          <Clock size={12} />
-          {post.readTime} phút đọc
-          <span className="text-slate-300">|</span>
-          <MapPin size={12} className="text-teal-600" />
-          <span className="normal-case tracking-normal text-slate-600">{post.province}</span>
+        <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap overflow-hidden">
+          <span className="inline-flex items-center gap-1 shrink-0"><Clock size={12} className="shrink-0" /> {String(post.readTime || '').includes('phút') ? String(post.readTime) : `${post.readTime} phút đọc`}</span>
+          <span className="text-slate-300 shrink-0">|</span>
+          <span className="inline-flex items-center gap-1 truncate"><MapPin size={12} className="text-teal-600 shrink-0" /> <span className="normal-case tracking-normal text-slate-600 truncate">{post.province}</span></span>
         </div>
 
         <h2 className="blog-article__title">{post.title}</h2>
@@ -322,8 +321,14 @@ export default function BlogPage() {
   };
 
   const handleUseMyLocation = () => {
-    if (!navigator.geolocation) return;
     setLocating(true);
+    if (!navigator.geolocation) {
+      patchFilters({ userAddress: 'TP. Hồ Chí Minh', userLat: 10.7769, userLng: 106.7009 });
+      toast.info('Trình duyệt không hỗ trợ định vị. Đã tự động chọn vị trí TP. Hồ Chí Minh.');
+      setLocating(false);
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       async pos => {
         const { latitude, longitude } = pos.coords;
@@ -336,14 +341,22 @@ export default function BlogPage() {
               userLat: results[0].lat,
               userLng: results[0].lng,
             });
+          } else {
+            patchFilters({ userAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
           }
         } catch {
-          /* keep coords */
+          patchFilters({ userAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
+        } finally {
+          setLocating(false);
         }
+      },
+      () => {
+        // Fallback gracefully on GPS denial or error
+        patchFilters({ userAddress: 'TP. Hồ Chí Minh', userLat: 10.7769, userLng: 106.7009 });
+        toast.info('Đã bật vị trí TP. Hồ Chí Minh (Bật GPS trình duyệt để định vị chính xác).');
         setLocating(false);
       },
-      () => setLocating(false),
-      { enableHighAccuracy: true, timeout: 12000 },
+      { enableHighAccuracy: true, timeout: 6000 },
     );
   };
 

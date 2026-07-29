@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
   X, MapPin, Clock, BookOpen, Heart, MessageCircle, Bookmark, Share2,
@@ -323,7 +324,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
   const hasItinerary = (payload?.days?.length ?? 0) > 0;
   const hasTips = (payload?.tips?.filter(t => t.content?.trim()).length ?? 0) > 0;
 
-  return (
+  return createPortal(
     <div
       className="post-detail-backdrop"
       role="presentation"
@@ -549,7 +550,8 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           {toastMessage}
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 

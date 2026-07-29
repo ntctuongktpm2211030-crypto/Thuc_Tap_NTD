@@ -15,7 +15,7 @@ export interface PlannerParams {
 }
 
 export interface ActivitySchema {
-  session: 'Sáng' | 'Trưa' | 'Chiều' | 'Tối'; // Choose from: "Sáng", "Trưa", "Chiều", "Tối"
+  session: 'Sáng' | 'Ăn sáng' | 'Trưa' | 'Chiều' | 'Tối'; // Choose from: "Sáng", "Ăn sáng", "Trưa", "Chiều", "Tối"
   timeSlot: string; // e.g. "09:00 - 11:00"
   activityName: string;
   locationName: string;
@@ -25,6 +25,21 @@ export interface ActivitySchema {
   longitude: number;
   notes: string;
   address?: string;
+  thoiGianThamQuan?: string;
+  goiYTraiNghiem?: string;
+  monDacSan?: string;
+  thoiGianNghiNgoi?: string;
+  thoiGianLuuLai?: string;
+  diaDiemDaoChoi?: string;
+  nghiDemODau?: string;
+  anToi?: string;
+  choDem?: string;
+  cafe?: string;
+  hoatDongGiaiTri?: string;
+  monAn?: string;
+  quanGoiY?: string;
+  anTrua?: string;
+  [key: string]: any;
 }
 
 export interface TripDaySchema {
@@ -49,7 +64,7 @@ export interface AIRegeneratePartParams {
   travelStyle: string;
   
   targetDayIndex: number;
-  targetSession?: 'Sáng' | 'Trưa' | 'Chiều' | 'Tối';
+  targetSession?: 'Sáng' | 'Ăn sáng' | 'Trưa' | 'Chiều' | 'Tối';
   currentItinerary: AIItineraryResponse;
   excludePlaces?: string[];
 }
@@ -143,7 +158,7 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
       // If we have at least 5 results in the 20km area, restrict to them. Otherwise, take the closest ones.
       if (totalCount >= 5) {
         const sortByRating = (places: RealPlace[], limit: number) => {
-          return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+          return [...places].sort((a, b) => ((b as any).averageRating || 0) - ((a as any).averageRating || 0)).slice(0, limit);
         };
         attractions = sortByRating(fAttractions, 8);
         restaurants = sortByRating(fRestaurants, 8);
@@ -169,7 +184,7 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
     } else {
       // Sort by rating and slice to prevent large payload (HTTP 413)
       const sortByRating = (places: RealPlace[], limit: number) => {
-        return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+        return [...places].sort((a, b) => ((b as any).averageRating || 0) - ((a as any).averageRating || 0)).slice(0, limit);
       };
       attractions = sortByRating(attractions, 8);
       restaurants = sortByRating(restaurants, 8);
@@ -384,7 +399,7 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
     };
 
     const sortByRating = (places: RealPlace[], limit: number) => {
-      return [...places].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0)).slice(0, limit);
+      return [...places].sort((a, b) => ((b as any).averageRating || 0) - ((a as any).averageRating || 0)).slice(0, limit);
     };
 
     attractions = sortByRating(attractions.filter(filterFn), 8);
@@ -695,7 +710,28 @@ async function refineItineraryCoordinates(itinerary: AIItineraryResponse, destin
 
         // 4. Fallback to destination center coordinates
         if (!refined && (!act.latitude || !act.longitude || act.latitude === 0)) {
-          if (  const EXPANDED_ATTRACTIONS = [
+          if (destCoords) {
+            act.latitude = destCoords.lat;
+            act.longitude = destCoords.lng;
+          }
+        }
+      }
+    }
+  }
+
+  return itinerary;
+}
+
+/**
+ * Fallback generator when AI API key is not configured or request fails.
+ */
+export async function generateFallbackMock(params: PlannerParams): Promise<AIItineraryResponse> {
+  const isVnd = (params.currency || 'USD') === 'VND';
+  const totalDays = params.durationDays || 1;
+  const targetBudget = params.totalBudget || (isVnd ? 5000000 : 250);
+  const scaleFactor = Math.min(1.5, Math.max(0.5, targetBudget / ((isVnd ? 2000000 : 100) * totalDays)));
+
+  const EXPANDED_ATTRACTIONS = [
     { name: 'Cột cờ Lũng Cú', category: 'attraction', description: 'Cột cờ thiêng liêng nơi địa đầu Tổ quốc với tầm nhìn núi rừng biên giới tuyệt đẹp.', latitude: 23.3603, longitude: 105.3161, costEstimate: 20000 },
     { name: 'Dốc Thẩm Mã', category: 'attraction', description: 'Cung đường đèo uốn lượn huyền thoại, điểm dừng chân chụp ảnh nổi tiếng.', latitude: 23.2384, longitude: 105.2125, costEstimate: 0 },
     { name: 'Dinh thự họ Vương', category: 'attraction', description: 'Dinh Vua Mèo kiến trúc cổ kính rêu phong giao thoa H\'Mông và Trung Hoa.', latitude: 23.2618, longitude: 105.2536, costEstimate: 20000 },
@@ -733,6 +769,8 @@ async function refineItineraryCoordinates(itinerary: AIItineraryResponse, destin
     { name: 'Quán cơm Hoàng Su Phì', category: 'restaurant', description: 'Cơm bình dân dẻo thơm kèm cá suối chiên giòn.', latitude: 22.7520, longitude: 104.6840, costEstimate: 90000 },
     { name: 'Cà phê Cực Bắc Lũng Cú', category: 'restaurant', description: 'Quán cà phê H\'Mông không gian yên bình độc đáo.', latitude: 23.3600, longitude: 105.3155, costEstimate: 45000 }
   ];
+
+  const curated = getCuratedProvince(params.destination);
 
   if (curated) {
     const days: TripDaySchema[] = [];

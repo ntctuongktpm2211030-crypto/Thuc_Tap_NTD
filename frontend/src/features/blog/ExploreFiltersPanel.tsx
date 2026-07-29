@@ -130,7 +130,18 @@ export default function ExploreFiltersPanel({
               <input
                 type="text"
                 value={filters.userAddress}
-                onChange={e => onChange({ userAddress: e.target.value })}
+                onChange={e => {
+                  const val = e.target.value;
+                  if (!val.trim()) {
+                    onChange({ userAddress: '', userLat: null, userLng: null });
+                  } else {
+                    onChange({
+                      userAddress: val,
+                      userLat: filters.userLat ?? 10.7769,
+                      userLng: filters.userLng ?? 106.7009,
+                    });
+                  }
+                }}
                 placeholder="VD: Quận 1, TP.HCM..."
                 className="flex-1 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
               />
@@ -138,27 +149,43 @@ export default function ExploreFiltersPanel({
                 type="button"
                 onClick={onUseMyLocation}
                 disabled={locating}
-                className="flex-shrink-0 px-2.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-amber-500 hover:border-amber-400/50 transition-colors disabled:opacity-50 cursor-pointer"
-                title="Lấy vị trí GPS"
+                className="flex-shrink-0 px-2.5 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white transition-all disabled:opacity-50 cursor-pointer shadow-sm active:scale-95 flex items-center justify-center gap-1 font-bold text-xs"
+                title="Lấy vị trí GPS của bạn"
               >
-                {locating ? <Loader2 size={16} className="animate-spin" /> : <LocateFixed size={16} />}
+                {locating ? <Loader2 size={16} className="animate-spin text-blue-600 dark:text-blue-400" /> : <LocateFixed size={16} />}
               </button>
             </div>
             {filters.userLat != null && (
-              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <Navigation size={10} /> Đã xác định vị trí — lọc theo khoảng cách được bật
+              <p className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-semibold">
+                <Navigation size={10} /> Đã xác định vị trí ({filters.userAddress || 'TP. Hồ Chí Minh'}) — Lọc theo khoảng cách được bật!
               </p>
             )}
           </div>
 
           {/* Khoảng cách */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Khoảng cách tối đa</label>
+            <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+              <span>Khoảng cách tối đa</span>
+              {filters.maxDistanceKm && (
+                <span className="text-[10px] text-blue-600 dark:text-blue-400 font-extrabold">{filters.maxDistanceKm} km</span>
+              )}
+            </label>
             <select
               value={filters.maxDistanceKm ?? ''}
-              onChange={e => onChange({ maxDistanceKm: e.target.value ? Number(e.target.value) : null })}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 focus:border-amber-400 focus:outline-none cursor-pointer"
-              disabled={filters.userLat == null}
+              onChange={e => {
+                const dist = e.target.value ? Number(e.target.value) : null;
+                if (dist != null && filters.userLat == null) {
+                  onChange({
+                    maxDistanceKm: dist,
+                    userLat: 10.7769,
+                    userLng: 106.7009,
+                    userAddress: filters.userAddress || 'TP. Hồ Chí Minh',
+                  });
+                } else {
+                  onChange({ maxDistanceKm: dist });
+                }
+              }}
+              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 focus:border-blue-500 focus:outline-none cursor-pointer transition-all font-medium"
             >
               <option value="">Không giới hạn</option>
               <option value="50">Trong 50 km</option>

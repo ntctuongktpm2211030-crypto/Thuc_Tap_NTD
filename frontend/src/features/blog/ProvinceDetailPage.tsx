@@ -2,12 +2,12 @@ import { useMemo, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   MapPin, Compass, Sparkles, Loader2, ArrowLeft,
-  AlertCircle
+  AlertCircle, Send, Bot, MessageSquare, Zap
 } from 'lucide-react';
 import { KnowledgeEngine, normalizeProvinceKey, type KnowledgeItem } from './KnowledgeEngine';
 import BookPageReader from './BookPageReader';
 import { PROVINCE_LANDMARK_SLIDESHOW, DEFAULT_SLIDESHOW_IMAGES } from './ProvinceLandmarkData';
-import { LANDMARK_IMAGES_MAPPING } from './LandmarkData';
+import { LANDMARK_IMAGES_MAPPING, getCategoryFallbackImage } from './LandmarkData';
 
 function normalizeParagraphs(text: string): string {
   if (!text) return '';
@@ -56,16 +56,27 @@ function renderFormattedContent(text: string) {
   );
 }
 
-// LandmarkCard component with exact mapped images + dynamic Wikipedia lookup fallback
+// LandmarkCard component with exact mapped images + random 1-of-3 province photo fallback + Wikipedia lookup
 function LandmarkCard({
   item,
   onClick,
+  provincePhotos,
   fallbackBanner
 }: {
   item: KnowledgeItem;
-  onClick: () => void;
+  onClick: (resolvedImage: string) => void;
+  provincePhotos?: string[];
   fallbackBanner?: string;
 }) {
+  // Randomly pick 1 out of the 3 province photos for this landmark
+  const [randomProvinceImage] = useState<string>(() => {
+    if (provincePhotos && provincePhotos.length > 0) {
+      const hash = item.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      return provincePhotos[hash % provincePhotos.length];
+    }
+    return fallbackBanner || '';
+  });
+
   const [imageUrl, setImageUrl] = useState<string>(() => {
     const upperName = item.name.toUpperCase();
     if (LANDMARK_IMAGES_MAPPING[upperName]) {
@@ -75,15 +86,26 @@ function LandmarkCard({
     if (matchedKey) {
       return LANDMARK_IMAGES_MAPPING[matchedKey];
     }
-    return '';
+    return randomProvinceImage || '';
   });
 
+  const categoryFallback = useMemo(() => {
+    return randomProvinceImage || getCategoryFallbackImage(item);
+  }, [item, randomProvinceImage]);
+
   useEffect(() => {
-    if (imageUrl) return; // Already resolved via LANDMARK_IMAGES_MAPPING
+    if (imageUrl) return; // Already resolved via mapping or province photo
 
     let isMounted = true;
-    const cleanQuery = item.name.replace(/^Lễ hội\s+/i, '').replace(/^Chùa\s+/i, '').replace(/^Ao\s+/i, '');
-    fetch(`https://vi.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.name)}|${encodeURIComponent(cleanQuery)}&prop=pageimages&format=json&pithumbsize=600&origin=*`)
+    const cleanQuery = item.name
+      .replace(/^Lễ hội\s+/i, '')
+      .replace(/^Chùa\s+/i, '')
+      .replace(/^Ao\s+/i, '')
+      .replace(/^Đền\s+/i, '')
+      .replace(/^Thành cổ\s+/i, 'Thành nhà ')
+      .replace(/^Cây đa\s+/i, '');
+
+    fetch(`https://vi.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.name)}|${encodeURIComponent(cleanQuery)}|${encodeURIComponent(item.name + ' (' + item.province + ')')}&prop=pageimages&format=json&pithumbsize=600&origin=*`)
       .then(r => r.json())
       .then(data => {
         if (!isMounted) return;
@@ -92,33 +114,32 @@ function LandmarkCard({
           const firstPageWithImg = Object.values(pages).find((p: any) => p.thumbnail?.source) as any;
           if (firstPageWithImg?.thumbnail?.source) {
             setImageUrl(firstPageWithImg.thumbnail.source);
-          } else {
-            setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
+            return;
           }
-        } else {
-          setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
         }
+        setImageUrl(categoryFallback);
       })
       .catch(() => {
-        if (isMounted) setImageUrl(fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800');
+        if (isMounted) setImageUrl(categoryFallback);
       });
 
     return () => { isMounted = false; };
-  }, [item.name, fallbackBanner, imageUrl]);
+  }, [item.name, item.province, categoryFallback, imageUrl]);
 
   const normalizedContent = normalizeParagraphs(item.content);
   const previewText = normalizedContent.length > 130 ? normalizedContent.slice(0, 130).trim() + '...' : normalizedContent;
+  const activeImage = imageUrl || categoryFallback;
 
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick(activeImage)}
       className="bg-white dark:bg-slate-900 rounded-[24px] border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
     >
       <div>
         {/* Image Box */}
         <div className="relative w-full h-44 rounded-[18px] overflow-hidden mb-4 bg-slate-100 dark:bg-slate-800">
           <img
-            src={imageUrl || fallbackBanner || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800'}
+            src={activeImage}
             alt={item.name}
             referrerPolicy="no-referrer"
             onError={(e) => {
@@ -164,8 +185,8 @@ export default function ProvinceDetailPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
 
-  // Active modal item state for popup details
-  const [activeModalItem, setActiveModalItem] = useState<KnowledgeItem | null>(null);
+  // Active modal item state for popup details (stores item + resolved outer card image)
+  const [activeModalItem, setActiveModalItem] = useState<{ item: KnowledgeItem; resolvedImage: string } | null>(null);
 
   // Active modal item state removed since all contents are displayed fully on cards
 
@@ -289,17 +310,22 @@ export default function ProvinceDetailPage() {
   }, [bannerPhotos]);
 
   // Handle AI consult strictly scoped to local repository context
-  const handleAiConsult = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!aiQuestion.trim()) return;
+  const handleAiConsult = async (e?: React.FormEvent, overrideQuery?: string) => {
+    if (e) e.preventDefault();
+    const queryStr = overrideQuery || aiQuestion;
+    if (!queryStr.trim()) return;
+
+    if (overrideQuery) {
+      setAiQuestion(overrideQuery);
+    }
 
     setAiLoading(true);
     setAiResponse('');
     try {
       // Mock an AI model response running strictly on the generated context
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800));
       
-      const query = aiQuestion.toLowerCase().trim();
+      const query = queryStr.toLowerCase().trim();
       let matchedItems: KnowledgeItem[] = [];
       let matchSource = '';
 
@@ -460,7 +486,7 @@ export default function ProvinceDetailPage() {
         {/* Light Transparent Gradient for Legibility - Zero Blur, Crisp Photos */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10 pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto space-y-4 relative z-20 w-full">
+        <div className="max-w-[1750px] mx-auto px-4 sm:px-6 lg:px-8 space-y-4 relative z-20 w-full">
           {/* Blue Badge */}
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1859B4] text-white text-[11px] font-bold uppercase tracking-wider shadow-md">
             <MapPin size={12} className="text-white" />
@@ -502,13 +528,13 @@ export default function ProvinceDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-12">
+      <div className="max-w-[1750px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         
-        {/* ── TOP SECTION: OVERVIEW (8 COLUMNS) & AI ASSISTANT (4 COLUMNS) ── */}
+        {/* ── TOP SECTION: OVERVIEW (7 COLUMNS / ~60%) & AI ASSISTANT (5 COLUMNS / ~40%) - UNIFIED 580PX FIXED HEIGHT ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Overview Reading Section */}
-          <div className="lg:col-span-8">
+          {/* Overview Reading Section (Book Card - Unified 580px Fixed Height matching AI Card) */}
+          <div className="lg:col-span-7 h-[580px] flex flex-col justify-between bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl p-5 sm:p-6 overflow-hidden">
             {overviewItem && overviewPages.length > 0 && (
               <BookPageReader 
                 title="Tổng Quan Địa Lý & Lịch Sử"
@@ -519,67 +545,120 @@ export default function ProvinceDetailPage() {
             )}
           </div>
 
-          {/* AI Assistant Sidebar */}
-          <aside className="lg:col-span-4 lg:sticky lg:top-24 self-start">
-            <div>
-              <div className="bg-[#0A2647] text-white rounded-[24px] shadow-2xl p-6 flex flex-col relative overflow-hidden group">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
-                      <Sparkles size={16} />
+          {/* AI Assistant Sidebar (40% Width - Unified 580px Fixed Height & 200px Scrollable Response Viewport) */}
+          <aside className="lg:col-span-5 h-[580px]">
+            <div className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl p-5 sm:p-6 flex flex-col justify-between h-[580px] overflow-hidden transition-all">
+              <div className="flex flex-col gap-3 shrink-0">
+                {/* Header Row */}
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-900/50">
+                      <Sparkles size={18} />
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-black uppercase tracking-wide text-white">Trợ Lý Số Địa Phương</h4>
-                      <p className="text-[11px] text-white/70">Hỏi về {formattedName} ngay tại đây!</p>
+                      <h4 className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">
+                        Trợ Lý Số Địa Phương
+                      </h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 mt-0.5">
+                        <Bot size={12} className="text-blue-500 shrink-0" />
+                        Hỏi về {formattedName} ngay tại đây!
+                      </p>
                     </div>
                   </div>
-                  <div className="opacity-60 group-hover:opacity-100 transition-opacity">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+
+                  <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center shrink-0">
+                    <Send size={14} className="-rotate-12" />
                   </div>
                 </div>
 
-                <p className="text-[12px] text-white/80 leading-relaxed mb-6 mt-2">
-                  Trợ lý AI này được cung cấp độc quyền từ bộ tri thức chính thống của tỉnh {formattedName}. Hãy hỏi các thông tin cụ thể để nhận gợi ý phù hợp và chính xác.
-                </p>
+                {/* Sub-text Description Banner */}
+                <div className="bg-slate-50 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2.5">
+                  <MessageSquare size={15} className="text-blue-500 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800 dark:text-slate-200">
+                      Tri thức chính thống tỉnh <span className="font-bold text-blue-600 dark:text-blue-400">{formattedName}</span>.
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Nhập câu hỏi chi tiết bên dưới để nhận thông tin giải đáp từ trợ lý AI.
+                    </p>
+                  </div>
+                </div>
 
-                <div className="bg-[#05162E] rounded-[20px] p-4 relative mb-4">
-                  <form onSubmit={handleAiConsult} className="flex flex-col">
+                {/* Quick Prompt Suggestion Chips */}
+                <div className="space-y-1.5">
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                    <Zap size={11} className="text-amber-500" /> Gợi ý nhanh:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      `Thắng cảnh ở ${formattedName}`,
+                      `Đặc sản ${formattedName}`,
+                      `Lễ hội truyền thống`
+                    ].map((chipText, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => handleAiConsult(undefined, chipText)}
+                        className="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200/60 dark:border-slate-700/60 transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+                      >
+                        💡 {chipText}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Interactive Input Form */}
+                <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-2xl p-2.5 relative transition-all shadow-inner group/input">
+                  <form onSubmit={(e) => handleAiConsult(e)} className="flex flex-col">
                     <textarea
                       value={aiQuestion}
                       onChange={e => setAiQuestion(e.target.value)}
                       placeholder={`Hỏi về danh thắng hay lịch sử của ${formattedName}...`}
-                      className="w-full text-[13px] bg-transparent border-none text-white placeholder-white/50 focus:outline-none resize-none h-24"
+                      className="w-full text-xs sm:text-sm bg-transparent border-none text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none resize-none h-14 leading-relaxed scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700"
                     />
                     
-                    {/* Decorative 3D Robot Image */}
-                    <div className="absolute right-0 bottom-0 pointer-events-none w-24 h-24 translate-x-4 translate-y-4">
+                    {/* Clean Floating Avatar Badge */}
+                    <div className="flex items-center justify-end gap-2 pt-1 border-t border-slate-200/60 dark:border-slate-800/80">
+                      <span className="text-[10px] font-medium text-slate-400">AI Assistant v2.0</span>
                       <img 
                         src="https://cdn-icons-png.flaticon.com/512/8649/8649605.png" 
-                        alt="3D Robot" 
-                        className="w-full h-full object-contain drop-shadow-2xl opacity-90"
+                        alt="AI Bot" 
+                        className="w-4 h-4 object-contain opacity-70 group-hover/input:scale-110 transition-transform"
                       />
                     </div>
                   </form>
                 </div>
 
+                {/* Action Button (Tra Cứu Nhanh) */}
                 <button
-                  onClick={handleAiConsult}
+                  onClick={(e) => handleAiConsult(e)}
                   disabled={aiLoading || !aiQuestion.trim()}
-                  className="w-full py-3 bg-white text-[#0A2647] text-[13px] font-bold uppercase tracking-wide rounded-xl shadow-lg cursor-pointer transition-all hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md shadow-blue-500/20 cursor-pointer transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.99] shrink-0"
                 >
-                  {aiLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowLeft size={16} className="rotate-180" />}
-                  Tra Cứu Nhanh
+                  {aiLoading ? (
+                    <Loader2 size={16} className="animate-spin text-white" />
+                  ) : (
+                    <>
+                      <span>Tra Cứu Nhanh</span>
+                      <Send size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                    </>
+                  )}
                 </button>
-
-                {aiResponse && (
-                  <div className="mt-4 space-y-2 border-t border-white/10 pt-4 animate-fade-in">
-                    <span className="text-[10px] font-black uppercase text-blue-300 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/25">Phản hồi của trợ lý</span>
-                    <p className="text-[12px] text-slate-200 whitespace-pre-wrap leading-relaxed bg-black/20 p-3 rounded-xl border border-white/5 max-h-[150px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20">
-                      {aiResponse}
-                    </p>
-                  </div>
-                )}
               </div>
+
+              {/* AI Response Display Area - Internal Scrollable View (200px Viewport) */}
+              {aiResponse && (
+                <div className="mt-2 space-y-1.5 border-t border-slate-100 dark:border-slate-800 pt-2 animate-fade-in flex-1 min-h-0 flex flex-col justify-end">
+                  <div className="flex items-center justify-between shrink-0">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-900/50">
+                      <Sparkles size={11} /> Phản hồi từ Trợ lý AI
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-inner max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500">
+                    {aiResponse}
+                  </div>
+                </div>
+              )}
             </div>
           </aside>
         </div>
@@ -648,8 +727,9 @@ export default function ProvinceDetailPage() {
                   <LandmarkCard
                     key={idx}
                     item={item}
+                    provincePhotos={bannerPhotos}
                     fallbackBanner={bannerPhotos[idx % bannerPhotos.length]}
-                    onClick={() => setActiveModalItem(item)}
+                    onClick={(imgUrl) => setActiveModalItem({ item, resolvedImage: imgUrl })}
                   />
                 ))}
               </div>
@@ -672,12 +752,13 @@ export default function ProvinceDetailPage() {
           </div>
         )}
       </div>
+
       {activeModalItem && (
         <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center z-[99999] p-4 sm:p-6 pt-20 pb-8 animate-fade-in animate-duration-200">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative space-y-6">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative space-y-4">
             <button
               onClick={() => setActiveModalItem(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all text-lg font-bold"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all text-lg font-bold z-10"
             >
               &times;
             </button>
@@ -685,15 +766,29 @@ export default function ProvinceDetailPage() {
             <div className="space-y-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 text-[10px] font-extrabold uppercase tracking-wider">
                 <Compass size={12} className="text-teal-500" />
-                {activeModalItem.subCategory}
+                {activeModalItem.item.subCategory}
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-955 dark:text-white tracking-tight leading-snug">
-                {activeModalItem.name}
+              <h3 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight leading-snug">
+                {activeModalItem.item.name}
               </h3>
             </div>
 
+            {/* Display EXACT Resolved Image from Outer Card */}
+            <div className="relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-md my-4 shrink-0">
+              <img
+                src={activeModalItem.resolvedImage}
+                alt={activeModalItem.item.name}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = bannerPhotos[0] || 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800';
+                }}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent pointer-events-none" />
+            </div>
+
             <div className="border-t border-slate-100 dark:border-slate-800 pt-4 w-full">
-              {renderFormattedContent(activeModalItem.content)}
+              {renderFormattedContent(activeModalItem.item.content)}
             </div>
           </div>
         </div>
