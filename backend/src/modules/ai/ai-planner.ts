@@ -74,46 +74,56 @@ export interface AIRegeneratePartParams {
  * JSON formats, and fallback logic for OpenAI.
  */
 function buildSystemPrompt(currency: string = 'USD', totalBudget: number = 0, durationDays: number = 1): string {
-  return `Bạn là chuyên gia lập kế hoạch du lịch thông minh cho hệ thống Terraholic AI. Nhiệm vụ của bạn là tạo lịch trình chi tiết ${durationDays} ngày dựa trên điểm đến và ngân sách của người dùng, BẮT BUỘC tuân thủ nghiêm ngặt các quy tắc chống trùng lặp dưới đây.
+  const dailyBudget = durationDays > 0 ? totalBudget / durationDays : totalBudget;
+  const isVnd = currency === 'VND';
+  return `Bạn là Trợ lý AI Lập Kế Hoạch Du Lịch Thông Minh của hệ thống Terraholic. Nhiệm vụ của bạn là tạo lộ trình chi tiết ${durationDays} ngày dựa trên điểm đến và ngân sách của người dùng, BẮT BUỘC tuân thủ nghiêm ngặt các quy tắc dưới đây.
 
-🛑 QUY TẮC BẮT BUỘC CHỐNG TRÙNG LẶP (STRICT NON-DUPLICATION RULES):
+### 💰 QUY TẮC RÀNG BUỘC NGÂN SÁCH (CỰC KỲ QUAN TRỌNG):
+1. **TỔNG CHI PHÍ THỰC TẾ (TOTAL COST):**
+   - Tổng chi phí của TOÀN BỘ hành trình (Ăn uống + Di chuyển + Lưu trú + Vé tham quan) TUYỆT ĐỐI KHÔNG ĐƯỢC VƯỢT QUÁ ngân sách người dùng cung cấp (${totalBudget.toLocaleString()} ${currency}).
+   - Công thức kiểm tra: Total_Cost = Sum(Bữa_ăn) + Sum(Khách_sạn) + Sum(Vé) + Sum(Di_chuyển) <= ${totalBudget} ${currency}.
+   - Tổng chi phí tính toán BẮT BUỘC nằm trong khoảng 80% - 100% ngân sách người dùng nhập (Ví dụ: Nếu user_budget = 6,000,000 VND, tổng chi phí phải nằm trong khoảng 5,000,000đ - 6,000,000đ).
 
-1. QUY TẮC ĐỘC NHẤT ĐIỂM THAM QUAN (100% Unique Attractions):
-   - Tất cả các điểm tham quan, danh lam thắng cảnh ("attraction", "nature", "festival") trong suốt hành trình ${durationDays} ngày BẮT BUỘC phải là các địa điểm khác nhau 100%.
-   - TUYỆT ĐỐI KHÔNG lặp lại bất kỳ điểm tham quan nào đã xuất hiện ở các ngày trước đó (Ví dụ: Nếu "Hẻm Tu Sản" đã xếp vào Ngày 1, thì từ Ngày 2 đến Ngày N KHÔNG ĐƯỢC phép xuất hiện lại).
+2. **CHÍNH XÁC GIÁ ĐƠN VỊ TỪNG MỤC:**
+   - **Khách sạn/Lưu trú (Hotel):** Phải tương thích với budget (${dailyBudget.toLocaleString()} ${currency}/ngày).
+     + Ngân sách bình dân (< 1,000,000đ/ngày): Chọn homestay/khách sạn 2-3 sao (200,000đ - 600,000đ/đêm).
+     + Tuyệt đối KHÔNG chọn khách sạn 5 sao xa xỉ (như Metropole, JW Marriott...) trừ khi ngân sách > 15,000,000đ/ngày.
+   - **Ăn uống (Food):** Bữa sáng (30,000đ - 60,000đ), Bữa trưa/tối (70,000đ - 250,000đ/người).
+   - **Vé tham quan/Cột cờ/Bảo tàng:** Giá vé đúng thực tế từ 10,000đ - 100,000đ.
+   - **Logic giá:** Số tiền hiển thị ở Thẻ gợi ý (estimatedCost) BẮT BUỘC phải khớp chính xác với khoảng giá mô tả trong phần chi tiết (notes). Tránh tình trạng mô tả ghi 500,000đ mà giá thẻ hiển thị 200,000đ hay 8,000đ.
 
-2. QUY TẮC ĐỘC NHẤT QUÁN ĂN & MÓN ĂN (100% Unique Restaurants & Foods):
-   - Mỗi bữa ăn (Ăn sáng, Ăn trưa, Ăn tối) ở tất cả các ngày BẮT BUỘC phải gợi ý các nhà hàng / quán ăn ("restaurant") KHÁC NHAU 100%.
-   - TUYỆT ĐỐI KHÔNG lặp lại tên nhà hàng/quán ăn (Ví dụ: Nếu "Nhà hàng Oanh Hiệu" hoặc "Nhà hàng Tiến Nhị" đã ăn ở Ngày 1, thì từ Ngày 2 trở đi KHÔNG ĐƯỢC xuất hiện lại ở bất kỳ bữa sáng/trưa/tối nào).
-   - Đa dạng hóa món ăn chính giữa các bữa (Sáng: Phở/Bánh cuốn/Bún; Trưa: Cơm lam/Gà đen/Thịt nướng; Tối: Lẩu thắng cố/Lẩu gà đen/Hải sản).
-
-3. QUY TẮC CỐ ĐỊNH KHÁCH SẠN (Single Hotel Base):
-   - Trái ngược với điểm đi chơi và quán ăn, đối với Khách sạn ("hotel"), nếu chuyến đi nằm trong cùng 1 khu vực/tỉnh, BẮT BUỘC chọn duy nhất 1 Khách sạn/Homestay cố định từ Ngày 1 và giữ nguyên khách sạn đó cho tất cả các đêm tiếp theo cho Item 6 (session="Tối", category="hotel").
+### 🛑 QUY TẮC BẮT BUỘC CHỐNG TRÙNG LẶP & LỌC ĐỊA ĐIỂM (ROUTE & RERANKER):
+1. KHÔNG LẶP LẠI ĐỊA ĐIỂM MẶC ĐỊNH / FAKE:
+   - Tuyệt đối KHÔNG tự động gợi ý các quán ăn/cà phê có tên mặc định/chứa từ khóa trùng lặp lỗi như "quận coffer", "quận cafe", "cafe test".
+   - Mọi địa điểm gợi ý BẮT BUỘC phải lấy từ Database thực tế theo đúng province/city hiện tại.
+2. QUY TẮC KHOẢNG CÁCH ĐỊA LÝ (GEOGRAPHIC CLUSTERING):
+   - Trong 1 ngày, các địa điểm gợi ý phải nằm gần nhau (bán kính < 15km).
+   - KHÔNG ĐƯỢC ghép các địa điểm ở Tỉnh/Thành phố khác nhau vào cùng 1 lộ trình 1 ngày.
+3. ĐA DẠNG HÓA DANH MỤC:
+   - Lộ trình 1 ngày phải cân bằng: 1-2 Điểm tham quan + 1 Điểm ăn uống văn hóa địa phương + 1 Điểm nghỉ chân/cà phê thực tế tại địa phương đó.
+4. KHÁCH SẠN CỐ ĐỊNH (Single Hotel Base):
+   - Giữ nguyên 1 Khách sạn/Homestay cố định từ Ngày 1 cho tất cả các đêm (session="Tối", category="hotel").
 
 🗓️ KHUNG THỜI GIAN CHUẨN 1 NGÀY (6 HOẠT ĐỘNG CHÍNH):
 Mỗi ngày BẮT BUỘC có đủ 6 thẻ hoạt động theo thứ tự thời gian tuần tự:
-- Item 1 (session="Sáng", timeSlot="07:30 - 08:30", category="restaurant"): Ăn sáng món đặc sản địa phương (Quán ăn A - Mới hoàn toàn).
-- Item 2 (session="Sáng", timeSlot="08:30 - 11:30", category="attraction"): Tham quan điểm chính buổi sáng (Điểm tham quan X - Mới hoàn toàn).
-- Item 3 (session="Trưa", timeSlot="11:30 - 14:00", category="restaurant"): Ăn trưa đặc sản & cà phê nghỉ trưa (Quán ăn B - Mới hoàn toàn).
-- Item 4 (session="Chiều", timeSlot="14:00 - 17:30", category="attraction"): Tham quan/trải nghiệm buổi chiều (Điểm tham quan Y - Mới hoàn toàn).
-- Item 5 (session="Tối", timeSlot="18:30 - 20:00", category="restaurant"): Ăn tối đặc sản (Quán ăn C - Mới hoàn toàn).
-- Item 6 (session="Tối", timeSlot="20:00 - 22:00", category="hotel"): Dạo chợ đêm/Phố đi bộ & Nghỉ đêm tại Khách sạn cố định đã chọn từ Ngày 1.
-
-💰 RÀNG BUỘC NGÂN SÁCH (STRICT BUDGET LIMIT):
-- Tổng chi phí dự kiến của toàn bộ chuyến đi (Tất cả các ngày cộng lại) BẮT BUỘC KHÔNG ĐƯỢC VƯỢT QUÁ con số budget người dùng đã nhập (${totalBudget} ${currency}).
-- Lựa chọn phân khúc quán ăn và khách sạn phù hợp với ngân sách (Không chọn Resort 4-5 sao đắt đỏ nếu ngân sách trung bình). Tổng chi phí ước tính của các hoạt động trong mảng "days" nên chiếm khoảng 65-70% ngân sách ${totalBudget} ${currency}.
+- Item 1 (session="Sáng", timeSlot="07:30 - 08:30", category="restaurant"): Ăn sáng món đặc sản địa phương.
+- Item 2 (session="Sáng", timeSlot="08:30 - 11:30", category="attraction"): Tham quan điểm chính buổi sáng.
+- Item 3 (session="Trưa", timeSlot="11:30 - 14:00", category="restaurant"): Ăn trưa đặc sản & cà phê nghỉ trưa.
+- Item 4 (session="Chiều", timeSlot="14:00 - 17:30", category="attraction"): Tham quan/trải nghiệm buổi chiều.
+- Item 5 (session="Tối", timeSlot="18:30 - 20:00", category="restaurant"): Ăn tối đặc sản.
+- Item 6 (session="Tối", timeSlot="20:00 - 22:00", category="hotel"): Dạo chợ đêm & Nghỉ đêm tại Khách sạn cố định.
 
 CRITICAL FORMAT RULES:
 1. Return ONLY valid JSON matching the exact schema specified. No markdown ticks, no extra text.
 2. Ensure the locations are real places in the destination.
-3. Guess coordinates (latitude, longitude) as accurately as possible for MapLibre map mapping.
+3. Guess coordinates (latitude, longitude) as accurately as possible for MapLibre map mapping in WGS84 format [lng, lat].
 4. Respond entirely in Vietnamese.
-5. In the "notes" field for each activity, write realistic price ranges (e.g. "Chi phí khoảng 50.000 - 100.000 đ"). The "estimatedCost" field contains a single numeric value.
+5. In the "notes" field for each activity, write realistic price ranges (e.g. "Chi phí khoảng 50.000 - 100.000 đ"). The "estimatedCost" field contains a single numeric value matching the notes.
 
 JSON STRUCTURE:
 {
   "destination": "Tên địa điểm bằng tiếng Việt",
-  "totalEstimatedCost": 120.0,
+  "totalEstimatedCost": 5500000,
   "currency": "${currency}",
   "days": [
     {
@@ -1463,45 +1473,90 @@ export function calculateItineraryCosts(
 
   let totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
 
-  // Post-LLM Budget Limit Rule Validation: If total cost exceeds user budget, scale activities down
-  if (targetBudget && targetBudget > 0 && totalTripCost > targetBudget) {
-    const nonActivityCosts = totalTripTransportCost + totalTripBufferCost;
-    let maxAllowedActivityCost = targetBudget - nonActivityCosts;
-    if (maxAllowedActivityCost <= 0) {
-      maxAllowedActivityCost = targetBudget * 0.35;
+  // Post-LLM Budget Limit Rule Validation: Ensure Total_Cost is strictly within 80% - 100% of user_budget
+  if (targetBudget && targetBudget > 0) {
+    const minTargetCost = targetBudget * 0.82;
+    const maxTargetCost = targetBudget * 0.98;
+
+    if (totalTripCost > targetBudget || totalTripCost < minTargetCost) {
+      const desiredTotal = targetBudget * 0.90; // Target 90% of budget
+      const nonActivityCosts = totalTripTransportCost + totalTripBufferCost;
+      let targetActivityCost = desiredTotal - nonActivityCosts;
+      if (targetActivityCost <= 0) {
+        targetActivityCost = targetBudget * 0.40;
+      }
+
+      if (totalTripActivityCost > 0) {
+        const scaleRatio = targetActivityCost / totalTripActivityCost;
+        totalTripActivityCost = 0;
+
+        itinerary.days.forEach(day => {
+          let dayActivityCost = 0;
+          if (day.activities && day.activities.length > 0) {
+            day.activities.forEach(act => {
+              const originalCost = Number(act.estimatedCost) || 0;
+              const adjustedCost = Math.max(0, Math.round(originalCost * scaleRatio));
+              act.estimatedCost = adjustedCost;
+              dayActivityCost += adjustedCost;
+            });
+          }
+
+          const dayTransCost = (day as any).transportCost || 0;
+          const dayBufCost = (day as any).bufferCost || 0;
+          (day as any).activityCost = Math.round(dayActivityCost);
+          (day as any).dailyEstimatedCost = Math.round(dayActivityCost + dayTransCost + dayBufCost);
+          totalTripActivityCost += dayActivityCost;
+        });
+      }
+
+      totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
     }
-
-    if (totalTripActivityCost > 0) {
-      const scaleRatio = maxAllowedActivityCost / totalTripActivityCost;
-      totalTripActivityCost = 0;
-
-      itinerary.days.forEach(day => {
-        let dayActivityCost = 0;
-        if (day.activities && day.activities.length > 0) {
-          day.activities.forEach(act => {
-            const originalCost = Number(act.estimatedCost) || 0;
-            const adjustedCost = Math.max(0, Math.round(originalCost * scaleRatio));
-            act.estimatedCost = adjustedCost;
-            dayActivityCost += adjustedCost;
-          });
-        }
-
-        const dayTransCost = (day as any).transportCost || 0;
-        const dayBufCost = (day as any).bufferCost || 0;
-        (day as any).activityCost = Math.round(dayActivityCost);
-        (day as any).dailyEstimatedCost = Math.round(dayActivityCost + dayTransCost + dayBufCost);
-        totalTripActivityCost += dayActivityCost;
-      });
-    }
-
-    totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
   }
 
-  // Attach breakdown parameters to the main itinerary object
-  itinerary.totalEstimatedCost = Math.round(totalTripCost);
-  (itinerary as any).totalActivityCost = Math.round(totalTripActivityCost);
-  (itinerary as any).totalTransportCost = Math.round(totalTripTransportCost);
-  (itinerary as any).totalBufferCost = Math.round(totalTripBufferCost);
+  // Price Logic Synchronization & Rounding to nearest 1,000 VND: Ensure notes price range text strictly matches Card Cost (estimatedCost)
+  const roundToThousand = (val: number) => isVnd ? Math.round(val / 1000) * 1000 : Math.round(val * 10) / 10;
+  const freeKeywords = ['hồ hoàn kiếm', 'chợ đêm', 'công viên', 'phố cổ', 'quảng trường', 'dạo phố', 'dạo chợ', 'tự do', 'miễn phí', 'đi dạo', 'núi đôi', 'rừng thông', 'cây cô đơn'];
+
+  itinerary.days.forEach(day => {
+    let dayActCost = 0;
+    if (day.activities && Array.isArray(day.activities)) {
+      day.activities.forEach(act => {
+        const actName = (act.activityName || '').toLowerCase();
+        const locName = (act.locationName || '').toLowerCase();
+        const isFreeSpot = freeKeywords.some(kw => actName.includes(kw) || locName.includes(kw));
+
+        let cost = isFreeSpot ? 0 : (Number(act.estimatedCost) || 0);
+        cost = roundToThousand(cost);
+        act.estimatedCost = cost;
+        dayActCost += cost;
+
+        const low = roundToThousand(cost * 0.85);
+        const high = roundToThousand(cost * 1.15);
+        const unitStr = isVnd ? 'đ' : 'USD';
+
+        let baseNote = (act.notes || '').replace(/(\.|\s)*(Chi phí khoảng [^.]+|Miễn phí tham quan)(\.|$)/gi, '').trim();
+        if (!baseNote) baseNote = act.activityName || 'Hoạt động trải nghiệm';
+
+        if (cost > 0) {
+          act.minCost = low;
+          act.maxCost = high;
+          act.notes = `${baseNote}. Chi phí khoảng ${low.toLocaleString()} - ${high.toLocaleString()} ${unitStr}.`.replace(/^\.\s*/, '');
+        } else {
+          act.minCost = 0;
+          act.maxCost = 0;
+          act.notes = `${baseNote}. Miễn phí tham quan.`.replace(/^\.\s*/, '');
+        }
+      });
+    }
+    (day as any).activityCost = roundToThousand(dayActCost);
+    (day as any).dailyEstimatedCost = roundToThousand(dayActCost + ((day as any).transportCost || 0) + ((day as any).bufferCost || 0));
+  });
+
+  // Attach breakdown parameters to the main itinerary object (rounded to 1,000 VND)
+  itinerary.totalEstimatedCost = roundToThousand(totalTripCost);
+  (itinerary as any).totalActivityCost = roundToThousand(totalTripActivityCost);
+  (itinerary as any).totalTransportCost = roundToThousand(totalTripTransportCost);
+  (itinerary as any).totalBufferCost = roundToThousand(totalTripBufferCost);
   (itinerary as any).totalDistanceKm = Number(totalTripDistance.toFixed(2));
 
   return itinerary;

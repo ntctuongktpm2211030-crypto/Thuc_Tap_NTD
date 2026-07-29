@@ -1,17 +1,20 @@
 # SYSTEM ARCHITECTURE & MEMORY BANK
 
 ## 🛠 Tech Stack Overview
+
 - **Backend**: Node.js, Express, TypeScript, Prisma ORM, PostgreSQL (pgvector).
 - **AI Engine**: Python FastAPI AI Service, LangChain/Gemini, Hybrid RAG.
 - **AI Agent Strategies**: Multi-Agent Architecture (`travel.agent.ts`, `food.agent.ts`, `culture.agent.ts`).
 
 ## 🗺 Module Map
+
 1. `backend/src/modules/ai-agents/`: Điều phối luồng làm việc của Multi-Agent.
 2. `backend/src/modules/rag/`: Tìm kiếm ngữ nghĩa, vector store, Fact Verifier & Guardrails[cite: 1, 2].
 3. `backend/src/modules/dialogue/`: Quản lý Intent, Dialogue State & Slot Filling[cite: 1, 2].
 4. `backend/src/modules/map/` & `optimizer/`: Tính toán lộ trình và dữ liệu địa lý (GIS)[cite: 1, 2].
 
 ## 📝 Change Log
+
 - [2026-07-29] Integrated AgentCircuitBreaker and Guardrails system to restrict token loops.
 - [2026-07-29] Fixed AI itinerary multi-day generation truncation (increased OpenAI max_tokens to 4500) and added localStorage + instant state update for AI history panel.
 - [2026-07-29] Enforced Rule Accommodation (fixed hotel per trip) and Rule Budget Limit (post-LLM budget cap validation & scaling) in `ai-planner.ts`.
@@ -75,3 +78,5 @@
 - [2026-07-29] Enhanced journey creation error diagnostics and backend response payloads: added explicit `errorModalInfo` popup in `CreateStoryPage.tsx` to display exact HTTP status codes, server error messages, and step-by-step resolution tips. Updated `POST /api/v1/posts` in `posts.router.ts` with structured error JSON, auth verification, and `tripId` pre-validation to prevent raw 500 errors.
 - [2026-07-29] Fixed root-cause journey submission failures: added safe array fallbacks for `data.photos` and `data.videos` in `CreateStoryPage.tsx` to prevent client-side `TypeError` crashes, updated `extractBodyText` in `posts.router.ts` to aggregate title, destination, and route points as valid journey content, and provided automatic default values for optional trip creation payloads.
 - [2026-07-29] Fixed media payload size error (`request entity too large`): increased Express body-parser limit to `100mb` in `backend/src/app.ts`, added 413 HTTP error handling in central backend error middleware, and updated `CreateStoryPage.tsx` Error Modal diagnostics to explicitly alert users when uploaded video/image files exceed payload size limits with clear compression & file-size resolution tips.
+- [2026-07-29] Integrated strict Terraholic AI Planner rules into `ai-planner.ts`: total cost budget constraint scaling (80%-100% budget target), itemized realistic pricing (hotel/food/tickets), Card Cost to notes text synchronization, exact 1,000 VND rounding (`Math.round(val / 1000) * 1000`), free spot zero-cost & `minCost`/`maxCost` enforcement (`estimatedCost = 0` & "Miễn phí tham quan" text), GIS WGS84 coordinate handling, and non-duplication location reranking.
+- [2026-07-29] Cleared IDE warnings in `TripPlanner.tsx`: removed unused imports (`Plane`, `Zap`, `ChevronDown`, `ChevronUp`, `Clock`, `X`), removed dead state variables (`expandedActivities`), and connected `savingTrip` to the Save Trip button disabled & loading spinner states.

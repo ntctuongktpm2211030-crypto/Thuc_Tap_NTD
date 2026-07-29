@@ -3,9 +3,9 @@ import { RippleButton } from '@/components/ui/ripple-button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  MapPin, BrainCircuit, Loader2, Plane, Zap, Check, AlertTriangle,
-  Compass, Sparkles, Bookmark, Calendar, DollarSign, Hash, ChevronDown, ChevronUp, Clock, ExternalLink, Navigation,
-  Search, X
+  MapPin, BrainCircuit, Loader2, Check, AlertTriangle,
+  Compass, Sparkles, Bookmark, Calendar, DollarSign, Hash, ExternalLink, Navigation,
+  Search
 } from 'lucide-react';
 import { TRIP_ACTIVITY_ICONS } from '../../config/modernIcons';
 import { tripsService, Waypoint } from '../../services/smartTravel.service';
@@ -186,7 +186,6 @@ const TripPlanner = () => {
   const [savingTrip, setSavingTrip] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
   const [aiError, setAiError] = useState<string | null>(null);
-  const [expandedActivities, setExpandedActivities] = useState<Record<string, boolean>>({});
 
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [aiHistory, setAiHistory] = useState<any[]>([]);
@@ -341,10 +340,6 @@ const TripPlanner = () => {
         </div>
       </div>
     );
-  };
-
-  const toggleExpandActivity = (key: string) => {
-    setExpandedActivities(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleSaveTrip = async () => {
@@ -1104,6 +1099,7 @@ const TripPlanner = () => {
                   
                   <RippleButton 
                     onClick={handleSaveTrip}
+                    disabled={savingTrip}
                     className={`px-5 py-3 text-xs font-bold rounded-xl border border-blue-500/30 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
                       savedTripId 
                         ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400' 
@@ -1111,7 +1107,9 @@ const TripPlanner = () => {
                     }`}
                     rippleColor="rgba(59,130,246,0.3)"
                   >
-                    {savedTripId ? (
+                    {savingTrip ? (
+                      <><Loader2 size={13} className="animate-spin" /> {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}</>
+                    ) : savedTripId ? (
                       <><Check size={13} strokeWidth={2.5} /> {lang === 'vi' ? 'Đã lưu hành trình' : 'Trip Saved'}</>
                     ) : (
                       <><Bookmark size={13} /> {lang === 'vi' ? 'Lưu hành trình' : 'Save Trip'}</>
