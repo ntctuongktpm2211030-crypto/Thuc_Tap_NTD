@@ -7,7 +7,7 @@ import type { RootState } from '../../store';
 import {
   Heart, MessageCircle, Bookmark,
   MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
-  Flame, Globe, Search, Loader2,
+  Flame, Globe, Loader2,
 } from 'lucide-react';
 import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
 
@@ -640,8 +640,7 @@ const LeftSidebar = ({
 }: {
   myPostCount: number;
 }) => {
-  const { t, lang } = useLang();
-  const vi = lang === 'vi';
+  const { t } = useLang();
   const user = useSelector((s: RootState) => s.auth.user);
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const profileCache = loadUserProfileCache();

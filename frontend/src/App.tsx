@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import {
-  Map, Home, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
+  Map, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
   Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock, Newspaper,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';

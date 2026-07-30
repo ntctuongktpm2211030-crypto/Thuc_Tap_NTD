@@ -28,6 +28,7 @@ export function storedToFeedItem(s: StoredStory): FeedStoryItem {
   };
 }
 
-export function mergeStories(mock: FeedStoryItem[]): FeedStoryItem[] {
-  return loadUserStories().map(storedToFeedItem);
+export function mergeStories(mock: FeedStoryItem[] = []): FeedStoryItem[] {
+  const userStories = loadUserStories().map(storedToFeedItem);
+  return [...userStories, ...mock];
 }

@@ -3,9 +3,9 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
-  MoreHorizontal, Globe, Briefcase, GraduationCap, Image as ImageIcon,
-  Bell, Sparkles, Compass, Send, Check, ChevronRight, Eye, Bookmark, Layers,
-  Plus, Trash2, Star, Calendar, DollarSign, Loader2
+  MoreHorizontal, Globe, Image as ImageIcon,
+  Bell, Sparkles, Send,
+  Plus, Trash2, Calendar, DollarSign, Loader2
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';

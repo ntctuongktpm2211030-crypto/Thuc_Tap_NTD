@@ -34,7 +34,8 @@ function calculateHaversineDistance(
 function calculateItineraryCosts(
   itinerary: any,
   travelStyle: string,
-  currency: string = 'VND'
+  currency: string = 'VND',
+  targetBudget?: number
 ): any {
   if (!itinerary || !Array.isArray(itinerary.days)) return itinerary;
 
@@ -113,10 +114,12 @@ function calculateItineraryCosts(
         const a1 = day.activities[j];
         const a2 = day.activities[j + 1];
         if (a1.latitude && a1.longitude && a2.latitude && a2.longitude) {
-          dayDistance += calculateHaversineDistance(
+          const legDist = calculateHaversineDistance(
             { latitude: a1.latitude, longitude: a1.longitude },
             { latitude: a2.latitude, longitude: a2.longitude }
           );
+          // Cap single intra-day leg distance to 60km to avoid coordinate anomalies
+          dayDistance += Math.min(legDist, 60);
         }
       }
 
@@ -125,12 +128,16 @@ function calculateItineraryCosts(
         const first = day.activities[0];
         const last = day.activities[day.activities.length - 1];
         if (first.latitude && first.longitude && last.latitude && last.longitude) {
-          dayDistance += calculateHaversineDistance(
+          const loopDist = calculateHaversineDistance(
             { latitude: last.latitude, longitude: last.longitude },
             { latitude: first.latitude, longitude: first.longitude }
           );
+          dayDistance += Math.min(loopDist, 60);
         }
       }
+
+      // Cap daily sightseeing distance to max 150km
+      dayDistance = Math.min(dayDistance, 150);
     }
 
     const dayTransportCost = dayDistance * transportRate;
@@ -152,14 +159,93 @@ function calculateItineraryCosts(
     };
   });
 
-  const totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
+  let totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
+
+  // Post-LLM Budget Limit Rule Validation: Ensure Total_Cost is strictly within 80% - 98% of user_budget
+  if (targetBudget && targetBudget > 0) {
+    const minTargetCost = targetBudget * 0.82;
+
+    if (totalTripCost > targetBudget || totalTripCost < minTargetCost) {
+      const desiredTotal = targetBudget * 0.90; // Target 90% of budget
+      const globalScale = totalTripCost > 0 ? desiredTotal / totalTripCost : 1;
+
+      totalTripActivityCost = 0;
+      totalTripTransportCost = 0;
+      totalTripBufferCost = 0;
+
+      updatedDays.forEach((day: any) => {
+        let dayActCost = 0;
+        if (day.activities && day.activities.length > 0) {
+          day.activities.forEach((act: any) => {
+            const originalCost = Number(act.estimatedCost) || 0;
+            const adjustedCost = Math.max(0, Math.round(originalCost * globalScale));
+            act.estimatedCost = adjustedCost;
+            dayActCost += adjustedCost;
+          });
+        }
+
+        const scaledTransCost = Math.round((day.transportCost || 0) * globalScale);
+        const scaledBufCost = Math.round((day.bufferCost || 0) * globalScale);
+
+        day.activityCost = Math.round(dayActCost);
+        day.transportCost = scaledTransCost;
+        day.bufferCost = scaledBufCost;
+        day.dailyEstimatedCost = Math.round(dayActCost + scaledTransCost + scaledBufCost);
+
+        totalTripActivityCost += dayActCost;
+        totalTripTransportCost += scaledTransCost;
+        totalTripBufferCost += scaledBufCost;
+      });
+
+      totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
+    }
+  }
+
+  // Price Logic Synchronization & Rounding to nearest 1,000 VND
+  const roundToThousand = (val: number) => isVnd ? Math.round(val / 1000) * 1000 : Math.round(val * 10) / 10;
+  const freeKeywords = ['hồ hoàn kiếm', 'chợ đêm', 'công viên', 'phố cổ', 'quảng trường', 'dạo phố', 'dạo chợ', 'tự do', 'miễn phí', 'đi dạo', 'núi đôi', 'rừng thông', 'cây cô đơn'];
+
+  updatedDays.forEach((day: any) => {
+    let dayActCost = 0;
+    if (day.activities && Array.isArray(day.activities)) {
+      day.activities.forEach((act: any) => {
+        const actName = (act.activityName || '').toLowerCase();
+        const locName = (act.locationName || '').toLowerCase();
+        const isFreeSpot = freeKeywords.some(kw => actName.includes(kw) || locName.includes(kw));
+
+        let cost = isFreeSpot ? 0 : (Number(act.estimatedCost) || 0);
+        cost = roundToThousand(cost);
+        act.estimatedCost = cost;
+        dayActCost += cost;
+
+        const low = roundToThousand(cost * 0.85);
+        const high = roundToThousand(cost * 1.15);
+        const unitStr = isVnd ? 'đ' : 'USD';
+
+        let baseNote = (act.notes || '').replace(/(\.|\s)*(Chi phí khoảng [^.]+|Miễn phí tham quan)(\.|$)/gi, '').trim();
+        if (!baseNote) baseNote = act.activityName || 'Hoạt động trải nghiệm';
+
+        if (cost > 0) {
+          act.minCost = low;
+          act.maxCost = high;
+          act.notes = `${baseNote}. Chi phí khoảng ${low.toLocaleString()} - ${high.toLocaleString()} ${unitStr}.`.replace(/^\.\s*/, '');
+        } else {
+          act.minCost = 0;
+          act.maxCost = 0;
+          act.notes = `${baseNote}. Miễn phí tham quan.`.replace(/^\.\s*/, '');
+        }
+      });
+    }
+    day.activityCost = roundToThousand(dayActCost);
+    day.dailyEstimatedCost = roundToThousand(dayActCost + (day.transportCost || 0) + (day.bufferCost || 0));
+  });
 
   return {
     ...itinerary,
-    totalEstimatedCost: Math.round(totalTripCost),
-    totalActivityCost: Math.round(totalTripActivityCost),
-    totalTransportCost: Math.round(totalTripTransportCost),
-    totalBufferCost: Math.round(totalTripBufferCost),
+    totalEstimatedCost: roundToThousand(totalTripCost),
+    totalActivityCost: roundToThousand(totalTripActivityCost),
+    totalTransportCost: roundToThousand(totalTripTransportCost),
+    totalBufferCost: roundToThousand(totalTripBufferCost),
     totalDistanceKm: Number(totalTripDistance.toFixed(2)),
     days: updatedDays,
   };
@@ -404,8 +490,8 @@ const TripPlanner = () => {
         interests,
         travelStyle: style
       });
-      finalResult = result;
-      setItinerary(result);
+      finalResult = calculateItineraryCosts(result, style, currency, Number(budget));
+      setItinerary(finalResult);
     } catch {
       const isVi = lang === 'vi';
       setAiError(isVi ? 'Không kết nối được dịch vụ AI — đang hiển thị lịch trình mẫu.' : 'AI endpoint unavailable — showing sample itinerary.');
@@ -554,7 +640,7 @@ const TripPlanner = () => {
         totalEstimatedCost: Number(budget),
         days: generatedDays
       };
-      finalResult = calculateItineraryCosts(mockResult, style, currency);
+      finalResult = calculateItineraryCosts(mockResult, style, currency, Number(budget));
       setItinerary(finalResult);
     } finally {
       setLoading(false);
@@ -652,7 +738,7 @@ const TripPlanner = () => {
           }
         })
       );
-      setItinerary(calculateItineraryCosts({ ...itinerary, days: optimizedDays }, style, currency));
+      setItinerary(calculateItineraryCosts({ ...itinerary, days: optimizedDays }, style, currency, Number(budget)));
       setOptimized(true);
     } catch (err) {
       console.error('Failed to run route optimization:', err);

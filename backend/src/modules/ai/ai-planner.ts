@@ -1434,10 +1434,12 @@ export function calculateItineraryCosts(
         const a1 = day.activities[j];
         const a2 = day.activities[j + 1];
         if (a1.latitude && a1.longitude && a2.latitude && a2.longitude) {
-          dayDistance += calculateHaversineDistance(
+          const legDist = calculateHaversineDistance(
             { latitude: a1.latitude, longitude: a1.longitude },
             { latitude: a2.latitude, longitude: a2.longitude }
           );
+          // Cap single intra-day leg distance to 60km to avoid coordinate anomalies
+          dayDistance += Math.min(legDist, 60);
         }
       }
 
@@ -1446,12 +1448,16 @@ export function calculateItineraryCosts(
         const first = day.activities[0];
         const last = day.activities[day.activities.length - 1];
         if (first.latitude && first.longitude && last.latitude && last.longitude) {
-          dayDistance += calculateHaversineDistance(
+          const loopDist = calculateHaversineDistance(
             { latitude: last.latitude, longitude: last.longitude },
             { latitude: first.latitude, longitude: first.longitude }
           );
+          dayDistance += Math.min(loopDist, 60);
         }
       }
+
+      // Cap daily sightseeing distance to max 150km
+      dayDistance = Math.min(dayDistance, 150);
     }
 
     const dayTransportCost = dayDistance * transportRate;
@@ -1473,41 +1479,41 @@ export function calculateItineraryCosts(
 
   let totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
 
-  // Post-LLM Budget Limit Rule Validation: Ensure Total_Cost is strictly within 80% - 100% of user_budget
+  // Post-LLM Budget Limit Rule Validation: Ensure Total_Cost is strictly within 80% - 98% of user_budget
   if (targetBudget && targetBudget > 0) {
     const minTargetCost = targetBudget * 0.82;
-    const maxTargetCost = targetBudget * 0.98;
 
     if (totalTripCost > targetBudget || totalTripCost < minTargetCost) {
       const desiredTotal = targetBudget * 0.90; // Target 90% of budget
-      const nonActivityCosts = totalTripTransportCost + totalTripBufferCost;
-      let targetActivityCost = desiredTotal - nonActivityCosts;
-      if (targetActivityCost <= 0) {
-        targetActivityCost = targetBudget * 0.40;
-      }
+      const globalScale = totalTripCost > 0 ? desiredTotal / totalTripCost : 1;
 
-      if (totalTripActivityCost > 0) {
-        const scaleRatio = targetActivityCost / totalTripActivityCost;
-        totalTripActivityCost = 0;
+      totalTripActivityCost = 0;
+      totalTripTransportCost = 0;
+      totalTripBufferCost = 0;
 
-        itinerary.days.forEach(day => {
-          let dayActivityCost = 0;
-          if (day.activities && day.activities.length > 0) {
-            day.activities.forEach(act => {
-              const originalCost = Number(act.estimatedCost) || 0;
-              const adjustedCost = Math.max(0, Math.round(originalCost * scaleRatio));
-              act.estimatedCost = adjustedCost;
-              dayActivityCost += adjustedCost;
-            });
-          }
+      itinerary.days.forEach(day => {
+        let dayActCost = 0;
+        if (day.activities && day.activities.length > 0) {
+          day.activities.forEach(act => {
+            const originalCost = Number(act.estimatedCost) || 0;
+            const adjustedCost = Math.max(0, Math.round(originalCost * globalScale));
+            act.estimatedCost = adjustedCost;
+            dayActCost += adjustedCost;
+          });
+        }
 
-          const dayTransCost = (day as any).transportCost || 0;
-          const dayBufCost = (day as any).bufferCost || 0;
-          (day as any).activityCost = Math.round(dayActivityCost);
-          (day as any).dailyEstimatedCost = Math.round(dayActivityCost + dayTransCost + dayBufCost);
-          totalTripActivityCost += dayActivityCost;
-        });
-      }
+        const scaledTransCost = Math.round(((day as any).transportCost || 0) * globalScale);
+        const scaledBufCost = Math.round(((day as any).bufferCost || 0) * globalScale);
+
+        (day as any).activityCost = Math.round(dayActCost);
+        (day as any).transportCost = scaledTransCost;
+        (day as any).bufferCost = scaledBufCost;
+        (day as any).dailyEstimatedCost = Math.round(dayActCost + scaledTransCost + scaledBufCost);
+
+        totalTripActivityCost += dayActCost;
+        totalTripTransportCost += scaledTransCost;
+        totalTripBufferCost += scaledBufCost;
+      });
 
       totalTripCost = totalTripActivityCost + totalTripTransportCost + totalTripBufferCost;
     }

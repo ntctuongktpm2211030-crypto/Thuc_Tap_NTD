@@ -392,7 +392,7 @@ export function isSameMonth(a: Date, b: Date): boolean {
 /** Điểm đến hot: đếm bài đăng trong tháng hiện tại */
 export function computeHotDestinationsThisMonth(
   posts: FeedPost[],
-  referenceDate = new Date(),
+  _referenceDate = new Date(),
   limit = 5,
 ): HotDestination[] {
   const counts = new Map<string, { key: string; raw: string; count: number; image?: string }>();
