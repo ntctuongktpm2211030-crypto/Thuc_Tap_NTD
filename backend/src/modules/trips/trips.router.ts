@@ -140,21 +140,22 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const { title, description, destinationName, startDate, endDate, totalBudget, travelStyle, isPublic, days } = req.body;
+    const { title, description, destinationName, destination, startDate, endDate, totalBudget, travelStyle, isPublic, days } = req.body;
 
-    if (!title || !destinationName || !startDate || !endDate) {
-      return res.status(400).json({ error: 'title, destinationName, startDate, endDate are required.' });
-    }
+    const resolvedTitle = (typeof title === 'string' && title.trim()) || 'Hành trình mới';
+    const resolvedDest = (typeof destinationName === 'string' && destinationName.trim()) || (typeof destination === 'string' && destination.trim()) || 'Việt Nam';
+    const resolvedStart = startDate ? new Date(startDate) : new Date();
+    const resolvedEnd = endDate ? new Date(endDate) : new Date(Date.now() + 86400000);
 
     // 1. Create the trip
     const trip = await prisma.trip.create({
       data: {
         ownerId: req.user!.sub,
-        title,
-        description,
-        destinationName,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        title: resolvedTitle,
+        description: description || '',
+        destinationName: resolvedDest,
+        startDate: resolvedStart,
+        endDate: resolvedEnd,
         totalBudget: totalBudget || 0,
         travelStyle: travelStyle || 'solo',
         isPublic: isPublic || false,

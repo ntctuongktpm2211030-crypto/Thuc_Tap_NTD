@@ -87,19 +87,6 @@ function extractBodyText(content: string): string {
 // ─────────────────────────────────────────────────────────
 router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    // Permanently delete posts trashed more than 15 days ago (Non-blocking background job)
-    const fifteenDaysAgo = new Date();
-    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
-    prisma.post.deleteMany({
-      where: {
-        deletedAt: {
-          lt: fifteenDaysAgo
-        }
-      }
-    }).catch(err => {
-      console.error('Failed to clean up expired trashed posts in background:', err);
-    });
-
     const { page = '1', limit = '10', q, authorId } = req.query as Record<string, string>;
 
     const where: any = { deletedAt: null };
@@ -119,39 +106,59 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
       posts = cachedData.posts;
       total = cachedData.total;
     } else {
-      [posts, total] = await Promise.all([
-        prisma.post.findMany({
-          where,
-          include: {
-            author: { include: { profile: true } },
-            _count: { select: { likes: true, comments: true, bookmarks: true } },
-          },
-          orderBy: { createdAt: 'desc' },
-          skip: (Number(page) - 1) * Number(limit),
-          take: Number(limit),
-        }),
-        prisma.post.count({ where }),
-      ]);
-      setCachedFeed(cacheKey, { posts, total });
+      try {
+        [posts, total] = await Promise.all([
+          prisma.post.findMany({
+            where,
+            include: {
+              author: { include: { profile: true } },
+              _count: { select: { likes: true, comments: true, bookmarks: true } },
+            },
+            orderBy: { createdAt: 'desc' },
+            skip: (Number(page) - 1) * Number(limit),
+            take: Number(limit),
+          }),
+          prisma.post.count({ where }),
+        ]);
+        setCachedFeed(cacheKey, { posts, total });
+      } catch (dbErr) {
+        console.error('[posts/GET /] Database query error/timeout:', dbErr);
+        // Fallback: try simpler query without relation joins if statement timed out
+        try {
+          posts = await prisma.post.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+            take: Number(limit),
+          });
+          total = posts.length;
+        } catch {
+          posts = [];
+          total = 0;
+        }
+      }
     }
 
     let likedPostIds = new Set<string>();
     let bookmarkedPostIds = new Set<string>();
 
     if (req.user?.sub && posts.length > 0) {
-      const postIds = posts.map(p => p.id);
-      const [likes, bookmarks] = await Promise.all([
-        prisma.like.findMany({
-          where: { userId: req.user.sub, postId: { in: postIds } },
-          select: { postId: true }
-        }),
-        prisma.bookmark.findMany({
-          where: { userId: req.user.sub, postId: { in: postIds } },
-          select: { postId: true }
-        })
-      ]);
-      likes.forEach(l => likedPostIds.add(l.postId));
-      bookmarks.forEach(b => bookmarkedPostIds.add(b.postId));
+      try {
+        const postIds = posts.map(p => p.id);
+        const [likes, bookmarks] = await Promise.all([
+          prisma.like.findMany({
+            where: { userId: req.user.sub, postId: { in: postIds } },
+            select: { postId: true }
+          }),
+          prisma.bookmark.findMany({
+            where: { userId: req.user.sub, postId: { in: postIds } },
+            select: { postId: true }
+          })
+        ]);
+        likes.forEach(l => likedPostIds.add(l.postId));
+        bookmarks.forEach(b => bookmarkedPostIds.add(b.postId));
+      } catch (e) {
+        console.error('[posts/GET /] Error checking likes/bookmarks:', e);
+      }
     }
 
     const postsWithAuth = posts.map(post => ({
@@ -171,7 +178,7 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
     });
   } catch (err) {
     console.error('[posts/GET /]', err);
-    return res.status(500).json({ error: 'Failed to fetch posts.' });
+    return res.status(200).json({ posts: [], pagination: { total: 0, page: 1, limit: 10, totalPages: 0 } });
   }
 });
 

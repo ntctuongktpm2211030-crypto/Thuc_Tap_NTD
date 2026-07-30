@@ -28,8 +28,11 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) {
+        return Promise.reject(error);
+      }
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
         const res = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
         const { accessToken } = res.data;
         
@@ -43,7 +46,6 @@ apiClient.interceptors.response.use(
         localStorage.removeItem('user');
         // Dispatch custom event để Redux store biết cần logout
         window.dispatchEvent(new Event('auth:logout'));
-        window.location.href = '/auth';
         return Promise.reject(refreshError);
       }
     }

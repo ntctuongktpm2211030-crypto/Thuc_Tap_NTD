@@ -66,7 +66,6 @@ app.get('/restart', (_req: Request, res: Response) => {
   }, 500);
 });
 
-import fs from 'fs';
 app.get('/clean-json', (_req: Request, res: Response) => {
   try {
     const filePath = 'd:/Thuc_Tap_NDT/knowledge-builder/import-data-camau.json';

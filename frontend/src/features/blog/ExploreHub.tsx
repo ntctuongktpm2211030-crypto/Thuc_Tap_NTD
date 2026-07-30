@@ -934,7 +934,7 @@ export default function ExploreHub() {
               </h3>
               
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {pagedPosts.map((post, idx) => (
+                {pagedPosts.map((post) => (
                   <article
                     key={post.id}
                     onClick={() => navigate(`/explore/post/${post.id}`)}

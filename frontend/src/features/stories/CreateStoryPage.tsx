@@ -17,7 +17,7 @@ import JourneyProgressSidebar from '../../components/create/JourneyProgressSideb
 import SectionHeader from '../../components/create/SectionHeader';
 import IconChip from '../../components/create/IconChip';
 import {
-  JOURNEY_CATEGORIES, MOODS, TRANSPORTS, TIP_CATEGORIES, ACTIVITY_TYPES,
+  JOURNEY_CATEGORIES, MOODS, TRANSPORTS, TIP_CATEGORIES,
   WEATHER_OPTIONS, RATING_LABELS, JOURNEY_STEPS,
 } from '../../config/modernIcons';
 import { postsService, tripsService } from '../../services/smartTravel.service';
@@ -26,7 +26,7 @@ import {
   validateImage, validateVideo, createPreviewUrl, revokePreviewUrl,
   resolveMediaUrl, saveJourneyDraft, saveJourneyDraftAsync, loadJourneyDraftEnvelope,
   clearJourneyDraft, journeyDraftHasContent,
-  MAX_PHOTOS, MAX_VIDEOS,
+  MAX_VIDEOS,
 } from '../../utils/mediaUtils';
 import type { PostDisplayType } from '../../utils/feedUtils';
 import {
@@ -1247,17 +1247,6 @@ const Step4Itinerary = ({ data, onChange }: { data: StoryData; onChange: (d: Par
     onChange({ days: [...data.days, ...newDays].map((d, i) => ({ ...d, day: i + 1 })) });
   };
 
-  const setDayRoutePoint = (dayIdx: number, pointId: string) => {
-    const pt = routePoints.find(p => p.id === pointId);
-    const days = [...data.days];
-    days[dayIdx] = {
-      ...days[dayIdx],
-      routePointId: pointId,
-      location: pt?.name ?? days[dayIdx].location,
-    };
-    onChange({ days });
-  };
-
   const addTip = () => {
     onChange({ tips: [...data.tips, { id: Date.now().toString(), category: 'general', content: '' }] });
   };
@@ -1822,7 +1811,6 @@ export default function CreateStoryPage() {
     details?: string;
   } | null>(null);
   const [draftSaved, setDraftSaved] = useState(false);
-  const [draftRestored] = useState(initial.restored);
   const topRef = useRef<HTMLDivElement>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savingRef = useRef(false);
@@ -1897,11 +1885,6 @@ export default function CreateStoryPage() {
     const ok = await saveJourneyDraftAsync(step, data);
     setDraftSaved(ok);
     setTimeout(() => setDraftSaved(false), 2500);
-  };
-
-  const handleLeave = () => {
-    void flushDraftSave(true);
-    navigate('/');
   };
 
   const handlePublish = async () => {
