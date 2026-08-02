@@ -1006,7 +1006,24 @@ const MapDashboard = () => {
 
   const addPointToRoute = (loc: MapLocation) => {
     if (routeQueue.some(p => p.id === loc.id)) return;
-    setRouteQueue([...routeQueue, loc]);
+    let newQueue = [...routeQueue];
+    if (newQueue.length === 0 && userLocation) {
+      const userPoint: MapLocation = {
+        id: `my-current-gps-start`,
+        name: vi ? 'Vị trí của bạn (GPS)' : 'Your Location',
+        lat: userLocation[0],
+        lng: userLocation[1],
+        category: 'CURRENT_USER'
+      };
+      newQueue.push(userPoint);
+    }
+    newQueue.push(loc);
+    setRouteQueue(newQueue);
+    toast.success(
+      vi
+        ? `Đã nối tuyến đường tới "${loc.name.split(',')[0]}"!`
+        : `Connected route to "${loc.name.split(',')[0]}"!`
+    );
   };
 
   const removeRoutePoint = (id: string) => {
@@ -1160,7 +1177,7 @@ const MapDashboard = () => {
       if (response && response.answer) setAiAssistantAnswer(response.answer);
     } catch (err) {
       console.error('Failed to get AI Assistant answer:', err);
-      setAiAssistantAnswer(vi ? 'Có lỗi xảy ra khi hỏi Trợ lý AI.' : 'Failed to ask AI Assistant.');
+      setAiAssistantAnswer(vi ? 'Có lỗi xảy ra khi hỏi Trợ lý ảo.' : 'Failed to ask AI Assistant.');
     } finally {
       setLoadingAiAssistant(false);
     }

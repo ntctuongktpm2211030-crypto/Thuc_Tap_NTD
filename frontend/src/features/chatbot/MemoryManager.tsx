@@ -622,7 +622,7 @@ export default function MemoryManager({
             <div>
               <span className="font-bold text-[var(--text-primary)]">{vi ? 'Gợi ý cá nhân hóa:' : 'Personalized Tip:'}</span>{' '}
               {vi
-                ? 'Trợ lý AI sẽ tự động điều chỉnh lộ trình, ưu tiên gợi ý các điểm đến và món ăn khớp với hồ sơ sở thích của bạn.'
+                ? 'Trợ lý ảo sẽ tự động điều chỉnh lộ trình, ưu tiên gợi ý các điểm đến và món ăn khớp với hồ sơ sở thích của bạn.'
                 : 'The AI assistant will customize trip itineraries, prioritizing attractions and local dishes matching your saved memory profile.'}
             </div>
           </div>

@@ -1,0 +1,1262 @@
+[
+  {
+    "id": "season_1",
+    "title": "HÀ GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HÀ GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HÀ GIANG\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 10 – 11 (Các tháng 10, 11)\n- Mùa du lịch chính: Thu - Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội hoa Tam giác mạch, ngắm đèo Mã Pí Lèng, Đồng văn\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Quyết định tổ chức Lễ hội hoa UBND tỉnh Hà Giang\n- Cổng thông tin chính thức: dulich.hagiang.gov.vn",
+    "metadata": {
+      "id": 1,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Hà Giang",
+      "ideal_months": [10, 11],
+      "ideal_period_text": "Tháng 10 – 11",
+      "highlights": "Lễ hội hoa Tam giác mạch, ngắm đèo Mã Pí Lèng, Đồng văn",
+      "primary_season": "Thu - Đông",
+      "reference_source": "Quyết định tổ chức Lễ hội hoa UBND tỉnh Hà Giang",
+      "official_website": "dulich.hagiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_2",
+    "title": "LÀO CAI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "LÀO CAI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH LÀO CAI\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 9 (Lúa chín) & T12 – T2 (Săn mây/băng) (Các tháng 9, 12, 1, 2)\n- Mùa du lịch chính: Thu & Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Ruộng bậc thang Y Tý, Fansipan, Lễ hội mùa đông Sa Pa\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Lào Cai (sapa.laocai.gov.vn)\n- Cổng thông tin chính thức: sapa.laocai.gov.vn",
+    "metadata": {
+      "id": 2,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Lào Cai",
+      "ideal_months": [9, 12, 1, 2],
+      "ideal_period_text": "Tháng 9 (Lúa chín) & T12 – T2 (Săn mây/băng)",
+      "highlights": "Ruộng bậc thang Y Tý, Fansipan, Lễ hội mùa đông Sa Pa",
+      "primary_season": "Thu & Đông",
+      "reference_source": "Cổng TTĐT Du lịch Lào Cai (sapa.laocai.gov.vn)",
+      "official_website": "sapa.laocai.gov.vn"
+    }
+  },
+  {
+    "id": "season_3",
+    "title": "YÊN BÁI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "YÊN BÁI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH YÊN BÁI\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 9 – 10 (Các tháng 9, 10)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Danh thắng Quốc gia Mù Cang Chải mùa lúa chín\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Bằng xếp hạng Di tích Quốc gia - Bộ VHTTDL\n- Cổng thông tin chính thức: yenbai.gov.vn",
+    "metadata": {
+      "id": 3,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Yên Bái",
+      "ideal_months": [9, 10],
+      "ideal_period_text": "Tháng 9 – 10",
+      "highlights": "Danh thắng Quốc gia Mù Cang Chải mùa lúa chín",
+      "primary_season": "Thu",
+      "reference_source": "Bằng xếp hạng Di tích Quốc gia - Bộ VHTTDL",
+      "official_website": "yenbai.gov.vn"
+    }
+  },
+  {
+    "id": "season_4",
+    "title": "SƠN LA - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "SƠN LA",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH SƠN LA\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 1 – 2 (Hoa đào/mận) & T10 – T11 (Cải trắng) (Các tháng 1, 2, 10, 11)\n- Mùa du lịch chính: Xuân & Thu - Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Mộc Châu mùa hoa nở, Lễ hội Hết Chá\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Mộc Châu (mocchau.sonla.gov.vn)\n- Cổng thông tin chính thức: mocchau.sonla.gov.vn",
+    "metadata": {
+      "id": 4,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Sơn La",
+      "ideal_months": [1, 2, 10, 11],
+      "ideal_period_text": "Tháng 1 – 2 (Hoa đào/mận) & T10 – T11 (Cải trắng)",
+      "highlights": "Mộc Châu mùa hoa nở, Lễ hội Hết Chá",
+      "primary_season": "Xuân & Thu - Đông",
+      "reference_source": "Cổng TTĐT Du lịch Mộc Châu (mocchau.sonla.gov.vn)",
+      "official_website": "mocchau.sonla.gov.vn"
+    }
+  },
+  {
+    "id": "season_5",
+    "title": "ĐIỆN BIÊN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐIỆN BIÊN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐIỆN BIÊN\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 3 (Hoa ban) & Tháng 5 (Lễ kỷ niệm) (Các tháng 3, 5)\n- Mùa du lịch chính: Xuân - Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Hoa Ban, Di tích Lịch sử Chiến thắng Điện Biên Phủ\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Đề án Lễ hội Hoa Ban hằng năm - UBND tỉnh Điện Biên\n- Cổng thông tin chính thức: dienbientourism.vn",
+    "metadata": {
+      "id": 5,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Điện Biên",
+      "ideal_months": [3, 5],
+      "ideal_period_text": "Tháng 3 (Hoa ban) & Tháng 5 (Lễ kỷ niệm)",
+      "highlights": "Lễ hội Hoa Ban, Di tích Lịch sử Chiến thắng Điện Biên Phủ",
+      "primary_season": "Xuân - Hè",
+      "reference_source": "Đề án Lễ hội Hoa Ban hằng năm - UBND tỉnh Điện Biên",
+      "official_website": "dienbientourism.vn"
+    }
+  },
+  {
+    "id": "season_6",
+    "title": "LAI CHÂU - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "LAI CHÂU",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH LAI CHÂU\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Săn mây đỉnh Sin Suối Hồ, đèo O Quý Hồ, mùa lúa\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch tỉnh Lai Châu (dulich.laichau.gov.vn)\n- Cổng thông tin chính thức: dulich.laichau.gov.vn",
+    "metadata": {
+      "id": 6,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Lai Châu",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Săn mây đỉnh Sin Suối Hồ, đèo O Quý Hồ, mùa lúa",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch tỉnh Lai Châu (dulich.laichau.gov.vn)",
+      "official_website": "dulich.laichau.gov.vn"
+    }
+  },
+  {
+    "id": "season_7",
+    "title": "HÒA BÌNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HÒA BÌNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HÒA BÌNH\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 11 – 4 (Các tháng 11, 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Du thuyền lòng hồ Thủy điện Hòa Bình, khoáng nóng Kim Bôi\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Hòa Bình\n- Cổng thông tin chính thức: hoabinh.gov.vn",
+    "metadata": {
+      "id": 7,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Hòa Bình",
+      "ideal_months": [11, 12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 11 – 4",
+      "highlights": "Du thuyền lòng hồ Thủy điện Hòa Bình, khoáng nóng Kim Bôi",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Sở VHTTDL tỉnh Hòa Bình",
+      "official_website": "hoabinh.gov.vn"
+    }
+  },
+  {
+    "id": "season_8",
+    "title": "CAO BẰNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "CAO BẰNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH CAO BẰNG\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 9 – 10 (Các tháng 9, 10)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Thác Bản Giốc mùa nước trong/xanh, mùa lúa chín\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cục Du lịch Quốc gia Việt Nam (vietnamtourism.gov.vn)\n- Cổng thông tin chính thức: caobangtourism.vn",
+    "metadata": {
+      "id": 8,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Cao Bằng",
+      "ideal_months": [9, 10],
+      "ideal_period_text": "Tháng 9 – 10",
+      "highlights": "Thác Bản Giốc mùa nước trong/xanh, mùa lúa chín",
+      "primary_season": "Thu",
+      "reference_source": "Cục Du lịch Quốc gia Việt Nam (vietnamtourism.gov.vn)",
+      "official_website": "caobangtourism.vn"
+    }
+  },
+  {
+    "id": "season_9",
+    "title": "BẮC KẠN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BẮC KẠN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BẮC KẠN\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 8 – 10 (Các tháng 8, 9, 10)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Hồ Ba Bể mùa nước êm, Lễ hội Cầu An\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch tỉnh Bắc Kạn\n- Cổng thông tin chính thức: backan.gov.vn",
+    "metadata": {
+      "id": 9,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Bắc Kạn",
+      "ideal_months": [8, 9, 10],
+      "ideal_period_text": "Tháng 8 – 10",
+      "highlights": "Hồ Ba Bể mùa nước êm, Lễ hội Cầu An",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch tỉnh Bắc Kạn",
+      "official_website": "backan.gov.vn"
+    }
+  },
+  {
+    "id": "season_10",
+    "title": "LẠNG SƠN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "LẠNG SƠN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH LẠNG SƠN\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 1 – 2 (Lễ hội Xuân) & T8 – T9 (Mẫu Sơn) (Các tháng 1, 2, 8, 9)\n- Mùa du lịch chính: Xuân & Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Chùa Tam Thanh, Lễ hội Lồng Tồng, mùa hồng chín\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Lạng Sơn\n- Cổng thông tin chính thức: langson.gov.vn",
+    "metadata": {
+      "id": 10,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Lạng Sơn",
+      "ideal_months": [1, 2, 8, 9],
+      "ideal_period_text": "Tháng 1 – 2 (Lễ hội Xuân) & T8 – T9 (Mẫu Sơn)",
+      "highlights": "Lễ hội Chùa Tam Thanh, Lễ hội Lồng Tồng, mùa hồng chín",
+      "primary_season": "Xuân & Thu",
+      "reference_source": "Sở VHTTDL tỉnh Lạng Sơn",
+      "official_website": "langson.gov.vn"
+    }
+  },
+  {
+    "id": "season_11",
+    "title": "TUYÊN QUANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "TUYÊN QUANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH TUYÊN QUANG\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 8 âm lịch (Tháng 9 dương) (Các tháng 9)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Thành Tuyên (Đêm hội Trung thu lớn nhất Việt Nam)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Đề án Lễ hội Thành Tuyên - UBND tỉnh Tuyên Quang\n- Cổng thông tin chính thức: tuyenquang.gov.vn",
+    "metadata": {
+      "id": 11,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Tuyên Quang",
+      "ideal_months": [9],
+      "ideal_period_text": "Tháng 8 âm lịch (Tháng 9 dương)",
+      "highlights": "Lễ hội Thành Tuyên (Đêm hội Trung thu lớn nhất Việt Nam)",
+      "primary_season": "Thu",
+      "reference_source": "Đề án Lễ hội Thành Tuyên - UBND tỉnh Tuyên Quang",
+      "official_website": "tuyenquang.gov.vn"
+    }
+  },
+  {
+    "id": "season_12",
+    "title": "THÁI NGUYÊN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "THÁI NGUYÊN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH THÁI NGUYÊN\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Đồi trà Tân Cương, Hồ Núi Cốc mùa thu\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Thái Nguyên\n- Cổng thông tin chính thức: thainguyen.gov.vn",
+    "metadata": {
+      "id": 12,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Thái Nguyên",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Đồi trà Tân Cương, Hồ Núi Cốc mùa thu",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch Thái Nguyên",
+      "official_website": "thainguyen.gov.vn"
+    }
+  },
+  {
+    "id": "season_13",
+    "title": "PHÚ THỌ - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "PHÚ THỌ",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH PHÚ THỌ\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 3 âm lịch (Tháng 4 dương) (Các tháng 4)\n- Mùa du lịch chính: Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Giỗ Tổ Hùng Vương - Lễ hội Đền Hùng\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Nghị định 145/2013/NĐ-CP về các ngày lễ lớn Quốc gia\n- Cổng thông tin chính thức: phutho.gov.vn",
+    "metadata": {
+      "id": 13,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Phú Thọ",
+      "ideal_months": [4],
+      "ideal_period_text": "Tháng 3 âm lịch (Tháng 4 dương)",
+      "highlights": "Giỗ Tổ Hùng Vương - Lễ hội Đền Hùng",
+      "primary_season": "Xuân",
+      "reference_source": "Nghị định 145/2013/NĐ-CP về các ngày lễ lớn Quốc gia",
+      "official_website": "phutho.gov.vn"
+    }
+  },
+  {
+    "id": "season_14",
+    "title": "BẮC GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BẮC GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BẮC GIANG\n- Khu vực: Trung du & Miền núi phía Bắc (TDMNPB)\n- Thời gian đi lý tưởng: Tháng 6 (Vải thiều) & Tháng 10 – 11 (Tây Yên Tử) (Các tháng 6, 10, 11)\n- Mùa du lịch chính: Hè & Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Thu hoạch Vải thiều Lục Ngạn, du lịch tâm linh Tây Yên Tử\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Chỉ dẫn địa lý Vải thiều Lục Ngạn - Cục Sở hữu trí tuệ\n- Cổng thông tin chính thức: bacgiang.gov.vn",
+    "metadata": {
+      "id": 14,
+      "region_code": "TDMNPB",
+      "region_name": "Trung du & Miền núi phía Bắc",
+      "province_name": "Bắc Giang",
+      "ideal_months": [6, 10, 11],
+      "ideal_period_text": "Tháng 6 (Vải thiều) & Tháng 10 – 11 (Tây Yên Tử)",
+      "highlights": "Thu hoạch Vải thiều Lục Ngạn, du lịch tâm linh Tây Yên Tử",
+      "primary_season": "Hè & Thu",
+      "reference_source": "Chỉ dẫn địa lý Vải thiều Lục Ngạn - Cục Sở hữu trí tuệ",
+      "official_website": "bacgiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_15",
+    "title": "HÀ NỘI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HÀ NỘI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HÀ NỘI\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Thu Hà Nội, mùa hoa sữa, Lễ hội Áo dài Du lịch\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Hà Nội (dulich.hanoi.gov.vn)\n- Cổng thông tin chính thức: dulich.hanoi.gov.vn",
+    "metadata": {
+      "id": 15,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Hà Nội",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Thu Hà Nội, mùa hoa sữa, Lễ hội Áo dài Du lịch",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch Hà Nội (dulich.hanoi.gov.vn)",
+      "official_website": "dulich.hanoi.gov.vn"
+    }
+  },
+  {
+    "id": "season_16",
+    "title": "HẢI PHÒNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HẢI PHÒNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HẢI PHÒNG\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Du lịch biển Cát Bà, Đồ Sơn, Hải Phòng Foodtour\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở Du lịch Hải Phòng\n- Cổng thông tin chính thức: haiphong.gov.vn",
+    "metadata": {
+      "id": 16,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Hải Phòng",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Du lịch biển Cát Bà, Đồ Sơn, Hải Phòng Foodtour",
+      "primary_season": "Hè",
+      "reference_source": "Sở Du lịch Hải Phòng",
+      "official_website": "haiphong.gov.vn"
+    }
+  },
+  {
+    "id": "season_17",
+    "title": "QUẢNG NINH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "QUẢNG NINH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH QUẢNG NINH\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 4 – 8 (Các tháng 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Hạ Long mùa biển đẹp, Carnival Hạ Long\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Chương trình kích cầu du lịch mùa hè - UBND tỉnh Quảng Ninh\n- Cổng thông tin chính thức: halong.org.vn",
+    "metadata": {
+      "id": 17,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Quảng Ninh",
+      "ideal_months": [4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 4 – 8",
+      "highlights": "Hạ Long mùa biển đẹp, Carnival Hạ Long",
+      "primary_season": "Hè",
+      "reference_source": "Chương trình kích cầu du lịch mùa hè - UBND tỉnh Quảng Ninh",
+      "official_website": "halong.org.vn"
+    }
+  },
+  {
+    "id": "season_18",
+    "title": "NINH BÌNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "NINH BÌNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH NINH BÌNH\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 1 – 3 (Tâm linh) & T5 – T6 (Mùa lúa Tràng An) (Các tháng 1, 2, 3, 5, 6)\n- Mùa du lịch chính: Xuân & Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Quần thể Danh thắng Tràng An, Tam Cốc mùa lúa vàng\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Hồ sơ Di sản Thế giới UNESCO Tràng An\n- Cổng thông tin chính thức: ninhbinhtourism.com.vn",
+    "metadata": {
+      "id": 18,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Ninh Bình",
+      "ideal_months": [1, 2, 3, 5, 6],
+      "ideal_period_text": "Tháng 1 – 3 (Tâm linh) & T5 – T6 (Mùa lúa Tràng An)",
+      "highlights": "Quần thể Danh thắng Tràng An, Tam Cốc mùa lúa vàng",
+      "primary_season": "Xuân & Hè",
+      "reference_source": "Hồ sơ Di sản Thế giới UNESCO Tràng An",
+      "official_website": "ninhbinhtourism.com.vn"
+    }
+  },
+  {
+    "id": "season_19",
+    "title": "VĨNH PHÚC - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "VĨNH PHÚC",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH VĨNH PHÚC\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 5 – 9 (Các tháng 5, 6, 7, 8, 9)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Nghỉ dưỡng Tam Đảo, Hồ Đại Lải (tránh nóng)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Vĩnh Phúc\n- Cổng thông tin chính thức: vinhphuc.gov.vn",
+    "metadata": {
+      "id": 19,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Vĩnh Phúc",
+      "ideal_months": [5, 6, 7, 8, 9],
+      "ideal_period_text": "Tháng 5 – 9",
+      "highlights": "Nghỉ dưỡng Tam Đảo, Hồ Đại Lải (tránh nóng)",
+      "primary_season": "Hè",
+      "reference_source": "Cổng TTĐT Du lịch Vĩnh Phúc",
+      "official_website": "vinhphuc.gov.vn"
+    }
+  },
+  {
+    "id": "season_20",
+    "title": "BẮC NINH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BẮC NINH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BẮC NINH\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 1 – 3 âm lịch (Tháng 2 - 4 dương) (Các tháng 2, 3, 4)\n- Mùa du lịch chính: Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Hội Lim, di sản Dân ca Quan họ Bắc Ninh\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Hồ sơ Di sản Phi vật thể Đại diện Nhân loại UNESCO\n- Cổng thông tin chính thức: bacninh.gov.vn",
+    "metadata": {
+      "id": 20,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Bắc Ninh",
+      "ideal_months": [2, 3, 4],
+      "ideal_period_text": "Tháng 1 – 3 âm lịch (Tháng 2 - 4 dương)",
+      "highlights": "Lễ hội Hội Lim, di sản Dân ca Quan họ Bắc Ninh",
+      "primary_season": "Xuân",
+      "reference_source": "Hồ sơ Di sản Phi vật thể Đại diện Nhân loại UNESCO",
+      "official_website": "bacninh.gov.vn"
+    }
+  },
+  {
+    "id": "season_21",
+    "title": "HẢI DƯƠNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HẢI DƯƠNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HẢI DƯƠNG\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 5 – 6 (Vải thiều) & Tháng 8 âm lịch (Các tháng 5, 6, 9)\n- Mùa du lịch chính: Hè & Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Côn Sơn - Kiếp Bạc, thu hoạch vải Thanh Hà\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Hải Dương\n- Cổng thông tin chính thức: haiduong.gov.vn",
+    "metadata": {
+      "id": 21,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Hải Dương",
+      "ideal_months": [5, 6, 9],
+      "ideal_period_text": "Tháng 5 – 6 (Vải thiều) & Tháng 8 âm lịch",
+      "highlights": "Lễ hội Côn Sơn - Kiếp Bạc, thu hoạch vải Thanh Hà",
+      "primary_season": "Hè & Thu",
+      "reference_source": "Sở VHTTDL tỉnh Hải Dương",
+      "official_website": "haiduong.gov.vn"
+    }
+  },
+  {
+    "id": "season_22",
+    "title": "HƯNG YÊN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HƯNG YÊN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HƯNG YÊN\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 7 – 8 (Các tháng 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa nhãn lồng Phố Hiến, di tích Phố Hiến cổ\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Chỉ dẫn địa lý Nhãn lồng Hưng Yên - Cục SHTT\n- Cổng thông tin chính thức: hungyen.gov.vn",
+    "metadata": {
+      "id": 22,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Hưng Yên",
+      "ideal_months": [7, 8],
+      "ideal_period_text": "Tháng 7 – 8",
+      "highlights": "Mùa nhãn lồng Phố Hiến, di tích Phố Hiến cổ",
+      "primary_season": "Hè",
+      "reference_source": "Chỉ dẫn địa lý Nhãn lồng Hưng Yên - Cục SHTT",
+      "official_website": "hungyen.gov.vn"
+    }
+  },
+  {
+    "id": "season_23",
+    "title": "THÁI BÌNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "THÁI BÌNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH THÁI BÌNH\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 12 – 1 (Các tháng 12, 1)\n- Mùa du lịch chính: Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Cánh đồng hoa cải, biển vô cực Thụy Xuân\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT tỉnh Thái Bình\n- Cổng thông tin chính thức: thaibinh.gov.vn",
+    "metadata": {
+      "id": 23,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Thái Bình",
+      "ideal_months": [12, 1],
+      "ideal_period_text": "Tháng 12 – 1",
+      "highlights": "Cánh đồng hoa cải, biển vô cực Thụy Xuân",
+      "primary_season": "Đông",
+      "reference_source": "Cổng TTĐT tỉnh Thái Bình",
+      "official_website": "thaibinh.gov.vn"
+    }
+  },
+  {
+    "id": "season_24",
+    "title": "HÀ NAM - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HÀ NAM",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HÀ NAM\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 1 – 3 (Các tháng 1, 2, 3)\n- Mùa du lịch chính: Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Chùa Tam Chúc, Lễ hội Tịch điền Đổi Sơn\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Hà Nam\n- Cổng thông tin chính thức: hanam.gov.vn",
+    "metadata": {
+      "id": 24,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Hà Nam",
+      "ideal_months": [1, 2, 3],
+      "ideal_period_text": "Tháng 1 – 3",
+      "highlights": "Chùa Tam Chúc, Lễ hội Tịch điền Đổi Sơn",
+      "primary_season": "Xuân",
+      "reference_source": "Sở VHTTDL tỉnh Hà Nam",
+      "official_website": "hanam.gov.vn"
+    }
+  },
+  {
+    "id": "season_25",
+    "title": "THANH HÓA - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "THANH HÓA",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH THANH HÓA\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Biển Sầm Sơn, Hải Tiến, Pù Luông mùa lúa chín\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Thanh Hóa\n- Cổng thông tin chính thức: thanhhoa.gov.vn",
+    "metadata": {
+      "id": 25,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Thanh Hóa",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Biển Sầm Sơn, Hải Tiến, Pù Luông mùa lúa chín",
+      "primary_season": "Hè",
+      "reference_source": "Cổng TTĐT Du lịch Thanh Hóa",
+      "official_website": "thanhhoa.gov.vn"
+    }
+  },
+  {
+    "id": "season_26",
+    "title": "NGHỆ AN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "NGHỆ AN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH NGHỆ AN\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Biển) & Tháng 12 (Hoa hướng dương) (Các tháng 5, 6, 7, 8, 12)\n- Mùa du lịch chính: Hè & Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Biển Cửa Lò, Làng Sen quê Bác, cánh đồng hoa Nghĩa Đàn\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở Du lịch tỉnh Nghệ An\n- Cổng thông tin chính thức: nghean.gov.vn",
+    "metadata": {
+      "id": 26,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Nghệ An",
+      "ideal_months": [5, 6, 7, 8, 12],
+      "ideal_period_text": "Tháng 5 – 8 (Biển) & Tháng 12 (Hoa hướng dương)",
+      "highlights": "Biển Cửa Lò, Làng Sen quê Bác, cánh đồng hoa Nghĩa Đàn",
+      "primary_season": "Hè & Đông",
+      "reference_source": "Sở Du lịch tỉnh Nghệ An",
+      "official_website": "nghean.gov.vn"
+    }
+  },
+  {
+    "id": "season_27",
+    "title": "HÀ TĨNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HÀ TĨNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HÀ TĨNH\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 5 – 7 (Các tháng 5, 6, 7)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Biển Thiên Cầm, Ngã ba Đồng Lộc\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Hà Tĩnh\n- Cổng thông tin chính thức: hatinh.gov.vn",
+    "metadata": {
+      "id": 27,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Hà Tĩnh",
+      "ideal_months": [5, 6, 7],
+      "ideal_period_text": "Tháng 5 – 7",
+      "highlights": "Biển Thiên Cầm, Ngã ba Đồng Lộc",
+      "primary_season": "Hè",
+      "reference_source": "Cổng TTĐT Du lịch Hà Tĩnh",
+      "official_website": "hatinh.gov.vn"
+    }
+  },
+  {
+    "id": "season_28",
+    "title": "QUẢNG BÌNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "QUẢNG BÌNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH QUẢNG BÌNH\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 4 – 8 (Các tháng 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Khám phá hệ thống hang động Phong Nha - Kẻ Bàng, Sơn Đoòng\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cung cấp dữ liệu mùa khô mùa mưa - BQL Vườn Quốc gia PNKB\n- Cổng thông tin chính thức: quangbinhtourism.vn",
+    "metadata": {
+      "id": 28,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Quảng Bình",
+      "ideal_months": [4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 4 – 8",
+      "highlights": "Khám phá hệ thống hang động Phong Nha - Kẻ Bàng, Sơn Đoòng",
+      "primary_season": "Hè",
+      "reference_source": "Cung cấp dữ liệu mùa khô mùa mưa - BQL Vườn Quốc gia PNKB",
+      "official_website": "quangbinhtourism.vn"
+    }
+  },
+  {
+    "id": "season_29",
+    "title": "QUẢNG TRỊ - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "QUẢNG TRỊ",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH QUẢNG TRỊ\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 4 – 7 (Các tháng 4, 5, 6, 7)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Du lịch Hoài niệm (Thành cổ Quảng Trị, Nghĩa trang Trường Sơn)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Quảng Trị\n- Cổng thông tin chính thức: quangtri.gov.vn",
+    "metadata": {
+      "id": 29,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Quảng Trị",
+      "ideal_months": [4, 5, 6, 7],
+      "ideal_period_text": "Tháng 4 – 7",
+      "highlights": "Du lịch Hoài niệm (Thành cổ Quảng Trị, Nghĩa trang Trường Sơn)",
+      "primary_season": "Hè",
+      "reference_source": "Sở VHTTDL tỉnh Quảng Trị",
+      "official_website": "quangtri.gov.vn"
+    }
+  },
+  {
+    "id": "season_30",
+    "title": "THỪA THIÊN HUẾ - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "THỪA THIÊN HUẾ",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH THỪA THIÊN HUẾ\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 4 – 6 (Các tháng 4, 5, 6)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Festival Huế, Cố đô Huế, Đại Nội, du lịch sông Hương\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Trung tâm Bảo tồn Di tích Cố đô Huế\n- Cổng thông tin chính thức: visithue.vn",
+    "metadata": {
+      "id": 30,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Thừa Thiên Huế",
+      "ideal_months": [4, 5, 6],
+      "ideal_period_text": "Tháng 4 – 6",
+      "highlights": "Festival Huế, Cố đô Huế, Đại Nội, du lịch sông Hương",
+      "primary_season": "Hè",
+      "reference_source": "Trung tâm Bảo tồn Di tích Cố đô Huế",
+      "official_website": "visithue.vn"
+    }
+  },
+  {
+    "id": "season_31",
+    "title": "ĐÀ NẮNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐÀ NẮNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐÀ NẮNG\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 4 – 8 (Các tháng 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Biển Mỹ Khê, Lễ hội Pháo hoa Quốc tế Đà Nẵng (DIFF)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Kế hoạch tổ chức DIFF hằng năm - UBND TP. Đà Nẵng\n- Cổng thông tin chính thức: danangfantasticity.com",
+    "metadata": {
+      "id": 31,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Đà Nẵng",
+      "ideal_months": [4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 4 – 8",
+      "highlights": "Biển Mỹ Khê, Lễ hội Pháo hoa Quốc tế Đà Nẵng (DIFF)",
+      "primary_season": "Hè",
+      "reference_source": "Kế hoạch tổ chức DIFF hằng năm - UBND TP. Đà Nẵng",
+      "official_website": "danangfantasticity.com"
+    }
+  },
+  {
+    "id": "season_32",
+    "title": "QUẢNG NAM - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "QUẢNG NAM",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH QUẢNG NAM\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 2 – 8 (Các tháng 2, 3, 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Xuân - Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Phố cổ Hội An, Di tích Mỹ Sơn, biển Cù Lao Chàm\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Quảng Nam (visitquangnam.vn)\n- Cổng thông tin chính thức: visitquangnam.vn",
+    "metadata": {
+      "id": 32,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Quảng Nam",
+      "ideal_months": [2, 3, 4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 2 – 8",
+      "highlights": "Phố cổ Hội An, Di tích Mỹ Sơn, biển Cù Lao Chàm",
+      "primary_season": "Xuân - Hè",
+      "reference_source": "Cổng TTĐT Du lịch Quảng Nam (visitquangnam.vn)",
+      "official_website": "visitquangnam.vn"
+    }
+  },
+  {
+    "id": "season_33",
+    "title": "QUẢNG NGÃI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "QUẢNG NGÃI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH QUẢNG NGÃI\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 4 – 8 (Các tháng 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Đảo Lý Sơn mùa biển xanh êm\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Quảng Ngãi\n- Cổng thông tin chính thức: quangngai.gov.vn",
+    "metadata": {
+      "id": 33,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Quảng Ngãi",
+      "ideal_months": [4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 4 – 8",
+      "highlights": "Đảo Lý Sơn mùa biển xanh êm",
+      "primary_season": "Hè",
+      "reference_source": "Sở VHTTDL tỉnh Quảng Ngãi",
+      "official_website": "quangngai.gov.vn"
+    }
+  },
+  {
+    "id": "season_34",
+    "title": "BÌNH ĐỊNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BÌNH ĐỊNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BÌNH ĐỊNH\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 3 – 8 (Các tháng 3, 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Xuân - Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Kỳ Co, Eo Gió, biển Quy Nhơn\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Bình Định (dulichbinhdinh.com.vn)\n- Cổng thông tin chính thức: dulichbinhdinh.com.vn",
+    "metadata": {
+      "id": 34,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Bình Định",
+      "ideal_months": [3, 4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 3 – 8",
+      "highlights": "Kỳ Co, Eo Gió, biển Quy Nhơn",
+      "primary_season": "Xuân - Hè",
+      "reference_source": "Cổng TTĐT Du lịch Bình Định (dulichbinhdinh.com.vn)",
+      "official_website": "dulichbinhdinh.com.vn"
+    }
+  },
+  {
+    "id": "season_35",
+    "title": "PHÚ YÊN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "PHÚ YÊN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH PHÚ YÊN\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 3 – 8 (Các tháng 3, 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Xuân - Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Gành Đá Đĩa, Mũi Điện (nơi đón bình minh đầu tiên)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Phú Yên\n- Cổng thông tin chính thức: phuyen.gov.vn",
+    "metadata": {
+      "id": 35,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Phú Yên",
+      "ideal_months": [3, 4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 3 – 8",
+      "highlights": "Gành Đá Đĩa, Mũi Điện (nơi đón bình minh đầu tiên)",
+      "primary_season": "Xuân - Hè",
+      "reference_source": "Cổng TTĐT Du lịch Phú Yên",
+      "official_website": "phuyen.gov.vn"
+    }
+  },
+  {
+    "id": "season_36",
+    "title": "KHÁNH HÒA - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "KHÁNH HÒA",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH KHÁNH HÒA\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 1 – 8 (Các tháng 1, 2, 3, 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Xuân - Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Nha Trang, Vịnh Cam Ranh, Festival Biển Nha Trang\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Niên giám Khí hậu tỉnh Khánh Hòa (Mùa khô kéo dài)\n- Cổng thông tin chính thức: nhatrang-khanhhoa.com",
+    "metadata": {
+      "id": 36,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Khánh Hòa",
+      "ideal_months": [1, 2, 3, 4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 1 – 8",
+      "highlights": "Nha Trang, Vịnh Cam Ranh, Festival Biển Nha Trang",
+      "primary_season": "Xuân - Hè",
+      "reference_source": "Niên giám Khí hậu tỉnh Khánh Hòa (Mùa khô kéo dài)",
+      "official_website": "nhatrang-khanhhoa.com"
+    }
+  },
+  {
+    "id": "season_37",
+    "title": "NINH THUẬN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "NINH THUẬN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH NINH THUẬN\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 8 – 10 (Các tháng 8, 9, 10)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa nho Ninh Thuận, Lễ hội Kate của người Chăm\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT tỉnh Ninh Thuận\n- Cổng thông tin chính thức: ninhthuan.gov.vn",
+    "metadata": {
+      "id": 37,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Ninh Thuận",
+      "ideal_months": [8, 9, 10],
+      "ideal_period_text": "Tháng 8 – 10",
+      "highlights": "Mùa nho Ninh Thuận, Lễ hội Kate của người Chăm",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT tỉnh Ninh Thuận",
+      "official_website": "ninhthuan.gov.vn"
+    }
+  },
+  {
+    "id": "season_38",
+    "title": "BÌNH THUẬN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BÌNH THUẬN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BÌNH THUẬN\n- Khu vực: Bắc Trung Bộ & Duyên hải Miền Trung (BTB_DHMT)\n- Thời gian đi lý tưởng: Tháng 10 – 4 (năm sau) (Các tháng 10, 11, 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Thu - Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Phan Thiết, Mũi Né (lướt sóng, biển xanh nắng ấm)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Hiệp hội Du lịch Bình Thuận\n- Cổng thông tin chính thức: binhthuan.gov.vn",
+    "metadata": {
+      "id": 38,
+      "region_code": "BTB_DHMT",
+      "region_name": "Bắc Trung Bộ & Duyên hải Miền Trung",
+      "province_name": "Bình Thuận",
+      "ideal_months": [10, 11, 12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 10 – 4 (năm sau)",
+      "highlights": "Phan Thiết, Mũi Né (lướt sóng, biển xanh nắng ấm)",
+      "primary_season": "Thu - Đông - Xuân",
+      "reference_source": "Hiệp hội Du lịch Bình Thuận",
+      "official_website": "binhthuan.gov.vn"
+    }
+  },
+  {
+    "id": "season_39",
+    "title": "LÂM ĐỒNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "LÂM ĐỒNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH LÂM ĐỒNG\n- Khu vực: Tây Nguyên (TN)\n- Thời gian đi lý tưởng: Tháng 11 – 3 (Các tháng 11, 12, 1, 2, 3)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Đà Lạt mùa hoa Dã quỳ, Cỏ hồng, Festival Hoa Đà Lạt\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Đề án Festival Hoa định kỳ - UBND tỉnh Lâm Đồng\n- Cổng thông tin chính thức: dalat.lamdong.gov.vn",
+    "metadata": {
+      "id": 39,
+      "region_code": "TN",
+      "region_name": "Tây Nguyên",
+      "province_name": "Lâm Đồng",
+      "ideal_months": [11, 12, 1, 2, 3],
+      "ideal_period_text": "Tháng 11 – 3",
+      "highlights": "Đà Lạt mùa hoa Dã quỳ, Cỏ hồng, Festival Hoa Đà Lạt",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Đề án Festival Hoa định kỳ - UBND tỉnh Lâm Đồng",
+      "official_website": "dalat.lamdong.gov.vn"
+    }
+  },
+  {
+    "id": "season_40",
+    "title": "ĐẮK LẮK - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐẮK LẮK",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐẮK LẮK\n- Khu vực: Tây Nguyên (TN)\n- Thời gian đi lý tưởng: Tháng 3 (Các tháng 3)\n- Mùa du lịch chính: Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Cà phê Buôn Ma Thuột, mùa hoa cà phê nở\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Đề án Lễ hội Cà phê Buôn Ma Thuột Quốc gia\n- Cổng thông tin chính thức: daklak.gov.vn",
+    "metadata": {
+      "id": 40,
+      "region_code": "TN",
+      "region_name": "Tây Nguyên",
+      "province_name": "Đắc Lắk",
+      "ideal_months": [3],
+      "ideal_period_text": "Tháng 3",
+      "highlights": "Lễ hội Cà phê Buôn Ma Thuột, mùa hoa cà phê nở",
+      "primary_season": "Xuân",
+      "reference_source": "Đề án Lễ hội Cà phê Buôn Ma Thuột Quốc gia",
+      "official_website": "daklak.gov.vn"
+    }
+  },
+  {
+    "id": "season_41",
+    "title": "ĐẮK NÔNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐẮK NÔNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐẮK NÔNG\n- Khu vực: Tây Nguyên (TN)\n- Thời gian đi lý tưởng: Tháng 11 – 4 (Các tháng 11, 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Công viên Địa chất Toàn cầu UNESCO Đắk Nông, Tà Đùng\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Hồ sơ Công viên Địa chất UNESCO Đắk Nông\n- Cổng thông tin chính thức: daknong.gov.vn",
+    "metadata": {
+      "id": 41,
+      "region_code": "TN",
+      "region_name": "Tây Nguyên",
+      "province_name": "Đắk Nông",
+      "ideal_months": [11, 12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 11 – 4",
+      "highlights": "Công viên Địa chất Toàn cầu UNESCO Đắk Nông, Tà Đùng",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Hồ sơ Công viên Địa chất UNESCO Đắk Nông",
+      "official_website": "daknong.gov.vn"
+    }
+  },
+  {
+    "id": "season_42",
+    "title": "GIA LAI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "GIA LAI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH GIA LAI\n- Khu vực: Tây Nguyên (TN)\n- Thời gian đi lý tưởng: Tháng 11 – 12 (Các tháng 11, 12)\n- Mùa du lịch chính: Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa hoa Dã quỳ Chư Đăng Ya, Biển Hồ Pleiku\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Gia Lai\n- Cổng thông tin chính thức: gialai.gov.vn",
+    "metadata": {
+      "id": 42,
+      "region_code": "TN",
+      "region_name": "Tây Nguyên",
+      "province_name": "Gia Lai",
+      "ideal_months": [11, 12],
+      "ideal_period_text": "Tháng 11 – 12",
+      "highlights": "Mùa hoa Dã quỳ Chư Đăng Ya, Biển Hồ Pleiku",
+      "primary_season": "Đông",
+      "reference_source": "Cổng TTĐT Du lịch Gia Lai",
+      "official_website": "gialai.gov.vn"
+    }
+  },
+  {
+    "id": "season_43",
+    "title": "KON TUM - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "KON TUM",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH KON TUM\n- Khu vực: Tây Nguyên (TN)\n- Thời gian đi lý tưởng: Tháng 11 – 12 (Các tháng 11, 12)\n- Mùa du lịch chính: Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Măng Đen (săn mây, hoa mai anh đào), Lễ hội Cồng chiêng\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Kon Tum\n- Cổng thông tin chính thức: kontum.gov.vn",
+    "metadata": {
+      "id": 43,
+      "region_code": "TN",
+      "region_name": "Tây Nguyên",
+      "province_name": "Kon Tum",
+      "ideal_months": [11, 12],
+      "ideal_period_text": "Tháng 11 – 12",
+      "highlights": "Măng Đen (săn mây, hoa mai anh đào), Lễ hội Cồng chiêng",
+      "primary_season": "Đông",
+      "reference_source": "Cổng TTĐT Du lịch Kon Tum",
+      "official_website": "kontum.gov.vn"
+    }
+  },
+  {
+    "id": "season_44",
+    "title": "HỒ CHÍ MINH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HỒ CHÍ MINH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HỒ CHÍ MINH\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 12 – 4 (Các tháng 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Âm nhạc Quốc tế HOZO, Tuần lễ Du lịch TP.HCM\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở Du lịch TP. Hồ Chí Minh (visithochiminhcity.vn)\n- Cổng thông tin chính thức: visithochiminhcity.vn",
+    "metadata": {
+      "id": 44,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Thành phố Hồ Chí Minh",
+      "ideal_months": [12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 12 – 4",
+      "highlights": "Lễ hội Âm nhạc Quốc tế HOZO, Tuần lễ Du lịch TP.HCM",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Sở Du lịch TP. Hồ Chí Minh (visithochiminhcity.vn)",
+      "official_website": "visithochiminhcity.vn"
+    }
+  },
+  {
+    "id": "season_45",
+    "title": "BÀ RỊA - VŨNG TÀU - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BÀ RỊA - VŨNG TÀU",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BÀ RỊA - VŨNG TÀU\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 11 – 4 (Côn Đảo) & T1 – T8 (Vũng Tàu) (Các tháng 11, 12, 1, 2, 3, 4, 5, 6, 7, 8)\n- Mùa du lịch chính: Quanh năm\n- Trải nghiệm & Điểm nhấn nổi bật: Biển Vũng Tàu, Rùa đẻ trứng ở Côn Đảo (Tháng 5-10)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: BQL Vườn Quốc gia Côn Đảo\n- Cổng thông tin chính thức: baria-vungtau.gov.vn",
+    "metadata": {
+      "id": 45,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Bà Rịa - Vũng Tàu",
+      "ideal_months": [11, 12, 1, 2, 3, 4, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 11 – 4 (Côn Đảo) & T1 – T8 (Vũng Tàu)",
+      "highlights": "Biển Vũng Tàu, Rùa đẻ trứng ở Côn Đảo (Tháng 5-10)",
+      "primary_season": "Quanh năm",
+      "reference_source": "BQL Vườn Quốc gia Côn Đảo",
+      "official_website": "baria-vungtau.gov.vn"
+    }
+  },
+  {
+    "id": "season_46",
+    "title": "TÂY NINH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "TÂY NINH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH TÂY NINH\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 1 – 3 (Âm lịch) (Các tháng 2, 3, 4)\n- Mùa du lịch chính: Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Mùa xuân Núi Bà Đen, Tòa thánh Tây Ninh\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Tây Ninh\n- Cổng thông tin chính thức: tayninh.gov.vn",
+    "metadata": {
+      "id": 46,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Tây Ninh",
+      "ideal_months": [2, 3, 4],
+      "ideal_period_text": "Tháng 1 – 3 (Âm lịch)",
+      "highlights": "Lễ hội Mùa xuân Núi Bà Đen, Tòa thánh Tây Ninh",
+      "primary_season": "Xuân",
+      "reference_source": "Cổng TTĐT Du lịch Tây Ninh",
+      "official_website": "tayninh.gov.vn"
+    }
+  },
+  {
+    "id": "season_47",
+    "title": "BÌNH DƯƠNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BÌNH DƯƠNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BÌNH DƯƠNG\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Trái cây) & T1 âm (Chùa Bà) (Các tháng 2, 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa trái cây Lái Thiêu, Chùa Bà Thiên Hậu\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Bình Dương\n- Cổng thông tin chính thức: binhduong.gov.vn",
+    "metadata": {
+      "id": 47,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Bình Dương",
+      "ideal_months": [2, 5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8 (Trái cây) & T1 âm (Chùa Bà)",
+      "highlights": "Mùa trái cây Lái Thiêu, Chùa Bà Thiên Hậu",
+      "primary_season": "Hè",
+      "reference_source": "Sở VHTTDL tỉnh Bình Dương",
+      "official_website": "binhduong.gov.vn"
+    }
+  },
+  {
+    "id": "season_48",
+    "title": "ĐỒNG NAI - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐỒNG NAI",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐỒNG NAI\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Vườn Quốc gia Cát Tiên, vườn trái cây Long Khánh\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: BQL Vườn Quốc gia Cát Tiên\n- Cổng thông tin chính thức: dongnai.gov.vn",
+    "metadata": {
+      "id": 48,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Đồng Nai",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Vườn Quốc gia Cát Tiên, vườn trái cây Long Khánh",
+      "primary_season": "Hè",
+      "reference_source": "BQL Vườn Quốc gia Cát Tiên",
+      "official_website": "dongnai.gov.vn"
+    }
+  },
+  {
+    "id": "season_49",
+    "title": "BÌNH PHƯỚC - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BÌNH PHƯỚC",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BÌNH PHƯỚC\n- Khu vực: Đông Nam Bộ (DNB)\n- Thời gian đi lý tưởng: Tháng 12 – 2 (Các tháng 12, 1, 2)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa cao su trút lá, Trảng cỏ Bù Lách\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT tỉnh Bình Phước\n- Cổng thông tin chính thức: binhphuoc.gov.vn",
+    "metadata": {
+      "id": 49,
+      "region_code": "DNB",
+      "region_name": "Đông Nam Bộ",
+      "province_name": "Bình Phước",
+      "ideal_months": [12, 1, 2],
+      "ideal_period_text": "Tháng 12 – 2",
+      "highlights": "Mùa cao su trút lá, Trảng cỏ Bù Lách",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Cổng TTĐT tỉnh Bình Phước",
+      "official_website": "binhphuoc.gov.vn"
+    }
+  },
+  {
+    "id": "season_50",
+    "title": "CẦN THƠ - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "CẦN THƠ",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH CẦN THƠ\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 6 – 8 (Trái cây) & T9 – T11 (Mùa nước nổi) (Các tháng 6, 7, 8, 9, 10, 11)\n- Mùa du lịch chính: Hè & Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Chợ nổi Cái Răng, ngày hội Du lịch sinh thái Phong Điền\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Cần Thơ (canthotourism.vn)\n- Cổng thông tin chính thức: canthotourism.vn",
+    "metadata": {
+      "id": 50,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Cần Thơ",
+      "ideal_months": [6, 7, 8, 9, 10, 11],
+      "ideal_period_text": "Tháng 6 – 8 (Trái cây) & T9 – T11 (Mùa nước nổi)",
+      "highlights": "Chợ nổi Cái Răng, ngày hội Du lịch sinh thái Phong Điền",
+      "primary_season": "Hè & Thu",
+      "reference_source": "Cổng TTĐT Du lịch Cần Thơ (canthotourism.vn)",
+      "official_website": "canthotourism.vn"
+    }
+  },
+  {
+    "id": "season_51",
+    "title": "AN GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "AN GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH AN GIANG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Rừng tràm Trà Sư mùa nước nổi, Lễ hội vía Bà Chúa Xứ\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh An Giang\n- Cổng thông tin chính thức: angiang.gov.vn",
+    "metadata": {
+      "id": 51,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "An Giang",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Rừng tràm Trà Sư mùa nước nổi, Lễ hội vía Bà Chúa Xứ",
+      "primary_season": "Thu",
+      "reference_source": "Sở VHTTDL tỉnh An Giang",
+      "official_website": "angiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_52",
+    "title": "ĐỒNG THÁP - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "ĐỒNG THÁP",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH ĐỒNG THÁP\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Nước nổi) & Tháng 12 (Làng hoa) (Các tháng 9, 10, 11, 12)\n- Mùa du lịch chính: Thu - Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Vườn Quốc gia Tràm Chim, Làng hoa Sa Đéc\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Đồng Tháp\n- Cổng thông tin chính thức: dongthap.gov.vn",
+    "metadata": {
+      "id": 52,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Đồng Tháp",
+      "ideal_months": [9, 10, 11, 12],
+      "ideal_period_text": "Tháng 9 – 11 (Nước nổi) & Tháng 12 (Làng hoa)",
+      "highlights": "Vườn Quốc gia Tràm Chim, Làng hoa Sa Đéc",
+      "primary_season": "Thu - Đông",
+      "reference_source": "Cổng TTĐT Du lịch Đồng Tháp",
+      "official_website": "dongthap.gov.vn"
+    }
+  },
+  {
+    "id": "season_53",
+    "title": "KIÊN GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "KIÊN GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH KIÊN GIANG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 11 – 4 (năm sau) (Các tháng 11, 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Phú Quốc, Nam Du mùa khô biển lặng, nắng ấm\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Dữ liệu Đài Khí tượng Thủy văn Kiên Giang\n- Cổng thông tin chính thức: kiengiang.gov.vn",
+    "metadata": {
+      "id": 53,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Kiên Giang",
+      "ideal_months": [11, 12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 11 – 4 (năm sau)",
+      "highlights": "Phú Quốc, Nam Du mùa khô biển lặng, nắng ấm",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Dữ liệu Đài Khí tượng Thủy văn Kiên Giang",
+      "official_website": "kiengiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_54",
+    "title": "BẾN TRE - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BẾN TRE",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BẾN TRE\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Mùa trái cây Chợ Lách, du lịch sinh thái cồn Cổ Chiên\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Bến Tre\n- Cổng thông tin chính thức: bentre.gov.vn",
+    "metadata": {
+      "id": 54,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Bến Tre",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Mùa trái cây Chợ Lách, du lịch sinh thái cồn Cổ Chiên",
+      "primary_season": "Hè",
+      "reference_source": "Cổng TTĐT Du lịch Bến Tre",
+      "official_website": "bentre.gov.vn"
+    }
+  },
+  {
+    "id": "season_55",
+    "title": "TIỀN GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "TIỀN GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH TIỀN GIANG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Chợ nổi Cái Bè, Cù lao Thới Sơn, trái cây Chợ Gạo\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Tiền Giang\n- Cổng thông tin chính thức: tiengiang.gov.vn",
+    "metadata": {
+      "id": 55,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Tiền Giang",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Chợ nổi Cái Bè, Cù lao Thới Sơn, trái cây Chợ Gạo",
+      "primary_season": "Hè",
+      "reference_source": "Cổng TTĐT Du lịch Tiền Giang",
+      "official_website": "tiengiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_56",
+    "title": "VĨNH LONG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "VĨNH LONG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH VĨNH LONG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 5 – 8 (Các tháng 5, 6, 7, 8)\n- Mùa du lịch chính: Hè\n- Trải nghiệm & Điểm nhấn nổi bật: Du lịch sông nước Cù lao An Bình, làng gạch Mang Thít\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Vĩnh Long\n- Cổng thông tin chính thức: vinhlong.gov.vn",
+    "metadata": {
+      "id": 56,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Vĩnh Long",
+      "ideal_months": [5, 6, 7, 8],
+      "ideal_period_text": "Tháng 5 – 8",
+      "highlights": "Du lịch sông nước Cù lao An Bình, làng gạch Mang Thít",
+      "primary_season": "Hè",
+      "reference_source": "Sở VHTTDL tỉnh Vĩnh Long",
+      "official_website": "vinhlong.gov.vn"
+    }
+  },
+  {
+    "id": "season_57",
+    "title": "HẬU GIANG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "HẬU GIANG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH HẬU GIANG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Khu bảo tồn thiên nhiên Lung Ngọc Hoàng mùa nước nổi\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT tỉnh Hậu Giang\n- Cổng thông tin chính thức: haugiang.gov.vn",
+    "metadata": {
+      "id": 57,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Hậu Giang",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Khu bảo tồn thiên nhiên Lung Ngọc Hoàng mùa nước nổi",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT tỉnh Hậu Giang",
+      "official_website": "haugiang.gov.vn"
+    }
+  },
+  {
+    "id": "season_58",
+    "title": "TRÀ VINH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "TRÀ VINH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH TRÀ VINH\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 10 âm lịch (Tháng 10-11 dương) (Các tháng 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Ok Om Bok của đồng bào Khmer\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Quyết định Di sản văn hóa phi vật thể Quốc gia - Bộ VHTTDL\n- Cổng thông tin chính thức: travinh.gov.vn",
+    "metadata": {
+      "id": 58,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Trà Vinh",
+      "ideal_months": [10, 11],
+      "ideal_period_text": "Tháng 10 âm lịch (Tháng 10-11 dương)",
+      "highlights": "Lễ hội Ok Om Bok của đồng bào Khmer",
+      "primary_season": "Thu",
+      "reference_source": "Quyết định Di sản văn hóa phi vật thể Quốc gia - Bộ VHTTDL",
+      "official_website": "travinh.gov.vn"
+    }
+  },
+  {
+    "id": "season_59",
+    "title": "SÓC TRĂNG - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "SÓC TRĂNG",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH SÓC TRĂNG\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 10 âm lịch (Tháng 10-11 dương) (Các tháng 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Đua ghe Ngo (Ok Om Bok)\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Sóc Trăng\n- Cổng thông tin chính thức: soctrang.gov.vn",
+    "metadata": {
+      "id": 59,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Sóc Trăng",
+      "ideal_months": [10, 11],
+      "ideal_period_text": "Tháng 10 âm lịch (Tháng 10-11 dương)",
+      "highlights": "Lễ hội Đua ghe Ngo (Ok Om Bok)",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch Sóc Trăng",
+      "official_website": "soctrang.gov.vn"
+    }
+  },
+  {
+    "id": "season_60",
+    "title": "BẠC LIÊU - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "BẠC LIÊU",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH BẠC LIÊU\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 10 – 12 (Các tháng 10, 11, 12)\n- Mùa du lịch chính: Thu - Đông\n- Trải nghiệm & Điểm nhấn nổi bật: Cánh đồng điện gió, Lễ hội Dạ cổ hoài nam\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Bạc Liêu\n- Cổng thông tin chính thức: baclieu.gov.vn",
+    "metadata": {
+      "id": 60,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Bạc Liêu",
+      "ideal_months": [10, 11, 12],
+      "ideal_period_text": "Tháng 10 – 12",
+      "highlights": "Cánh đồng điện gió, Lễ hội Dạ cổ hoài nam",
+      "primary_season": "Thu - Đông",
+      "reference_source": "Sở VHTTDL tỉnh Bạc Liêu",
+      "official_website": "baclieu.gov.vn"
+    }
+  },
+  {
+    "id": "season_61",
+    "title": "CÀ MAU - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "CÀ MAU",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH CÀ MAU\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 12 – 4 (Mùa khô) (Các tháng 12, 1, 2, 3, 4)\n- Mùa du lịch chính: Đông - Xuân\n- Trải nghiệm & Điểm nhấn nổi bật: Đất Mũi Cà Mau, Vườn Quốc gia U Minh Hạ\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Cà Mau (camautourism.vn)\n- Cổng thông tin chính thức: camautourism.vn",
+    "metadata": {
+      "id": 61,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Cà Mau",
+      "ideal_months": [12, 1, 2, 3, 4],
+      "ideal_period_text": "Tháng 12 – 4 (Mùa khô)",
+      "highlights": "Đất Mũi Cà Mau, Vườn Quốc gia U Minh Hạ",
+      "primary_season": "Đông - Xuân",
+      "reference_source": "Cổng TTĐT Du lịch Cà Mau (camautourism.vn)",
+      "official_website": "camautourism.vn"
+    }
+  },
+  {
+    "id": "season_62",
+    "title": "LONG AN - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "LONG AN",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH LONG AN\n- Khu vực: Đồng bằng Sông Cửu Long (DBSCL)\n- Thời gian đi lý tưởng: Tháng 9 – 11 (Các tháng 9, 10, 11)\n- Mùa du lịch chính: Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Làng nổi Tân Lập mùa nước nổi, đầm sen\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Cổng TTĐT Du lịch Long An\n- Cổng thông tin chính thức: longan.gov.vn",
+    "metadata": {
+      "id": 62,
+      "region_code": "DBSCL",
+      "region_name": "Đồng bằng Sông Cửu Long",
+      "province_name": "Long An",
+      "ideal_months": [9, 10, 11],
+      "ideal_period_text": "Tháng 9 – 11",
+      "highlights": "Làng nổi Tân Lập mùa nước nổi, đầm sen",
+      "primary_season": "Thu",
+      "reference_source": "Cổng TTĐT Du lịch Long An",
+      "official_website": "longan.gov.vn"
+    }
+  },
+  {
+    "id": "season_63",
+    "title": "NAM ĐỊNH - TỔNG QUAN - Thời điểm du lịch lý tưởng & Điểm nhấn",
+    "category": "destination",
+    "province": "NAM ĐỊNH",
+    "subCategory": "TỔNG QUAN",
+    "content": "THỜI ĐIỂM DU LỊCH LÝ TƯỞNG & ĐIỂM NHẤN TỈNH NAM ĐỊNH\n- Khu vực: Đồng bằng Sông Hồng (DBSH)\n- Thời gian đi lý tưởng: Tháng 1 – 3 (Lễ hội Xuân) & Tháng 9 (Các tháng 1, 2, 3, 9)\n- Mùa du lịch chính: Xuân & Thu\n- Trải nghiệm & Điểm nhấn nổi bật: Lễ hội Khai ấn Đền Trần, Quần thể di tích Phủ Dầy, Nhà thờ đổ Hải Lý\n- Trích dẫn & Căn cứ pháp lý/Dữ liệu: Sở VHTTDL tỉnh Nam Định\n- Cổng thông tin chính thức: namdinh.gov.vn",
+    "metadata": {
+      "id": 63,
+      "region_code": "DBSH",
+      "region_name": "Đồng bằng Sông Hồng",
+      "province_name": "Nam Định",
+      "ideal_months": [1, 2, 3, 9],
+      "ideal_period_text": "Tháng 1 – 3 (Lễ hội Xuân) & Tháng 9",
+      "highlights": "Lễ hội Khai ấn Đền Trần, Quần thể di tích Phủ Dầy, Nhà thờ đổ Hải Lý",
+      "primary_season": "Xuân & Thu",
+      "reference_source": "Sở VHTTDL tỉnh Nam Định",
+      "official_website": "namdinh.gov.vn"
+    }
+  }
+]

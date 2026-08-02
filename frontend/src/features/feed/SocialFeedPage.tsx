@@ -890,6 +890,8 @@ function renderFeedPost(
   );
 }
 
+let cachedSocialFeed: FeedPost[] | null = null;
+
 export default function SocialFeedPage() {
   const { t } = useLang();
   const { requireAuth } = useRequireAuth();
@@ -902,10 +904,10 @@ export default function SocialFeedPage() {
   const [storyCreatorOpen, setStoryCreatorOpen] = useState(false);
   const [viewStory, setViewStory] = useState<FeedStoryItem | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
-  const [apiPosts, setApiPosts] = useState<FeedPost[]>([]);
+  const [apiPosts, setApiPosts] = useState<FeedPost[]>(() => cachedSocialFeed || []);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [feedLoading, setFeedLoading] = useState(false);
+  const [feedLoading, setFeedLoading] = useState(() => !cachedSocialFeed || cachedSocialFeed.length === 0);
   const [feedError, setFeedError] = useState('');
   const [sidebarTick, setSidebarTick] = useState(0);
   const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
@@ -939,7 +941,12 @@ export default function SocialFeedPage() {
 
   const loadFeed = async (pageNum: number, isAppend: boolean = false) => {
     if (pageNum === 1) {
-      setFeedLoading(true);
+      if (cachedSocialFeed && cachedSocialFeed.length > 0 && !isAppend) {
+        setApiPosts(cachedSocialFeed);
+        setFeedLoading(false);
+      } else {
+        setFeedLoading(true);
+      }
     }
     setFeedError('');
     try {
@@ -952,6 +959,7 @@ export default function SocialFeedPage() {
       if (isAppend) {
         setApiPosts(prev => [...prev, ...mapped]);
       } else {
+        cachedSocialFeed = mapped;
         setApiPosts(mapped);
       }
       
@@ -964,7 +972,9 @@ export default function SocialFeedPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Không tải được bài đăng từ máy chủ';
       setFeedError(msg);
-      if (!isAppend) setApiPosts([]);
+      if (!isAppend && (!cachedSocialFeed || cachedSocialFeed.length === 0)) {
+        setApiPosts([]);
+      }
     } finally {
       setFeedLoading(false);
     }
@@ -1065,6 +1075,7 @@ export default function SocialFeedPage() {
   useEffect(() => {
     const state = location.state as { refreshFeed?: boolean } | null;
     if (!state?.refreshFeed) return;
+    cachedSocialFeed = null;
     void loadFeedFromApi();
     navigate(location.pathname, { replace: true, state: {} });
     // eslint-disable-next-line react-hooks/exhaustive-deps

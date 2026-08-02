@@ -187,10 +187,10 @@ const translations = {
 
   vi: {
     // Navigation
-    'nav.feed':       'Bảng tin',
+    'nav.feed':       'Trang chủ',
     'nav.explore':    'Khám phá',
     'nav.map':        'Bản đồ',
-    'nav.aiPlanner':  'Lên kế hoạch AI',
+    'nav.aiPlanner':  'Quản lí kế hoạch',
     'nav.analytics':  'Thống kê',
     'nav.cultureGuide': 'Cẩm nang văn hóa — ẩm thực',
     'nav.signIn':     'Đăng nhập',
@@ -277,7 +277,7 @@ const translations = {
     'sidebar.profile.followers':'Người theo dõi',
 
     // Quick nav
-    'nav.quick.feed':      'Bảng tin',
+    'nav.quick.feed':      'Trang chủ',
     'nav.quick.explore':   'Khám phá',
     'nav.quick.map':       'Bản đồ xã hội',
     'nav.quick.aiPlanner': 'Lên kế hoạch AI',
@@ -285,14 +285,14 @@ const translations = {
     'nav.quick.saved':     'Đã lưu',
 
     // AI Planner
-    'planner.heading':     'Lên Kế Hoạch Du Lịch Thông Minh',
-    'planner.subtitle':    'Tạo hành trình cá nhân tối ưu với thuật toán TSP và trí tuệ GPT-4o.',
+    'planner.heading':     'Tạo Kế Hoạch Du Lịch Thông Minh',
+    'planner.subtitle':    'Tạo hành trình cá nhân tối ưu với thuật toán TSP và trí tuệ nhân tạo AI.',
     'planner.destination': 'Điểm đến',
     'planner.days':        'Số ngày',
     'planner.budget':      'Kinh phí dự kiến (đ)',
     'planner.style':       'Phong cách du lịch',
     'planner.interests':   'Sở thích',
-    'planner.generate':    'Tạo hành trình thông minh',
+    'planner.generate':    'Tạo kế hoạch hành trình',
     'planner.generating':  'Đang tham vấn AI...',
     'planner.optimize':    'Tối ưu lộ trình',
     'planner.optimized':   '✓ Đã tối ưu TSP',

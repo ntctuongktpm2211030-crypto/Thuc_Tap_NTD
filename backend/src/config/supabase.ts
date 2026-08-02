@@ -22,8 +22,7 @@ export async function uploadBase64ToSupabase(base64Str: string, folder: string =
 
     const matches = base64Str.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (!matches || matches.length !== 3) {
-      console.warn('[Supabase Upload] Invalid Base64 format');
-      return null;
+      return base64Str;
     }
 
     const mimeType = matches[1];
@@ -34,24 +33,29 @@ export async function uploadBase64ToSupabase(base64Str: string, folder: string =
     const filename = `${folder}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${extension}`;
     const bucketName = process.env.SUPABASE_BUCKET || 'images';
 
-    const { data, error } = await supabase.storage
+    const uploadPromise = supabase.storage
       .from(bucketName)
       .upload(filename, buffer, {
         contentType: mimeType,
         upsert: true,
       });
 
+    // 2-second timeout to prevent hanging when Supabase storage is slow or unconfigured
+    const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: new Error('Upload timeout') }), 2000)
+    );
+
+    const { error } = await Promise.race([uploadPromise, timeoutPromise]);
+
     if (error) {
-      console.error('[Supabase Upload Error]', error);
       return base64Str;
     }
 
-    // Get public URL
     const { data: publicUrlData } = supabase.storage
       .from(bucketName)
       .getPublicUrl(filename);
 
-    return publicUrlData.publicUrl;
+    return publicUrlData.publicUrl || base64Str;
   } catch (err) {
     console.error('[uploadBase64ToSupabase] Error:', err);
     return base64Str;

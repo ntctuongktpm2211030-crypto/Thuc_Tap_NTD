@@ -4,7 +4,8 @@ import {
   MapPin, Landmark, BookOpen, Compass, Search, Sparkles,
   Loader2, FileText, ChevronRight
 } from 'lucide-react';
-import { KnowledgeEngine, normalizeProvinceKey, type KnowledgeItem } from './KnowledgeEngine';
+import { KnowledgeEngine, normalizeProvinceKey, parseJsonHandbookContent, type KnowledgeItem } from './KnowledgeEngine';
+import api from '../../services/api';
 import { SearchEngine } from './SearchEngine';
 import blogVideo from '../../../../video.mp4';
 import { KineticText } from '../../components/ui/kinetic-text';
@@ -15,44 +16,56 @@ import {
 } from './ProvinceLandmarkData';
 import { ETHNIC_IMAGES_MAPPING } from './EthnicGroupData';
 
-function normalizeParagraphs(text: string): string {
-  if (!text) return '';
-  const paragraphs = text.split(/\n\s*\n/);
-  const cleaned = paragraphs.map(p => {
-    return p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
-  });
-  return cleaned.filter(Boolean).join('\n\n');
-}
+
 
 function renderFormattedContent(text: string) {
   if (!text) return null;
-  const normalized = text.normalize('NFC');
-  const rawParagraphs = normalized.split(/\n\s*\n/);
+
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+  const parseInline = (str: string) => {
+    const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-extrabold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('*') && part.endsWith('*')) {
+        return <em key={i} className="italic text-slate-600 dark:text-slate-400">{part.slice(1, -1)}</em>;
+      }
+      return part;
+    });
+  };
 
   return (
-    <div className="space-y-4 w-full">
-      {rawParagraphs.map((rawPara, idx) => {
-        const cleanedPara = rawPara.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
-        if (!cleanedPara) return null;
-
-        // Detect if this line is a heading/sub-heading (e.g. "MỸ THUẬT CỔ TRUYỀN")
-        const isHeading = cleanedPara.length < 90 && (
-          cleanedPara === cleanedPara.toUpperCase() ||
-          /^[0-9IVXLCDM]+\.\s+/i.test(cleanedPara) ||
-          cleanedPara.endsWith(':')
-        );
-
-        if (isHeading) {
+    <div className="space-y-2.5 w-full text-left my-2">
+      {lines.map((line, idx) => {
+        // Headings (e.g. ### Heading)
+        if (line.startsWith('#') || line.startsWith('###')) {
+          const cleanHeading = line.replace(/^#+\s*/, '').trim();
           return (
-            <h4 key={idx} className="font-black text-sm sm:text-base text-slate-900 dark:text-white mt-6 mb-2 text-center border-b border-slate-200 dark:border-slate-800 pb-2 tracking-wide uppercase">
-              {cleanedPara}
+            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+              <span>{cleanHeading}</span>
             </h4>
           );
         }
 
+        // Bullet points (e.g. • Item or - Item)
+        if (line.startsWith('•') || line.startsWith('-') || line.startsWith('* ')) {
+          const content = line.replace(/^[•\-\*]\s*/, '').trim();
+          return (
+            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-2.5 px-3.5 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors">
+              <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1.5 shrink-0 shadow-sm" />
+              <span className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+                {parseInline(content)}
+              </span>
+            </div>
+          );
+        }
+
+        // Standard Paragraph
         return (
-          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 text-center font-normal tracking-normal">
-            {cleanedPara}
+          <p key={idx} className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-normal">
+            {parseInline(line)}
           </p>
         );
       })}
@@ -228,7 +241,7 @@ export default function ExploreHandbookHub() {
   const filteredEthnicGroups = useMemo(() => {
     if (!query.trim()) return ethnicGroups;
     const q = query.toLowerCase().trim();
-    return ethnicGroups.filter(e => 
+    return ethnicGroups.filter((e: KnowledgeItem) => 
       e.name.toLowerCase().includes(q) || 
       e.title.toLowerCase().includes(q) || 
       e.content.toLowerCase().includes(q)
@@ -255,11 +268,30 @@ export default function ExploreHandbookHub() {
     sessionStorage.setItem('handbookPage', handbookPage.toString());
   }, [handbookPage]);
 
+  // Fetch custom admin handbook documents & parse JSON/Word/PDF/Markdown files into KnowledgeEngine
+  useEffect(() => {
+    async function loadAdminHandbooks() {
+      try {
+        const res = await api.get('/admin/handbooks');
+        const docs = res.data?.data || [];
+        docs.forEach((doc: any) => {
+          if (doc.content) {
+            const parsed = parseJsonHandbookContent(doc.content, doc.category || doc.fileType || 'AM-THUC');
+            KnowledgeEngine.addCustomItems(parsed);
+          }
+        });
+      } catch (err) {
+        console.warn('Could not load admin custom handbooks:', err);
+      }
+    }
+    loadAdminHandbooks();
+  }, []);
+
   // Filtered provinces list based on category & real-time search query
   const filteredProvinces = useMemo(() => {
     const canonicalList = KnowledgeEngine.getCanonicalProvincesList();
 
-    let list = canonicalList.map(p => {
+    let list = canonicalList.map((p: any) => {
       const lookup = PROVINCE_LANDMARK_SLIDESHOW[p.key] || 
                      PROVINCE_LANDMARK_SLIDESHOW[normalizeProvinceKey(p.key)] || 
                      PROVINCE_LANDMARK_SLIDESHOW[p.key.replace(/\s*-\s*/g, '-')] || 
@@ -277,12 +309,25 @@ export default function ExploreHandbookHub() {
 
     // Category filter with proper Vietnamese mapping
     if (activeCategory !== 'TẤT CẢ') {
-      list = list.filter(p => {
+      list = list.filter((p: any) => {
         const provItems = KnowledgeEngine.getItemsForProvince(p.key);
-        return provItems.some(i => {
-          const sub = i.subCategory.toUpperCase();
-          if (activeCategory === 'VĂN HÓA') {
-            return sub === 'VĂN HÓA' || sub === 'CULTURE' || i.category === 'culture';
+        return provItems.some((i: KnowledgeItem) => {
+          const sub = (i.subCategory || '').toUpperCase();
+          const cat = (i.category || '').toLowerCase();
+          const title = (i.title || '').toUpperCase();
+          const content = (i.content || '').toUpperCase();
+
+          if (activeCategory === 'DI TÍCH - VĂN HÓA') {
+            return sub.includes('DI TÍCH') || sub.includes('VĂN HÓA') || sub.includes('CULTURE') || sub.includes('MONUMENT') || cat === 'culture';
+          }
+          if (activeCategory === 'ẨM THỰC') {
+            return sub.includes('ẨM THỰC') || sub.includes('FOOD') || sub.includes('THỰC') || sub.includes('ĐẶC SẢN') || sub.includes('MÓN AN') || cat === 'food' || cat === 'restaurant' || title.includes('ẨM THỰC') || title.includes('ĐẶC SẢN') || content.includes('ĐẶC SẢN');
+          }
+          if (activeCategory === 'LỄ HỘI') {
+            return sub.includes('LỄ HỘI') || sub.includes('HỘI') || sub.includes('FESTIVAL') || title.includes('LỄ HỘI');
+          }
+          if (activeCategory === 'DÂN TỘC') {
+            return sub.includes('DÂN TỘC') || sub.includes('TỘC') || sub.includes('ETHNIC') || title.includes('DÂN TỘC');
           }
           return sub === activeCategory;
         });
@@ -292,11 +337,11 @@ export default function ExploreHandbookHub() {
     // Real-time search query filtering on the grid
     if (query.trim()) {
       const q = query.toLowerCase().trim();
-      list = list.filter(p => {
+      list = list.filter((p: any) => {
         const provItems = KnowledgeEngine.getItemsForProvince(p.key);
         const matchesName = p.name.toLowerCase().includes(q) || p.key.toLowerCase().includes(q);
         const matchesTagline = p.tagline.toLowerCase().includes(q);
-        const matchesItems = provItems.some(i => 
+        const matchesItems = provItems.some((i: KnowledgeItem) => 
           i.name.toLowerCase().includes(q) || 
           i.content.toLowerCase().includes(q) ||
           i.subCategory.toLowerCase().includes(q)
@@ -325,7 +370,7 @@ export default function ExploreHandbookHub() {
 
   // Clean canonical categories in Vietnamese without raw English tokens
   const categories = useMemo(() => {
-    return ['TẤT CẢ', 'THẤNG CẢNH', 'DI TÍCH', 'LỄ HỘI', 'ẨM THỰC', 'VĂN HÓA', 'DÂN TỘC'];
+    return ['TẤT CẢ', 'DI TÍCH - VĂN HÓA', 'LỄ HỘI', 'ẨM THỰC', 'DÂN TỘC'];
   }, []);
 
   // Search Results
@@ -341,93 +386,11 @@ export default function ExploreHandbookHub() {
     setAiLoading(true);
     setAiResponse('');
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const map = KnowledgeEngine.groupByProvince();
-      const items = map.get(aiSelectedProvince.toUpperCase()) || [];
-      
-      const queryStr = aiQuestion.toLowerCase().trim();
-      let matchedItems: KnowledgeItem[] = [];
-      let matchSource = '';
-
-      const INTENT_DICT = {
-        LE_HOI: ['lễ hội', 'le hoi', 'hội', 'hoi', 'lễ', 'le', 'tết', 'tet', 'kỷ niệm', 'ky niem', 'truyền thống', 'truyen thong', 'hội hè', 'hoi he'],
-        DI_TICH: ['di tích', 'di tich', 'lịch sử', 'lich su', 'chùa', 'chua', 'nhà thờ', 'nha tho', 'bảo tàng', 'bao tang', 'đền', 'den', 'miếu', 'mieu', 'lăng', 'lang', 'cổ kính', 'co kinh', 'di sản', 'di san'],
-        THANG_CANH: ['thắng cảnh', 'thang canh', 'tham quan', 'vui chơi', 'vui choi', 'du lịch', 'du lich', 'chỗ chơi', 'cho choi', 'công viên', 'cong vien', 'địa điểm', 'dia diem', 'cảnh đẹp', 'canh dep', 'khám phá', 'kham pha', 'giải trí', 'giai tri', 'checkin', 'chụp hình', 'chup hinh'],
-        TONG_QUAN: ['tổng quan', 'tong quan', 'địa lý', 'dia ly', 'giới thiệu', 'gioi thieu', 'khí hậu', 'khi hau', 'thời tiết', 'thoi tiet', 'mùa', 'mua', 'nhiệt độ', 'nhiet do', 'vị trí', 'vi tri', 'diện tích', 'dien tich', 'dân số', 'dan so', 'bản đồ', 'ban do'],
-        AM_THUC: ['ăn gì', 'an gi', 'món ăn', 'mon an', 'đặc sản', 'dac san', 'ẩm thực', 'am thuc', 'nhà hàng', 'nha hang', 'quán', 'quan', 'đồ ăn', 'do an', 'thức uống', 'thuc uong', 'ngon']
-      };
-
-      const matchesIntent = (keywords: string[]) => keywords.some(kw => queryStr.includes(kw));
-
-      if (matchesIntent(INTENT_DICT.LE_HOI)) {
-        matchedItems = items.filter(item => item.subCategory.toUpperCase() === 'LỄ HỘI');
-        matchSource = 'Danh sách Lễ hội văn hóa';
-      } else if (matchesIntent(INTENT_DICT.DI_TICH)) {
-        matchedItems = items.filter(item => item.subCategory.toUpperCase() === 'DI TÍCH');
-        matchSource = 'Danh sách Di tích lịch sử & Tâm linh';
-      } else if (matchesIntent(INTENT_DICT.THANG_CANH)) {
-        matchedItems = items.filter(item => item.subCategory.toUpperCase() === 'THẤNG CẢNH');
-        matchSource = 'Danh sách Danh lam thắng cảnh & Điểm vui chơi';
-      } else if (matchesIntent(INTENT_DICT.TONG_QUAN)) {
-        matchedItems = items.filter(item => item.subCategory.toUpperCase() === 'TỔNG QUAN');
-        matchSource = 'Tổng quan địa lý & Khí hậu';
-      } else if (matchesIntent(INTENT_DICT.AM_THUC)) {
-        matchedItems = items.filter(item => 
-          item.name.toLowerCase().includes('ẩm thực') || 
-          item.name.toLowerCase().includes('ăn') ||
-          item.content.toLowerCase().includes('ẩm thực') ||
-          item.content.toLowerCase().includes('đặc sản') ||
-          item.content.toLowerCase().includes('món ăn')
-        );
-        matchSource = 'Đề xuất Ẩm thực & Đặc sản địa phương';
-      }
-
-      if (matchedItems.length === 0) {
-        const tokens = queryStr.split(/\s+/).filter(t => t.length >= 2);
-        if (tokens.length > 0) {
-          const scored = items.map(item => {
-            let score = 0;
-            const nameLower = item.name.toLowerCase();
-            const contentLower = item.content.toLowerCase();
-            tokens.forEach(t => {
-              if (nameLower.includes(t)) score += 3;
-              if (contentLower.includes(t)) score += 1;
-            });
-            return { item, score };
-          });
-
-          const filtered = scored
-            .filter(e => e.score > 0)
-            .sort((a, b) => b.score - a.score)
-            .map(e => e.item);
-
-          matchedItems = filtered.slice(0, 3);
-          matchSource = 'Tư liệu liên quan nhất';
-        }
-      }
-
-      if (matchedItems.length === 0) {
-        matchedItems = items.filter(item => 
-          item.name.toLowerCase().includes(queryStr) || 
-          item.content.toLowerCase().includes(queryStr)
-        );
-        matchSource = 'Kết quả khớp từ khóa';
-      }
-
-      const provName = allProvincesForAi.find((p: { key: string; name: string }) => p.key === aiSelectedProvince)?.name || aiSelectedProvince;
-
-      if (matchedItems.length > 0) {
-        let responseText = `### 🤖 Phản hồi từ Trợ lý AI về ${provName}\n`;
-        responseText += `*Nguồn dữ liệu: ${matchSource}*\n\n`;
-        matchedItems.forEach(item => {
-          responseText += `📍 **${item.name}** (${item.subCategory})\n${normalizeParagraphs(item.content)}\n\n`;
-        });
-        setAiResponse(responseText.trim());
-      } else {
-        setAiResponse(`Dữ liệu tri thức chính thống hiện tại về "${provName}" không nhắc đến thông tin chi tiết về phần này. Tôi xin lỗi vì không thể tự sáng tác câu trả lời ngoài tài liệu.`);
-      }
+      await new Promise(resolve => setTimeout(resolve, 300));
+      const { responseText, matchSource } = KnowledgeEngine.synthesizeAiAnswer(aiSelectedProvince, aiQuestion);
+      setAiResponse(`### 🤖 Phản hồi từ Trợ lý Ảo\n*Nguồn dữ liệu: ${matchSource}*\n\n${responseText}`);
     } catch {
-      setAiResponse('Gặp lỗi khi liên kết với Trợ lý AI du lịch.');
+      setAiResponse('Gặp lỗi khi liên kết với Trợ lý Ảo du lịch.');
     } finally {
       setAiLoading(false);
     }
@@ -469,10 +432,9 @@ export default function ExploreHandbookHub() {
       <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         
         {/* ── 1. KNOWLEDGE STATISTICS ── */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto -mt-20 relative z-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto -mt-20 relative z-20">
           {[
             { label: 'Tỉnh thành', value: stats.totalProvinces, icon: MapPin, color: 'text-rose-500' },
-            { label: 'Thắng cảnh', value: stats.totalLandmarks, icon: Compass, color: 'text-emerald-500' },
             { label: 'Di tích lịch sử', value: stats.totalMonuments, icon: Landmark, color: 'text-amber-500' },
             { label: 'Nét văn hóa', value: stats.totalCultureItems, icon: BookOpen, color: 'text-violet-500' },
             { label: 'Mục tri thức', value: stats.totalItems, icon: FileText, color: 'text-blue-500' }
@@ -564,7 +526,7 @@ export default function ExploreHandbookHub() {
                 </h3>
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
-                  {filteredEthnicGroups.map((ethnic) => (
+                  {filteredEthnicGroups.map((ethnic: KnowledgeItem) => (
                     <EthnicCard
                       key={ethnic.id}
                       ethnic={ethnic}
@@ -581,7 +543,7 @@ export default function ExploreHandbookHub() {
                 </h3>
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
-                  {paginatedProvinces.map((prov) => (
+                  {paginatedProvinces.map((prov: any) => (
                     <ProvinceCard
                       key={prov.key}
                       prov={prov}
@@ -590,7 +552,13 @@ export default function ExploreHandbookHub() {
                         tagline: prov.tagline,
                         category: prov.category,
                       }}
-                      onNavigate={() => navigate(`/explore/province/${prov.key}`)}
+                      onNavigate={() => {
+                        if (activeCategory !== 'TẤT CẢ') {
+                          navigate(`/explore/province/${prov.key}?category=${encodeURIComponent(activeCategory)}`);
+                        } else {
+                          navigate(`/explore/province/${prov.key}`);
+                        }
+                      }}
                     />
                   ))}
                 </div>
@@ -654,7 +622,7 @@ export default function ExploreHandbookHub() {
                   <Sparkles size={16} className="text-white" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-[var(--gold)]">TRỢ LÝ TRI THỨC AI</h4>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[var(--gold)]">TRỢ LÝ ẢO TRI THỨC</h4>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400">Trả lời nhanh mọi thắc mắc</p>
                 </div>
               </div>
@@ -691,16 +659,16 @@ export default function ExploreHandbookHub() {
                   className="w-full py-3 bg-[var(--gold)] hover:opacity-90 text-white font-black text-[11px] uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                 >
                   {aiLoading ? <Loader2 size={14} className="animate-spin text-white" /> : <Search size={14} className="text-white" />}
-                  TRA CỨU TRỢ LÝ
+                  TRA CỨU TRỢ LÝ ẢO
                 </button>
               </form>
 
               {aiResponse && (
                 <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-fade-in">
                   <span className="text-[8px] font-black uppercase text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded border border-[var(--gold)]/20">KẾT QUẢ TRA CỨU</span>
-                  <p className="text-[10px] text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[220px] overflow-y-auto whitespace-pre-wrap">
-                    {aiResponse}
-                  </p>
+                  <div className="text-[11px] text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[240px] overflow-y-auto whitespace-pre-wrap">
+                    {renderFormattedContent(aiResponse)}
+                  </div>
                 </div>
               )}
             </div>

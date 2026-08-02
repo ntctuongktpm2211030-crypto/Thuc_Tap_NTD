@@ -53,7 +53,7 @@ const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
     { icon: Compass, label: t('nav.quick.explore'),   href: '/explore',        color: 'text-violet-400' },
     { icon: MapPin,  label: t('nav.quick.map'),        href: '/map',            color: 'text-teal-400' },
     { icon: Sparkles,label: t('nav.quick.aiPlanner'), href: '/trips',          color: 'text-sky-400' },
-    { icon: Bot,     label: 'AI Trợ lý',               href: '/chat',           color: 'text-rose-400' },
+    { icon: Bot,     label: 'Trợ lý ảo',               href: '/chat',           color: 'text-rose-400' },
   ];
 
   return (

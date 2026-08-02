@@ -6,6 +6,20 @@ generator client {
   previewFeatures = ["postgresqlExtensions"]
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
+generator markdown {
+  provider = "prisma-markdown"
+  output   = "database.md"
+  title    = "SmartTravel Database Document"
+}
+
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
@@ -15,6 +29,7 @@ datasource db {
 
 enum UserRole {
   USER
+  ADMIN
 }
 
 model User {
@@ -855,4 +870,18 @@ model AuditTrail {
   description    String             @db.Text
   ipAddress      String?
   createdAt      DateTime           @default(now())
+}
+
+// 11. Quản lý Cẩm nang & Tài liệu Admin (Handbook Documents)
+model HandbookDocument {
+  id           String   @id @default(uuid())
+  title        String
+  category     String   @default("Handbook") // "Word", "JSON", "PDF", "Handbook"
+  fileType     String   @default("txt")      // "docx", "json", "pdf", "txt"
+  fileName     String?
+  fileSize     String?
+  content      String   @db.Text
+  updatedAtStr String   // Định dạng "HH:mm DD/MM/YYYY" (Ví dụ: "16:05 30/07/2026")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

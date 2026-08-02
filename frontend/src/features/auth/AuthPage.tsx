@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Mail, Lock, User, Eye, EyeOff, ArrowRight,
-  Check, AlertCircle, Plane, MapPin, Globe, ChevronLeft,
+  Check, AlertCircle, Plane, MapPin, Globe, ChevronLeft, Shield,
 } from 'lucide-react';
 import { loginThunk, registerThunk, clearError, loginGoogleThunk } from '../../store/authSlice';
 import type { RootState, AppDispatch } from '../../store';
@@ -12,6 +12,7 @@ import { useToast } from '../../contexts/ToastContext';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
 import { loginGoogle } from '../../config/firebase';
 import { authService } from '../../services/smartTravel.service';
+import api from '../../services/api';
 import logoImg from '../../assets/logo.png';
 import { RippleButton } from '@/components/ui/ripple-button';
 
@@ -314,6 +315,20 @@ export default function AuthPage() {
     setForgotStatus(null);
     setForgotLoadingState(true);
     try {
+      // First attempt registration/general OTP verification
+      const verifyRes = await api.post('/auth/verify-otp', { email: forgotEmail, otp: otpCode }).catch(() => null);
+
+      if (verifyRes?.data?.accessToken) {
+        localStorage.setItem('st-token', verifyRes.data.accessToken);
+        localStorage.setItem('st-user', JSON.stringify(verifyRes.data.user));
+        setForgotStatus({ text: '🎉 Xác thực mã OTP thành công! Đang kích hoạt & đăng nhập vào Terraholic...', isError: false });
+        setTimeout(() => {
+          window.location.href = redirectTo || '/';
+        }, 1500);
+        return;
+      }
+
+      // Password reset OTP fallback
       const res = await authService.verifyOtp(forgotEmail, otpCode);
       setResetToken(res.resetToken);
       setForgotStatus({ text: 'Mã OTP xác thực thành công.', isError: false });
@@ -372,7 +387,30 @@ export default function AuthPage() {
   const [regEmail, setRegEmail] = useState(field());
   const [regPwd, setRegPwd] = useState(field());
   const [regConfirm, setRegConfirm] = useState(field());
+  const [regOtpCode, setRegOtpCode] = useState(field());
+  const [sendingRegOtp, setSendingRegOtp] = useState(false);
+  const [regOtpMsg, setRegOtpMsg] = useState('');
   const [agreed, setAgreed] = useState(false);
+
+  const handleSendRegisterOtp = async () => {
+    if (!isEmail(regEmail.value)) {
+      setRegEmail(p => ({ ...p, error: 'Vui lòng nhập Email hợp lệ trước khi gửi mã OTP', touched: true }));
+      return;
+    }
+    setSendingRegOtp(true);
+    setRegOtpMsg('');
+    try {
+      const res = await api.post('/auth/send-register-otp', { email: regEmail.value.trim() });
+      const msg = res.data?.message || `Mã OTP 6 số đã được gửi tới email ${regEmail.value}`;
+      setRegOtpMsg(`📧 ${msg}`);
+    } catch (err: any) {
+      console.error('Send register OTP error:', err);
+      const errMsg = err.response?.data?.error || 'Không thể gửi mã OTP. Vui lòng kiểm tra lại email.';
+      setRegOtpMsg(`⚠️ ${errMsg}`);
+    } finally {
+      setSendingRegOtp(false);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -435,6 +473,10 @@ export default function AuthPage() {
       setRegConfirm(p => ({ ...p, error: 'Mật khẩu nhập lại không khớp', touched: true })); ok = false;
     } else setRegConfirm(p => ({ ...p, error: '' }));
 
+    if (!regOtpCode.value || regOtpCode.value.trim().length !== 6) {
+      setRegOtpCode(p => ({ ...p, error: 'Vui lòng bấm Gửi mã OTP và nhập 6 chữ số', touched: true })); ok = false;
+    } else setRegOtpCode(p => ({ ...p, error: '' }));
+
     if (!agreed) { ok = false; }
 
     return ok;
@@ -455,8 +497,17 @@ export default function AuthPage() {
     e.preventDefault();
     if (!validateRegister()) return;
     dispatch(clearError());
-    const result = await dispatch(registerThunk({ fullName: regName.value.trim(), email: regEmail.value.trim(), password: regPwd.value }));
-    if (registerThunk.fulfilled.match(result)) navigate(redirectTo, { replace: true });
+    const email = regEmail.value.trim();
+    const result = await dispatch(registerThunk({
+      fullName: regName.value.trim(),
+      email,
+      password: regPwd.value,
+      otpCode: regOtpCode.value
+    } as any));
+
+    if (registerThunk.fulfilled.match(result)) {
+      navigate(redirectTo, { replace: true });
+    }
   };
 
   // ──────────────────────────────────────────────────────────
@@ -821,6 +872,47 @@ export default function AuthPage() {
                   </button>
                 }
               />
+
+              {/* MÃ XÁC THỰC OTP EMAIL */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block">
+                  Mã xác thực OTP Email
+                </label>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input
+                      id="reg-otp"
+                      type="text"
+                      placeholder="Nhập 6 số OTP..."
+                      value={regOtpCode.value}
+                      error={regOtpCode.error}
+                      touched={regOtpCode.touched}
+                      autoComplete="one-time-code"
+                      onChange={v => setRegOtpCode(p => ({ ...p, value: v.replace(/\D/g, '').slice(0, 6), touched: true, error: v.length === 6 ? '' : 'Nhập mã 6 chữ số' }))}
+                      onBlur={() => setRegOtpCode(p => ({ ...p, touched: true }))}
+                      icon={<Shield size={16} />}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSendRegisterOtp}
+                    disabled={sendingRegOtp}
+                    className="px-4 py-3 bg-[var(--gold)]/15 hover:bg-[var(--gold)]/25 text-[var(--gold)] border border-[var(--gold)]/40 rounded-xl text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shrink-0 h-[46px] flex items-center gap-1.5 shadow-sm"
+                  >
+                    {sendingRegOtp ? (
+                      <span className="animate-spin">⏳</span>
+                    ) : (
+                      <Mail size={14} />
+                    )}
+                    {sendingRegOtp ? 'Đang gửi...' : 'Gửi mã OTP'}
+                  </button>
+                </div>
+                {regOtpMsg && (
+                  <p className="text-[11px] font-bold text-emerald-600 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20 mt-1">
+                    {regOtpMsg}
+                  </p>
+                )}
+              </div>
 
               {/* Terms */}
               <label className="flex items-start gap-3 cursor-pointer group">

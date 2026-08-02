@@ -37,6 +37,7 @@ import toolCallRouter from './modules/tool-calls/routes/tool-call.router';
 import cacheRouter from './modules/cache/routes/cache.router';
 import aiAgentRouter from './modules/ai-agents/routes/agent.router';
 import ragRouter from './modules/rag/routes/rag.router';
+import adminRouter, { ensureDefaultAdminUser } from './modules/admin/admin.router';
 
 const app = express();
 
@@ -593,6 +594,10 @@ app.use('/api/v1/ai-agents', aiAgentRouter);
 
 // RAG: Retrieval-Augmented Generation (Embeddings + Vector Storage + Retriever + Prompt Builder)
 app.use('/api/v1/rag', ragRouter);
+
+// Admin: System Dashboard, Users, Posts & Handbook Management
+app.use('/api/v1/admin', adminRouter);
+ensureDefaultAdminUser();
 
 // ─── 404 Handler ─────────────────────────────────────────
 app.use((_req: Request, res: Response) => {

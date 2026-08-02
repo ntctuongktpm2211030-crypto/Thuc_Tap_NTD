@@ -14,7 +14,7 @@ const log = (msg: string) => {
 
 try {
   log('🔄 Running Prisma db push to sync database...');
-  const out1 = execSync('npx prisma db push', { encoding: 'utf-8' });
+  const out1 = execSync('npx prisma db push --accept-data-loss', { encoding: 'utf-8' });
   log(`Output:\n${out1}`);
   
   log('🔄 Running Prisma generate to rebuild client...');

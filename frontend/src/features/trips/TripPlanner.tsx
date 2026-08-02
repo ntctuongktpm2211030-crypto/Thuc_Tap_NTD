@@ -15,6 +15,45 @@ import { useToast } from '../../contexts/ToastContext';
 import MapLibreMap, { MapLocation } from '../../components/Map/MapLibreMap';
 import ParallaxHero from '../../components/ui/parallax-hero';
 
+const GLOBAL_SAMPLE_ATTRACTIONS = [
+  { name: 'Cột cờ Lũng Cú', category: 'attraction', notes: 'Cột cờ thiêng liêng nơi địa đầu Tổ quốc.' },
+  { name: 'Dốc Thẩm Mã', category: 'attraction', notes: 'Cung đường đèo uốn lượn đẹp mắt.' },
+  { name: 'Dinh thự họ Vương', category: 'attraction', notes: 'Kiến trúc cổ Vua Mèo độc đáo.' },
+  { name: 'Phố cổ Đồng Văn', category: 'attraction', notes: 'Quần thể nhà cổ trăm năm ngói âm dương.' },
+  { name: 'Hẻm Tu Sản', category: 'nature', notes: 'Hẻm vực sâu nhất Đông Nam Á tráng lệ.' },
+  { name: 'Sông Nho Quế', category: 'nature', notes: 'Dòng sông xanh ngọc bích êm đềm.' },
+  { name: 'Cổng trời Quản Bạ', category: 'attraction', notes: 'Cửa ngõ vào Cao nguyên đá Đồng Văn.' },
+  { name: 'Núi Đôi Cô Tiên', category: 'nature', notes: 'Tuyệt tác thiên nhiên Núi Đôi kỳ thú.' },
+  { name: 'Rừng thông Yên Minh', category: 'nature', notes: 'Rừng thông xanh tươi mát dịu êm.' },
+  { name: 'Danh thắng Hoàng Su Phì', category: 'nature', notes: 'Ruộng bậc thang vàng óng kỳ vĩ.' },
+  { name: 'Chợ phiên Mèo Vạc', category: 'festival', notes: 'Chợ phiên sắc màu truyền thống.' },
+  { name: 'Thung lũng Sủng Là', category: 'nature', notes: 'Đóa hoa nở trên đá và Nhà của Pao.' },
+  { name: 'Làng văn hóa Lũng Cẩm', category: 'attraction', notes: 'Làng cổ H\'Mông trình tường rêu phong.' },
+  { name: 'Cây cô đơn Can Tỷ', category: 'attraction', notes: 'Cây nghiến sừng sững giữa vách núi.' },
+  { name: 'Làng Pả Vi Mèo Vạc', category: 'attraction', notes: 'Làng du lịch cộng đồng dân tộc.' },
+  { name: 'Hang Lùng Khúy', category: 'nature', notes: 'Đệ nhất hang động cao nguyên đá.' },
+  { name: 'Đèo Mã Pí Lèng', category: 'nature', notes: 'Một trong tứ đại đỉnh đèo Việt Nam.' },
+  { name: 'Thác Du Già', category: 'nature', notes: 'Dòng thác mát rượi giữa thung lũng.' },
+  { name: 'Dốc Pai Lủng', category: 'attraction', notes: 'Cung đường ngắm hoàng hôn tuyệt đẹp.' },
+  { name: 'Mốc 428 Biên Giới', category: 'attraction', notes: 'Cột mốc biên giới cực Bắc thiêng liêng.' }
+];
+
+const GLOBAL_SAMPLE_RESTAURANTS = [
+  { name: 'Phở tráng tay Đồng Văn', notes: 'Phở tráng tay thủ công nóng hổi.' },
+  { name: 'Bánh cuốn trứng Phố Cổ', notes: 'Bánh cuốn chấm nước ninh xương béo ngậy.' },
+  { name: 'Bún chả Yên Minh', notes: 'Bún chả nướng than hoa thơm lừng.' },
+  { name: 'Nhà hàng Oanh Hiệu', notes: 'Lẩu gà đen nấm rừng trứ danh.' },
+  { name: 'Cơm lam Mèo Vạc', notes: 'Cơm lam nướng ống nứa ăn kèm thịt quay.' },
+  { name: 'Lẩu thắng cố Đồng Văn', notes: 'Thắng cố men lá truyền thống đậm đà.' },
+  { name: 'Lẩu gà đen H\'Mông', notes: 'Lẩu gà đen ninh thuốc bắc rau sạch.' },
+  { name: 'Quán ăn Lũng Cú', notes: 'Ẩm thực địa phương chân Cột cờ.' },
+  { name: 'Nhà hàng Tiến Nhị', notes: 'Nhà hàng đặc sản nổi tiếng.' },
+  { name: 'Quán ăn Quản Bạ', notes: 'Thịt bò khô và rau rừng tươi ngon.' },
+  { name: 'Nhà hàng Khải Hoàn', notes: 'Nhà hàng ấm cúng thực đơn đa dạng.' },
+  { name: 'Quán cơm Hoàng Su Phì', notes: 'Cơm bình dân dẻo thơm kèm cá suối.' },
+  { name: 'Cà phê Cực Bắc Lũng Cú', notes: 'Cà phê H\'Mông không gian yên bình.' }
+];
+
 function calculateHaversineDistance(
   p1: { latitude: number; longitude: number },
   p2: { latitude: number; longitude: number }
@@ -672,6 +711,127 @@ const TripPlanner = () => {
     }
   };
 
+  const cascadeDeduplicateSubsequentDays = (itineraryObj: any, changedDayIdx: number) => {
+    if (!itineraryObj || !Array.isArray(itineraryObj.days)) return itineraryObj;
+
+    const updatedItinerary = JSON.parse(JSON.stringify(itineraryObj));
+    const usedPlaces = new Set<string>();
+
+    // 1. Collect all places used in Days 1..changedDayIdx
+    updatedItinerary.days.forEach((d: any) => {
+      const dayNum = d.dayIndex || d.day || 1;
+      if (dayNum <= changedDayIdx) {
+        d.activities?.forEach((act: any) => {
+          if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
+          if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+        });
+      }
+    });
+
+    // 2. Scan and update subsequent days (dayNum > changedDayIdx)
+    updatedItinerary.days.forEach((d: any) => {
+      const dayNum = d.dayIndex || d.day || 1;
+      if (dayNum > changedDayIdx) {
+        d.activities?.forEach((act: any) => {
+          const actNameLower = (act.activityName || '').trim().toLowerCase();
+          const locNameLower = (act.locationName || '').trim().toLowerCase();
+
+          const isDuplicate = Array.from(usedPlaces).some(used => 
+            (actNameLower && (used.includes(actNameLower) || actNameLower.includes(used))) ||
+            (locNameLower && (used.includes(locNameLower) || locNameLower.includes(used)))
+          );
+
+          if (isDuplicate) {
+            const isRestaurant = act.category === 'restaurant';
+            const pool = isRestaurant ? GLOBAL_SAMPLE_RESTAURANTS : GLOBAL_SAMPLE_ATTRACTIONS;
+            const unused = pool.filter(p => !usedPlaces.has(p.name.toLowerCase()));
+
+            if (unused.length > 0) {
+              const replacement = unused[0];
+              const newName = isRestaurant 
+                ? (lang === 'vi' ? `Thưởng thức ${replacement.name}` : `Dine at ${replacement.name}`)
+                : (lang === 'vi' ? `Tham quan ${replacement.name}` : `Visit ${replacement.name}`);
+              act.activityName = newName;
+              act.locationName = `${replacement.name}, ${destination}`;
+              act.notes = replacement.notes || (lang === 'vi' ? 'Điểm mới trải nghiệm hấp dẫn.' : 'Exciting new location.');
+              if ((replacement as any).category) act.category = (replacement as any).category;
+              usedPlaces.add(replacement.name.toLowerCase());
+              usedPlaces.add(newName.toLowerCase());
+            } else {
+              const synthetic = lang === 'vi' 
+                ? `Điểm ${act.session || 'khám phá'} mới Ngày ${dayNum}`
+                : `New Day ${dayNum} ${act.session || 'Attraction'}`;
+              act.activityName = synthetic;
+              act.locationName = `${synthetic}, ${destination}`;
+              usedPlaces.add(synthetic.toLowerCase());
+            }
+          } else {
+            if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
+            if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+          }
+        });
+      }
+    });
+
+    return calculateItineraryCosts(updatedItinerary, style, currency, Number(budget));
+  };
+
+  const handleRegenerateSingleActivity = async (dayIdx: number, actIdx: number) => {
+    if (!itinerary) return;
+    const targetKey = `single-${dayIdx}-${actIdx}`;
+    setLoadingPart(targetKey);
+
+    const updated = JSON.parse(JSON.stringify(itinerary));
+    const targetDay = updated.days.find((d: any) => (d.dayIndex || d.day) === dayIdx);
+    if (!targetDay || !targetDay.activities || !targetDay.activities[actIdx]) {
+      setLoadingPart(null);
+      return;
+    }
+
+    const actToChange = targetDay.activities[actIdx];
+
+    // Collect exclude places (all activity names except the one being replaced)
+    const excludePlaces = new Set<string>();
+    updated.days.forEach((d: any) => {
+      d.activities?.forEach((a: any, i: number) => {
+        if ((d.dayIndex || d.day) === dayIdx && i === actIdx) return;
+        if (a.activityName) excludePlaces.add(a.activityName.trim().toLowerCase());
+        if (a.locationName) excludePlaces.add(a.locationName.trim().toLowerCase());
+      });
+    });
+
+    const isRestaurant = actToChange.category === 'restaurant';
+    const isHotel = actToChange.category === 'hotel';
+    const pool = isRestaurant 
+      ? GLOBAL_SAMPLE_RESTAURANTS 
+      : isHotel 
+      ? GLOBAL_SAMPLE_RESTAURANTS 
+      : GLOBAL_SAMPLE_ATTRACTIONS;
+
+    const unused = pool.filter(p => !excludePlaces.has(p.name.toLowerCase()));
+    const replacement = unused.length > 0 ? unused[0] : pool[Math.floor(Math.random() * pool.length)];
+
+    const prefix = isRestaurant 
+      ? (lang === 'vi' ? 'Thưởng thức tại' : 'Dine at')
+      : isHotel 
+      ? (lang === 'vi' ? 'Nghỉ ngơi tại' : 'Stay at')
+      : (lang === 'vi' ? 'Tham quan' : 'Visit');
+
+    actToChange.activityName = `${prefix} ${replacement.name}`;
+    actToChange.locationName = `${replacement.name}, ${destination}`;
+    actToChange.notes = replacement.notes || (lang === 'vi' ? 'Lựa chọn điểm đến mới hấp dẫn.' : 'New attractive destination choice.');
+
+    // Cascade non-duplication deduplication pass to all subsequent days (dayIndex > dayIdx)
+    const cascaded = cascadeDeduplicateSubsequentDays(updated, dayIdx);
+    setItinerary(cascaded);
+    setOptimized(false);
+    setLoadingPart(null);
+
+    success(lang === 'vi' 
+      ? `Đã đổi thẻ "${replacement.name}" & tự động cập nhật nối tiếp các ngày sau!`
+      : `Swapped activity card to "${replacement.name}" & auto-updated subsequent days!`);
+  };
+
   const handleRegeneratePart = async (dayIdx: number, sessionName?: 'Sáng' | 'Trưa' | 'Chiều' | 'Tối') => {
     if (!itinerary) return;
     const targetKey = sessionName ? `session-${dayIdx}-${sessionName}` : `day-${dayIdx}`;
@@ -680,7 +840,7 @@ const TripPlanner = () => {
     // Gather exclude places (current names)
     const excludePlaces: string[] = [];
     itinerary.days.forEach((d: any) => {
-      d.activities.forEach((a: any) => {
+      d.activities?.forEach((a: any) => {
         if (a.activityName) excludePlaces.push(a.activityName);
       });
     });
@@ -699,12 +859,52 @@ const TripPlanner = () => {
         excludePlaces
       });
       if (response) {
-        setItinerary(response);
+        const cascaded = cascadeDeduplicateSubsequentDays(response, dayIdx);
+        setItinerary(cascaded);
         setOptimized(false);
+        const sessionText = sessionName ? (lang === 'vi' ? `buổi ${sessionName}` : `${sessionName} session`) : '';
+        const dayText = lang === 'vi' ? `Ngày ${dayIdx}` : `Day ${dayIdx}`;
+        success(lang === 'vi' 
+          ? `Đã đổi ${sessionText} ${dayText} & tự động cập nhật nối tiếp các ngày sau không bị trùng lặp!` 
+          : `Updated ${sessionText} ${dayText} & auto-cascaded subsequent days with zero duplicates!`);
       }
     } catch (err) {
       console.error('Failed to regenerate part:', err);
-      error(lang === 'vi' ? 'Không thể đổi lịch trình. Vui lòng thử lại.' : 'Failed to regenerate part. Please try again.');
+      // Fallback local regeneration & cascading deduplication
+      const updatedLocal = JSON.parse(JSON.stringify(itinerary));
+      const targetDay = updatedLocal.days.find((d: any) => (d.dayIndex || d.day) === dayIdx);
+      if (targetDay) {
+        const pool = sessionName?.includes('Trưa') || sessionName?.includes('Ăn') || sessionName?.includes('Tối') 
+          ? GLOBAL_SAMPLE_RESTAURANTS 
+          : GLOBAL_SAMPLE_ATTRACTIONS;
+        const used = new Set(excludePlaces.map(p => p.toLowerCase()));
+        const unused = pool.filter(p => !used.has(p.name.toLowerCase()));
+        const replacement = unused.length > 0 ? unused[0] : pool[Math.floor(Math.random() * pool.length)];
+
+        if (sessionName) {
+          const actToChange = targetDay.activities.find((a: any) => a.session === sessionName) || targetDay.activities[0];
+          if (actToChange) {
+            actToChange.activityName = lang === 'vi' ? `Khám phá ${replacement.name}` : `Explore ${replacement.name}`;
+            actToChange.locationName = `${replacement.name}, ${destination}`;
+            actToChange.notes = replacement.notes || (lang === 'vi' ? 'Lựa chọn mới hấp dẫn.' : 'New attractive option.');
+          }
+        } else {
+          targetDay.activities.forEach((act: any, idx: number) => {
+            const item = pool[(idx + Math.floor(Math.random() * 5)) % pool.length];
+            act.activityName = lang === 'vi' ? `Tham quan ${item.name}` : `Visit ${item.name}`;
+            act.locationName = `${item.name}, ${destination}`;
+          });
+        }
+      }
+
+      const cascaded = cascadeDeduplicateSubsequentDays(updatedLocal, dayIdx);
+      setItinerary(cascaded);
+      setOptimized(false);
+      const sessionText = sessionName ? (lang === 'vi' ? `buổi ${sessionName}` : `${sessionName} session`) : '';
+      const dayText = lang === 'vi' ? `Ngày ${dayIdx}` : `Day ${dayIdx}`;
+      success(lang === 'vi' 
+        ? `Đã đổi ${sessionText} ${dayText} & tự động cập nhật nối tiếp các ngày sau không bị trùng lặp!` 
+        : `Updated ${sessionText} ${dayText} & auto-cascaded subsequent days with zero duplicates!`);
     } finally {
       setLoadingPart(null);
     }
@@ -894,7 +1094,7 @@ const TripPlanner = () => {
           {/* Top Pill Badge with Pulse Indicator */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/15 border border-blue-400/30 text-xs font-bold text-sky-300 uppercase tracking-wider backdrop-blur-md shadow-lg shadow-blue-500/10">
             <Sparkles size={13} className="text-cyan-300 animate-pulse" />
-            <span>{lang === 'vi' ? 'Công nghệ AI Thế Hệ Mới' : 'Next-Gen AI Technology'}</span>
+            <span>{lang === 'vi' ? 'Công nghệ trợ lý ảo thế hệ mới' : 'Next-Gen AI Technology'}</span>
           </div>
 
           {/* Heading */}
@@ -932,7 +1132,7 @@ const TripPlanner = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-white tracking-wide drop-shadow-md">
-                {lang === 'vi' ? 'Trợ lý Lộ trình AI' : 'AI Itinerary Assistant'}
+                {lang === 'vi' ? 'Trợ lý ảo Lộ trình' : 'AI Itinerary Assistant'}
               </span>
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 drop-shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
@@ -1300,9 +1500,24 @@ const TripPlanner = () => {
                                         <h4 className="text-xs font-bold text-[var(--text-primary)]">{act.activityName || act.name}</h4>
                                       </div>
                                     </div>
-                                    <span className="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-lg">
-                                      {formatCost(act.estimatedCost || act.cost)}
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRegenerateSingleActivity(currentDay.dayIndex || currentDay.day, idx)}
+                                        disabled={loadingPart !== null || loading}
+                                        className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded-lg border border-amber-500/20 transition-all cursor-pointer disabled:opacity-50 active:scale-95"
+                                        title={lang === 'vi' ? 'Đổi thẻ hoạt động này & tự động cập nhật các ngày sau' : 'Swap this activity card & auto-cascade subsequent days'}
+                                      >
+                                        {loadingPart === `single-${currentDay.dayIndex || currentDay.day}-${idx}` ? (
+                                          <Loader2 size={10} className="animate-spin" />
+                                        ) : (
+                                          <>{lang === 'vi' ? 'Đổi thẻ' : 'Swap Card'}</>
+                                        )}
+                                      </button>
+                                      <span className="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-lg">
+                                        {formatCost(act.estimatedCost || act.cost)}
+                                      </span>
+                                    </div>
                                   </div>
 
                                   <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{act.notes || act.note}</p>

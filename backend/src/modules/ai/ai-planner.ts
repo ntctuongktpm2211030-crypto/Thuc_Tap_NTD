@@ -534,13 +534,88 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
     }
 
     const refined = await refineItineraryCoordinates(updatedItinerary, params.destination);
-    return calculateItineraryCosts(refined, params.travelStyle, params.currency || 'USD', params.totalBudget);
+    const cascaded = cascadeDeduplicateBackend(refined, dayIndex, params.destination);
+    return calculateItineraryCosts(cascaded, params.travelStyle, params.currency || 'USD', params.totalBudget);
 
   } catch (error) {
     console.error('❌ Failed to regenerate itinerary part with AI:', error);
     const fb = generateFallbackRegenerate(params);
-    return calculateItineraryCosts(fb, params.travelStyle, params.currency || 'USD', params.totalBudget);
+    const cascadedFb = cascadeDeduplicateBackend(fb, dayIndex, params.destination);
+    return calculateItineraryCosts(cascadedFb, params.travelStyle, params.currency || 'USD', params.totalBudget);
   }
+}
+
+/**
+ * Ensures zero duplicate places across all subsequent days when a day/session is regenerated.
+ */
+function cascadeDeduplicateBackend(itinerary: AIItineraryResponse, changedDayIndex: number, destination: string): AIItineraryResponse {
+  if (!itinerary || !Array.isArray(itinerary.days)) return itinerary;
+
+  const curated = getCuratedProvince(destination);
+  const usedPlaces = new Set<string>();
+
+  // 1. Collect all used places from Day 1 up to changedDayIndex
+  itinerary.days.forEach(d => {
+    if ((d.dayIndex || 1) <= changedDayIndex) {
+      d.activities?.forEach(act => {
+        if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
+        if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+      });
+    }
+  });
+
+  // 2. Scan and update subsequent days (dayIndex > changedDayIndex)
+  itinerary.days.forEach(d => {
+    const currentDayIdx = d.dayIndex || 1;
+    if (currentDayIdx > changedDayIndex) {
+      d.activities?.forEach((act) => {
+        const actNameLower = (act.activityName || '').trim().toLowerCase();
+        const locNameLower = (act.locationName || '').trim().toLowerCase();
+
+        const isDuplicate = Array.from(usedPlaces).some(used => 
+          (actNameLower && (used.includes(actNameLower) || actNameLower.includes(used))) ||
+          (locNameLower && (used.includes(locNameLower) || locNameLower.includes(used)))
+        );
+
+        if (isDuplicate) {
+          if (curated) {
+            const pool = [
+              ...curated.attractions,
+              ...curated.nature,
+              ...curated.restaurants,
+              ...curated.hotels,
+              ...curated.festivals
+            ];
+            const unused = pool.filter(p => !usedPlaces.has(p.name.toLowerCase()));
+            if (unused.length > 0) {
+              const replacement = unused[0];
+              act.activityName = act.category === 'restaurant' ? `Thưởng thức ${replacement.name}` : `Tham quan ${replacement.name}`;
+              act.locationName = `${replacement.name}, ${curated.provinceName}`;
+              act.latitude = replacement.latitude;
+              act.longitude = replacement.longitude;
+              act.notes = replacement.description;
+              usedPlaces.add(replacement.name.toLowerCase());
+            } else {
+              const synthetic = `Điểm mới Ngày ${currentDayIdx} (${act.session || 'khám phá'})`;
+              act.activityName = synthetic;
+              act.locationName = `${synthetic}, ${destination}`;
+              usedPlaces.add(synthetic.toLowerCase());
+            }
+          } else {
+            const synthetic = `Điểm mới Ngày ${currentDayIdx} (${act.session || 'khám phá'})`;
+            act.activityName = synthetic;
+            act.locationName = `${synthetic}, ${destination}`;
+            usedPlaces.add(synthetic.toLowerCase());
+          }
+        } else {
+          if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
+          if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+        }
+      });
+    }
+  });
+
+  return itinerary;
 }
 
 /**

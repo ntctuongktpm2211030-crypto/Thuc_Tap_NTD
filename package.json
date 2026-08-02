@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "prisma-markdown": "^4.0.0"
+  }
+}

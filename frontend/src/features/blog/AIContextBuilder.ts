@@ -19,7 +19,7 @@ export const AIContextBuilder = {
 
   buildSystemPrompt(provinceName: string): string {
     const context = this.buildContextForProvince(provinceName);
-    return `Bạn là Trợ lý số chuyên trách Du lịch Việt Nam của Terraholic.
+    return `Bạn là Trợ lý ảo chuyên trách Du lịch Việt Nam của Terraholic.
 Dưới đây là nguồn tri thức chính thức duy nhất về địa phương "${provinceName}":
 ----------------------------------------
 ${context}

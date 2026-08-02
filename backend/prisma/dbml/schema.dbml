@@ -1,0 +1,834 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  email String [unique, not null]
+  passwordHash String [not null]
+  role UserRole [not null, default: 'USER']
+  isVerified Boolean [not null, default: false]
+  verificationToken String
+  resetPasswordToken String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  profile Profile
+  preferences TravelPreferences
+  trips Trip [not null]
+  posts Post [not null]
+  comments Comment [not null]
+  likes Like [not null]
+  bookmarks Bookmark [not null]
+  checkIns CheckIn [not null]
+  notifications Notification [not null]
+  aiHistories AIHistory [not null]
+  liveLocation Location
+  chatbotConversations ChatConversation [not null]
+  aiMemory AIMemory
+  userRecommendations UserRecommendation [not null]
+  travelHistories TravelHistory [not null]
+  favoriteFoods FavoriteFood [not null]
+  savedPlaces SavedPlace [not null]
+  aiFeedbacks AIFeedback [not null]
+  followers Follower [not null]
+  following Follower [not null]
+  conversations Conversation [not null]
+  messages Message [not null]
+  journeys Journey [not null]
+  locationHistory LocationHistory [not null]
+  organizedEvents Event [not null]
+  eventAttendances EventAttendee [not null]
+  travelerMatchesUser TravelerMatch [not null]
+  travelerMatchesTarget TravelerMatch [not null]
+}
+
+Table Profile {
+  id String [pk]
+  userId String [unique, not null]
+  fullName String [not null]
+  avatarUrl String
+  coverUrl String
+  bio String
+  phoneNumber String
+  homeLocation String
+  user User [not null]
+}
+
+Table TravelPreferences {
+  id String [pk]
+  userId String [unique, not null]
+  preferredPace String [not null]
+  dailyBudget Float [not null]
+  activities String[] [not null]
+  destinationTypes String[] [not null]
+  foodPreferences String[] [not null]
+  user User [not null]
+}
+
+Table Trip {
+  id String [pk]
+  ownerId String [not null]
+  title String [not null]
+  description String
+  destinationName String [not null]
+  startDate DateTime
+  endDate DateTime
+  totalBudget Float [not null, default: 0]
+  travelStyle String [not null, default: 'solo']
+  isPublic Boolean [not null, default: false]
+  status TripStatus [not null, default: 'CONFIRMED']
+  cloneSourceId String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  owner User [not null]
+  cloneSource Trip
+  clonedTrips Trip [not null]
+  days TripDay [not null]
+  posts Post [not null]
+  recommendations Recommendation [not null]
+}
+
+Table TripDay {
+  id String [pk]
+  tripId String [not null]
+  dayIndex Int [not null]
+  date DateTime
+  trip Trip [not null]
+  activities TripActivity [not null]
+
+  indexes {
+    (tripId, dayIndex) [unique]
+  }
+}
+
+Table TripActivity {
+  id String [pk]
+  tripDayId String [not null]
+  destinationId String
+  title String
+  location String
+  description String
+  startTime String
+  endTime String
+  estimatedCost Float [not null, default: 0]
+  sequenceOrder Int [not null]
+  notes String
+  tripDay TripDay [not null]
+  destination Destination
+}
+
+Table Destination {
+  id String [pk]
+  name String [not null]
+  description String
+  latitude Float [not null]
+  longitude Float [not null]
+  category String [not null]
+  averageRating Float [not null, default: 0]
+  address String
+  openingHours String
+  activities TripActivity [not null]
+  checkIns CheckIn [not null]
+  recommendations Recommendation [not null]
+  events Event [not null]
+  travelHistories TravelHistory [not null]
+  userRecommendations UserRecommendation [not null]
+  posts Post [not null]
+}
+
+Table Post {
+  id String [pk]
+  authorId String [not null]
+  content String [not null]
+  mediaUrls String[] [not null]
+  tripId String
+  locationId String
+  createdAt DateTime [default: `now()`, not null]
+  deletedAt DateTime
+  author User [not null]
+  trip Trip
+  destination Destination
+  comments Comment [not null]
+  likes Like [not null]
+  bookmarks Bookmark [not null]
+}
+
+Table Comment {
+  id String [pk]
+  postId String [not null]
+  authorId String [not null]
+  content String [not null]
+  parentId String
+  createdAt DateTime [default: `now()`, not null]
+  post Post [not null]
+  author User [not null]
+  parent Comment
+  replies Comment [not null]
+}
+
+Table Like {
+  id String [pk]
+  postId String [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  post Post [not null]
+  user User [not null]
+
+  indexes {
+    (postId, userId) [unique]
+  }
+}
+
+Table Bookmark {
+  id String [pk]
+  postId String [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  post Post [not null]
+  user User [not null]
+
+  indexes {
+    (postId, userId) [unique]
+  }
+}
+
+Table Follower {
+  id String [pk]
+  followerId String [not null]
+  followingId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  follower User [not null]
+  following User [not null]
+
+  indexes {
+    (followerId, followingId) [unique]
+  }
+}
+
+Table Message {
+  id String [pk]
+  conversationId String [not null]
+  senderId String [not null]
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  conversation Conversation [not null]
+  sender User [not null]
+}
+
+Table Conversation {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  participants User [not null]
+  messages Message [not null]
+}
+
+Table Notification {
+  id String [pk]
+  recipientId String [not null]
+  type String [not null]
+  content String [not null]
+  isRead Boolean [not null, default: false]
+  targetId String
+  createdAt DateTime [default: `now()`, not null]
+  recipient User [not null]
+}
+
+Table CheckIn {
+  id String [pk]
+  userId String [not null]
+  destinationId String [not null]
+  note String
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  destination Destination [not null]
+}
+
+Table Location {
+  id String [pk]
+  userId String [unique, not null]
+  latitude Float [not null]
+  longitude Float [not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table Recommendation {
+  id String [pk]
+  tripId String [not null]
+  destinationId String [not null]
+  score Float [not null]
+  recommendationReason String
+  trip Trip [not null]
+  destination Destination [not null]
+}
+
+Table AIHistory {
+  id String [pk]
+  userId String [not null]
+  promptText String [not null]
+  responseJson String [not null]
+  type String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+}
+
+Table Journey {
+  id String [pk]
+  userId String [not null]
+  title String [not null]
+  description String
+  coverImageUrl String
+  isPublic Boolean [not null, default: true]
+  status String [not null, default: 'draft']
+  startDate DateTime
+  endDate DateTime
+  totalDistance Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  routes Route [not null]
+}
+
+Table Route {
+  id String [pk]
+  journeyId String [not null]
+  name String [not null]
+  description String
+  transportMode String [not null, default: 'walking']
+  distanceKm Float [not null, default: 0]
+  durationMin Int [not null, default: 0]
+  color String [not null, default: '#D4A843']
+  createdAt DateTime [default: `now()`, not null]
+  journey Journey [not null]
+  points RoutePoint [not null]
+}
+
+Table RoutePoint {
+  id String [pk]
+  routeId String [not null]
+  latitude Float [not null]
+  longitude Float [not null]
+  altitude Float
+  sequenceOrder Int [not null]
+  timestamp DateTime [default: `now()`, not null]
+  note String
+  photoUrl String
+  route Route [not null]
+}
+
+Table LocationHistory {
+  id String [pk]
+  userId String [not null]
+  latitude Float [not null]
+  longitude Float [not null]
+  accuracy Float
+  speed Float
+  heading Float
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+}
+
+Table Event {
+  id String [pk]
+  title String [not null]
+  description String
+  coverImageUrl String
+  destinationId String
+  latitude Float [not null]
+  longitude Float [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  category String [not null]
+  maxAttendees Int
+  currentCount Int [not null, default: 0]
+  organizerId String [not null]
+  isPublic Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  destination Destination
+  organizer User [not null]
+  attendees EventAttendee [not null]
+}
+
+Table EventAttendee {
+  id String [pk]
+  eventId String [not null]
+  userId String [not null]
+  status String [not null, default: 'going']
+  createdAt DateTime [default: `now()`, not null]
+  event Event [not null]
+  user User [not null]
+
+  indexes {
+    (eventId, userId) [unique]
+  }
+}
+
+Table TravelerMatch {
+  id String [pk]
+  userId String [not null]
+  matchedUserId String [not null]
+  compatScore Float [not null]
+  matchReasons String[] [not null]
+  status String [not null, default: 'suggested']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  matchedUser User [not null]
+
+  indexes {
+    (userId, matchedUserId) [unique]
+  }
+}
+
+Table ChatConversation {
+  id String [pk]
+  userId String [not null]
+  title String [default: 'New Conversation']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  messages ChatMessage [not null]
+}
+
+Table ChatMessage {
+  id String [pk]
+  conversationId String [not null]
+  role String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  conversation ChatConversation [not null]
+  versions ChatMessageVersion [not null]
+  feedback AIFeedback
+  toolCalls ToolCall [not null]
+  aiChatLog AIChatLog
+}
+
+Table ChatMessageVersion {
+  id String [pk]
+  messageId String [not null]
+  content String [not null]
+  version Int [not null]
+  isActive Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  message ChatMessage [not null]
+}
+
+Table AIMemory {
+  id String [pk]
+  userId String [unique, not null]
+  travelPreferences String[] [not null]
+  favoriteFoods String[] [not null]
+  budget String
+  transportation String[] [not null]
+  favoriteLocations String[] [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table UserRecommendation {
+  id String [pk]
+  userId String [not null]
+  location String [not null]
+  destinationId String
+  priority String [not null]
+  reason String
+  type String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  destination Destination
+}
+
+Table TravelHistory {
+  id String [pk]
+  userId String [not null]
+  location String [not null]
+  destinationId String
+  time DateTime [not null]
+  rating String
+  cost Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  destination Destination
+}
+
+Table FavoriteFood {
+  id String [pk]
+  userId String [not null]
+  name String [not null]
+  region String
+  description String
+  rating Float
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table SavedPlace {
+  id String [pk]
+  userId String [not null]
+  name String [not null]
+  category String [not null]
+  latitude Float [not null]
+  longitude Float [not null]
+  address String
+  imageUrl String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table AIFeedback {
+  id String [pk]
+  userId String [not null]
+  messageId String [unique, not null]
+  rating Int [not null]
+  comment String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  message ChatMessage [not null]
+}
+
+Table ToolCall {
+  id String [pk]
+  messageId String [not null]
+  toolName String [not null]
+  input String [not null]
+  output String
+  status String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  message ChatMessage [not null]
+}
+
+Table SystemCache {
+  key String [not null]
+  type String [not null]
+  value String [not null]
+  expiresAt DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (key, type) [pk]
+  }
+}
+
+Table KnowledgeContent {
+  id String [pk]
+  title String [not null]
+  body String [not null]
+  category String [not null]
+  questions KnowledgeQuestion [not null]
+  answers KnowledgeAnswer [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table KnowledgeQuestion {
+  id String [pk]
+  contentId String [not null]
+  questionText String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  content KnowledgeContent [not null]
+}
+
+Table KnowledgeAnswer {
+  id String [pk]
+  contentId String [not null]
+  answerText String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  content KnowledgeContent [not null]
+}
+
+Table SafetyWarning {
+  id String [pk]
+  type String [not null]
+  description String [not null]
+  latitude Float [not null]
+  longitude Float [not null]
+  radiusKm Float [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+  expiresAt DateTime
+}
+
+Table ModelRegistry {
+  id String [pk]
+  name String [unique, not null]
+  provider String [not null]
+  type String [not null]
+  version String [not null]
+  isActive Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  chatLogs AIChatLog [not null]
+}
+
+Table KnowledgeVersion {
+  id String [pk]
+  versionNumber Int [unique, not null]
+  commitMessage String
+  createdAt DateTime [default: `now()`, not null]
+  freshnessLogs KnowledgeFreshness [not null]
+}
+
+Table PromptVersion {
+  id String [pk]
+  templateName String [not null]
+  versionHash String [unique, not null]
+  templateText String [not null]
+  isActive Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  chatLogs AIChatLog [not null]
+}
+
+Table AIChatLog {
+  id String [pk]
+  messageId String [unique, not null]
+  query String [not null]
+  llmPrompt String [not null]
+  llmResponse String [not null]
+  similarityScore Float [not null]
+  confidenceScore Int [not null]
+  reliabilityLevel String [not null]
+  groundednessScore Int [not null]
+  claimVerScore Int [not null]
+  retrievedContext String [not null]
+  promptTokens Int [not null]
+  completionTokens Int [not null]
+  totalTokens Int [not null]
+  apiCostUsd Float [not null]
+  latencyMs Int [not null]
+  ttftMs Int [not null]
+  guardrailsBlocked Boolean [not null, default: false]
+  securityThreatType String
+  unsupportedClaims Int [not null, default: 0]
+  modelId String [not null]
+  promptId String [not null]
+  model ModelRegistry [not null]
+  prompt PromptVersion [not null]
+  message ChatMessage [not null]
+  userFeedbacks UserFeedback [not null]
+  evalHistories EvaluationHistory [not null]
+  guardrailEvents GuardrailEvent [not null]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table UserFeedback {
+  id String [pk]
+  chatLogId String [not null]
+  rating Int [not null]
+  comment String
+  correctedText String
+  isProcessed Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  chatLog AIChatLog [not null]
+}
+
+Table CacheMetadata {
+  id String [pk]
+  cacheKey String [unique, not null]
+  queryText String [not null]
+  responseJson String [not null]
+  hitCount Int [not null, default: 1]
+  expiresAt DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table EvaluationHistory {
+  id String [pk]
+  chatLogId String [not null]
+  metricName String [not null]
+  score Float [not null]
+  evaluatorModel String [not null]
+  reasoning String
+  createdAt DateTime [default: `now()`, not null]
+  chatLog AIChatLog [not null]
+}
+
+Table GuardrailEvent {
+  id String [pk]
+  chatLogId String
+  ruleViolated String [not null]
+  severity String [not null]
+  payloadBlocked String [not null]
+  actionTaken String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  chatLog AIChatLog
+}
+
+Table KnowledgeFreshness {
+  id String [pk]
+  contentId String [not null]
+  knowledgeCat String [not null]
+  lastCheckedAt DateTime [default: `now()`, not null]
+  driftDetected Boolean [not null, default: false]
+  sourceHash String
+  versionId Int [not null]
+  version KnowledgeVersion [not null]
+}
+
+Table AuditTrail {
+  id String [pk]
+  actionType String [not null]
+  actorName String [not null]
+  description String [not null]
+  ipAddress String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table HandbookDocument {
+  id String [pk]
+  title String [not null]
+  category String [not null, default: 'Handbook']
+  fileType String [not null, default: 'txt']
+  fileName String
+  fileSize String
+  content String [not null]
+  updatedAtStr String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table ConversationParticipants {
+  conversationsId String [ref: > Conversation.id]
+  participantsId String [ref: > User.id]
+}
+
+Enum UserRole {
+  USER
+  ADMIN
+}
+
+Enum TripStatus {
+  DRAFT_AI
+  DRAFT_USER
+  CONFIRMED
+}
+
+Ref: Profile.userId - User.id [delete: Cascade]
+
+Ref: TravelPreferences.userId - User.id [delete: Cascade]
+
+Ref: Trip.ownerId > User.id [delete: Cascade]
+
+Ref: Trip.cloneSourceId - Trip.id
+
+Ref: TripDay.tripId > Trip.id [delete: Cascade]
+
+Ref: TripActivity.tripDayId > TripDay.id [delete: Cascade]
+
+Ref: TripActivity.destinationId > Destination.id [delete: Set Null]
+
+Ref: Post.authorId > User.id [delete: Cascade]
+
+Ref: Post.tripId > Trip.id [delete: Set Null]
+
+Ref: Post.locationId > Destination.id [delete: Set Null]
+
+Ref: Comment.postId > Post.id [delete: Cascade]
+
+Ref: Comment.authorId > User.id [delete: Cascade]
+
+Ref: Comment.parentId - Comment.id [delete: Cascade]
+
+Ref: Like.postId > Post.id [delete: Cascade]
+
+Ref: Like.userId > User.id [delete: Cascade]
+
+Ref: Bookmark.postId > Post.id [delete: Cascade]
+
+Ref: Bookmark.userId > User.id [delete: Cascade]
+
+Ref: Follower.followerId > User.id [delete: Cascade]
+
+Ref: Follower.followingId > User.id [delete: Cascade]
+
+Ref: Message.conversationId > Conversation.id [delete: Cascade]
+
+Ref: Message.senderId > User.id [delete: Cascade]
+
+Ref: Notification.recipientId > User.id [delete: Cascade]
+
+Ref: CheckIn.userId > User.id [delete: Cascade]
+
+Ref: CheckIn.destinationId > Destination.id [delete: Cascade]
+
+Ref: Location.userId - User.id [delete: Cascade]
+
+Ref: Recommendation.tripId > Trip.id [delete: Cascade]
+
+Ref: Recommendation.destinationId > Destination.id [delete: Cascade]
+
+Ref: AIHistory.userId > User.id [delete: Cascade]
+
+Ref: Journey.userId > User.id [delete: Cascade]
+
+Ref: Route.journeyId > Journey.id [delete: Cascade]
+
+Ref: RoutePoint.routeId > Route.id [delete: Cascade]
+
+Ref: LocationHistory.userId > User.id [delete: Cascade]
+
+Ref: Event.destinationId > Destination.id [delete: Set Null]
+
+Ref: Event.organizerId > User.id [delete: Cascade]
+
+Ref: EventAttendee.eventId > Event.id [delete: Cascade]
+
+Ref: EventAttendee.userId > User.id [delete: Cascade]
+
+Ref: TravelerMatch.userId > User.id [delete: Cascade]
+
+Ref: TravelerMatch.matchedUserId > User.id [delete: Cascade]
+
+Ref: ChatConversation.userId > User.id [delete: Cascade]
+
+Ref: ChatMessage.conversationId > ChatConversation.id [delete: Cascade]
+
+Ref: ChatMessageVersion.messageId > ChatMessage.id [delete: Cascade]
+
+Ref: AIMemory.userId - User.id [delete: Cascade]
+
+Ref: UserRecommendation.userId > User.id [delete: Cascade]
+
+Ref: UserRecommendation.destinationId > Destination.id [delete: Set Null]
+
+Ref: TravelHistory.userId > User.id [delete: Cascade]
+
+Ref: TravelHistory.destinationId > Destination.id [delete: Set Null]
+
+Ref: FavoriteFood.userId > User.id [delete: Cascade]
+
+Ref: SavedPlace.userId > User.id [delete: Cascade]
+
+Ref: AIFeedback.userId > User.id [delete: Cascade]
+
+Ref: AIFeedback.messageId - ChatMessage.id [delete: Cascade]
+
+Ref: ToolCall.messageId > ChatMessage.id [delete: Cascade]
+
+Ref: KnowledgeQuestion.contentId > KnowledgeContent.id [delete: Cascade]
+
+Ref: KnowledgeAnswer.contentId > KnowledgeContent.id [delete: Cascade]
+
+Ref: AIChatLog.modelId > ModelRegistry.id
+
+Ref: AIChatLog.promptId > PromptVersion.id
+
+Ref: AIChatLog.messageId - ChatMessage.id [delete: Cascade]
+
+Ref: UserFeedback.chatLogId > AIChatLog.id [delete: Cascade]
+
+Ref: EvaluationHistory.chatLogId > AIChatLog.id [delete: Cascade]
+
+Ref: GuardrailEvent.chatLogId > AIChatLog.id [delete: Set Null]
+
+Ref: KnowledgeFreshness.versionId > KnowledgeVersion.versionNumber

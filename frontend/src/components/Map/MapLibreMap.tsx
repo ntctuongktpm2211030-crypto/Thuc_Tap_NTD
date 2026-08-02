@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLang } from '../../contexts/LanguageContext';
 import { mapService } from '../../services/smartTravel.service';
-import { CloudRain, AlertTriangle, Calendar, Compass, ListTodo, MapPin } from 'lucide-react';
+import { Compass, ListTodo, MapPin, Navigation } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -123,10 +123,10 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
   let allCheckinsHtml = '';
   if (loc.allCheckins && loc.allCheckins.length > 1) {
     const listHtml = loc.allCheckins.slice(1).map(c => `
-      <div class="flex items-start gap-1.5 border-t border-slate-100 pt-1.5 mt-1.5" style="display: flex; gap: 6px; border-top:1px solid #eee; padding-top:6px; margin-top:6px;">
-        <img src="${c.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="w-5 h-5 rounded-full object-cover border border-slate-200 mt-0.5" style="width:20px; height:20px; border-radius:50%; object-fit:cover;" />
-        <div class="flex-1 min-w-0">
-          <p class="text-[9px] font-bold text-slate-800 leading-none" style="margin:0; font-size:9px; font-weight:bold;">${c.user}</p>
+      <div class="flex items-start gap-1.5 border-t border-slate-100 pt-1 mt-1" style="display:flex; align-items:flex-start; gap:6px; border-top:1px solid #f1f5f9; margin-top:4px; padding-top:4px;">
+        <img src="${c.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="w-4 h-4 rounded-full object-cover mt-0.5" style="width:16px; height:16px; border-radius:50%; object-fit:cover;" />
+        <div style="flex:1; min-width:0;">
+          <p class="text-[9px] font-bold text-slate-700 leading-none" style="margin:0; font-size:9px; font-weight:bold;">${c.user}</p>
           <p class="text-[7.5px] text-slate-500" style="margin:0; font-size:7.5px;">${c.time}</p>
           ${c.note ? `<p class="text-[9px] text-slate-600 italic mt-0.5 leading-tight" style="margin:0; font-size:9px;">"${c.note}"</p>` : ''}
         </div>
@@ -145,6 +145,8 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
     `;
   }
 
+  const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`;
+
   return `
     <div class="space-y-2 text-slate-800" style="font-family: sans-serif; font-size: 11px; max-width: 220px; line-height: 1.4;">
       ${headerHtml}
@@ -152,13 +154,23 @@ const createPopupContent = (loc: MapLocation, vi: boolean, hasRouteCallback: boo
       ${imageHtml}
       <div class="text-[10px] text-yellow-600 font-bold flex items-center gap-1 mt-1" style="margin-top:4px; font-size:10px; font-weight:bold;">📍 ${loc.name || (isLive ? 'Live Tracking' : '')}</div>
       ${allCheckinsHtml}
-      ${hasRouteCallback ? `
-      <button 
-        onclick="window.addPointToRoute('${loc.id}')"
-        style="margin-top: 10px; width: 100%; background-color: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 10px; cursor: pointer; display: block;"
-      >
-        ${vi ? '+ Thêm vào lộ trình' : '+ Add to Route'}
-      </button>` : ''}
+      <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+        <a 
+          href="${gmapsUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="width: 100%; background-color: #10b981; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-weight: bold; font-size: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; box-sizing: border-box;"
+        >
+          🗺️ ${vi ? 'Chỉ đường Google Maps' : 'Google Maps Route'}
+        </a>
+        ${hasRouteCallback ? `
+        <button 
+          onclick="window.addPointToRoute('${loc.id}')"
+          style="width: 100%; background-color: #3b82f6; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-weight: bold; font-size: 10px; cursor: pointer; display: block;"
+        >
+          📍 ${vi ? 'Nối tuyến đường' : 'Connect Route'}
+        </button>` : ''}
+      </div>
     </div>
   `;
 };
@@ -601,13 +613,43 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
     }
   }, [locations, viewMode, aiRecommendedIds, showEvents, loaded]);
 
-  // 4. Route points Polyline path connector
+  // 4. Real-world Road Routing path connector (OSRM API / OpenStreetMap)
   useEffect(() => {
     if (!loaded || !mlMapRef.current) return;
     const map = mlMapRef.current;
-    
-    const updateLine = () => {
+
+    if (routePoints.length < 2) {
+      if (map.isStyleLoaded() && map.getSource('route-line')) {
+        (map.getSource('route-line') as any).setData({
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'LineString', coordinates: [] }
+        });
+      }
+      return;
+    }
+
+    let isMounted = true;
+
+    const updateRoadLine = async () => {
       if (!map.isStyleLoaded()) return;
+
+      const fallbackCoords = routePoints.map(p => [p.lng, p.lat]);
+      let finalCoordinates: [number, number][] = fallbackCoords as [number, number][];
+
+      try {
+        const waypoints = routePoints.map(p => `${p.lng},${p.lat}`).join(';');
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${waypoints}?overview=full&geometries=geojson`;
+        const res = await fetch(osrmUrl);
+        const data = await res.json();
+        if (data && data.routes && data.routes[0] && data.routes[0].geometry && data.routes[0].geometry.coordinates) {
+          finalCoordinates = data.routes[0].geometry.coordinates;
+        }
+      } catch (err) {
+        console.warn('[MapLibreMap] OSRM real road fetch fallback to straight line:', err);
+      }
+
+      if (!isMounted) return;
 
       if (map.getSource('route-line')) {
         (map.getSource('route-line') as any).setData({
@@ -615,7 +657,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
           properties: {},
           geometry: {
             type: 'LineString',
-            coordinates: routePoints.map(p => [p.lng, p.lat])
+            coordinates: finalCoordinates
           }
         });
       } else {
@@ -626,7 +668,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             properties: {},
             geometry: {
               type: 'LineString',
-              coordinates: routePoints.map(p => [p.lng, p.lat])
+              coordinates: finalCoordinates
             }
           }
         });
@@ -639,25 +681,29 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#d4af37',
-            'line-width': 4,
-            'line-opacity': 0.8
+            'line-color': '#2563eb',
+            'line-width': 5,
+            'line-opacity': 0.85
           }
         });
       }
 
       if (routePoints.length >= 2) {
         const bounds = new maplibregl.LngLatBounds();
-        routePoints.forEach(p => bounds.extend([p.lng, p.lat]));
-        map.fitBounds(bounds, { padding: 50 });
+        finalCoordinates.forEach(p => bounds.extend(p as [number, number]));
+        map.fitBounds(bounds, { padding: 60 });
       }
     };
 
     if (map.isStyleLoaded()) {
-      updateLine();
+      void updateRoadLine();
     } else {
-      map.once('style.load', updateLine);
+      map.once('style.load', () => void updateRoadLine());
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [routePoints, loaded]);
 
   // 5. Warning Circle layers
@@ -1017,15 +1063,28 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
               </span>
             </div>
 
-            <button
-              onClick={() => {
-                if (onAddPointToRoute) onAddPointToRoute(selectedLocation);
-              }}
-              className="mt-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 px-3.5 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-            >
-              <Compass size={13} />
-              <span>{vi ? 'Xem chi tiết' : 'View Details'}</span>
-            </button>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 shadow-sm no-underline"
+              >
+                <Navigation size={12} />
+                <span>{vi ? 'Chỉ đường Google Maps' : 'Google Maps'}</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (onAddPointToRoute) onAddPointToRoute(selectedLocation);
+                }}
+                className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              >
+                <Compass size={12} />
+                <span>{vi ? 'Nối tuyến đường' : 'Connect Route'}</span>
+              </button>
+            </div>
           </div>
 
           {/* Close button */}
