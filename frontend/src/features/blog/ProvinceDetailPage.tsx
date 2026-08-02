@@ -9,6 +9,7 @@ import BookPageReader from './BookPageReader';
 import { PROVINCE_LANDMARK_SLIDESHOW, DEFAULT_SLIDESHOW_IMAGES } from './ProvinceLandmarkData';
 import { LANDMARK_IMAGES_MAPPING, getCategoryFallbackImage } from './LandmarkData';
 import api from '../../services/api';
+import { fetchJson } from '../../utils/fetchUtils';
 
 function normalizeParagraphs(text: string): string {
   if (!text) return '';
@@ -125,8 +126,7 @@ function LandmarkCard({
       .replace(/^Thành cổ\s+/i, 'Thành nhà ')
       .replace(/^Cây đa\s+/i, '');
 
-    fetch(`https://vi.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.name)}|${encodeURIComponent(cleanQuery)}|${encodeURIComponent(item.name + ' (' + item.province + ')')}&prop=pageimages&format=json&pithumbsize=600&origin=*`)
-      .then(r => r.json())
+    fetchJson(`https://vi.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.name)}|${encodeURIComponent(cleanQuery)}|${encodeURIComponent(item.name + ' (' + item.province + ')')}&prop=pageimages&format=json&pithumbsize=600&origin=*`)
       .then(data => {
         if (!isMounted) return;
         const pages = data.query?.pages;

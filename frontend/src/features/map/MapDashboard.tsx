@@ -14,6 +14,7 @@ import { io } from 'socket.io-client';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import { journeyCategoryToFeedLabel, type FeedPost } from '../../utils/feedUtils';
 import { RippleButton } from '../../components/ui/ripple-button';
+import { fetchJson } from '../../utils/fetchUtils';
 
 const CAN_THO_COORDS: [number, number] = [10.03711, 105.78825];
 
@@ -21,8 +22,7 @@ const fetchOsmNearbyPois = async (lat: number, lng: number, radiusKm: number) =>
   const radiusMeters = Math.min(Math.max(radiusKm, 1) * 1000, 20000);
   const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(node["tourism"](around:${radiusMeters},${lat},${lng});node["amenity"~"restaurant|cafe|fast_food|bar"](around:${radiusMeters},${lat},${lng});node["historic"](around:${radiusMeters},${lat},${lng}););out body 30;`;
   try {
-    const res = await fetch(overpassUrl);
-    const data = await res.json();
+    const data = await fetchJson(overpassUrl);
     if (data && Array.isArray(data.elements)) {
       return data.elements
         .filter((el: any) => el.tags && (el.tags['name:vi'] || el.tags.name))
@@ -277,8 +277,7 @@ const MapDashboard = () => {
 
   const fetchIpLocation = async (): Promise<[number, number] | null> => {
     try {
-      const res = await fetch('https://ip-api.com/json/');
-      const data = await res.json();
+      const data = await fetchJson('https://ip-api.com/json/');
       if (data && data.status === 'success' && data.lat && data.lon) {
         const coords: [number, number] = [data.lat, data.lon];
         setUserLocation(coords);
@@ -357,6 +356,16 @@ const MapDashboard = () => {
   const [viewMode, setViewMode] = useState<'markers' | 'cluster' | 'heatmap'>('markers');
   const [selectedCenter, setSelectedCenter] = useState<[number, number]>(CAN_THO_COORDS);
   const [cachingProgress, setCachingProgress] = useState<number | null>(null);
+  const cachingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (cachingIntervalRef.current) {
+        clearInterval(cachingIntervalRef.current);
+        cachingIntervalRef.current = null;
+      }
+    };
+  }, []);
 
   const [customDestName, setCustomDestName] = useState('');
   const [newNote, setNewNote] = useState('');
@@ -636,6 +645,9 @@ const MapDashboard = () => {
     const interval = setInterval(sendLocation, 10000);
 
     return () => {
+      socket.off('connect');
+      socket.off('friend_location_updated');
+      socket.off('friend_offline');
       socket.disconnect();
       clearInterval(interval);
       socketRef.current = null;
@@ -679,12 +691,11 @@ const MapDashboard = () => {
     const delayDebounceFn = setTimeout(async () => {
       try {
         const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=5&accept-language=vi`;
-        const res = await fetch(url, {
+        const data = await fetchJson(url, {
           headers: {
             'User-Agent': 'SmartTravelApp/1.0'
           }
         });
-        const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
           const centerLat = parseFloat(data[0].lat);
           const centerLng = parseFloat(data[0].lon);
@@ -1053,11 +1064,20 @@ const MapDashboard = () => {
 
   const handleCacheTiles = () => {
     setCachingProgress(10);
-    const interval = setInterval(() => {
-      setCachingProgress(prev => {
-        if (prev === null || prev >= 100) { clearInterval(interval); alert(vi ? 'Tải bản đồ ngoại tuyến thành công!' : 'Offline map downloaded successfully!'); return null; }
-        return prev + 20;
-      });
+    let currentProgress = 10;
+    if (cachingIntervalRef.current) clearInterval(cachingIntervalRef.current);
+    cachingIntervalRef.current = setInterval(() => {
+      currentProgress += 20;
+      if (currentProgress >= 100) {
+        if (cachingIntervalRef.current) {
+          clearInterval(cachingIntervalRef.current);
+          cachingIntervalRef.current = null;
+        }
+        setCachingProgress(null);
+        alert(vi ? 'Tải bản đồ ngoại tuyến thành công!' : 'Offline map downloaded successfully!');
+      } else {
+        setCachingProgress(currentProgress);
+      }
     }, 200);
   };
 
@@ -1069,12 +1089,11 @@ const MapDashboard = () => {
     // Use OpenStreetMap's free Nominatim geocoding API to search globally
     try {
       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=5&accept-language=vi`;
-      const res = await fetch(url, {
+      const data = await fetchJson(url, {
         headers: {
           'User-Agent': 'SmartTravelApp/1.0'
         }
       });
-      const data = await res.json();
 
       if (Array.isArray(data) && data.length > 0) {
         const osmLocations: MapLocation[] = data.map((item: any, idx: number) => ({
@@ -1750,7 +1769,7 @@ const MapDashboard = () => {
                 <div className="flex gap-1.5 flex-wrap">
                   {checkinImages.map((img, idx) => (
                     <div key={idx} className="relative w-12 h-12 rounded-lg overflow-hidden border border-[var(--border-normal)] shadow-sm font-sans">
-                      <img src={img} className="w-full h-full object-cover" />
+                      <img src={img} alt={`Checkin thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                       <button
                         type="button"
                         onClick={() => setCheckinImages(prev => prev.filter((_, i) => i !== idx))}
@@ -1854,7 +1873,7 @@ const MapDashboard = () => {
                     )}
                     {imageUrl && (
                       <div className="w-16 h-12 rounded-lg overflow-hidden border border-slate-700 bg-black/10 mt-1">
-                        <img src={imageUrl} className="w-full h-full object-cover" />
+                        <img src={imageUrl} alt={chk.destination?.name || 'Checkin photo'} className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div className="text-[9px] text-[var(--gold)] font-semibold flex items-center gap-0.5 truncate mt-1">

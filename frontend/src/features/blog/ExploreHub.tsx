@@ -304,12 +304,10 @@ export default function ExploreHub() {
   // Add search query to history list
   const addSearchHistory = (q: string) => {
     if (!q.trim()) return;
-    setSearchHistory(prev => {
-      const filtered = prev.filter(x => x !== q);
-      const next = [q, ...filtered].slice(0, 5);
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
-      return next;
-    });
+    const filtered = searchHistory.filter(x => x !== q);
+    const next = [q, ...filtered].slice(0, 5);
+    setSearchHistory(next);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
   };
 
   const clearHistory = () => {
@@ -787,7 +785,7 @@ export default function ExploreHub() {
                         className="bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-800/80 rounded-2xl overflow-hidden p-3.5 hover:-translate-y-1 hover:shadow-md cursor-pointer transition-all duration-300 group"
                       >
                         <div className="aspect-[4/3] rounded-xl overflow-hidden bg-slate-200 relative mb-3">
-                          <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-103 transition-transform" />
+                          <img src={post.coverImage} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-103 transition-transform" />
                           <span className="absolute top-2 left-2 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
                             <MapPin size={9} /> {post.dist < 1 ? `${Math.round(post.dist * 1000)}m` : `${Math.round(post.dist)}km`}
                           </span>
@@ -906,7 +904,7 @@ export default function ExploreHub() {
                   <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2.5">
                       {filteredPosts[0].avatar ? (
-                        <img src={filteredPosts[0].avatar} alt="" className="w-8 h-8 rounded-full object-cover ring-2 ring-teal-500/20" />
+                        <img src={filteredPosts[0].avatar} alt={filteredPosts[0].author || 'Tác giả'} className="w-8 h-8 rounded-full object-cover ring-2 ring-teal-500/20" />
                       ) : (
                         <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center justify-center">
                           {filteredPosts[0].author?.charAt(0) || 'T'}
@@ -942,7 +940,7 @@ export default function ExploreHub() {
                   >
                     <div>
                       <div className="aspect-[16/10] bg-slate-200 relative overflow-hidden">
-                        <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-101 transition-transform" />
+                        <img src={post.coverImage} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-101 transition-transform" />
                         <span className="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-white text-[9px] font-bold px-2 py-0.5 rounded-md border border-slate-250 dark:border-slate-800">
                           {post.category}
                         </span>
@@ -964,7 +962,7 @@ export default function ExploreHub() {
 
                     <div className="p-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <img src={post.avatar} alt="" className="w-6 h-6 rounded-full object-cover" />
+                        <img src={post.avatar} alt={post.author || 'Tác giả'} loading="lazy" className="w-6 h-6 rounded-full object-cover" />
                         <span className="text-[10px] font-bold text-slate-700 dark:text-slate-350">{post.author}</span>
                       </div>
                       <div className="flex items-center gap-2 text-[10px] text-slate-400">

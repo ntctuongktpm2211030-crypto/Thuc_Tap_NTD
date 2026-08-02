@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { RippleButton } from '../../components/ui/ripple-button';
 import type { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
+import { useIsMounted } from '../../hooks/useIsMounted';
 import { toast } from '../../contexts/ToastContext';
 import CommentsSection from './CommentsSection';
 import type { FeedPost } from '../../utils/feedUtils';
@@ -128,6 +129,7 @@ interface Props {
 }
 
 export default function PostDetailModal({ post, onClose, onPostUpdated, labels }: Props) {
+  const isMounted = useIsMounted();
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
@@ -164,6 +166,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
     if (!post || post.id.startsWith('checkin-')) return;
     postsService.get(post.id)
       .then(data => {
+        if (!isMounted()) return;
         if (data.likes) {
           const list = data.likes.map((l: any) => ({
             id: l.user.id,
@@ -174,7 +177,9 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
         }
       })
       .catch(err => {
-        console.error("Failed to fetch full post details:", err);
+        if (isMounted()) {
+          console.error("Failed to fetch full post details:", err);
+        }
       });
   }, [post]);
 
@@ -609,7 +614,7 @@ function CheckinBoardingPass({
           <span className="boarding-pass-label">PASSENGER / TRAVELER</span>
           <div className="flex items-center gap-2 mt-1">
             <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} onClick={onClose} className="block hover:scale-105 transition-transform cursor-pointer">
-              <img src={post.author.avatar} className="w-6 h-6 rounded-full object-cover border border-[var(--gold)]/30" />
+              <img src={post.author.avatar} alt={post.author.name || 'Author avatar'} className="w-6 h-6 rounded-full object-cover border border-[var(--gold)]/30" />
             </Link>
             <span className="boarding-pass-value truncate max-w-[100px]">{post.author.name}</span>
           </div>

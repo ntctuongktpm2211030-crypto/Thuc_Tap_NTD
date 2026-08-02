@@ -13,8 +13,10 @@ const router = Router();
 // HELPERS
 // ─────────────────────────────────────────────────────────
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_dev';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'fallback_refresh_secret_dev';
+import { getRequiredEnv } from '../../config/env';
+
+const JWT_SECRET = getRequiredEnv('JWT_SECRET');
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || JWT_SECRET;
 
 function signAccessToken(userId: string, role: string) {
   return jwt.sign({ sub: userId, role }, JWT_SECRET, { expiresIn: '15m' });

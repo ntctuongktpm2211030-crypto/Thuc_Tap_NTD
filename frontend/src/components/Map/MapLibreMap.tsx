@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLang } from '../../contexts/LanguageContext';
 import { mapService } from '../../services/smartTravel.service';
+import { fetchJson } from '../../utils/fetchUtils';
 import { Compass, ListTodo, MapPin, Navigation } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -392,17 +393,20 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-    map.on('dragend', () => {
+    const handleDragEnd = () => {
       const currentCenter = map.getCenter();
       if (currentCenter && onCenterChange) {
         onCenterChange([currentCenter.lat, currentCenter.lng]);
       }
-    });
+    };
+
+    map.on('dragend', handleDragEnd);
 
     mlMapRef.current = map;
     setLoaded(true);
 
     return () => {
+      map.off('dragend', handleDragEnd);
       if (mlMapRef.current) {
         mlMapRef.current.remove();
         mlMapRef.current = null;
@@ -558,7 +562,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         .setPopup(popup)
         .addTo(map);
 
-      el.addEventListener('click', (e) => {
+      el.onclick = (e) => {
         e.stopPropagation();
         if (onSelectLocation) onSelectLocation(loc);
         if (popup.isOpen()) {
@@ -566,7 +570,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         } else {
           popup.addTo(map);
         }
-      });
+      };
 
       mlMarkersRef.current.push(marker);
     });
@@ -599,7 +603,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         .setPopup(popup)
         .addTo(map);
 
-      el.addEventListener('click', (e) => {
+      el.onclick = (e) => {
         e.stopPropagation();
         if (onSelectLocation) onSelectLocation(currentUserLoc);
         if (popup.isOpen()) {
@@ -607,10 +611,15 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
         } else {
           popup.addTo(map);
         }
-      });
+      };
 
       mlMarkersRef.current.push(userMarker);
     }
+
+    return () => {
+      mlMarkersRef.current.forEach(m => m.remove());
+      mlMarkersRef.current = [];
+    };
   }, [locations, viewMode, aiRecommendedIds, showEvents, loaded]);
 
   // 4. Real-world Road Routing path connector (OSRM API / OpenStreetMap)
@@ -640,8 +649,7 @@ export const MapLibreMap: React.FC<MapLibreMapProps> = ({
       try {
         const waypoints = routePoints.map(p => `${p.lng},${p.lat}`).join(';');
         const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${waypoints}?overview=full&geometries=geojson`;
-        const res = await fetch(osrmUrl);
-        const data = await res.json();
+        const data = await fetchJson(osrmUrl);
         if (data && data.routes && data.routes[0] && data.routes[0].geometry && data.routes[0].geometry.coordinates) {
           finalCoordinates = data.routes[0].geometry.coordinates;
         }

@@ -158,24 +158,33 @@ function App() {
     return <p className="text-[11.5px] text-[var(--text-primary)] leading-relaxed">{content}</p>;
   };
 
-  const fetchNotifications = () => {
-    if (isAuthenticated && user) {
-      socialService.notifications()
-        .then(data => {
-          if (Array.isArray(data)) setNotifications(data);
-        })
-        .catch(err => console.error('Fetch notifications failed in App:', err));
-    }
-  };
-
   useEffect(() => {
-    fetchNotifications();
+    let isMounted = true;
+
+    const loadNotifications = () => {
+      if (isAuthenticated && user) {
+        socialService.notifications()
+          .then(data => {
+            if (isMounted && Array.isArray(data)) setNotifications(data);
+          })
+          .catch(err => console.error('Fetch notifications failed in App:', err));
+      }
+    };
+
+    loadNotifications();
     if (isAuthenticated && user) {
-      const interval = setInterval(fetchNotifications, 20000);
-      return () => clearInterval(interval);
+      const interval = setInterval(loadNotifications, 20000);
+      return () => {
+        isMounted = false;
+        clearInterval(interval);
+      };
     } else {
       setNotifications([]);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [isAuthenticated, user]);
 
   // Connect to Notification socket room and listen for real-time notifications
@@ -190,6 +199,8 @@ function App() {
         autoConnect: true
       });
 
+      let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
       socket.on('connect', () => {
         console.log('[Socket.IO] Notification socket connected');
         socket.emit('register_user', user.id);
@@ -200,10 +211,14 @@ function App() {
         setNotifications(prev => [newNotif, ...prev]);
         setNewNotifObj(newNotif);
         setToastMessage(newNotif.content);
-        setTimeout(() => setToastMessage(''), 4000);
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => setToastMessage(''), 4000);
       });
 
       return () => {
+        if (toastTimer) clearTimeout(toastTimer);
+        socket.off('connect');
+        socket.off('new_notification');
         socket.disconnect();
       };
     }

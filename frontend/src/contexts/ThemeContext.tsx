@@ -17,7 +17,7 @@ const ThemeContext = createContext<ThemeContextValue>({
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     // Load from localStorage or default to light
-    const saved = localStorage.getItem('st-theme') as Theme | null;
+    const saved = (localStorage.getItem('st-theme:v1') || localStorage.getItem('st-theme')) as Theme | null;
     return saved ?? 'light';
   });
 
@@ -28,7 +28,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // Also add/remove dark class for any Tailwind dark: utilities
     root.classList.toggle('dark', theme === 'dark');
     root.classList.toggle('light', theme === 'light');
-    localStorage.setItem('st-theme', theme);
+    localStorage.setItem('st-theme:v1', theme);
   }, [theme]);
 
   const toggleTheme = () =>

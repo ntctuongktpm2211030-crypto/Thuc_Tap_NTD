@@ -81,11 +81,17 @@ async function runTests() {
       headers,
       body: JSON.stringify({ title: 'Hỏi về ẩm thực Hà Nội' }),
     });
+    if (!createConvRes.ok) {
+      throw new Error(`Create conversation failed with status ${createConvRes.status}`);
+    }
     const convData = (await createConvRes.json()) as any;
     console.log('✅ Đã tạo cuộc hội thoại mới. ID:', convData.id);
 
     // B. Lấy danh sách cuộc hội thoại
     const listConvRes = await fetch(`${BASE_URL}/chatbot/conversations`, { method: 'GET', headers });
+    if (!listConvRes.ok) {
+      throw new Error(`List conversations failed with status ${listConvRes.status}`);
+    }
     const listConv = (await listConvRes.json()) as any;
     console.log(`📋 Số lượng cuộc hội thoại: ${listConv.length}`);
 
@@ -96,12 +102,18 @@ async function runTests() {
       headers,
       body: JSON.stringify({ content: 'Tôi muốn ăn trưa ở Hà Nội, gợi ý cho tôi món ăn nhé' }),
     });
+    if (!sendMsgRes.ok) {
+      throw new Error(`Send message failed with status ${sendMsgRes.status}`);
+    }
     const sendResult = (await sendMsgRes.json()) as any;
     console.log('👤 User hỏi:', 'Tôi muốn ăn trưa ở Hà Nội, gợi ý cho tôi món ăn nhé');
     console.log('🤖 AI phản hồi:', sendResult.assistantMessage?.versions[0]?.content);
 
     // D. Lấy chi tiết cuộc hội thoại
     const detailRes = await fetch(`${BASE_URL}/chatbot/conversations/${convData.id}`, { method: 'GET', headers });
+    if (!detailRes.ok) {
+      throw new Error(`Get conversation details failed with status ${detailRes.status}`);
+    }
     const detailData = (await detailRes.json()) as any;
     console.log(`🔍 Chi tiết hội thoại: Lấy được ${detailData.messages?.length} tin nhắn.`);
 

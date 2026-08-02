@@ -12,6 +12,7 @@ import { useToast } from '../../contexts/ToastContext';
 import type { RootState, AppDispatch } from '../../store';
 import { setUser } from '../../store/authSlice';
 import { socialService, travelHistoryService, tripsService, postsService } from '../../services/smartTravel.service';
+import { useIsMounted } from '../../hooks/useIsMounted';
 
 
 
@@ -23,6 +24,7 @@ export default function ProfilePage() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { userId } = useParams<{ userId?: string }>();
+  const isMounted = useIsMounted();
   const loggedInUser = useSelector((s: RootState) => s.auth.user);
   const vi = lang === 'vi';
 
@@ -118,6 +120,7 @@ export default function ProfilePage() {
       setLoadingProfile(true);
       socialService.getProfile(targetId)
         .then(data => {
+          if (!isMounted()) return;
           const normalized = {
             id: data.id,
             email: data.email,
@@ -131,11 +134,14 @@ export default function ProfilePage() {
           setProfileUser(normalized);
         })
         .catch(err => {
+          if (!isMounted()) return;
           console.error('Failed to load user profile:', err);
           error(vi ? 'Không tìm thấy người dùng này.' : 'User not found.');
         })
         .finally(() => {
-          setLoadingProfile(false);
+          if (isMounted()) {
+            setLoadingProfile(false);
+          }
         });
     } else {
       setProfileUser(null);
@@ -147,6 +153,7 @@ export default function ProfilePage() {
     if (loggedInUser) {
       socialService.getFollowing(loggedInUser.id)
         .then(data => {
+          if (!isMounted()) return;
           if (Array.isArray(data)) {
             setFollowingIdsState(new Set(data.map(u => u.id)));
             if (isOwnProfile) {
@@ -159,6 +166,7 @@ export default function ProfilePage() {
       if (isOwnProfile) {
         socialService.notifications()
           .then(data => {
+            if (!isMounted()) return;
             if (Array.isArray(data)) setNotifications(data);
           })
           .catch(err => console.error('Get notifications failed:', err));

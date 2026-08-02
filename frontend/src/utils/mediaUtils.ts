@@ -36,6 +36,9 @@ export function fileToDataUrl(file: File): Promise<string> {
 export async function resolveMediaUrl(url: string): Promise<string> {
   if (!url.startsWith('blob:')) return url;
   const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch blob URL: ${res.statusText}`);
+  }
   const blob = await res.blob();
   return fileToDataUrl(new File([blob], 'media', { type: blob.type }));
 }

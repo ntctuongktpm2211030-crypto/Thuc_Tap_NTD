@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "prisma-markdown": "^4.0.0"
+  },
+  "scripts": {
+    "doctor": "npx react-doctor@latest"
   }
 }

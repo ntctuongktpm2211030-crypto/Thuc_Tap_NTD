@@ -59,11 +59,9 @@ export const AdminDashboardLayout: React.FC = () => {
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
-    setIsCollapsed(prev => {
-      const next = !prev;
-      localStorage.setItem('st-admin-sidebar-collapsed', String(next));
-      return next;
-    });
+    const next = !isCollapsed;
+    setIsCollapsed(next);
+    localStorage.setItem('st-admin-sidebar-collapsed:v1', String(next));
   };
 
   useEffect(() => {

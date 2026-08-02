@@ -380,12 +380,12 @@ const LangContext = createContext<LangContextValue>({
 
 export const LangProvider = ({ children }: { children: React.ReactNode }) => {
   const [lang, setLangState] = useState<Lang>(() => {
-    return (localStorage.getItem('st-lang') as Lang) ?? 'vi';
+    return ((localStorage.getItem('st-lang:v1') || localStorage.getItem('st-lang')) as Lang) ?? 'vi';
   });
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    localStorage.setItem('st-lang', l);
+    localStorage.setItem('st-lang:v1', l);
   };
 
   const t = (key: TranslationKey): string => {

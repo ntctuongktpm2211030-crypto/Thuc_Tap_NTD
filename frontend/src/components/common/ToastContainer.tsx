@@ -32,17 +32,11 @@ const SingleToast: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void 
     const decrement = (intervalTime / duration) * 100;
 
     const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev <= decrement) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - decrement;
-      });
+      setProgress((prev) => Math.max(0, prev - decrement));
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [duration, isPaused, toast.id]);
+  }, [duration, isPaused]);
 
   // Style variations based on type
   const getConfig = () => {

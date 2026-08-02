@@ -5,9 +5,11 @@ import prisma from '../../config/db';
 import { requireAuth, requireAdmin, optionalAuth } from '../auth/auth.middleware';
 import { EmailService } from '../auth/email.service';
 
+import { getRequiredEnv } from '../../config/env';
+
 const router = Router();
 const emailService = new EmailService();
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey123';
+const JWT_SECRET = getRequiredEnv('JWT_SECRET');
 
 /**
  * Helper: Format timestamp as "HH:mm DD/MM/YYYY" (e.g. "16:05 30/07/2026")
