@@ -82,6 +82,7 @@
 - [2026-07-29] Cleared IDE warnings in `TripPlanner.tsx`: removed unused imports (`Plane`, `Zap`, `ChevronDown`, `ChevronUp`, `Clock`, `X`), removed dead state variables (`expandedActivities`), and connected `savingTrip` to the Save Trip button disabled & loading spinner states.
 - [2026-07-30] Fixed API runtime errors: added fallback query resilience & removed request-path `deleteMany` in `posts.router.ts` (`GET /api/v1/posts`) to eliminate PostgreSQL statement timeouts (500), added default fallback titles/destinations in `trips.router.ts` (`POST /api/v1/trips`) to prevent 400 Bad Request errors, and checked `refreshToken` presence in `api.ts` before attempting token refresh to protect unauthenticated background requests (`/social/notifications`).
 - [2026-07-30] Cleared unused declared variable and import warnings in frontend (`App.tsx`, `ProfilePage.tsx`, `storyStorage.ts`, `SocialFeedPage.tsx`, `feedUtils.ts`).
+<<<<<<< Updated upstream
 - [2026-07-30] Refined Single Activity Card Swapping & Cascading Deduplication in `TripPlanner.tsx`: Clicking `Đổi thẻ` on an activity card updates ONLY that specific activity card in Day K (leaving all other cards in Day K intact), then automatically cascades through all subsequent days (Day K+1, K+2... N) to eliminate duplicate places across the entire multi-day trip.
 - [2026-07-30] Fixed IDE TypeScript compilation errors: restored missing `'planner.subtitle'` key in `LanguageContext.tsx` `translations.vi` dictionary and added safe type casting `(replacement as any).category` in `TripPlanner.tsx`.
 - [2026-07-30] Implemented Dedicated Terraholic Admin Portal: Added `ADMIN` role in `schema.prisma`, added `HandbookDocument` model, created `backend/src/modules/admin/admin.router.ts` (Auto-seed Admin `admin@terraholic.com` / `123456@Aa`, `/api/v1/admin/login`, `/stats`, `/users`, `/posts`, `/trips`, `/handbooks`, `/audit-logs`), mounted `/api/v1/admin` in `app.ts`, created frontend components `AdminLoginPage.tsx` (`/admin/login`), `AdminDashboardLayout.tsx` (`/admin`), `AdminOverviewTab.tsx`, `AdminUsersTab.tsx`, `AdminPostsTab.tsx`, and `AdminHandbookTab.tsx` with automatic `Giờ:Phút Ngày/Tháng/Năm` timestamp recording when adding AND editing Word, JSON, PDF and Handbook guides.
@@ -123,7 +124,7 @@
 - [2026-08-04] Fixed JSX Ternary Operator Syntax Error: Fixed redundant `?` syntax error in `className` ternary string inside `AdminDashboardLayout.tsx` (line 370), resolving Vite Babel parser build error.
 - [2026-08-04] Optimized Compact & Basic Dropdown UI: Reduced width of Admin Notification Dropdown in `AdminDashboardLayout.tsx` from `w-440px` to a sleek compact `w-80` (320px), trimmed padding (`p-2.5`), adjusted fonts to `text-[10px]` & `text-[11px]`, and resized vector icon bubbles (`w-7 h-7`) for a super clean, compact basic design.
 - [2026-08-04] Expanded Rich Notifications & Enhanced Smooth Scroll Roll: Expanded notification API list in `admin.router.ts` to return 8 rich items (combining reported violations, 180-day inactive warnings, and AI moderation alerts), and enhanced list container in `AdminDashboardLayout.tsx` with smooth scrolling (`scroll-smooth max-h-[310px] custom-scrollbar`) for an ultra-smooth scrolling experience.
-- [2026-08-04] Removed Empty Yellow Warning Alert in CreateStoryPage.tsx: Updated step validation alert check in `CreateStoryPage.tsx` (`!canNext() && step > 1`) eliminating the empty yellow warning box rendered at the bottom of Step 1 form.
+- [2026-08-04] Removed Local AI Assistant Sidebar & Balanced Interface Layout: Removed "Trợ lý ảo địa phương" sidebar card, state variables, and handlers in `ProvinceDetailPage.tsx`, expanded 3D Overview Book Reader container to `max-w-6xl` with `min-h-[580px]` viewport height and font scaling (`text-[15.5px]`) for a larger, comfortable book reading experience.
 
 
 
@@ -164,4 +165,8 @@
 
 
 
+
+=======
+- [2026-08-01] Fixed 500 Internal Server Errors on `/social/search`, `/social/following`, and `/posts` by adding `ADMIN` and `MODERATOR` roles to `UserRole` enum in `backend/prisma/schema.prisma` & PostgreSQL database, eliminating Prisma deserialization crashes when fetching users with administrative roles.
+>>>>>>> Stashed changes
 

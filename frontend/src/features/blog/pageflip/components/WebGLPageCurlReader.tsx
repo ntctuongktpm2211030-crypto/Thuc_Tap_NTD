@@ -66,7 +66,7 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
   // Fixed column count to prevent wrapping and splitting words in half
   const bodyStyle: React.CSSProperties = {
     columnCount: half === 'full' ? 1 : 2,
-    columnGap: '2.5rem',
+    columnGap: '3rem',
     textAlign: 'justify',
     lineHeight: 1.8,
     fontFamily: '"Times New Roman", Times, serif',
@@ -113,7 +113,7 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
         </div>
 
         {/* Book Body: warm ink text, justified columns, proper margins */}
-        <div className="my-5 flex-grow text-stone-800 text-[13.5px] overflow-hidden" style={bodyStyle}>
+        <div className="my-5 flex-grow text-stone-800 text-[14.5px] sm:text-[15.5px] overflow-hidden" style={bodyStyle}>
           {normalizedContent}
         </div>
       </div>
@@ -270,7 +270,7 @@ export default function WebGLPageCurlReader({ title, pages, currentPage, onPageC
       {/* ── BOOK VIEWPORT CONTAINER ── */}
       <div 
         ref={containerRef}
-        className="relative w-full min-h-[420px] sm:min-h-[440px] book-viewport overflow-hidden"
+        className="relative w-full min-h-[500px] sm:min-h-[540px] md:min-h-[580px] book-viewport overflow-hidden"
         style={{
           boxShadow: '0 30px 70px rgba(44, 38, 33, 0.18), 0 12px 30px rgba(44, 38, 33, 0.12)',
           borderRadius: '16px'
