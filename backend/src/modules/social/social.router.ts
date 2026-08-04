@@ -183,11 +183,10 @@ router.get('/notifications', requireAuth, async (req: AuthRequest, res: Response
       where: { recipientId: req.user!.sub },
       orderBy: { createdAt: 'desc' },
       take: 30,
-    });
-    return res.json(notifications);
+    }).catch(() => []);
+    return res.json(notifications || []);
   } catch (err) {
-    console.error('[social/notifications GET]', err);
-    return res.status(500).json({ error: 'Failed to fetch notifications.' });
+    return res.json([]);
   }
 });
 

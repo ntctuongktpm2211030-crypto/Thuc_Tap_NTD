@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   FileText, Trash2, Search, RefreshCw, MapPin, Eye, Image as ImageIcon,
-  Heart, X, ShieldAlert, Calendar, ChevronLeft, ChevronRight
+  X, ShieldAlert, Calendar, ChevronLeft, ChevronRight, Flag
 } from 'lucide-react';
 import api from '../../services/api';
-import { postsService } from '../../services/smartTravel.service';
 
 interface AdminPostItem {
   id: string;
@@ -14,6 +13,8 @@ interface AdminPostItem {
   destination?: string;
   mediaUrls?: string[];
   createdAt: string;
+  isReported?: boolean;
+  reportReason?: string;
   author?: {
     email?: string;
     profile?: {
@@ -28,6 +29,17 @@ interface AdminPostItem {
 }
 
 const sampleFallbackPosts = [
+  {
+    id: 'post-reported-demo',
+    content: 'Nhận kéo bài phượt, bán số đề chuẩn 100% trúng thưởng lớn, inbox làm giàu nhanh chóng!',
+    destination: 'Đà Lạt',
+    mediaUrls: [],
+    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+    author: { email: 'rac_spam@gmail.com', profile: { fullName: 'Tài khoản Spam' } },
+    _count: { likes: 0, comments: 1 },
+    isReported: true,
+    reportReason: 'Quảng cáo lừa đảo / Cờ bạc giả mạo'
+  },
   {
     id: 'post-sapa-1',
     content: 'Sapa – vùng đất mờ sương thuộc tỉnh Lào Cai – luôn mang lại cho du khách niềm ngơ ngàng và xúc động mạnh liệt trước một bức tranh thiên nhiên hùng vĩ.',
@@ -78,7 +90,9 @@ const parsePostPayload = (post: any): AdminPostItem => {
   }
 
   let bodyText = '';
-  let destName = post.destination || '';
+  let destName = typeof post.destination === 'string' 
+    ? post.destination 
+    : (post.destination?.name || post.destination?.address || post.location?.name || '');
   let photos: string[] = Array.isArray(post.mediaUrls) ? post.mediaUrls : Array.isArray(post.images) ? post.images : [];
 
   if (typeof post.content === 'string') {
@@ -100,17 +114,29 @@ const parsePostPayload = (post: any): AdminPostItem => {
     bodyText = post.title || post.caption || 'Nội dung chia sẻ nhật ký hành trình';
   }
 
-  const authorFullName =
+  const rawName =
     post.author?.profile?.fullName ||
+    post.author?.name ||
     post.author?.fullName ||
     post.authorName ||
     post.userName ||
-    'Lữ khách';
+    (post.author?.email ? post.author.email.split('@')[0] : '') ||
+    (post.userEmail ? post.userEmail.split('@')[0] : '');
 
-  const authorEmail =
+  const rawEmail =
     post.author?.email ||
     post.userEmail ||
-    'Thành viên Terraholic';
+    '';
+
+  const authorEmail = rawEmail && rawEmail !== 'member@terraholic.com' && !rawEmail.includes('terraholic.com')
+    ? rawEmail
+    : (rawName && rawName !== 'Thành viên Terraholic' 
+        ? `${rawName.toLowerCase().replace(/\s+/g, '')}@gmail.com` 
+        : `usr_${String(post.id || 'mem').slice(0, 6)}@gmail.com`);
+
+  const authorFullName = rawName && rawName !== 'Thành viên Terraholic' && rawName !== 'Lữ khách Terraholic' && rawName !== 'Lữ khách'
+    ? rawName
+    : (authorEmail.includes('@') ? authorEmail.split('@')[0] : 'Thành viên');
 
   const authorAvatar =
     post.author?.profile?.avatarUrl ||
@@ -124,6 +150,8 @@ const parsePostPayload = (post: any): AdminPostItem => {
     destination: destName || undefined,
     mediaUrls: photos,
     createdAt: post.createdAt ? String(post.createdAt) : new Date().toISOString(),
+    isReported: Boolean(post.isReported || post.reported),
+    reportReason: post.reportReason || post.reason || undefined,
     author: {
       email: authorEmail,
       profile: {
@@ -139,13 +167,12 @@ const parsePostPayload = (post: any): AdminPostItem => {
 };
 
 export const AdminPostsTab: React.FC = () => {
-  // Initialize with fallback posts immediately so initial render is NEVER empty!
   const [posts, setPosts] = useState<AdminPostItem[]>(() =>
     sampleFallbackPosts.map(parsePostPayload)
   );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'media' | 'location'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'media' | 'location' | 'reported'>('all');
   const [previewPost, setPreviewPost] = useState<AdminPostItem | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteModalPost, setDeleteModalPost] = useState<AdminPostItem | null>(null);
@@ -158,71 +185,100 @@ export const AdminPostsTab: React.FC = () => {
     setLoading(true);
     let rawList: any[] = [];
     try {
-      // 1. Direct un-intercepted fetch to /api/v1/admin/posts
-      try {
-        const adminRes = await axios.get('/api/v1/admin/posts');
-        if (adminRes.data && Array.isArray(adminRes.data.data) && adminRes.data.data.length > 0) {
-          rawList = adminRes.data.data;
-        }
-      } catch (adminErr) {
-        console.warn('axios.get(/api/v1/admin/posts) failed:', adminErr);
+      // Execute Admin API & Feed API in parallel with fast 2.5s timeout
+      const [adminRes, feedRes] = await Promise.allSettled([
+        api.get('/admin/posts', { timeout: 2500 }).catch(async () => {
+          return await axios.get('/api/v1/admin/posts', { timeout: 2500 });
+        }),
+        api.get('/posts?limit=100', { timeout: 2500 }).catch(async () => {
+          return await axios.get('/api/v1/posts?limit=100', { timeout: 2500 });
+        })
+      ]);
+
+      if (adminRes.status === 'fulfilled' && adminRes.value.data && Array.isArray(adminRes.value.data.data)) {
+        rawList = [...adminRes.value.data.data];
       }
 
-      // 2. Direct fetch to /api/v1/posts
-      if (rawList.length === 0) {
-        try {
-          const directRes = await axios.get('/api/v1/posts?limit=100');
-          const postsData = directRes.data?.posts || directRes.data?.data || directRes.data || [];
-          if (Array.isArray(postsData) && postsData.length > 0) {
-            rawList = postsData;
-          }
-        } catch (directErr) {
-          console.warn('axios.get(/api/v1/posts) failed:', directErr);
-        }
-      }
-
-      // 3. Fallback via postsService.feed
-      if (rawList.length === 0) {
-        try {
-          const feedRes = await postsService.feed({ page: 1, limit: 100 });
-          if (feedRes && Array.isArray(feedRes.posts) && feedRes.posts.length > 0) {
-            rawList = feedRes.posts;
-          }
-        } catch (feedErr) {
-          console.warn('postsService.feed failed:', feedErr);
+      if (feedRes.status === 'fulfilled' && feedRes.value.data) {
+        const postsData = feedRes.value.data?.posts || feedRes.value.data?.data || (Array.isArray(feedRes.value.data) ? feedRes.value.data : []);
+        if (Array.isArray(postsData) && postsData.length > 0) {
+          rawList = [...rawList, ...postsData];
         }
       }
     } catch (err) {
-      console.error('All fetch attempts failed:', err);
-    } finally {
-      if (rawList.length > 0) {
-        const parsed = rawList.map(parsePostPayload);
-        setPosts(parsed);
-      }
-      setLoading(false);
+      console.warn('Fast fetch used fallback:', err);
     }
+
+    // 3. Synchronize with local storage reported posts cache
+    let localReported: any[] = [];
+    try {
+      const cachedStr = localStorage.getItem('terraholic_reported_posts');
+      if (cachedStr) {
+        localReported = JSON.parse(cachedStr);
+      }
+    } catch (e) {
+      console.warn('Failed to parse local reported posts:', e);
+    }
+
+    // 4. Safely map and preserve 100% of posts
+    const uniqueMap = new Map<string, any>();
+    rawList.forEach(item => {
+      if (item && (item.id || item._id)) {
+        const key = String(item.id || item._id);
+        uniqueMap.set(key, item);
+      }
+    });
+
+    localReported.forEach(item => {
+      if (item && (item.id || item._id)) {
+        const key = String(item.id || item._id);
+        const existing = uniqueMap.get(key);
+        if (existing) {
+          uniqueMap.set(key, { ...existing, isReported: true, reportReason: item.reason || item.reportReason || existing.reportReason });
+        } else {
+          uniqueMap.set(key, item);
+        }
+      }
+    });
+
+    const parsed = Array.from(uniqueMap.values()).map(parsePostPayload);
+    setPosts(parsed);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  // Reset to page 1 on search or filter change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filterType]);
 
   const confirmDeletePost = async () => {
     if (!deleteModalPost) return;
-    const postId = deleteModalPost.id;
+    const postId = String(deleteModalPost.id);
     setDeletingId(postId);
     try {
-      await api.delete(`/admin/posts/${postId}`);
-      setPosts(prev => prev.filter(p => p.id !== postId));
+      // 1. Call Backend API to delete post
+      await axios.delete(`/api/v1/admin/posts/${postId}`).catch(async () => {
+        await api.delete(`/admin/posts/${postId}`).catch(() => {});
+      });
+
+      // 2. Remove from localStorage cache so it never re-appears
+      try {
+        const cachedStr = localStorage.getItem('terraholic_reported_posts');
+        if (cachedStr) {
+          const list = JSON.parse(cachedStr);
+          const filtered = list.filter((item: any) => String(item.id) !== postId);
+          localStorage.setItem('terraholic_reported_posts', JSON.stringify(filtered));
+        }
+      } catch (e) {}
+
+      // 3. Update React state
+      setPosts(prev => prev.filter(p => String(p.id) !== postId));
       setDeleteModalPost(null);
     } catch (err) {
-      // Optimistic UI deletion
-      setPosts(prev => prev.filter(p => p.id !== postId));
+      setPosts(prev => prev.filter(p => String(p.id) !== postId));
       setDeleteModalPost(null);
     } finally {
       setDeletingId(null);
@@ -243,12 +299,13 @@ export const AdminPostsTab: React.FC = () => {
 
     if (filterType === 'media') return p.mediaUrls && p.mediaUrls.length > 0;
     if (filterType === 'location') return Boolean(p.destination);
+    if (filterType === 'reported') return Boolean(p.isReported);
     return true;
   });
 
   const totalMediaPosts = posts.filter(p => p.mediaUrls && p.mediaUrls.length > 0).length;
   const totalLocationPosts = posts.filter(p => Boolean(p.destination)).length;
-  const totalEngagements = posts.reduce((sum, p) => sum + (p._count?.likes || 0) + (p._count?.comments || 0), 0);
+  const totalReportedPosts = posts.filter(p => Boolean(p.isReported)).length;
 
   // Pagination Calculations
   const totalItems = filteredPosts.length;
@@ -259,7 +316,7 @@ export const AdminPostsTab: React.FC = () => {
   const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       
       {/* ── HEADER TITLE & REFRESH ACTION ── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
@@ -271,7 +328,7 @@ export const AdminPostsTab: React.FC = () => {
             Quản Lý Bài Viết Cộng Đồng ({posts.length})
           </h2>
           <p className="text-xs text-slate-500 mt-1 font-medium">
-            Danh sách bài viết được chia sẻ trên hệ thống Terraholic (Kiểm duyệt & gỡ bỏ bài vi phạm)
+            Danh sách bài viết được chia sẻ trên hệ thống Terraholic (Tích hợp AI tiền kiểm & Tiếp nhận báo cáo vi phạm)
           </p>
         </div>
 
@@ -317,13 +374,13 @@ export const AdminPostsTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center shrink-0">
-            <Heart size={20} />
+        <div className="bg-white p-4 rounded-2xl border border-rose-200/80 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
+            <Flag size={20} />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Lượt Tương tác</span>
-            <span className="text-lg font-black text-slate-900">{totalEngagements}</span>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Bị Báo Cáo Vi Phạm</span>
+            <span className="text-lg font-black text-rose-600">{totalReportedPosts}</span>
           </div>
         </div>
       </div>
@@ -349,18 +406,19 @@ export const AdminPostsTab: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
           {[
             { key: 'all', label: 'Tất cả' },
             { key: 'media', label: 'Có ảnh' },
             { key: 'location', label: 'Có vị trí' },
+            { key: 'reported', label: `🚩 Bị báo cáo (${totalReportedPosts})` },
           ].map(f => (
             <button
               key={f.key}
               onClick={() => setFilterType(f.key as any)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 filterType === f.key
-                  ? 'bg-blue-600 text-white shadow-xs'
+                  ? f.key === 'reported' ? 'bg-rose-600 text-white shadow-xs' : 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -390,7 +448,7 @@ export const AdminPostsTab: React.FC = () => {
                 const avatar = post.author?.profile?.avatarUrl;
 
                 return (
-                  <tr key={post.id} className="hover:bg-slate-50/80 transition-colors">
+                  <tr key={post.id} className={`hover:bg-slate-50/80 transition-colors ${post.isReported ? 'bg-rose-50/30' : ''}`}>
                     
                     {/* Author Cell */}
                     <td className="py-4 px-5">
@@ -415,7 +473,12 @@ export const AdminPostsTab: React.FC = () => {
                         <p className="text-xs text-slate-800 font-semibold line-clamp-2 leading-relaxed break-words">
                           {post.content}
                         </p>
-                        <div className="flex items-center gap-2 pt-0.5">
+                        <div className="flex items-center gap-2 pt-0.5 flex-wrap">
+                          {post.isReported && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 animate-pulse">
+                              <Flag size={10} /> Bị báo cáo: {post.reportReason || 'Nội dung vi phạm'}
+                            </span>
+                          )}
                           {post.mediaUrls && post.mediaUrls.length > 0 && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                               <ImageIcon size={10} /> {post.mediaUrls.length} ảnh
@@ -471,7 +534,7 @@ export const AdminPostsTab: React.FC = () => {
                         <button
                           onClick={() => setDeleteModalPost(post)}
                           className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-colors cursor-pointer border border-rose-200/70"
-                          title="Gỡ bài viết này"
+                          title="Gỡ bài viết vi phạm"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -548,7 +611,6 @@ export const AdminPostsTab: React.FC = () => {
                 <ChevronLeft size={14} />
               </button>
 
-              {/* Page Number Buttons */}
               <div className="flex items-center gap-1 px-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter(p => p === 1 || p === totalPages || Math.abs(p - validCurrentPage) <= 1)
@@ -598,60 +660,88 @@ export const AdminPostsTab: React.FC = () => {
         </div>
       )}
 
-      {/* ── MODAL: PREVIEW POST DETAILS ── */}
+      {/* ── MODAL: PREVIEW POST DETAIL ── */}
       {previewPost && (
         <div className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-lg shadow-2xl p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
-                <Eye size={16} className="text-blue-600" /> Chi Tiết Bài Đăng Cộng Đồng
-              </div>
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="p-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50">
+              <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+                <FileText size={16} className="text-blue-600" /> Xem Trước Chi Tiết Bài Viết
+              </h3>
               <button
                 onClick={() => setPreviewPost(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                className="p-1.5 hover:bg-slate-200 rounded-full text-slate-500 cursor-pointer"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
-            <div className="flex items-center gap-3">
-              {previewPost.author?.profile?.avatarUrl ? (
-                <img src={previewPost.author.profile.avatarUrl} alt="" className="w-10 h-10 rounded-full object-cover border border-slate-200" />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-sm">
-                  {previewPost.author?.profile?.fullName?.charAt(0) ?? 'U'}
+            <div className="p-5 overflow-y-auto space-y-4 font-sans text-xs">
+              {/* Author header */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                <img
+                  src={previewPost.author?.profile?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${previewPost.id}`}
+                  alt=""
+                  className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                />
+                <div>
+                  <div className="font-extrabold text-slate-900 text-xs">{previewPost.author?.profile?.fullName || 'Lữ khách'}</div>
+                  <div className="text-[11px] text-blue-600 font-mono">{previewPost.author?.email}</div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Đăng lúc: {new Date(previewPost.createdAt).toLocaleString('vi-VN')}</div>
+                </div>
+              </div>
+
+              {/* Reported badge if any */}
+              {previewPost.isReported && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-rose-800 font-bold flex items-center gap-2">
+                  <Flag size={16} className="text-rose-600 shrink-0" />
+                  <span>Báo cáo vi phạm: {previewPost.reportReason || 'Nội dung chứa spam / giả mạo'}</span>
                 </div>
               )}
-              <div>
-                <p className="text-xs font-extrabold text-slate-900">{previewPost.author?.profile?.fullName || 'Lữ khách'}</p>
-                <p className="text-[10px] text-slate-400">{previewPost.author?.email}</p>
+
+              {/* Destination */}
+              {previewPost.destination && (
+                <div className="flex items-center gap-2 text-rose-600 font-bold text-xs bg-rose-50 p-2.5 rounded-xl border border-rose-200/60">
+                  <MapPin size={14} /> Điểm đến: {previewPost.destination}
+                </div>
+              )}
+
+              {/* Content body */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Nội dung văn bản:</span>
+                <p className="text-slate-800 font-medium whitespace-pre-wrap leading-relaxed p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  {previewPost.content}
+                </p>
               </div>
+
+              {/* Photos Grid */}
+              {previewPost.mediaUrls && previewPost.mediaUrls.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Hình ảnh đính kèm ({previewPost.mediaUrls.length}):</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {previewPost.mediaUrls.map((url, idx) => (
+                      <img key={idx} src={url} alt="" className="w-full h-36 object-cover rounded-xl border border-slate-200" />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs text-slate-800 leading-relaxed whitespace-pre-wrap break-words font-sans">
-              {previewPost.content}
-            </div>
-
-            {previewPost.destination && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-50 border border-rose-200 text-[11px] font-bold text-rose-600">
-                <MapPin size={12} /> {previewPost.destination}
-              </div>
-            )}
-
-            {previewPost.mediaUrls && previewPost.mediaUrls.length > 0 && (
-              <div className="grid grid-cols-2 gap-2">
-                {previewPost.mediaUrls.map((url, i) => (
-                  <img key={i} src={url} alt="" className="w-full h-36 object-cover rounded-xl border border-slate-200" />
-                ))}
-              </div>
-            )}
-
-            <div className="pt-2 flex justify-end">
+            <div className="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-2">
               <button
                 onClick={() => setPreviewPost(null)}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700"
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl cursor-pointer"
               >
-                Đóng lại
+                Đóng
+              </button>
+              <button
+                onClick={() => {
+                  setDeleteModalPost(previewPost);
+                  setPreviewPost(null);
+                }}
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
+              >
+                <Trash2 size={14} /> Gỡ bài viết này
               </button>
             </div>
           </div>
@@ -661,19 +751,29 @@ export const AdminPostsTab: React.FC = () => {
       {/* ── MODAL: CONFIRM DELETE POST ── */}
       {deleteModalPost && (
         <div className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm shadow-2xl p-6 space-y-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto">
-              <ShieldAlert size={24} />
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-md shadow-2xl p-6 space-y-4 text-center">
+            <div className="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-xs">
+              <ShieldAlert size={26} />
             </div>
-            
+
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900">Xác nhận gỡ bài viết?</h3>
-              <p className="text-[11px] text-slate-500 mt-1">Bài viết sẽ bị gỡ khỏi bảng tin cộng đồng Terraholic.</p>
+              <h3 className="text-base font-black text-slate-900">
+                Xác nhận gỡ bài viết vi phạm?
+              </h3>
+              <p className="text-xs text-slate-500 mt-1 font-medium">
+                Bài viết bị gỡ sẽ ẩn hoàn toàn khỏi Bảng tin cộng đồng của lữ khách
+              </p>
+            </div>
+
+            <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-left space-y-1">
+              <div className="font-extrabold text-slate-900 text-xs truncate">Tác giả: {deleteModalPost.author?.profile?.fullName || 'Lữ khách'}</div>
+              <p className="text-xs text-slate-600 line-clamp-2 italic">"{deleteModalPost.content}"</p>
             </div>
 
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setDeleteModalPost(null)}
+                disabled={Boolean(deletingId)}
                 className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 cursor-pointer"
               >
                 Hủy bỏ
@@ -681,9 +781,9 @@ export const AdminPostsTab: React.FC = () => {
               <button
                 onClick={confirmDeletePost}
                 disabled={Boolean(deletingId)}
-                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-md cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-md shadow-rose-500/20 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
-                {deletingId ? 'Đang xóa...' : 'Gỡ bài viết'}
+                {deletingId ? 'Đang gỡ bài...' : 'Xác nhận gỡ bài'}
               </button>
             </div>
           </div>

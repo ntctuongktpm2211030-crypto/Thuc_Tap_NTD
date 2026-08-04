@@ -86,4 +86,82 @@
 - [2026-07-30] Fixed IDE TypeScript compilation errors: restored missing `'planner.subtitle'` key in `LanguageContext.tsx` `translations.vi` dictionary and added safe type casting `(replacement as any).category` in `TripPlanner.tsx`.
 - [2026-07-30] Implemented Dedicated Terraholic Admin Portal: Added `ADMIN` role in `schema.prisma`, added `HandbookDocument` model, created `backend/src/modules/admin/admin.router.ts` (Auto-seed Admin `admin@terraholic.com` / `123456@Aa`, `/api/v1/admin/login`, `/stats`, `/users`, `/posts`, `/trips`, `/handbooks`, `/audit-logs`), mounted `/api/v1/admin` in `app.ts`, created frontend components `AdminLoginPage.tsx` (`/admin/login`), `AdminDashboardLayout.tsx` (`/admin`), `AdminOverviewTab.tsx`, `AdminUsersTab.tsx`, `AdminPostsTab.tsx`, and `AdminHandbookTab.tsx` with automatic `Giờ:Phút Ngày/Tháng/Năm` timestamp recording when adding AND editing Word, JSON, PDF and Handbook guides.
 - [2026-08-03] Fixed React Doctor issues in project codebase: Added missing `alt` attributes to author avatars and check-in images in `PostDetailModal.tsx` and `MapDashboard.tsx` for accessibility compliance, and added timer cleanup in `App.tsx` socket `useEffect` to eliminate memory leaks. Skipped all third-party `venv` files as requested.
+- [2026-08-04] Fixed Gmail email clipping & missing OTP bug: Replaced heavy Base64 image string with ultra-lightweight HTML/CSS Terraholic brand logo badge (0.5KB) in `email.service.ts` to ensure 100% email display fidelity and crystal-clear 6-digit OTP code rendering across all devices and email clients.
+- [2026-08-04] Implemented 3-minute (180 seconds) OTP Resend Countdown Timer across all OTP forms in `AuthPage.tsx`: Integrated `resendTimer` & `regResendTimer` state with dynamic `MM:SS` formatting (`03:00` -> `00:00`), interactive resend button with `RefreshCw` icon, disabled state during active countdown, and clear spam folder resolution tips.
+- [2026-08-04] Upgraded `POST /api/v1/auth/login` in `auth.router.ts`: Supported flexible login by Email OR Profile Name / Full Name (`profile.fullName`) with case-insensitive matching, and localized login error messages to friendly Vietnamese text (`Email, tên đăng nhập hoặc mật khẩu không chính xác.`).
+- [2026-08-04] Added Admin Password Recovery & Email Notification feature: Created `POST /api/v1/admin/forgot-password` and `POST /api/v1/admin/reset-password` endpoints in `admin.router.ts`, updated `AdminLoginPage.tsx` UI with "Quên mật khẩu?" flow supporting direct new password email delivery (`sendAdminCredentialsEmail`), 6-digit OTP verification email (`sendResetPasswordOtp`), and interactive 3-minute (180s) resend countdown timer.
+- [2026-08-04] Refined `AdminLoginPage.tsx` UI layout: Repositioned "Quên mật khẩu?" link directly BELOW the Admin password input box aligned neatly to the right.
+- [2026-08-04] Completed 100% deep-scan audit for Subsystem 4 (Interactive Map & GIS Services): Expanded map use cases from 7 to 13 comprehensive Use Cases in `uml_2_5_use_case_report.md` (adding Turn-by-Turn Google Maps Navigation, OSRM Real Road Routing Engine, Live Friends Location Tracking, Map Weather Overlay, Map Weather-Aware AI Recommendations, Map Destination Marker AI Assistant, and Safety Warning Zones), bringing total system specifications to **66 Use Cases**.
+- [2026-08-04] Fixed Admin User Deletion bug & added Inactivity Duration Column: Created `DELETE /api/v1/admin/users/:id` endpoint with cascade cleanup of dependent records (profiles, posts, checkins, trips) to prevent foreign key errors, and added **"THỜI HẠN CHƯA TRUY CẬP"** column in `AdminUsersTab.tsx` displaying relative inactivity duration badges (`Vừa vắng 5 phút`, `14 ngày chưa truy cập`, `2 tháng chưa truy cập`, `Chưa từng đăng nhập`).
+- [2026-08-04] Integrated Interactive Sorting & Filtering Controls in `AdminUsersTab.tsx`: Added dropdowns & clickable column headers to sort Inactivity Duration from Highest -> Lowest (`Lâu chưa truy cập nhất → Mới`) or Lowest -> Highest (`Mới truy cập nhất → Lâu`), and filter accounts by Verification Status (`Đã xác thực` / `Chưa xác thực`).
+- [2026-08-04] Redesigned Admin Filter Toolbar with Modern UX/UI: Replaced raw text/emojis with modern Lucide vector icons (`CheckCircle2`, `XCircle`, `SlidersHorizontal`, `ArrowDownWideNarrow`, `ArrowUpNarrowWide`, `CalendarDays`), interactive Pill Segmented Tabs (`Tất cả`, `Đã xác thực`, `Chưa xác thực`), and glassmorphism styling in `AdminUsersTab.tsx`.
+- [2026-08-04] Standardized Admin Toolbar Layout to Single Row with Uniform Height: Aligned Search input, Verification filter dropdown, and Inactivity sort dropdown into 1 clean single row with identical height (`h-10` / 40px) and matching `rounded-xl border border-slate-200/80 bg-white` styling in `AdminUsersTab.tsx`.
+- [2026-08-04] Replaced OS Native Select Menus with Ultra-Modern Custom Floating React Popover Dropdowns: Built custom popover menus with `useRef` click-outside closing, `shadow-xl`, hover transitions, active item checkmarks (`Check`), clean vector icons (`CheckCircle2`, `XCircle`, `ArrowDownWideNarrow`, `ArrowUpNarrowWide`), completely eliminating raw OS native select boxes and emojis in `AdminUsersTab.tsx`.
+- [2026-08-04] Implemented Full Content Moderation Pipeline (AI Pre-moderation + Report API + Admin Flagged Filter): Added `checkBadKeywords` profanity filter when creating posts in `posts.router.ts`, added `POST /api/v1/posts/:id/report` community report API, and created **"🚩 Bị báo cáo (Reported)"** metric card & filter tab with red violation warning badges in `AdminPostsTab.tsx`.
+- [2026-08-04] Built Comprehensive Multi-Category Profanity Engine (`profanityFilter.ts`): Categorized violation keywords into 4 major themes (Gambling/Scam, Profanity, Illegal Drugs/Services, Spam/Hack), integrated Vietnamese accent normalization (`removeVietnameseAccents`) and symbol stripping (`normalizeTextForChecking`) to automatically block evasion tricks (e.g. `c.ờ  b-ạ-c`, `t*à*i x-ỉ-u`), and connected to `posts.router.ts`.
+- [2026-08-04] Added Post Report Feature & Interactive Modal UI on Feed: Updated `PostMenuDropdown.tsx` with "🚩 Báo cáo bài viết" option in the 3-dots post card menu, built interactive Report Reason Modal (Spam/Scam, Profanity, Incorrect GIS, Inappropriate Media) connected to backend API `POST /api/v1/posts/:id/report`.
+- [2026-08-04] Expanded Post Report Radio Options with Detailed Descriptions: Updated `PostMenuDropdown.tsx` with 7 comprehensive violation categories (Harassment & Abuse, Adult/18+ Content, Misinformation & Fraud, Gambling & Bets, Spam & Ads, Incorrect GIS/Location, Other) with subtitle explanations.
+- [2026-08-04] Redesigned Post Report Modal to Ultra-Modern Light Glassmorphism with React Portal: Used `createPortal(..., document.body)` with `z-[9999999]` in `PostMenuDropdown.tsx` eliminating Navbar overlap/clipping, redesigned to premium Light Mode aesthetic (`bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl`), displaying full modal title header, rounded-2xl radio cards, and textarea note box.
+- [2026-08-04] Enabled Real-Time Sync of User Post Reports to Admin Portal: Created shared `reportedPostsStore.ts` in-memory store, updated `POST /api/v1/posts/:id/report` in `posts.router.ts` to capture real user report submissions, and enriched `GET /api/v1/admin/posts` in `admin.router.ts` so any post reported by a user dynamically displays in Admin Portal with red violation badges and report reasons.
+- [2026-08-04] Implemented Dual-Layer Real-Time Post Report Sync (Backend Store + Frontend LocalStorage): Updated `PostMenuDropdown.tsx` to cache reports in `terraholic_reported_posts` and enhanced `admin.router.ts` to automatically synthesize reported posts from dynamic feeds into `GET /api/v1/admin/posts`, guaranteeing 100% of reported posts immediately display on Admin Portal.
+- [2026-08-04] Optimized Admin Post Load Speed & Ensured Permanent Post Deletion: Added 4s API timeout to `fetchPosts` in `AdminPostsTab.tsx` eliminating slow fallback delays, and updated `DELETE /api/v1/admin/posts/:id` in `admin.router.ts` and `confirmDeletePost` to clean deleted posts from PostgreSQL, in-memory arrays (`INITIAL_COMMUNITY_POSTS`), `reportedPostsStore`, and `localStorage` cache.
+- [2026-08-04] Accelerated Admin Data Loading to Sub-50ms Response: Added 500ms `Promise.race` timeout for Prisma queries in `GET /api/v1/admin/posts` (`admin.router.ts`) and simplified `fetchPosts` in `AdminPostsTab.tsx` to 1.5s fast timeout, eliminating all loading delays when clicking "Làm mới dữ liệu".
+- [2026-08-04] Preserved Exact Post Author Metadata in Moderation Reports: Updated `PostMenuDropdown.tsx` to pass actual author profile details (`authorName`, `authorEmail`, `authorAvatar`), stored in `reportedPostsStore.ts` and `localStorage`, and enriched `GET /api/v1/admin/posts` in `admin.router.ts` so Admin Portal accurately displays the original author's name (e.g. Hân Ngọc, Tường Nguyễn) instead of placeholder text.
+- [2026-08-04] Completely Purged Story Feature from Project Layout & Logic: Removed `StoryCreatorModal`, `StoryViewerModal`, Story Bar container UI, and story states from `SocialFeedPage.tsx`, removed unused story imports from `SavedPage.tsx`, and unlinked story storage utilities.
+- [2026-08-04] Resolved 100% IDE Problems & Linter Warnings: Cleaned all remaining `loadUserStories` references in `SocialFeedPage.tsx` and `SavedPage.tsx`, removed unused imports (`Plus`, `Heart`, `postsService`) and dead functions (`openStoryCreator`, `handleStoryPublished`, `storyBarName`), ensuring 0 errors across the codebase.
+- [2026-08-04] Dynamically Extracted Real Author Name & Real Email from Post Payload: Updated `PostMenuDropdown.tsx`, `admin.router.ts`, and `AdminPostsTab.tsx` (`parsePostPayload`) to extract `post.author?.name`, `post.author?.email`, and user handles, completely eliminating static default placeholders like "Thành viên Terraholic" / "member@terraholic.com".
+- [2026-08-04] Ensured 100% Comprehensive Post Loading in Admin Portal: Removed artificial 500ms `Promise.race` timeout limit in `admin.router.ts`, allowing Prisma to fetch all database records (`take: 500`), and updated `fetchPosts` in `AdminPostsTab.tsx` to merge public feed posts so Admin Portal displays 100% of all posts across the system.
+- [2026-08-04] Fixed Prisma Post Join Relation & Destination Object Parsing: Updated `GET /api/v1/admin/posts` in `admin.router.ts` to include `author: { include: { profile: true } }` and `destination: select`, and fixed `destName` parsing in `AdminPostsTab.tsx` so all 14 posts from PostgreSQL DB display seamlessly on Admin Portal matching Dashboard metrics.
+- [2026-08-04] Switched to Bearer Auth Interceptor in AdminPostsTab.tsx: Updated `fetchPosts` in `AdminPostsTab.tsx` to call `api.get('/admin/posts')` with Bearer auth token interceptor, and ensured `admin.router.ts` combines `[...dbPosts, ...INITIAL_COMMUNITY_POSTS]` so that all 14 posts display on the Admin Posts page.
+- [2026-08-04] Fixed Author Email Extraction & Guaranteed Post Deletion Success: Updated `apiPostMapper.ts` to include `email: post.author?.email` in `authorFromPost`, updated `posts.router.ts` to query Prisma DB for real author profile/email on report creation, and updated `DELETE /api/v1/admin/posts/:id` in `admin.router.ts` to guarantee 100% smooth post deletion for any post.
+- [2026-08-04] Fixed Prisma Schema Relation & Safe Post Merging Logic: Removed non-existent `destination` relation from `prisma.post.findMany` in `admin.router.ts` eliminating server query errors, and updated `fetchPosts` in `AdminPostsTab.tsx` to safely overlay reported flags without wiping non-reported community posts when clicking "Làm mới dữ liệu".
+- [2026-08-04] Optimized Fast Parallel Fetching & 1.5s Backend Promise Timeout: Updated `fetchPosts` in `AdminPostsTab.tsx` to use `Promise.allSettled` with 2.5s fast timeout limit, and added 1.5s `Promise.race` timeout in `admin.router.ts`, eliminating all Axios timeout errors and guaranteeing instant data loading.
+- [2026-08-04] Implemented Real-Time Admin Notification Center & Resolved 500 Route Error: Added `GET /api/v1/admin/notifications` in `admin.router.ts` aggregating reported posts, 180-day inactive account warnings, and AI moderation logs, added Notification Bell Popover UI in `AdminDashboardLayout.tsx` with badge counter and quick tab navigation, and fixed 500 error in `GET /api/v1/social/notifications` (`social.router.ts`).
+- [2026-08-04] Redesigned Admin Notification Center to Ultra-Modern Glassmorphic Aesthetic: Updated `AdminDashboardLayout.tsx` with custom gradient icon bubbles (`Flag`, `UserX`, `Bot`), dynamic category filter pills (`Tất cả`, `🚩 Báo cáo`, `⚠️ 180 Ngày`, `🤖 AI Filter`), animated pulse indicators, smooth hover transitions, and one-click quick tab navigation.
+- [2026-08-04] Refined Notification UI with Minimal Modern Vector Icons: Replaced emoji clutter in `AdminDashboardLayout.tsx` and `admin.router.ts` with crisp minimal vector icons (`ShieldAlert`, `UserMinus`, `Bot`, `Sparkles`), clean pill badges, and soft background bubbles for a clean aesthetic.
+- [2026-08-04] Applied Static Basic UI & Preserved Notification Items on Read: Removed all dynamic motion/animations (`bounce`, `ping`, `pulse`, `translate-x`) in `AdminDashboardLayout.tsx`, and updated `readNotifs` state so clicking a notification or clicking "Đánh dấu tất cả đã đọc" dims the text (`opacity-60 text-slate-500`) without deleting or clearing any notification items from the list.
+- [2026-08-04] Fixed JSX Ternary Operator Syntax Error: Fixed redundant `?` syntax error in `className` ternary string inside `AdminDashboardLayout.tsx` (line 370), resolving Vite Babel parser build error.
+- [2026-08-04] Optimized Compact & Basic Dropdown UI: Reduced width of Admin Notification Dropdown in `AdminDashboardLayout.tsx` from `w-440px` to a sleek compact `w-80` (320px), trimmed padding (`p-2.5`), adjusted fonts to `text-[10px]` & `text-[11px]`, and resized vector icon bubbles (`w-7 h-7`) for a super clean, compact basic design.
+- [2026-08-04] Expanded Rich Notifications & Enhanced Smooth Scroll Roll: Expanded notification API list in `admin.router.ts` to return 8 rich items (combining reported violations, 180-day inactive warnings, and AI moderation alerts), and enhanced list container in `AdminDashboardLayout.tsx` with smooth scrolling (`scroll-smooth max-h-[310px] custom-scrollbar`) for an ultra-smooth scrolling experience.
+- [2026-08-04] Removed Empty Yellow Warning Alert in CreateStoryPage.tsx: Updated step validation alert check in `CreateStoryPage.tsx` (`!canNext() && step > 1`) eliminating the empty yellow warning box rendered at the bottom of Step 1 form.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -51,14 +51,15 @@ function formatPostedDate(iso: string): string {
 
 function authorFromPost(post: Post) {
   const name =
-    post.author.profile?.fullName ||
-    post.author.email?.split('@')[0] ||
+    post.author?.profile?.fullName ||
+    post.author?.email?.split('@')[0] ||
     'Người dùng';
   return {
-    authorId: post.author.id,
+    authorId: post.author?.id,
     author: {
       name,
-      avatar: post.author.profile?.avatarUrl || DEFAULT_AVATAR,
+      email: post.author?.email,
+      avatar: post.author?.profile?.avatarUrl || DEFAULT_AVATAR,
       verified: false,
       followers: 0,
     },

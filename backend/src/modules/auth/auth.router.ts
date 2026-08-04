@@ -244,28 +244,36 @@ router.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'email and password are required.' });
+      return res.status(400).json({ error: 'Vui lòng nhập email/tên đăng nhập và mật khẩu.' });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
+    const inputStr = String(email).trim();
+
+    // Tìm kiếm linh hoạt theo email HOẶC họ tên/tên đăng nhập (profile.fullName)
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: { equals: inputStr, mode: 'insensitive' } },
+          { profile: { fullName: { equals: inputStr, mode: 'insensitive' } } },
+        ],
+      },
       include: { profile: true },
     });
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials.' });
+      return res.status(401).json({ error: 'Email, tên đăng nhập hoặc mật khẩu không chính xác.' });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid credentials.' });
+      return res.status(401).json({ error: 'Email, tên đăng nhập hoặc mật khẩu không chính xác.' });
     }
 
     const accessToken = signAccessToken(user.id, user.role);
     const refreshToken = signRefreshToken(user.id);
 
     return res.status(200).json({
-      message: 'Login successful.',
+      message: 'Đăng nhập thành công.',
       user: {
         id: user.id,
         email: user.email,
@@ -279,7 +287,7 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     console.error('[auth/login]', err);
-    return res.status(500).json({ error: 'Internal server error.' });
+    return res.status(500).json({ error: 'Lỗi máy chủ nội bộ khi đăng nhập.' });
   }
 });
 

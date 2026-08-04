@@ -76,12 +76,35 @@ function sendNativeSmtpEmail(options: { host: string; port: number; user: string
   });
 }
 
+function getLogoHeaderHtml(): string {
+  return `
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="display: inline-block; background-color: #ffffff; padding: 10px 26px; border-radius: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.9);">
+        <table border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+          <tr>
+            <td style="vertical-align: middle; padding-right: 8px;">
+              <span style="font-size: 22px;">📍</span>
+            </td>
+            <td style="vertical-align: middle;">
+              <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 22px; font-weight: 900; color: #1e3a8a; letter-spacing: 2px; text-transform: uppercase;">
+                TERRA<span style="color: #d97706;">HOLIC</span>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
 export class EmailService {
   async sendVerificationEmail(to: string, token: string): Promise<boolean> {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?email=${encodeURIComponent(to)}&token=${token}`;
     const subject = 'Xác minh tài khoản Terraholic';
+    const logoHtml = getLogoHeaderHtml();
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+        ${logoHtml}
         <h2 style="color: #2563eb; text-align: center;">Chào mừng bạn đến với Terraholic!</h2>
         <p>Cảm ơn bạn đã đăng ký tài khoản trên nền tảng mạng xã hội du lịch thông minh Terraholic.</p>
         <p>Vui lòng click vào nút bên dưới để xác minh tài khoản của bạn:</p>
@@ -122,6 +145,7 @@ export class EmailService {
 
   async sendResetPasswordOtp(to: string, otp: string): Promise<boolean> {
     const subject = '🔐 Mã OTP Xác Thực Đổi Mật Khẩu — Terraholic';
+    const logoHtml = getLogoHeaderHtml();
     const html = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -142,6 +166,7 @@ export class EmailService {
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
+                    ${logoHtml}
                     <div style="background: rgba(255,255,255,0.18); display: inline-block; padding: 8px 18px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: #fffbeb;">
                       🔐 SECURITY VERIFICATION CODE
                     </div>
@@ -247,6 +272,7 @@ export class EmailService {
 
   async sendRegisterOtpEmail(to: string, otp: string): Promise<boolean> {
     const subject = '🚀 Mã OTP Xác Thực Đăng Ký Tài Khoản — Terraholic';
+    const logoHtml = getLogoHeaderHtml();
     const html = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -267,6 +293,7 @@ export class EmailService {
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
+                    ${logoHtml}
                     <div style="background: rgba(255,255,255,0.18); display: inline-block; padding: 8px 18px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: #ecfdf5;">
                       🚀 ACCOUNT REGISTRATION OTP
                     </div>
@@ -372,6 +399,7 @@ export class EmailService {
   async sendAdminCredentialsEmail(to: string, fullName: string, passwordTemp: string = 'Terraholic@2026'): Promise<boolean> {
     const adminUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin`;
     const subject = '🛡️ Thông báo Cấp Quyền & Mật Khẩu Đăng Nhập Admin Portal — Terraholic';
+    const logoHtml = getLogoHeaderHtml();
     const html = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -391,6 +419,7 @@ export class EmailService {
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
+                    ${logoHtml}
                     <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 8px 18px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: #fbbf24;">
                       🛡️ ADMIN PRIVILEGES GRANTED
                     </div>
@@ -542,6 +571,7 @@ export class EmailService {
   async sendAdminRevokedEmail(to: string, fullName: string): Promise<boolean> {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const subject = '⚠️ Thông báo Thu Hồi Quyền Quản Trị Viên (Admin) — Terraholic';
+    const logoHtml = getLogoHeaderHtml();
     const html = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -562,6 +592,7 @@ export class EmailService {
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
+                    ${logoHtml}
                     <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 8px 18px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: #ffe4e6;">
                       ⚠️ ADMIN PRIVILEGES REVOKED
                     </div>

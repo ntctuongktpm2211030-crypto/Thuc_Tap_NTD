@@ -22,7 +22,18 @@ import {
   AlertCircle,
   X,
   Mail,
-  Send
+  Send,
+  Bell,
+  Flag,
+  UserX,
+  Bot,
+  Sparkles,
+  Clock,
+  CheckCheck,
+  RefreshCw,
+  ShieldAlert,
+  UserMinus,
+  AlertTriangle
 } from 'lucide-react';
 import api from '../../services/api';
 import AdminOverviewTab from './AdminOverviewTab';
@@ -64,6 +75,25 @@ export const AdminDashboardLayout: React.FC = () => {
     localStorage.setItem('st-admin-sidebar-collapsed:v1', String(next));
   };
 
+  // Admin Notifications State
+  const [adminNotifs, setAdminNotifs] = useState<any[]>([]);
+  const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [notifFilter, setNotifFilter] = useState<'all' | 'report' | 'inactive' | 'ai'>('all');
+  const [readNotifs, setReadNotifs] = useState<Set<string>>(() => new Set());
+
+  const fetchAdminNotifs = async () => {
+    try {
+      const res = await api.get('/admin/notifications', { timeout: 3500 }).catch(async () => {
+        return await axios.get('/api/v1/admin/notifications', { timeout: 3500 });
+      });
+      if (res.data && Array.isArray(res.data.data)) {
+        setAdminNotifs(res.data.data);
+      }
+    } catch (e) {
+      console.warn('Failed to fetch admin notifications:', e);
+    }
+  };
+
   useEffect(() => {
     // Verify admin token
     const token = localStorage.getItem('st-admin-token') || localStorage.getItem('st-token');
@@ -82,6 +112,7 @@ export const AdminDashboardLayout: React.FC = () => {
     }
 
     fetchStats();
+    fetchAdminNotifs();
   }, [navigate]);
 
   const fetchStats = async () => {
@@ -202,7 +233,192 @@ export const AdminDashboardLayout: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {/* Admin Notifications Bell Icon & Popover Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifMenu(!showNotifMenu)}
+              className="relative p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl cursor-pointer border border-slate-200 flex items-center justify-center"
+              title="Thông báo hệ thống Admin"
+            >
+              <Bell size={18} className="text-slate-700" />
+              {adminNotifs.filter(n => !readNotifs.has(n.id)).length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full shadow-sm min-w-[18px] text-center border-2 border-white">
+                  {adminNotifs.filter(n => !readNotifs.has(n.id)).length}
+                </span>
+              )}
+            </button>
+
+            {/* Notifications Popover Dropdown - Compact & Basic Smooth Scroll */}
+            {showNotifMenu && (
+              <div className="absolute right-0 mt-2 w-84 sm:w-84 bg-white rounded-xl shadow-xl border border-slate-200 z-[999999] overflow-hidden">
+                {/* Basic Compact Header */}
+                <div className="p-2.5 bg-slate-900 text-white flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Bell size={14} className="text-blue-400" />
+                    <span className="text-[11px] font-bold tracking-wide uppercase">Thông Báo Quản Trị ({adminNotifs.length})</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={fetchAdminNotifs}
+                      className="p-1 hover:bg-slate-800 text-slate-300 hover:text-white rounded cursor-pointer"
+                      title="Làm mới thông báo"
+                    >
+                      <RefreshCw size={12} />
+                    </button>
+                    <button 
+                      onClick={() => setShowNotifMenu(false)}
+                      className="p-1 hover:bg-slate-800 text-slate-300 hover:text-white rounded cursor-pointer"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Compact Category Filter Pills */}
+                <div className="p-1.5 bg-slate-50 border-b border-slate-200 flex items-center gap-1 overflow-x-auto custom-scrollbar">
+                  <button
+                    onClick={() => setNotifFilter('all')}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer whitespace-nowrap ${
+                      notifFilter === 'all'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    Tất cả ({adminNotifs.length})
+                  </button>
+                  <button
+                    onClick={() => setNotifFilter('report')}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                      notifFilter === 'report'
+                        ? 'bg-rose-600 text-white'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <ShieldAlert size={11} className={notifFilter === 'report' ? 'text-white' : 'text-rose-500'} /> 
+                    Báo cáo ({adminNotifs.filter(n => n.type === 'report').length})
+                  </button>
+                  <button
+                    onClick={() => setNotifFilter('inactive')}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                      notifFilter === 'inactive'
+                        ? 'bg-amber-600 text-white'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <UserMinus size={11} className={notifFilter === 'inactive' ? 'text-white' : 'text-amber-500'} /> 
+                    180 Ngày ({adminNotifs.filter(n => n.type === 'inactive_user').length})
+                  </button>
+                  <button
+                    onClick={() => setNotifFilter('ai')}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                      notifFilter === 'ai'
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Bot size={11} className={notifFilter === 'ai' ? 'text-white' : 'text-indigo-500'} /> 
+                    AI ({adminNotifs.filter(n => n.type === 'ai_moderation').length})
+                  </button>
+                </div>
+
+                {/* Compact Notifications List - Smooth Scroll & Pretty Roll */}
+                <div className="max-h-[310px] overflow-y-auto scroll-smooth divide-y divide-slate-100 custom-scrollbar pr-0.5">
+                  {adminNotifs.filter(item => {
+                    if (notifFilter === 'report') return item.type === 'report';
+                    if (notifFilter === 'inactive') return item.type === 'inactive_user';
+                    if (notifFilter === 'ai') return item.type === 'ai_moderation';
+                    return true;
+                  }).length === 0 ? (
+                    <div className="p-6 text-center text-slate-400">
+                      <Sparkles size={20} className="mx-auto mb-1 text-slate-300" />
+                      <p className="text-[11px] font-medium text-slate-500">Không có thông báo nào thuộc danh mục này.</p>
+                    </div>
+                  ) : (
+                    adminNotifs
+                      .filter(item => {
+                        if (notifFilter === 'report') return item.type === 'report';
+                        if (notifFilter === 'inactive') return item.type === 'inactive_user';
+                        if (notifFilter === 'ai') return item.type === 'ai_moderation';
+                        return true;
+                      })
+                      .map(item => {
+                        const isRead = readNotifs.has(item.id);
+                        return (
+                          <div 
+                            key={item.id}
+                            onClick={() => {
+                              setReadNotifs(prev => new Set(prev).add(item.id));
+                              setShowNotifMenu(false);
+                              if (item.type === 'report' || item.type === 'ai_moderation') {
+                                setActiveTab('posts');
+                              } else if (item.type === 'inactive_user') {
+                                setActiveTab('users');
+                              }
+                            }}
+                            className={`p-2.5 cursor-pointer text-left transition-colors ${
+                              isRead 
+                                ? 'bg-slate-50/50 opacity-55 hover:opacity-80' 
+                                : 'bg-white hover:bg-slate-50'
+                            }`}
+                          >
+                            <div className="flex items-start gap-2.5">
+                              {/* Compact Vector Icon Bubble */}
+                              <div className="mt-0.5 shrink-0">
+                                {item.type === 'report' && (
+                                  <div className="w-7 h-7 rounded bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+                                    <ShieldAlert size={14} />
+                                  </div>
+                                )}
+                                {item.type === 'inactive_user' && (
+                                  <div className="w-7 h-7 rounded bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+                                    <UserMinus size={14} />
+                                  </div>
+                                )}
+                                {item.type === 'ai_moderation' && (
+                                  <div className="w-7 h-7 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
+                                    <Bot size={14} />
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Compact Content */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between gap-1">
+                                  <h4 className={`text-[11px] ${isRead ? 'font-medium text-slate-500' : 'font-bold text-slate-900'} leading-tight truncate`}>
+                                    {item.title}
+                                  </h4>
+                                  <span className="text-[9px] text-slate-400 font-medium shrink-0">
+                                    {new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                                  </span>
+                                </div>
+                                <p className={`text-[10px] ${isRead ? 'text-slate-400' : 'text-slate-600'} font-medium mt-0.5 leading-snug line-clamp-2`}>
+                                  {item.message}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                  )}
+                </div>
+
+                {/* Compact Footer */}
+                <div className="p-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                  <span className="text-[9px] text-slate-400 font-medium">Tự động đồng bộ 30s</span>
+                  <button
+                    onClick={() => {
+                      setReadNotifs(new Set(adminNotifs.map(n => n.id)));
+                    }}
+                    className="text-[10px] text-blue-600 hover:text-blue-700 font-bold cursor-pointer flex items-center gap-1 hover:underline"
+                  >
+                    <CheckCheck size={12} /> Đánh dấu tất cả đã đọc
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => navigate('/')}
             className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer border border-slate-200/80"

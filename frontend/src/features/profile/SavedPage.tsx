@@ -15,7 +15,6 @@ import { mapApiPostsToFeed } from '../../utils/apiPostMapper';
 import { FeedPost } from '../../utils/feedUtils';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import { loadUserProfileCache } from '../../utils/feedPostStorage';
-import { loadUserStories } from '../../utils/storyStorage';
 
 import { computeHotDestinationsThisMonth, sortCompanionsByFollowers } from '../../utils/feedUtils';
 
@@ -44,7 +43,6 @@ const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
   const { t } = useLang();
   const user = useSelector((s: RootState) => s.auth.user);
   const profileCache = loadUserProfileCache();
-  const storyCount = loadUserStories().length;
   const displayName = user?.fullName || t('auth.loginToPost');
   const locationLabel = profileCache.location || 'Chưa cập nhật vị trí';
 
@@ -75,7 +73,7 @@ const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
           <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
             {[
               [String(savedCount), t('sidebar.profile.posts')],
-              [String(storyCount), 'Hành trình'],
+              ['0', 'Hành trình'],
               ['0', t('sidebar.profile.followers')],
             ].map(([n, l], i) => (
               <div key={i} className="py-1">

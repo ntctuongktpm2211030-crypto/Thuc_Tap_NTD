@@ -2084,12 +2084,15 @@ export default function CreateStoryPage() {
             )}
 
             {/* Error alerts if step invalid */}
-            {!canNext() && (
+            {!canNext() && step > 1 && (
               <div className="journey-alert journey-alert--warn mt-4">
-                <AlertCircle size={15} />
-                {step === 2 && data.displayType === 'social' && 'Vui lòng thêm ít nhất 1 ảnh (tối đa 2)'}
-                {step === 2 && data.displayType !== 'social' && 'Vui lòng chọn ảnh bìa'}
-                {step === 3 && 'Vui lòng thêm ít nhất 1 điểm trên bản đồ tuyến đường'}
+                <AlertCircle size={15} className="shrink-0" />
+                <span>
+                  {step === 2 && data.displayType === 'social' && 'Vui lòng thêm ít nhất 1 ảnh bài viết'}
+                  {step === 2 && data.displayType !== 'social' && 'Vui lòng chọn ảnh bìa chính cho hành trình'}
+                  {step === 3 && 'Vui lòng thêm ít nhất 1 vị trí địa danh trên bản đồ tuyến đường'}
+                  {step === 4 && 'Vui lòng kiểm tra đầy đủ lộ trình chi tiết chuyến đi'}
+                </span>
               </div>
             )}
 

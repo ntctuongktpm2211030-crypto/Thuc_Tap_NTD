@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Mail, Lock, User, Eye, EyeOff, ArrowRight,
-  Check, AlertCircle, Plane, MapPin, Globe, ChevronLeft, Shield,
+  Check, AlertCircle, Plane, MapPin, Globe, ChevronLeft, Shield, RefreshCw,
 } from 'lucide-react';
 import { loginThunk, registerThunk, clearError, loginGoogleThunk } from '../../store/authSlice';
 import type { RootState, AppDispatch } from '../../store';
@@ -282,6 +282,54 @@ export default function AuthPage() {
   const [forgotStatus, setForgotStatus] = useState<{ text: string; isError: boolean } | null>(null);
   const [forgotLoadingState, setForgotLoadingState] = useState(false);
 
+  // OTP Countdown Timers (3 minutes = 180 seconds)
+  const [resendTimer, setResendTimer] = useState(0);
+  const [regResendTimer, setRegResendTimer] = useState(0);
+
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const interval = setInterval(() => {
+      setResendTimer(prev => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [resendTimer]);
+
+  useEffect(() => {
+    if (regResendTimer <= 0) return;
+    const interval = setInterval(() => {
+      setRegResendTimer(prev => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [regResendTimer]);
+
+  const formatTimer = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+  };
+
+  const handleResendOtp = async () => {
+    if (resendTimer > 0 || forgotLoadingState) return;
+    if (!forgotEmail) {
+      setForgotStatus({ text: 'Vui lòng nhập Email để gửi lại mã OTP', isError: true });
+      switchMode('forgot');
+      return;
+    }
+    setForgotStatus(null);
+    setForgotLoadingState(true);
+    try {
+      await authService.forgotPassword(forgotEmail);
+      setForgotStatus({ text: `Mã OTP mới đã được gửi thành công đến email ${forgotEmail}.`, isError: false });
+      setResendTimer(180);
+    } catch (err: any) {
+      console.error('Resend OTP error:', err);
+      const msg = err.response?.data?.error || 'Có lỗi xảy ra khi gửi lại mã OTP.';
+      setForgotStatus({ text: msg, isError: true });
+    } finally {
+      setForgotLoadingState(false);
+    }
+  };
+
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isEmail(forgotEmail)) {
@@ -292,11 +340,12 @@ export default function AuthPage() {
     setForgotLoadingState(true);
     try {
       await authService.forgotPassword(forgotEmail);
-      setForgotStatus({ text: 'Mã OTP đã được gửi về email của bạn.', isError: false });
+      setForgotStatus({ text: 'Mã OTP 6 chữ số đã được gửi về email của bạn.', isError: false });
+      setResendTimer(180); // Bắt đầu đếm ngược 3 phút
       setTimeout(() => {
         setForgotStatus(null);
         setMode('otp');
-      }, 1500);
+      }, 1200);
     } catch (err: any) {
       console.error('Forgot password error:', err);
       const msg = err.response?.data?.error || 'Có lỗi xảy ra, vui lòng thử lại sau.';
@@ -393,6 +442,7 @@ export default function AuthPage() {
   const [agreed, setAgreed] = useState(false);
 
   const handleSendRegisterOtp = async () => {
+    if (regResendTimer > 0 || sendingRegOtp) return;
     if (!isEmail(regEmail.value)) {
       setRegEmail(p => ({ ...p, error: 'Vui lòng nhập Email hợp lệ trước khi gửi mã OTP', touched: true }));
       return;
@@ -403,6 +453,7 @@ export default function AuthPage() {
       const res = await api.post('/auth/send-register-otp', { email: regEmail.value.trim() });
       const msg = res.data?.message || `Mã OTP 6 số đã được gửi tới email ${regEmail.value}`;
       setRegOtpMsg(`📧 ${msg}`);
+      setRegResendTimer(180);
     } catch (err: any) {
       console.error('Send register OTP error:', err);
       const errMsg = err.response?.data?.error || 'Không thể gửi mã OTP. Vui lòng kiểm tra lại email.';
@@ -717,21 +768,43 @@ export default function AuthPage() {
                 )}
               </button>
 
-              <div className="flex justify-between items-center text-xs">
-                <button
-                  type="button"
-                  onClick={() => switchMode('forgot')}
-                  className="font-semibold text-[var(--gold)] hover:underline"
-                >
-                  Gửi lại OTP khác
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchMode('login')}
-                  className="font-semibold text-[var(--text-muted)] hover:underline"
-                >
-                  Quay lại đăng nhập
-                </button>
+              <div className="space-y-3 pt-1">
+                <div className="flex justify-between items-center text-xs">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={resendTimer > 0 || forgotLoadingState}
+                    className={`font-bold flex items-center gap-1.5 transition-all ${
+                      resendTimer > 0 || forgotLoadingState
+                        ? 'text-[var(--text-muted)] opacity-60 cursor-not-allowed'
+                        : 'text-[var(--gold)] hover:underline cursor-pointer'
+                    }`}
+                  >
+                    <RefreshCw size={13} className={forgotLoadingState ? 'animate-spin' : ''} />
+                    {resendTimer > 0 ? (
+                      <span>Gửi lại mã OTP ({formatTimer(resendTimer)})</span>
+                    ) : (
+                      <span>Gửi lại mã OTP mới</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => switchMode('login')}
+                    className="font-semibold text-[var(--text-muted)] hover:underline"
+                  >
+                    Quay lại đăng nhập
+                  </button>
+                </div>
+
+                {resendTimer > 0 ? (
+                  <p className="text-[11px] text-[var(--text-secondary)] bg-[var(--bg-elevated)] p-3 rounded-xl border border-[var(--border-subtle)] leading-relaxed">
+                    📩 Mã OTP đã được gửi. Nếu chưa thấy trong Hộp thư đến, vui lòng kiểm tra mục <strong>Spam / Thư rác</strong> hoặc bấm <strong>Gửi lại mã OTP mới</strong> sau <strong className="text-[var(--gold)]">{formatTimer(resendTimer)}</strong>.
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-amber-500 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 leading-relaxed font-medium">
+                    💡 Bạn vẫn chưa nhận được email? Hãy bấm nút <strong>Gửi lại mã OTP mới</strong> ở trên để hệ thống gửi lại ngay.
+                  </p>
+                )}
               </div>
             </form>
           )}
@@ -896,15 +969,17 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={handleSendRegisterOtp}
-                    disabled={sendingRegOtp}
+                    disabled={sendingRegOtp || regResendTimer > 0}
                     className="px-4 py-3 bg-[var(--gold)]/15 hover:bg-[var(--gold)]/25 text-[var(--gold)] border border-[var(--gold)]/40 rounded-xl text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shrink-0 h-[46px] flex items-center gap-1.5 shadow-sm"
                   >
                     {sendingRegOtp ? (
                       <span className="animate-spin">⏳</span>
+                    ) : regResendTimer > 0 ? (
+                      <RefreshCw size={13} />
                     ) : (
                       <Mail size={14} />
                     )}
-                    {sendingRegOtp ? 'Đang gửi...' : 'Gửi mã OTP'}
+                    {sendingRegOtp ? 'Đang gửi...' : regResendTimer > 0 ? `Gửi lại (${formatTimer(regResendTimer)})` : 'Gửi mã OTP'}
                   </button>
                 </div>
                 {regOtpMsg && (

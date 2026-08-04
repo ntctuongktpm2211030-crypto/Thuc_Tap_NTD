@@ -300,6 +300,8 @@ router.get('/:id', optionalAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+import { checkContentViolation } from '../../utils/profanityFilter';
+
 // ─────────────────────────────────────────────────────────
 // POST /api/v1/posts  — create a new blog post
 // ─────────────────────────────────────────────────────────
@@ -326,6 +328,17 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({
         error: 'Nội dung quá ngắn',
         message: 'Nội dung bài viết/hành trình phải chứa ít nhất 10 ký tự.',
+      });
+    }
+
+    // AI Pre-moderation & Comprehensive Profanity Check
+    const violationCheck = checkContentViolation(bodyText);
+    if (violationCheck.isViolation) {
+      return res.status(400).json({
+        error: 'Vi phạm tiêu chuẩn cộng đồng',
+        message: `Nội dung bài viết chứa cụm từ thuộc nhóm [${violationCheck.categoryName}]: "${violationCheck.matchedKeyword}". Vui lòng loại bỏ từ vi phạm để đăng bài!`,
+        category: violationCheck.categoryName,
+        matchedKeyword: violationCheck.matchedKeyword
       });
     }
 
@@ -657,6 +670,60 @@ router.get('/bookmarks/mine', requireAuth, async (req: AuthRequest, res: Respons
   } catch (err) {
     console.error('[posts/bookmarks/mine]', err);
     return res.status(500).json({ error: 'Failed to fetch bookmarks.' });
+  }
+});
+
+/**
+ * POST /api/v1/posts/:id/report
+ * Report a post for community moderation
+ */
+import { reportedPostsStore } from '../../utils/reportedPostsStore';
+
+/**
+ * POST /api/v1/posts/:id/report
+ * Report a post for community moderation
+ */
+router.post('/:id/report', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { reason, description, authorName, authorEmail, authorAvatar } = req.body;
+
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: { author: { include: { profile: true } } }
+    });
+
+    const realAuthorName =
+      post?.author?.profile?.fullName ||
+      (post?.author?.email ? post.author.email.split('@')[0] : null) ||
+      authorName ||
+      'Tài khoản Thành viên';
+
+    const realAuthorEmail =
+      post?.author?.email ||
+      authorEmail ||
+      (realAuthorName && realAuthorName !== 'Tài khoản Thành viên' 
+        ? `${realAuthorName.toLowerCase().replace(/\s+/g, '')}@gmail.com` 
+        : 'member@gmail.com');
+
+    const realAuthorAvatar = authorAvatar || post?.author?.profile?.avatarUrl || '';
+
+    // Save report with author info into reportedPostsStore
+    reportedPostsStore.addReport(id, reason, description, req.user?.sub, {
+      authorName: realAuthorName,
+      authorEmail: realAuthorEmail,
+      authorAvatar: realAuthorAvatar
+    });
+
+    console.log(`[REPORT POST] 🚩 Bài viết [${id}] của tác giả [${realAuthorName}] bị báo cáo bởi user [${req.user?.sub}]. Lý do: ${reason || 'Vi phạm tiêu chuẩn cộng đồng'}`);
+
+    return res.json({
+      success: true,
+      message: 'Cảm ơn bạn đã gửi báo cáo! Quản trị viên Terraholic sẽ tiến hành kiểm duyệt và xử lý bài viết này trong thời gian sớm nhất.'
+    });
+  } catch (err: any) {
+    console.error('[posts/:id/report ERROR]', err);
+    return res.status(500).json({ error: 'Không thể gửi báo cáo vi phạm.' });
   }
 });
 

@@ -6,15 +6,11 @@ import { useRequireAuth } from '../../hooks/useRequireAuth';
 import type { RootState } from '../../store';
 import {
   Heart, MessageCircle, Bookmark,
-  MapPin, Clock, BookOpen, Plus, TrendingUp, Users, Sparkles,
+  MapPin, Clock, BookOpen, TrendingUp, Users, Sparkles,
   Flame, Globe, Loader2,
 } from 'lucide-react';
 import { NAV_ICONS, FILTER_ICONS } from '../../config/modernIcons';
 
-import type { FeedStoryItem, StoredStory } from '../../types/story';
-import { mergeStories, storedToFeedItem } from '../../utils/storyStorage';
-import StoryCreatorModal from '../../components/stories/StoryCreatorModal';
-import StoryViewerModal from '../../components/stories/StoryViewerModal';
 import QuickComposeModal from '../../components/feed/QuickComposeModal';
 import {
   computeHotDestinationsThisMonth,
@@ -36,7 +32,6 @@ import { loadUserProfileCache } from '../../utils/feedPostStorage';
 import { syncToggleBookmark, syncToggleLike } from '../../utils/postEngagement';
 import { postsService, socialService } from '../../services/smartTravel.service';
 import { mapApiPostsToFeed, mapApiPostToFeedPost } from '../../utils/apiPostMapper';
-import { loadUserStories } from '../../utils/storyStorage';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import FeedCardShell from '../../components/feed/FeedCardShell';
 import PostMenuDropdown from '../../components/feed/PostMenuDropdown';
@@ -645,7 +640,6 @@ const LeftSidebar = ({
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const profileCache = loadUserProfileCache();
   const postCount = myPostCount;
-  const storyCount = loadUserStories().length;
 
   const displayName = isAuthenticated && user?.fullName ? user.fullName : t('auth.loginToPost');
   const locationLabel = profileCache.location || (isAuthenticated ? 'Chưa cập nhật vị trí' : 'Đăng nhập để xem hồ sơ');
@@ -677,7 +671,7 @@ const LeftSidebar = ({
             <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" /> {locationLabel}
           </p>
           <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
-            {[String(postCount), String(storyCount), '0'].map((n, i) => (
+            {[String(postCount), '0', '0'].map((n, i) => (
               <div key={i} className="py-1">
                 <div className="text-sm font-bold text-[var(--text-primary)]">{n}</div>
                 <div className="text-[10px] text-[var(--text-muted)]">
@@ -900,9 +894,6 @@ export default function SocialFeedPage() {
   const user = useSelector((s: RootState) => s.auth.user);
   const [activeFilter, setActiveFilter] = useState('all');
   const [detailPost, setDetailPost] = useState<FeedPost | null>(null);
-  const [stories, setStories] = useState<FeedStoryItem[]>(() => mergeStories([]));
-  const [storyCreatorOpen, setStoryCreatorOpen] = useState(false);
-  const [viewStory, setViewStory] = useState<FeedStoryItem | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [apiPosts, setApiPosts] = useState<FeedPost[]>(() => cachedSocialFeed || []);
   const [page, setPage] = useState(1);
@@ -918,26 +909,6 @@ export default function SocialFeedPage() {
   const openPost = (post: FeedPost) => setDetailPost(post);
   const closePost = () => setDetailPost(null);
   const readMoreLabel = t('feed.readMore');
-
-  const storyLabels = {
-    title: t('story.title'),
-    close: t('story.close'),
-    cancel: t('story.cancel'),
-    next: t('story.next'),
-    photosHint: t('story.photosHint'),
-    pickPhotos: t('story.pickPhotos'),
-    pickPhotosSub: t('story.pickPhotosSub'),
-    addMore: t('story.addMore'),
-    needPhoto: t('story.needPhoto'),
-    layoutHint: t('story.layoutHint'),
-    layoutFallback: t('story.layoutFallback'),
-    nextEdit: t('story.nextEdit'),
-    addText: t('story.addText'),
-    locationPlaceholder: t('story.locationPlaceholder'),
-    locationLabel: t('story.locationLabel'),
-    publish: t('story.publish'),
-    publishing: t('story.publishing'),
-  };
 
   const loadFeed = async (pageNum: number, isAppend: boolean = false) => {
     if (pageNum === 1) {
@@ -1039,21 +1010,6 @@ export default function SocialFeedPage() {
     needPhoto: t('feed.compose.needPhoto'),
   };
 
-  const openStoryCreator = () => {
-    if (!requireAuth('/')) return;
-    setStoryCreatorOpen(true);
-  };
-
-  const handleStoryPublished = (s: StoredStory) => {
-    setStories(prev => [storedToFeedItem(s), ...prev]);
-  };
-
-  const storyBarName = (story: FeedStoryItem) => {
-    if (user?.fullName && story.user === user.fullName) {
-      return user.fullName.split(' ')[0] || 'Bạn';
-    }
-    return story.user.split(' ')[0];
-  };
   // Load registered users from API to use as companions suggestions (Dynamic updates on search changes)
   useEffect(() => {
     socialService.searchUsers(feedSearchQuery)
@@ -1273,13 +1229,6 @@ export default function SocialFeedPage() {
           comments: t('feed.commentsCount'),
         }}
       />
-      <StoryCreatorModal
-        open={storyCreatorOpen}
-        onClose={() => setStoryCreatorOpen(false)}
-        onPublished={handleStoryPublished}
-        labels={storyLabels}
-      />
-      <StoryViewerModal story={viewStory} onClose={() => setViewStory(null)} />
       <QuickComposeModal
         open={composeOpen}
         onClose={() => setComposeOpen(false)}
@@ -1299,59 +1248,6 @@ export default function SocialFeedPage() {
 
         {/* MAIN FEED */}
         <main className="min-w-0 space-y-4">
-
-          {/* Stories bar */}
-          <div className="surface-elevated p-3 sm:p-4">
-            <div className="stories-container">
-              {/* Add story */}
-              <button 
-                type="button" 
-                onClick={openStoryCreator} 
-                className="fb-story-card fb-story-add group relative flex flex-col cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white"
-              >
-                <div className="fb-story-add-image-wrap w-full h-[135px] overflow-hidden bg-slate-100">
-                  <img 
-                    src={user?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"} 
-                    alt="current user" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="fb-story-add-btn absolute bottom-[35px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#1877F2] border-[3px] border-white flex items-center justify-center text-white z-10 shadow">
-                  <Plus size={18} strokeWidth={3} />
-                </div>
-                <div className="fb-story-add-text flex-1 flex items-end justify-center pb-2 bg-white">
-                  <span className="text-[11px] font-bold text-slate-700 leading-none">{t('feed.addStory')}</span>
-                </div>
-              </button>
-
-              {stories.map(story => (
-                <button
-                  key={story.id}
-                  type="button"
-                  className="fb-story-card relative flex flex-col cursor-pointer overflow-hidden rounded-xl border border-slate-200 group text-left"
-                  onClick={() => setViewStory(story)}
-                >
-                  <img 
-                    src={story.image} 
-                    alt={story.user} 
-                    loading="lazy" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="fb-story-gradient absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-                  
-                  {/* User Avatar on Top Left */}
-                  <div className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full border-[2.5px] border-[#1877F2] overflow-hidden shadow-md bg-slate-200">
-                    <img src={story.avatar} alt={story.user} className="w-full h-full object-cover" />
-                  </div>
-
-                  {/* User Name on Bottom Left */}
-                  <span className="absolute bottom-2.5 left-2.5 right-2.5 text-[11px] font-bold text-white leading-tight line-clamp-2 drop-shadow-sm">
-                    {storyBarName(story)}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Compose box */}
           <ComposeBox onOpenCompose={() => setComposeOpen(true)} />

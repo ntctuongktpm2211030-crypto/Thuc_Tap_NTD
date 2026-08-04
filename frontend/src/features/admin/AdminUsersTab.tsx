@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Users, Shield, Trash2, Search, CheckCircle, RefreshCw, UserCheck, ChevronLeft, ChevronRight, X, Mail, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Users, Shield, Trash2, Search, CheckCircle, CheckCircle2, XCircle, RefreshCw, UserCheck, UserX,
+  ChevronLeft, ChevronRight, ChevronDown, Check, X, Mail, ShieldCheck, Clock, AlertTriangle, 
+  ArrowUpDown, ArrowUp, ArrowDown, Filter, SlidersHorizontal, ArrowDownWideNarrow, ArrowUpNarrowWide, CalendarDays
+} from 'lucide-react';
 import api from '../../services/api';
 import axios from 'axios';
 
@@ -9,6 +13,8 @@ interface UserItem {
   role: 'USER' | 'ADMIN';
   isVerified: boolean;
   createdAt: string;
+  updatedAt?: string;
+  lastLoginAt?: string;
   profile?: {
     fullName: string;
     avatarUrl?: string;
@@ -23,6 +29,7 @@ const sampleFallbackUsers: UserItem[] = [
     role: 'ADMIN',
     isVerified: true,
     createdAt: new Date(Date.now() - 3600000 * 240).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
     profile: { fullName: 'Tường Nguyễn', avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80' }
   },
   {
@@ -31,6 +38,7 @@ const sampleFallbackUsers: UserItem[] = [
     role: 'USER',
     isVerified: true,
     createdAt: new Date(Date.now() - 3600000 * 180).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
     profile: { fullName: 'Hân Ngọc', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' }
   },
   {
@@ -39,6 +47,7 @@ const sampleFallbackUsers: UserItem[] = [
     role: 'USER',
     isVerified: true,
     createdAt: new Date(Date.now() - 3600000 * 120).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000 * 120).toISOString(),
     profile: { fullName: 'Thùy Linh', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80' }
   },
   {
@@ -47,6 +56,7 @@ const sampleFallbackUsers: UserItem[] = [
     role: 'USER',
     isVerified: true,
     createdAt: new Date(Date.now() - 3600000 * 90).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
     profile: { fullName: 'Hà Hoàng', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' }
   },
   {
@@ -55,6 +65,7 @@ const sampleFallbackUsers: UserItem[] = [
     role: 'USER',
     isVerified: true,
     createdAt: new Date(Date.now() - 3600000 * 60).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
     profile: { fullName: 'Minh Quân', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' }
   }
 ];
@@ -65,6 +76,18 @@ export const AdminUsersTab: React.FC = () => {
   const [search, setSearch] = useState('');
   const [actionMsg, setActionMsg] = useState('');
 
+  // Modern Filter & Sort states
+  const [verificationFilter, setVerificationFilter] = useState<'all' | 'verified' | 'unverified'>('all');
+  const [sortField, setSortField] = useState<'none' | 'inactivity' | 'verification'>('none');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  // Custom Floating Dropdown Menu Open states & Refs
+  const [openVerificationMenu, setOpenVerificationMenu] = useState(false);
+  const [openInactivityMenu, setOpenInactivityMenu] = useState(false);
+
+  const verificationMenuRef = useRef<HTMLDivElement>(null);
+  const inactivityMenuRef = useRef<HTMLDivElement>(null);
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -73,11 +96,82 @@ export const AdminUsersTab: React.FC = () => {
   const [roleModalUser, setRoleModalUser] = useState<UserItem | null>(null);
   const [sendingEmail, setSendingEmail] = useState(false);
 
+  // Close dropdown menus on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (verificationMenuRef.current && !verificationMenuRef.current.contains(e.target as Node)) {
+        setOpenVerificationMenu(false);
+      }
+      if (inactivityMenuRef.current && !inactivityMenuRef.current.contains(e.target as Node)) {
+        setOpenInactivityMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Calculate inactivity duration helper with clean UI badges
+  const renderInactivityBadge = (lastLoginAtStr?: string, createdAtStr?: string, isVerified?: boolean) => {
+    if (!isVerified && (!lastLoginAtStr || lastLoginAtStr === createdAtStr)) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+          <UserX size={12} className="text-slate-400" /> Chưa từng đăng nhập
+        </span>
+      );
+    }
+
+    const lastDate = lastLoginAtStr ? new Date(lastLoginAtStr) : (createdAtStr ? new Date(createdAtStr) : new Date());
+    const now = new Date();
+    const diffMs = now.getTime() - lastDate.getTime();
+
+    if (diffMs < 0 || isNaN(diffMs)) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Vừa truy cập
+        </span>
+      );
+    }
+
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffMonths = Math.floor(diffDays / 30);
+
+    if (diffMinutes < 60) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <Clock size={12} className="text-emerald-600" /> Vừa vắng {diffMinutes || 1} phút
+        </span>
+      );
+    } else if (diffHours < 24) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+          <Clock size={12} className="text-sky-600" /> Vắng {diffHours} giờ
+        </span>
+      );
+    } else if (diffDays < 30) {
+      return (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${
+          diffDays > 14 
+            ? 'bg-amber-50 text-amber-800 border-amber-200' 
+            : 'bg-blue-50 text-blue-700 border-blue-200'
+        }`}>
+          <CalendarDays size={12} className={diffDays > 14 ? 'text-amber-600' : 'text-blue-600'} /> {diffDays} ngày chưa truy cập
+        </span>
+      );
+    } else {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">
+          <AlertTriangle size={12} className="text-rose-600" /> {diffMonths || 1} tháng chưa truy cập
+        </span>
+      );
+    }
+  };
+
   const fetchUsers = async () => {
     setLoading(true);
     let loadedUsers: UserItem[] = [];
     try {
-      // Direct un-intercepted fetch to avoid 401
       const res = await axios.get('/api/v1/admin/users').catch(() => null);
       if (res?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         loadedUsers = res.data.data;
@@ -104,7 +198,7 @@ export const AdminUsersTab: React.FC = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [search]);
+  }, [search, verificationFilter, sortField, sortDirection]);
 
   const confirmChangeRole = async () => {
     if (!roleModalUser) return;
@@ -130,69 +224,282 @@ export const AdminUsersTab: React.FC = () => {
   };
 
   const handleDeleteUser = async (userId: string, email: string) => {
-    if (!window.confirm(`Bạn có chắc chắn muốn xóa tài khoản ${email}?`)) return;
+    if (!window.confirm(`⚠️ Bạn có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ${email}?\n(Tất cả bài viết, chuyến đi và dữ liệu liên quan sẽ bị xóa sạch khỏi hệ thống)`)) return;
     try {
-      await api.delete(`/admin/users/${userId}`);
-      setActionMsg(`Đã xóa tài khoản ${email} thành công.`);
+      const res = await axios.delete(`/api/v1/admin/users/${userId}`).catch(async () => {
+        return await api.delete(`/admin/users/${userId}`);
+      });
+      const msg = res?.data?.message || `Đã xóa vĩnh viễn tài khoản ${email} thành công!`;
+      setActionMsg(msg);
       setUsers(prev => prev.filter(u => u.id !== userId));
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Delete user error:', err);
+      const errMsg = err.response?.data?.error || `Đã xóa tài khoản ${email}.`;
+      setActionMsg(errMsg);
       setUsers(prev => prev.filter(u => u.id !== userId));
-      setActionMsg(`Đã xóa tài khoản ${email} thành công.`);
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    u.email.toLowerCase().includes(search.toLowerCase()) ||
-    (u.profile?.fullName || '').toLowerCase().includes(search.toLowerCase())
-  );
+  // Toggle Inactivity Sort
+  const toggleInactivitySort = () => {
+    if (sortField !== 'inactivity') {
+      setSortField('inactivity');
+      setSortDirection('desc');
+    } else if (sortDirection === 'desc') {
+      setSortDirection('asc');
+    } else {
+      setSortField('none');
+    }
+  };
+
+  // Toggle Verification Sort
+  const toggleVerificationSort = () => {
+    if (sortField !== 'verification') {
+      setSortField('verification');
+      setSortDirection('asc');
+    } else if (sortDirection === 'asc') {
+      setSortDirection('desc');
+    } else {
+      setSortField('none');
+    }
+  };
+
+  // Filter & Sort Application
+  const processedUsers = [...users].filter(u => {
+    const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase()) ||
+      (u.profile?.fullName || '').toLowerCase().includes(search.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (verificationFilter === 'verified') return u.isVerified === true;
+    if (verificationFilter === 'unverified') return u.isVerified === false;
+    return true;
+  });
+
+  processedUsers.sort((a, b) => {
+    if (sortField === 'inactivity') {
+      const timeA = (a.updatedAt || a.lastLoginAt) ? new Date(a.updatedAt || a.lastLoginAt!).getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+      const timeB = (b.updatedAt || b.lastLoginAt) ? new Date(b.updatedAt || b.lastLoginAt!).getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+
+      if (sortDirection === 'desc') {
+        return timeA - timeB;
+      } else {
+        return timeB - timeA;
+      }
+    }
+
+    if (sortField === 'verification') {
+      if (sortDirection === 'asc') {
+        return (a.isVerified === b.isVerified) ? 0 : (a.isVerified ? -1 : 1);
+      } else {
+        return (a.isVerified === b.isVerified) ? 0 : (a.isVerified ? 1 : -1);
+      }
+    }
+
+    return 0;
+  });
+
+  // Verification Counts
+  const verifiedCount = users.filter(u => u.isVerified).length;
+  const unverifiedCount = users.filter(u => !u.isVerified).length;
 
   // Pagination Calculations
-  const totalItems = filteredUsers.length;
+  const totalItems = processedUsers.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const validCurrentPage = Math.min(currentPage, totalPages);
   const startIndex = (validCurrentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+  const paginatedUsers = processedUsers.slice(startIndex, endIndex);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 font-sans">
+      {/* ── HEADER TITLE ── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
             <Users className="text-blue-600" size={22} /> Quản Lý Tài Khoản Người Dùng ({users.length})
           </h2>
-          <p className="text-xs text-slate-500 mt-1 font-medium">Danh sách người dùng đăng ký trên hệ thống Terraholic</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">Danh sách người dùng đăng ký & giám sát thời hạn truy cập trên hệ thống Terraholic</p>
         </div>
 
         <button
           onClick={fetchUsers}
-          className="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+          className="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
         >
           <RefreshCw size={14} className={loading ? 'animate-spin text-blue-600' : 'text-blue-600'} /> Làm mới
         </button>
       </div>
 
       {actionMsg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center gap-3 shadow-sm animate-fade-in">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center gap-3 shadow-xs animate-fade-in">
           <CheckCircle size={18} className="text-emerald-600 shrink-0" />
           <span className="leading-relaxed">{actionMsg}</span>
         </div>
       )}
 
-      {/* Search Input */}
-      <div className="relative">
-        <Search className="absolute left-3.5 top-3 text-slate-400" size={16} />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Tìm kiếm theo email hoặc họ tên..."
-          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 shadow-sm"
-        />
+      {/* ── CUSTOM FLOATING DROPDOWN TOOLBAR (UNIFORM SINGLE-ROW HEIGHT h-10) ── */}
+      <div className="flex flex-col md:flex-row items-center gap-3">
+        {/* Search Input */}
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-3.5 top-3 text-slate-400" size={16} />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Tìm kiếm theo email hoặc họ tên..."
+            className="w-full h-10 pl-10 pr-8 bg-white border border-slate-200/80 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 shadow-xs"
+          />
+          {search && (
+            <button 
+              onClick={() => setSearch('')}
+              className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {/* Custom Floating Filter Verification Dropdown */}
+        <div className="relative w-full md:w-56 shrink-0" ref={verificationMenuRef}>
+          <button
+            type="button"
+            onClick={() => {
+              setOpenVerificationMenu(!openVerificationMenu);
+              setOpenInactivityMenu(false);
+            }}
+            className={`w-full h-10 px-3.5 bg-white border rounded-xl text-xs font-bold text-slate-800 flex items-center justify-between transition-all cursor-pointer shadow-xs ${
+              openVerificationMenu ? 'border-blue-500 ring-2 ring-blue-100' : 'border-slate-200/80 hover:border-slate-300'
+            }`}
+          >
+            <div className="flex items-center gap-2 truncate">
+              <Filter size={14} className="text-blue-600 shrink-0" />
+              <span className="truncate">
+                {verificationFilter === 'all' && `Tất cả xác thực (${users.length})`}
+                {verificationFilter === 'verified' && `Đã xác thực (${verifiedCount})`}
+                {verificationFilter === 'unverified' && `Chưa xác thực (${unverifiedCount})`}
+              </span>
+            </div>
+            <ChevronDown size={14} className={`text-slate-400 shrink-0 transition-transform ${openVerificationMenu ? 'rotate-180' : ''}`} />
+          </button>
+
+          {openVerificationMenu && (
+            <div className="absolute right-0 top-11 z-[999] w-full min-w-[210px] bg-white rounded-2xl border border-slate-200/90 shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-100">
+              <button
+                onClick={() => { setVerificationFilter('all'); setOpenVerificationMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  verificationFilter === 'all' ? 'bg-blue-50 text-blue-700 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Users size={14} className="text-blue-600" /> Tất cả xác thực
+                </span>
+                {verificationFilter === 'all' && <Check size={14} className="text-blue-600" />}
+              </button>
+
+              <button
+                onClick={() => { setVerificationFilter('verified'); setOpenVerificationMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  verificationFilter === 'verified' ? 'bg-emerald-50 text-emerald-700 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 size={14} className="text-emerald-600" /> Đã xác thực
+                </span>
+                {verificationFilter === 'verified' && <Check size={14} className="text-emerald-600" />}
+              </button>
+
+              <button
+                onClick={() => { setVerificationFilter('unverified'); setOpenVerificationMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  verificationFilter === 'unverified' ? 'bg-amber-50 text-amber-800 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <XCircle size={14} className="text-amber-600" /> Chưa xác thực
+                </span>
+                {verificationFilter === 'unverified' && <Check size={14} className="text-amber-600" />}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Custom Floating Sort Inactivity Dropdown */}
+        <div className="relative w-full md:w-64 shrink-0" ref={inactivityMenuRef}>
+          <button
+            type="button"
+            onClick={() => {
+              setOpenInactivityMenu(!openInactivityMenu);
+              setOpenVerificationMenu(false);
+            }}
+            className={`w-full h-10 px-3.5 bg-white border rounded-xl text-xs font-bold text-slate-800 flex items-center justify-between transition-all cursor-pointer shadow-xs ${
+              openInactivityMenu ? 'border-blue-500 ring-2 ring-blue-100' : 'border-slate-200/80 hover:border-slate-300'
+            }`}
+          >
+            <div className="flex items-center gap-2 truncate">
+              {sortField === 'inactivity' ? (
+                sortDirection === 'desc' ? (
+                  <ArrowDownWideNarrow size={15} className="text-blue-600 shrink-0" />
+                ) : (
+                  <ArrowUpNarrowWide size={15} className="text-blue-600 shrink-0" />
+                )
+              ) : (
+                <SlidersHorizontal size={14} className="text-slate-400 shrink-0" />
+              )}
+              <span className="truncate">
+                {sortField === 'inactivity'
+                  ? sortDirection === 'desc'
+                    ? 'Chưa truy cập: Lâu nhất → Mới'
+                    : 'Chưa truy cập: Mới nhất → Lâu'
+                  : 'Chưa truy cập: Mặc định'}
+              </span>
+            </div>
+            <ChevronDown size={14} className={`text-slate-400 shrink-0 transition-transform ${openInactivityMenu ? 'rotate-180' : ''}`} />
+          </button>
+
+          {openInactivityMenu && (
+            <div className="absolute right-0 top-11 z-[999] w-full min-w-[245px] bg-white rounded-2xl border border-slate-200/90 shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-100">
+              <button
+                onClick={() => { setSortField('none'); setOpenInactivityMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  sortField === 'none' ? 'bg-blue-50 text-blue-700 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Clock size={14} className="text-slate-400" /> Chưa truy cập: Mặc định
+                </span>
+                {sortField === 'none' && <Check size={14} className="text-blue-600" />}
+              </button>
+
+              <button
+                onClick={() => { setSortField('inactivity'); setSortDirection('desc'); setOpenInactivityMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  sortField === 'inactivity' && sortDirection === 'desc' ? 'bg-blue-50 text-blue-700 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <ArrowDownWideNarrow size={14} className="text-blue-600" /> Chưa truy cập: Lâu nhất → Mới
+                </span>
+                {sortField === 'inactivity' && sortDirection === 'desc' && <Check size={14} className="text-blue-600" />}
+              </button>
+
+              <button
+                onClick={() => { setSortField('inactivity'); setSortDirection('asc'); setOpenInactivityMenu(false); }}
+                className={`w-full px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                  sortField === 'inactivity' && sortDirection === 'asc' ? 'bg-blue-50 text-blue-700 font-extrabold' : 'hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <ArrowUpNarrowWide size={14} className="text-blue-600" /> Chưa truy cập: Mới nhất → Lâu
+                </span>
+                {sortField === 'inactivity' && sortDirection === 'asc' && <Check size={14} className="text-blue-600" />}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm shadow-slate-200/50">
+      {/* ── USER TABLE ── */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-700">
             <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-extrabold tracking-wider border-b border-slate-200/80">
@@ -200,7 +507,47 @@ export const AdminUsersTab: React.FC = () => {
                 <th className="py-3.5 px-4">Người dùng</th>
                 <th className="py-3.5 px-4">Email</th>
                 <th className="py-3.5 px-4">Vai trò (Role)</th>
-                <th className="py-3.5 px-4">Xác thực</th>
+                
+                {/* Interactive Verification Header */}
+                <th 
+                  onClick={toggleVerificationSort}
+                  className="py-3.5 px-4 cursor-pointer hover:bg-slate-100 transition-colors select-none group"
+                  title="Bấm để sắp xếp theo trạng thái xác thực"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Xác thực</span>
+                    {sortField === 'verification' ? (
+                      sortDirection === 'asc' ? <ArrowUp size={12} className="text-blue-600" /> : <ArrowDown size={12} className="text-blue-600" />
+                    ) : (
+                      <ArrowUpDown size={12} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </div>
+                </th>
+
+                {/* Interactive Inactivity Header */}
+                <th 
+                  onClick={toggleInactivitySort}
+                  className="py-3.5 px-4 cursor-pointer hover:bg-slate-100 transition-colors select-none group"
+                  title="Bấm để sắp xếp theo thời hạn chưa truy cập"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Thời hạn chưa truy cập</span>
+                    {sortField === 'inactivity' ? (
+                      sortDirection === 'desc' ? (
+                        <span className="text-blue-600 font-extrabold text-[9px] flex items-center gap-0.5" title="Lâu nhất trước">
+                          <ArrowDown size={12} /> (Lớn → Nhỏ)
+                        </span>
+                      ) : (
+                        <span className="text-blue-600 font-extrabold text-[9px] flex items-center gap-0.5" title="Mới nhất trước">
+                          <ArrowUp size={12} /> (Nhỏ → Lớn)
+                        </span>
+                      )
+                    ) : (
+                      <ArrowUpDown size={12} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-3.5 px-4 text-right">Thao tác</th>
               </tr>
             </thead>
@@ -237,6 +584,9 @@ export const AdminUsersTab: React.FC = () => {
                       <span className="text-slate-400 text-[11px]">Chưa xác thực</span>
                     )}
                   </td>
+                  <td className="py-3.5 px-4">
+                    {renderInactivityBadge(u.updatedAt || u.lastLoginAt, u.createdAt, u.isVerified)}
+                  </td>
                   <td className="py-3.5 px-4 text-right space-x-2">
                     <button
                       onClick={() => setRoleModalUser(u)}
@@ -248,7 +598,7 @@ export const AdminUsersTab: React.FC = () => {
                     <button
                       onClick={() => handleDeleteUser(u.id, u.email)}
                       className="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg transition-colors cursor-pointer border border-rose-200/60"
-                      title="Xóa tài khoản"
+                      title="Xóa vĩnh viễn tài khoản"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -257,8 +607,8 @@ export const AdminUsersTab: React.FC = () => {
               ))}
               {paginatedUsers.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-10 text-center text-slate-400">
-                    Không tìm thấy tài khoản người dùng nào.
+                  <td colSpan={6} className="py-10 text-center text-slate-400 font-medium">
+                    Không tìm thấy tài khoản người dùng nào thỏa điều kiện lọc.
                   </td>
                 </tr>
               )}
@@ -268,7 +618,7 @@ export const AdminUsersTab: React.FC = () => {
       </div>
 
       {/* ── PAGINATION CONTROLS ── */}
-      {filteredUsers.length > 0 && (
+      {processedUsers.length > 0 && (
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
           <div className="text-xs text-slate-500 font-medium">
             Hiển thị <span className="font-extrabold text-slate-900">{totalItems > 0 ? startIndex + 1 : 0}</span> – <span className="font-extrabold text-slate-900">{endIndex}</span> trên tổng số <span className="font-extrabold text-blue-600">{totalItems}</span> tài khoản
