@@ -312,7 +312,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
     if (!req.user?.sub) {
       return res.status(401).json({
         error: 'Chưa đăng nhập',
-        message: 'Bạn cần đăng nhập tài khoản để thực hiện đăng hành trình.',
+        message: 'Bạn cần đăng nhập tài khoản để thực hiện đăng bài viết hành trình.',
       });
     }
 

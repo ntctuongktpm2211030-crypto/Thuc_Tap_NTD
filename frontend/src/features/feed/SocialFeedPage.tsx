@@ -1024,9 +1024,12 @@ export default function SocialFeedPage() {
   }, [sidebarTick, feedSearchQuery]);
 
   useEffect(() => {
+    if ((location.state as any)?.refreshFeed) {
+      cachedSocialFeed = null;
+    }
     void loadFeedFromApi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, location.key]);
+  }, [location.pathname, location.key, location.state]);
 
   useEffect(() => {
     const state = location.state as { refreshFeed?: boolean } | null;

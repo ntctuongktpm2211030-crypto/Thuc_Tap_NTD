@@ -135,6 +135,8 @@ export const AdminDashboardLayout: React.FC = () => {
     localStorage.removeItem('st-admin-token');
     localStorage.removeItem('st-token');
     localStorage.removeItem('st-user');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
     navigate('/admin/login');
   };
 

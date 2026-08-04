@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  User, Users, Bookmark, Settings, LogOut, ChevronDown,
+  User, Users, Bookmark, Settings, LogOut, ChevronDown, Globe,
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import type { RootState } from '../../store';
@@ -12,7 +12,7 @@ interface UserMenuDropdownProps {
 }
 
 export default function UserMenuDropdown({ onLogout }: UserMenuDropdownProps) {
-  const { t } = useLang();
+  const { t, lang, setLang } = useLang();
   const navigate = useNavigate();
   const user = useSelector((s: RootState) => s.auth.user);
   const [open, setOpen] = useState(false);
@@ -93,6 +93,31 @@ export default function UserMenuDropdown({ onLogout }: UserMenuDropdownProps) {
               </button>
             ))}
           </nav>
+
+          <div className="user-menu-divider" />
+
+          {/* Language Switcher Row */}
+          <div className="px-3 py-2 flex items-center justify-between">
+            <span className="text-xs font-semibold text-[var(--text-muted)] flex items-center gap-1.5">
+              <Globe size={14} className="text-blue-500" /> {lang === 'vi' ? 'Ngôn ngữ:' : 'Language:'}
+            </span>
+            <div className="flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
+              {(['vi', 'en'] as const).map(l => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLang(l)}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer ${
+                    lang === l
+                      ? 'bg-[var(--gold)] text-white shadow-sm'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="user-menu-divider" />
 

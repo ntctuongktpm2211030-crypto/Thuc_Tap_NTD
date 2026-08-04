@@ -8,7 +8,7 @@ import { postsService } from '../../services/smartTravel.service';
 import { toApiPostId } from '../../utils/postIds';
 import { syncToggleBookmark, syncToggleLike } from '../../utils/postEngagement';
 import { getExplorePostById, patchExplorePostEngagement } from './explorePostsStore';
-import { toast } from '../../contexts/ToastContext';
+import ShareModal from '../../components/feed/ShareModal';
 
 const CATEGORY_STYLES: Record<string, string> = {
   'Thiên nhiên': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
@@ -30,6 +30,7 @@ export default function ExploreArticlePage() {
   const [comments, setComments] = useState(post?.comments ?? []);
   const [likedComments, setLikedComments] = useState<Record<string, 'like' | 'love' | 'haha' | null>>({});
   const [engagementLoading, setEngagementLoading] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const applyPost = useCallback((next: NonNullable<typeof post>) => {
     setPost(next);
@@ -447,17 +448,14 @@ export default function ExploreArticlePage() {
                 <span>{post.bookmarked ? 'Đã lưu' : 'Lưu'}</span>
               </button>
 
-              {/* Share link copying */}
+              {/* Share modal opener */}
               <button
                 type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
-                }}
-                className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+                onClick={() => setShareOpen(true)}
+                className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors cursor-pointer"
               >
                 <Share2 size={16} className="text-emerald-500" />
-                <span>Chia</span>
+                <span>Chia sẻ</span>
               </button>
             </div>
           </div>
@@ -577,6 +575,14 @@ export default function ExploreArticlePage() {
         </article>
       </div>
 
+      {/* Share Modal Popup */}
+      <ShareModal
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        postUrl={window.location.href}
+        title={post?.title || 'Bài viết Terraholic'}
+        description={post?.excerpt || 'Khám phá hành trình tuyệt đẹp trên Terraholic!'}
+      />
     </div>
   );
 }

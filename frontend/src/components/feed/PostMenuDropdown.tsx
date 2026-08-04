@@ -8,6 +8,7 @@ import { postsService } from '../../services/smartTravel.service';
 import type { FeedPost } from '../../utils/feedUtils';
 import axios from 'axios';
 import api from '../../services/api';
+import ShareModal from './ShareModal';
 
 import { useToast } from '../../contexts/ToastContext';
 
@@ -25,6 +26,9 @@ export default function PostMenuDropdown({
   const { confirm, success, error } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Share Modal state
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // Report Modal state
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -55,28 +59,9 @@ export default function PostMenuDropdown({
     setIsOpen(false);
   };
 
-  const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/?postId=${post.id}`;
-    const pAny = post as any;
-    const shareData = {
-      title: pAny.title || 'Bài viết từ Smart Travel',
-      text: pAny.content ? String(pAny.content).substring(0, 100) : '',
-      url: shareUrl,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        if ((err as Error).name !== 'AbortError') {
-          error('Chia sẻ thất bại.');
-        }
-      }
-    } else {
-      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-      window.open(fbUrl, '_blank');
-    }
+  const handleShare = () => {
     setIsOpen(false);
+    setIsShareModalOpen(true);
   };
 
   const handleDelete = () => {
@@ -354,6 +339,14 @@ export default function PostMenuDropdown({
         </div>,
         document.body
       )}
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        postId={post.id}
+        title={(post as any).headline || (post as any).title || 'Bài viết từ Terraholic'}
+      />
     </div>
   );
 }

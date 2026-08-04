@@ -266,8 +266,8 @@ const DEFAULT_CAN_THO_DESTINATIONS: any[] = [
 const MapDashboard = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((s: RootState) => s.auth);
-  const { t } = useLang();
-  const vi = t('nav.feed') === 'Bảng tin';
+  const { lang } = useLang();
+  const vi = lang === 'vi';
 
   const socketRef = useRef<any>(null);
   const userLocationRef = useRef<[number, number] | null>(null);
@@ -1537,12 +1537,6 @@ const MapDashboard = () => {
               <option value="20">20 km</option>
             </select>
 
-            <button
-              onClick={handleFindNearby}
-              className="h-[34px] px-3.5 bg-blue-600 hover:bg-blue-700 text-white text-[10.5px] font-bold uppercase rounded-xl transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 cursor-pointer border-none flex items-center justify-center gap-1.5 shrink-0"
-            >
-              🔍 {vi ? 'Tìm quanh đây' : 'Find Nearby'}
-            </button>
 
             <button
               onClick={handleOptimizeTSP}
@@ -1796,7 +1790,7 @@ const MapDashboard = () => {
         {/* list of check-ins */}
         <div className="bg-[var(--bg-elevated)] border border-[var(--border-normal)] p-4 flex flex-col flex-1 rounded-xl shadow-sm overflow-hidden">
           <h3 className="sidebar-title mb-3 flex items-center justify-between">
-            <span className="flex items-center gap-1.5"><Users size={12} className="text-[var(--gold)]" /> Community Check-Ins</span>
+            <span className="flex items-center gap-1.5"><Users size={12} className="text-[var(--gold)]" /> {vi ? 'CHECK-IN CỘNG ĐỒNG' : 'COMMUNITY CHECK-INS'}</span>
             <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full font-extrabold shadow-sm shadow-red-500/10">{checkins.length}</span>
           </h3>
           <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[320px]">

@@ -260,7 +260,7 @@ function App() {
   ];
 
   const createNavItems = isAuthenticated
-    ? [{ to: '/journeys/create', label: lang === 'vi' ? 'Đăng hành trình' : 'Share Journey', Icon: Send }]
+    ? [{ to: '/journeys/create', label: lang === 'vi' ? 'Đăng bài viết hành trình' : 'Share Journey', Icon: Send }]
     : [];
 
   const navItems = [...browseNavItems, ...createNavItems];
@@ -344,10 +344,10 @@ function App() {
           <div className="flex items-center gap-1.5 flex-shrink-0">
 
             {/* Language Pill */}
-            <div className="hidden sm:flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
+            <div className="flex items-center rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] overflow-hidden p-0.5 gap-0.5">
               {(['vi', 'en'] as const).map(l => (
                 <button key={l} onClick={() => setLang(l)} title={l === 'vi' ? 'Tiếng Việt' : 'English'}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none ${
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none cursor-pointer ${
                     lang === l
                       ? 'bg-[var(--gold)] text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'

@@ -36,26 +36,43 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   };
 
   const loadComments = async () => {
+    let localList: Comment[] = [];
+    try {
+      const localRaw = localStorage.getItem(`terraholic_comments_${postId}`);
+      if (localRaw) localList = JSON.parse(localRaw);
+    } catch {}
+
     if (postId.startsWith('checkin-')) {
-      setComments([]);
-      if (onCommentCountChange) onCommentCountChange(0);
+      setComments(localList);
+      if (onCommentCountChange) onCommentCountChange(localList.length);
       return;
     }
+
     setLoading(true);
     setError('');
     try {
       const data = await postsService.getComments(postId);
-      setComments(data);
+      const map = new Map<string, Comment>();
+      (data || []).forEach(c => map.set(c.id, c));
+      localList.forEach(c => map.set(c.id, c));
+      const merged = Array.from(map.values());
+
+      setComments(merged);
       
       // Calculate total comments count (top-level + replies)
-      let totalCount = data.length;
-      data.forEach(c => {
+      let totalCount = merged.length;
+      merged.forEach(c => {
         if (c.replies) totalCount += c.replies.length;
       });
       if (onCommentCountChange) onCommentCountChange(totalCount);
     } catch (err) {
       console.error(err);
-      setError('Không tải được bình luận.');
+      if (localList.length > 0) {
+        setComments(localList);
+        if (onCommentCountChange) onCommentCountChange(localList.length);
+      } else {
+        setError('Không tải được bình luận.');
+      }
     } finally {
       setLoading(false);
     }
@@ -83,24 +100,29 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
         },
         replies: [],
       };
-      setComments(prev => [mockComment as any, ...prev]);
+      const updated = [mockComment as any, ...comments];
+      setComments(updated);
+      try {
+        localStorage.setItem(`terraholic_comments_${postId}`, JSON.stringify(updated));
+      } catch {}
       setNewCommentText('');
-      if (onCommentCountChange) onCommentCountChange(comments.length + 1);
+      if (onCommentCountChange) onCommentCountChange(updated.length);
       return;
     }
 
     try {
       const newComment = await postsService.addComment(postId, newCommentText);
       // Backend returns the comment, we insert it at the top of comments
-      setComments(prev => [
-        { ...newComment, replies: [] },
-        ...prev
-      ]);
+      const updated = [{ ...newComment, replies: [] }, ...comments];
+      setComments(updated);
+      try {
+        localStorage.setItem(`terraholic_comments_${postId}`, JSON.stringify(updated));
+      } catch {}
       setNewCommentText('');
       
       // Recalculate total count
-      let totalCount = comments.length + 1;
-      comments.forEach(c => {
+      let totalCount = updated.length;
+      updated.forEach(c => {
         if (c.replies) totalCount += c.replies.length;
       });
       if (onCommentCountChange) onCommentCountChange(totalCount);

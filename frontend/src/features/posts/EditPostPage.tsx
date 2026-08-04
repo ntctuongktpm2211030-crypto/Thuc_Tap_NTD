@@ -209,7 +209,7 @@ export default function EditPostPage() {
             ) : (
               <>
                 <CheckCircle2 size={15} />
-                <span>Cập Nhật Bài Viết</span>
+                <span>Lưu bài viết</span>
               </>
             )}
           </button>
