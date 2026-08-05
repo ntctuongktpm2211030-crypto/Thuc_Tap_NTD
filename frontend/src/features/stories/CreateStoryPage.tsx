@@ -125,7 +125,7 @@ interface StoryData {
 // ──────────────────────────────────────────────────────────
 // CONSTANTS
 // ──────────────────────────────────────────────────────────
-const TRAVEL_STYLES = ['Solo', 'Cặp đôi', 'Gia đình', 'Nhóm bạn', 'Công tác + Du lịch'];
+const TRAVEL_STYLES = ['Độc hành', 'Cặp đôi', 'Gia đình', 'Nhóm bạn', 'Công tác + Du lịch'];
 const POPULAR_TAGS = ['#ThienNhien', '#AmThuc', '#PhieuLuu', '#NghiDuong', '#VanHoa', '#Budget', '#Luxury', '#SoloTravel', '#CouplesTrip', '#FamilyTrip', '#Backpacking', '#SunriseView'];
 
 const STEP_HINTS: Record<number, string> = {
@@ -1912,7 +1912,7 @@ export default function CreateStoryPage() {
             startDate: data.startDate || new Date().toISOString(),
             endDate: data.endDate || new Date().toISOString(),
             totalBudget: parseFloat(data.budget) || 0,
-            travelStyle: data.companions || data.travelStyle || 'Solo',
+            travelStyle: data.companions || data.travelStyle || 'Độc hành',
             isPublic: data.privacy === 'public',
             days: data.days.map(d => ({
               dayNumber: d.day,

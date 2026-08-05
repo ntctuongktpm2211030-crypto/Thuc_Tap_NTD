@@ -169,4 +169,7 @@
 =======
 - [2026-08-01] Fixed 500 Internal Server Errors on `/social/search`, `/social/following`, and `/posts` by adding `ADMIN` and `MODERATOR` roles to `UserRole` enum in `backend/prisma/schema.prisma` & PostgreSQL database, eliminating Prisma deserialization crashes when fetching users with administrative roles.
 >>>>>>> Stashed changes
+- [2026-08-05] Fixed overlapping password show/hide icons issue in `AuthPage.tsx` by adding global browser CSS rules in `index.css` to disable native `::-ms-reveal`, `::-ms-clear`, and `::-webkit-credentials-auto-fill-button` icons, and fixed Tailwind `pr-11` class concatenation bug in `Input` component.
+- [2026-08-05] Updated travel companion style label from "Solo" to "Độc hành" in `CreateStoryPage.tsx` for the journey creation form.
+- [2026-08-05] Removed parentheses count string `({filteredEthnicGroups.length} Dân tộc)` from "Thư Viện 54 Dân Tộc Việt Nam" header title in `ExploreHandbookHub.tsx`.
 

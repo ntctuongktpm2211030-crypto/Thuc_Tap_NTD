@@ -57,7 +57,7 @@ const field = (value = ''): FieldState => ({ value, touched: false, error: '' })
 interface InputProps {
   id: string;
   type?: string;
-  label: string;
+  label?: string;
   placeholder: string;
   value: string;
   error?: string;
@@ -75,11 +75,13 @@ const Input = ({ id, type = 'text', label, placeholder, value, error, touched, o
 
   return (
     <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-        {label}
-      </label>
-      <div className="relative">
-        <div className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${hasError ? 'text-rose-400' : isValid ? 'text-emerald-400' : 'text-[var(--text-muted)]'}`}>
+      {label && (
+        <label htmlFor={id} className="block text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+          {label}
+        </label>
+      )}
+      <div className="relative flex items-center">
+        <div className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors pointer-events-none z-10 ${hasError ? 'text-rose-400' : isValid ? 'text-emerald-400' : 'text-[var(--text-muted)]'}`}>
           {icon}
         </div>
         <input
@@ -90,7 +92,7 @@ const Input = ({ id, type = 'text', label, placeholder, value, error, touched, o
           autoComplete={autoComplete}
           onChange={e => onChange(e.target.value)}
           onBlur={onBlur}
-          className={`w-full bg-[var(--bg-elevated)] border rounded-xl pl-10 pr-${rightElement ? '11' : '4'} py-3.5 text-sm text-[var(--text-primary)] focus:outline-none transition-all placeholder:text-[var(--text-muted)] ${
+          className={`w-full bg-[var(--bg-elevated)] border rounded-xl pl-10 ${rightElement ? 'pr-11' : 'pr-4'} py-3.5 text-sm text-[var(--text-primary)] focus:outline-none transition-all placeholder:text-[var(--text-muted)] ${
             hasError
               ? 'border-rose-500/60 focus:border-rose-500 bg-rose-500/5'
               : isValid
@@ -99,10 +101,10 @@ const Input = ({ id, type = 'text', label, placeholder, value, error, touched, o
           }`}
         />
         {rightElement && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">{rightElement}</div>
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center z-10">{rightElement}</div>
         )}
         {isValid && !rightElement && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center z-10 pointer-events-none">
             <Check size={16} className="text-emerald-400" />
           </div>
         )}

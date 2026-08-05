@@ -522,7 +522,7 @@ export default function ExploreHandbookHub() {
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <BookOpen size={16} className="text-[var(--gold)]" />
-                  Thư Viện 54 Dân Tộc Việt Nam ({filteredEthnicGroups.length} Dân tộc)
+                  Thư Viện 54 Dân Tộc Việt Nam
                 </h3>
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
