@@ -124,7 +124,20 @@
 - [2026-08-04] Fixed JSX Ternary Operator Syntax Error: Fixed redundant `?` syntax error in `className` ternary string inside `AdminDashboardLayout.tsx` (line 370), resolving Vite Babel parser build error.
 - [2026-08-04] Optimized Compact & Basic Dropdown UI: Reduced width of Admin Notification Dropdown in `AdminDashboardLayout.tsx` from `w-440px` to a sleek compact `w-80` (320px), trimmed padding (`p-2.5`), adjusted fonts to `text-[10px]` & `text-[11px]`, and resized vector icon bubbles (`w-7 h-7`) for a super clean, compact basic design.
 - [2026-08-04] Expanded Rich Notifications & Enhanced Smooth Scroll Roll: Expanded notification API list in `admin.router.ts` to return 8 rich items (combining reported violations, 180-day inactive warnings, and AI moderation alerts), and enhanced list container in `AdminDashboardLayout.tsx` with smooth scrolling (`scroll-smooth max-h-[310px] custom-scrollbar`) for an ultra-smooth scrolling experience.
+<<<<<<< HEAD
+- [2026-08-05] Edit Post Button Label: Changed action button text from "Cập Nhật Bài Viết" to "Lưu bài viết" in `EditPostPage.tsx`.
+- [2026-08-05] Implemented Device Zalo Message Sharing & Share Modal Integration: Updated `ShareModal.tsx` with dedicated Zalo Message share handler (`handleZaloShare`), copying title & article URL to clipboard for direct chat pasting while opening `https://zalo.me/share`, added Toast confirmation feedback, and integrated `ShareModal` in `ExploreArticlePage.tsx` and `PostDetailModal.tsx`.
+- [2026-08-05] Facebook-Style 1 Newest Comment Preview & Live Comment Count: Updated `FeedCommentsPreview.tsx` to display exactly 1 newest comment bubble with author avatar, name, and "Bình luận mới nhất" badge matching Facebook UI, synchronized `displayCommentCount` in `PostEngagementBlock.tsx` so outer post cards display live total comment count (`N bình luận`), and added `localStorage` persistence in `CommentsSection.tsx`.
+- [2026-08-05] Trip Planner UI Text Update: Renamed sidebar section header from "Lịch sử AI" to "Lịch sử kế hoạch" in `TripPlanner.tsx`.
+- [2026-08-05] Universal Bilingual Language Switcher (VI | EN): Made Language Pill visible across all screen sizes in `App.tsx`, added quick language toggle option inside `UserMenuDropdown.tsx`, and synchronized `localStorage` persistence in `LanguageContext.tsx` enabling instant switching between Tiếng Việt and English.
+- [2026-08-05] Fixed Map Dashboard Vietnamese Language Switch Bug: Updated `MapDashboard.tsx` to evaluate `const vi = lang === 'vi'` directly from `useLang()` instead of checking outdated string `'Bảng tin'`, restoring 100% Vietnamese translation rendering across search boxes, filters, GIS controls, check-in forms, and community check-in titles when in VI mode.
+
+
+
+
+=======
 - [2026-08-04] Removed Local AI Assistant Sidebar & Balanced Interface Layout: Removed "Trợ lý ảo địa phương" sidebar card, state variables, and handlers in `ProvinceDetailPage.tsx`, expanded 3D Overview Book Reader container to `max-w-6xl` with `min-h-[580px]` viewport height and font scaling (`text-[15.5px]`) for a larger, comfortable book reading experience.
+>>>>>>> 179722dc0fd8ff1f655de152a356eeb3c4f6736f
 
 
 

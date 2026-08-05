@@ -1940,9 +1940,10 @@ export default function CreateStoryPage() {
 
       clearJourneyDraft();
       setPublished(true);
+      navigate('/', { state: { refreshFeed: true } });
     } catch (err: any) {
       let statusCode: number | undefined = undefined;
-      let title = 'Không thể đăng hành trình';
+      let title = 'Không thể đăng bài viết hành trình';
       let message = 'Gặp sự cố khi lưu bài viết vào hệ thống. Vui lòng kiểm tra lại thông tin.';
       let details: string | undefined = undefined;
 
@@ -2127,7 +2128,7 @@ export default function CreateStoryPage() {
                 ) : (
                   <button type="button" onClick={handlePublish} disabled={!isReadyToPublish || publishing}
                     className="modern-nav-btn modern-nav-btn--primary disabled:opacity-50">
-                    {publishing ? <><Loader2 size={15} className="animate-spin" /> Đang đăng...</> : <><Send size={15} /> Đăng hành trình</>}
+                    {publishing ? <><Loader2 size={15} className="animate-spin" /> Đang đăng...</> : <><Send size={15} /> Đăng bài viết hành trình</>}
                   </button>
                 )}
               </div>

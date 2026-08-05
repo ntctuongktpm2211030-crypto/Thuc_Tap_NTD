@@ -1,6 +1,8 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
 import { RippleButton } from '@/components/ui/ripple-button';
 import FeedCommentsPreview from './FeedCommentsPreview';
+import ShareModal from './ShareModal';
 
 interface PostEngagementBlockProps {
   postId: string;
@@ -26,6 +28,17 @@ export default function PostEngagementBlock({
   onOpenDetail,
   onOpenLikers,
 }: PostEngagementBlockProps) {
+  const [shareOpen, setShareOpen] = useState(false);
+  const [displayCommentCount, setDisplayCommentCount] = useState(commentCount);
+
+  useEffect(() => {
+    setDisplayCommentCount(prev => Math.max(prev, commentCount));
+  }, [commentCount]);
+
+  const handleCommentsLoaded = useCallback((count: number) => {
+    setDisplayCommentCount(prev => Math.max(prev, count));
+  }, []);
+
   return (
     <>
       <div className="flex items-center justify-between p-3 px-4 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] rounded-b-2xl">
@@ -62,16 +75,20 @@ export default function PostEngagementBlock({
           <button
             type="button"
             onClick={e => { e.stopPropagation(); onOpenDetail(); }}
-            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors group/comment"
+            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors group/comment cursor-pointer"
           >
             <MessageCircle size={14} className="text-blue-500 transition-colors" />
-            <span>{commentCount} bình luận</span>
+            <span>
+              {displayCommentCount > 0
+                ? `${displayCommentCount.toLocaleString()} bình luận`
+                : 'Bình luận'}
+            </span>
           </button>
 
           <button
             type="button"
             onClick={onBookmark}
-            className={`flex items-center gap-1.5 font-semibold transition-colors group/save ${
+            className={`flex items-center gap-1.5 font-semibold transition-colors group/save cursor-pointer ${
               saved ? 'text-amber-600' : 'text-slate-600 dark:text-slate-400 hover:text-amber-600'
             }`}
           >
@@ -81,8 +98,8 @@ export default function PostEngagementBlock({
 
           <button
             type="button"
-            onClick={e => e.stopPropagation()}
-            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-emerald-600 transition-colors group/share"
+            onClick={e => { e.stopPropagation(); setShareOpen(true); }}
+            className="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400 hover:text-emerald-600 transition-colors group/share cursor-pointer"
           >
             <Share2 size={14} className="text-emerald-500 transition-colors" />
             <span>Chia sẻ</span>
@@ -90,7 +107,18 @@ export default function PostEngagementBlock({
         </div>
       </div>
 
-      <FeedCommentsPreview postId={postId} onOpenDetail={onOpenDetail} />
+      <FeedCommentsPreview
+        postId={postId}
+        onOpenDetail={onOpenDetail}
+        onCommentCountLoaded={handleCommentsLoaded}
+      />
+
+      {/* Share Modal Popup */}
+      <ShareModal
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        postId={postId}
+      />
     </>
   );
 }

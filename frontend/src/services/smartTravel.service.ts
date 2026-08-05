@@ -92,14 +92,20 @@ export const authService = {
 
   LuuPhienDangNhap: (res: AuthResponse) => {
     localStorage.setItem('accessToken', res.accessToken);
+    localStorage.setItem('st-token', res.accessToken);
     localStorage.setItem('refreshToken', res.refreshToken);
     localStorage.setItem('user', JSON.stringify(res.user));
+    localStorage.removeItem('st-admin-token');
+    localStorage.removeItem('st-user');
   },
 
   XoaPhienDangNhap: () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('st-token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    localStorage.removeItem('st-admin-token');
+    localStorage.removeItem('st-user');
   },
 
   LayUserDaLuu: () => {

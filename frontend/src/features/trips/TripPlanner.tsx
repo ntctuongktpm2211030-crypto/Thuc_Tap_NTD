@@ -392,7 +392,7 @@ const TripPlanner = () => {
         <div className="flex justify-between items-center border-b border-[var(--border-normal)] pb-3">
           <h3 className="font-ui text-xs font-bold text-[var(--text-primary)] flex items-center gap-2">
             <BrainCircuit size={15} className="text-blue-500" /> 
-            {lang === 'vi' ? 'Lịch sử AI' : 'AI History'}
+            {lang === 'vi' ? 'Lịch sử kế hoạch' : 'Itinerary History'}
           </h3>
           {filtered.length > 6 && (
             <button

@@ -192,7 +192,7 @@ const translations = {
     'nav.map':        'Bản đồ',
     'nav.aiPlanner':  'Quản lí kế hoạch',
     'nav.analytics':  'Thống kê',
-    'nav.cultureGuide': 'Cẩm nang văn hóa — ẩm thực',
+    'nav.cultureGuide': 'Cẩm nang tri thức du lịch',
     'nav.signIn':     'Đăng nhập',
     'nav.joinFree':   'Đăng ký',
     'nav.signOut':    'Đăng xuất',
@@ -200,7 +200,7 @@ const translations = {
     'userMenu.profile':       'Hồ sơ cá nhân',
     'userMenu.following':     'Danh sách theo dõi',
     'userMenu.saved':         'Đã lưu',
-    'userMenu.shareJourney':  'Đăng hành trình',
+    'userMenu.shareJourney':  'Đăng bài viết hành trình',
     'userMenu.settings':      'Cài đặt',
 
     'profile.tab.posts':  'Bài viết',
@@ -242,7 +242,7 @@ const translations = {
     'feed.compose.publishing':'Đang đăng…',
     'feed.compose.needContent': 'Vui lòng nhập ít nhất 10 ký tự.',
     'feed.compose.needPhoto': 'Vui lòng thêm ít nhất 1 ảnh.',
-    'feed.shareJourney':      'Đăng hành trình',
+    'feed.shareJourney':      'Đăng bài viết hành trình',
     'feed.filter.all':        'Tất cả',
     'feed.filter.following':  'Đang theo dõi',
     'feed.filter.adventure':  'Phiêu lưu',
@@ -386,6 +386,7 @@ export const LangProvider = ({ children }: { children: React.ReactNode }) => {
   const setLang = (l: Lang) => {
     setLangState(l);
     localStorage.setItem('st-lang:v1', l);
+    localStorage.setItem('st-lang', l);
   };
 
   const t = (key: TranslationKey): string => {

@@ -9,8 +9,8 @@ import { RippleButton } from '../../components/ui/ripple-button';
 import type { RootState } from '../../store';
 import { postsService } from '../../services/smartTravel.service';
 import { useIsMounted } from '../../hooks/useIsMounted';
-import { toast } from '../../contexts/ToastContext';
 import CommentsSection from './CommentsSection';
+import ShareModal from './ShareModal';
 import type { FeedPost } from '../../utils/feedUtils';
 import {
   getPostFullBody,
@@ -139,6 +139,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
   const [commentCount, setCommentCount] = useState(0);
   const [likers, setLikers] = useState<{ id: string; name: string; avatar?: string }[]>([]);
   const [toastMessage, setToastMessage] = useState('');
+  const [shareOpen, setShareOpen] = useState(false);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -360,6 +361,7 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
               saved={saved}
               handleLike={handleLike}
               handleBookmark={handleBookmark}
+              handleShare={() => setShareOpen(true)}
               onClose={onClose}
             />
           ) : (
@@ -494,17 +496,14 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
                     <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
                   </button>
 
-                  {/* Share link copying */}
+                  {/* Share modal opener */}
                   <button
                     type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                      toast.success('Đã sao chép liên kết bài viết vào bộ nhớ tạm!');
-                    }}
-                    className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+                    onClick={() => setShareOpen(true)}
+                    className="flex items-center gap-2 hover:text-[var(--gold)] transition-colors cursor-pointer"
                   >
                     <Share2 size={16} className="text-emerald-500" />
-                    <span>Chia</span>
+                    <span>Chia sẻ</span>
                   </button>
                 </div>
               </div>
@@ -555,6 +554,15 @@ export default function PostDetailModal({ post, onClose, onPostUpdated, labels }
           {toastMessage}
         </div>
       )}
+
+      {/* Share Modal Popup */}
+      <ShareModal
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        postId={post.id}
+        title={getPostDetailTitle(post)}
+        description={getPostDetailSubtitle(post)}
+      />
     </div>,
     document.body
   );
@@ -567,6 +575,7 @@ function CheckinBoardingPass({
   saved,
   handleLike,
   handleBookmark,
+  handleShare,
   onClose,
 }: {
   post: any;
@@ -575,6 +584,7 @@ function CheckinBoardingPass({
   saved: boolean;
   handleLike: () => void;
   handleBookmark: () => void;
+  handleShare?: () => void;
   onClose?: () => void;
 }) {
   const images = getPostImages(post);
@@ -702,12 +712,21 @@ function CheckinBoardingPass({
           <button
             type="button"
             onClick={handleBookmark}
-            className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors ${
+            className={`flex items-center gap-2 hover:text-[var(--gold)] transition-colors cursor-pointer ${
               saved ? 'text-[var(--gold)]' : ''
             }`}
           >
             <Bookmark size={14} className={`text-amber-500 ${saved ? 'fill-current' : ''}`} />
             <span>{saved ? 'Đã lưu' : 'Lưu'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleShare}
+            className="flex items-center gap-2 hover:text-emerald-400 transition-colors cursor-pointer text-slate-400"
+          >
+            <Share2 size={14} className="text-emerald-500" />
+            <span>Chia sẻ</span>
           </button>
         </div>
       </div>

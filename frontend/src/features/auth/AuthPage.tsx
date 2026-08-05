@@ -370,8 +370,11 @@ export default function AuthPage() {
       const verifyRes = await api.post('/auth/verify-otp', { email: forgotEmail, otp: otpCode }).catch(() => null);
 
       if (verifyRes?.data?.accessToken) {
+        localStorage.setItem('accessToken', verifyRes.data.accessToken);
         localStorage.setItem('st-token', verifyRes.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(verifyRes.data.user));
         localStorage.setItem('st-user', JSON.stringify(verifyRes.data.user));
+        localStorage.removeItem('st-admin-token');
         setForgotStatus({ text: '🎉 Xác thực mã OTP thành công! Đang kích hoạt & đăng nhập vào Terraholic...', isError: false });
         setTimeout(() => {
           window.location.href = redirectTo || '/';
