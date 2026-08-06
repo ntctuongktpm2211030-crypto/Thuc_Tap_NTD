@@ -105,10 +105,6 @@ function renderFormattedContent(text: string, titleHint?: string) {
     </div>
   );
 }
-      })}
-    </div>
-  );
-}
 
 // Interactive Province Card Component: Fixed Main Image by Default, Slideshow Only Starts When Hovered!
 function ProvinceCard({

@@ -331,13 +331,6 @@ export default function ProvinceDetailPage() {
   }, [id]);
 
   const overviewPages = useMemo(() => {
-<<<<<<< HEAD
-    if (!overviewItem) return [];
-    const rawText = overviewItem.content || '';
-    const cleanText = rawText.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
-    if (!cleanText) return [];
-
-=======
     let contentToUse = overviewItem?.content;
     if (!contentToUse && provinceItems.length > 0) {
       const firstItem = provinceItems[0];
@@ -348,7 +341,6 @@ export default function ProvinceDetailPage() {
     if (!contentToUse) return [];
 
     const cleanText = contentToUse.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
->>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
     const words = cleanText.split(' ').filter(Boolean);
     const totalWords = words.length;
     if (totalWords === 0) return [];
