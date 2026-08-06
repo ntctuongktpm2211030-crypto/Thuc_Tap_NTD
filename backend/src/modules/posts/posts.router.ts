@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import prisma from '../../config/db';
+import prisma, { withDbRetry } from '../../config/db';
 import { requireAuth, optionalAuth, AuthRequest } from '../auth/auth.middleware';
 import { sendRealTimeNotification } from '../../socket/notification.socket';
 import { uploadBase64ToSupabase } from '../../config/supabase';
@@ -364,9 +364,9 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
       }
     }
 
-    const post = await prisma.post.create({
+    const post = await withDbRetry(() => prisma.post.create({
       data: {
-        authorId: req.user.sub,
+        authorId: req.user!.sub,
         content,
         mediaUrls: finalMediaUrls,
         tripId: validTripId,
@@ -377,7 +377,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
         author: { include: { profile: true } },
         _count: { select: { likes: true, comments: true } },
       },
-    });
+    }));
 
     invalidateFeedCache();
 

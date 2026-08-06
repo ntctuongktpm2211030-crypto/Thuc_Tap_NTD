@@ -82,7 +82,6 @@
 - [2026-07-29] Cleared IDE warnings in `TripPlanner.tsx`: removed unused imports (`Plane`, `Zap`, `ChevronDown`, `ChevronUp`, `Clock`, `X`), removed dead state variables (`expandedActivities`), and connected `savingTrip` to the Save Trip button disabled & loading spinner states.
 - [2026-07-30] Fixed API runtime errors: added fallback query resilience & removed request-path `deleteMany` in `posts.router.ts` (`GET /api/v1/posts`) to eliminate PostgreSQL statement timeouts (500), added default fallback titles/destinations in `trips.router.ts` (`POST /api/v1/trips`) to prevent 400 Bad Request errors, and checked `refreshToken` presence in `api.ts` before attempting token refresh to protect unauthenticated background requests (`/social/notifications`).
 - [2026-07-30] Cleared unused declared variable and import warnings in frontend (`App.tsx`, `ProfilePage.tsx`, `storyStorage.ts`, `SocialFeedPage.tsx`, `feedUtils.ts`).
-<<<<<<< Updated upstream
 - [2026-07-30] Refined Single Activity Card Swapping & Cascading Deduplication in `TripPlanner.tsx`: Clicking `Đổi thẻ` on an activity card updates ONLY that specific activity card in Day K (leaving all other cards in Day K intact), then automatically cascades through all subsequent days (Day K+1, K+2... N) to eliminate duplicate places across the entire multi-day trip.
 - [2026-07-30] Fixed IDE TypeScript compilation errors: restored missing `'planner.subtitle'` key in `LanguageContext.tsx` `translations.vi` dictionary and added safe type casting `(replacement as any).category` in `TripPlanner.tsx`.
 - [2026-07-30] Implemented Dedicated Terraholic Admin Portal: Added `ADMIN` role in `schema.prisma`, added `HandbookDocument` model, created `backend/src/modules/admin/admin.router.ts` (Auto-seed Admin `admin@terraholic.com` / `123456@Aa`, `/api/v1/admin/login`, `/stats`, `/users`, `/posts`, `/trips`, `/handbooks`, `/audit-logs`), mounted `/api/v1/admin` in `app.ts`, created frontend components `AdminLoginPage.tsx` (`/admin/login`), `AdminDashboardLayout.tsx` (`/admin`), `AdminOverviewTab.tsx`, `AdminUsersTab.tsx`, `AdminPostsTab.tsx`, and `AdminHandbookTab.tsx` with automatic `Giờ:Phút Ngày/Tháng/Năm` timestamp recording when adding AND editing Word, JSON, PDF and Handbook guides.
@@ -124,65 +123,20 @@
 - [2026-08-04] Fixed JSX Ternary Operator Syntax Error: Fixed redundant `?` syntax error in `className` ternary string inside `AdminDashboardLayout.tsx` (line 370), resolving Vite Babel parser build error.
 - [2026-08-04] Optimized Compact & Basic Dropdown UI: Reduced width of Admin Notification Dropdown in `AdminDashboardLayout.tsx` from `w-440px` to a sleek compact `w-80` (320px), trimmed padding (`p-2.5`), adjusted fonts to `text-[10px]` & `text-[11px]`, and resized vector icon bubbles (`w-7 h-7`) for a super clean, compact basic design.
 - [2026-08-04] Expanded Rich Notifications & Enhanced Smooth Scroll Roll: Expanded notification API list in `admin.router.ts` to return 8 rich items (combining reported violations, 180-day inactive warnings, and AI moderation alerts), and enhanced list container in `AdminDashboardLayout.tsx` with smooth scrolling (`scroll-smooth max-h-[310px] custom-scrollbar`) for an ultra-smooth scrolling experience.
-<<<<<<< HEAD
 - [2026-08-05] Edit Post Button Label: Changed action button text from "Cập Nhật Bài Viết" to "Lưu bài viết" in `EditPostPage.tsx`.
 - [2026-08-05] Implemented Device Zalo Message Sharing & Share Modal Integration: Updated `ShareModal.tsx` with dedicated Zalo Message share handler (`handleZaloShare`), copying title & article URL to clipboard for direct chat pasting while opening `https://zalo.me/share`, added Toast confirmation feedback, and integrated `ShareModal` in `ExploreArticlePage.tsx` and `PostDetailModal.tsx`.
 - [2026-08-05] Facebook-Style 1 Newest Comment Preview & Live Comment Count: Updated `FeedCommentsPreview.tsx` to display exactly 1 newest comment bubble with author avatar, name, and "Bình luận mới nhất" badge matching Facebook UI, synchronized `displayCommentCount` in `PostEngagementBlock.tsx` so outer post cards display live total comment count (`N bình luận`), and added `localStorage` persistence in `CommentsSection.tsx`.
 - [2026-08-05] Trip Planner UI Text Update: Renamed sidebar section header from "Lịch sử AI" to "Lịch sử kế hoạch" in `TripPlanner.tsx`.
 - [2026-08-05] Universal Bilingual Language Switcher (VI | EN): Made Language Pill visible across all screen sizes in `App.tsx`, added quick language toggle option inside `UserMenuDropdown.tsx`, and synchronized `localStorage` persistence in `LanguageContext.tsx` enabling instant switching between Tiếng Việt and English.
 - [2026-08-05] Fixed Map Dashboard Vietnamese Language Switch Bug: Updated `MapDashboard.tsx` to evaluate `const vi = lang === 'vi'` directly from `useLang()` instead of checking outdated string `'Bảng tin'`, restoring 100% Vietnamese translation rendering across search boxes, filters, GIS controls, check-in forms, and community check-in titles when in VI mode.
-
-
-
-
-=======
 - [2026-08-04] Removed Local AI Assistant Sidebar & Balanced Interface Layout: Removed "Trợ lý ảo địa phương" sidebar card, state variables, and handlers in `ProvinceDetailPage.tsx`, expanded 3D Overview Book Reader container to `max-w-6xl` with `min-h-[580px]` viewport height and font scaling (`text-[15.5px]`) for a larger, comfortable book reading experience.
->>>>>>> 179722dc0fd8ff1f655de152a356eeb3c4f6736f
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-- [2026-08-01] Fixed 500 Internal Server Errors on `/social/search`, `/social/following`, and `/posts` by adding `ADMIN` and `MODERATOR` roles to `UserRole` enum in `backend/prisma/schema.prisma` & PostgreSQL database, eliminating Prisma deserialization crashes when fetching users with administrative roles.
->>>>>>> Stashed changes
 - [2026-08-05] Fixed overlapping password show/hide icons issue in `AuthPage.tsx` by adding global browser CSS rules in `index.css` to disable native `::-ms-reveal`, `::-ms-clear`, and `::-webkit-credentials-auto-fill-button` icons, and fixed Tailwind `pr-11` class concatenation bug in `Input` component.
 - [2026-08-05] Updated travel companion style label from "Solo" to "Độc hành" in `CreateStoryPage.tsx` for the journey creation form.
 - [2026-08-05] Removed parentheses count string `({filteredEthnicGroups.length} Dân tộc)` from "Thư Viện 54 Dân Tộc Việt Nam" header title in `ExploreHandbookHub.tsx`.
-
+- [2026-08-06] Fixed empty white rounded bar bug in `ProvinceDetailPage.tsx` by conditionally rendering outer overview card container only when `overviewPages` has content, and adding automatic fallback overview text generation for search destinations.
+- [2026-08-06] Fixed blank white screen crash on ethnic group search by adding missing `LandmarkModalImage` component in `ProvinceDetailPage.tsx` and handling `DÂN TỘC` search suggestions with direct modal triggers in `ExploreHandbookHub.tsx`.
+- [2026-08-06] Optimized Book Page Reader footer controls in `WebGLPageCurlReader.tsx` to render navigation bar conditionally only when `totalPages > 1`, eliminating empty disabled button bars.
+- [2026-08-06] Applied `text-justify` alignment with `NFC` Unicode normalization to all handbook article content & ethnic group detail modal paragraphs in `ExploreHandbookHub.tsx` and `ProvinceDetailPage.tsx`.
+- [2026-08-06] Resolved narrow text wrapping & repeating PDF headers in ethnic group detail modal: merged single line breaks into full continuous paragraphs and stripped embedded PDF page headers (`CÁC DÂN TỘC VIỆT NAM`, `DÂN TỘC [NAME]`) in `renderFormattedContent` for 100% full-width justified paragraph alignment across modal width.
+- [2026-08-06] Fixed 500 Internal Server Errors on `/social/search`, `/social/notifications`, `/social/following/:userId`, and `/posts`: Added `ADMIN` and `MODERATOR` roles to `UserRole` enum in `backend/prisma/schema.prisma` and regenerated Prisma Client to resolve Prisma deserialization crashes when querying users with administrative roles.
+- [2026-08-06] Resolved 404 Chatbot Memory Error & Transient Database Connection Drops: Updated `LayBoNhoAI` in `chatbot.controller.ts` to return HTTP 200 OK with `null` when a user has no prior AI memory record, created `withDbRetry` helper in `db.ts` to handle transient Supabase/PostgreSQL SSL connection drops, and filtered 401 unauthenticated errors in `App.tsx` notification loader catch block.

@@ -167,7 +167,11 @@ function App() {
           .then(data => {
             if (isMounted && Array.isArray(data)) setNotifications(data);
           })
-          .catch(err => console.error('Fetch notifications failed in App:', err));
+          .catch(err => {
+            if (err?.response?.status !== 401) {
+              console.error('Fetch notifications failed in App:', err);
+            }
+          });
       }
     };
 

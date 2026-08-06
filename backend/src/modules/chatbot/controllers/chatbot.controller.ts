@@ -110,7 +110,7 @@ export class ChatbotController {
       const memory = await this.service.getMemory(userId);
       if (!memory) {
         logger.debug('ChatbotController', 'LayBoNhoAI — no memory found', { userId }, requestId);
-        return res.status(404).json({ error: 'Người dùng chưa có dữ liệu bộ nhớ AI.' });
+        return res.status(200).json(null);
       }
       const fields = ['travelPreferences', 'favoriteFoods', 'budget', 'transportation', 'favoriteLocations'] as const;
       const nonEmpty = fields.filter(f => (memory as any)[f] && ((Array.isArray((memory as any)[f]) ? (memory as any)[f].length : 1) > 0));
