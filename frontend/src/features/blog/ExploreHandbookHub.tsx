@@ -535,12 +535,8 @@ export default function ExploreHandbookHub() {
                 <div
                   key={idx}
                   onClick={() => {
-<<<<<<< HEAD
-                    if (res.item.subCategory?.toUpperCase() === 'DÂN TỘC' || res.item.province === 'Việt Nam') {
-=======
-                    if (res.item.subCategory.toUpperCase() === 'DÂN TỘC' || res.item.title.toUpperCase().includes('DÂN TỘC')) {
+                    if (res.item.subCategory?.toUpperCase() === 'DÂN TỘC' || res.item.title.toUpperCase().includes('DÂN TỘC') || res.item.province === 'Việt Nam') {
                       setActiveCategory('DÂN TỘC');
->>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
                       setActiveEthnicModal(res.item);
                     } else {
                       navigate(`/explore/province/${res.item.province}`);

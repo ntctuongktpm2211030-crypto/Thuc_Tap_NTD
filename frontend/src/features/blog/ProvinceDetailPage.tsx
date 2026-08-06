@@ -362,16 +362,9 @@ export default function ProvinceDetailPage() {
       }
     }
 
-<<<<<<< HEAD
     // Prune any empty trailing spreads automatically
     return pages.filter(p => p.trim().length > 0);
-  }, [overviewItem]);
-
-  // currentOverviewText memo removed since pages array is passed directly to BookPageReader
-=======
-    return pages;
   }, [overviewItem, provinceItems, formattedName]);
->>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
 
   useEffect(() => {
     setOverviewPage(1);
