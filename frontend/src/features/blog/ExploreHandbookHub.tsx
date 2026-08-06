@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Landmark, BookOpen, Compass, Search, Sparkles,
-  FileText, ChevronRight
+  Loader2, FileText, ChevronRight
 } from 'lucide-react';
 import { KnowledgeEngine, normalizeProvinceKey, parseJsonHandbookContent, type KnowledgeItem } from './KnowledgeEngine';
 import api from '../../services/api';
@@ -446,6 +446,15 @@ export default function ExploreHandbookHub() {
     setHandbookPage(1);
   }, [activeCategory, query]);
 
+  // AI assistant states
+  const [aiQuestion, setAiQuestion] = useState('');
+  const [aiSelectedProvince, setAiSelectedProvince] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState('');
+
+  // For the AI select box we want all provinces regardless of category
+  const allProvincesForAi = useMemo(() => KnowledgeEngine.getProvincesList(), []);
+
   // Clean canonical categories in Vietnamese without raw English tokens
   const categories = useMemo(() => {
     return ['TẤT CẢ', 'DI TÍCH - VĂN HÓA', 'LỄ HỘI', 'ẨM THỰC', 'DÂN TỘC'];
@@ -455,6 +464,23 @@ export default function ExploreHandbookHub() {
   const searchResults = useMemo(() => {
     return SearchEngine.search(query);
   }, [query]);
+
+  const handleAiConsult = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aiQuestion.trim() || !aiSelectedProvince) return;
+
+    setAiLoading(true);
+    setAiResponse('');
+    try {
+      await new Promise(resolve => setTimeout(resolve, 300));
+      const { responseText, matchSource } = KnowledgeEngine.synthesizeAiAnswer(aiSelectedProvince, aiQuestion);
+      setAiResponse(`### 🤖 Phản hồi từ Trợ lý Ảo\n*Nguồn dữ liệu: ${matchSource}*\n\n${responseText}`);
+    } catch {
+      setAiResponse('Gặp lỗi khi liên kết với Trợ lý Ảo du lịch.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans overflow-x-clip">
@@ -581,8 +607,9 @@ export default function ExploreHandbookHub() {
           </div>
         </div>
 
-        <div className="w-full space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* ── 4. PROVINCES & ETHNIC GROUPS CARDS GRID ── */}
+          <div className="lg:col-span-9 space-y-6">
             {activeCategory === 'DÂN TỘC' ? (
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -693,6 +720,67 @@ export default function ExploreHandbookHub() {
                 )}
               </>
             )}
+          </div>
+
+          {/* ── 5. AI KNOWLEDGE ASSISTANT SIDEBAR ── */}
+          <aside className="lg:col-span-3 lg:sticky lg:top-24 self-start">
+            <div className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-5 space-y-4 relative overflow-hidden group">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[var(--gold)] text-white flex items-center justify-center font-bold">
+                  <Sparkles size={16} className="text-white" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[var(--gold)]">TRỢ LÝ ẢO TRI THỨC</h4>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Trả lời nhanh mọi thắc mắc</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleAiConsult} className="space-y-3">
+                <div>
+                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CHỌN TỈNH THÀNH</label>
+                  <select
+                    value={aiSelectedProvince}
+                    onChange={e => setAiSelectedProvince(e.target.value)}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-white outline-none focus:border-[var(--gold)] cursor-pointer"
+                  >
+                    <option value="" className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">-- Lựa chọn tỉnh --</option>
+                    {allProvincesForAi.map((p: { key: string; name: string }) => (
+                      <option key={p.key} value={p.key} className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CÂU HỎI TRA CỨU</label>
+                  <textarea
+                    value={aiQuestion}
+                    onChange={e => setAiQuestion(e.target.value)}
+                    placeholder="VD: Núi Cấm ở đâu? có cảnh đẹp gì..."
+                    disabled={!aiSelectedProvince}
+                    className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[var(--gold)] resize-none h-24 disabled:opacity-40 transition-all"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={aiLoading || !aiQuestion.trim() || !aiSelectedProvince}
+                  className="w-full py-3 bg-[var(--gold)] hover:opacity-90 text-white font-black text-[11px] uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                >
+                  {aiLoading ? <Loader2 size={14} className="animate-spin text-white" /> : <Search size={14} className="text-white" />}
+                  TRA CỨU TRỢ LÝ ẢO
+                </button>
+              </form>
+
+              {aiResponse && (
+                <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-fade-in">
+                  <span className="text-[8px] font-black uppercase text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded border border-[var(--gold)]/20">KẾT QUẢ TRA CỨU</span>
+                  <div className="text-[11px] text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[240px] overflow-y-auto whitespace-pre-wrap">
+                    {renderFormattedContent(aiResponse)}
+                  </div>
+                </div>
+              )}
+            </div>
+          </aside>
         </div>
       </div>
 
