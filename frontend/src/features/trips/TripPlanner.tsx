@@ -290,6 +290,111 @@ function calculateItineraryCosts(
   };
 }
 
+const GENERIC_LOCATION_STOPWORDS = new Set([
+  'ha giang', 'ha noi', 'da nang', 'ho chi minh', 'da lat', 'phu quoc', 'hoi an', 'nha trang',
+  'nha hang', 'quan an', 'khach san', 'homestay', 'ca phe', 'cafe', 'coffee',
+  'trung tam', 'du lich', 'dac san', 'tham quan', 'kham pha', 'dia diem', 'quang truong', 'cho dem'
+]);
+
+function cleanPlaceKeyFrontend(str: string): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/^(bua sang|an sang|breakfast|bua trua|an trua|lunch|bua toi|an toi|dinner|thuong thuc bua toi|thuong thuc bua trua|thuong thuc bua sang|thuong thuc|tham quan|kham pha|trai nghiem|visit|explore|sightseeing|dao choi|dao dem|dao|di dao|night market walk & hotel stay|nghi dem tai|stay at|nghi tai|ca phe tai|cafe tai|coffee at|ghe|tai|o|di|dung)\s*:?\s*/gi, '')
+    .replace(/[\d.,:;!?'"()\-–]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function isKeyDuplicateFrontend(actName: string, locName: string, usedSet: Set<string>): boolean {
+  const actClean = cleanPlaceKeyFrontend(actName);
+  const locClean = cleanPlaceKeyFrontend(locName);
+
+  if (!actClean && !locClean) return false;
+
+  for (const used of usedSet) {
+    if (!used || used.length < 3) continue;
+
+    // Exact key match
+    if ((actClean && actClean === used) || (locClean && locClean === used)) {
+      return true;
+    }
+
+    // Substring match check for sufficiently long, non-generic strings
+    if (actClean && actClean.length >= 6 && used.length >= 6 && !GENERIC_LOCATION_STOPWORDS.has(actClean) && !GENERIC_LOCATION_STOPWORDS.has(used)) {
+      if (actClean.includes(used) || used.includes(actClean)) return true;
+    }
+    if (locClean && locClean.length >= 6 && used.length >= 6 && !GENERIC_LOCATION_STOPWORDS.has(locClean) && !GENERIC_LOCATION_STOPWORDS.has(used)) {
+      if (locClean.includes(used) || used.includes(locClean)) return true;
+    }
+  }
+
+  return false;
+}
+
+function ensureUniqueItineraryActivities(itineraryObj: any, destinationName: string, langMode: string = 'vi'): any {
+  if (!itineraryObj || !Array.isArray(itineraryObj.days)) return itineraryObj;
+
+  const updatedItinerary = JSON.parse(JSON.stringify(itineraryObj));
+  const usedPlaces = new Set<string>();
+
+  updatedItinerary.days.forEach((d: any, dIdx: number) => {
+    const dayNum = d.dayIndex || d.day || (dIdx + 1);
+    if (!Array.isArray(d.activities)) return;
+
+    d.activities.forEach((act: any, actIdx: number) => {
+      // Hotel accommodation stays fixed across nights
+      if (act.category === 'hotel' || (act.session === 'Tối' && actIdx === d.activities.length - 1)) {
+        return;
+      }
+
+      const isDuplicate = isKeyDuplicateFrontend(act.activityName || '', act.locationName || '', usedPlaces);
+
+      if (isDuplicate) {
+        const isRestaurant = act.category === 'restaurant' || (act.activityName || '').toLowerCase().includes('ăn') || (act.activityName || '').toLowerCase().includes('cà phê');
+        const pool = isRestaurant ? GLOBAL_SAMPLE_RESTAURANTS : GLOBAL_SAMPLE_ATTRACTIONS;
+
+        const available = pool.filter(p => {
+          const pClean = cleanPlaceKeyFrontend(p.name);
+          return pClean && !isKeyDuplicateFrontend(p.name, p.name, usedPlaces);
+        });
+
+        if (available.length > 0) {
+          const replacement = available[0];
+          const repClean = cleanPlaceKeyFrontend(replacement.name);
+          usedPlaces.add(repClean);
+
+          const newName = isRestaurant 
+            ? (langMode === 'vi' ? `Thưởng thức ${replacement.name}` : `Dine at ${replacement.name}`)
+            : (langMode === 'vi' ? `Tham quan ${replacement.name}` : `Visit ${replacement.name}`);
+          act.activityName = newName;
+          act.locationName = `${replacement.name}, ${destinationName}`;
+          if (replacement.notes) act.notes = replacement.notes;
+          if ((replacement as any).category) act.category = (replacement as any).category;
+        } else {
+          const sessionLabel = act.session || 'Khám phá';
+          const synthetic = langMode === 'vi' 
+            ? `Điểm trải nghiệm ${destinationName} (Ngày ${dayNum} - ${sessionLabel})`
+            : `Experience ${destinationName} (Day ${dayNum} - ${sessionLabel})`;
+          act.activityName = synthetic;
+          act.locationName = `${synthetic}, ${destinationName}`;
+          usedPlaces.add(cleanPlaceKeyFrontend(synthetic));
+        }
+      } else {
+        const actClean = cleanPlaceKeyFrontend(act.activityName || '');
+        const locClean = cleanPlaceKeyFrontend(act.locationName || '');
+        if (actClean) usedPlaces.add(actClean);
+        if (locClean) usedPlaces.add(locClean);
+      }
+    });
+  });
+
+  return updatedItinerary;
+}
+
 const TripPlanner = () => {
   const { lang, t } = useLang();
   const { success, error } = useToast();
@@ -529,7 +634,8 @@ const TripPlanner = () => {
         interests,
         travelStyle: style
       });
-      finalResult = calculateItineraryCosts(result, style, currency, Number(budget));
+      const deduplicatedResult = ensureUniqueItineraryActivities(result, destination, lang);
+      finalResult = calculateItineraryCosts(deduplicatedResult, style, currency, Number(budget));
       setItinerary(finalResult);
     } catch {
       const isVi = lang === 'vi';
@@ -580,15 +686,15 @@ const TripPlanner = () => {
       const usedNamesSample = new Set<string>();
 
       const getItem = (pool: any[], prefix: string, idx: number) => {
-        const unused = pool.filter(p => !usedNamesSample.has(p.name.toLowerCase()));
+        const unused = pool.filter(p => !isKeyDuplicateFrontend(p.name, p.name, usedNamesSample));
         if (unused.length > 0) {
           const item = unused[0];
-          usedNamesSample.add(item.name.toLowerCase());
+          usedNamesSample.add(cleanPlaceKeyFrontend(item.name));
           return item;
         }
         const base = pool[idx % pool.length];
-        const dynamicName = `${prefix} ${base.name} ${destination}`;
-        usedNamesSample.add(dynamicName.toLowerCase());
+        const dynamicName = `${prefix} ${destination} (${idx + 1})`;
+        usedNamesSample.add(cleanPlaceKeyFrontend(dynamicName));
         return { ...base, name: dynamicName };
       };
 
@@ -679,7 +785,8 @@ const TripPlanner = () => {
         totalEstimatedCost: Number(budget),
         days: generatedDays
       };
-      finalResult = calculateItineraryCosts(mockResult, style, currency, Number(budget));
+      const deduplicatedMock = ensureUniqueItineraryActivities(mockResult, destination, lang);
+      finalResult = calculateItineraryCosts(deduplicatedMock, style, currency, Number(budget));
       setItinerary(finalResult);
     } finally {
       setLoading(false);

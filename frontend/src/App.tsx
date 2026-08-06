@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Map, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
-  Menu, X, User, Send, Utensils, Bot, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock, Newspaper,
+  Menu, X, User, Send, Utensils, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock, Newspaper,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './store/authSlice';
@@ -30,7 +30,6 @@ import FollowingPage from './features/profile/FollowingPage';
 import SavedPage from './features/profile/SavedPage';
 import SettingsPage from './features/profile/SettingsPage';
 import NotificationsPage from './features/profile/NotificationsPage';
-import ChatbotPage from './features/chatbot/ChatbotPage';
 
 // Lazy-loaded heavy pages — splits bundle so initial load is fast
 const MapDashboard = lazy(() => import('./features/map/MapDashboard'));
@@ -190,13 +189,22 @@ function App() {
   // Connect to Notification socket room and listen for real-time notifications
   useEffect(() => {
     if (isAuthenticated && user?.id) {
-      const socketUrl = import.meta.env.VITE_API_URL 
-        ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
-        : window.location.origin;
+      const getSocketUrl = (): string => {
+        const envUrl = import.meta.env.VITE_API_URL;
+        if (envUrl && typeof envUrl === 'string' && envUrl.startsWith('http')) {
+          return envUrl.replace(/\/api\/v1\/?$/, '');
+        }
+        const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+        const hostname = window.location.hostname || 'localhost';
+        return `${protocol}//${hostname}:5000`;
+      };
 
-      const socket = io(socketUrl, {
-        transports: ['websocket'],
-        autoConnect: true
+      const socket = io(getSocketUrl(), {
+        transports: ['websocket', 'polling'],
+        autoConnect: true,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
       });
 
       let toastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -255,8 +263,6 @@ function App() {
     { to: '/guide/culture-food', label: t('nav.cultureGuide'), Icon: Utensils },
     { to: '/map',       label: t('nav.map'),        Icon: Map },
     { to: '/trips',     label: t('nav.aiPlanner'), Icon: Sparkles },
-    { to: '/chat',      label: lang === 'vi' ? 'Trợ lý ảo' : 'AI Chat', Icon: Bot },
-
   ];
 
   const createNavItems = isAuthenticated
@@ -618,7 +624,6 @@ function App() {
               <TripPlanner />
             </Suspense>
           } />
-          <Route path="/chat" element={<ProtectedRoute><ChatbotPage /></ProtectedRoute>} />
           <Route path="/guide/culture-food" element={<CultureFoodGuidePage />} />
           <Route path="/journeys/create" element={<ProtectedRoute><CreateStoryPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />

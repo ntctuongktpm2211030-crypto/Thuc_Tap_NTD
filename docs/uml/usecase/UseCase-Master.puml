@@ -5,7 +5,7 @@ skinparam actorStyle awesome
 skinparam linetype ortho
 
 ' ==========================================
-' 1. ACTORS DEFINITIONS
+' 1. ACTORS DEFINITIONS (HUMAN & SYSTEM)
 ' ==========================================
 
 package "Tác nhân con người (Human Actors)" {
@@ -16,91 +16,90 @@ package "Tác nhân con người (Human Actors)" {
 
 package "Hệ thống & Dịch vụ ngoại vi (External Systems)" {
   actor "Firebase Auth" as Firebase <<System>>
-  actor "OpenStreetMap\n(Map Service)" as OSM <<System>>
+  actor "OpenStreetMap\n(OSM / OSRM Engine)" as OSM <<System>>
   actor "SMTP Mail Server" as SMTP <<System>>
   actor "OpenAI API\n(LLM Service)" as OpenAI <<System>>
   actor "vietnamadminunits API" as AdminUnits <<System>>
   actor "Supabase Storage" as Storage <<System>>
 }
 
-' Actor Inheritance
+' Actor Inheritance (Subtyping)
 RegisteredUser -|> Guest
 
 ' ==========================================
 ' 2. SYSTEM BOUNDARY & USE CASES
 ' ==========================================
 
-rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Terraholic {
+rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh SmartTravel (Terraholic)" as Terraholic {
 
   ' --- Phân hệ Xác thực & Thành viên ---
   package "Xác thực & Hồ sơ (Authentication & Profile)" {
-    usecase "Đăng ký tài khoản\n(Register)" as UC_Auth_Reg
+    usecase "Đăng ký tài khoản mới\n(Register Account)" as UC_Auth_Reg
     usecase "Xác thực tài khoản qua Email\n(Verify Email)" as UC_Auth_Verify
     usecase "Đăng nhập tài khoản\n(Log In)" as UC_Auth_Login
     usecase "Đăng nhập truyền thống\n(Password Log In)" as UC_Auth_PassLogin
     usecase "Đăng nhập Google SSO\n(Google SSO Log In)" as UC_Auth_GLogin
-    usecase "Quản lý hồ sơ & sở thích\n(Manage Profile)" as UC_Auth_Pref
-    usecase "Theo dõi thành viên khác\n(Follow Members)" as UC_Auth_Follow
+    usecase "Quản lý hồ sơ & sở thích\n(Manage Profile & Preferences)" as UC_Auth_Pref
+    usecase "Theo dõi thành viên cộng đồng\n(Follow Members)" as UC_Auth_Follow
   }
 
   ' --- Phân hệ Lập lịch trình ---
-  package "Lập lịch trình & Hành trình (Trip Planning)" {
-    usecase "Quản lý chuyến đi\n(Manage Trips)" as UC_Trip_Manage
-    usecase "Tạo lịch trình qua AI\n(AI Itinerary Generation)" as UC_Trip_AI
-    usecase "Tối ưu lộ trình TSP\n(Route Optimization)" as UC_Trip_TSP
-    usecase "Quản lý lịch sử đi lại\n(Manage Travel History)" as UC_Trip_History
-    usecase "Tạo hành trình tự do mới\n(Create Custom Itinerary)" as UC_Trip_Custom
-    usecase "Quản lý hoạt động hành trình\n(Manage Custom Activities)" as UC_Trip_Act
+  package "Lập lịch trình & Tối ưu lộ trình (Trip Planning & Optimization)" {
+    usecase "Quản lý hành trình du lịch\n(Manage Trips)" as UC_Trip_Manage
+    usecase "Tạo lịch trình tự động bằng AI\n(Generate AI Itinerary)" as UC_Trip_AI
+    usecase "Tối ưu hóa lộ trình di chuyển\n(Optimize Route TSP)" as UC_Trip_TSP
+    usecase "Thiết kế hành trình tùy chỉnh\n(Create Custom Itinerary)" as UC_Trip_Custom
+    usecase "Nhân bản & Chia sẻ lịch trình\n(Clone & Share Itinerary)" as UC_Trip_Clone
+    usecase "Quản lý nhật ký & chi phí đi lại\n(Manage Expenses & History)" as UC_Trip_History
   }
 
   ' --- Phân hệ Mạng xã hội ---
-  package "Mạng xã hội & Cộng đồng (Social & Community)" {
-    usecase "Xem bảng tin cộng đồng\n(Browse Feed)" as UC_Soc_Feed
-    usecase "Quản lý bài viết chia sẻ\n(Manage Posts)" as UC_Soc_Posts
-    usecase "Thích/Bỏ thích bài đăng\n(Like/Unlike Posts)" as UC_Soc_Like
-    usecase "Bình luận bài viết\n(Comment on Posts)" as UC_Soc_Comment
-    usecase "Lưu trữ bài đăng\n(Bookmark Posts)" as UC_Soc_Bookmark
+  package "Mạng xã hội du lịch (Social & Community Feed)" {
+    usecase "Khám phá bảng tin cộng đồng\n(Browse Community Feed)" as UC_Soc_Feed
+    usecase "Quản lý bài viết chia sẻ\n(Manage Travel Posts)" as UC_Soc_Posts
+    usecase "Tương tác bài đăng cộng đồng\n(Interact with Posts)" as UC_Soc_Interact
+    usecase "Tìm kiếm bạn đồng hành du lịch\n(Find Travel Companions)" as UC_Soc_Match
   }
 
   ' --- Phân hệ Bản đồ ---
-  package "Bản đồ tương tác & GIS (Interactive Map & GIS)" {
-    usecase "Xem & di chuyển bản đồ\n(View & Pan Map)" as UC_Map_View
-    usecase "Thay đổi bản đồ nền\n(Switch Base Map)" as UC_Map_Style
-    usecase "Tìm kiếm vị trí\n(Search Location)" as UC_Map_Search
-    usecase "Lọc danh mục địa điểm\n(Filter Categories)" as UC_Map_Filter
-    usecase "Xem chi tiết địa điểm\n(View Attraction Details)" as UC_Map_Detail
-    usecase "Định vị & Chia sẻ vị trí live\n(Live Location Tracking)" as UC_Map_Live
-    usecase "Xem chỉ đường lộ trình\n(View Route Directions)" as UC_Map_Route
-    usecase "Thực hiện check-in địa điểm\n(Perform Check-in)" as UC_Map_Checkin
-    usecase "Tạo sự kiện local\n(Create Local Event)" as UC_Map_CreateEvent
-    usecase "Xem sự kiện địa phương\n(View Local Events)" as UC_Map_ViewEvents
+  package "Bản đồ tương tác & GIS (Interactive Map & GIS Services)" {
+    usecase "Khám phá bản đồ du lịch tương tác\n(Explore Interactive Map)" as UC_Map_Explore
+    usecase "Định vị & Chia sẻ vị trí live\n(Live Location Sharing)" as UC_Map_Live
+    usecase "Dẫn đường & Tính toán tuyến đường\n(Route Navigation)" as UC_Map_Route
+    usecase "Thực hiện check-in địa điểm\n(Perform Location Check-in)" as UC_Map_Checkin
+    usecase "Quản lý sự kiện du lịch địa phương\n(Manage Local Events)" as UC_Map_Events
   }
 
   ' --- Phân hệ Trợ lý ảo AI ---
-  package "Trợ lý ảo AI & RAG (AI Chatbot & RAG)" {
-    usecase "Chat với trợ lý ảo đa Agent\n(Chat with AI Assistant)" as UC_AI_Chat
-    usecase "Quản lý phiên hội thoại\n(Manage Chat Sessions)" as UC_AI_Conv
-    usecase "Tái tạo phản hồi đa phiên bản\n(Regenerate Response)" as UC_AI_Regen
-    usecase "Đánh giá phản hồi AI\n(Rate AI Answer)" as UC_AI_Feedback
-    usecase "Quản lý món ăn yêu thích\n(Manage Favorite Foods)" as UC_AI_Food
+  package "Trợ lý ảo AI & RAG (AI Assistant & RAG Engine)" {
+    usecase "Trò chuyện với trợ lý ảo du lịch\n(Chat with AI Assistant)" as UC_AI_Chat
+    usecase "Quản lý phiên hội thoại AI\n(Manage Chat Sessions)" as UC_AI_Sessions
+    usecase "Tra cứu tri thức văn hóa & ẩm thực RAG\n(Search Knowledge via RAG)" as UC_AI_RAG
+    usecase "Quản lý danh mục đặc sản yêu thích\n(Manage Favorite Foods)" as UC_AI_Food
   }
-
 
   ' --- Phân hệ Quản trị ---
-  package "Quản trị & Analytics Hệ thống (Admin & Analytics)" {
-    usecase "Xem Dashboard tổng quan & Heatmap\n(View Admin Dashboard)" as UC_Admin_Dash
-    usecase "Phân tích dự báo & Phễu chuyển đổi\n(BI Predictions & Funnel)" as UC_Admin_BI
-    usecase "Xuất báo cáo hệ thống (PDF/CSV/Excel)\n(Export System Reports)" as UC_Admin_Export
-    usecase "Quản lý tri thức RAG & Cache\n(Manage RAG Knowledge & Cache)" as UC_Admin_RAG
+  package "Quản trị hệ thống (System Administration Portal)" {
+    usecase "Quản lý tài khoản thành viên\n(Manage User Accounts)" as UC_Admin_Users
+    usecase "Kiểm duyệt bài viết & Vi phạm\n(Moderate Posts & Reports)" as UC_Admin_Posts
+    usecase "Quản lý cẩm nang & Nạp tri thức RAG\n(Manage RAG Knowledge)" as UC_Admin_Knowledge
+    usecase "Xem Dashboard & Thống kê hệ thống\n(View Admin Dashboard)" as UC_Admin_Dash
   }
 
   ' ==========================================
-  ' RELATIONSHIPS BETWEEN USE CASES
+  ' RELATIONSHIPS BETWEEN USE CASES (UML 2.5)
   ' ==========================================
   
-  ' Extends
+  ' Include Relations
+  UC_Auth_Reg ..> UC_Auth_Verify : <<include>>
+  UC_Trip_Manage ..> UC_Trip_TSP : <<include>>
+  UC_Soc_Interact ..> UC_Soc_Feed : <<include>>
+
+  ' Extend Relations
   UC_Trip_AI ..> UC_Trip_Manage : <<extend>>
-  UC_Trip_TSP ..> UC_Trip_Manage : <<extend>>
+  UC_Trip_Clone ..> UC_Trip_Manage : <<extend>>
+  UC_Map_Route ..> UC_Map_Explore : <<extend>>
+  UC_AI_Food ..> UC_AI_Chat : <<extend>>
 
   ' Generalizations
   UC_Auth_PassLogin -|> UC_Auth_Login
@@ -113,59 +112,47 @@ rectangle "Nền tảng Trợ lý ảo Du lịch Thông minh Terraholic" as Terr
 
 ' Guest Associations
 Guest -- UC_Auth_Reg
-Guest -- UC_Auth_Verify
 Guest -- UC_Auth_Login
 Guest -- UC_Soc_Feed
-Guest -- UC_Map_View
-Guest -- UC_Map_Style
-Guest -- UC_Map_Search
-Guest -- UC_Map_Filter
-Guest -- UC_Map_Detail
-Guest -- UC_Map_ViewEvents
+Guest -- UC_Map_Explore
+Guest -- UC_AI_RAG
 
 ' Registered User Associations
 RegisteredUser -- UC_Auth_Pref
 RegisteredUser -- UC_Auth_Follow
 RegisteredUser -- UC_Trip_Manage
-RegisteredUser -- UC_Trip_History
 RegisteredUser -- UC_Trip_Custom
-RegisteredUser -- UC_Trip_Act
+RegisteredUser -- UC_Trip_History
 RegisteredUser -- UC_Soc_Posts
-RegisteredUser -- UC_Soc_Like
-RegisteredUser -- UC_Soc_Comment
-RegisteredUser -- UC_Soc_Bookmark
+RegisteredUser -- UC_Soc_Interact
+RegisteredUser -- UC_Soc_Match
 RegisteredUser -- UC_Map_Live
-RegisteredUser -- UC_Map_Route
 RegisteredUser -- UC_Map_Checkin
-RegisteredUser -- UC_Map_CreateEvent
+RegisteredUser -- UC_Map_Events
 RegisteredUser -- UC_AI_Chat
-RegisteredUser -- UC_AI_Conv
-RegisteredUser -- UC_AI_Regen
-RegisteredUser -- UC_AI_Feedback
-RegisteredUser -- UC_AI_Food
+RegisteredUser -- UC_AI_Sessions
 
 ' Admin Associations
+Admin -- UC_Admin_Users
+Admin -- UC_Admin_Posts
+Admin -- UC_Admin_Knowledge
 Admin -- UC_Admin_Dash
-Admin -- UC_Admin_BI
-Admin -- UC_Admin_Export
-Admin -- UC_Admin_RAG
 
 ' External Systems Connections
 UC_Auth_Reg -- SMTP
 UC_Auth_Verify -- SMTP
-UC_Auth_Login -- Firebase
+UC_Auth_GLogin -- Firebase
 UC_Auth_Pref -- AdminUnits
 
 UC_Trip_AI -- OpenAI
 UC_Soc_Posts -- Storage
 
-UC_Map_View -- OSM
-UC_Map_Style -- OSM
-UC_Map_Search -- OSM
+UC_Map_Explore -- OSM
 UC_Map_Route -- OSM
 UC_Map_Checkin -- Storage
 
 UC_AI_Chat -- OpenAI
-UC_AI_Regen -- OpenAI
+UC_Soc_Match -- OpenAI
 
 @enduml
+

@@ -9,6 +9,24 @@ interface WebGLPageCurlReaderProps {
   onPageChange: (page: number) => void;
 }
 
+function fixVietnameseDiacritics(text: string): string {
+  if (!text) return '';
+  let str = text.normalize('NFC');
+  str = str.replace(/a\u0300/g, 'à').replace(/a\u0301/g, 'á').replace(/a\u0303/g, 'ã').replace(/a\u0309/g, 'ả').replace(/a\u0323/g, 'ạ');
+  str = str.replace(/ă\u0300/g, 'ằ').replace(/ă\u0301/g, 'ắ').replace(/ă\u0303/g, 'ẵ').replace(/ă\u0309/g, 'ẳ').replace(/ă\u0323/g, 'ặ');
+  str = str.replace(/â\u0300/g, 'ầ').replace(/â\u0301/g, 'ấ').replace(/â\u0303/g, 'ẫ').replace(/â\u0309/g, 'ẩ').replace(/â\u0323/g, 'ậ');
+  str = str.replace(/e\u0300/g, 'è').replace(/e\u0301/g, 'é').replace(/e\u0303/g, 'ẽ').replace(/e\u0309/g, 'ẻ').replace(/e\u0323/g, 'ẹ');
+  str = str.replace(/ê\u0300/g, 'ề').replace(/ê\u0301/g, 'ế').replace(/ê\u0303/g, 'ễ').replace(/ê\u0309/g, 'ể').replace(/ê\u0323/g, 'ệ');
+  str = str.replace(/i\u0300/g, 'ì').replace(/i\u0301/g, 'í').replace(/i\u0303/g, 'ĩ').replace(/i\u0309/g, 'ỉ').replace(/i\u0323/g, 'ị');
+  str = str.replace(/o\u0300/g, 'ò').replace(/o\u0301/g, 'ó').replace(/o\u0303/g, 'õ').replace(/o\u0309/g, 'ỏ').replace(/o\u0323/g, 'ọ');
+  str = str.replace(/ô\u0300/g, 'ồ').replace(/ô\u0301/g, 'ố').replace(/ô\u0303/g, 'ỗ').replace(/ô\u0309/g, 'ổ').replace(/ô\u0323/g, 'ộ');
+  str = str.replace(/ơ\u0300/g, 'ờ').replace(/ơ\u0301/g, 'ớ').replace(/ơ\u0303/g, 'ỡ').replace(/ơ\u0309/g, 'ở').replace(/ơ\u0323/g, 'ợ');
+  str = str.replace(/u\u0300/g, 'ù').replace(/u\u0301/g, 'ú').replace(/u\u0303/g, 'ũ').replace(/u\u0309/g, 'ủ').replace(/u\u0323/g, 'ụ');
+  str = str.replace(/ư\u0300/g, 'ừ').replace(/ư\u0301/g, 'ứ').replace(/ư\u0303/g, 'ữ').replace(/ư\u0309/g, 'ử').replace(/ư\u0323/g, 'ự');
+  str = str.replace(/y\u0300/g, 'ỳ').replace(/y\u0301/g, 'ý').replace(/y\u0303/g, 'ỹ').replace(/y\u0309/g, 'ỷ').replace(/y\u0323/g, 'ỵ');
+  return str.normalize('NFC');
+}
+
 // Reusable single page sheet component supporting desktop spreads (left/right halves)
 const PageSheet = React.forwardRef<HTMLDivElement, { 
   title: string; 
@@ -28,10 +46,7 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
   const isLeft = half === 'left';
   const isRight = half === 'right';
 
-  // Normalize Unicode content to NFC canonical composition form.
-  // This merges base vowels and combining diacritics into single precomposed characters,
-  // preventing browsers from spacing them apart under text-justify (align: justify).
-  const normalizedContent = content.normalize('NFC');
+  const normalizedContent = fixVietnameseDiacritics(content);
 
   const cardStyle: React.CSSProperties = {
     position: 'absolute',
@@ -63,14 +78,17 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
     boxSizing: 'border-box',
   };
 
-  // Fixed column count to prevent wrapping and splitting words in half
+  // Fixed column count with native Segoe UI Vietnamese font stack
   const bodyStyle: React.CSSProperties = {
     columnCount: half === 'full' ? 1 : 2,
-    columnGap: '3rem',
+    columnFill: 'auto',
+    columnGap: '3.5rem',
     textAlign: 'justify',
     lineHeight: 1.8,
-    fontFamily: '"Times New Roman", Times, serif',
-    color: '#2C2621'
+    fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", -apple-system, sans-serif',
+    color: '#1e293b',
+    height: 'calc(100% - 55px)',
+    maxHeight: 'calc(100% - 55px)',
   };
 
   return (
@@ -98,12 +116,12 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
       )}
 
       {/* Styled content with book-grade typography */}
-      <div style={contentStyle} className="p-8 sm:p-10 flex flex-col justify-between h-full z-10 select-text">
+      <div style={contentStyle} className="p-8 sm:p-10 flex flex-col justify-between h-full z-10 select-text page-content">
         {isLeft && <div className="book-spine-left" />}
         {isRight && <div className="book-spine-right" />}
 
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-amber-900/10 pb-4 mb-3">
+        <div className="flex justify-between items-center border-b border-amber-900/10 pb-3 mb-2 shrink-0">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 font-sans">
             {title}
           </span>
@@ -112,9 +130,13 @@ const PageSheet = React.forwardRef<HTMLDivElement, {
           </span>
         </div>
 
-        {/* Book Body: warm ink text, justified columns, proper margins */}
-        <div className="my-5 flex-grow text-stone-800 text-[14.5px] sm:text-[15.5px] overflow-hidden" style={bodyStyle}>
-          {normalizedContent}
+        {/* Book Body: warm ink text, justified columns, column-fill: auto */}
+        <div className="my-1 flex-grow text-slate-800 text-[14px] sm:text-[15px] overflow-hidden book-spread" style={bodyStyle}>
+          {normalizedContent.split(/\n\s*\n/).map((para, pIdx) => (
+            <p key={pIdx} className="indent-6 mb-1.5 pb-0 leading-[1.8] text-justify font-sans text-slate-800 font-normal">
+              {para}
+            </p>
+          ))}
         </div>
       </div>
     </div>

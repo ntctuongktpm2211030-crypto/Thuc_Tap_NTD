@@ -5,45 +5,65 @@ export interface SearchResult {
   score: number;
 }
 
+export function removeVietnameseAccents(str: string): string {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase();
+}
+
 export const SearchEngine = {
   search(query: string): SearchResult[] {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
+    const rawQ = query.trim().toLowerCase();
+    if (!rawQ) return [];
 
+    const normQ = removeVietnameseAccents(rawQ);
     const all = KnowledgeEngine.loadAll();
     const results: SearchResult[] = [];
 
     for (const item of all) {
       let score = 0;
       const titleLower = item.title.toLowerCase();
-      const contentLower = item.content.toLowerCase();
-      const provinceLower = item.province.toLowerCase();
-      const subLower = item.subCategory.toLowerCase();
-      const nameLower = item.name.toLowerCase();
+      const titleNorm = removeVietnameseAccents(item.title);
 
-      // Priority scores based on query matching fields
-      if (nameLower === q) {
+      const contentLower = item.content.toLowerCase();
+      const contentNorm = removeVietnameseAccents(item.content);
+
+      const provinceLower = item.province.toLowerCase();
+      const provinceNorm = removeVietnameseAccents(item.province);
+
+      const subLower = item.subCategory.toLowerCase();
+      const subNorm = removeVietnameseAccents(item.subCategory);
+
+      const nameLower = item.name.toLowerCase();
+      const nameNorm = removeVietnameseAccents(item.name);
+
+      // Priority scores based on query matching fields (exact and accent-normalized)
+      if (nameLower === rawQ || nameNorm === normQ) {
         score += 100;
-      } else if (nameLower.includes(q)) {
+      } else if (nameLower.includes(rawQ) || nameNorm.includes(normQ)) {
+        score += 50;
+      }
+
+      if (provinceLower === rawQ || provinceNorm === normQ) {
+        score += 80;
+      } else if (provinceLower.includes(rawQ) || provinceNorm.includes(normQ)) {
         score += 40;
       }
 
-      if (provinceLower === q) {
-        score += 80;
-      } else if (provinceLower.includes(q)) {
+      if (subLower.includes(rawQ) || subNorm.includes(normQ)) {
         score += 30;
       }
 
-      if (subLower.includes(q)) {
+      if (titleLower.includes(rawQ) || titleNorm.includes(normQ)) {
         score += 20;
       }
 
-      if (titleLower.includes(q)) {
-        score += 15;
-      }
-
-      if (contentLower.includes(q)) {
-        score += 5;
+      if (contentLower.includes(rawQ) || contentNorm.includes(normQ)) {
+        score += 10;
       }
 
       if (score > 0) {
@@ -55,3 +75,4 @@ export const SearchEngine = {
     return results.sort((a, b) => b.score - a.score).slice(0, 30);
   }
 };
+

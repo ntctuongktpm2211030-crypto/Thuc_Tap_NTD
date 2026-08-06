@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Landmark, BookOpen, Compass, Search, Sparkles,
-  Loader2, FileText, ChevronRight
+  FileText, ChevronRight
 } from 'lucide-react';
 import { KnowledgeEngine, normalizeProvinceKey, parseJsonHandbookContent, type KnowledgeItem } from './KnowledgeEngine';
 import api from '../../services/api';
-import { SearchEngine } from './SearchEngine';
+import { SearchEngine, removeVietnameseAccents } from './SearchEngine';
 import blogVideo from '../../../../video.mp4';
 import { KineticText } from '../../components/ui/kinetic-text';
 import {
@@ -18,10 +18,20 @@ import { ETHNIC_IMAGES_MAPPING } from './EthnicGroupData';
 
 
 
+function normalizeParagraphs(text: string): string {
+  if (!text) return '';
+  const paragraphs = text.split(/\n\s*\n/);
+  const cleaned = paragraphs.map(p => {
+    return p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+  });
+  return cleaned.filter(Boolean).join('\n\n');
+}
+
 function renderFormattedContent(text: string) {
   if (!text) return null;
 
-  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const normalized = normalizeParagraphs(text);
+  const lines = normalized.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
 
   const parseInline = (str: string) => {
     const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -37,13 +47,13 @@ function renderFormattedContent(text: string) {
   };
 
   return (
-    <div className="space-y-2.5 w-full text-left my-2">
+    <div className="space-y-4 w-full text-left my-2">
       {lines.map((line, idx) => {
         // Headings (e.g. ### Heading)
         if (line.startsWith('#') || line.startsWith('###')) {
           const cleanHeading = line.replace(/^#+\s*/, '').trim();
           return (
-            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 w-full">
               <span>{cleanHeading}</span>
             </h4>
           );
@@ -53,9 +63,9 @@ function renderFormattedContent(text: string) {
         if (line.startsWith('•') || line.startsWith('-') || line.startsWith('* ')) {
           const content = line.replace(/^[•\-\*]\s*/, '').trim();
           return (
-            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-2.5 px-3.5 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors">
+            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
               <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1.5 shrink-0 shadow-sm" />
-              <span className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              <span className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
                 {parseInline(content)}
               </span>
             </div>
@@ -64,7 +74,7 @@ function renderFormattedContent(text: string) {
 
         // Standard Paragraph
         return (
-          <p key={idx} className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-normal">
+          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 font-normal w-full block text-justify sm:text-left">
             {parseInline(line)}
           </p>
         );
@@ -240,19 +250,25 @@ export default function ExploreHandbookHub() {
 
   const filteredEthnicGroups = useMemo(() => {
     if (!query.trim()) return ethnicGroups;
-    const q = query.toLowerCase().trim();
-    return ethnicGroups.filter((e: KnowledgeItem) => 
-      e.name.toLowerCase().includes(q) || 
-      e.title.toLowerCase().includes(q) || 
-      e.content.toLowerCase().includes(q)
-    );
-  }, [ethnicGroups, query]);
+    const rawQ = query.trim().toLowerCase();
+    const normQ = removeVietnameseAccents(rawQ);
 
-  // AI assistant states
-  const [aiQuestion, setAiQuestion] = useState('');
-  const [aiSelectedProvince, setAiSelectedProvince] = useState('');
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState('');
+    return ethnicGroups.filter((e: KnowledgeItem) => {
+      const nameL = e.name.toLowerCase();
+      const nameN = removeVietnameseAccents(e.name);
+      const titleL = e.title.toLowerCase();
+      const titleN = removeVietnameseAccents(e.title);
+      const contentL = e.content.toLowerCase();
+      const contentN = removeVietnameseAccents(e.content);
+      const subL = e.subCategory.toLowerCase();
+      const subN = removeVietnameseAccents(e.subCategory);
+
+      return nameL.includes(rawQ) || nameN.includes(normQ) ||
+             titleL.includes(rawQ) || titleN.includes(normQ) ||
+             contentL.includes(rawQ) || contentN.includes(normQ) ||
+             subL.includes(rawQ) || subN.includes(normQ);
+    });
+  }, [ethnicGroups, query]);
 
   // Loaded engine statistics
   const stats = useMemo(() => KnowledgeEngine.buildStatistics(), []);
@@ -334,20 +350,62 @@ export default function ExploreHandbookHub() {
       });
     }
 
-    // Real-time search query filtering on the grid
+    // Real-time search query filtering on the grid with relevance scoring
     if (query.trim()) {
-      const q = query.toLowerCase().trim();
-      list = list.filter((p: any) => {
+      const rawQ = query.trim().toLowerCase();
+      const normQ = removeVietnameseAccents(rawQ);
+
+      const scoredList: { prov: any; score: number }[] = [];
+
+      list.forEach((p: any) => {
         const provItems = KnowledgeEngine.getItemsForProvince(p.key);
-        const matchesName = p.name.toLowerCase().includes(q) || p.key.toLowerCase().includes(q);
-        const matchesTagline = p.tagline.toLowerCase().includes(q);
-        const matchesItems = provItems.some((i: KnowledgeItem) => 
-          i.name.toLowerCase().includes(q) || 
-          i.content.toLowerCase().includes(q) ||
-          i.subCategory.toLowerCase().includes(q)
-        );
-        return matchesName || matchesTagline || matchesItems;
+        const nameL = p.name.toLowerCase();
+        const nameN = removeVietnameseAccents(p.name);
+        const keyL = p.key.toLowerCase();
+        const keyN = removeVietnameseAccents(p.key);
+        const tagL = p.tagline.toLowerCase();
+        const tagN = removeVietnameseAccents(p.tagline);
+
+        let score = 0;
+
+        // Exact province name or key match gets highest score
+        if (nameL === rawQ || nameN === normQ || keyL === rawQ || keyN === normQ) {
+          score += 1000;
+        } else if (nameL.includes(rawQ) || nameN.includes(normQ) || keyL.includes(rawQ) || keyN.includes(normQ)) {
+          score += 500;
+        }
+
+        if (tagL.includes(rawQ) || tagN.includes(normQ)) {
+          score += 200;
+        }
+
+        const itemMatches = provItems.filter((i: KnowledgeItem) => {
+          const iNameL = i.name.toLowerCase();
+          const iNameN = removeVietnameseAccents(i.name);
+          const iContentL = i.content.toLowerCase();
+          const iContentN = removeVietnameseAccents(i.content);
+          const iSubL = i.subCategory.toLowerCase();
+          const iSubN = removeVietnameseAccents(i.subCategory);
+          const iProvL = (i.province || '').toLowerCase();
+          const iProvN = removeVietnameseAccents(i.province || '');
+
+          return (
+            iNameL.includes(rawQ) || iNameN.includes(normQ) ||
+            iContentL.includes(rawQ) || iContentN.includes(normQ) ||
+            iSubL.includes(rawQ) || iSubN.includes(normQ) ||
+            iProvL.includes(rawQ) || iProvN.includes(normQ)
+          );
+        });
+
+        score += itemMatches.length * 10;
+
+        if (score > 0) {
+          scoredList.push({ prov: p, score });
+        }
       });
+
+      scoredList.sort((a, b) => b.score - a.score);
+      list = scoredList.map(s => s.prov);
     }
 
     return list;
@@ -360,13 +418,10 @@ export default function ExploreHandbookHub() {
     return filteredProvinces.slice(start, start + itemsPerPage);
   }, [filteredProvinces, handbookPage]);
 
-  // Reset page when category changes
+  // Reset page when category or search query changes
   useEffect(() => {
     setHandbookPage(1);
-  }, [activeCategory]);
-
-  // For the AI select box we want all provinces regardless of category
-  const allProvincesForAi = useMemo(() => KnowledgeEngine.getProvincesList(), []);
+  }, [activeCategory, query]);
 
   // Clean canonical categories in Vietnamese without raw English tokens
   const categories = useMemo(() => {
@@ -377,24 +432,6 @@ export default function ExploreHandbookHub() {
   const searchResults = useMemo(() => {
     return SearchEngine.search(query);
   }, [query]);
-
-  // Handle AI consult
-  const handleAiConsult = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!aiQuestion.trim() || !aiSelectedProvince) return;
-
-    setAiLoading(true);
-    setAiResponse('');
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const { responseText, matchSource } = KnowledgeEngine.synthesizeAiAnswer(aiSelectedProvince, aiQuestion);
-      setAiResponse(`### 🤖 Phản hồi từ Trợ lý Ảo\n*Nguồn dữ liệu: ${matchSource}*\n\n${responseText}`);
-    } catch {
-      setAiResponse('Gặp lỗi khi liên kết với Trợ lý Ảo du lịch.');
-    } finally {
-      setAiLoading(false);
-    }
-  };
 
   return (
     <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans overflow-x-clip">
@@ -474,7 +511,13 @@ export default function ExploreHandbookHub() {
               {searchResults.map((res, idx) => (
                 <div
                   key={idx}
-                  onClick={() => navigate(`/explore/province/${res.item.province}`)}
+                  onClick={() => {
+                    if (res.item.subCategory?.toUpperCase() === 'DÂN TỘC' || res.item.province === 'Việt Nam') {
+                      setActiveEthnicModal(res.item);
+                    } else {
+                      navigate(`/explore/province/${res.item.province}`);
+                    }
+                  }}
                   className="flex items-center justify-between px-3 py-2.5 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl cursor-pointer text-xs"
                 >
                   <div>
@@ -514,10 +557,8 @@ export default function ExploreHandbookHub() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+        <div className="w-full space-y-6">
           {/* ── 4. PROVINCES & ETHNIC GROUPS CARDS GRID ── */}
-          <div className="lg:col-span-9 space-y-6">
             {activeCategory === 'DÂN TỘC' ? (
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -542,26 +583,37 @@ export default function ExploreHandbookHub() {
                   Bản Đồ Hành Chính & Thư Viện Địa Phương
                 </h3>
 
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
-                  {paginatedProvinces.map((prov: any) => (
-                    <ProvinceCard
-                      key={prov.key}
-                      prov={prov}
-                      meta={{
-                        images: prov.images,
-                        tagline: prov.tagline,
-                        category: prov.category,
-                      }}
-                      onNavigate={() => {
-                        if (activeCategory !== 'TẤT CẢ') {
-                          navigate(`/explore/province/${prov.key}?category=${encodeURIComponent(activeCategory)}`);
-                        } else {
-                          navigate(`/explore/province/${prov.key}`);
-                        }
-                      }}
-                    />
-                  ))}
-                </div>
+                {paginatedProvinces.length === 0 ? (
+                  <div className="text-center py-16 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 space-y-3 shadow-sm">
+                    <MapPin size={40} className="mx-auto text-slate-400 opacity-60" />
+                    <h4 className="text-base font-bold text-slate-900 dark:text-white">Không tìm thấy địa danh phù hợp</h4>
+                    <p className="text-xs text-slate-500 max-w-sm mx-auto">Không tìm thấy kết quả nào khớp với từ khóa "{query}". Vui lòng thử tìm với từ khóa khác.</p>
+                    <button onClick={() => setQuery('')} className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all cursor-pointer">
+                      Xóa từ khóa tìm kiếm
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
+                    {paginatedProvinces.map((prov: any) => (
+                      <ProvinceCard
+                        key={prov.key}
+                        prov={prov}
+                        meta={{
+                          images: prov.images,
+                          tagline: prov.tagline,
+                          category: prov.category,
+                        }}
+                        onNavigate={() => {
+                          if (activeCategory !== 'TẤT CẢ') {
+                            navigate(`/explore/province/${prov.key}?category=${encodeURIComponent(activeCategory)}`);
+                          } else {
+                            navigate(`/explore/province/${prov.key}`);
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 {/* Pagination Controls */}
                 {totalHandbookPages > 1 && (
@@ -612,67 +664,6 @@ export default function ExploreHandbookHub() {
                 )}
               </>
             )}
-          </div>
-
-          {/* ── 5. AI KNOWLEDGE ASSISTANT ── */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-24 self-start">
-            <div className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-5 space-y-4 relative overflow-hidden group">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[var(--gold)] text-white flex items-center justify-center font-bold">
-                  <Sparkles size={16} className="text-white" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-[var(--gold)]">TRỢ LÝ ẢO TRI THỨC</h4>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Trả lời nhanh mọi thắc mắc</p>
-                </div>
-              </div>
-
-              <form onSubmit={handleAiConsult} className="space-y-3">
-                <div>
-                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CHỌN TỈNH THÀNH</label>
-                  <select
-                    value={aiSelectedProvince}
-                    onChange={e => setAiSelectedProvince(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs text-slate-800 dark:text-white outline-none focus:border-[var(--gold)] cursor-pointer"
-                  >
-                    <option value="" className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">-- Lựa chọn tỉnh --</option>
-                    {allProvincesForAi.map((p: { key: string; name: string }) => (
-                      <option key={p.key} value={p.key} className="bg-white dark:bg-slate-950 text-slate-800 dark:text-white">{p.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">CÂU HỎI TRA CỨU</label>
-                  <textarea
-                    value={aiQuestion}
-                    onChange={e => setAiQuestion(e.target.value)}
-                    placeholder="VD: Núi Cấm ở đâu? có cảnh đẹp gi..."
-                    disabled={!aiSelectedProvince}
-                    className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[var(--gold)] resize-none h-24 disabled:opacity-40 transition-all"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={aiLoading || !aiQuestion.trim() || !aiSelectedProvince}
-                  className="w-full py-3 bg-[var(--gold)] hover:opacity-90 text-white font-black text-[11px] uppercase tracking-wider rounded-xl shadow-lg cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
-                >
-                  {aiLoading ? <Loader2 size={14} className="animate-spin text-white" /> : <Search size={14} className="text-white" />}
-                  TRA CỨU TRỢ LÝ ẢO
-                </button>
-              </form>
-
-              {aiResponse && (
-                <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-fade-in">
-                  <span className="text-[8px] font-black uppercase text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded border border-[var(--gold)]/20">KẾT QUẢ TRA CỨU</span>
-                  <div className="text-[11px] text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[240px] overflow-y-auto whitespace-pre-wrap">
-                    {renderFormattedContent(aiResponse)}
-                  </div>
-                </div>
-              )}
-            </div>
-          </aside>
         </div>
       </div>
 

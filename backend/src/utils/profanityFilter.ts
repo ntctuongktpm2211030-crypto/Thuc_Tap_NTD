@@ -65,6 +65,10 @@ export function normalizeTextForChecking(str: string): string {
     .trim();
 }
 
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * Động cơ Kiểm tra Từ Cấm Rộng Bao Hàm (Profanity Engine)
  */
@@ -86,14 +90,29 @@ export function checkContentViolation(text: string): {
       const kwLower = kw.toLowerCase();
       const kwNoAccents = removeVietnameseAccents(kwLower);
 
-      // 1. Quét khớp trực tiếp văn bản gốc
-      // 2. Quét khớp văn bản đã xóa ký tự lách luật (d.ấ.u c.ắ.m)
-      // 3. Quét khớp văn bản không dấu (co bac, tai xiu)
-      if (
-        rawLower.includes(kwLower) ||
-        normalizedText.includes(kwLower) ||
-        noAccentsText.includes(kwNoAccents)
-      ) {
+      let matched = false;
+
+      // 1. Với các từ cấm quá ngắn (≤ 3 ký tự như "ỉa", "đái"), bắt buộc kiểm tra theo Ranh giới từ (Word Boundary)
+      // để tránh bắt nhầm các từ tiếng Việt hợp lệ (VD: "Gia Lai", "nhiều", "tham gia", "địa điểm" chứa "ia")
+      if (kwNoAccents.length <= 3) {
+        const rawRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])${escapeRegExp(kwLower)}(?:$|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])`, 'i');
+        const noAccentsRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_])${escapeRegExp(kwNoAccents)}(?:$|\\s|[^a-zA-Z0-9_])`, 'i');
+
+        if (rawRegex.test(rawLower) || noAccentsRegex.test(noAccentsText)) {
+          matched = true;
+        }
+      } else {
+        // 2. Với các cụm từ dài (như "cờ bạc", "tài xỉu", "ma túy"), áp dụng quét bao hàm rộng
+        if (
+          rawLower.includes(kwLower) ||
+          normalizedText.includes(kwLower) ||
+          noAccentsText.includes(kwNoAccents)
+        ) {
+          matched = true;
+        }
+      }
+
+      if (matched) {
         let categoryName = 'Nội dung vi phạm tiêu chuẩn cộng đồng';
         if (categoryKey === 'GAMBLING_SPAM') categoryName = 'Cờ bạc / Lừa đảo tài chính / Số đề';
         if (categoryKey === 'PROFANITY') categoryName = 'Ngôn từ thô tục / Xúc phạm';

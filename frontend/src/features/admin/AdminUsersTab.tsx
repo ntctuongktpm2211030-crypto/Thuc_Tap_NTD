@@ -22,56 +22,8 @@ interface UserItem {
   };
 }
 
-const sampleFallbackUsers: UserItem[] = [
-  {
-    id: 'usr-tuong',
-    email: 'tuong.nguyen@terraholic.com',
-    role: 'ADMIN',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 240).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-    profile: { fullName: 'Tường Nguyễn', avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80' }
-  },
-  {
-    id: 'usr-hanngoc',
-    email: 'hanngoc@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 180).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-    profile: { fullName: 'Hân Ngọc', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' }
-  },
-  {
-    id: 'usr-linh',
-    email: 'linh.nguyen@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 120).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 120).toISOString(),
-    profile: { fullName: 'Thùy Linh', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80' }
-  },
-  {
-    id: 'usr-hahoang',
-    email: 'hahoang@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 90).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-    profile: { fullName: 'Hà Hoàng', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80' }
-  },
-  {
-    id: 'usr-minhquan',
-    email: 'minhquan@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 60).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    profile: { fullName: 'Minh Quân', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80' }
-  }
-];
-
 export const AdminUsersTab: React.FC = () => {
-  const [users, setUsers] = useState<UserItem[]>(() => sampleFallbackUsers);
+  const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [actionMsg, setActionMsg] = useState('');
@@ -91,6 +43,24 @@ export const AdminUsersTab: React.FC = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    let loadedUsers: UserItem[] = [];
+    try {
+      const res = await api.get('/admin/users').catch(async () => {
+        return await axios.get('/api/v1/admin/users').catch(() => null);
+      });
+      if (res?.data && Array.isArray(res.data.data)) {
+        loadedUsers = res.data.data;
+      }
+    } catch (err) {
+      console.error('Failed to load users:', err);
+    } finally {
+      setUsers(loadedUsers);
+      setLoading(false);
+    }
+  };
 
   // Confirm Role Modal state
   const [roleModalUser, setRoleModalUser] = useState<UserItem | null>(null);
@@ -165,30 +135,6 @@ export const AdminUsersTab: React.FC = () => {
           <AlertTriangle size={12} className="text-rose-600" /> {diffMonths || 1} tháng chưa truy cập
         </span>
       );
-    }
-  };
-
-  const fetchUsers = async () => {
-    setLoading(true);
-    let loadedUsers: UserItem[] = [];
-    try {
-      const res = await axios.get('/api/v1/admin/users').catch(() => null);
-      if (res?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        loadedUsers = res.data.data;
-      } else {
-        const fallbackRes = await api.get('/admin/users').catch(() => null);
-        if (fallbackRes?.data?.data && Array.isArray(fallbackRes.data.data)) {
-          loadedUsers = fallbackRes.data.data;
-        }
-      }
-    } catch (err) {
-      console.error('Failed to load users:', err);
-    } finally {
-      if (loadedUsers.length === 0) {
-        loadedUsers = sampleFallbackUsers;
-      }
-      setUsers(loadedUsers);
-      setLoading(false);
     }
   };
 

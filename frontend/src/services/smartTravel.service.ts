@@ -113,6 +113,12 @@ export const authService = {
     return raw ? JSON.parse(raw) : null;
   },
 
+  LuuUser: (user: any) => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  },
+
   DaDangNhap: () => !!localStorage.getItem('accessToken'),
 
   // Alias tương thích ngược
@@ -222,6 +228,8 @@ export const postsService = {
 export const mapService = {
   DiemDanh: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
     apiClient.post('/map/checkin', { destinationId, note, customName, latitude, longitude }).then(r => r.data),
+  LayDanhSachCheckinCuaToi: () =>
+    apiClient.get('/map/checkins/my').then(r => r.data),
   DiemDanhGanDay: (limit?: number) =>
     apiClient.get('/map/checkins', { params: { limit } }).then(r => r.data),
   DiemDanhLanCan: (lat: number, lng: number, radius?: number) =>
@@ -245,6 +253,7 @@ export const mapService = {
   // Alias tương thích ngược
   checkIn: (destinationId: string, note?: string, customName?: string, latitude?: number, longitude?: number) =>
     mapService.DiemDanh(destinationId, note, customName, latitude, longitude),
+  myCheckins: () => mapService.LayDanhSachCheckinCuaToi(),
   recentCheckins: (limit?: number) => mapService.DiemDanhGanDay(limit),
   nearbyCheckins: (lat: number, lng: number, radius?: number) => mapService.DiemDanhLanCan(lat, lng, radius),
   updateLocation: (latitude: number, longitude: number) => mapService.CapNhatToaDo(latitude, longitude),
@@ -283,7 +292,7 @@ export const socialService = {
   CapNhatHauDai: (data: { fullName?: string; bio?: string; avatarUrl?: string; coverUrl?: string; homeLocation?: string }) =>
     apiClient.put('/social/profile', data).then(r => r.data),
   TheoDoiNguoiDung: (targetUserId: string) =>
-    apiClient.post<{ following: boolean }>(`/social/follow/${targetUserId}`).then(r => r.data),
+    apiClient.post<{ following: boolean; followersCount?: number }>(`/social/follow/${targetUserId}`).then(r => r.data),
   LayNguoiTheoDoi: (userId: string) =>
     apiClient.get(`/social/followers/${userId}`).then(r => r.data),
   LayDangTheoDoi: (userId: string) =>

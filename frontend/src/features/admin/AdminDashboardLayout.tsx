@@ -95,13 +95,6 @@ export const AdminDashboardLayout: React.FC = () => {
   };
 
   useEffect(() => {
-    // Verify admin token
-    const token = localStorage.getItem('st-admin-token') || localStorage.getItem('st-token');
-    if (!token) {
-      navigate('/admin/login');
-      return;
-    }
-
     const savedUser = localStorage.getItem('st-user');
     if (savedUser) {
       try {

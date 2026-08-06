@@ -24,7 +24,8 @@ function normalizeParagraphs(text: string): string {
 function renderFormattedContent(text: string) {
   if (!text) return null;
 
-  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const normalized = normalizeParagraphs(text);
+  const lines = normalized.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
 
   const parseInline = (str: string) => {
     const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -40,13 +41,13 @@ function renderFormattedContent(text: string) {
   };
 
   return (
-    <div className="space-y-2.5 w-full text-left my-2">
+    <div className="space-y-4 w-full text-left my-2">
       {lines.map((line, idx) => {
         // Headings (e.g. ### Heading)
         if (line.startsWith('#') || line.startsWith('###')) {
           const cleanHeading = line.replace(/^#+\s*/, '').trim();
           return (
-            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 w-full">
               <span>{cleanHeading}</span>
             </h4>
           );
@@ -56,9 +57,9 @@ function renderFormattedContent(text: string) {
         if (line.startsWith('•') || line.startsWith('-') || line.startsWith('* ')) {
           const content = line.replace(/^[•\-\*]\s*/, '').trim();
           return (
-            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-2.5 px-3.5 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors">
+            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
               <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1.5 shrink-0 shadow-sm" />
-              <span className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              <span className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
                 {parseInline(content)}
               </span>
             </div>
@@ -67,7 +68,7 @@ function renderFormattedContent(text: string) {
 
         // Standard Paragraph
         return (
-          <p key={idx} className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-normal">
+          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 font-normal w-full block text-justify sm:text-left">
             {parseInline(line)}
           </p>
         );
@@ -290,21 +291,33 @@ export default function ProvinceDetailPage() {
 
   const overviewPages = useMemo(() => {
     if (!overviewItem) return [];
-    const cleanText = overviewItem.content.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+    const rawText = overviewItem.content || '';
+    const cleanText = rawText.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!cleanText) return [];
+
     const words = cleanText.split(' ').filter(Boolean);
-    
-    // ~330 words per page fills both 2 columns in larger book layout
-    const wordsPerPage = 330;
-    if (words.length <= wordsPerPage) {
+    const totalWords = words.length;
+    if (totalWords === 0) return [];
+
+    // Capacity of 1 2-page spread with column-fill: auto is ~480-520 words
+    const maxWordsPerSpread = 480;
+
+    // If text fits in 1 spread (with elasticity up to ~520 words), pack all into 1 spread
+    if (totalWords <= 520) {
       return [cleanText];
     }
 
+    // Pack text greedily: Fill Spread 1 100% to capacity before spilling into Spread 2, etc.
     const pages: string[] = [];
-    for (let i = 0; i < words.length; i += wordsPerPage) {
-      pages.push(words.slice(i, i + wordsPerPage).join(' '));
+    for (let i = 0; i < totalWords; i += maxWordsPerSpread) {
+      const chunk = words.slice(i, i + maxWordsPerSpread).join(' ');
+      if (chunk.trim()) {
+        pages.push(chunk);
+      }
     }
 
-    return pages;
+    // Prune any empty trailing spreads automatically
+    return pages.filter(p => p.trim().length > 0);
   }, [overviewItem]);
 
   // currentOverviewText memo removed since pages array is passed directly to BookPageReader

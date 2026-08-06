@@ -3,15 +3,19 @@ import { socialService } from '../../services/smartTravel.service';
 
 interface Props {
   authorId?: string;
+  authorEmail?: string;
+  authorName?: string;
   currentUserId?: string;
   isFollowing: boolean;
   onFollowChange: (authorId: string, following: boolean) => void;
   requireAuth: (returnPath: string) => boolean;
 }
 
-/** Nút Theo dõi kiểu Instagram — chỉ hiện khi chưa theo dõi và không phải bài của mình */
+/** Nút Theo dõi kiểu Instagram — chỉ hiện khi chưa theo dõi và không phải bài của mình hay tài khoản Admin */
 export default function AuthorFollowButton({
   authorId,
+  authorEmail,
+  authorName,
   currentUserId,
   isFollowing,
   onFollowChange,
@@ -19,7 +23,9 @@ export default function AuthorFollowButton({
 }: Props) {
   const [loading, setLoading] = useState(false);
 
-  if (!authorId || !currentUserId || authorId === currentUserId || isFollowing) {
+  const isAdmin = authorEmail === 'admin@terraholic.com' || authorName?.toLowerCase().includes('administrator');
+
+  if (!authorId || !currentUserId || authorId === currentUserId || isFollowing || isAdmin) {
     return null;
   }
 

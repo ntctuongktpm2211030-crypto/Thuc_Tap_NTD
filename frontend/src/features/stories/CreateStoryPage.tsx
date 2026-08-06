@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import {
-  MapPin, DollarSign, Users, Calendar,
+  MapPin, Users, Calendar,
   ChevronRight, ChevronLeft, Upload, X, Plus, Star, Globe,
   Lock, UserCheck, Clock,
   Check, Eye, Send, Loader2,
@@ -249,9 +249,9 @@ const Step1Story = ({
             {FEED_DISPLAY_OPTIONS.map(opt => {
               const selected = data.displayType === opt.id;
               const bgImages: Record<string, string> = {
-                social: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80',
-                magazine: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80',
-                hero: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=400&q=80'
+                social: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=90',
+                magazine: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=90',
+                hero: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1600&q=90'
               };
               return (
                 <button
@@ -803,8 +803,15 @@ const Step2Photos = ({ data, onChange }: { data: StoryData; onChange: (d: Partia
       </div>
 
       {uploadError && (
-        <div className="flex items-center gap-2 text-rose-400 text-xs p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl">
-          <AlertCircle size={14} /> {uploadError}
+        <div className="p-4 bg-rose-500/10 border-2 border-rose-500/40 rounded-2xl text-xs text-rose-500 font-medium flex items-start gap-3 shadow-md">
+          <AlertCircle size={18} className="shrink-0 mt-0.5 text-rose-500" />
+          <div className="flex-1">
+            <p className="font-bold text-sm text-rose-600 dark:text-rose-400 mb-1">⚠️ Dung lượng tệp không hợp lệ</p>
+            <p className="text-slate-700 dark:text-rose-200 leading-relaxed">{uploadError}</p>
+          </div>
+          <button type="button" onClick={() => setUploadError('')} className="p-1 hover:bg-rose-500/20 rounded-lg text-rose-400 transition-colors">
+            <X size={14} />
+          </button>
         </div>
       )}
 
@@ -1108,11 +1115,24 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
         <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngân sách tổng</label>
         <div className="flex gap-2">
           <div className="input-premium flex items-center p-0 gap-0 overflow-hidden focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold-glow)] transition-all w-full">
-            <div className="pl-3 text-[var(--text-muted)] flex-shrink-0 flex items-center justify-center">
-              <DollarSign size={15} />
+            <div className="pl-3 text-[var(--text-muted)] flex-shrink-0 flex items-center justify-center font-bold text-sm">
+              {data.currency === 'USD' ? '$' : data.currency === 'EUR' ? '€' : data.currency === 'JPY' ? '¥' : '₫'}
             </div>
-            <input type="number" value={data.budget} onChange={e => onChange({ budget: e.target.value })}
-              placeholder="5,000,000"
+            <input 
+              type="text" 
+              inputMode="numeric"
+              value={data.budget ? Number(String(data.budget).replace(/\D/g, '')).toLocaleString('vi-VN') : ''} 
+              onChange={e => {
+                const raw = e.target.value;
+                const digitsOnly = raw.replace(/\D/g, '');
+                if (!digitsOnly) {
+                  onChange({ budget: '' });
+                  return;
+                }
+                const cleaned = digitsOnly.replace(/^0+(?=\d)/, '');
+                onChange({ budget: cleaned });
+              }}
+              placeholder="200.000.000"
               className="w-full bg-transparent border-none outline-none py-3 pl-2 pr-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]" />
             <div className="h-6 w-[1px] bg-slate-300 dark:bg-slate-700 flex-shrink-0"></div>
             <select value={data.currency} onChange={e => onChange({ currency: e.target.value })}
@@ -1950,18 +1970,30 @@ export default function CreateStoryPage() {
       if (axios.isAxiosError(err)) {
         statusCode = err.response?.status;
         const resData = err.response?.data as any;
-        const fullMsg = `${message} ${details || ''}`.toLowerCase();
+        const fullRawMsg = JSON.stringify(resData || '').toLowerCase() + (err.message || '').toLowerCase();
+        
         const isTooLarge =
           statusCode === 413 ||
-          fullMsg.includes('too large') ||
-          fullMsg.includes('payload too large') ||
-          fullMsg.includes('entity too large');
+          fullRawMsg.includes('too large') ||
+          fullRawMsg.includes('payload too large') ||
+          fullRawMsg.includes('entity too large');
+
+        const isServerError =
+          statusCode === 500 ||
+          fullRawMsg.includes('prisma') ||
+          fullRawMsg.includes('closed the connection') ||
+          fullRawMsg.includes('p1017');
 
         if (isTooLarge) {
           statusCode = 413;
-          title = 'Tệp Video / Hình Ảnh Quá Dung Lượng';
-          message = 'Video hoặc hình ảnh bạn tải lên quá lớn, vượt quá giới hạn bộ nhớ hệ thống cho phép.';
-          details = 'Tải lên thất bại: request entity too large (payload vượt quá giới hạn bộ nhớ server)';
+          title = '⚠️ Dung Lượng Tệp Video / Hình Ảnh Vượt Quá Giới Hạn';
+          message = 'Dung lượng tệp media (ảnh hoặc video) bạn chọn quá lớn, vượt quá giới hạn hệ thống. Vui lòng kiểm tra dung lượng từng tệp: Tối đa 10 MB cho mỗi ảnh và 100 MB cho mỗi video.';
+          details = 'Tải lên thất bại (Mã 413 Payload Too Large): Gói dữ liệu vượt kích thước tối đa cho phép của hệ thống. Gợi ý: Hãy thử nén ảnh/video hoặc bỏ bớt các tệp video dung lượng quá cao.';
+        } else if (isServerError) {
+          statusCode = 500;
+          title = 'Sự Cố Kết Nối Máy Chủ (HTTP 500)';
+          message = 'Hệ thống tạm thời gặp sự cố kết nối máy chủ hoặc cơ sở dữ liệu. Bài viết của bạn chưa thể lưu thành công.';
+          details = 'Vui lòng thử lại sau vài giây hoặc kiểm tra lại đường truyền mạng. Bản nháp bài viết của bạn vẫn được tự động bảo lưu an toàn!';
         } else if (resData) {
           if (typeof resData === 'string') {
             message = resData;

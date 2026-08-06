@@ -57,7 +57,14 @@ export default function UserMenuDropdown({ onLogout }: UserMenuDropdownProps) {
         aria-haspopup="true"
       >
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-blue-700 flex items-center justify-center text-xs font-black text-white flex-shrink-0">
-          <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full rounded-full object-cover" />
+          <img
+            src={user.avatarUrl || user.profile?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=0D9488&color=fff`}
+            alt=""
+            className="w-full h-full rounded-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=0D9488&color=fff`;
+            }}
+          />
         </div>
         <span className="text-xs font-semibold text-[var(--text-primary)] hidden lg:block max-w-[100px] truncate">
           {user.fullName}
@@ -69,7 +76,14 @@ export default function UserMenuDropdown({ onLogout }: UserMenuDropdownProps) {
         <div className="user-menu-panel" role="menu">
           <div className="user-menu-header">
             <div className="user-menu-avatar overflow-hidden">
-              <img src={user.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover" />
+              <img
+                src={user.avatarUrl || user.profile?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=0D9488&color=fff`}
+                alt=""
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=0D9488&color=fff`;
+                }}
+              />
             </div>
             <div className="min-w-0">
               <p className="user-menu-name">{user.fullName}</p>

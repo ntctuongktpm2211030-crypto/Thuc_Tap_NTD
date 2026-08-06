@@ -586,12 +586,21 @@ const MapDashboard = () => {
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
-    const socketUrl = import.meta.env.VITE_API_URL 
-      ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
-      : window.location.origin;
-      
-    const socket = io(socketUrl, {
-      transports: ['websocket']
+    const getSocketUrl = (): string => {
+      const envUrl = import.meta.env.VITE_API_URL;
+      if (envUrl && typeof envUrl === 'string' && envUrl.startsWith('http')) {
+        return envUrl.replace(/\/api\/v1\/?$/, '');
+      }
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      const hostname = window.location.hostname || 'localhost';
+      return `${protocol}//${hostname}:5000`;
+    };
+
+    const socket = io(getSocketUrl(), {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
     });
 
     socketRef.current = socket;

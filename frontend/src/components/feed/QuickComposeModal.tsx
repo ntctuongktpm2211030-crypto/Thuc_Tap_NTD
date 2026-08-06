@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { RippleButton } from '@/components/ui/ripple-button';
 import { useSelector } from 'react-redux';
-import { X, ImagePlus, MapPin, Send, Navigation, Trash2, Loader2 } from 'lucide-react';
+import { X, ImagePlus, MapPin, Send, Navigation, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import type { RootState } from '../../store';
 import LocationMapPicker from '../Map/LocationMapPicker';
 import { validateImage, createPreviewUrl, revokePreviewUrl, resolveMediaUrl } from '../../utils/mediaUtils';
@@ -12,9 +12,6 @@ import { postsService } from '../../services/smartTravel.service';
 
 const MAX_PHOTOS = 2;
 const MIN_CONTENT = 10;
-
-const DEFAULT_AVATAR =
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80';
 
 interface Props {
   open: boolean;
@@ -185,7 +182,7 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
   if (!open) return null;
 
   const authorName = user?.fullName || 'Bạn';
-  const avatar = user?.avatarUrl || DEFAULT_AVATAR;
+  const avatar = user?.avatarUrl || user?.profile?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=0D9488&color=fff`;
 
   return (
     <div className="quick-compose-backdrop" role="presentation">
@@ -205,7 +202,14 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
           <div className="quick-compose-preview">
             <div className="post-card quick-compose-preview-card">
               <div className="flex items-center gap-3 p-4 pb-3">
-                <img src={avatar} alt="" className="w-11 h-11 rounded-full object-cover ring-2 ring-[var(--border-normal)]" />
+                <img
+                  src={avatar}
+                  alt=""
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-[var(--border-normal)]"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=0D9488&color=fff`;
+                  }}
+                />
                 <div>
                   <p className="text-sm font-bold text-[var(--text-primary)]">{authorName}</p>
                   <p className="text-[11px] text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5">
@@ -287,7 +291,12 @@ export default function QuickComposeModal({ open, onClose, onPublished, labels }
                   <span className="text-sm font-semibold">Chọn 1–2 ảnh chia sẻ</span>
                 </button>
               )}
-              {uploadError && <p className="text-xs text-rose-400 mt-1">{uploadError}</p>}
+              {uploadError && (
+                <div className="mt-2 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-500 flex items-center gap-2">
+                  <AlertCircle size={14} className="shrink-0 text-rose-500" />
+                  <span>{uploadError}</span>
+                </div>
+              )}
             </div>
 
             <div className="quick-compose-section">

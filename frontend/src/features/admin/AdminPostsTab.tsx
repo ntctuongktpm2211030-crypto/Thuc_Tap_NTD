@@ -28,56 +28,6 @@ interface AdminPostItem {
   };
 }
 
-const sampleFallbackPosts = [
-  {
-    id: 'post-reported-demo',
-    content: 'Nhận kéo bài phượt, bán số đề chuẩn 100% trúng thưởng lớn, inbox làm giàu nhanh chóng!',
-    destination: 'Đà Lạt',
-    mediaUrls: [],
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    author: { email: 'rac_spam@gmail.com', profile: { fullName: 'Tài khoản Spam' } },
-    _count: { likes: 0, comments: 1 },
-    isReported: true,
-    reportReason: 'Quảng cáo lừa đảo / Cờ bạc giả mạo'
-  },
-  {
-    id: 'post-sapa-1',
-    content: 'Sapa – vùng đất mờ sương thuộc tỉnh Lào Cai – luôn mang lại cho du khách niềm ngơ ngàng và xúc động mạnh liệt trước một bức tranh thiên nhiên hùng vĩ.',
-    destination: 'Sapa — Apao Homestay',
-    mediaUrls: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: new Date(Date.now() - 3600000 * 72).toISOString(),
-    author: { email: 'hanngoc@terraholic.com', profile: { fullName: 'Hân Ngọc' } },
-    _count: { likes: 12, comments: 4 }
-  },
-  {
-    id: 'post-tuong-1',
-    content: 'Chuyến đi khám phá vẻ đẹp Sa Pa cùng bản Cát Cát và đỉnh Fansipan 3.143m tuyệt đẹp!',
-    destination: 'Sapa — Apao Homestay',
-    mediaUrls: ['https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    author: { email: 'tuong.nguyen@terraholic.com', profile: { fullName: 'Tường Nguyễn' } },
-    _count: { likes: 28, comments: 6 }
-  },
-  {
-    id: 'post-dalat-1',
-    content: 'Đà Lạt mùa dã quỳ nở vàng rực khắp các nẻo đường Cô Bắc, Cầu Đất và Hồ Tuyền Lâm.',
-    destination: 'Đà Lạt — Cô Bắc (5 điểm)',
-    mediaUrls: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-    author: { email: 'tuong.nguyen@terraholic.com', profile: { fullName: 'Tường Nguyễn' } },
-    _count: { likes: 35, comments: 9 }
-  },
-  {
-    id: 'post-hagiang-1',
-    content: 'Hành trình chinh phục Cổng Trời Quản Bạ và ngắm dòng sông Nho Quế xanh ngắt tại Hà Giang.',
-    destination: 'Cổng Trời Quản Bạ, Hà Giang',
-    mediaUrls: ['https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: new Date(Date.now() - 3600000 * 96).toISOString(),
-    author: { email: 'linh.nguyen@terraholic.com', profile: { fullName: 'Thùy Linh' } },
-    _count: { likes: 45, comments: 11 }
-  }
-];
-
 const parsePostPayload = (post: any): AdminPostItem => {
   if (!post || typeof post !== 'object') {
     return {
@@ -167,9 +117,7 @@ const parsePostPayload = (post: any): AdminPostItem => {
 };
 
 export const AdminPostsTab: React.FC = () => {
-  const [posts, setPosts] = useState<AdminPostItem[]>(() =>
-    sampleFallbackPosts.map(parsePostPayload)
-  );
+  const [posts, setPosts] = useState<AdminPostItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'media' | 'location' | 'reported'>('all');
@@ -185,31 +133,40 @@ export const AdminPostsTab: React.FC = () => {
     setLoading(true);
     let rawList: any[] = [];
     try {
-      // Execute Admin API & Feed API in parallel with fast 2.5s timeout
+      // Execute Admin API & Feed API in parallel using authenticated api client with multi-endpoint fallback
       const [adminRes, feedRes] = await Promise.allSettled([
-        api.get('/admin/posts', { timeout: 2500 }).catch(async () => {
-          return await axios.get('/api/v1/admin/posts', { timeout: 2500 });
+        api.get('/admin/posts', { timeout: 8000 }).catch(async () => {
+          return await axios.get('/api/v1/admin/posts', { timeout: 8000 }).catch(async () => {
+            return await axios.get('http://localhost:5000/api/v1/admin/posts', { timeout: 8000 }).catch(() => null);
+          });
         }),
-        api.get('/posts?limit=100', { timeout: 2500 }).catch(async () => {
-          return await axios.get('/api/v1/posts?limit=100', { timeout: 2500 });
+        api.get('/posts?limit=100', { timeout: 8000 }).catch(async () => {
+          return await axios.get('/api/v1/posts?limit=100', { timeout: 8000 }).catch(async () => {
+            return await axios.get('http://localhost:5000/api/v1/posts?limit=100', { timeout: 8000 }).catch(() => null);
+          });
         })
       ]);
 
-      if (adminRes.status === 'fulfilled' && adminRes.value.data && Array.isArray(adminRes.value.data.data)) {
-        rawList = [...adminRes.value.data.data];
+      if (adminRes.status === 'fulfilled' && adminRes.value?.data) {
+        const adminData = Array.isArray(adminRes.value.data.data)
+          ? adminRes.value.data.data
+          : (Array.isArray(adminRes.value.data) ? adminRes.value.data : []);
+        if (adminData.length > 0) {
+          rawList = [...adminData];
+        }
       }
 
-      if (feedRes.status === 'fulfilled' && feedRes.value.data) {
+      if (feedRes.status === 'fulfilled' && feedRes.value?.data) {
         const postsData = feedRes.value.data?.posts || feedRes.value.data?.data || (Array.isArray(feedRes.value.data) ? feedRes.value.data : []);
         if (Array.isArray(postsData) && postsData.length > 0) {
           rawList = [...rawList, ...postsData];
         }
       }
     } catch (err) {
-      console.warn('Fast fetch used fallback:', err);
+      console.warn('Admin posts fetch:', err);
     }
 
-    // 3. Synchronize with local storage reported posts cache
+    // Synchronize with local storage reported posts cache
     let localReported: any[] = [];
     try {
       const cachedStr = localStorage.getItem('terraholic_reported_posts');
@@ -220,7 +177,7 @@ export const AdminPostsTab: React.FC = () => {
       console.warn('Failed to parse local reported posts:', e);
     }
 
-    // 4. Safely map and preserve 100% of posts
+    // Safely map and preserve 100% of posts
     const uniqueMap = new Map<string, any>();
     rawList.forEach(item => {
       if (item && (item.id || item._id)) {

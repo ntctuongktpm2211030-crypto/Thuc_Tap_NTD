@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Settings, Globe, Bell, Shield, Sliders, Save, Loader2, Plus, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Settings, Globe, Bell, Shield, Sliders, Save, Loader2, Plus, X, User, CheckCircle } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { authService, socialService } from '../../services/smartTravel.service';
-import type { RootState } from '../../store';
+import type { RootState, AppDispatch } from '../../store';
+import { setUser } from '../../store/authSlice';
 
 export default function SettingsPage() {
   const { t, lang, setLang } = useLang();
   const { isDark, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((s: RootState) => s.auth.user);
   const vi = lang === 'vi';
+
+  // ─── Profile Info State ───────────────────────────────
+  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [bio, setBio] = useState(user?.bio || user?.profile?.bio || '');
+  const [homeLocation, setHomeLocation] = useState(user?.homeLocation || user?.profile?.homeLocation || '');
 
   // ─── Travel Preferences State ─────────────────────────
   const [preferredPace, setPreferredPace] = useState<string>('moderate');
@@ -25,9 +33,22 @@ export default function SettingsPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
 
   useEffect(() => {
+    if (user?.id) {
+      socialService.getProfile(user.id)
+        .then(data => {
+          if (data) {
+            setFullName(data.profile?.fullName || data.fullName || user.fullName || '');
+            setBio(data.profile?.bio || user.bio || '');
+            setHomeLocation(data.profile?.homeLocation || user.homeLocation || '');
+          }
+        })
+        .catch(() => {});
+    }
+
     authService.me()
       .then(data => {
         if (data.preferences) {
@@ -42,7 +63,7 @@ export default function SettingsPage() {
         console.error('Fetch preferences failed:', err);
         setLoading(false);
       });
-  }, []);
+  }, [user?.id]);
 
   const handleAddItem = (
     value: string,
@@ -69,21 +90,44 @@ export default function SettingsPage() {
     e.preventDefault();
     setSaving(true);
     setMessage(null);
+    setShowSuccessModal(false);
     try {
+      // Update Profile Details
+      await socialService.updateProfile({
+        fullName,
+        bio,
+        homeLocation,
+      });
+
+      // Update Travel Preferences
       await socialService.updatePreferences({
         preferredPace,
         activities,
         destinationTypes,
         foodPreferences,
       });
-      setMessage({
-        text: vi ? 'Cập nhật sở thích du lịch thành công!' : 'Travel preferences updated successfully!',
-        isError: false,
-      });
+
+      // Sync Redux
+      if (user) {
+        dispatch(setUser({
+          ...user,
+          fullName,
+          bio,
+          homeLocation,
+          profile: {
+            ...(user.profile || {}),
+            fullName,
+            bio,
+            homeLocation,
+          }
+        }));
+      }
+
+      setShowSuccessModal(true);
     } catch (err: any) {
-      console.error('Update preferences failed:', err);
+      console.error('Update settings failed:', err);
       setMessage({
-        text: vi ? 'Cập nhật sở thích du lịch thất bại.' : 'Failed to update travel preferences.',
+        text: vi ? 'Cập nhật thất bại. Vui lòng thử lại.' : 'Failed to save settings.',
         isError: true,
       });
     } finally {
@@ -185,6 +229,56 @@ export default function SettingsPage() {
                 {message.text}
               </div>
             )}
+
+            {/* Section: Thông tin cá nhân */}
+            <div className="pb-6 border-b border-[var(--border-subtle)] space-y-4">
+              <h3 className="text-sm font-extrabold uppercase tracking-wider text-[var(--gold)] flex items-center gap-2">
+                <User size={16} />
+                {vi ? 'THÔNG TIN CÁ NHÂN' : 'PERSONAL INFORMATION'}
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                    {vi ? 'Họ và tên' : 'Full Name'}
+                  </label>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={e => setFullName(e.target.value)}
+                    placeholder={vi ? 'Nhập họ và tên...' : 'Enter full name...'}
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-semibold focus:outline-none focus:border-[var(--gold)]"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                    {vi ? 'Quê quán / Vị trí' : 'Home Location'}
+                  </label>
+                  <input
+                    type="text"
+                    value={homeLocation}
+                    onChange={e => setHomeLocation(e.target.value)}
+                    placeholder={vi ? 'Ví dụ: Hà Nội, Đà Nẵng, TP.HCM...' : 'e.g. Hanoi, Da Nang...'}
+                    className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-semibold focus:outline-none focus:border-[var(--gold)]"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Giới thiệu bản thân (Bio)' : 'Bio / Short Introduction'}
+                </label>
+                <textarea
+                  rows={3}
+                  value={bio}
+                  onChange={e => setBio(e.target.value)}
+                  placeholder={vi ? 'Chia sẻ một chút về niềm đam mê du lịch của bạn...' : 'Tell something about yourself...'}
+                  className="w-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-medium focus:outline-none focus:border-[var(--gold)] resize-none"
+                />
+              </div>
+            </div>
 
             {/* Preferred Pace */}
             <div>
@@ -364,6 +458,42 @@ export default function SettingsPage() {
         </Link>
         </div>
       </div>
+
+      {/* ── MODAL THÔNG BÁO THÀNH CÔNG ĐẸP MẮT ── */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center space-y-5 animate-scale-up relative overflow-hidden">
+            {/* Glow ambient background inside modal */}
+            <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl pointer-events-none" />
+            
+            {/* Icon Badge */}
+            <div className="w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 flex items-center justify-center mx-auto shadow-lg">
+              <CheckCircle size={36} className="animate-pulse" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-black text-[var(--text-primary)]">
+                {vi ? 'Cập nhật thông tin thành công!' : 'Profile Updated Successfully!'}
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] font-medium leading-relaxed">
+                {vi ? 'Thông tin cá nhân và cấu hình sở thích của bạn đã được lưu và đồng bộ toàn hệ thống.' : 'Your profile details and travel preferences have been saved.'}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/profile');
+              }}
+              className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black rounded-2xl shadow-lg transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+            >
+              {vi ? 'Đồng ý & Về trang cá nhân' : 'OK & Back to Profile'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

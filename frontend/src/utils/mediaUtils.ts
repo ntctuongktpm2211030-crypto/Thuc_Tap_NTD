@@ -4,14 +4,26 @@ export const MAX_PHOTOS = 20;
 export const MAX_VIDEOS = 5;
 
 export function validateImage(file: File): string | null {
-  if (!file.type.startsWith('image/')) return 'Chỉ chấp nhận file ảnh (JPG, PNG, WEBP, GIF)';
-  if (file.size > MAX_IMAGE_SIZE) return 'Ảnh tối đa 10MB';
+  if (!file.type.startsWith('image/')) {
+    return `Tệp "${file.name}" không phải là định dạng ảnh hợp lệ (chỉ chấp nhận JPG, PNG, WEBP, GIF).`;
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    const actualMb = (file.size / (1024 * 1024)).toFixed(1);
+    const limitMb = (MAX_IMAGE_SIZE / (1024 * 1024)).toFixed(0);
+    return `Tệp ảnh "${file.name}" bị quá dung lượng! (Dung lượng thực tế: ${actualMb} MB — Giới hạn tối đa: ${limitMb} MB/ảnh). Vui lòng chọn ảnh nhỏ hơn hoặc nén bớt dung lượng trước khi tải lên.`;
+  }
   return null;
 }
 
 export function validateVideo(file: File): string | null {
-  if (!file.type.startsWith('video/')) return 'Chỉ chấp nhận file video (MP4, WEBM, MOV)';
-  if (file.size > MAX_VIDEO_SIZE) return 'Video tối đa 100MB';
+  if (!file.type.startsWith('video/')) {
+    return `Tệp "${file.name}" không phải là định dạng video hợp lệ (chỉ chấp nhận MP4, WEBM, MOV).`;
+  }
+  if (file.size > MAX_VIDEO_SIZE) {
+    const actualMb = (file.size / (1024 * 1024)).toFixed(1);
+    const limitMb = (MAX_VIDEO_SIZE / (1024 * 1024)).toFixed(0);
+    return `Tệp video "${file.name}" bị quá dung lượng! (Dung lượng thực tế: ${actualMb} MB — Giới hạn tối đa: ${limitMb} MB/video). Vui lòng nén video hoặc giảm độ phân giải trước khi tải lên.`;
+  }
   return null;
 }
 

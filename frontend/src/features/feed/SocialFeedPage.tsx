@@ -30,7 +30,7 @@ import {
 } from '../../utils/feedUtils';
 import { loadUserProfileCache } from '../../utils/feedPostStorage';
 import { syncToggleBookmark, syncToggleLike } from '../../utils/postEngagement';
-import { postsService, socialService } from '../../services/smartTravel.service';
+import { postsService, socialService, tripsService } from '../../services/smartTravel.service';
 import { mapApiPostsToFeed, mapApiPostToFeedPost } from '../../utils/apiPostMapper';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import FeedCardShell from '../../components/feed/FeedCardShell';
@@ -179,6 +179,8 @@ const HeroCard = ({
                 <span className="text-sm font-bold text-white">{post.author.name}</span>
                 <AuthorFollowButton
                   authorId={post.authorId}
+                  authorEmail={post.author.email}
+                  authorName={post.author.name}
                   currentUserId={currentUserId}
                   isFollowing={post.authorId ? followingIds.has(post.authorId) : true}
                   onFollowChange={onFollowChange}
@@ -483,14 +485,24 @@ const SocialPostCard = ({
     }
   };
 
+  const currentUser = useSelector((s: RootState) => s.auth.user);
+  const isOwnPost = currentUser?.id && post.authorId === currentUser.id;
+  const displayAvatar = isOwnPost
+    ? (currentUser.avatarUrl || currentUser.profile?.avatarUrl || post.author.avatar)
+    : (post.author.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+
   return (
     <div className="post-card animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between p-4 pb-3" onClick={stopCardClick}>
         <div className="flex items-center gap-3">
           <Link to={post.authorId ? `/profile/${post.authorId}` : '#'} className="relative block hover:scale-105 transition-transform cursor-pointer">
-            <img src={post.author.avatar} alt={post.author.name}
-              className="w-11 h-11 rounded-full object-cover ring-2 ring-[var(--border-normal)] ring-offset-2 ring-offset-[var(--bg-surface)]" />
+            <img src={displayAvatar} alt={post.author.name}
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-[var(--border-normal)] ring-offset-2 ring-offset-[var(--bg-surface)]"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author.name)}&background=0D9488&color=fff`;
+              }}
+            />
             {post.author.verified && (
               <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center border border-[var(--bg-surface)]">
                 <span className="text-[8px] font-bold text-white">✓</span>
@@ -639,10 +651,40 @@ const LeftSidebar = ({
   const user = useSelector((s: RootState) => s.auth.user);
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const profileCache = loadUserProfileCache();
-  const postCount = myPostCount;
+  const [profileStats, setProfileStats] = useState({
+    posts: myPostCount,
+    trips: 0,
+    followers: 0,
+    location: profileCache.location || 'Chưa cập nhật vị trí'
+  });
+
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      socialService.getProfile(user.id)
+        .then(data => {
+          if (data) {
+            setProfileStats({
+              posts: data._count?.posts ?? myPostCount,
+              trips: data._count?.trips ?? 0,
+              followers: data._count?.followers ?? 0,
+              location: data.profile?.homeLocation || data.homeLocation || profileCache.location || 'Chưa cập nhật vị trí'
+            });
+          }
+        })
+        .catch(err => console.error('Sidebar fetch profile error:', err));
+
+      tripsService.LayDanhSachChuyenDi()
+        .then(trips => {
+          if (Array.isArray(trips)) {
+            setProfileStats(prev => ({ ...prev, trips: trips.length }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user?.id, isAuthenticated, myPostCount]);
 
   const displayName = isAuthenticated && user?.fullName ? user.fullName : t('auth.loginToPost');
-  const locationLabel = profileCache.location || (isAuthenticated ? 'Chưa cập nhật vị trí' : 'Đăng nhập để xem hồ sơ');
+  const locationLabel = isAuthenticated ? profileStats.location : 'Đăng nhập để xem hồ sơ';
 
   const navLinks = [
     { icon: NAV_ICONS.feed, label: t('nav.quick.feed'), href: '/', color: 'text-amber-400' },
@@ -662,25 +704,36 @@ const LeftSidebar = ({
           <div className="absolute top-2 right-4 w-8 h-8 rounded-full bg-[var(--gold)]/20 animate-float" style={{ animationDelay: '0s' }} />
           <div className="absolute top-4 right-10 w-5 h-5 rounded-full bg-violet-500/20 animate-float" style={{ animationDelay: '1s' }} />
         </div>
-        <div className="profile-mini-avatar">
-          <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        <div className="pt-9 pb-4 px-4">
-          <h4 className="font-bold text-[var(--text-primary)] truncate">{displayName}</h4>
-          <p className="text-[11px] text-[var(--text-muted)] mb-3 flex items-center gap-1 truncate">
-            <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" /> {locationLabel}
-          </p>
-          <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
-            {[String(postCount), '0', '0'].map((n, i) => (
-              <div key={i} className="py-1">
-                <div className="text-sm font-bold text-[var(--text-primary)]">{n}</div>
-                <div className="text-[10px] text-[var(--text-muted)]">
-                  {[t('sidebar.profile.posts'), t('sidebar.profile.trips'), t('sidebar.profile.followers')][i]}
-                </div>
-              </div>
-            ))}
+        <Link to={isAuthenticated ? '/profile' : '/auth'} className="block cursor-pointer group">
+          <div className="profile-mini-avatar">
+            <img
+              src={user?.avatarUrl || user?.profile?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=0D9488&color=fff`}
+              alt=""
+              className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullName || 'User')}&background=0D9488&color=fff`;
+              }}
+            />
           </div>
-        </div>
+          <div className="pt-9 pb-4 px-4">
+            <h4 className="font-bold text-[var(--text-primary)] truncate group-hover:text-[var(--gold)] transition-colors">{displayName}</h4>
+            <p className="text-[11px] text-[var(--text-muted)] mb-3 flex items-center gap-1 truncate">
+              <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" /> {locationLabel}
+            </p>
+            <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
+              {[
+                [String(profileStats.posts), t('sidebar.profile.posts')],
+                [String(profileStats.trips), t('sidebar.profile.trips')],
+                [String(profileStats.followers), t('sidebar.profile.followers')],
+              ].map(([n, l], i) => (
+                <div key={i} className="py-1">
+                  <div className="text-sm font-bold text-[var(--text-primary)]">{n}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Quick nav */}
@@ -921,7 +974,7 @@ export default function SocialFeedPage() {
     }
     setFeedError('');
     try {
-      const limit = 15;
+      const limit = 6;
       const response = await postsService.feed({ page: pageNum, limit });
       const posts = response.posts || [];
       const pagination = response.pagination;
@@ -1091,6 +1144,24 @@ export default function SocialFeedPage() {
     try {
       const res = await socialService.toggleFollow(userId);
       handleFollowChange(userId, res.following);
+
+      setRegisteredUsers(prev => prev.map(u => {
+        if (u.id === userId) {
+          const currentCount = u._count?.followers ?? u.followers ?? 0;
+          const updatedCount = typeof res.followersCount === 'number'
+            ? res.followersCount
+            : (res.following ? currentCount + 1 : Math.max(0, currentCount - 1));
+          return {
+            ...u,
+            followers: updatedCount,
+            _count: {
+              ...(u._count || {}),
+              followers: updatedCount,
+            }
+          };
+        }
+        return u;
+      }));
     } catch (err) {
       console.error('Failed to toggle follow user:', err);
     }
@@ -1144,9 +1215,10 @@ export default function SocialFeedPage() {
     const list: CompanionSuggestion[] = [];
     const currentUserId = user?.id;
 
-    // 1. Map registeredUsers from backend
+    // 1. Map registeredUsers from backend (excluding system admin accounts)
     registeredUsers.forEach(u => {
-      if (u.id !== currentUserId && !seen.has(u.id)) {
+      const isAdmin = u.role === 'ADMIN' || u.email === 'admin@terraholic.com' || u.profile?.fullName?.toLowerCase().includes('administrator');
+      if (u.id !== currentUserId && !isAdmin && !seen.has(u.id)) {
         seen.add(u.id);
         const name = u.profile?.fullName || u.email?.split('@')[0] || 'Người dùng';
         const followers = u._count?.followers ?? 0;
@@ -1164,9 +1236,10 @@ export default function SocialFeedPage() {
       }
     });
 
-    // 2. Extract authors from all posts
+    // 2. Extract authors from all posts (excluding system admin accounts)
     apiPosts.forEach(post => {
-      if (post.authorId && post.authorId !== currentUserId && !seen.has(post.authorId)) {
+      const isAuthorAdmin = post.author?.email === 'admin@terraholic.com' || post.author?.name?.toLowerCase().includes('administrator');
+      if (post.authorId && post.authorId !== currentUserId && !isAuthorAdmin && !seen.has(post.authorId)) {
         seen.add(post.authorId);
         list.push({
           id: post.authorId,
@@ -1274,20 +1347,23 @@ export default function SocialFeedPage() {
             </div>
           </div>
 
-          {feedLoading && (
-            <p className="text-center text-sm text-[var(--text-muted)] py-6">Đang tải bài đăng…</p>
+          {feedLoading && apiPosts.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12 space-y-3">
+              <div className="w-8 h-8 rounded-full border-3 border-t-[var(--gold)] border-r-transparent border-b-blue-500 border-l-transparent animate-spin" />
+              <p className="text-center text-xs font-bold text-[var(--text-muted)]">Đang tải bài đăng…</p>
+            </div>
           )}
           {!feedLoading && feedError && (
-            <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
-              {feedError}
-              <button type="button" onClick={() => void loadFeedFromApi()} className="ml-2 underline text-rose-200">
+            <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300 flex items-center justify-between">
+              <span>{feedError}</span>
+              <button type="button" onClick={() => void loadFeedFromApi()} className="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 rounded-lg text-xs font-bold transition-all">
                 Thử lại
               </button>
             </div>
           )}
 
           {/* Hero — kiểu Minh Quân (Editor's Pick, ảnh full) */}
-          {!feedLoading && hero && (
+          {hero && (
             <HeroCard
               post={hero}
               onOpen={() => openPost(hero)}
@@ -1300,7 +1376,7 @@ export default function SocialFeedPage() {
 
           {/* Feed — magazine (Sarah Miller) + social (Linh Trần) */}
           <div className="space-y-4">
-            {!feedLoading && feed.length === 0 && !feedError && (
+            {!feedLoading && feed.length === 0 && !hero && !feedError && (
               <p className="text-center text-sm text-[var(--text-muted)] py-8">Chưa có bài đăng — hãy chia sẻ hành trình đầu tiên!</p>
             )}
             {feed.map(post => renderFeedPost(

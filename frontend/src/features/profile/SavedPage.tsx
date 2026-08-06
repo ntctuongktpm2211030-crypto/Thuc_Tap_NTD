@@ -1,5 +1,6 @@
 // SavedPage v2 – 3-column layout (same as SocialFeedPage)
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
@@ -7,16 +8,16 @@ import {
   Bookmark, ExternalLink, Heart, MessageCircle, Trash2,
   Calendar, DollarSign, MapPin, Compass, Clock, Sparkles,
   FileImage, LayoutGrid, List, Globe, TrendingUp, Users, Flame,
-  Home, Bot,
+  Home, Bot, X,
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
-import { postsService, tripsService, socialService, Post } from '../../services/smartTravel.service';
+import { postsService, tripsService, socialService, mapService, Post } from '../../services/smartTravel.service';
 import { mapApiPostsToFeed } from '../../utils/apiPostMapper';
-import { FeedPost } from '../../utils/feedUtils';
+import { FeedPost, getPostImages } from '../../utils/feedUtils';
 import PostDetailModal from '../../components/feed/PostDetailModal';
 import { loadUserProfileCache } from '../../utils/feedPostStorage';
 
-import { computeHotDestinationsThisMonth, sortCompanionsByFollowers } from '../../utils/feedUtils';
+import { computeHotDestinationsThisMonth, sortCompanionsByFollowers, cleanCardText } from '../../utils/feedUtils';
 
 function unpackActivityNotes(act: any) {
   let extra: any = {};
@@ -32,7 +33,7 @@ function unpackActivityNotes(act: any) {
   return {
     ...act,
     ...extra,
-    notes: originalNotes,
+    notes: cleanCardText(originalNotes),
     activityName: act.destination?.name || act.activityName || 'Điểm tham quan',
     locationName: act.destination?.address || act.destination?.name || act.locationName || 'Địa điểm',
   };
@@ -42,9 +43,42 @@ function unpackActivityNotes(act: any) {
 const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
   const { t } = useLang();
   const user = useSelector((s: RootState) => s.auth.user);
+  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const profileCache = loadUserProfileCache();
-  const displayName = user?.fullName || t('auth.loginToPost');
-  const locationLabel = profileCache.location || 'Chưa cập nhật vị trí';
+  const [profileStats, setProfileStats] = useState({
+    posts: savedCount,
+    trips: 0,
+    followers: 0,
+    location: profileCache.location || 'Chưa cập nhật vị trí'
+  });
+
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      socialService.getProfile(user.id)
+        .then(data => {
+          if (data) {
+            setProfileStats({
+              posts: data._count?.posts ?? savedCount,
+              trips: data._count?.trips ?? 0,
+              followers: data._count?.followers ?? 0,
+              location: data.profile?.homeLocation || data.homeLocation || profileCache.location || 'Chưa cập nhật vị trí'
+            });
+          }
+        })
+        .catch(err => console.error('Sidebar fetch profile error:', err));
+
+      tripsService.LayDanhSachChuyenDi()
+        .then(trips => {
+          if (Array.isArray(trips)) {
+            setProfileStats(prev => ({ ...prev, trips: trips.length }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user?.id, isAuthenticated, savedCount]);
+
+  const displayName = isAuthenticated && user?.fullName ? user.fullName : t('auth.loginToPost');
+  const locationLabel = isAuthenticated ? profileStats.location : 'Đăng nhập để xem hồ sơ';
 
   const navLinks = [
     { icon: Home,    label: t('nav.quick.feed'),      href: '/',               color: 'text-amber-400' },
@@ -62,27 +96,29 @@ const SavedLeftSidebar = ({ savedCount }: { savedCount: number }) => {
           <div className="absolute top-2 right-4 w-8 h-8 rounded-full bg-[var(--gold)]/20 animate-float" style={{ animationDelay: '0s' }} />
           <div className="absolute top-4 right-10 w-5 h-5 rounded-full bg-violet-500/20 animate-float" style={{ animationDelay: '1s' }} />
         </div>
-        <div className="profile-mini-avatar">
-          <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover rounded-full" />
-        </div>
-        <div className="pt-9 pb-4 px-4">
-          <h4 className="font-bold text-[var(--text-primary)] truncate">{displayName}</h4>
-          <p className="text-[11px] text-[var(--text-muted)] mb-3 flex items-center gap-1 truncate">
-            <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" /> {locationLabel}
-          </p>
-          <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
-            {[
-              [String(savedCount), t('sidebar.profile.posts')],
-              ['0', 'Hành trình'],
-              ['0', t('sidebar.profile.followers')],
-            ].map(([n, l], i) => (
-              <div key={i} className="py-1">
-                <div className="text-sm font-bold text-[var(--text-primary)]">{n}</div>
-                <div className="text-[10px] text-[var(--text-muted)]">{l}</div>
-              </div>
-            ))}
+        <Link to={isAuthenticated ? '/profile' : '/auth'} className="block cursor-pointer group">
+          <div className="profile-mini-avatar">
+            <img src={user?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="" className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform" />
           </div>
-        </div>
+          <div className="pt-9 pb-4 px-4">
+            <h4 className="font-bold text-[var(--text-primary)] truncate group-hover:text-[var(--gold)] transition-colors">{displayName}</h4>
+            <p className="text-[11px] text-[var(--text-muted)] mb-3 flex items-center gap-1 truncate">
+              <MapPin size={10} className="text-[var(--gold)] flex-shrink-0" /> {locationLabel}
+            </p>
+            <div className="grid grid-cols-3 gap-0 divide-x divide-[var(--border-subtle)] text-center py-2 bg-[var(--bg-elevated)] rounded-xl">
+              {[
+                [String(profileStats.posts), t('sidebar.profile.posts')],
+                [String(profileStats.trips), t('sidebar.profile.trips')],
+                [String(profileStats.followers), t('sidebar.profile.followers')],
+              ].map(([n, l], i) => (
+                <div key={i} className="py-1">
+                  <div className="text-sm font-bold text-[var(--text-primary)]">{n}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Quick nav */}
@@ -130,7 +166,7 @@ const SavedRightSidebar = () => {
       })
       .catch(err => console.error(err));
 
-    postsService.feed({ page: 1, limit: 50 })
+    postsService.feed({ page: 1, limit: 6 })
       .then(res => {
         if (res && Array.isArray(res.posts)) setApiPosts(res.posts);
       })
@@ -174,7 +210,7 @@ const SavedRightSidebar = () => {
         name: u.profile?.fullName || u.fullName || u.email,
         avatar: u.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
         handle: `@${(u.profile?.fullName || u.fullName || u.email).split(' ').pop().toLowerCase()}`,
-        followers: u._count?.followers || 0,
+        followers: u._count?.followers ?? u.followers ?? 0,
       }));
     return sortCompanionsByFollowers(list as any, 5);
   }, [registeredUsers, loggedInUser?.id]);
@@ -192,6 +228,24 @@ const SavedRightSidebar = () => {
         else next.delete(userId);
         return next;
       });
+
+      setRegisteredUsers(prev => prev.map(u => {
+        if (u.id === userId) {
+          const currentCount = u._count?.followers ?? u.followers ?? 0;
+          const updatedCount = typeof res.followersCount === 'number'
+            ? res.followersCount
+            : (res.following ? currentCount + 1 : Math.max(0, currentCount - 1));
+          return {
+            ...u,
+            followers: updatedCount,
+            _count: {
+              ...(u._count || {}),
+              followers: updatedCount,
+            }
+          };
+        }
+        return u;
+      }));
     } catch (err) {
       console.error(err);
     }
@@ -284,21 +338,66 @@ const SavedRightSidebar = () => {
 };
 
 function parsePostContent(content: string) {
+  const cleaned = cleanCardText(content);
   try {
     const parsed = JSON.parse(content);
     if (parsed && typeof parsed === 'object') {
       return {
-        headline: parsed.headline || parsed.title || '',
-        body: parsed.body || parsed.excerpt || '',
+        headline: cleanCardText(parsed.headline || parsed.title),
+        body: cleanCardText(parsed.body || parsed.excerpt || parsed.content || parsed.note || cleaned),
         category: parsed.category || ''
       };
     }
   } catch (e) {}
   return {
     headline: '',
-    body: content,
+    body: cleaned,
     category: ''
   };
+}
+
+function extractCardImage(item: any): string | null {
+  if (!item) return null;
+
+  if (Array.isArray(item.images) && item.images.length > 0) {
+    const valid = item.images.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+    if (valid) return valid;
+  }
+
+  if (Array.isArray(item.mediaUrls) && item.mediaUrls.length > 0) {
+    const valid = item.mediaUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+    if (valid) return valid;
+  }
+
+  if (typeof item.imageUrl === 'string' && item.imageUrl.trim().length > 0) return item.imageUrl;
+  if (typeof item.image === 'string' && item.image.trim().length > 0) return item.image;
+  if (typeof item.cover === 'string' && item.cover.trim().length > 0) return item.cover;
+  if (typeof item.coverUrl === 'string' && item.coverUrl.trim().length > 0) return item.coverUrl;
+
+  const rawContent = item.content || item.note;
+  if (typeof rawContent === 'string' && rawContent.trim().length > 0) {
+    try {
+      const parsed = JSON.parse(rawContent);
+      if (parsed && typeof parsed === 'object') {
+        if (Array.isArray(parsed.images) && parsed.images.length > 0) {
+          const v = parsed.images.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+          if (v) return v;
+        }
+        if (Array.isArray(parsed.photos) && parsed.photos.length > 0) {
+          const v = parsed.photos.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+          if (v) return v;
+        }
+        if (Array.isArray(parsed.mediaUrls) && parsed.mediaUrls.length > 0) {
+          const v = parsed.mediaUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+          if (v) return v;
+        }
+        if (typeof parsed.image === 'string' && parsed.image.trim().length > 0) return parsed.image;
+        if (typeof parsed.cover === 'string' && parsed.cover.trim().length > 0) return parsed.cover;
+      }
+    } catch {}
+  }
+
+  return null;
 }
 
 // ── MAIN PAGE ─────────────────────────────────────────────────
@@ -322,16 +421,35 @@ export default function SavedPage() {
     setLoading(true);
     setError('');
     try {
-      const [posts, trips] = await Promise.all([
+      const [posts, trips, backendCheckinsRes] = await Promise.all([
         postsService.LayBaiVietDaLuuCuaToi(),
-        tripsService.LayDanhSachChuyenDi()
+        tripsService.LayDanhSachChuyenDi(),
+        mapService.myCheckins().catch(() => []),
       ]);
       setSavedPosts(posts);
       setSavedTrips(trips);
 
       const rawCheckins = localStorage.getItem('saved_checkins');
       const localCheckins = rawCheckins ? JSON.parse(rawCheckins) : [];
-      setSavedCheckins(localCheckins);
+
+      const formattedBackendCheckins = Array.isArray(backendCheckinsRes) ? backendCheckinsRes.map(c => ({
+        id: `checkin-db-${c.id}`,
+        destination: cleanCardText(c.destination?.name || c.destination?.address || 'Địa điểm check-in'),
+        content: cleanCardText(c.note || `Đã check-in tại ${c.destination?.name || 'địa điểm du lịch'}`),
+        images: c.destination?.imageUrl ? [c.destination.imageUrl] : [],
+        date: new Date(c.createdAt).toLocaleDateString('vi-VN'),
+        author: {
+          name: c.user?.profile?.fullName || 'Tôi',
+          avatar: c.user?.profile?.avatarUrl,
+        },
+        likes: 0,
+      })) : [];
+
+      const mergedCheckinsMap = new Map();
+      localCheckins.forEach((item: any) => { if (item.id) mergedCheckinsMap.set(item.id, item); });
+      formattedBackendCheckins.forEach((item: any) => { if (item.id && !mergedCheckinsMap.has(item.id)) mergedCheckinsMap.set(item.id, item); });
+
+      setSavedCheckins(Array.from(mergedCheckinsMap.values()));
     } catch (err) {
       console.error(err);
       setError(vi ? 'Không thể tải bộ sưu tập đã lưu.' : 'Failed to load saved collection.');
@@ -426,13 +544,13 @@ export default function SavedPage() {
       )}
 
       {/* Trip Detail Modal */}
-      {selectedTrip && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
-            <div className="p-6 border-b border-[var(--border-subtle)] flex items-start justify-between bg-gradient-to-r from-[var(--gold)]/10 via-transparent to-transparent">
+      {selectedTrip && createPortal(
+        <div className="fixed inset-0 z-[9999999] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in" onClick={() => { setSelectedTrip(null); setSelectedDayIdx(0); }}>
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-scale-up" onClick={e => e.stopPropagation()}>
+            <div className="p-5 sm:p-6 border-b border-[var(--border-subtle)] flex items-start justify-between bg-gradient-to-r from-[var(--gold)]/10 via-transparent to-transparent">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-xs text-[var(--gold)] font-bold uppercase tracking-wider">
-                  <Compass size={12} /> {vi ? 'Lịch trình du lịch' : 'Travel Itinerary'}
+                  <Compass size={14} /> {vi ? 'Lịch trình du lịch' : 'Travel Itinerary'}
                 </div>
                 <h2 className="text-xl font-editorial font-bold text-[var(--text-primary)]">{selectedTrip.title}</h2>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--text-muted)] pt-1">
@@ -442,17 +560,17 @@ export default function SavedPage() {
                   <span className="flex items-center gap-1"><Sparkles size={12} className="text-yellow-500" /> {selectedTrip.travelStyle}</span>
                 </div>
               </div>
-              <button onClick={() => { setSelectedTrip(null); setSelectedDayIdx(0); }} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1.5 hover:bg-[var(--bg-elevated)] rounded-full border border-[var(--border-subtle)]">
-                <span className="text-lg font-bold">&times;</span>
+              <button onClick={() => { setSelectedTrip(null); setSelectedDayIdx(0); }} className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer shrink-0">
+                <X size={18} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto flex flex-col md:flex-row min-h-0">
               <div className="w-full md:w-48 border-r border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4 space-y-1 overflow-y-auto">
                 {selectedTrip.days.map((day: any, idx: number) => (
                   <button key={day.id || idx} onClick={() => setSelectedDayIdx(idx)}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-between border ${selectedDayIdx === idx ? 'bg-[var(--gold)] text-black border-[var(--gold)]' : 'bg-transparent text-[var(--text-primary)] border-transparent hover:bg-black/5'}`}>
-                    <span>{vi ? `Ngày ${idx + 1}` : `Day ${idx + 1}`}</span>
-                    <span className="text-[10px] opacity-75">{day.activities?.length || 0} {vi ? 'hoạt động' : 'acts'}</span>
+                    className={`w-full text-left px-4 py-3 rounded-xl text-xs transition-all flex items-center justify-between border cursor-pointer ${selectedDayIdx === idx ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20 font-extrabold' : 'bg-transparent text-[var(--text-primary)] border-transparent hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                    <span className="font-extrabold">{vi ? `Ngày ${idx + 1}` : `Day ${idx + 1}`}</span>
+                    <span className={`text-[10px] font-semibold ${selectedDayIdx === idx ? 'text-white/90' : 'opacity-75'}`}>{day.activities?.length || 0} {vi ? 'hoạt động' : 'acts'}</span>
                   </button>
                 ))}
               </div>
@@ -483,13 +601,14 @@ export default function SavedPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Delete Confirm Modal */}
-      {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
+      {deleteConfirmId && createPortal(
+        <div className="fixed inset-0 z-[9999999] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in" onClick={() => setDeleteConfirmId(null)}>
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl animate-scale-up" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500"><Trash2 size={20} /></div>
               <div>
@@ -503,7 +622,8 @@ export default function SavedPage() {
               <button onClick={confirmDeleteTrip} className="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-white font-extrabold cursor-pointer transition-all flex items-center justify-center gap-1.5"><Trash2 size={13} />{vi ? 'Xác nhận xóa' : 'Confirm Delete'}</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
@@ -537,12 +657,30 @@ export default function SavedPage() {
               </div>
 
               {/* View mode toggle */}
-              <div className="flex items-center gap-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl p-1">
-                <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-[var(--gold)] text-black' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}>
-                  <LayoutGrid size={14} />
+              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-1">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-xl transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                  title={vi ? 'Hiển thị dạng lưới' : 'Grid View'}
+                >
+                  <LayoutGrid size={16} strokeWidth={2.2} />
                 </button>
-                <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-[var(--gold)] text-black' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}>
-                  <List size={14} />
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-xl transition-all cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                  title={vi ? 'Hiển thị dạng danh sách' : 'List View'}
+                >
+                  <List size={16} strokeWidth={2.2} />
                 </button>
               </div>
             </div>
@@ -597,7 +735,8 @@ export default function SavedPage() {
                 {savedPosts.map(post => {
                   const authorName = post.author.profile?.fullName || 'Người dùng';
                   const avatar = post.author.profile?.avatarUrl;
-                  const hasMedia = post.mediaUrls && post.mediaUrls.length > 0;
+                  const mappedPost = mapApiPostsToFeed([post])[0];
+                  const cardImg = mappedPost ? (getPostImages(mappedPost)[0] || extractCardImage(post)) : extractCardImage(post);
                   const dateString = new Date(post.createdAt).toLocaleDateString('vi-VN');
                   const parsed = parsePostContent(post.content);
 
@@ -605,7 +744,11 @@ export default function SavedPage() {
                     return (
                       <div key={post.id} onClick={() => handlePostClick(post)}
                         className="surface-elevated border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-lg transition-all duration-300 flex gap-3 p-4 group">
-                        {hasMedia && <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0"><img src={post.mediaUrls[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" /></div>}
+                        {cardImg && (
+                          <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800">
+                            <img src={cardImg} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div>
                             <div className="flex items-center gap-1.5 mb-1">
@@ -631,15 +774,23 @@ export default function SavedPage() {
                   return (
                     <div key={post.id} onClick={() => handlePostClick(post)}
                       className="surface-elevated overflow-hidden border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-xl transition-all duration-300 flex flex-col group">
-                      <div className="h-44 relative bg-gradient-to-br from-violet-600/20 to-rose-600/20 overflow-hidden">
-                        {hasMedia ? <img src={post.mediaUrls[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                          : <div className="w-full h-full flex items-center justify-center"><FileImage size={28} className="text-[var(--text-muted)] opacity-30" /></div>}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                        <button onClick={(e) => handleUnsavePost(e, post.id)} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100" title={vi ? 'Bỏ lưu' : 'Unsave'}>
-                          <Trash2 size={12} />
-                        </button>
-                        <span className="absolute bottom-2.5 left-2.5 bg-black/50 text-[10px] text-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">{dateString}</span>
-                      </div>
+                      {cardImg ? (
+                        <div className="h-44 relative bg-gradient-to-br from-violet-600/20 to-rose-600/20 overflow-hidden">
+                          <img src={cardImg} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                          <button onClick={(e) => handleUnsavePost(e, post.id)} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100" title={vi ? 'Bỏ lưu' : 'Unsave'}>
+                            <Trash2 size={12} />
+                          </button>
+                          <span className="absolute bottom-2.5 left-2.5 bg-black/50 text-[10px] text-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">{dateString}</span>
+                        </div>
+                      ) : (
+                        <div className="p-4 pb-0 flex justify-between items-center">
+                          <span className="text-[10px] text-[var(--text-muted)]">{dateString}</span>
+                          <button onClick={(e) => handleUnsavePost(e, post.id)} className="w-7 h-7 rounded-full bg-black/5 hover:bg-rose-600/90 hover:text-white flex items-center justify-center transition-all" title={vi ? 'Bỏ lưu' : 'Unsave'}>
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      )}
                       <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
@@ -681,14 +832,18 @@ export default function SavedPage() {
                 {savedCheckins.map(post => {
                   const authorName = post.author?.name || 'Người dùng';
                   const avatar = post.author?.avatar;
-                  const hasMedia = post.images && post.images.length > 0;
+                  const cardImg = extractCardImage(post);
                   const dateString = post.date || 'Gần đây';
 
                   if (viewMode === 'list') {
                     return (
                       <div key={post.id} onClick={() => handlePostClick(post)}
                         className="surface-elevated border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-lg transition-all duration-300 flex gap-3 p-4 group">
-                        {hasMedia && <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0"><img src={post.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" /></div>}
+                        {cardImg && (
+                          <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800">
+                            <img src={cardImg} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div>
                             <div className="flex items-center gap-1.5 mb-1">
@@ -696,8 +851,8 @@ export default function SavedPage() {
                               <span className="text-[11px] font-bold text-[var(--text-secondary)]">{authorName}</span>
                               <span className="text-[10px] text-[var(--text-muted)]">· {dateString}</span>
                             </div>
-                            <h4 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1 mb-1">{post.destination}</h4>
-                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed line-clamp-2">{post.content}</p>
+                            <h4 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1 mb-1">{cleanCardText(post.destination)}</h4>
+                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed line-clamp-2">{cleanCardText(post.content)}</p>
                           </div>
                           <div className="flex items-center justify-between pt-2 text-[10px] text-[var(--text-muted)]">
                             <div className="flex gap-3">
@@ -713,23 +868,31 @@ export default function SavedPage() {
                   return (
                     <div key={post.id} onClick={() => handlePostClick(post)}
                       className="surface-elevated overflow-hidden border border-[var(--border-subtle)] hover:border-[var(--gold)]/40 rounded-2xl cursor-pointer hover:shadow-xl transition-all duration-300 flex flex-col group">
-                      <div className="h-44 relative bg-gradient-to-br from-violet-600/20 to-rose-600/20 overflow-hidden">
-                        {hasMedia ? <img src={post.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                          : <div className="w-full h-full flex items-center justify-center"><FileImage size={28} className="text-[var(--text-muted)] opacity-30" /></div>}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                        <button onClick={(e) => { e.stopPropagation(); handleUnsaveCheckin(e, post.id); }} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100" title={vi ? 'Bỏ lưu' : 'Unsave'}>
-                          <Trash2 size={12} />
-                        </button>
-                        <span className="absolute bottom-2.5 left-2.5 bg-black/50 text-[10px] text-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">{dateString}</span>
-                      </div>
+                      {cardImg ? (
+                        <div className="h-44 relative bg-gradient-to-br from-violet-600/20 to-rose-600/20 overflow-hidden">
+                          <img src={cardImg} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                          <button onClick={(e) => { e.stopPropagation(); handleUnsaveCheckin(e, post.id); }} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100" title={vi ? 'Bỏ lưu' : 'Unsave'}>
+                            <Trash2 size={12} />
+                          </button>
+                          <span className="absolute bottom-2.5 left-2.5 bg-black/50 text-[10px] text-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">{dateString}</span>
+                        </div>
+                      ) : (
+                        <div className="p-4 pb-0 flex justify-between items-center">
+                          <span className="text-[10px] text-[var(--text-muted)]">{dateString}</span>
+                          <button onClick={(e) => { e.stopPropagation(); handleUnsaveCheckin(e, post.id); }} className="w-7 h-7 rounded-full bg-black/5 hover:bg-rose-600/90 hover:text-white flex items-center justify-center transition-all" title={vi ? 'Bỏ lưu' : 'Unsave'}>
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      )}
                       <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             {avatar ? <img src={avatar} alt="" className="w-5 h-5 rounded-full object-cover border border-[var(--border-subtle)]" /> : <div className="w-5 h-5 rounded-full bg-[var(--gold)] text-black font-bold flex items-center justify-center text-[9px]">{authorName.charAt(0)}</div>}
                             <span className="text-[11px] font-bold text-[var(--text-secondary)] truncate">{authorName}</span>
                           </div>
-                          <h3 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1">{post.destination}</h3>
-                          <p className="text-[11px] text-[var(--text-secondary)] leading-normal line-clamp-3">{post.content}</p>
+                          <h3 className="text-xs font-bold text-[var(--text-primary)] line-clamp-1">{cleanCardText(post.destination)}</h3>
+                          <p className="text-[11px] text-[var(--text-secondary)] leading-normal line-clamp-3">{cleanCardText(post.content)}</p>
                         </div>
                         <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-3">
                           <div className="flex gap-3">
@@ -774,7 +937,7 @@ export default function SavedPage() {
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div>
-                            <span className="text-[9px] font-bold bg-[var(--gold)]/10 text-[var(--gold)] border border-[var(--gold)]/20 px-2 py-0.5 rounded-full uppercase tracking-wider">{trip.travelStyle || 'Explore'}</span>
+                            <span className="text-[9px] font-extrabold bg-blue-600 text-white px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">{trip.travelStyle || 'Explore'}</span>
                             <h3 className="text-sm font-bold text-[var(--text-primary)] line-clamp-1 mt-1">{trip.title}</h3>
                             <p className="text-[11px] text-[var(--text-muted)] flex items-center gap-1"><MapPin size={10} /> {trip.destinationName}</p>
                           </div>
@@ -797,7 +960,7 @@ export default function SavedPage() {
                       <div className="h-44 relative bg-gradient-to-br from-teal-500/20 via-[var(--bg-elevated)] to-[var(--gold)]/20 overflow-hidden flex items-center justify-center">
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300" />
                         <div className="relative z-10 text-center p-4 space-y-2">
-                          <span className="inline-flex text-[9px] font-extrabold bg-[var(--gold)] text-black px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">{trip.travelStyle || 'Explore'}</span>
+                          <span className="inline-flex text-[10px] font-extrabold bg-blue-600 text-white px-3.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-white/20">{trip.travelStyle || 'Explore'}</span>
                           <h3 className="text-sm font-editorial font-bold text-white line-clamp-2 px-2 drop-shadow-md">{trip.title}</h3>
                         </div>
                         <button onClick={(e) => handleDeleteTrip(e, trip.id)} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 hover:bg-rose-600/90 text-white flex items-center justify-center backdrop-blur-sm transition-all z-20 opacity-0 group-hover:opacity-100" title={vi ? 'Xóa hành trình' : 'Delete'}>

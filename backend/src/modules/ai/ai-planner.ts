@@ -256,6 +256,130 @@ function buildUserPrompt(params: PlannerParams, centerCoords: { lat: number; lng
   ${context}`;
 }
 
+const GENERIC_LOCATION_STOPWORDS = new Set([
+  'ha giang', 'ha noi', 'da nang', 'ho chi minh', 'da lat', 'phu quoc', 'hoi an', 'nha trang',
+  'nha hang', 'quan an', 'khach san', 'homestay', 'ca phe', 'cafe', 'coffee',
+  'trung tam', 'du lich', 'dac san', 'tham quan', 'kham pha', 'dia diem', 'quang truong', 'cho dem'
+]);
+
+export function cleanPlaceKey(str: string): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/^(bua sang|an sang|breakfast|bua trua|an trua|lunch|bua toi|an toi|dinner|thuong thuc bua toi|thuong thuc bua trua|thuong thuc bua sang|thuong thuc|tham quan|kham pha|trai nghiem|visit|explore|sightseeing|dao choi|dao dem|dao|di dao|night market walk & hotel stay|nghi dem tai|stay at|nghi tai|ca phe tai|cafe tai|coffee at|ghe|tai|o|di|dung)\s*:?\s*/gi, '')
+    .replace(/[\d.,:;!?'"()\-–]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function isKeyDuplicate(actName: string, locName: string, usedSet: Set<string>): boolean {
+  const actClean = cleanPlaceKey(actName);
+  const locClean = cleanPlaceKey(locName);
+
+  if (!actClean && !locClean) return false;
+
+  for (const used of usedSet) {
+    if (!used || used.length < 3) continue;
+
+    // Exact key match
+    if ((actClean && actClean === used) || (locClean && locClean === used)) {
+      return true;
+    }
+
+    // Substring match check for sufficiently long, non-generic strings
+    if (actClean && actClean.length >= 6 && used.length >= 6 && !GENERIC_LOCATION_STOPWORDS.has(actClean) && !GENERIC_LOCATION_STOPWORDS.has(used)) {
+      if (actClean.includes(used) || used.includes(actClean)) return true;
+    }
+    if (locClean && locClean.length >= 6 && used.length >= 6 && !GENERIC_LOCATION_STOPWORDS.has(locClean) && !GENERIC_LOCATION_STOPWORDS.has(used)) {
+      if (locClean.includes(used) || used.includes(locClean)) return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Strict intra-day and inter-day deduplication filter.
+ * Ensures no activity/place name repeats within the same day or across different days
+ * (except for night hotel stays).
+ */
+export function deduplicateItinerary(itinerary: AIItineraryResponse, destinationName: string): AIItineraryResponse {
+  if (!itinerary || !Array.isArray(itinerary.days)) return itinerary;
+
+  const curated = getCuratedProvince(destinationName);
+  const fallbackAttractions = curated ? [...curated.attractions, ...curated.nature, ...curated.festivals] : [];
+  const fallbackRestaurants = curated ? [...curated.restaurants] : [];
+
+  const usedPlaces = new Set<string>();
+
+  itinerary.days.forEach((day, dayIdx) => {
+    if (!Array.isArray(day.activities)) return;
+
+    day.activities.forEach((act, actIdx) => {
+      // Hotel / accommodation at night is allowed to stay fixed across days
+      if (act.category === 'hotel' || (act.session === 'Tối' && actIdx === day.activities.length - 1)) {
+        return;
+      }
+
+      const isDup = isKeyDuplicate(act.activityName || '', act.locationName || '', usedPlaces);
+
+      if (isDup) {
+        const isRest = act.category === 'restaurant' || (act.activityName || '').toLowerCase().includes('ăn') || (act.activityName || '').toLowerCase().includes('cà phê');
+        const pool = isRest ? fallbackRestaurants : fallbackAttractions;
+
+        const available = pool.filter(p => {
+          const pClean = cleanPlaceKey(p.name);
+          return pClean && !isKeyDuplicate(p.name, p.name, usedPlaces);
+        });
+
+        if (available.length > 0) {
+          const replacement = available[0];
+          const repClean = cleanPlaceKey(replacement.name);
+          usedPlaces.add(repClean);
+
+          if (isRest) {
+            act.activityName = act.session === 'Sáng'
+              ? `Bữa sáng: ${replacement.name}`
+              : act.session === 'Trưa'
+              ? `Ăn trưa & Cà phê tại ${replacement.name}`
+              : `Thưởng thức bữa tối tại ${replacement.name}`;
+            act.locationName = replacement.name;
+          } else {
+            act.activityName = `Tham quan ${replacement.name}`;
+            act.locationName = `${replacement.name}, ${destinationName}`;
+          }
+
+          if (replacement.latitude && replacement.longitude) {
+            act.latitude = replacement.latitude;
+            act.longitude = replacement.longitude;
+          }
+          if (replacement.description) {
+            act.notes = `${replacement.description}`;
+          }
+        } else {
+          // Dynamic unique title if pool exhausted
+          const tag = isRest ? 'Ăn uống đặc sản' : 'Điểm trải nghiệm mới';
+          const sessionLabel = act.session || 'Khám phá';
+          const newTitle = `${tag} ${destinationName} (Ngày ${dayIdx + 1} - ${sessionLabel})`;
+          act.activityName = newTitle;
+          act.locationName = `${newTitle}, ${destinationName}`;
+          usedPlaces.add(cleanPlaceKey(newTitle));
+        }
+      } else {
+        const actClean = cleanPlaceKey(act.activityName);
+        const locClean = cleanPlaceKey(act.locationName);
+        if (actClean) usedPlaces.add(actClean);
+        if (locClean) usedPlaces.add(locClean);
+      }
+    });
+  });
+
+  return itinerary;
+}
+
 /**
  * Generates an itinerary using OpenAI client integration.
  * Includes fallback mocks to ensure runtime availability without active keys.
@@ -265,7 +389,9 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
 
   if (!apiKey || apiKey === 'your_openai_key_here') {
     console.warn('⚠️ OpenAI API Key is missing. Returning structured mock itinerary.');
-    return await generateFallbackMock(params);
+    const rawMock = await generateFallbackMock(params);
+    const deduplicatedMock = deduplicateItinerary(rawMock, params.destination);
+    return calculateItineraryCosts(deduplicatedMock, params.travelStyle, params.currency || 'USD', params.totalBudget);
   }
 
   // Resolve coordinates and correct province name
@@ -323,11 +449,13 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
     const data = await response.json();
     const resultJson = JSON.parse(data.choices[0].message.content) as AIItineraryResponse;
     const refined = await refineItineraryCoordinates(resultJson, params.destination);
-    return calculateItineraryCosts(refined, params.travelStyle, params.currency || 'USD', params.totalBudget);
+    const deduplicated = deduplicateItinerary(refined, params.destination);
+    return calculateItineraryCosts(deduplicated, params.travelStyle, params.currency || 'USD', params.totalBudget);
   } catch (error) {
     console.error('❌ Failed to retrieve AI itinerary from OpenAI:', error);
     const mock = await generateFallbackMock(params);
-    return calculateItineraryCosts(mock, params.travelStyle, params.currency || 'USD', params.totalBudget);
+    const deduplicatedMock = deduplicateItinerary(mock, params.destination);
+    return calculateItineraryCosts(deduplicatedMock, params.travelStyle, params.currency || 'USD', params.totalBudget);
   }
 }
 
@@ -558,8 +686,10 @@ function cascadeDeduplicateBackend(itinerary: AIItineraryResponse, changedDayInd
   itinerary.days.forEach(d => {
     if ((d.dayIndex || 1) <= changedDayIndex) {
       d.activities?.forEach(act => {
-        if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
-        if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+        const aClean = cleanPlaceKey(act.activityName || '');
+        const lClean = cleanPlaceKey(act.locationName || '');
+        if (aClean) usedPlaces.add(aClean);
+        if (lClean) usedPlaces.add(lClean);
       });
     }
   });
@@ -569,13 +699,10 @@ function cascadeDeduplicateBackend(itinerary: AIItineraryResponse, changedDayInd
     const currentDayIdx = d.dayIndex || 1;
     if (currentDayIdx > changedDayIndex) {
       d.activities?.forEach((act) => {
-        const actNameLower = (act.activityName || '').trim().toLowerCase();
-        const locNameLower = (act.locationName || '').trim().toLowerCase();
+        // Skip night hotels
+        if (act.category === 'hotel') return;
 
-        const isDuplicate = Array.from(usedPlaces).some(used => 
-          (actNameLower && (used.includes(actNameLower) || actNameLower.includes(used))) ||
-          (locNameLower && (used.includes(locNameLower) || locNameLower.includes(used)))
-        );
+        const isDuplicate = isKeyDuplicate(act.activityName || '', act.locationName || '', usedPlaces);
 
         if (isDuplicate) {
           if (curated) {
@@ -586,30 +713,33 @@ function cascadeDeduplicateBackend(itinerary: AIItineraryResponse, changedDayInd
               ...curated.hotels,
               ...curated.festivals
             ];
-            const unused = pool.filter(p => !usedPlaces.has(p.name.toLowerCase()));
+            const unused = pool.filter(p => !isKeyDuplicate(p.name, p.name, usedPlaces));
             if (unused.length > 0) {
               const replacement = unused[0];
+              const repClean = cleanPlaceKey(replacement.name);
               act.activityName = act.category === 'restaurant' ? `Thưởng thức ${replacement.name}` : `Tham quan ${replacement.name}`;
               act.locationName = `${replacement.name}, ${curated.provinceName}`;
               act.latitude = replacement.latitude;
               act.longitude = replacement.longitude;
               act.notes = replacement.description;
-              usedPlaces.add(replacement.name.toLowerCase());
+              usedPlaces.add(repClean);
             } else {
-              const synthetic = `Điểm mới Ngày ${currentDayIdx} (${act.session || 'khám phá'})`;
+              const synthetic = `Điểm mới ${destination} (Ngày ${currentDayIdx} - ${act.session || 'khám phá'})`;
               act.activityName = synthetic;
               act.locationName = `${synthetic}, ${destination}`;
-              usedPlaces.add(synthetic.toLowerCase());
+              usedPlaces.add(cleanPlaceKey(synthetic));
             }
           } else {
-            const synthetic = `Điểm mới Ngày ${currentDayIdx} (${act.session || 'khám phá'})`;
+            const synthetic = `Điểm mới ${destination} (Ngày ${currentDayIdx} - ${act.session || 'khám phá'})`;
             act.activityName = synthetic;
             act.locationName = `${synthetic}, ${destination}`;
-            usedPlaces.add(synthetic.toLowerCase());
+            usedPlaces.add(cleanPlaceKey(synthetic));
           }
         } else {
-          if (act.activityName) usedPlaces.add(act.activityName.trim().toLowerCase());
-          if (act.locationName) usedPlaces.add(act.locationName.trim().toLowerCase());
+          const aClean = cleanPlaceKey(act.activityName || '');
+          const lClean = cleanPlaceKey(act.locationName || '');
+          if (aClean) usedPlaces.add(aClean);
+          if (lClean) usedPlaces.add(lClean);
         }
       });
     }

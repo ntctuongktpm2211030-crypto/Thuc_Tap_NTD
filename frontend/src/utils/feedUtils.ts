@@ -4,6 +4,7 @@ export type PostDisplayType = 'hero' | 'magazine' | 'social';
 
 export interface FeedAuthor {
   name: string;
+  email?: string;
   avatar: string;
   verified: boolean;
   followers?: number;
@@ -50,6 +51,56 @@ export function truncateForFeed(text: string, max: number): { preview: string; t
   }
   const cut = trimmed.slice(0, max).replace(/\s+\S*$/, '');
   return { preview: `${cut}…`, truncated: true };
+}
+
+export function cleanCardText(text: any): string {
+  if (text === null || text === undefined) return '';
+  if (typeof text === 'object') {
+    return (
+      text.body ||
+      text.content ||
+      text.excerpt ||
+      text.note ||
+      text.headline ||
+      text.title ||
+      text.description ||
+      text.originalNotes ||
+      ''
+    );
+  }
+  let str = String(text).trim();
+  let depth = 0;
+  while (
+    depth < 3 &&
+    ((str.startsWith('{') && str.endsWith('}')) || (str.startsWith('"') && str.endsWith('"')))
+  ) {
+    try {
+      const parsed = JSON.parse(str);
+      if (typeof parsed === 'string') {
+        str = parsed.trim();
+      } else if (typeof parsed === 'object' && parsed !== null) {
+        str = (
+          parsed.body ||
+          parsed.content ||
+          parsed.excerpt ||
+          parsed.note ||
+          parsed.headline ||
+          parsed.title ||
+          parsed.description ||
+          parsed.originalNotes ||
+          ''
+        ).trim();
+        break;
+      } else {
+        break;
+      }
+    } catch {
+      break;
+    }
+    depth++;
+  }
+  str = str.replace(/```json[\s\S]*?```/gi, '').replace(/```[\s\S]*?```/gi, '').trim();
+  return str;
 }
 
 export function getPostFullBody(post: FeedPost): string {
@@ -227,13 +278,26 @@ export function getRoutePointsFromPost(post: FeedPost): { id: string; name: stri
 
 export function getPostImages(post: FeedPost): string[] {
   if (post.images && post.images.length > 0) {
-    return post.images;
+    const valid = post.images.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+    if (valid.length > 0) return valid;
   }
-  if (post.displayType === 'social') {
-    return post.images ?? [];
+  const imgStr = (post as any).image;
+  if (typeof imgStr === 'string' && imgStr.trim().length > 0) {
+    return [imgStr];
   }
-  const imgs = [post.image];
-  return imgs.filter(Boolean);
+  if (post.journeyPayload) {
+    try {
+      const j = JSON.parse(post.journeyPayload);
+      if (j && typeof j === 'object') {
+        if (Array.isArray(j.photos) && j.photos.length > 0) return j.photos.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+        if (Array.isArray(j.images) && j.images.length > 0) return j.images.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+        if (Array.isArray(j.mediaUrls) && j.mediaUrls.length > 0) return j.mediaUrls.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+        if (typeof j.image === 'string' && j.image.trim().length > 0) return [j.image];
+        if (typeof j.cover === 'string' && j.cover.trim().length > 0) return [j.cover];
+      }
+    } catch {}
+  }
+  return [];
 }
 
 export interface HeroFeedPost extends FeedPostBase {
@@ -320,12 +384,12 @@ export function parseDestinationDisplay(key: string, raw: string): { name: strin
 }
 
 const DEST_IMAGES: Record<string, string> = {
-  'hà giang': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=120&q=80',
-  sapa: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=120&q=80',
-  'hội an': 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=120&q=80',
-  'phố cổ hội an': 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=120&q=80',
-  'hà nội': 'https://images.unsplash.com/photo-1557750255-c76072a7aad1?auto=format&fit=crop&w=120&q=80',
-  'phú quốc': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=120&q=80',
+  'hà giang': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1600&q=90',
+  sapa: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1600&q=90',
+  'hội an': 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1600&q=90',
+  'phố cổ hội an': 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1600&q=90',
+  'hà nội': 'https://images.unsplash.com/photo-1557750255-c76072a7aad1?auto=format&fit=crop&w=1600&q=90',
+  'phú quốc': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1600&q=90',
 };
 
 const DEST_GRADIENTS = [

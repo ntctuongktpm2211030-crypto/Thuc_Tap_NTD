@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   MapPin, Users, Search, Sparkles, Clock, ArrowRight,
   Utensils, Landmark, Heart, Compass,
-  Loader2, Navigation, AlertCircle, Bookmark, Image as ImageIcon
+  Navigation, AlertCircle, Bookmark, Image as ImageIcon
 } from 'lucide-react';
 import { searchPlaces } from '../../utils/geocodeUtils';
 import { postsService } from '../../services/smartTravel.service';
@@ -18,44 +18,7 @@ import { toast } from '../../contexts/ToastContext';
 // Local storage key for search history
 const HISTORY_KEY = 'terraholic_explore_search_history';
 
-const AI_CHIPS_POOL = [
-  { label: '🌊 Đi biển', style: 'beach' },
-  { label: '⛺ Dã ngoại', style: 'camping' },
-  { label: '🍜 Food Tour', style: 'food' },
-  { label: '❤️ Hẹn hò', style: 'romantic' },
-  { label: '🌸 Mùa hoa', style: 'flowers' },
-  { label: '🏔 Leo núi', style: 'hiking' },
-  { label: '📸 Sống ảo', style: 'checkin' },
-  { label: '🚲 Đạp xe', style: 'biking' },
-  { label: '🌿 Chữa lành', style: 'healing' },
-  { label: '☕ Cà phê', style: 'cafe' },
-  { label: '🌅 Ngắm bình minh', style: 'sunrise' },
-  { label: '🏖 Resort', style: 'resort' },
-  { label: '🚗 Road Trip', style: 'roadtrip' },
-  { label: '🎒 Đi bụi', style: 'solo' },
-  { label: '👨‍👩‍👧‍👦 Gia đình', style: 'family' },
-  { label: '🐶 Thú cưng', style: 'pets' },
-  { label: '🍂 Săn mây', style: 'clouds' },
-  { label: '🏮 Lễ hội', style: 'festival' },
-  { label: '🏰 Di tích cổ', style: 'history' },
-  { label: '🛶 Sông nước', style: 'river' }
-];
 
-const BUDGET_OPTIONS = [
-  { label: 'Dưới 500k', value: '<500k' },
-  { label: '1 - 2 Triệu', value: '1-2m' },
-  { label: '2 - 5 Triệu', value: '2-5m' },
-  { label: 'Trên 5 Triệu', value: '>5m' },
-  { label: 'Không giới hạn', value: 'any' }
-];
-
-const COMPANION_OPTIONS = [
-  { label: 'Đi một mình', value: 'solo' },
-  { label: 'Đi với người yêu', value: 'couple' },
-  { label: 'Đi với gia đình', value: 'family' },
-  { label: 'Đi với bạn bè', value: 'friends' },
-  { label: 'Đi công ty', value: 'company' }
-];
 
 export default function ExploreHub() {
   const navigate = useNavigate();
@@ -79,31 +42,6 @@ export default function ExploreHub() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [feedPage, setFeedPage] = useState(1);
   const postsPerPage = 6;
-
-  // AI Recommendation module states
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiResult, setAiResult] = useState<any | null>(null);
-  const [aiInput, setAiInput] = useState('');
-  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
-  const [selectedBudget, setSelectedBudget] = useState('any');
-  const [selectedCompanion, setSelectedCompanion] = useState('friends');
-  const [activeChips, setActiveChips] = useState<typeof AI_CHIPS_POOL>([]);
-
-  const shuffleChips = () => {
-    const shuffled = [...AI_CHIPS_POOL].sort(() => 0.5 - Math.random());
-    setActiveChips(shuffled.slice(0, 6));
-  };
-
-  const toggleStyleChip = (style: string) => {
-    setSelectedStyles(prev =>
-      prev.includes(style) ? prev.filter(x => x !== style) : [...prev, style]
-    );
-  };
-
-  // Shuffle chips on mount
-  useEffect(() => {
-    shuffleChips();
-  }, []);
 
   // Infinite Scroll Trigger Ref
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -356,73 +294,6 @@ export default function ExploreHub() {
     return [...matchedDests, ...matchedDishes, ...matchedCulture].slice(0, 6);
   }, [searchQuery]);
 
-  // AI Travel recommendation handler
-  const generateAiInspiration = async () => {
-    setAiLoading(true);
-    setAiResult(null);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const queryText = aiInput.trim();
-      const budgetText = BUDGET_OPTIONS.find(b => b.value === selectedBudget)?.label || 'Bất kỳ';
-      const companionText = COMPANION_OPTIONS.find(c => c.value === selectedCompanion)?.label || 'Bất kỳ';
-
-      if (selectedStyles.includes('clouds') || queryText.toLowerCase().includes('săn mây') || queryText.toLowerCase().includes('sapa')) {
-        setAiResult({
-          title: '☁️ Săn mây Y Tý - Sapa (Lào Cai)',
-          reason: `Địa điểm phù hợp với phong cách leo núi săn mây đi cùng ${companionText.toLowerCase()} với mức kinh tế ${budgetText.toLowerCase()}.`,
-          description: 'Hành trình vượt mây lên Y Tý - Lảo Thẩn. Nơi được ví như cổng trời mây trắng xóa phủ kín thung lũng sâu.',
-          highlights: [
-            'Trekking đỉnh Lảo Thẩn săn mây đại ngàn',
-            'Check-in cột mốc biên giới Lũng Pô nơi con sông Hồng chảy vào đất Việt',
-            'Thưởng thức canh gà hầm sâm đất rừng đặc sản ôn đới se lạnh'
-          ],
-          budgetEstimate: '1.800.000 - 2.500.000 đ'
-        });
-      } else if (selectedStyles.includes('beach') || queryText.toLowerCase().includes('biển') || queryText.toLowerCase().includes('phú quốc')) {
-        setAiResult({
-          title: '🌴 Kỳ nghỉ thiên đường: Đảo Nam Du (Kiên Giang)',
-          reason: `Đề xuất biển đảo hoang sơ tuyệt vời dành cho nhóm ${companionText.toLowerCase()} với tầm ngân sách tầm trung ${budgetText.toLowerCase()}.`,
-          description: 'Nam Du sở hữu làn nước trong như ngọc, những hàng dừa nghiêng bóng và bãi cát mịn màng chưa bị thương mại hóa nhiều.',
-          highlights: [
-            'Lặn ngắm san hô rực rỡ tại Hòn Hai Bờ Đập',
-            'Đón hoàng hôn trọn vẹn từ ngọn hải đăng Nam Du cao nhất vùng',
-            'Thưởng thức sò điệp nướng mỡ hành, lẩu chua cá bớp tươi rói ngay trên bè'
-          ],
-          budgetEstimate: '2.000.000 - 3.000.000 đ'
-        });
-      } else if (selectedStyles.includes('food') || queryText.toLowerCase().includes('ăn') || queryText.toLowerCase().includes('hải sản') || queryText.toLowerCase().includes('food')) {
-        setAiResult({
-          title: '🍲 Thiên đường ẩm thực: Hải Phòng Food Tour',
-          reason: `Hành trình ăn uống ngắn ngày hoàn hảo cho nhóm ${companionText.toLowerCase()} với mức kinh phí vô cùng tiết kiệm ${budgetText.toLowerCase()}.`,
-          description: 'Khám phá tất cả ngõ ngách ẩm thực đất Cảng nổi tiếng từ bánh đa cua đến cà phê cốt dừa.',
-          highlights: [
-            'Thử bánh đa cua bể chuẩn vị tại ngõ chợ Cát Bi',
-            'Làm tour trà cúc, bánh mì cay ngập nhân ngõ Hàng Kênh',
-            'Thưởng thức dừa dầm trân châu cốt dừa béo ngậy'
-          ],
-          budgetEstimate: '600.000 - 900.000 đ'
-        });
-      } else {
-        setAiResult({
-          title: '🏕️ Cắm trại bình minh: Hồ Dầu Tiếng (Tây Ninh)',
-          reason: `Địa điểm dã ngoại thư thái lý tưởng cho nhóm ${companionText.toLowerCase()} với chi phí ${budgetText.toLowerCase()}.`,
-          description: 'Hồ nước nhân tạo lớn nhất Việt Nam với bãi cỏ xanh ngát bằng phẳng ven hồ, rất thích hợp dựng lều ngắm bình minh phía núi Bà Đen.',
-          highlights: [
-            'Dựng lều ven hồ ngắm hoàng hôn buông sau núi Bà Đen',
-            'Chèo thuyền SUP ngắm mây nước hữu tình mát mẻ',
-            'Tự tay nướng thịt bò tơ Tây Ninh thơm lừng bên bếp lửa trại ấm áp'
-          ],
-          budgetEstimate: '500.000 - 800.000 đ'
-        });
-      }
-    } catch {
-      setAiResult(null);
-    } finally {
-      setAiLoading(false);
-    }
-  };
-
   const totalPages = Math.ceil(filteredPosts.slice(1).length / postsPerPage);
   const pagedPosts = useMemo(() => {
     const start = (feedPage - 1) * postsPerPage;
@@ -623,139 +494,6 @@ export default function ExploreHub() {
               totalCount={posts.length}
             />
 
-            {/* AI Inspiration Card ("AI Travel Inspiration Center") - Vivid Glassmorphic Theme */}
-            <div className="bg-gradient-to-br from-indigo-700 via-indigo-900 to-purple-950 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 text-white rounded-3xl border border-indigo-400/30 dark:border-indigo-800/50 shadow-2xl p-5 space-y-4 relative overflow-hidden group">
-              {/* Vibrant background decorative glows */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
-              <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/20 rounded-full blur-xl pointer-events-none" />
-
-              <div className="flex items-center gap-2.5 relative z-10">
-                <div className="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-400/30">
-                  <Sparkles size={18} className="animate-pulse" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-amber-300">AI Inspiration Center</h4>
-                  <p className="text-[10px] text-indigo-100 dark:text-slate-400 font-medium">Bạn muốn đi đâu hôm nay?</p>
-                </div>
-              </div>
-
-              {/* Natural Query Textarea */}
-              <div className="space-y-1 relative z-10">
-                <textarea
-                  value={aiInput}
-                  onChange={e => setAiInput(e.target.value)}
-                  placeholder="Nhập ý kiến tự do (Ví dụ: tôi muốn săn mây ở Sapa, đi với người yêu, ngân sách 2 triệu...)"
-                  className="w-full text-[10px] bg-white/10 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800/80 rounded-xl p-2.5 text-white placeholder-indigo-200 dark:placeholder-slate-500 focus:outline-none focus:border-amber-300/80 focus:ring-1 focus:ring-amber-300/50 resize-none h-16 leading-relaxed transition-all backdrop-blur-sm"
-                />
-              </div>
-
-              {/* Dynamic Mood & Style Chips */}
-              <div className="space-y-1.5 relative z-10">
-                <label className="block text-[9px] font-black uppercase text-indigo-200 dark:text-slate-400 tracking-wider">Cảm xúc & Phong cách</label>
-                <div className="flex flex-wrap gap-1">
-                  {activeChips.map(chip => {
-                    const active = selectedStyles.includes(chip.style);
-                    return (
-                      <button
-                        key={chip.style}
-                        type="button"
-                        onClick={() => toggleStyleChip(chip.style)}
-                        className={`text-[9px] font-bold px-2 py-1.5 rounded-lg border transition-all cursor-pointer ${
-                          active
-                            ? 'bg-amber-400 border-amber-300 text-slate-950 shadow-md shadow-amber-400/30 scale-102 font-extrabold'
-                            : 'bg-white/10 dark:bg-slate-950/40 border-white/15 dark:border-slate-800 text-white dark:text-slate-350 hover:bg-white/20 dark:hover:border-slate-700'
-                        }`}
-                      >
-                        {chip.label}
-                      </button>
-                    );
-                  })}
-                  <button
-                    type="button"
-                    onClick={shuffleChips}
-                    className="text-[9px] font-black px-2 py-1.5 rounded-lg bg-white/20 dark:bg-slate-800 border border-white/25 dark:border-slate-700 text-amber-300 hover:bg-white/30 transition-all cursor-pointer"
-                  >
-                    🔄 Đổi
-                  </button>
-                </div>
-              </div>
-
-              {/* Dropdowns parameters */}
-              <div className="grid grid-cols-2 gap-2 text-[9px] relative z-10">
-                <div>
-                  <label className="block text-indigo-200 dark:text-slate-400 mb-1 font-bold uppercase tracking-wider">Ngân sách</label>
-                  <select
-                    value={selectedBudget}
-                    onChange={e => setSelectedBudget(e.target.value)}
-                    className="w-full bg-white/15 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/80 cursor-pointer"
-                  >
-                    {BUDGET_OPTIONS.map(opt => (
-                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">{opt.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-indigo-200 dark:text-slate-400 mb-1 font-bold uppercase tracking-wider">Bạn đồng hành</label>
-                  <select
-                    value={selectedCompanion}
-                    onChange={e => setSelectedCompanion(e.target.value)}
-                    className="w-full bg-white/15 dark:bg-slate-950/60 border border-white/20 dark:border-slate-800 rounded-lg p-1.5 text-white outline-none focus:border-amber-300/80 cursor-pointer"
-                  >
-                    {COMPANION_OPTIONS.map(opt => (
-                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">{opt.label}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <button
-                type="button"
-                onClick={generateAiInspiration}
-                disabled={aiLoading}
-                className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xl shadow-amber-400/20 cursor-pointer transition-all hover:scale-101 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed relative z-10"
-              >
-                {aiLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                Nhận gợi ý hành trình
-              </button>
-
-              {/* Recommendation Results Display */}
-              {aiLoading ? (
-                <div className="flex flex-col items-center justify-center py-6 gap-2 text-indigo-200 animate-pulse border-t border-white/15 pt-4">
-                  <Loader2 className="animate-spin text-amber-300" size={18} />
-                  <span className="text-[9px]">AI đang phân tích ý tưởng...</span>
-                </div>
-              ) : aiResult ? (
-                <div className="space-y-3 animate-fade-in border-t border-white/15 pt-4">
-                  <div>
-                    <span className="text-[8px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded border border-amber-300/30">Đề xuất hoàn hảo</span>
-                    <h5 className="text-xs font-extrabold text-white mt-1.5">{aiResult.title}</h5>
-                  </div>
-                  {aiResult.reason && (
-                    <p className="text-[9px] text-indigo-100 dark:text-slate-400 leading-normal italic bg-white/10 dark:bg-slate-950/30 p-2 rounded-lg border border-white/10 dark:border-slate-900/50">
-                      💡 {aiResult.reason}
-                    </p>
-                  )}
-                  <p className="text-[10px] text-white/90 dark:text-slate-250 leading-relaxed">{aiResult.description}</p>
-                  
-                  {aiResult.highlights && aiResult.highlights.length > 0 && (
-                    <ul className="space-y-1 text-[9px] text-indigo-100 dark:text-slate-350">
-                      {aiResult.highlights.map((h: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-1">
-                          <span className="text-amber-300 shrink-0">•</span>
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  
-                  <div className="pt-2 flex items-center justify-between border-t border-white/15">
-                    <span className="text-[8px] text-indigo-200 uppercase font-black tracking-wider">Chi phí dự trù</span>
-                    <span className="text-[10px] font-black text-amber-300">{aiResult.budgetEstimate}</span>
-                  </div>
-                </div>
-              ) : null}
-            </div>
           </aside>
 
           {/* ── MAIN CONTENT AREA (9 COLUMNS) ── */}
@@ -1015,22 +753,7 @@ export default function ExploreHub() {
               {filteredPosts.length <= 1 && (
                 <div className="text-center py-10 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
                   <AlertCircle className="mx-auto text-slate-300 mb-2" size={32} />
-                  <p className="font-bold text-slate-700 dark:text-slate-300">Không tìm thấy bài viết nào</p>
                   <p className="text-xs text-slate-400 mt-1">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn.</p>
-                </div>
-              )}
-
-              {/* Loader Trigger for Infinite Scroll */}
-              {hasMore && (
-                <div ref={loaderRef} className="flex justify-center py-6">
-                  {loadingMore ? (
-                    <div className="flex items-center gap-2 text-xs text-slate-400 animate-pulse">
-                      <Loader2 className="animate-spin text-blue-500" size={14} />
-                      <span>Đang tải thêm câu chuyện...</span>
-                    </div>
-                  ) : (
-                    <span className="text-[10px] text-slate-400 italic">Kéo xuống để tải thêm bài viết</span>
-                  )}
                 </div>
               )}
             </div>

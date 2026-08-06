@@ -72,6 +72,27 @@ router.post('/checkin', requireAuth, async (req: AuthRequest, res: Response) => 
 });
 
 // ─────────────────────────────────────────────────────────
+// GET /api/v1/map/checkins/my  — logged in user's check-ins
+// ─────────────────────────────────────────────────────────
+router.get('/checkins/my', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const checkins = await prisma.checkIn.findMany({
+      where: { userId: req.user!.sub },
+      include: {
+        user: { include: { profile: true } },
+        destination: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return res.json(checkins);
+  } catch (err) {
+    console.error('[map/checkins/my GET]', err);
+    return res.status(500).json({ error: 'Failed to fetch my check-ins.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
 // GET /api/v1/map/checkins  — recent public check-ins feed
 // ─────────────────────────────────────────────────────────
 router.get('/checkins', async (req: AuthRequest, res: Response) => {

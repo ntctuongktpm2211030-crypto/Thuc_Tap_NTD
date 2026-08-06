@@ -13,8 +13,7 @@ import {
 const DEFAULT_AVATAR =
   'https://cdn.pixabay.com/photo-2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
-const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80';
+
 
 const BLOG_CATEGORY_LABELS: Record<string, string> = {
   review: 'Review',
@@ -105,13 +104,45 @@ function categoryLabel(payload: ParsedPayload): string {
   return 'Du lịch';
 }
 
+function extractMediaFromPost(post: Post, payload: ParsedPayload | null): string[] {
+  if (Array.isArray(post.mediaUrls) && post.mediaUrls.length > 0) {
+    const valid = post.mediaUrls.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+    if (valid.length > 0) return valid;
+  }
+
+  if (Array.isArray((post as any).images) && (post as any).images.length > 0) {
+    const valid = ((post as any).images as any[]).filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+    if (valid.length > 0) return valid;
+  }
+
+  if (payload) {
+    if (Array.isArray(payload.photos)) {
+      const photos = payload.photos.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+      if (photos.length > 0) return photos;
+    }
+    if (Array.isArray(payload.images)) {
+      const images = payload.images.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+      if (images.length > 0) return images;
+    }
+    if (Array.isArray(payload.mediaUrls)) {
+      const mediaUrls = payload.mediaUrls.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+      if (mediaUrls.length > 0) return mediaUrls;
+    }
+    if (typeof payload.image === 'string' && payload.image.trim().length > 0) return [payload.image];
+    if (typeof payload.cover === 'string' && payload.cover.trim().length > 0) return [payload.cover];
+    if (typeof payload.photo === 'string' && payload.photo.trim().length > 0) return [payload.photo];
+  }
+
+  return [];
+}
+
 /** Chuyển bài từ API backend → định dạng hiển thị bảng tin */
 export function mapApiPostToFeedPost(post: Post): FeedPost | null {
   if (!post?.id || !post.content) return null;
 
   const payload = parseContent(post.content);
-  const media = post.mediaUrls?.filter(Boolean) ?? [];
-  const image = media[0] || FALLBACK_IMAGE;
+  const media = extractMediaFromPost(post, payload);
+  const image = media[0] || '';
 
   if (!payload) {
     const social: SocialFeedPost = {

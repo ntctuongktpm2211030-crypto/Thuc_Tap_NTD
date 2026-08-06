@@ -705,6 +705,7 @@ Table ConversationParticipants {
 Enum UserRole {
   USER
   ADMIN
+  MODERATOR
 }
 
 Enum TripStatus {

@@ -45,3 +45,13 @@ export function patchExplorePostEngagement(
 ) {
   updateExplorePost(id, patch);
 }
+
+export function resetExplorePosts(): ExplorePost[] {
+  cache = [...INITIAL_EXPLORE_POSTS];
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+  return cache;
+}

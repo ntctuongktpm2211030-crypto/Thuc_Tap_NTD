@@ -313,6 +313,8 @@ body::before {
   width: 100%;
   height: clamp(260px, 40vw, 480px);
   object-fit: cover;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
   /* No transform on hover — animate the card, not the image */
 }
 

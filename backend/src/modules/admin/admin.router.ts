@@ -72,6 +72,14 @@ export async function ensureDefaultAdminUser() {
 }
 
 /**
+ * Auto-Initialize Initial Community Posts in PostgreSQL DB if table is empty
+ */
+export async function ensureInitialCommunityPosts() {
+  // Disabled auto creation of initial community posts to keep DB completely empty as requested
+  return;
+}
+
+/**
  * POST /api/v1/admin/login
  * Dedicated Admin Portal Login
  */
@@ -338,72 +346,9 @@ router.get('/stats', requireAuth, requireAdmin, async (_req: Request, res: Respo
  * GET /api/v1/admin/users
  * Fetch User List for User Management
  */
-const INITIAL_COMMUNITY_USERS = [
-  {
-    id: 'usr-tuong',
-    email: 'tuong.nguyen@terraholic.com',
-    role: 'ADMIN',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 240).toISOString(),
-    profile: {
-      fullName: 'Tường Nguyễn',
-      avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80',
-      bio: 'Lữ khách yêu thiên nhiên & khám phá Việt Nam'
-    }
-  },
-  {
-    id: 'usr-hanngoc',
-    email: 'hanngoc@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 180).toISOString(),
-    profile: {
-      fullName: 'Hân Ngọc',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      bio: 'Đam mê nhiếp ảnh & ẩm thực vùng cao'
-    }
-  },
-  {
-    id: 'usr-linh',
-    email: 'linh.nguyen@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 120).toISOString(),
-    profile: {
-      fullName: 'Thùy Linh',
-      avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80',
-      bio: 'Check-in mọi nẻo đường Tây Bắc'
-    }
-  },
-  {
-    id: 'usr-hahoang',
-    email: 'hahoang@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 90).toISOString(),
-    profile: {
-      fullName: 'Hà Hoàng',
-      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
-      bio: 'Phượt thủ Cần Thơ & Miền Tây'
-    }
-  },
-  {
-    id: 'usr-minhquan',
-    email: 'minhquan@terraholic.com',
-    role: 'USER',
-    isVerified: true,
-    createdAt: new Date(Date.now() - 3600000 * 60).toISOString(),
-    profile: {
-      fullName: 'Minh Quân',
-      avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
-      bio: 'Yêu Đà Lạt & săn mây Tà Xùa'
-    }
-  }
-];
-
 router.get('/users', optionalAuth, async (_req: Request, res: Response) => {
   try {
-    let dbUsers = await (prisma as any).user.findMany({
+    const dbUsers = await (prisma as any).user.findMany({
       select: {
         id: true,
         email: true,
@@ -423,11 +368,10 @@ router.get('/users', optionalAuth, async (_req: Request, res: Response) => {
       take: 100
     }).catch(() => []);
 
-    const combinedUsers = [...dbUsers, ...INITIAL_COMMUNITY_USERS];
-    return res.json({ success: true, data: combinedUsers });
+    return res.json({ success: true, data: dbUsers });
   } catch (err: any) {
     console.error('Failed to fetch users for admin:', err);
-    return res.json({ success: true, data: INITIAL_COMMUNITY_USERS });
+    return res.json({ success: true, data: [] });
   }
 });
 
@@ -604,112 +548,13 @@ router.post('/change-password', optionalAuth, async (req: Request, res: Response
   }
 });
 
-/**
- * GET /api/v1/admin/posts
- * Fetch Community Posts for Admin Management
- */
-const INITIAL_COMMUNITY_POSTS = [
-  {
-    id: 'post-sapa-1',
-    content: JSON.stringify({
-      displayType: 'social',
-      body: 'Sapa – vùng đất mờ sương thuộc tỉnh Lào Cai – luôn mang lại cho du khách niềm ngơ ngàng và xúc động mạnh liệt trước một bức tranh thiên nhiên hùng vĩ.',
-      destination: 'Sapa — Apao Homestay',
-      location: { name: 'Sapa', lat: 22.3364, lng: 103.8438 }
-    }),
-    destination: 'Sapa — Apao Homestay',
-    mediaUrls: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80'
-    ],
-    createdAt: new Date(Date.now() - 3600000 * 72).toISOString(),
-    author: {
-      id: 'usr-hanngoc',
-      email: 'hanngoc@terraholic.com',
-      profile: {
-        fullName: 'Hân Ngọc',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
-      }
-    },
-    _count: { likes: 12, comments: 4 }
-  },
-  {
-    id: 'post-tuong-1',
-    content: JSON.stringify({
-      displayType: 'social',
-      body: 'Chuyến đi khám phá vẻ đẹp Sa Pa cùng bản Cát Cát và đỉnh Fansipan 3.143m tuyệt đẹp!',
-      destination: 'Sapa — Apao Homestay',
-      location: { name: 'Sa Pa', lat: 22.3364, lng: 103.8438 }
-    }),
-    destination: 'Sapa — Apao Homestay',
-    mediaUrls: [
-      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1200&q=80'
-    ],
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    author: {
-      id: 'usr-tuong',
-      email: 'tuong.nguyen@terraholic.com',
-      profile: {
-        fullName: 'Tường Nguyễn',
-        avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80'
-      }
-    },
-    _count: { likes: 28, comments: 6 }
-  },
-  {
-    id: 'post-dalat-1',
-    content: JSON.stringify({
-      displayType: 'social',
-      body: 'Đà Lạt mùa dã quỳ nở vàng rực khắp các nẻo đường Cô Bắc, Cầu Đất và Hồ Tuyền Lâm.',
-      destination: 'Đà Lạt — Cô Bắc (5 điểm)',
-      location: { name: 'Đà Lạt', lat: 11.9404, lng: 108.4583 }
-    }),
-    destination: 'Đà Lạt — Cô Bắc (5 điểm)',
-    mediaUrls: [
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
-    ],
-    createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-    author: {
-      id: 'usr-tuong',
-      email: 'tuong.nguyen@terraholic.com',
-      profile: {
-        fullName: 'Tường Nguyễn',
-        avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80'
-      }
-    },
-    _count: { likes: 35, comments: 9 }
-  },
-  {
-    id: 'post-hagiang-1',
-    content: JSON.stringify({
-      displayType: 'social',
-      body: 'Hành trình chinh phục Cổng Trời Quản Bạ và ngắm dòng sông Nho Quế xanh ngắt tại Hà Giang.',
-      destination: 'Cổng Trời Quản Bạ, Hà Giang',
-      location: { name: 'Hà Giang', lat: 22.8233, lng: 104.9839 }
-    }),
-    destination: 'Cổng Trời Quản Bạ, Hà Giang',
-    mediaUrls: [
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80'
-    ],
-    createdAt: new Date(Date.now() - 3600000 * 96).toISOString(),
-    author: {
-      id: 'usr-linh',
-      email: 'linh.nguyen@terraholic.com',
-      profile: {
-        fullName: 'Thùy Linh',
-        avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80'
-      }
-    },
-    _count: { likes: 45, comments: 11 }
-  }
-];
-
 import { reportedPostsStore } from '../../utils/reportedPostsStore';
 
 router.get('/posts', optionalAuth, async (_req: Request, res: Response) => {
   try {
     let dbPosts: any[] = [];
     try {
-      const dbPromise = (prisma as any).post.findMany({
+      dbPosts = await (prisma as any).post.findMany({
         where: { deletedAt: null },
         include: {
           author: {
@@ -718,17 +563,30 @@ router.get('/posts', optionalAuth, async (_req: Request, res: Response) => {
           _count: { select: { likes: true, comments: true } }
         },
         orderBy: { createdAt: 'desc' },
-        take: 200
+        take: 1000
       });
-      const timeoutPromise = new Promise<any[]>((resolve) => setTimeout(() => resolve([]), 1500));
-      dbPosts = await Promise.race([dbPromise, timeoutPromise]);
+
+      if (dbPosts.length === 0) {
+        await ensureInitialCommunityPosts();
+        dbPosts = await (prisma as any).post.findMany({
+          where: { deletedAt: null },
+          include: {
+            author: {
+              include: { profile: true }
+            },
+            _count: { select: { likes: true, comments: true } }
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 1000
+        });
+      }
       console.log(`[ADMIN GET /posts] 🚀 Đã tải thành công ${dbPosts.length} bài viết từ CSDL PostgreSQL.`);
     } catch (e) {
       console.error('[admin/posts Prisma error]', e);
       dbPosts = [];
     }
 
-    let rawList: any[] = [...dbPosts, ...INITIAL_COMMUNITY_POSTS];
+    let rawList: any[] = [...dbPosts];
     
     // 1. Map existing posts with report info
     const existingIds = new Set(rawList.map((p: any) => String(p.id || p._id)));
@@ -790,7 +648,7 @@ router.get('/posts', optionalAuth, async (_req: Request, res: Response) => {
     return res.json({ success: true, data: combinedPosts });
   } catch (err: any) {
     console.error('[admin/posts GET]', err);
-    return res.json({ success: true, data: INITIAL_COMMUNITY_POSTS });
+    return res.json({ success: true, data: [] });
   }
 });
 

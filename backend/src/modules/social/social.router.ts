@@ -107,7 +107,8 @@ router.post('/follow/:targetUserId', requireAuth, async (req: AuthRequest, res: 
       await prisma.follower.delete({
         where: { followerId_followingId: { followerId, followingId } },
       });
-      return res.json({ following: false });
+      const followersCount = await prisma.follower.count({ where: { followingId } });
+      return res.json({ following: false, followersCount });
     } else {
       // Fetch follower profile for better notification content
       const follower = await prisma.user.findUnique({
@@ -118,6 +119,7 @@ router.post('/follow/:targetUserId', requireAuth, async (req: AuthRequest, res: 
 
       // Follow + create notification in background
       await prisma.follower.create({ data: { followerId, followingId } });
+      const followersCount = await prisma.follower.count({ where: { followingId } });
       
       prisma.notification.create({
         data: {
@@ -132,7 +134,7 @@ router.post('/follow/:targetUserId', requireAuth, async (req: AuthRequest, res: 
         console.error('Failed to create follow notification in background:', err);
       });
 
-      return res.json({ following: true });
+      return res.json({ following: true, followersCount });
     }
   } catch (err) {
     console.error('[social/follow POST]', err);

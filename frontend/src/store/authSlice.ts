@@ -11,6 +11,9 @@ interface AuthUser {
   role: string;
   avatarUrl?: string;
   coverUrl?: string;
+  bio?: string;
+  homeLocation?: string;
+  profile?: any;
 }
 
 interface AuthState {
@@ -98,6 +101,9 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<AuthUser>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+      if (action.payload) {
+        authService.LuuUser(action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
