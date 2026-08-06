@@ -21,11 +21,43 @@ function normalizeParagraphs(text: string): string {
   return cleaned.filter(Boolean).join('\n\n');
 }
 
-function renderFormattedContent(text: string) {
+function renderFormattedContent(text: string, titleHint?: string) {
   if (!text) return null;
 
-  const normalized = normalizeParagraphs(text);
-  const lines = normalized.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  let cleaned = text.normalize('NFC');
+
+  // Strip recurring PDF page header artifacts
+  cleaned = cleaned
+    .replace(/CÁC DÂN TỘC VIỆT NAM/gi, '')
+    .replace(/CÁC TỈNH\s*&\s*THÀNH PHỐ/gi, '')
+    .replace(/CÁC TỈNH\s*VÀ\s*THÀNH PHỐ/gi, '');
+
+  if (titleHint) {
+    const cleanHint = titleHint.replace(/^(DÂN TỘC|TỈNH|TP\.|THÀNH PHỐ)\s+/i, '').trim();
+    if (cleanHint.length >= 2) {
+      const hintRegex = new RegExp(`^DÂN TỘC\\s+${cleanHint.toUpperCase()}$`, 'gim');
+      cleaned = cleaned.replace(hintRegex, '');
+    }
+  }
+
+  // Split into paragraphs by double newlines or block elements
+  const rawParagraphs = cleaned.split(/\r?\n\s*\r?\n/);
+  const blocks: string[] = [];
+
+  rawParagraphs.forEach(p => {
+    const trimmed = p.trim();
+    if (!trimmed) return;
+
+    // If it contains headings or bullet points, preserve line splits for those
+    if (trimmed.includes('#') || trimmed.includes('•') || trimmed.includes('- ')) {
+      const lines = trimmed.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      blocks.push(...lines);
+    } else {
+      // Merge single line breaks in normal body paragraph
+      const merged = trimmed.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+      if (merged) blocks.push(merged);
+    }
+  });
 
   const parseInline = (str: string) => {
     const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -41,35 +73,35 @@ function renderFormattedContent(text: string) {
   };
 
   return (
-    <div className="space-y-4 w-full text-left my-2">
-      {lines.map((line, idx) => {
+    <div className="space-y-4 w-full text-justify my-2">
+      {blocks.map((block, idx) => {
         // Headings (e.g. ### Heading)
-        if (line.startsWith('#') || line.startsWith('###')) {
-          const cleanHeading = line.replace(/^#+\s*/, '').trim();
+        if (block.startsWith('#') || block.startsWith('###')) {
+          const cleanHeading = block.replace(/^#+\s*/, '').trim();
           return (
-            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 w-full">
+            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 text-left w-full">
               <span>{cleanHeading}</span>
             </h4>
           );
         }
 
         // Bullet points (e.g. • Item or - Item)
-        if (line.startsWith('•') || line.startsWith('-') || line.startsWith('* ')) {
-          const content = line.replace(/^[•\-\*]\s*/, '').trim();
+        if (block.startsWith('•') || block.startsWith('-') || block.startsWith('* ')) {
+          const content = block.replace(/^[•\-\*]\s*/, '').trim();
           return (
-            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
+            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3.5 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
               <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1.5 shrink-0 shadow-sm" />
-              <span className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              <span className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium text-justify w-full block">
                 {parseInline(content)}
               </span>
             </div>
           );
         }
 
-        // Standard Paragraph
+        // Standard Full-Width Paragraph
         return (
-          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 font-normal w-full block text-justify sm:text-left">
-            {parseInline(line)}
+          <p key={idx} className="text-xs sm:text-sm leading-relaxed sm:leading-loose text-slate-700 dark:text-slate-300 font-normal text-justify w-full block tracking-normal">
+            {parseInline(block)}
           </p>
         );
       })}
@@ -289,12 +321,34 @@ export default function ProvinceDetailPage() {
   // Overview pagination states
   const [overviewPage, setOverviewPage] = useState(1);
 
+  const formattedName = useMemo(() => {
+    if (!id) return '';
+    let decoded = id;
+    try {
+      decoded = decodeURIComponent(id);
+    } catch {}
+    return decoded.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  }, [id]);
+
   const overviewPages = useMemo(() => {
+<<<<<<< HEAD
     if (!overviewItem) return [];
     const rawText = overviewItem.content || '';
     const cleanText = rawText.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
     if (!cleanText) return [];
 
+=======
+    let contentToUse = overviewItem?.content;
+    if (!contentToUse && provinceItems.length > 0) {
+      const firstItem = provinceItems[0];
+      if (firstItem?.content) {
+        contentToUse = `${formattedName} là địa danh du lịch nổi tiếng với nhiều danh thắng và di sản văn hóa đặc sắc. ${firstItem.content}`;
+      }
+    }
+    if (!contentToUse) return [];
+
+    const cleanText = contentToUse.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+>>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
     const words = cleanText.split(' ').filter(Boolean);
     const totalWords = words.length;
     if (totalWords === 0) return [];
@@ -316,23 +370,19 @@ export default function ProvinceDetailPage() {
       }
     }
 
+<<<<<<< HEAD
     // Prune any empty trailing spreads automatically
     return pages.filter(p => p.trim().length > 0);
   }, [overviewItem]);
 
   // currentOverviewText memo removed since pages array is passed directly to BookPageReader
+=======
+    return pages;
+  }, [overviewItem, provinceItems, formattedName]);
+>>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
 
   useEffect(() => {
     setOverviewPage(1);
-  }, [id]);
-
-  const formattedName = useMemo(() => {
-    if (!id) return '';
-    let decoded = id;
-    try {
-      decoded = decodeURIComponent(id);
-    } catch {}
-    return decoded.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   }, [id]);
 
   const bannerPhotos = useMemo(() => {
@@ -466,18 +516,18 @@ export default function ProvinceDetailPage() {
       <div className="max-w-[1750px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         
         {/* ── TOP SECTION: OVERVIEW (BOOK CARD - CENTERED & BALANCED LAYOUT) ── */}
-        <div className="max-w-6xl mx-auto w-full">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl p-5 sm:p-8 overflow-hidden">
-            {overviewItem && overviewPages.length > 0 && (
+        {overviewPages.length > 0 && (
+          <div className="max-w-6xl mx-auto w-full">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl p-5 sm:p-8 overflow-hidden">
               <BookPageReader 
-                title="Tổng Quan Địa Lý & Lịch Sử"
+                title={`Tổng Quan Địa Lý & Lịch Sử ${formattedName}`}
                 pages={overviewPages}
                 currentPage={overviewPage}
                 onPageChange={setOverviewPage}
               />
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── BOTTOM SECTION: TABS & ITEMS GRID (FULL WIDTH MATCHING MOCKUP) ── */}
         {subCategoriesList.length > 0 && (
@@ -604,7 +654,7 @@ export default function ProvinceDetailPage() {
             </div>
 
             <div className="border-t border-slate-100 dark:border-slate-800 pt-4 w-full">
-              {renderFormattedContent(activeModalItem.item.content)}
+              {renderFormattedContent(activeModalItem.item.content, activeModalItem.item.name)}
             </div>
           </div>
         </div>

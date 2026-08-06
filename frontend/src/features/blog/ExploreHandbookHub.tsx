@@ -18,20 +18,43 @@ import { ETHNIC_IMAGES_MAPPING } from './EthnicGroupData';
 
 
 
-function normalizeParagraphs(text: string): string {
-  if (!text) return '';
-  const paragraphs = text.split(/\n\s*\n/);
-  const cleaned = paragraphs.map(p => {
-    return p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
-  });
-  return cleaned.filter(Boolean).join('\n\n');
-}
-
-function renderFormattedContent(text: string) {
+function renderFormattedContent(text: string, titleHint?: string) {
   if (!text) return null;
 
-  const normalized = normalizeParagraphs(text);
-  const lines = normalized.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  let cleaned = text.normalize('NFC');
+
+  // Strip recurring PDF page header artifacts
+  cleaned = cleaned
+    .replace(/CÁC DÂN TỘC VIỆT NAM/gi, '')
+    .replace(/CÁC TỈNH\s*&\s*THÀNH PHỐ/gi, '')
+    .replace(/CÁC TỈNH\s*VÀ\s*THÀNH PHỐ/gi, '');
+
+  if (titleHint) {
+    const cleanHint = titleHint.replace(/^(DÂN TỘC|TỈNH|TP\.|THÀNH PHỐ)\s+/i, '').trim();
+    if (cleanHint.length >= 2) {
+      const hintRegex = new RegExp(`^DÂN TỘC\\s+${cleanHint.toUpperCase()}$`, 'gim');
+      cleaned = cleaned.replace(hintRegex, '');
+    }
+  }
+
+  // Split into paragraphs by double newlines or block elements
+  const rawParagraphs = cleaned.split(/\r?\n\s*\r?\n/);
+  const blocks: string[] = [];
+
+  rawParagraphs.forEach(p => {
+    const trimmed = p.trim();
+    if (!trimmed) return;
+
+    // If it contains headings or bullet points, preserve line splits for those
+    if (trimmed.includes('#') || trimmed.includes('•') || trimmed.includes('- ')) {
+      const lines = trimmed.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      blocks.push(...lines);
+    } else {
+      // Merge single line breaks in normal body paragraph
+      const merged = trimmed.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+      if (merged) blocks.push(merged);
+    }
+  });
 
   const parseInline = (str: string) => {
     const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -47,37 +70,41 @@ function renderFormattedContent(text: string) {
   };
 
   return (
-    <div className="space-y-4 w-full text-left my-2">
-      {lines.map((line, idx) => {
+    <div className="space-y-4 w-full text-justify my-2">
+      {blocks.map((block, idx) => {
         // Headings (e.g. ### Heading)
-        if (line.startsWith('#') || line.startsWith('###')) {
-          const cleanHeading = line.replace(/^#+\s*/, '').trim();
+        if (block.startsWith('#') || block.startsWith('###')) {
+          const cleanHeading = block.replace(/^#+\s*/, '').trim();
           return (
-            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 w-full">
+            <h4 key={idx} className="text-base sm:text-lg font-black text-blue-700 dark:text-blue-400 mt-5 mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 text-left w-full">
               <span>{cleanHeading}</span>
             </h4>
           );
         }
 
         // Bullet points (e.g. • Item or - Item)
-        if (line.startsWith('•') || line.startsWith('-') || line.startsWith('* ')) {
-          const content = line.replace(/^[•\-\*]\s*/, '').trim();
+        if (block.startsWith('•') || block.startsWith('-') || block.startsWith('* ')) {
+          const content = block.replace(/^[•\-\*]\s*/, '').trim();
           return (
-            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
+            <div key={idx} className="flex items-start gap-2.5 bg-slate-50 dark:bg-slate-800/60 p-3.5 px-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm hover:border-blue-300 transition-colors w-full">
               <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1.5 shrink-0 shadow-sm" />
-              <span className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              <span className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium text-justify w-full block">
                 {parseInline(content)}
               </span>
             </div>
           );
         }
 
-        // Standard Paragraph
+        // Standard Full-Width Paragraph
         return (
-          <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 font-normal w-full block text-justify sm:text-left">
-            {parseInline(line)}
+          <p key={idx} className="text-xs sm:text-sm leading-relaxed sm:leading-loose text-slate-700 dark:text-slate-300 font-normal text-justify w-full block tracking-normal">
+            {parseInline(block)}
           </p>
         );
+      })}
+    </div>
+  );
+}
       })}
     </div>
   );
@@ -512,7 +539,12 @@ export default function ExploreHandbookHub() {
                 <div
                   key={idx}
                   onClick={() => {
+<<<<<<< HEAD
                     if (res.item.subCategory?.toUpperCase() === 'DÂN TỘC' || res.item.province === 'Việt Nam') {
+=======
+                    if (res.item.subCategory.toUpperCase() === 'DÂN TỘC' || res.item.title.toUpperCase().includes('DÂN TỘC')) {
+                      setActiveCategory('DÂN TỘC');
+>>>>>>> 5d3aa6da76d474cebd6b8bc21602c0061f51a181
                       setActiveEthnicModal(res.item);
                     } else {
                       navigate(`/explore/province/${res.item.province}`);
@@ -563,7 +595,7 @@ export default function ExploreHandbookHub() {
               <>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <BookOpen size={16} className="text-[var(--gold)]" />
-                  Thư Viện 54 Dân Tộc Việt Nam ({filteredEthnicGroups.length} Dân tộc)
+                  Thư Viện 54 Dân Tộc Việt Nam
                 </h3>
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6" id="handbook-feed-anchor">
@@ -575,6 +607,11 @@ export default function ExploreHandbookHub() {
                     />
                   ))}
                 </div>
+                {filteredEthnicGroups.length === 0 && (
+                  <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
+                    <p className="text-sm text-slate-500 font-medium">Không tìm thấy thông tin dân tộc nào khớp với từ khóa "{query}".</p>
+                  </div>
+                )}
               </>
             ) : (
               <>
@@ -709,7 +746,7 @@ export default function ExploreHandbookHub() {
 
             {/* Scrollable Article Body Content */}
             <div className="p-6 sm:p-8 overflow-y-auto w-full space-y-4">
-              {renderFormattedContent(activeEthnicModal.content)}
+              {renderFormattedContent(activeEthnicModal.content, activeEthnicModal.name)}
             </div>
 
             {/* Modal Footer Bar */}

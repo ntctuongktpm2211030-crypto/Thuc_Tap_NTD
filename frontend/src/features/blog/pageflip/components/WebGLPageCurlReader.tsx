@@ -425,27 +425,29 @@ export default function WebGLPageCurlReader({ title, pages, currentPage, onPageC
       </div>
 
       {/* Footer Controls */}
-      <div className="flex justify-between items-center border-t border-amber-900/10 pt-4 mt-4 z-20">
-        <button
-          onClick={handlePrev}
-          disabled={currentPage === 1 || isFlipping}
-          className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
-        >
-          ◀ Trang trước
-        </button>
-        
-        <span className="text-xs font-bold text-slate-500">
-          Trang {currentPage} / {totalPages}
-        </span>
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center border-t border-amber-900/10 pt-4 mt-4 z-20">
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1 || isFlipping}
+            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
+          >
+            ◀ Trang trước
+          </button>
+          
+          <span className="text-xs font-bold text-slate-500">
+            Trang {currentPage} / {totalPages}
+          </span>
 
-        <button
-          onClick={handleNext}
-          disabled={currentPage === totalPages || isFlipping}
-          className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all font-bold"
-        >
-          Trang sau ▶
-        </button>
-      </div>
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages || isFlipping}
+            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 hover:text-slate-800 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all font-bold"
+          >
+            Trang sau ▶
+          </button>
+        </div>
+      )}
     </div>
   );
 }
