@@ -67,21 +67,55 @@ export default function ExploreHub() {
         const mapped = apiPosts
           .map((p: any) => {
             try {
-              const payload = JSON.parse(p.content);
-              const category = payload.category === 'food' || p.content.includes('am-thuc') ? 'Ẩm thực' : 'Văn hóa';
+              let payload: any = {};
+              if (typeof p.content === 'string' && p.content.trim().startsWith('{') && p.content.trim().endsWith('}')) {
+                try { payload = JSON.parse(p.content); } catch {}
+              }
+
+              const category = payload.feedCategory || payload.category || (p.destination?.category === 'restaurant' ? 'Ẩm thực' : 'Văn hóa');
+
+              let imagesList: string[] = [];
+              if (Array.isArray(p.mediaUrls) && p.mediaUrls.length > 0) imagesList = p.mediaUrls;
+              else if (Array.isArray(payload.mediaUrls) && payload.mediaUrls.length > 0) imagesList = payload.mediaUrls;
+              else if (Array.isArray(payload.images) && payload.images.length > 0) imagesList = payload.images;
+              if (payload.coverImage && !imagesList.includes(payload.coverImage)) {
+                imagesList.unshift(payload.coverImage);
+              }
+
+              const coverImage = imagesList[0] || payload.coverImage || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=900&q=80';
+
+              const formattedComments = (p.comments || []).map((c: any) => {
+                let text = c.content || '';
+                if (typeof c.content === 'string' && c.content.trim().startsWith('{') && c.content.trim().endsWith('}')) {
+                  try {
+                    const parsedCmt = JSON.parse(c.content);
+                    text = parsedCmt.text || parsedCmt.content || parsedCmt.body || c.content;
+                  } catch {}
+                }
+                return {
+                  id: c.id,
+                  authorId: c.authorId || c.author?.id,
+                  author: c.author?.profile?.fullName || c.author?.email?.split('@')[0] || 'Người dùng',
+                  avatar: c.author?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                  text,
+                  date: new Date(c.createdAt).toLocaleDateString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+                };
+              });
+
               return {
                 id: toExplorePostId(p.id),
-                author: p.author.profile?.fullName || p.author.email.split('@')[0],
-                handle: `@${p.author.email.split('@')[0]}`,
-                avatar: p.author.profile?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80',
-                verified: p.author.role === 'admin' || p.likes?.length > 10,
-                title: payload.title || payload.headline || 'Khám phá Việt Nam',
-                excerpt: payload.excerpt || p.content.slice(0, 150),
-                content: p.content,
-                coverImage: p.mediaUrls?.[0] || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=900&q=80',
+                author: p.author?.profile?.fullName || p.author?.email?.split('@')[0] || 'Người dùng',
+                handle: `@${p.author?.email?.split('@')[0] || 'user'}`,
+                avatar: p.author?.profile?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80',
+                verified: p.author?.role === 'admin' || p.likes?.length > 10,
+                title: payload.title || payload.headline || (p.content ? p.content.slice(0, 50) : 'Khám phá Việt Nam'),
+                excerpt: payload.excerpt || (p.content ? p.content.slice(0, 150) : ''),
+                content: payload.body || payload.description || p.content,
+                coverImage,
+                images: imagesList.length > 0 ? imagesList : [coverImage],
                 tags: payload.tags || [],
                 category,
-                location: payload.destination || 'Việt Nam',
+                location: payload.destination || p.destination?.name || 'Việt Nam',
                 province: payload.destination || 'Việt Nam',
                 region: 'Bắc' as const,
                 lat: payload.location?.lat || 21.0285,
@@ -91,8 +125,8 @@ export default function ExploreHub() {
                 cultureThemes: category === 'Văn hóa' ? ['Văn hóa'] : [],
                 date: new Date(p.createdAt).toLocaleDateString('vi-VN'),
                 readTime: 4,
-                likes: p._count?.likes || 0,
-                comments: [],
+                likes: p._count?.likes || (Array.isArray(p.likes) ? p.likes.length : 0),
+                comments: formattedComments,
                 bookmarked: !!p.isBookmarked,
                 liked: !!p.isLiked,
               };
@@ -103,12 +137,11 @@ export default function ExploreHub() {
           .filter(Boolean) as ExplorePost[];
 
         if (mapped.length > 0) {
-          const merged = [...getExplorePosts()];
-          for (const m of mapped) {
-            if (m && !merged.some(x => x.id === m.id)) merged.unshift(m);
-          }
-          setExplorePosts(merged);
-          setPosts(merged);
+          setExplorePosts(mapped);
+          setPosts(mapped);
+        } else {
+          setExplorePosts([]);
+          setPosts([]);
         }
       })
       .catch(() => {});

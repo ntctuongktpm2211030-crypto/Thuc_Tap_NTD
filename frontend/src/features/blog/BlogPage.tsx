@@ -303,12 +303,11 @@ export default function BlogPage() {
           .map((p: Parameters<typeof mapApiToExplorePost>[0]) => mapApiToExplorePost(p))
           .filter((p): p is ExplorePost => p !== null);
         if (mapped.length > 0) {
-          const merged = [...getExplorePosts()];
-          for (const m of mapped) {
-            if (!merged.some(x => x.id === m.id)) merged.unshift(m);
-          }
-          setExplorePosts(merged);
-          setPosts(merged);
+          setExplorePosts(mapped);
+          setPosts(mapped);
+        } else {
+          setExplorePosts([]);
+          setPosts([]);
         }
       })
       .catch(() => {});

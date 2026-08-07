@@ -326,9 +326,10 @@ const Step1Story = ({
               <textarea 
                 value={data.content} 
                 onChange={e => onChange({ content: e.target.value })}
-                rows={5}
-                placeholder="Chi tiết hành trình, kinh nghiệm, lịch trình gợi ý…"
-                className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all resize-none shadow-sm" 
+                rows={12}
+                spellCheck={false}
+                placeholder="Chi tiết hành trình, kinh nghiệm, lịch trình gợi ý, hướng dẫn di chuyển và lưu ý chuyến đi…"
+                className="w-full bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all min-h-[260px] resize-y shadow-sm" 
               />
               {isHero && (
                 <p className="text-[10px] text-[var(--text-muted)] mt-1">Bài nổi bật nên có nội dung phong phú (≥120 ký tự) hoặc tóm tắt dài.</p>
@@ -360,9 +361,10 @@ const Step1Story = ({
             <textarea 
               value={data.content} 
               onChange={e => onChange({ content: e.target.value })}
-              rows={8}
+              rows={10}
+              spellCheck={false}
               placeholder="VD: Vừa đến Hội An và tôi đã mê hoàn toàn! Mẹo nhỏ: thuê xe đạp (100k/ngày) và khám phá cánh đồng lúa lúc bình minh…"
-              className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all resize-none shadow-sm" 
+              className="w-full bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-800 focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]/20 transition-all min-h-[220px] resize-y shadow-sm" 
             />
             <div className="flex justify-between text-[10px] text-[var(--text-muted)] mt-1">
               <span>Kiểu Linh Trần — caption ngắn, có thể kèm mẹo thực tế</span>
@@ -1085,16 +1087,58 @@ const Step3Details = ({ data, onChange }: { data: StoryData; onChange: (d: Parti
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngày bắt đầu</label>
-          <div className="relative">
-            <input type="date" value={data.startDate} onChange={e => onChange({ startDate: e.target.value })}
-              className="input-premium pl-4 text-sm" />
+          <div className="relative cursor-pointer group">
+            <div className="input-premium pl-4 pr-10 text-sm flex items-center justify-between pointer-events-none group-hover:border-[var(--gold)] transition-colors">
+              <span className={data.startDate ? "text-[var(--text-primary)] font-bold" : "text-[var(--text-muted)]"}>
+                {data.startDate ? (() => {
+                  const parts = data.startDate.split('T')[0].split('-');
+                  return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : data.startDate;
+                })() : 'dd/mm/yyyy'}
+              </span>
+              <Calendar size={16} className="text-[var(--text-muted)] group-hover:text-[var(--gold)] transition-colors" />
+            </div>
+            <input
+              type="date"
+              value={data.startDate}
+              onChange={e => onChange({ startDate: e.target.value })}
+              onClick={e => {
+                try {
+                  if ('showPicker' in e.currentTarget) {
+                    e.currentTarget.showPicker();
+                  }
+                } catch (err) {}
+              }}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+              lang="vi-VN"
+            />
           </div>
         </div>
         <div>
           <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Ngày kết thúc</label>
-          <div className="relative">
-            <input type="date" value={data.endDate} onChange={e => onChange({ endDate: e.target.value })}
-              className="input-premium pl-4 text-sm" />
+          <div className="relative cursor-pointer group">
+            <div className="input-premium pl-4 pr-10 text-sm flex items-center justify-between pointer-events-none group-hover:border-[var(--gold)] transition-colors">
+              <span className={data.endDate ? "text-[var(--text-primary)] font-bold" : "text-[var(--text-muted)]"}>
+                {data.endDate ? (() => {
+                  const parts = data.endDate.split('T')[0].split('-');
+                  return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : data.endDate;
+                })() : 'dd/mm/yyyy'}
+              </span>
+              <Calendar size={16} className="text-[var(--text-muted)] group-hover:text-[var(--gold)] transition-colors" />
+            </div>
+            <input
+              type="date"
+              value={data.endDate}
+              onChange={e => onChange({ endDate: e.target.value })}
+              onClick={e => {
+                try {
+                  if ('showPicker' in e.currentTarget) {
+                    e.currentTarget.showPicker();
+                  }
+                } catch (err) {}
+              }}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+              lang="vi-VN"
+            />
           </div>
         </div>
       </div>
@@ -1921,7 +1965,8 @@ export default function CreateStoryPage() {
       const coverUrl = coverSource ? await resolveMediaUrl(coverSource) : '';
       const photoUrls = await Promise.all(data.photos.map(resolveMediaUrl));
       const videoUrls = await Promise.all(data.videos.map(resolveMediaUrl));
-      const mediaUrls = [coverUrl, ...photoUrls, ...videoUrls].filter(Boolean);
+      const rawMedia = [coverUrl, ...photoUrls, ...videoUrls].filter(Boolean);
+      const mediaUrls = Array.from(new Set(rawMedia));
 
       let tripId: string | undefined;
       if (data.days.length > 0) {

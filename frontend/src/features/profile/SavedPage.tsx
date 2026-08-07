@@ -364,6 +364,16 @@ function extractCardImage(item: any): string | null {
     if (valid) return valid;
   }
 
+  if (Array.isArray(item.imageUrls) && item.imageUrls.length > 0) {
+    const valid = item.imageUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+    if (valid) return valid;
+  }
+
+  if (Array.isArray(item.photos) && item.photos.length > 0) {
+    const valid = item.photos.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+    if (valid) return valid;
+  }
+
   if (Array.isArray(item.mediaUrls) && item.mediaUrls.length > 0) {
     const valid = item.mediaUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
     if (valid) return valid;
@@ -374,11 +384,20 @@ function extractCardImage(item: any): string | null {
   if (typeof item.cover === 'string' && item.cover.trim().length > 0) return item.cover;
   if (typeof item.coverUrl === 'string' && item.coverUrl.trim().length > 0) return item.coverUrl;
 
+  if (item.rawCheckin) {
+    const rawResult = extractCardImage(item.rawCheckin);
+    if (rawResult) return rawResult;
+  }
+
   const rawContent = item.content || item.note;
   if (typeof rawContent === 'string' && rawContent.trim().length > 0) {
     try {
       const parsed = JSON.parse(rawContent);
       if (parsed && typeof parsed === 'object') {
+        if (Array.isArray(parsed.imageUrls) && parsed.imageUrls.length > 0) {
+          const v = parsed.imageUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
+          if (v) return v;
+        }
         if (Array.isArray(parsed.images) && parsed.images.length > 0) {
           const v = parsed.images.find((img: any) => typeof img === 'string' && img.trim().length > 0);
           if (v) return v;
@@ -391,6 +410,7 @@ function extractCardImage(item: any): string | null {
           const v = parsed.mediaUrls.find((img: any) => typeof img === 'string' && img.trim().length > 0);
           if (v) return v;
         }
+        if (typeof parsed.imageUrl === 'string' && parsed.imageUrl.trim().length > 0) return parsed.imageUrl;
         if (typeof parsed.image === 'string' && parsed.image.trim().length > 0) return parsed.image;
         if (typeof parsed.cover === 'string' && parsed.cover.trim().length > 0) return parsed.cover;
       }
@@ -398,6 +418,66 @@ function extractCardImage(item: any): string | null {
   }
 
   return null;
+}
+
+function formatTripForSavedPage(item: any, vi: boolean) {
+  if (!item) return null;
+
+  const rawDest = item.destinationName || item.destination || item.itinerary?.destination || item.itinerary?.destinationName || 'Việt Nam';
+  const destName = typeof rawDest === 'object' ? (rawDest.name || rawDest.address || 'Việt Nam') : String(rawDest);
+  const capDest = destName.replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+  const rawDays = item.days || item.itinerary?.days || [];
+  const durationDays = item.durationDays || (Array.isArray(rawDays) ? rawDays.length : 1);
+
+  const daysArr = Array.isArray(rawDays) && rawDays.length > 0 ? rawDays.map((d: any, idx: number) => ({
+    id: d.id || `day-${idx + 1}`,
+    dayIndex: d.dayIndex || d.day || (idx + 1),
+    title: d.title || d.dayTitle || (vi ? `Ngày ${idx + 1}` : `Day ${idx + 1}`),
+    activities: (d.activities || []).map((act: any, actIdx: number) => ({
+      id: act.id || `act-${actIdx + 1}`,
+      activityName: act.activityName || act.name || 'Hoạt động trải nghiệm',
+      locationName: act.locationName || act.address || destName,
+      startTime: act.startTime || (act.timeSlot ? act.timeSlot.split('-')[0]?.trim() : '08:00'),
+      endTime: act.endTime || (act.timeSlot ? act.timeSlot.split('-')[1]?.trim() : '10:00'),
+      notes: act.notes || act.description || act.note || '',
+      estimatedCost: Number(act.estimatedCost) || 0,
+    }))
+  })) : Array.from({ length: durationDays }, (_, idx) => ({
+    id: `day-${idx + 1}`,
+    dayIndex: idx + 1,
+    title: vi ? `Ngày ${idx + 1}` : `Day ${idx + 1}`,
+    activities: [
+      {
+        id: `act-1`,
+        activityName: vi ? `Tham quan & Khám phá ${capDest}` : `Explore ${capDest}`,
+        locationName: capDest,
+        startTime: '08:00',
+        endTime: '12:00',
+        notes: vi ? `Hành trình tự do khám phá các điểm nổi tiếng tại ${capDest}.` : `Self-guided exploration at ${capDest}.`,
+        estimatedCost: 0
+      }
+    ]
+  }));
+
+  const title = item.title || (vi ? `Khám phá ${capDest} (${durationDays} ngày)` : `Explore ${capDest} (${durationDays} days)`);
+  const travelStyle = item.travelStyle || item.style || 'Phiêu lưu';
+  const totalBudget = item.totalBudget || item.totalEstimatedCost || item.itinerary?.totalEstimatedCost || 0;
+  const startDate = item.startDate || item.createdAt || new Date().toISOString();
+  const createdAt = item.createdAt || item.updatedAt || new Date().toISOString();
+
+  return {
+    ...item,
+    id: item.id || `trip-${Date.now()}-${Math.random()}`,
+    title,
+    destinationName: capDest,
+    travelStyle,
+    totalBudget,
+    startDate,
+    createdAt,
+    days: daysArr,
+    description: item.description || (vi ? `Lộ trình khám phá ${capDest} trong ${durationDays} ngày cùng Terraholic AI Planner.` : `Itinerary for ${capDest} (${durationDays} days) with Terraholic AI Planner.`),
+  };
 }
 
 // ── MAIN PAGE ─────────────────────────────────────────────────
@@ -421,29 +501,94 @@ export default function SavedPage() {
     setLoading(true);
     setError('');
     try {
-      const [posts, trips, backendCheckinsRes] = await Promise.all([
-        postsService.LayBaiVietDaLuuCuaToi(),
-        tripsService.LayDanhSachChuyenDi(),
+      const [posts, tripsRes, aiHistoryRes, backendCheckinsRes] = await Promise.all([
+        postsService.LayBaiVietDaLuuCuaToi().catch(() => []),
+        tripsService.LayDanhSachChuyenDi().catch(() => []),
+        tripsService.LayLichSuTaoChuyenDiAI().catch(() => []),
         mapService.myCheckins().catch(() => []),
       ]);
       setSavedPosts(posts);
-      setSavedTrips(trips);
+
+      const rawAiHistory = localStorage.getItem('smarttravel_ai_history');
+      const localAiHistory = rawAiHistory ? JSON.parse(rawAiHistory) : [];
+
+      const mergedTripsMap = new Map();
+
+      if (Array.isArray(tripsRes)) {
+        tripsRes.forEach((t: any) => {
+          if (t.id) {
+            const formatted = formatTripForSavedPage(t, vi);
+            if (formatted) mergedTripsMap.set(t.id, formatted);
+          }
+        });
+      }
+
+      if (Array.isArray(aiHistoryRes)) {
+        aiHistoryRes.forEach((h: any) => {
+          if (h.id && !mergedTripsMap.has(h.id)) {
+            const formatted = formatTripForSavedPage(h, vi);
+            if (formatted) mergedTripsMap.set(h.id, formatted);
+          }
+        });
+      }
+
+      if (Array.isArray(localAiHistory)) {
+        localAiHistory.forEach((h: any) => {
+          if (h.id && !mergedTripsMap.has(h.id)) {
+            const formatted = formatTripForSavedPage(h, vi);
+            if (formatted) mergedTripsMap.set(h.id, formatted);
+          }
+        });
+      }
+
+      setSavedTrips(Array.from(mergedTripsMap.values()));
 
       const rawCheckins = localStorage.getItem('saved_checkins');
       const localCheckins = rawCheckins ? JSON.parse(rawCheckins) : [];
 
-      const formattedBackendCheckins = Array.isArray(backendCheckinsRes) ? backendCheckinsRes.map(c => ({
-        id: `checkin-db-${c.id}`,
-        destination: cleanCardText(c.destination?.name || c.destination?.address || 'Địa điểm check-in'),
-        content: cleanCardText(c.note || `Đã check-in tại ${c.destination?.name || 'địa điểm du lịch'}`),
-        images: c.destination?.imageUrl ? [c.destination.imageUrl] : [],
-        date: new Date(c.createdAt).toLocaleDateString('vi-VN'),
-        author: {
-          name: c.user?.profile?.fullName || 'Tôi',
-          avatar: c.user?.profile?.avatarUrl,
-        },
-        likes: 0,
-      })) : [];
+      const formattedBackendCheckins = Array.isArray(backendCheckinsRes) ? backendCheckinsRes.map(c => {
+        let noteText = '';
+        let checkinImages: string[] = [];
+        if (c.destination?.imageUrl) checkinImages.push(c.destination.imageUrl);
+
+        if (c.note && typeof c.note === 'string') {
+          const trimmed = c.note.trim();
+          if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              noteText = parsed.text || parsed.note || parsed.body || parsed.content || '';
+              if (typeof parsed.imageUrl === 'string' && parsed.imageUrl.trim().length > 0) checkinImages.push(parsed.imageUrl);
+              if (Array.isArray(parsed.imageUrls)) checkinImages.push(...parsed.imageUrls);
+              if (Array.isArray(parsed.images)) checkinImages.push(...parsed.images);
+              if (Array.isArray(parsed.photos)) checkinImages.push(...parsed.photos);
+              if (Array.isArray(parsed.mediaUrls)) checkinImages.push(...parsed.mediaUrls);
+            } catch (e) {
+              noteText = c.note;
+            }
+          } else {
+            noteText = c.note;
+          }
+        }
+
+        const validImages = Array.from(new Set(checkinImages.filter((img: any) => typeof img === 'string' && img.trim().length > 0)));
+
+        return {
+          id: `checkin-db-${c.id}`,
+          destination: cleanCardText(c.destination?.name || c.destination?.address || 'Địa điểm check-in'),
+          content: cleanCardText(noteText || `Đã check-in tại ${c.destination?.name || 'địa điểm du lịch'}`),
+          images: validImages,
+          imageUrls: validImages,
+          imageUrl: validImages[0] || '',
+          coverUrl: validImages[0] || '',
+          date: new Date(c.createdAt).toLocaleDateString('vi-VN'),
+          author: {
+            name: c.user?.profile?.fullName || c.user?.fullName || c.user?.email || 'Tôi',
+            avatar: c.user?.profile?.avatarUrl || (c.user as any)?.avatarUrl || c.user?.avatar,
+          },
+          likes: 0,
+          rawCheckin: c,
+        };
+      }) : [];
 
       const mergedCheckinsMap = new Map();
       localCheckins.forEach((item: any) => { if (item.id) mergedCheckinsMap.set(item.id, item); });
@@ -491,7 +636,17 @@ export default function SavedPage() {
     const tripId = deleteConfirmId;
     setDeleteConfirmId(null);
     try {
-      await tripsService.XoaChuyenDi(tripId);
+      await tripsService.XoaChuyenDi(tripId).catch(() => {});
+
+      const rawAiHistory = localStorage.getItem('smarttravel_ai_history');
+      if (rawAiHistory) {
+        try {
+          const parsed = JSON.parse(rawAiHistory);
+          const updated = parsed.filter((h: any) => h.id !== tripId);
+          localStorage.setItem('smarttravel_ai_history', JSON.stringify(updated));
+        } catch (e) {}
+      }
+
       setSavedTrips(prev => prev.filter(t => t.id !== tripId));
     } catch (err) { console.error(err); }
   };

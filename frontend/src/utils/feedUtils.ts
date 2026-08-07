@@ -78,8 +78,8 @@ export function cleanCardText(text: any): string {
       const parsed = JSON.parse(str);
       if (typeof parsed === 'string') {
         str = parsed.trim();
-      } else if (typeof parsed === 'object' && parsed !== null) {
         str = (
+          parsed.text ||
           parsed.body ||
           parsed.content ||
           parsed.excerpt ||
@@ -277,27 +277,28 @@ export function getRoutePointsFromPost(post: FeedPost): { id: string; name: stri
 }
 
 export function getPostImages(post: FeedPost): string[] {
+  let raw: string[] = [];
   if (post.images && post.images.length > 0) {
     const valid = post.images.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-    if (valid.length > 0) return valid;
+    if (valid.length > 0) raw = valid;
+  } else {
+    const imgStr = (post as any).image;
+    if (typeof imgStr === 'string' && imgStr.trim().length > 0) {
+      raw = [imgStr];
+    } else if (post.journeyPayload) {
+      try {
+        const j = JSON.parse(post.journeyPayload);
+        if (j && typeof j === 'object') {
+          if (Array.isArray(j.photos) && j.photos.length > 0) raw = j.photos.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+          else if (Array.isArray(j.images) && j.images.length > 0) raw = j.images.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+          else if (Array.isArray(j.mediaUrls) && j.mediaUrls.length > 0) raw = j.mediaUrls.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
+          else if (typeof j.image === 'string' && j.image.trim().length > 0) raw = [j.image];
+          else if (typeof j.cover === 'string' && j.cover.trim().length > 0) raw = [j.cover];
+        }
+      } catch {}
+    }
   }
-  const imgStr = (post as any).image;
-  if (typeof imgStr === 'string' && imgStr.trim().length > 0) {
-    return [imgStr];
-  }
-  if (post.journeyPayload) {
-    try {
-      const j = JSON.parse(post.journeyPayload);
-      if (j && typeof j === 'object') {
-        if (Array.isArray(j.photos) && j.photos.length > 0) return j.photos.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
-        if (Array.isArray(j.images) && j.images.length > 0) return j.images.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
-        if (Array.isArray(j.mediaUrls) && j.mediaUrls.length > 0) return j.mediaUrls.filter((u: any) => typeof u === 'string' && u.trim().length > 0);
-        if (typeof j.image === 'string' && j.image.trim().length > 0) return [j.image];
-        if (typeof j.cover === 'string' && j.cover.trim().length > 0) return [j.cover];
-      }
-    } catch {}
-  }
-  return [];
+  return Array.from(new Set(raw));
 }
 
 export interface HeroFeedPost extends FeedPostBase {

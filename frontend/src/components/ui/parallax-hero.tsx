@@ -37,7 +37,6 @@ const defaultLayers: ParallaxLayer[] = [
   { src: 'https://i.ibb.co/chZkMKzX/fog-3.png', alt: 'fog3', speedX: 0.11, speedY: 0.018, speedZ: 0, rotation: 0, distance: 2800, zIndex: 12, initialTop: 'calc(50% + 70px)', initialLeft: '50%', width: '950px' },
   { src: 'https://i.ibb.co/39PKgGNS/mountain-4.png', alt: 'm4', speedX: 0.059, speedY: 0.024, speedZ: 0.35, rotation: 0.14, distance: 3200, zIndex: 13, initialTop: 'calc(50% + 10px)', initialLeft: 'calc(50% - 340px)', width: '780px' },
   { src: 'https://i.ibb.co/rKHGSD9S/mountain-3.png', alt: 'm3', speedX: 0.04, speedY: 0.018, speedZ: 0.32, rotation: 0.05, distance: 3400, zIndex: 14, initialTop: 'calc(50% - 30px)', initialLeft: 'calc(50% + 350px)', width: '420px' },
-  { src: 'https://i.ibb.co/bj0s7gRP/fog-2.png', alt: 'fog2', speedX: 0.15, speedY: 0.0115, speedZ: 0, rotation: 0, distance: 3600, zIndex: 15, initialTop: 'calc(50% - 30px)', initialLeft: 'calc(50% + 320px)', width: '700px' },
   { src: 'https://i.ibb.co/7tHMfwZH/mountain-2.png', alt: 'm2', speedX: 0.0235, speedY: 0.013, speedZ: 0.42, rotation: 0.15, distance: 3800, zIndex: 16, initialTop: 'calc(50% + 90px)', initialLeft: 'calc(50% + 320px)', width: '520px' },
   { src: 'https://i.ibb.co/Knh5tBS/mountain-1.png', alt: 'm1', speedX: 0.027, speedY: 0.018, speedZ: 0.53, rotation: 0.2, distance: 4000, zIndex: 17, initialTop: 'calc(50% + 10px)', initialLeft: 'calc(50% - 340px)', width: '780px' },
   { src: 'https://i.ibb.co/Y41vTxSN/fog-1.png', alt: 'fog1', speedX: 0.12, speedY: 0.01, speedZ: 0, rotation: 0, distance: 4200, zIndex: 18, initialTop: 'calc(100% - 120px)', initialLeft: 'calc(50% + 40px)', width: '1100px', className: 'opacity-50' },
@@ -117,6 +116,7 @@ export const ParallaxHero: React.FC<ParallaxHeroProps> = ({
           }}
           src={layer.src}
           alt={layer.alt}
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
           className={cn(
             'absolute pointer-events-none transition-transform duration-[300ms] ease-out select-none',
             layer.className

@@ -16,33 +16,33 @@ const STEP_METAS = [
 
 export default function JourneyProgressSidebar({ current, completion, percent }: JourneyProgressSidebarProps) {
   // Circular progress math
-  const radius = 42;
-  const stroke = 6;
+  const radius = 58;
+  const stroke = 7;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="journey-sidebar-modern select-none">
+    <div className="journey-sidebar-modern select-none p-2">
       {/* Circular Progress Wheel */}
-      <div className="sidebar-section flex flex-col items-center justify-center mb-4">
-        <div className="relative flex items-center justify-center">
-          <svg className="w-28 h-28 transform -rotate-90">
+      <div className="sidebar-section flex flex-col items-center justify-center pt-2 pb-2 mb-4">
+        <div className="relative flex items-center justify-center w-36 h-36">
+          <svg className="w-36 h-36 transform -rotate-90">
             {/* Background Circle */}
             <circle
-              cx="56"
-              cy="56"
+              cx="72"
+              cy="72"
               r={radius}
-              className="text-slate-100"
+              className="text-slate-100 dark:text-slate-800"
               strokeWidth={stroke}
               stroke="currentColor"
               fill="transparent"
             />
             {/* Foreground Circle */}
             <circle
-              cx="56"
-              cy="56"
+              cx="72"
+              cy="72"
               r={radius}
-              className="text-[var(--gold)] transition-all duration-500 ease-out"
+              className="text-blue-600 dark:text-blue-500 transition-all duration-500 ease-out"
               strokeWidth={stroke}
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
@@ -52,10 +52,10 @@ export default function JourneyProgressSidebar({ current, completion, percent }:
             />
           </svg>
           {/* Inner Content */}
-          <div className="absolute flex flex-col items-center justify-center text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bước</span>
-            <span className="text-2xl font-black text-slate-800 leading-none my-0.5">{current}</span>
-            <span className="text-[9px] font-semibold text-slate-500">{percent}% hoàn thành</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-3 pointer-events-none">
+            <span className="text-[11px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">BƯỚC</span>
+            <span className="text-3xl font-black text-slate-900 dark:text-white leading-none my-1">{current}</span>
+            <span className="text-[11px] font-black text-blue-600 dark:text-blue-400 leading-tight whitespace-nowrap">{percent}% hoàn thành</span>
           </div>
         </div>
       </div>

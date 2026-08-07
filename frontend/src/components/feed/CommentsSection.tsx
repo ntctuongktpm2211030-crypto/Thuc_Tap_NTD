@@ -11,6 +11,53 @@ interface CommentsSectionProps {
   onCommentCountChange?: (count: number) => void;
 }
 
+function CommentTextWithMentions({ text }: { text: string }) {
+  if (!text) return null;
+  const trimmed = text.trim();
+  if (trimmed.startsWith('@')) {
+    const multiMatch = trimmed.match(/^(@[^\s]+\s+[^\s]+)\s+(.*)$/);
+    if (multiMatch) {
+      return (
+        <span>
+          <span className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer mr-1.5">{multiMatch[1]}</span>
+          <span>{multiMatch[2]}</span>
+        </span>
+      );
+    }
+    const singleMatch = trimmed.match(/^(@[^\s]+)\s+(.*)$/);
+    if (singleMatch) {
+      return (
+        <span>
+          <span className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer mr-1.5">{singleMatch[1]}</span>
+          <span>{singleMatch[2]}</span>
+        </span>
+      );
+    }
+  }
+  return <span>{text}</span>;
+}
+
+function normalizeCommentsSectionItem(c: any): any {
+  if (!c) return null;
+  const content = c.content || c.text || '';
+  const authorObj = typeof c.author === 'object' && c.author ? c.author : {
+    profile: {
+      fullName: typeof c.author === 'string' ? c.author : 'Người dùng',
+      avatarUrl: c.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+    }
+  };
+  const replies = Array.isArray(c.replies) ? c.replies.map(normalizeCommentsSectionItem).filter(Boolean) : [];
+
+  return {
+    ...c,
+    id: String(c.id || Date.now()),
+    content,
+    author: authorObj,
+    createdAt: c.createdAt || c.date || new Date().toISOString(),
+    replies,
+  };
+}
+
 export default function CommentsSection({ postId, onCommentCountChange }: CommentsSectionProps) {
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -36,11 +83,28 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
   };
 
   const loadComments = async () => {
-    let localList: Comment[] = [];
-    try {
-      const localRaw = localStorage.getItem(`terraholic_comments_${postId}`);
-      if (localRaw) localList = JSON.parse(localRaw);
-    } catch {}
+    let localList: any[] = [];
+    const rawId = postId.replace(/^api-/, '');
+    const keys = [
+      `terraholic_comments_${postId}`,
+      `terraholic_comments_${rawId}`,
+      `terraholic_comments_api-${rawId}`,
+    ];
+
+    for (const k of keys) {
+      try {
+        const localRaw = localStorage.getItem(k);
+        if (localRaw) {
+          const parsed = JSON.parse(localRaw);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(item => {
+              const norm = normalizeCommentsSectionItem(item);
+              if (norm) localList.push(norm);
+            });
+          }
+        }
+      } catch {}
+    }
 
     if (postId.startsWith('checkin-')) {
       setComments(localList);
@@ -52,9 +116,14 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
     setError('');
     try {
       const data = await postsService.getComments(postId);
-      const map = new Map<string, Comment>();
-      (data || []).forEach(c => map.set(c.id, c));
-      localList.forEach(c => map.set(c.id, c));
+      const map = new Map<string, any>();
+      (data || []).forEach(c => {
+        const norm = normalizeCommentsSectionItem(c);
+        if (norm) map.set(norm.id, norm);
+      });
+      localList.forEach(c => {
+        if (!map.has(c.id)) map.set(c.id, c);
+      });
       const merged = Array.from(map.values());
 
       setComments(merged);
@@ -80,6 +149,17 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
 
   useEffect(() => {
     void loadComments();
+
+    const handleSync = () => {
+      void loadComments();
+    };
+
+    window.addEventListener('terraholic_comments_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('terraholic_comments_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, [postId]);
 
   const handleAddComment = async (e: React.FormEvent) => {
@@ -117,7 +197,13 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
       setComments(updated);
       try {
         localStorage.setItem(`terraholic_comments_${postId}`, JSON.stringify(updated));
+        if (postId.startsWith('api-')) {
+          localStorage.setItem(`terraholic_comments_${postId.replace('api-', '')}`, JSON.stringify(updated));
+        } else {
+          localStorage.setItem(`terraholic_comments_api-${postId}`, JSON.stringify(updated));
+        }
       } catch {}
+      window.dispatchEvent(new CustomEvent('terraholic_comments_updated', { detail: { postId } }));
       setNewCommentText('');
       
       // Recalculate total count
@@ -171,8 +257,7 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
     try {
       const newReply = await postsService.addComment(postId, replyText, parentId);
       
-      // Update comments list in state by appending the reply to parent
-      setComments(prev => prev.map(c => {
+      const updated = comments.map(c => {
         if (c.id === parentId) {
           return {
             ...c,
@@ -180,8 +265,19 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
           };
         }
         return c;
-      }));
+      });
       
+      setComments(updated);
+      try {
+        localStorage.setItem(`terraholic_comments_${postId}`, JSON.stringify(updated));
+        if (postId.startsWith('api-')) {
+          localStorage.setItem(`terraholic_comments_${postId.replace('api-', '')}`, JSON.stringify(updated));
+        } else {
+          localStorage.setItem(`terraholic_comments_api-${postId}`, JSON.stringify(updated));
+        }
+      } catch {}
+      window.dispatchEvent(new CustomEvent('terraholic_comments_updated', { detail: { postId } }));
+
       setReplyText('');
       setActiveReplyId(null);
 
@@ -314,7 +410,9 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                   <div className="flex-1">
                     <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                       <p className="font-bold text-[var(--text-primary)] text-xs mb-0.5">{c.author.profile?.fullName || 'Người dùng'}</p>
-                      <p className="whitespace-pre-wrap break-all leading-normal text-xs">{c.content}</p>
+                      <p className="whitespace-pre-wrap break-all leading-normal text-xs">
+                        <CommentTextWithMentions text={c.content} />
+                      </p>
                       {currentReaction && (
                         <span className="absolute -bottom-1.5 -right-1.5 flex items-center bg-white dark:bg-slate-700 border border-[var(--border-subtle)] rounded-full px-1.5 py-0.5 shadow-sm text-[10px] scale-90 z-20">
                           {currentReaction === 'like' && '👍'}
@@ -410,7 +508,9 @@ export default function CommentsSection({ postId, onCommentCountChange }: Commen
                         <div className="flex-1">
                           <div className="relative bg-[var(--bg-elevated)] rounded-2xl rounded-tl-sm px-3.5 py-1.5 text-sm text-[var(--text-secondary)] inline-block max-w-[90%] hover:brightness-105 transition-all">
                             <p className="font-bold text-[var(--text-primary)] text-[11px] mb-0.5">{reply.author.profile?.fullName || 'Người dùng'}</p>
-                            <p className="whitespace-pre-wrap break-all leading-normal text-xs">{reply.content}</p>
+                            <p className="whitespace-pre-wrap break-all leading-normal text-xs">
+                              <CommentTextWithMentions text={reply.content} />
+                            </p>
                             {replyReaction && (
                               <span className="absolute -bottom-1.5 -right-1.5 flex items-center bg-white dark:bg-slate-700 border border-[var(--border-subtle)] rounded-full px-1.5 py-0.5 shadow-sm text-[9px] scale-90 z-20">
                                 {replyReaction === 'like' && '👍'}

@@ -11,9 +11,34 @@ import { useLang } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import type { RootState, AppDispatch } from '../../store';
 import { setUser } from '../../store/authSlice';
-import { authService, socialService, travelHistoryService, tripsService, postsService } from '../../services/smartTravel.service';
+import { authService, socialService, travelHistoryService, tripsService, postsService, mapService } from '../../services/smartTravel.service';
 import { useIsMounted } from '../../hooks/useIsMounted';
 import { cleanCardText } from '../../utils/feedUtils';
+
+function formatTripForProfile(item: any, vi: boolean) {
+  if (!item) return null;
+
+  const rawDest = item.destinationName || item.destination || item.itinerary?.destination || item.itinerary?.destinationName || 'Việt Nam';
+  const destName = typeof rawDest === 'object' ? (rawDest.name || rawDest.address || 'Việt Nam') : String(rawDest);
+  const capDest = destName.replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+  const rawDays = item.days || item.itinerary?.days || [];
+  const durationDays = item.durationDays || (Array.isArray(rawDays) ? rawDays.length : 1);
+  const title = item.title || (vi ? `Khám phá ${capDest} (${durationDays} ngày)` : `Explore ${capDest} (${durationDays} days)`);
+  const totalBudget = item.totalBudget || item.totalEstimatedCost || item.itinerary?.totalEstimatedCost || 0;
+  const startDate = item.startDate || item.createdAt || new Date().toISOString();
+  const endDate = item.endDate || new Date(new Date(startDate).getTime() + Math.max(0, durationDays - 1) * 86400000).toISOString();
+
+  return {
+    ...item,
+    id: item.id || `trip-${Date.now()}-${Math.random()}`,
+    title,
+    destinationName: capDest,
+    totalBudget,
+    startDate,
+    endDate,
+  };
+}
 
 
 
@@ -53,8 +78,44 @@ export default function ProfilePage() {
 
   const fetchPlannedTrips = async () => {
     try {
-      const data = await tripsService.LayDanhSachChuyenDi();
-      if (Array.isArray(data)) setPlannedTrips(data);
+      const [tripsRes, aiHistoryRes] = await Promise.all([
+        tripsService.LayDanhSachChuyenDi().catch(() => []),
+        tripsService.LayLichSuTaoChuyenDiAI().catch(() => []),
+      ]);
+
+      const rawAiHistory = localStorage.getItem('smarttravel_ai_history');
+      const localAiHistory = rawAiHistory ? JSON.parse(rawAiHistory) : [];
+
+      const mergedTripsMap = new Map();
+
+      if (Array.isArray(tripsRes)) {
+        tripsRes.forEach((t: any) => {
+          if (t.id) {
+            const formatted = formatTripForProfile(t, vi);
+            if (formatted) mergedTripsMap.set(t.id, formatted);
+          }
+        });
+      }
+
+      if (Array.isArray(aiHistoryRes)) {
+        aiHistoryRes.forEach((h: any) => {
+          if (h.id && !mergedTripsMap.has(h.id)) {
+            const formatted = formatTripForProfile(h, vi);
+            if (formatted) mergedTripsMap.set(h.id, formatted);
+          }
+        });
+      }
+
+      if (Array.isArray(localAiHistory)) {
+        localAiHistory.forEach((h: any) => {
+          if (h.id && !mergedTripsMap.has(h.id)) {
+            const formatted = formatTripForProfile(h, vi);
+            if (formatted) mergedTripsMap.set(h.id, formatted);
+          }
+        });
+      }
+
+      setPlannedTrips(Array.from(mergedTripsMap.values()));
     } catch (err) {
       console.error('Fetch planned trips failed:', err);
     }
@@ -340,8 +401,78 @@ export default function ProfilePage() {
   const fetchHistory = async () => {
     setLoadingHistory(true);
     try {
-      const data = await travelHistoryService.LayDanhSachNhatKy();
-      if (Array.isArray(data)) setHistoryList(data);
+      const [dbHistory, checkinsRes] = await Promise.all([
+        travelHistoryService.LayDanhSachNhatKy().catch(() => []),
+        mapService.myCheckins().catch(() => []),
+      ]);
+
+      const rawSavedCheckins = localStorage.getItem('saved_checkins');
+      const localCheckins = rawSavedCheckins ? JSON.parse(rawSavedCheckins) : [];
+
+      const formattedCheckins = Array.isArray(checkinsRes) ? checkinsRes.map(c => {
+        let noteText = '';
+        let checkinImages: string[] = [];
+        if (c.destination?.imageUrl) checkinImages.push(c.destination.imageUrl);
+
+        if (c.note && typeof c.note === 'string') {
+          const trimmed = c.note.trim();
+          if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              noteText = parsed.text || parsed.note || parsed.body || parsed.content || '';
+              const imgs = parsed.imageUrl || parsed.imageUrls || parsed.images || parsed.photos || parsed.mediaUrls;
+              if (imgs) {
+                if (Array.isArray(imgs)) {
+                  imgs.forEach((img: string) => { if (img && !checkinImages.includes(img)) checkinImages.push(img); });
+                } else if (typeof imgs === 'string' && !checkinImages.includes(imgs)) {
+                  checkinImages.push(imgs);
+                }
+              }
+            } catch (e) {
+              noteText = c.note;
+            }
+          } else {
+            noteText = c.note;
+          }
+        }
+
+        return {
+          id: `checkin-${c.id}`,
+          location: c.destination?.name || c.destination?.address || (vi ? 'Vị trí check-in' : 'Check-in Location'),
+          time: c.createdAt,
+          cost: 0,
+          rating: 5,
+          notes: noteText || (vi ? `Check-in tại ${c.destination?.name || 'địa điểm du lịch'}` : `Checked in at ${c.destination?.name || 'travel spot'}`),
+          images: checkinImages
+        };
+      }) : [];
+
+      const formattedLocalCheckins = Array.isArray(localCheckins) ? localCheckins.map((lc: any) => ({
+        id: lc.id || `local-${Math.random()}`,
+        location: lc.destinationName || lc.title || lc.name || 'Check-in Location',
+        time: lc.createdAt || new Date().toISOString(),
+        cost: lc.cost || 0,
+        rating: lc.rating || 5,
+        notes: lc.notes || lc.note || lc.description || '',
+        images: Array.isArray(lc.images) ? lc.images : lc.imageUrl ? [lc.imageUrl] : []
+      })) : [];
+
+      const mergedMap = new Map();
+      if (Array.isArray(dbHistory)) {
+        dbHistory.forEach(h => {
+          if (h.id) {
+            mergedMap.set(h.id, {
+              ...h,
+              images: Array.isArray(h.images) ? h.images : h.imageUrl ? [h.imageUrl] : []
+            });
+          }
+        });
+      }
+
+      formattedCheckins.forEach(ch => { if (ch.id && !mergedMap.has(ch.id)) mergedMap.set(ch.id, ch); });
+      formattedLocalCheckins.forEach(ch => { if (ch.id && !mergedMap.has(ch.id)) mergedMap.set(ch.id, ch); });
+
+      setHistoryList(Array.from(mergedMap.values()));
     } catch (err) {
       console.error('Fetch travel history failed:', err);
     } finally {
@@ -352,6 +483,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (activeTab === 'history') {
       fetchHistory();
+    } else if (activeTab === 'trips') {
+      fetchPlannedTrips();
     }
   }, [activeTab]);
 
@@ -878,7 +1011,6 @@ export default function ProfilePage() {
                 <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300 font-medium">
                   <p><strong className="text-slate-900 dark:text-white">{vi ? 'Họ tên:' : 'Name:'}</strong> {user.fullName}</p>
                   <p><strong className="text-slate-900 dark:text-white">Email:</strong> {user.email}</p>
-                  <p><strong className="text-slate-900 dark:text-white">{vi ? 'Vai trò:' : 'Role:'}</strong> {user.role}</p>
                   <p><strong className="text-slate-900 dark:text-white">{vi ? 'Sở thích:' : 'Interests:'}</strong> {vi ? 'Du lịch, ẩm thực, nhiếp ảnh' : 'Travel, food, photography'}</p>
                 </div>
               </div>
@@ -1072,6 +1204,17 @@ export default function ProfilePage() {
                     {historyList.map(item => (
                       <div key={item.id} className="p-4 rounded-xl border border-[var(--border-normal)] bg-[var(--bg-elevated)] relative hover:border-[var(--gold)]/50 transition-all flex flex-col justify-between group shadow-sm">
                         <div>
+                          {Array.isArray(item.images) && item.images.length > 0 && (
+                            <div className="mb-3 aspect-video rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-slate-900/5">
+                              <img
+                                src={item.images[0]}
+                                alt={item.location}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                              />
+                            </div>
+                          )}
+
                           <div className="flex justify-between items-start gap-4">
                             <h4 className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-1.5">
                               📍 {item.location}
@@ -1082,17 +1225,26 @@ export default function ProfilePage() {
                               </span>
                             </div>
                           </div>
+
+                          {item.notes && (
+                            <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed line-clamp-2 bg-[var(--bg-surface)] p-2.5 rounded-xl border border-[var(--border-subtle)] italic">
+                              "{item.notes}"
+                            </p>
+                          )}
+
                           <div className="mt-3 space-y-1.5 text-xs text-[var(--text-secondary)]">
                             <p className="flex items-center gap-1.5">
                               <Calendar size={12} className="opacity-75" />
                               <span>{new Date(item.time).toLocaleDateString(vi ? 'vi-VN' : 'en-US')}</span>
                             </p>
-                            <p className="flex items-center gap-1.5">
-                              <DollarSign size={12} className="opacity-75 text-emerald-500" />
-                              <span className="font-semibold text-[var(--text-primary)]">
-                                {Number(item.cost).toLocaleString(vi ? 'vi-VN' : 'en-US')} {vi ? 'VND' : 'USD'}
-                              </span>
-                            </p>
+                            {Number(item.cost) > 0 && (
+                              <p className="flex items-center gap-1.5">
+                                <DollarSign size={12} className="opacity-75 text-emerald-500" />
+                                <span className="font-semibold text-[var(--text-primary)]">
+                                  {Number(item.cost).toLocaleString(vi ? 'vi-VN' : 'en-US')} {vi ? 'VND' : 'USD'}
+                                </span>
+                              </p>
+                            )}
                           </div>
                         </div>
                         {isOwnProfile && (
@@ -1300,6 +1452,7 @@ export default function ProfilePage() {
                   value={editFullName}
                   onChange={e => setEditFullName(e.target.value)}
                   placeholder={vi ? 'Nhập họ và tên của bạn...' : 'Enter your full name...'}
+                  spellCheck={false}
                   className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-semibold focus:outline-none focus:border-brand-500"
                   required
                 />
@@ -1314,6 +1467,7 @@ export default function ProfilePage() {
                   value={editHomeLocation}
                   onChange={e => setEditHomeLocation(e.target.value)}
                   placeholder={vi ? 'Ví dụ: Hà Nội, Đà Nẵng, TP. Hồ Chí Minh...' : 'e.g. Hanoi, Da Nang...'}
+                  spellCheck={false}
                   className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-semibold focus:outline-none focus:border-brand-500"
                 />
               </div>
@@ -1327,6 +1481,7 @@ export default function ProfilePage() {
                   value={editBio}
                   onChange={e => setEditBio(e.target.value)}
                   placeholder={vi ? 'Chia sẻ câu nói yêu thích hoặc niềm đam mê xê dịch của bạn...' : 'Share something about yourself...'}
+                  spellCheck={false}
                   className="w-full bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl px-3.5 py-2.5 text-xs text-[var(--text-primary)] font-medium focus:outline-none focus:border-brand-500 resize-none"
                 />
               </div>

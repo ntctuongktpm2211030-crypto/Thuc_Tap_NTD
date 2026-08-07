@@ -311,7 +311,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
         return url;
       });
       const results = await Promise.all(uploadPromises);
-      finalMediaUrls = results.filter((url): url is string => typeof url === 'string');
+      finalMediaUrls = Array.from(new Set(results.filter((url): url is string => typeof url === 'string')));
     }
 
     // Verify tripId exists if passed to avoid foreign key failure
@@ -488,7 +488,7 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
         return url;
       });
       const results = await Promise.all(uploadPromises);
-      finalMediaUrls = results.filter((url): url is string => typeof url === 'string');
+      finalMediaUrls = Array.from(new Set(results.filter((url): url is string => typeof url === 'string')));
     }
 
     const updatedPost = await prisma.post.update({

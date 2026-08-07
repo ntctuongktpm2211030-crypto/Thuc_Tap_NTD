@@ -792,6 +792,10 @@ const MapDashboard = () => {
 
       const checkinTime = new Date(c.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date(c.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-US');
 
+      const isMe = Boolean(user && (c.userId === user.id || c.user?.id === user.id || (c.user?.email && user.email && c.user.email.toLowerCase() === user.email.toLowerCase())));
+      const displayName = c.user?.profile?.fullName || (c.user as any)?.fullName || (isMe ? (user.fullName || user.profile?.fullName) : null) || c.user?.email || 'Lữ khách';
+      const displayAvatar = c.user?.profile?.avatarUrl || (c.user as any)?.avatarUrl || (c.user as any)?.avatar || (isMe ? (user.avatarUrl || user.profile?.avatarUrl) : null) || '';
+
       if (seenCheckins.has(locKey)) {
         const existing = mappedCheckins.find(m => m.id === `checkin-${locKey}`);
         if (existing) {
@@ -804,8 +808,8 @@ const MapDashboard = () => {
             }];
           }
           existing.allCheckins.push({
-            user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
-            avatar: c.user?.profile?.avatarUrl || '',
+            user: displayName,
+            avatar: displayAvatar,
             note: parsedNote,
             time: checkinTime
           });
@@ -825,8 +829,8 @@ const MapDashboard = () => {
         imageUrls: imageUrls,
         tag: tag,
         tags: tags,
-        user: c.user?.profile?.fullName || c.user?.email || 'Người dùng',
-        avatar: c.user?.profile?.avatarUrl || '',
+        user: displayName,
+        avatar: displayAvatar,
         time: checkinTime,
         category: c.destination?.category || 'checkin'
       });
@@ -996,7 +1000,23 @@ const MapDashboard = () => {
         tags: checkinTags
       });
       const response = await mapService.checkIn('', finalPayload, customDestName.trim(), lat, lng);
-      setCheckins(prev => [response, ...prev]);
+      const currentUserAvatar = user?.avatarUrl || user?.profile?.avatarUrl || response?.user?.profile?.avatarUrl || (response?.user as any)?.avatarUrl || '';
+      const currentUserName = user?.fullName || user?.profile?.fullName || response?.user?.profile?.fullName || response?.user?.email || 'Lữ khách';
+
+      const enrichedCheckin = {
+        ...response,
+        user: {
+          id: user?.id || response?.user?.id,
+          email: user?.email || response?.user?.email,
+          avatarUrl: currentUserAvatar,
+          profile: {
+            fullName: currentUserName,
+            avatarUrl: currentUserAvatar,
+          }
+        }
+      };
+
+      setCheckins(prev => [enrichedCheckin, ...prev]);
       setNewNote('');
       setCustomDestName('');
       setCheckinImages([]);
@@ -1013,8 +1033,8 @@ const MapDashboard = () => {
         imageUrls: checkinImages,
         tag: checkinTags[0] || '',
         tags: checkinTags,
-        user: response.user?.profile?.fullName || response.user?.email || 'Người dùng',
-        avatar: response.user?.profile?.avatarUrl || ''
+        user: currentUserName,
+        avatar: currentUserAvatar
       });
 
       alert(vi ? 'Check-in thành công!' : 'Check-in successful!');
@@ -1826,6 +1846,17 @@ const MapDashboard = () => {
                     tags = parsed.tags || (parsed.tag ? [parsed.tag] : []);
                   } catch (e) { }
                 }
+
+                const isMe = Boolean(
+                  user &&
+                  ((chk.userId && chk.userId === user.id) ||
+                   (chk.user?.id && chk.user.id === user.id) ||
+                   (chk.user?.email && user?.email && chk.user.email.toLowerCase() === user.email.toLowerCase()))
+                );
+
+                const chkUserName = chk.user?.profile?.fullName || (chk.user as any)?.fullName || (isMe ? (user?.fullName || user?.profile?.fullName) : null) || chk.user?.email || 'Lữ khách';
+                const chkUserAvatar = chk.user?.profile?.avatarUrl || (chk.user as any)?.avatarUrl || (chk.user as any)?.avatar || (isMe ? (user?.avatarUrl || user?.profile?.avatarUrl) : null) || `https://ui-avatars.com/api/?name=${encodeURIComponent(chkUserName)}&background=2563EB&color=fff`;
+
                 return (
                   <div
                     key={chk.id}
@@ -1841,8 +1872,8 @@ const MapDashboard = () => {
                         imageUrls: imageUrls,
                         tag: tag,
                         tags: tags,
-                        user: chk.user?.profile?.fullName || chk.user?.email || 'Người dùng',
-                        avatar: chk.user?.profile?.avatarUrl || ''
+                        user: chkUserName,
+                        avatar: chkUserAvatar
                       });
                     }}
                     className="p-2 bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] border border-[var(--border-normal)] rounded-xl transition-all cursor-pointer space-y-1.5 group"
@@ -1854,14 +1885,14 @@ const MapDashboard = () => {
                         className="block hover:scale-105 transition-transform cursor-pointer flex-shrink-0"
                       >
                         <img
-                          src={chk.user?.profile?.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
-                          alt={chk.user?.profile?.fullName || 'User'}
+                          src={chkUserAvatar}
+                          alt={chkUserName}
                           className="w-6 h-6 rounded-full object-cover border border-[var(--border-normal)]"
                         />
                       </Link>
                       <div className="min-w-0 flex-1">
                         <h4 className="text-[10px] font-bold text-[var(--text-primary)] group-hover:text-[var(--gold)] transition-colors truncate">
-                          {chk.user?.profile?.fullName || chk.user?.email || 'User'}
+                          {chkUserName}
                         </h4>
                         <p className="text-[8px] text-[var(--text-muted)] leading-none mt-0.5">
                           {new Date(chk.createdAt).toLocaleTimeString(vi ? 'vi-VN' : 'en-US', {

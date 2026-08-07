@@ -9,14 +9,14 @@ interface PostEngagementBlockProps {
   likeCount: number;
   commentCount: number;
   liked: boolean;
-  saved: boolean;
+  saved?: boolean;
   onLike: (e: React.MouseEvent) => void;
-  onBookmark: (e: React.MouseEvent) => void;
+  onBookmark?: (e: React.MouseEvent) => void;
   onOpenDetail: () => void;
   onOpenLikers?: () => void;
 }
 
-/** Hàng thống kê + preview bình luận + thanh Thích / Bình luận / Lưu (đồng bộ cấu trúc feed) */
+/** Hàng thống kê + preview bình luận + thanh Thích / Bình luận / Lưu / Chia sẻ */
 export default function PostEngagementBlock({
   postId,
   likeCount,
@@ -70,7 +70,7 @@ export default function PostEngagementBlock({
           </button>
         </div>
 
-        {/* Right: Comment, Save, Share */}
+        {/* Right: Comment, Save & Share */}
         <div className="flex items-center gap-4 sm:gap-5">
           <button
             type="button"
@@ -89,7 +89,7 @@ export default function PostEngagementBlock({
             type="button"
             onClick={onBookmark}
             className={`flex items-center gap-1.5 font-semibold transition-colors group/save cursor-pointer ${
-              saved ? 'text-amber-600' : 'text-slate-600 dark:text-slate-400 hover:text-amber-600'
+              saved ? 'text-amber-600 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-amber-600'
             }`}
           >
             <Bookmark size={14} className={`text-amber-500 ${saved ? 'fill-current' : ''} transition-colors`} />

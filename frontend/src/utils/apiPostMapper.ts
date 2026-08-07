@@ -105,35 +105,34 @@ function categoryLabel(payload: ParsedPayload): string {
 }
 
 function extractMediaFromPost(post: Post, payload: ParsedPayload | null): string[] {
+  let raw: string[] = [];
+
   if (Array.isArray(post.mediaUrls) && post.mediaUrls.length > 0) {
     const valid = post.mediaUrls.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-    if (valid.length > 0) return valid;
-  }
-
-  if (Array.isArray((post as any).images) && (post as any).images.length > 0) {
+    if (valid.length > 0) raw = valid;
+  } else if (Array.isArray((post as any).images) && (post as any).images.length > 0) {
     const valid = ((post as any).images as any[]).filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-    if (valid.length > 0) return valid;
-  }
-
-  if (payload) {
+    if (valid.length > 0) raw = valid;
+  } else if (payload) {
     if (Array.isArray(payload.photos)) {
       const photos = payload.photos.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-      if (photos.length > 0) return photos;
-    }
-    if (Array.isArray(payload.images)) {
+      if (photos.length > 0) raw = photos;
+    } else if (Array.isArray(payload.images)) {
       const images = payload.images.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-      if (images.length > 0) return images;
-    }
-    if (Array.isArray(payload.mediaUrls)) {
+      if (images.length > 0) raw = images;
+    } else if (Array.isArray(payload.mediaUrls)) {
       const mediaUrls = payload.mediaUrls.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
-      if (mediaUrls.length > 0) return mediaUrls;
+      if (mediaUrls.length > 0) raw = mediaUrls;
+    } else if (typeof payload.image === 'string' && payload.image.trim().length > 0) {
+      raw = [payload.image];
+    } else if (typeof payload.cover === 'string' && payload.cover.trim().length > 0) {
+      raw = [payload.cover];
+    } else if (typeof payload.photo === 'string' && payload.photo.trim().length > 0) {
+      raw = [payload.photo];
     }
-    if (typeof payload.image === 'string' && payload.image.trim().length > 0) return [payload.image];
-    if (typeof payload.cover === 'string' && payload.cover.trim().length > 0) return [payload.cover];
-    if (typeof payload.photo === 'string' && payload.photo.trim().length > 0) return [payload.photo];
   }
 
-  return [];
+  return Array.from(new Set(raw));
 }
 
 /** Chuyển bài từ API backend → định dạng hiển thị bảng tin */

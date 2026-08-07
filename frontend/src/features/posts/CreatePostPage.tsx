@@ -151,7 +151,8 @@ export default function CreatePostPage() {
       const coverUrl = data.coverImage ? await resolveMediaUrl(data.coverImage) : '';
       const photoUrls = await Promise.all(data.photos.map(resolveMediaUrl));
       const videoUrls = await Promise.all(data.videos.map(resolveMediaUrl));
-      const mediaUrls = [coverUrl, ...photoUrls, ...videoUrls].filter(Boolean);
+      const rawMedia = [coverUrl, ...photoUrls, ...videoUrls].filter(Boolean);
+      const mediaUrls = Array.from(new Set(rawMedia));
       await postsService.TaoBaiViet({ content: buildPostContent(data), mediaUrls });
 
       clearDraft();

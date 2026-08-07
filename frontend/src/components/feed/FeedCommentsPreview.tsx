@@ -8,14 +8,52 @@ interface Props {
   onCommentCountLoaded?: (count: number) => void;
 }
 
-function commentAuthorName(c: Comment): string {
+function commentAuthorName(c: any): string {
+  if (!c) return 'Người dùng';
   if (c.author?.profile?.fullName) return c.author.profile.fullName;
-  if ((c.author as any)?.name) return (c.author as any).name;
-  return 'Người dùng Terraholic';
+  if (c.author?.fullName) return c.author.fullName;
+  if (c.author?.name) return c.author.name;
+  if (typeof c.author === 'string' && c.author.trim()) return c.author.trim();
+  if (c.authorName) return c.authorName;
+  return 'Người dùng';
 }
 
-function commentAuthorAvatar(c: Comment): string | undefined {
-  return c.author?.profile?.avatarUrl || (c.author as any)?.avatar;
+function commentAuthorAvatar(c: any): string | undefined {
+  if (!c) return undefined;
+  return (
+    c.author?.profile?.avatarUrl ||
+    c.author?.avatarUrl ||
+    c.author?.avatar ||
+    c.avatarUrl ||
+    c.avatar ||
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
+}
+
+function CommentTextWithMentions({ text }: { text: string }) {
+  if (!text) return null;
+  const trimmed = text.trim();
+  if (trimmed.startsWith('@')) {
+    const multiMatch = trimmed.match(/^(@[^\s]+\s+[^\s]+)\s+(.*)$/);
+    if (multiMatch) {
+      return (
+        <span>
+          <span className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer mr-1.5">{multiMatch[1]}</span>
+          <span>{multiMatch[2]}</span>
+        </span>
+      );
+    }
+    const singleMatch = trimmed.match(/^(@[^\s]+)\s+(.*)$/);
+    if (singleMatch) {
+      return (
+        <span>
+          <span className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer mr-1.5">{singleMatch[1]}</span>
+          <span>{singleMatch[2]}</span>
+        </span>
+      );
+    }
+  }
+  return <span>{text}</span>;
 }
 
 /** Hiển thị 1 bình luận mới nhất trên feed — chuẩn phong cách Facebook */
@@ -26,50 +64,74 @@ export default function FeedCommentsPreview({ postId, onOpenDetail, onCommentCou
   useEffect(() => {
     let cancelled = false;
 
-    // Load local comments fallback from localStorage
-    let localList: Comment[] = [];
-    try {
-      const localRaw = localStorage.getItem(`terraholic_comments_${postId}`);
-      if (localRaw) localList = JSON.parse(localRaw);
-    } catch {
-      // ignore
-    }
+    const loadData = () => {
+      let localList: any[] = [];
+      const rawId = postId.replace(/^api-/, '');
+      const keys = [
+        `terraholic_comments_${postId}`,
+        `terraholic_comments_${rawId}`,
+        `terraholic_comments_api-${rawId}`,
+      ];
 
-    const apiId = toApiPostId(postId);
-    if (!apiId) {
-      if (!cancelled) {
-        setComments(localList);
-        setLoaded(true);
-        if (onCommentCountLoaded) onCommentCountLoaded(localList.length);
+      for (const k of keys) {
+        try {
+          const localRaw = localStorage.getItem(k);
+          if (localRaw) {
+            const parsed = JSON.parse(localRaw);
+            if (Array.isArray(parsed)) {
+              localList.push(...parsed);
+            }
+          }
+        } catch {}
       }
-      return;
-    }
 
-    postsService
-      .getComments(apiId)
-      .then(data => {
-        if (!cancelled) {
-          const map = new Map<string, Comment>();
-          (data || []).forEach(c => map.set(c.id, c));
-          localList.forEach(c => map.set(c.id, c));
-          const merged = Array.from(map.values());
-          setComments(merged);
-          setLoaded(true);
-          if (onCommentCountLoaded) onCommentCountLoaded(merged.length);
-        }
-      })
-      .catch(() => {
+      const apiId = toApiPostId(postId);
+      if (!apiId) {
         if (!cancelled) {
           setComments(localList);
           setLoaded(true);
-          if (onCommentCountLoaded && localList.length > 0) {
-            onCommentCountLoaded(localList.length);
-          }
+          if (onCommentCountLoaded) onCommentCountLoaded(localList.length);
         }
-      });
+        return;
+      }
+
+      postsService
+        .getComments(apiId)
+        .then(data => {
+          if (!cancelled) {
+            const map = new Map<string, any>();
+            (data || []).forEach(c => map.set(c.id, c));
+            localList.forEach(c => {
+              const key = c.id || `${c.author}_${c.text || c.content}`;
+              if (!map.has(key)) map.set(key, c);
+            });
+            const merged = Array.from(map.values());
+            setComments(merged);
+            setLoaded(true);
+            if (onCommentCountLoaded) onCommentCountLoaded(merged.length);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setComments(localList);
+            setLoaded(true);
+            if (onCommentCountLoaded && localList.length > 0) {
+              onCommentCountLoaded(localList.length);
+            }
+          }
+        });
+    };
+
+    loadData();
+
+    const handleSync = () => loadData();
+    window.addEventListener('terraholic_comments_updated', handleSync);
+    window.addEventListener('storage', handleSync);
 
     return () => {
       cancelled = true;
+      window.removeEventListener('terraholic_comments_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
     };
   }, [postId, onCommentCountLoaded]);
 
@@ -88,6 +150,7 @@ export default function FeedCommentsPreview({ postId, onOpenDetail, onCommentCou
 
   const authorName = commentAuthorName(newestComment);
   const avatar = commentAuthorAvatar(newestComment);
+  const commentContent = (newestComment as any).content || (newestComment as any).text || '';
 
   return (
     <div className="feed-comments-preview w-full px-4 pb-3 pt-1" onClick={e => e.stopPropagation()}>
@@ -118,7 +181,7 @@ export default function FeedCommentsPreview({ postId, onOpenDetail, onCommentCou
             <span className="text-[10px] text-slate-400 font-medium">· Bình luận mới nhất</span>
           </div>
           <p className="text-slate-700 dark:text-slate-300 font-normal leading-relaxed break-words">
-            {newestComment.content}
+            <CommentTextWithMentions text={commentContent} />
           </p>
         </div>
       </button>

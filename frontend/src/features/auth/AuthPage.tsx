@@ -615,7 +615,7 @@ export default function AuthPage() {
                 <button key={m} onClick={() => switchMode(m)}
                   className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     mode === m
-                      ? 'bg-[var(--gold)] text-black shadow-sm'
+                      ? 'bg-[var(--gold)] text-white shadow-sm'
                       : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}>
                   {m === 'login' ? t('auth.signIn') : t('auth.createAccount')}

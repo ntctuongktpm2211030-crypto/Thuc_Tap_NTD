@@ -92,17 +92,25 @@ export function checkContentViolation(text: string): {
 
       let matched = false;
 
-      // 1. Với các từ cấm quá ngắn (≤ 3 ký tự như "ỉa", "đái"), bắt buộc kiểm tra theo Ranh giới từ (Word Boundary)
-      // để tránh bắt nhầm các từ tiếng Việt hợp lệ (VD: "Gia Lai", "nhiều", "tham gia", "địa điểm" chứa "ia")
-      if (kwNoAccents.length <= 3) {
-        const rawRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])${escapeRegExp(kwLower)}(?:$|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])`, 'i');
-        const noAccentsRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_])${escapeRegExp(kwNoAccents)}(?:$|\\s|[^a-zA-Z0-9_])`, 'i');
+      // 1. Với từ cấm ngắn (≤ 4 ký tự hoặc từ đơn có dấu như "đái", "ỉa")
+      const hasAccents = kwLower !== kwNoAccents;
 
-        if (rawRegex.test(rawLower) || noAccentsRegex.test(noAccentsText)) {
+      if (kwLower.length <= 4 || !kwLower.includes(' ')) {
+        // Nếu từ cấm có dấu (VD: "đái", "ỉa"), BẮT BUỘC phải kiểm tra chính xác từ có dấu với ranh giới từ (Word Boundary).
+        // Tuyệt đối KHÔNG quét qua noAccentsText để tránh bắt nhầm các từ tiếng Việt hợp lệ (VD: "dài", "đại", "bài", "khái")
+        const strictAccentsRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])${escapeRegExp(kwLower)}(?:$|\\s|[^a-zA-Z0-9_àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])`, 'i');
+
+        if (strictAccentsRegex.test(rawLower)) {
           matched = true;
+        } else if (!hasAccents) {
+          // Chỉ kiểm tra qua noAccentsText nếu bản thân từ cấm nhập vào là không dấu (VD: "do ngu", "suc vat")
+          const noAccentsRegex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9_])${escapeRegExp(kwNoAccents)}(?:$|\\s|[^a-zA-Z0-9_])`, 'i');
+          if (noAccentsRegex.test(noAccentsText)) {
+            matched = true;
+          }
         }
       } else {
-        // 2. Với các cụm từ dài (như "cờ bạc", "tài xỉu", "ma túy"), áp dụng quét bao hàm rộng
+        // 2. Với các cụm từ nhiều từ (VD: "cờ bạc", "tài xỉu", "gái gọi", "bán số đề"), áp dụng quét bao hàm rộng
         if (
           rawLower.includes(kwLower) ||
           normalizedText.includes(kwLower) ||

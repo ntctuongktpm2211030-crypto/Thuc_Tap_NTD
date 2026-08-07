@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Users, UserPlus, Search, Loader2 } from 'lucide-react';
+import { Users, UserPlus, Search, Loader2, ArrowLeft } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
 import { socialService } from '../../services/smartTravel.service';
 import type { RootState } from '../../store';
@@ -101,15 +101,27 @@ export default function FollowingPage() {
 
       <div className="relative z-10 space-y-6 max-w-[1750px] mx-auto">
         <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 rounded-3xl shadow-xl space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
-              <Users size={24} />
-            </div>
-            <div>
-              <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{t('userMenu.following')}</h1>
-              <p className="text-xs font-medium text-slate-500">
-                {vi ? 'Người bạn đang theo dõi và người theo dõi bạn' : 'People you follow and your followers'}
-              </p>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <Link
+              to="/profile"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all shadow-sm border border-slate-200/80 dark:border-slate-700 group cursor-pointer flex-shrink-0"
+            >
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform text-blue-600 dark:text-blue-400" />
+              <span>{vi ? 'Về trang cá nhân' : 'Back to Profile'}</span>
+            </Link>
+
+            <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700 hidden sm:block" />
+
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500/15 to-indigo-500/15 border border-blue-500/20 text-blue-600 dark:text-blue-400 shadow-sm">
+                <Users size={22} />
+              </div>
+              <div>
+                <h1 className="text-xl font-extrabold text-slate-900 dark:text-white leading-tight">{t('userMenu.following')}</h1>
+                <p className="text-xs font-medium text-slate-500 leading-tight">
+                  {vi ? 'Người bạn đang theo dõi và người theo dõi bạn' : 'People you follow and your followers'}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -190,10 +202,6 @@ export default function FollowingPage() {
               })
             )}
           </div>
-
-          <Link to="/profile" className="inline-flex items-center gap-1 text-xs font-bold text-brand-600 hover:underline">
-            ← {vi ? 'Về hồ sơ' : 'Back to profile'}
-          </Link>
         </div>
       </div>
     </div>
