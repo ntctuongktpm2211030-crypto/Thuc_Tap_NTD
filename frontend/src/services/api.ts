@@ -37,6 +37,7 @@ apiClient.interceptors.response.use(
         const { accessToken } = res.data;
         
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('st-token', accessToken);
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {

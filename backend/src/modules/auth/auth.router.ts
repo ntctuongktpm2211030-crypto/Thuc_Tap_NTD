@@ -20,11 +20,11 @@ const JWT_SECRET = getRequiredEnv('JWT_SECRET');
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || JWT_SECRET;
 
 function signAccessToken(userId: string, role: string) {
-  return jwt.sign({ sub: userId, role }, JWT_SECRET, { expiresIn: '15m' });
+  return jwt.sign({ sub: userId, role }, JWT_SECRET, { expiresIn: '7d' });
 }
 
 function signRefreshToken(userId: string) {
-  return jwt.sign({ sub: userId }, JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ sub: userId }, JWT_REFRESH_SECRET, { expiresIn: '30d' });
 }
 
 /**
