@@ -992,9 +992,13 @@ export default function AuthPage() {
                   </button>
                 </div>
                 {regOtpMsg && (
-                  <p className="text-[11px] font-bold text-emerald-600 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20 mt-1">
-                    {regOtpMsg}
-                  </p>
+                  <div className={`text-xs font-bold p-3 rounded-xl border mt-1 flex flex-col gap-1 ${
+                    regOtpMsg.includes('⚠️')
+                      ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                      : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                  }`}>
+                    <div>{regOtpMsg}</div>
+                  </div>
                 )}
               </div>
 
