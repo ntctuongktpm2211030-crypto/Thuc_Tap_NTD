@@ -5,8 +5,8 @@ import api from '../../services/api';
 
 export const AdminLoginPage: React.FC = () => {
   const [mode, setMode] = useState<'login' | 'forgot' | 'otp'>('login');
-  const [email, setEmail] = useState('admin@terraholic.com');
-  const [password, setPassword] = useState('123456@Aa');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ text: string; isError: boolean } | null>(null);
@@ -229,11 +229,7 @@ export const AdminLoginPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200/80 text-[11px] text-slate-600 space-y-1">
-              <p className="font-extrabold text-blue-700">🔑 Tài khoản Admin Mặc định:</p>
-              <p>• Username: <code className="text-slate-900 font-mono font-bold">admin</code> hoặc <code className="text-slate-900 font-mono font-bold">admin@terraholic.com</code></p>
-              <p>• Mật khẩu: <code className="text-slate-900 font-mono font-bold">123456@Aa</code></p>
-            </div>
+
 
             <button
               type="submit"
