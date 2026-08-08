@@ -599,6 +599,29 @@ app.use('/api/v1/rag', ragRouter);
 app.use('/api/v1/admin', adminRouter);
 ensureDefaultAdminUser();
 
+// Purge soft-deleted posts permanently from DB
+import prisma from './config/db';
+async function purgeSoftDeletedPosts() {
+  try {
+    const deletedPosts = await prisma.post.findMany({
+      where: { NOT: { deletedAt: null } },
+      select: { id: true }
+    });
+    if (deletedPosts.length > 0) {
+      const ids = deletedPosts.map(p => p.id);
+      await prisma.comment.deleteMany({ where: { postId: { in: ids } } });
+      await prisma.like.deleteMany({ where: { postId: { in: ids } } });
+      await prisma.bookmark.deleteMany({ where: { postId: { in: ids } } });
+      await prisma.notification.deleteMany({ where: { targetId: { in: ids } } });
+      await prisma.post.deleteMany({ where: { id: { in: ids } } });
+      console.log(`[DB Purge] 🗑️ Successfully hard deleted ${ids.length} soft-deleted posts from PostgreSQL.`);
+    }
+  } catch (err) {
+    console.error('[DB Purge Error]', err);
+  }
+}
+purgeSoftDeletedPosts();
+
 // ─── 404 Handler ─────────────────────────────────────────
 app.use((_req: Request, res: Response) => {
   res.status(404).json({

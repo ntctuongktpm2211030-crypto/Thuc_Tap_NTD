@@ -231,7 +231,8 @@ export const AdminPostsTab: React.FC = () => {
         }
       } catch (e) {}
 
-      // 3. Update React state
+      // 3. Update React state & dispatch global post:deleted event
+      window.dispatchEvent(new CustomEvent('post:deleted', { detail: { postId } }));
       setPosts(prev => prev.filter(p => String(p.id) !== postId));
       setDeleteModalPost(null);
     } catch (err) {

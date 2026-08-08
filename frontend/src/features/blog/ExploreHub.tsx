@@ -147,6 +147,17 @@ export default function ExploreHub() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const handlePostDeleted = (e: any) => {
+      const deletedId = e.detail?.postId;
+      if (deletedId) {
+        setPosts(prev => prev.filter(p => String(p.id) !== String(deletedId) && String(p.id) !== `db-${deletedId}`));
+      }
+    };
+    window.addEventListener('post:deleted', handlePostDeleted);
+    return () => window.removeEventListener('post:deleted', handlePostDeleted);
+  }, []);
+
   // Infinite Scroll Trigger
   useEffect(() => {
     if (!loaderRef.current) return;

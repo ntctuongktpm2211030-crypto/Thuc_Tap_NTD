@@ -195,10 +195,17 @@ export const postsService = {
     apiClient.get<{ posts: Post[]; pagination: any }>('/posts', { params }).then(r => r.data),
   LayChiTietBaiViet: (id: string) => apiClient.get<Post>(`/posts/${id}`).then(r => r.data),
   TaoBaiViet: (data: { content: string; mediaUrls?: string[]; tripId?: string }) =>
-    apiClient.post<Post>('/posts', data).then(r => r.data),
+    apiClient.post<Post>('/posts', data).then(r => {
+      window.dispatchEvent(new CustomEvent('post:created', { detail: { post: r.data } }));
+      return r.data;
+    }),
   CapNhatBaiViet: (id: string, data: { content: string; mediaUrls?: string[] }) =>
     apiClient.put<Post>(`/posts/${id}`, data).then(r => r.data),
-  XoaBaiViet: (id: string) => apiClient.delete(`/posts/${id}`),
+  XoaBaiViet: (id: string) =>
+    apiClient.delete(`/posts/${id}`).then(r => {
+      window.dispatchEvent(new CustomEvent('post:deleted', { detail: { postId: id } }));
+      return r;
+    }),
   ThichHoacBoThich: (id: string) =>
     apiClient.post<{ liked: boolean }>(`/posts/${id}/like`).then(r => r.data),
   LuuHoacBoLuu: (id: string) =>

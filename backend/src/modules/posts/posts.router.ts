@@ -10,21 +10,13 @@ const router = Router();
 const feedCache = new Map<string, { data: { posts: any[]; total: number }; expiresAt: number }>();
 const commentsCache = new Map<string, { data: any; expiresAt: number }>();
 
-function getCachedFeed(key: string) {
-  const cached = feedCache.get(key);
-  if (!cached) return null;
-  if (Date.now() > cached.expiresAt) {
-    feedCache.delete(key);
-    return null;
-  }
-  return cached.data;
+function getCachedFeed(_key: string) {
+  // Always return null to guarantee 100% real-time fresh database queries without stale feed caching
+  return null;
 }
 
-function setCachedFeed(key: string, data: any) {
-  feedCache.set(key, {
-    data,
-    expiresAt: Date.now() + 300000 // 5 minutes TTL for blazing fast feed loads
-  });
+function setCachedFeed(_key: string, _data: any) {
+  // No-op
 }
 
 function invalidateFeedCache() {
@@ -98,7 +90,7 @@ router.get('/', optionalAuth, async (req: AuthRequest, res: Response) => {
     }
 
     const cacheKey = `feed_${page}_${limit}_${q || ''}_${authorId || ''}`;
-    let cachedData = getCachedFeed(cacheKey);
+    let cachedData: any = getCachedFeed(cacheKey);
     let posts: any[] = [];
     let total = 0;
 
@@ -361,14 +353,20 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
 // ─────────────────────────────────────────────────────────
 router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const post = await prisma.post.findUnique({ where: { id: req.params.id } });
+    const postId = req.params.id;
+    const post = await prisma.post.findUnique({ where: { id: postId } });
     if (!post) return res.status(404).json({ error: 'Post not found.' });
     if (post.authorId !== req.user!.sub) return res.status(403).json({ error: 'Access denied.' });
 
-    await prisma.post.update({
-      where: { id: req.params.id },
-      data: { deletedAt: new Date() }
-    });
+    // Hard Delete post and all child relationships from DB
+    await prisma.$transaction([
+      prisma.comment.deleteMany({ where: { postId } }),
+      prisma.like.deleteMany({ where: { postId } }),
+      prisma.bookmark.deleteMany({ where: { postId } }),
+      prisma.notification.deleteMany({ where: { targetId: postId } }),
+      prisma.post.delete({ where: { id: postId } }),
+    ]);
+
     invalidateFeedCache();
     return res.status(204).send();
   } catch (err) {

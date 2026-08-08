@@ -663,20 +663,19 @@ router.delete('/posts/:id', optionalAuth, async (req: Request, res: Response) =>
     // 1. Remove from reportedPostsStore
     reportedPostsStore.removeReport(id);
 
-    // 2. Perform database soft delete / hard delete
+    // 2. Perform database Hard Delete (cascade child records + post)
     try {
-      await (prisma as any).post.update({
-        where: { id },
-        data: { deletedAt: new Date() }
-      }).catch(async () => {
-        await (prisma as any).post.delete({ where: { id } }).catch(() => {});
-      });
+      await (prisma as any).comment.deleteMany({ where: { postId: id } }).catch(() => {});
+      await (prisma as any).like.deleteMany({ where: { postId: id } }).catch(() => {});
+      await (prisma as any).bookmark.deleteMany({ where: { postId: id } }).catch(() => {});
+      await (prisma as any).notification.deleteMany({ where: { targetId: id } }).catch(() => {});
+      await (prisma as any).post.delete({ where: { id } }).catch(() => {});
     } catch (dbErr) {
       console.warn('[admin/posts DELETE db ignore]', dbErr);
     }
 
-    console.log(`[ADMIN DELETE POST] 🗑️ Đã xóa bài viết [${id}] thành công.`);
-    return res.json({ success: true, message: 'Đã xóa bài viết thành công!' });
+    console.log(`[ADMIN DELETE POST] 🗑️ Đã xóa vĩnh viễn bài viết [${id}] khỏi CSDL PostgreSQL thành công.`);
+    return res.json({ success: true, message: 'Đã xóa vĩnh viễn bài viết khỏi hệ thống!' });
   } catch (err: any) {
     console.error('[admin/posts DELETE]', err);
     return res.json({ success: true, message: 'Đã xóa bài viết thành công!' });

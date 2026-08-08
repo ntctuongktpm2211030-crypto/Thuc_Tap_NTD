@@ -4,22 +4,16 @@ const STORAGE_KEY = 'smarttravel_explore_posts_v2';
 
 function loadStored(): ExplorePost[] | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as ExplorePost[]) : null;
-  } catch {
-    return null;
-  }
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {}
+  return null;
 }
 
-function saveStored(posts: ExplorePost[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-  } catch {
-    /* ignore */
-  }
+function saveStored(_posts: ExplorePost[]) {
+  // Disable stale local storage cache to ensure 100% database synchronization
 }
 
-let cache: ExplorePost[] = loadStored() ?? [...INITIAL_EXPLORE_POSTS];
+let cache: ExplorePost[] = [...INITIAL_EXPLORE_POSTS];
 
 export function getExplorePosts(): ExplorePost[] {
   return cache;

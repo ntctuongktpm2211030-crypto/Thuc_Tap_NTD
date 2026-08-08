@@ -963,6 +963,28 @@ export default function SocialFeedPage() {
   const closePost = () => setDetailPost(null);
   const readMoreLabel = t('feed.readMore');
 
+  useEffect(() => {
+    const handlePostCreated = () => {
+      cachedSocialFeed = null;
+      loadFeed(1, false);
+    };
+    const handlePostDeleted = (e: any) => {
+      const deletedId = e.detail?.postId;
+      if (deletedId) {
+        setApiPosts(prev => prev.filter(p => String(p.id) !== String(deletedId)));
+        if (cachedSocialFeed) {
+          cachedSocialFeed = cachedSocialFeed.filter(p => String(p.id) !== String(deletedId));
+        }
+      }
+    };
+    window.addEventListener('post:created', handlePostCreated);
+    window.addEventListener('post:deleted', handlePostDeleted);
+    return () => {
+      window.removeEventListener('post:created', handlePostCreated);
+      window.removeEventListener('post:deleted', handlePostDeleted);
+    };
+  }, []);
+
   const loadFeed = async (pageNum: number, isAppend: boolean = false) => {
     if (pageNum === 1) {
       if (cachedSocialFeed && cachedSocialFeed.length > 0 && !isAppend) {
