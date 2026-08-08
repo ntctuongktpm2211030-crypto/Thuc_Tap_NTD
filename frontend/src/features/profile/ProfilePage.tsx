@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   MapPin, Camera, Pencil, Users, Heart, MessageCircle, Share2,
   MoreHorizontal, Globe, Image as ImageIcon,
-  Bell, Sparkles, Send,
+  Bell, Sparkles, Send, KeyRound,
   Plus, Trash2, Calendar, DollarSign, Loader2, CheckCircle, X
 } from 'lucide-react';
 import { useLang } from '../../contexts/LanguageContext';
@@ -72,6 +72,45 @@ export default function ProfilePage() {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [editingEntry, setEditingEntry] = useState<any>(null);
+
+  // Change Password state
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [submittingPassword, setSubmittingPassword] = useState(false);
+
+  const handleChangePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!oldPassword) {
+      error(vi ? 'Vui lòng nhập mật khẩu hiện tại.' : 'Please enter current password.');
+      return;
+    }
+    if (!newPassword || newPassword.length < 8) {
+      error(vi ? 'Mật khẩu mới phải có tối thiểu 8 ký tự.' : 'New password must be at least 8 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      error(vi ? 'Mật khẩu mới và Nhập lại mật khẩu không khớp.' : 'New password and confirmation do not match.');
+      return;
+    }
+
+    setSubmittingPassword(true);
+    try {
+      await authService.changePassword(oldPassword, newPassword, confirmPassword);
+      success(vi ? 'Đổi mật khẩu thành công!' : 'Password changed successfully!');
+      setShowChangePasswordModal(false);
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err: any) {
+      console.error('Change password failed:', err);
+      const msg = err?.response?.data?.error || (vi ? 'Mật khẩu hiện tại không chính xác hoặc có lỗi xảy ra.' : 'Current password incorrect or an error occurred.');
+      error(msg);
+    } finally {
+      setSubmittingPassword(false);
+    }
+  };
 
   // Planned Trips state
   const [plannedTrips, setPlannedTrips] = useState<any[]>([]);
@@ -671,7 +710,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Profile Action Buttons */}
-            <div className="flex items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-center">
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-center">
               {isOwnProfile ? (
                 <>
                   <button
@@ -681,6 +720,14 @@ export default function ProfilePage() {
                   >
                     <Pencil size={15} />
                     <span>{vi ? 'Chỉnh sửa trang cá nhân' : 'Edit Profile'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowChangePasswordModal(true)}
+                    className="px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-extrabold rounded-2xl border border-amber-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
+                  >
+                    <KeyRound size={15} />
+                    <span>{vi ? 'Đổi mật khẩu' : 'Change Password'}</span>
                   </button>
                   <Link
                     to="/profile/following"
@@ -1537,6 +1584,105 @@ export default function ProfilePage() {
             >
               {vi ? 'Đồng ý & Đóng' : 'OK & Close'}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL ĐỔI MẬT KHẨU TÀI KHOẢN ── */}
+      {showChangePasswordModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
+          <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-3xl p-6 sm:p-7 w-full max-w-md shadow-2xl space-y-5 animate-scale-up relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-amber-500/10 text-amber-500 rounded-xl">
+                  <KeyRound size={20} />
+                </div>
+                <h3 className="text-sm font-extrabold text-[var(--text-primary)]">
+                  {vi ? 'Đổi mật khẩu tài khoản' : 'Change Account Password'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowChangePasswordModal(false);
+                  setOldPassword('');
+                  setNewPassword('');
+                  setConfirmPassword('');
+                }}
+                className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Mật khẩu hiện tại' : 'Current Password'} <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={e => setOldPassword(e.target.value)}
+                  placeholder={vi ? 'Nhập mật khẩu hiện tại...' : 'Enter current password...'}
+                  required
+                  className="w-full px-3.5 py-2.5 text-xs bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl focus:ring-2 focus:ring-amber-500 text-[var(--text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Mật khẩu mới' : 'New Password'} <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  placeholder={vi ? 'Tối thiểu 8 ký tự...' : 'Minimum 8 characters...'}
+                  required
+                  minLength={8}
+                  className="w-full px-3.5 py-2.5 text-xs bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl focus:ring-2 focus:ring-amber-500 text-[var(--text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-[var(--text-secondary)]">
+                  {vi ? 'Nhập lại mật khẩu mới' : 'Confirm New Password'} <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder={vi ? 'Nhập lại mật khẩu mới vừa gõ...' : 'Re-enter new password...'}
+                  required
+                  minLength={8}
+                  className="w-full px-3.5 py-2.5 text-xs bg-[var(--bg-primary)] border border-[var(--border-normal)] rounded-xl focus:ring-2 focus:ring-amber-500 text-[var(--text-primary)]"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowChangePasswordModal(false);
+                    setOldPassword('');
+                    setNewPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="px-4 py-2 text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] rounded-xl transition-colors cursor-pointer"
+                >
+                  {vi ? 'Hủy bỏ' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingPassword}
+                  className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {submittingPassword && <Loader2 size={14} className="animate-spin" />}
+                  <span>{vi ? 'Xác nhận đổi mật khẩu' : 'Change Password'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

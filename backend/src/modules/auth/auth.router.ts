@@ -620,4 +620,47 @@ router.post('/reset-password', async (req: Request, res: Response) => {
   }
 });
 
+// ─────────────────────────────────────────────────────────
+// POST /api/v1/auth/change-password
+// ─────────────────────────────────────────────────────────
+router.post('/change-password', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    const userId = (req as any).user?.id;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ error: 'Vui lòng nhập đầy đủ Mật khẩu hiện tại, Mật khẩu mới và Xác nhận mật khẩu mới.' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'Xác nhận mật khẩu mới không khớp.' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'Mật khẩu mới phải có tối thiểu 8 ký tự.' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'Người dùng không tồn tại.' });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.passwordHash);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Mật khẩu hiện tại không chính xác.' });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash }
+    });
+
+    return res.status(200).json({ message: 'Đổi mật khẩu thành công!' });
+  } catch (err: any) {
+    console.error('[auth/change-password]', err);
+    return res.status(500).json({ error: 'Không thể đổi mật khẩu. Vui lòng thử lại sau.' });
+  }
+});
+
 export default router;
