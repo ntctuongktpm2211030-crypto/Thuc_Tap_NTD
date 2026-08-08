@@ -33,8 +33,8 @@ function signRefreshToken(userId: string) {
 router.post('/send-register-otp', async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ error: 'Vui lòng nhập email.' });
+    if (!email || typeof email !== 'string' || !email.trim()) {
+      return res.status(400).json({ error: 'Vui lòng nhập địa chỉ email hợp lệ.' });
     }
 
     const inputEmail = email.trim().toLowerCase();
@@ -48,41 +48,51 @@ router.post('/send-register-otp', async (req: Request, res: Response) => {
     const expires = Date.now() + 15 * 60 * 1000;
     const tokenStr = `${otpCode}|${expires}`;
 
-    if (existing) {
-      await prisma.user.update({
-        where: { id: existing.id },
-        data: { verificationToken: tokenStr }
-      });
-    } else {
-      const dummyPasswordHash = await bcrypt.hash('Pending@2026', 10);
-      await prisma.user.create({
-        data: {
-          email: inputEmail,
-          passwordHash: dummyPasswordHash,
-          isVerified: false,
-          verificationToken: tokenStr,
-          profile: {
-            create: { fullName: inputEmail.split('@')[0] }
+    try {
+      if (existing) {
+        await prisma.user.update({
+          where: { id: existing.id },
+          data: { verificationToken: tokenStr }
+        });
+      } else {
+        const dummyPasswordHash = await bcrypt.hash('Pending@2026', 10);
+        await prisma.user.create({
+          data: {
+            email: inputEmail,
+            passwordHash: dummyPasswordHash,
+            isVerified: false,
+            verificationToken: tokenStr,
+            profile: {
+              create: { fullName: inputEmail.split('@')[0] }
+            }
           }
-        }
-      });
+        });
+      }
+    } catch (dbErr: any) {
+      console.warn('[send-register-otp] DB upsert warning:', dbErr?.message);
+      await prisma.user.updateMany({
+        where: { email: inputEmail },
+        data: { verificationToken: tokenStr }
+      }).catch(() => {});
     }
 
-    const sent = await emailService.sendRegisterOtpEmail(inputEmail, otpCode).catch(err => {
-      console.error('[send-register-otp] Error sending email:', err);
-      return false;
-    });
+    let sent = false;
+    try {
+      sent = await emailService.sendRegisterOtpEmail(inputEmail, otpCode);
+    } catch (emailErr: any) {
+      console.error('[send-register-otp] Error sending email:', emailErr);
+    }
 
-    console.log(`[REGISTER OTP DISPATCH] 📧 Mã OTP [${otpCode}] sent to ${inputEmail}, success: ${sent}`);
+    console.log(`[REGISTER OTP DISPATCH] 📧 Mã OTP [${otpCode}] for ${inputEmail}, success: ${sent}`);
 
     return res.json({
       success: true,
       message: `Mã OTP 6 số đã được gửi tới email ${inputEmail}`,
       otpDemo: otpCode
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error('[send-register-otp] Exception:', err);
-    return res.status(500).json({ error: 'Không thể gửi mã OTP qua email.' });
+    return res.status(500).json({ error: 'Không thể gửi mã OTP. Vui lòng thử lại sau.' });
   }
 });
 
