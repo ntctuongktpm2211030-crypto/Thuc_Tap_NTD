@@ -183,10 +183,10 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 /**
- * POST /api/v1/auth/verify-otp
- * Verify 6-digit OTP code for Registration or Password Reset
+ * POST /api/v1/auth/verify-register-otp
+ * Verify 6-digit OTP code for Inline Registration
  */
-router.post('/verify-otp', async (req: Request, res: Response) => {
+router.post('/verify-register-otp', async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
 
