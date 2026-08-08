@@ -211,7 +211,20 @@ export const AdminUsersTab: React.FC = () => {
   };
 
   // Filter & Sort Application
+  const currentAdminUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('st-user') || localStorage.getItem('user') || '{}');
+    } catch {
+      return {};
+    }
+  })();
+
   const processedUsers = [...users].filter(u => {
+    // Ẩn tài khoản đang đăng nhập hiện tại khỏi danh sách quản lý
+    if (currentAdminUser?.email && u.email.toLowerCase() === String(currentAdminUser.email).toLowerCase()) {
+      return false;
+    }
+
     const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase()) ||
       (u.profile?.fullName || '').toLowerCase().includes(search.toLowerCase());
 
