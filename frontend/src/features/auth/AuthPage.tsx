@@ -382,14 +382,10 @@ export default function AuthPage() {
         return;
       }
 
-      // Password reset OTP fallback
       const res = await authService.verifyOtp(forgotEmail, otpCode);
       setResetToken(res.resetToken);
-      setForgotStatus({ text: 'Mã OTP xác thực thành công.', isError: false });
-      setTimeout(() => {
-        setForgotStatus(null);
-        setMode('reset');
-      }, 1500);
+      setForgotStatus(null);
+      setMode('reset');
     } catch (err: any) {
       console.error('Verify OTP error:', err);
       const msg = err.response?.data?.error || 'Mã OTP không hợp lệ hoặc đã hết hiệu lực.';
