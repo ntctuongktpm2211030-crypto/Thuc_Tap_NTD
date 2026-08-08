@@ -1336,7 +1336,7 @@ export default function ProfilePage() {
 
       {/* ─── MODAL: THÊM / SỬA NHẬT KÝ DI CHUYỂN ─── */}
       {showHistoryModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
           <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-scale-up">
             <div className="px-5 py-4 border-b border-[var(--border-subtle)] flex justify-between items-center bg-[var(--bg-elevated)]">
               <h3 className="font-bold text-sm text-[var(--text-primary)]">
@@ -1474,7 +1474,7 @@ export default function ProfilePage() {
 
       {/* ── MODAL: CHỈNH SỬA THÔNG TIN CÁ NHÂN ── */}
       {showEditModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
           <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-scale-up">
             <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex justify-between items-center bg-[var(--bg-elevated)]">
               <h3 className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
@@ -1557,7 +1557,7 @@ export default function ProfilePage() {
 
       {/* ── MODAL THÔNG BÁO THÀNH CÔNG ĐẸP MẮT ── */}
       {showSuccessModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
           <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center space-y-5 animate-scale-up relative overflow-hidden">
             {/* Glow ambient background inside modal */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
@@ -1590,7 +1590,7 @@ export default function ProfilePage() {
 
       {/* ── MODAL ĐỔI MẬT KHẨU TÀI KHOẢN ── */}
       {showChangePasswordModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fade-in">
           <div className="bg-[var(--bg-surface)] border border-[var(--border-normal)] rounded-3xl p-6 sm:p-7 w-full max-w-md shadow-2xl space-y-5 animate-scale-up relative overflow-hidden">
             <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-3">
               <div className="flex items-center gap-2.5">
