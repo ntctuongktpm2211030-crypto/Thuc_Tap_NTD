@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '../../config/db';
 import { firebaseAuth } from '../../config/firebase';
 import { EmailService } from './email.service';
+import { requireAuth, AuthRequest } from './auth.middleware';
 import crypto from 'crypto';
 const emailService = new EmailService();
 
@@ -633,10 +634,10 @@ router.post('/reset-password', async (req: Request, res: Response) => {
 // ─────────────────────────────────────────────────────────
 // POST /api/v1/auth/change-password
 // ─────────────────────────────────────────────────────────
-router.post('/change-password', requireAuth, async (req: Request, res: Response) => {
+router.post('/change-password', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({ error: 'Vui lòng nhập đầy đủ Mật khẩu hiện tại, Mật khẩu mới và Xác nhận mật khẩu mới.' });
