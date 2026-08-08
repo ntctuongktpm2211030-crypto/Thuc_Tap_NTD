@@ -258,7 +258,7 @@ export const INTENT_KEYWORDS: Record<TravelSubIntent, {
 /**
  * Maps user input keywords → TravelSubIntent for rule-based detection.
  */
-export const SUB_INTENT_KEYWORDS: Record<string, TravelSubIntent[]> = {
+export const SUB_INTENT_KEYWORDS: Record<string, string[]> = {
   'check-in': ['check in', 'sống ảo', 'chụp ảnh', 'selfie', 'view đẹp', 'săn mây', 'sống ảo'],
   'sightseeing': ['ngắm cảnh', 'tham quan', 'danh lam', 'phong cảnh', 'cảnh đẹp', 'ngắm', 'chiêm ngưỡng'],
   'trekking': ['trekking', 'leo núi', 'đi bộ', 'xuyên rừng', 'băng rừng', 'chinh phục', 'đỉnh'],

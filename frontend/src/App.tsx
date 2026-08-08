@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Map, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2,
+  Map, Compass, Sparkles, Bell, Sun, Moon, Globe, Loader2, Bot,
   Menu, X, User, Send, Utensils, Search, Bookmark, Heart, MessageSquare, UserPlus, Clock, Newspaper,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +34,7 @@ import NotificationsPage from './features/profile/NotificationsPage';
 // Lazy-loaded heavy pages — splits bundle so initial load is fast
 const MapDashboard = lazy(() => import('./features/map/MapDashboard'));
 const TripPlanner = lazy(() => import('./features/trips/TripPlanner'));
+const ChatbotPage = lazy(() => import('./features/chatbot/ChatbotPage'));
 
 const MotionPlayground = lazy(() => import('./features/admin/MotionPlayground'));
 const AdminLoginPage = lazy(() => import('./features/admin/AdminLoginPage'));
@@ -267,6 +268,7 @@ function App() {
     { to: '/guide/culture-food', label: t('nav.cultureGuide'), Icon: Utensils },
     { to: '/map',       label: t('nav.map'),        Icon: Map },
     { to: '/trips',     label: t('nav.aiPlanner'), Icon: Sparkles },
+    { to: '/chat',      label: t('nav.aiAssistant'), Icon: Bot },
   ];
 
   const createNavItems = isAuthenticated
@@ -542,9 +544,26 @@ function App() {
 
             {/* Divider + extras */}
             <div className="w-px h-5 bg-[var(--border-subtle)] mx-2" />
-            <Link to="/profile/saved" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]`}>
-              <Bookmark size={14} strokeWidth={1.8} /> {lang === 'vi' ? 'Đã lưu' : 'Saved'}
-            </Link>
+            {(() => {
+              const savedActive = isActive('/profile/saved');
+              return (
+                <Link
+                  to="/profile/saved"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-150 group border ${
+                    savedActive
+                      ? 'bg-[var(--gold-glow)] text-[var(--gold)] border-[var(--gold)] shadow-[0_2px_8px_rgba(37,99,235,0.08)]'
+                      : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
+                  }`}
+                >
+                  <Bookmark
+                    size={16}
+                    className={`transition-colors ${savedActive ? 'text-[var(--gold)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`}
+                    strokeWidth={savedActive ? 2 : 1.8}
+                  />
+                  <span>{lang === 'vi' ? 'Đã lưu' : 'Saved'}</span>
+                </Link>
+              );
+            })()}
           </div>
         </div>
 
@@ -626,6 +645,16 @@ function App() {
               </div>
             }>
               <TripPlanner />
+            </Suspense>
+          } />
+          <Route path="/chat" element={
+            <Suspense fallback={
+              <div className="flex items-center justify-center p-20 text-xs text-[var(--text-muted)] gap-2">
+                <Loader2 size={16} className="animate-spin" />
+                <span>Loading Chatbot AI...</span>
+              </div>
+            }>
+              <ChatbotPage />
             </Suspense>
           } />
           <Route path="/guide/culture-food" element={<CultureFoodGuidePage />} />

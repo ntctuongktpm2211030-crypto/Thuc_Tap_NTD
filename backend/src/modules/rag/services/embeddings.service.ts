@@ -2,43 +2,43 @@ export class EmbeddingsService {
   private apiKey: string | null = null;
 
   constructor() {
-    if (process.env.OPENAI_API_KEY) {
-      this.apiKey = process.env.OPENAI_API_KEY;
+    const key = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+    if (key && key !== 'your_gemini_key_here' && key !== 'your_openai_key_here') {
+      this.apiKey = key;
     }
   }
 
   /**
-   * Sinh vector embedding cho văn bản
+   * Sinh vector embedding cho văn bản bằng Gemini Embedding API hoặc Local Engine
    */
   async generate(text: string): Promise<number[]> {
-    const isGroq = this.apiKey && (this.apiKey.startsWith('gsk_') || process.env.OPENAI_API_BASE_URL?.includes('groq.com'));
-    const isGoogle = this.apiKey && (this.apiKey.startsWith('AIzaSy') || process.env.OPENAI_API_BASE_URL?.includes('googleapis.com'));
-
-    if (this.apiKey && !isGroq && !isGoogle) {
+    if (this.apiKey) {
       try {
         const EMBEDDING_TIMEOUT_MS = parseInt(process.env.EMBEDDING_TIMEOUT_MS || '15000', 10);
-        const response = await fetch('https://api.openai.com/v1/embeddings', {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${this.apiKey}`;
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.apiKey}`,
           },
           body: JSON.stringify({
-            model: 'text-embedding-3-small',
-            input: text,
+            model: 'models/text-embedding-004',
+            content: {
+              parts: [{ text: text }],
+            },
           }),
           signal: AbortSignal.timeout(EMBEDDING_TIMEOUT_MS),
         });
 
         if (response.ok) {
           const data = (await response.json()) as any;
-          if (data && data.data && data.data[0] && data.data[0].embedding) {
-            return data.data[0].embedding;
+          if (data && data.embedding && Array.isArray(data.embedding.values)) {
+            return data.embedding.values;
           }
         }
-        console.warn(`[EmbeddingsService] OpenAI API trả về status: ${response.status}. Chuyển sang Local Engine.`);
+        console.warn(`[EmbeddingsService] Gemini Embedding API trả về status ${response.status}. Chuyển sang Local Engine.`);
       } catch (err) {
-        console.warn('[EmbeddingsService] Lỗi gọi OpenAI Embeddings API, tự động chuyển sang Local Hashing Engine.', err);
+        console.warn('[EmbeddingsService] Lỗi gọi Gemini Embeddings API, chuyển sang Local Hashing Engine.', err);
       }
     }
 

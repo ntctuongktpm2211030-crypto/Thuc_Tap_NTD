@@ -1,0 +1,1267 @@
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import prisma, { withDbRetry } from '../config/db';
+
+const rawFoodData = [
+  {
+    "stt": 1,
+    "tinh_thanh": "An Giang",
+    "mon_an_dac_san": [
+      "Bò leo núi Tân Châu",
+      "Gỏi sầu đâu",
+      "Bún cá An Giang",
+      "Cá lóc nướng trui",
+      "Lẩu mắm"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Mắm Châu Đốc",
+        "mo_ta": "Được mệnh danh là 'vương quốc mắm' với hàng chục loại mắm đậm đà như mắm thái, mắm cá lóc, mắm cá linh."
+      },
+      "Khô nhái",
+      "Bánh bò thốt nốt"
+    ]
+  },
+  {
+    "stt": 2,
+    "tinh_thanh": "Bà Rịa - Vũng Tàu",
+    "mon_an_dac_san": [
+      "Gỏi cá mai",
+      "Lẩu cá đuối",
+      {
+        "ten": "Bánh khọt Vũng Tàu",
+        "mo_ta": "Món bánh chiên khuôn nhỏ giòn tan từ bột gạo, phủ nhân tôm tươi, mỡ hành và tôm khô chiên, cuốn rau sống chấm nước mắm chua ngọt."
+      },
+      "Cá súng - cá nấu tương me"
+    ],
+    "dac_san_qua_tang": ["Bánh bông lan trứng muối", "Mắm Trí Hải"]
+  },
+  {
+    "stt": 3,
+    "tinh_thanh": "Bắc Giang",
+    "mon_an_dac_san": ["Gà đồi Yên Thế", "Bánh đúc Đồng Quan"],
+    "dac_san_qua_tang": [
+      "Cam Bố Hạ",
+      "Chè bát tiên",
+      {
+        "ten": "Vải thiều Lục Ngạn",
+        "mo_ta": "Nổi tiếng khắp cả nước và xuất khẩu ra thế giới nhờ vỏ mỏng, hạt nhỏ, thịt dày, ngọt sắc và hương thơm đặc trưng."
+      }
+    ]
+  },
+  {
+    "stt": 4,
+    "tinh_thanh": "Bắc Kạn",
+    "mon_an_dac_san": [
+      "Bánh coóc mò (bánh sừng bò)",
+      "Bánh pẻng phạ (bánh trời)",
+      "Lạp sườn hun khói"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Miến dong Côn Minh - Na Rì (Miến dong Na Rì)",
+        "mo_ta": "Sản xuất từ bột củ dong riềng đỏ nguyên chất, sợi miến giòn, dai, không bị trương nở khi nấu lâu."
+      },
+      "Bánh ngải"
+    ]
+  },
+  {
+    "stt": 5,
+    "tinh_thanh": "Bạc Liêu",
+    "mon_an_dac_san": [
+      {
+        "ten": "Bánh củ cải Bạc Liêu",
+        "mo_ta": "Món ăn mộc mạc mang hương vị đậm đà của miền Tây sông nước. Bánh có lớp vỏ mềm dẻo từ bột gạo kết hợp củ cải trắng, nhân gồm tôm, thịt lợn và đậu xanh."
+      },
+      "Cà ri vịt",
+      "Bún bò cay"
+    ],
+    "dac_san_qua_tang": ["Mắm cá chốt", "Tôm khô đất Đa Giàu"]
+  },
+  {
+    "stt": 6,
+    "tinh_thanh": "Bắc Ninh",
+    "mon_an_dac_san": [
+      "Cháo cá Tích Nghi",
+      "Phở gan cháy Đáp Cầu",
+      "Nem chua rán Bắc Ninh",
+      "Bánh khúc làng Diềm"
+    ],
+    "dac_san_qua_tang": [
+      "Rượu nếp làng Cẩm",
+      "Tương Đình Tổ",
+      {
+        "ten": "Bánh phu thê Đình Bảng",
+        "mo_ta": "Biểu tượng văn hóa ẩm thực truyền thống Kinh Bắc, thường xuất hiện trong các dịp lễ tết, cưới hỏi với ý nghĩa tượng trưng cho sự gắn kết vợ chồng."
+      }
+    ]
+  },
+  {
+    "stt": 7,
+    "tinh_thanh": "Bến Tre",
+    "mon_an_dac_san": [
+      "Cá bống kho nước dừa",
+      "Củ hủ dừa xào tép nhảy",
+      "Cơm trái dừa",
+      "Tép rang dừa"
+    ],
+    "dac_san_qua_tang": [
+      "Rượu dừa",
+      "Bánh tráng Mỹ Lồng",
+      {
+        "ten": "Kẹo dừa Bến Tre",
+        "mo_ta": "Đặc sản truyền thống nổi tiếng làm từ nước cốt dừa, đường và mạch nha. Kẹo có hương vị béo ngậy, ngọt thanh đặc trưng của xứ dừa."
+      }
+    ]
+  },
+  {
+    "stt": 8,
+    "tinh_thanh": "Bình Định",
+    "mon_an_dac_san": [
+      "Gỏi cá chình",
+      "Gié bò Tây Sơn",
+      "Bún chả cá Quy Nhơn",
+      "Nem chua"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh hồng Tam Quan",
+      "Chả cá Quy Nhơn",
+      {
+        "ten": "Bánh ít lá gai",
+        "mo_ta": "Món bánh truyền thống có vỏ màu đen dẻo thơm từ lá gai, nhân đậu xanh hoặc dừa ngọt bùi, gói cẩn thận trong lá chuối hình tháp."
+      },
+      "Rượu Bầu Đá"
+    ]
+  },
+  {
+    "stt": 9,
+    "tinh_thanh": "Bình Dương",
+    "mon_an_dac_san": [
+      {
+        "ten": "Gỏi gà măng cụt Lái Thiêu (Gỏi măng cụt)",
+        "mo_ta": "Gỏi gà kết hợp cùng măng cụt Lái Thiêu nổi tiếng có vỏ mỏng, mọng nước, vị ngọt thanh chua dịu tạo nên món ăn độc đáo."
+      },
+      "Lẩu bò nhúng mắm ruốc"
+    ],
+    "dac_san_qua_tang": [
+      "Nem Lái Thiêu",
+      "Mứt gừng Bình Nhâm",
+      {
+        "ten": "Măng cụt Lái Thiêu",
+        "mo_ta": "Nổi tiếng với vỏ mỏng, mọng nước, vị ngọt thanh chua dịu. Thường được thưởng thức trực tiếp hoặc làm món gỏi gà măng cụt độc đáo."
+      }
+    ]
+  },
+  {
+    "stt": 10,
+    "tinh_thanh": "Bình Phước",
+    "mon_an_dac_san": [
+      "Gỏi hạt điều",
+      "Heo mẹt Đồng Xoài",
+      "Bánh tét hột điều"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Hạt điều Bình Phước (Hạt điều rang muối)",
+        "mo_ta": "Đã được Cục Sở hữu trí tuệ cấp giấy chứng nhận đăng ký chỉ dẫn địa lý. Hạt điều ở đây có hạt chắc, mẩy, giòn và vị béo ngậy đặc trưng."
+      },
+      "Rượu cần S'tiêng"
+    ]
+  },
+  {
+    "stt": 11,
+    "tinh_thanh": "Bình Thuận",
+    "mon_an_dac_san": [
+      "Gỏi cá Phan Thiết",
+      "Lẩu cá bớp",
+      "Bánh mì quê Phan Thiết",
+      "Lẩu thả"
+    ],
+    "dac_san_qua_tang": [
+      "Cá bống ăn liền",
+      "Nước mắm Cá Đen",
+      {
+        "ten": "Nước mắm Phan Thiết",
+        "mo_ta": "Sản xuất theo phương pháp ủ chượp truyền thống từ cá cơm tươi, tạo nên hương vị đậm đà, độ đạm cao và màu gián sóng sánh."
+      },
+      "Thanh long Bình Thuận",
+      {
+        "ten": "Mực một nắng",
+        "mo_ta": "Mực ống tươi vừa đánh bắt được phơi qua đúng một cái nắng gắt, thịt bên ngoài khô ráo nhưng bên trong vẫn ngọt mềm, dẻo dai."
+      }
+    ]
+  },
+  {
+    "stt": 12,
+    "tinh_thanh": "Cà Mau",
+    "mon_an_dac_san": [
+      "Lẩu mắm U Minh",
+      "Cá lóc nướng trui",
+      "Cá nâu kho trái giác"
+    ],
+    "dac_san_qua_tang": [
+      "Khô cá sặc U Minh",
+      "Ba khía Rạch Gốc",
+      {
+        "ten": "Cua Cà Mau",
+        "mo_ta": "Nổi tiếng thịt chắc, ngọt thơm và gạch béo ngậy nhờ sống trong môi trường sinh thái tự nhiên vùng ngập mặn."
+      }
+    ]
+  },
+  {
+    "stt": 13,
+    "tinh_thanh": "Cao Bằng",
+    "mon_an_dac_san": [
+      "Bánh cuốn Cao Bằng",
+      "Bánh áp chao",
+      "Vịt nấu hạt dẻ Trùng Khánh"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh chè lam",
+      "Miến dong đen Phia Đén",
+      {
+        "ten": "Hạt dẻ Trùng Khánh",
+        "mo_ta": "Loại hạt to gấp 4-5 lần hạt dẻ thông thường, vỏ cứng, nhân màu vàng bùi ngậy và rất thơm khi rang hoặc hấp."
+      }
+    ]
+  },
+  {
+    "stt": 14,
+    "tinh_thanh": "Cần Thơ",
+    "mon_an_dac_san": [
+      "Ốc bươu xanh nướng tiêu",
+      "Gà um dâu Hạ Châu",
+      "Chả giò rế"
+    ],
+    "dac_san_qua_tang": [
+      "Dâu Hạ Châu",
+      "Rượu mận 6 Tia",
+      {
+        "ten": "Bánh tét lá cẩm",
+        "mo_ta": "Có màu tím đẹp mắt từ nước lá cẩm, nhân gồm nếp dẻo, đậu xanh, thịt mỡ, trứng muối thơm ngon đậm đà."
+      }
+    ]
+  },
+  {
+    "stt": 15,
+    "tinh_thanh": "Đà Nẵng",
+    "mon_an_dac_san": [
+      "Bún mắm nêm thịt luộc lỗ tai heo",
+      "Nghêu hoa hấp sả",
+      "Mì Quảng Đà Nẵng",
+      "Thịt luộc Khuê Trung",
+      {
+        "ten": "Bún chả cá Đà Nẵng",
+        "mo_ta": "Món bún nước dùng ninh từ xương cá ngọt thanh, kết hợp chả cá chiên hoặc hấp giòn dai cùng bí đỏ, su su, bắp cải."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Cá bò lát rim",
+      "Mực cán cay",
+      {
+        "ten": "Tré Đà Nẵng",
+        "mo_ta": "Đặc sản lên men làm từ thịt đầu lợn, tai lợn, riềng, tỏi và thính gạo, mang hương vị chua nhẹ, giòn sần sật và thơm nồng."
+      }
+    ]
+  },
+  {
+    "stt": 16,
+    "tinh_thanh": "Đắc Lắk",
+    "mon_an_dac_san": [
+      "Gà nướng Bản Đôn",
+      "Thịt nai nướng",
+      "Cá lăng nấu măng Buôn Ma Thuột"
+    ],
+    "dac_san_qua_tang": [
+      "Sáp - mật ong nuôi trong hũ thủy tinh",
+      "Macca sấy",
+      {
+        "ten": "Cà phê Buôn Ma Thuột",
+        "mo_ta": "Thương hiệu nổi tiếng toàn cầu với hương vị đậm đà, thơm nồng đặc trưng của vùng đất đỏ Bazan."
+      }
+    ]
+  },
+  {
+    "stt": 17,
+    "tinh_thanh": "Đắk Nông",
+    "mon_an_dac_san": [
+      "Lẩu lá rừng",
+      "Cá kìm hồ Tà Đùng",
+      "Gà nướng sa lửa - cơm lam"
+    ],
+    "dac_san_qua_tang": [
+      "Gạo Buôn Choáh",
+      "Rễ cây Sâm cau trắng",
+      {
+        "ten": "Pơ-lang (Hạt tiêu Đắk Nông)",
+        "mo_ta": "Hạt tiêu cay nồng, thơm phức, chất lượng cao nhờ thổ nhưỡng và khí hậu Tây Nguyên."
+      }
+    ]
+  },
+  {
+    "stt": 18,
+    "tinh_thanh": "Điện Biên",
+    "mon_an_dac_san": [
+      "Pa pỉnh tộp (cá suối nướng)",
+      "Gà nướng mắc khén",
+      "Cá nướng ba pinh tập Điện Biên"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh khẩu xén Mường Lay",
+      "Chẳm chéo",
+      {
+        "ten": "Thịt trâu gác bếp",
+        "mo_ta": "Món ăn đặc sản của người Thái đen, thịt trâu tươi được ướp mắc khén, hạt dổi rồi hun khói củi Tây Bắc, vị đậm đà cay nồng."
+      }
+    ]
+  },
+  {
+    "stt": 19,
+    "tinh_thanh": "Đồng Nai",
+    "mon_an_dac_san": [
+      "Lẩu tôm sông",
+      "Gà hấp bưởi Tân Triều",
+      "Xôi chiên phồng"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Bưởi Tân Triều",
+        "mo_ta": "Giống bưởi đường lá cam mọng nước, ngọt thanh, vỏ mỏng, được chế biến thành nhiều món ăn và rượu bưởi độc đáo."
+      },
+      "Mít tố nữ Long Khánh"
+    ]
+  },
+  {
+    "stt": 20,
+    "tinh_thanh": "Đồng Tháp",
+    "mon_an_dac_san": [
+      "Cá lóc nướng cuốn lá sen non",
+      "Chuột đồng quay lu",
+      "Chả giò sen"
+    ],
+    "dac_san_qua_tang": [
+      "Khô cá lóc Đồng Tháp Mười",
+      "Rượu sen hồng",
+      {
+        "ten": "Nem Lai Vung",
+        "mo_ta": "Sự kết hợp hài hòa giữa vị chua của thịt lên men, vị cay của tiêu ớt và độ giòn của bì lợn, gói trong lá chuối xanh."
+      }
+    ]
+  },
+  {
+    "stt": 21,
+    "tinh_thanh": "Gia Lai",
+    "mon_an_dac_san": [
+      "Bò nướng ống tre Pleiku",
+      "Bún mắmcua",
+      {
+        "ten": "Phở khô Pleiku (Phở hai bát)",
+        "mo_ta": "Món ăn độc đáo gồm một bát bánh phở trộn sệt và một bát nước dùng đậm đà ăn kèm rau sống."
+      }
+    ],
+    "dac_san_qua_tang": ["Cà phê Pleiku", "Bò một nắng muối kiến vàng"]
+  },
+  {
+    "stt": 22,
+    "tinh_thanh": "Hà Giang",
+    "mon_an_dac_san": [
+      "Thắng cố",
+      "Thịt lợn cắp nách",
+      "Thịt trâu gác bếp Hà Giang",
+      "Trâu gác bếp Mèo Vạc"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh tam giác mạch Hà Giang",
+      "Hồng không hạt Quản Bạ",
+      "Chè shan tuyết Hoàng Su Tì",
+      {
+        "ten": "Mật ong bạc hà",
+        "mo_ta": "Khai thác từ hoa bạc hà dại vùng núi đá cao, có màu vàng xanh tự nhiên, vị ngọt mát và mùi thơm thảo mộc đặc trưng."
+      },
+      "Rượu ngô Hà Giang"
+    ]
+  },
+  {
+    "stt": 23,
+    "tinh_thanh": "Hà Nam",
+    "mon_an_dac_san": ["Bánh cuốn chả Phủ Lý", "Bún sốt vang", "Bánh cuốn"],
+    "dac_san_qua_tang": [
+      "Bánh chưng làng Đầm",
+      "Rau sắng Ba Sao",
+      {
+        "ten": "Cá kho Vũ Đại",
+        "mo_ta": "Món cá trắm đen kho niêu đất theo phương pháp truyền thống suốt 12-16 tiếng, thịt cá chắc ngọt, xương mềm nhừ."
+      }
+    ]
+  },
+  {
+    "stt": 24,
+    "tinh_thanh": "Hà Nội",
+    "mon_an_dac_san": [
+      {
+        "ten": "Bún đậu mắm tôm",
+        "mo_ta": "Món ăn bình dân gồm bún lá, đậu phụ rán giòn, thịt chân giò, chả cốm ăn kèm mắm tôm dậy vị pha chanh, ớt và đường."
+      },
+      "Bánh tôm Hồ Tây",
+      "Bún thang",
+      {
+        "ten": "Chả cá Lã Vọng",
+        "mo_ta": "Món ướp cá tẩm nghệ chiên trên chảo tại bàn, ăn kèm thì là, hành lá, bún, đậu phụng rán và mắm tôm."
+      },
+      "Bún chả quạt",
+      {
+        "ten": "Phở bò (Beef Pho)",
+        "mo_ta": "Món súp mì truyền thống gồm nước dùng ninh từ xương bò giàu hương vị thơm mùi thảo mộc (quế, hồi, thảo quả), ăn kèm bánh phở tươi và các loại thịt bò."
+      },
+      {
+        "ten": "Bún chả",
+        "mo_ta": "Món ăn gồm chả thịt heo nướng than hoa thơm lừng, dùng kèm bún tươi, rau sống và nước chấm pha chua ngọt đặc trưng."
+      },
+      {
+        "ten": "Cà phê trứng (Egg Coffee)",
+        "mo_ta": "Đồ uống sáng tạo độc đáo từ cà phê phin đậm đà kết hợp lớp kem lòng đỏ trứng gà đánh bông mịn cùng sữa đặc."
+      }
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Cốm làng Vòng (Cốm dẹp xanh)",
+        "mo_ta": "Thức quà mùa thu Hà Nội từ lúa nếp non, hạt cốm dẻo thơm, xanh mướt, gói trong lá sen phảng phất hương vị tinh tế."
+      },
+      "Trà sen Tây Hồ",
+      "Kem Tràng Tiền",
+      "Ô mai Hàng Đường"
+    ]
+  },
+  {
+    "stt": 25,
+    "tinh_thanh": "Hà Tĩnh",
+    "mon_an_dac_san": [
+      "Nhút mít Hương Sơn",
+      "Mực nháy Vũng Áng",
+      {
+        "ten": "Kẹo cu đơ",
+        "mo_ta": "Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Rượu nếp Can Lộc",
+      "Ram dẻo",
+      {
+        "ten": "Kẹo cu đơ",
+        "mo_ta": "Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm."
+      }
+    ]
+  },
+  {
+    "stt": 26,
+    "tinh_thanh": "Hải Dương",
+    "mon_an_dac_san": [
+      "Bánh dày Gia Lộc",
+      "Gà Mạnh Hoạch",
+      "Bún cá rô đồng",
+      "Chả rươi"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh gai Ninh Giang",
+      "Bánh đa gấc Kẻ Sặt",
+      {
+        "ten": "Bánh đậu xanh Hải Dương",
+        "mo_ta": "Được làm từ bột đậu xanh nguyên chất, đường và dầu ăn, bánh tơi mịn, tan ngay trong miệng với vị ngọt bùi."
+      }
+    ]
+  },
+  {
+    "stt": 27,
+    "tinh_thanh": "Hải Phòng",
+    "mon_an_dac_san": [
+      "Bánh mì que cay",
+      "Dừa dầm",
+      {
+        "ten": "Bánh đa cua (Red Noodle Soup with Crab)",
+        "mo_ta": "Món ăn đặc trưng đất Cảng với sợi bánh đa đỏ dẻo giòn, nước dùng ngọt đậm đà từ gạch cua đồng, ăn kèm chả lá lốt, chả cá và rau muống."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Ruốc tôm Hải Phòng",
+      "Táo muối Bàng La",
+      "Nước mắm Cát Hải"
+    ]
+  },
+  {
+    "stt": 28,
+    "tinh_thanh": "Hậu Giang",
+    "mon_an_dac_san": [
+      "Bánh xèo củ hủ khóm",
+      "Lẩu cá thát lát khổ qua",
+      "Cháo lòng Cái Tắc",
+      {
+        "ten": "Chả cá thát lát Hậu Giang",
+        "mo_ta": "Cá thát lát tươi quết dai tự nhiên, thịt ngọt thơm, thường được chiên giòn hoặc hấp chín."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Trà mãng cầu xiêm",
+      "Snack da cá thát lát",
+      "Khóm Cầu Đúc"
+    ]
+  },
+  {
+    "stt": 29,
+    "tinh_thanh": "Hòa Bình",
+    "mon_an_dac_san": [
+      "Cá suối nướng Mai Châu",
+      "Cơm lam - thịt lợn rừng xiên nướng",
+      "Thịt trâu lá lồm"
+    ],
+    "dac_san_qua_tang": [
+      "Tỏi tía Mai Châu",
+      {
+        "ten": "Cam Cao Phong",
+        "mo_ta": "Mọng nước, vị ngọt đậm thanh mát, vỏ mỏng màu vàng óng, nổi tiếng miền Bắc."
+      }
+    ]
+  },
+  {
+    "stt": 30,
+    "tinh_thanh": "TP. Hồ Chí Minh",
+    "mon_an_dac_san": [
+      {
+        "ten": "Cơm tấm Sài Gòn (Cơm tấm sườn - bì - chả)",
+        "mo_ta": "Món ăn bình dân quen thuộc gồm hạt cơm tấm nở xốp, sườn nướng mỡ hành thơm lừng, bì, chả trứng và nước mắm chua ngọt."
+      },
+      {
+        "ten": "Bánh mì Sài Gòn (Bánh mì thịt)",
+        "mo_ta": "Bánh mì vỏ giòn kẹp nhân pate, bơ, các loại thịt nguội, chả lụa, dưa chua, ngò rí và nước xốt đậm đà."
+      },
+      "Bún riêu cua Sài Gòn",
+      {
+        "ten": "Chả giò (Vietnamese Fried Spring Rolls)",
+        "mo_ta": "Cuốn bánh tráng nhân thịt băm, tôm, mộc nhĩ, khoai môn chiên ngập dầu giòn rụm."
+      },
+      {
+        "ten": "Bò kho",
+        "mo_ta": "Món bò hầm nhừ với hoa hồi, quế, cà rốt và gia vị cari, ăn kèm bánh mì hoặc hủ tiếu."
+      }
+    ],
+    "dac_san_qua_tang": ["Khô cá dứa Cần Giờ", "Khô bò Củ Chi"]
+  },
+  {
+    "stt": 31,
+    "tinh_thanh": "Hưng Yên",
+    "mon_an_dac_san": [
+      "Chả gà Tiểu Quan",
+      "Ếch om Phượng Tường",
+      "Bún thang lươn Phố Hiến (Bún thang lươn)"
+    ],
+    "dac_san_qua_tang": [
+      "Chè sen long nhãn Phố Hiến",
+      "Mật ong hoa nhãn",
+      {
+        "ten": "Nhãn lồng Hưng Yên",
+        "mo_ta": "Nổi tiếng từ xưa với cùi dày, hạt nhỏ, nước mọng và vị ngọt lịm kèm hương thơm dịu mát."
+      }
+    ]
+  },
+  {
+    "stt": 32,
+    "tinh_thanh": "Khánh Hòa",
+    "mon_an_dac_san": [
+      "Bún sứa Nha Trang",
+      "Bún mực Vạn Ninh",
+      "Bánh canh chả cá Nha Trang",
+      "Bún cá dầm",
+      {
+        "ten": "Nem nướng Nha Trang",
+        "mo_ta": "Thịt lợn nướng xiên que thơm phức, cuốn cùng bánh tráng chiên giòn, rau sống và chấm nước xốt nếp gan heo thơm bùi."
+      },
+      {
+        "ten": "Bò né",
+        "mo_ta": "Món bò bít tết kiểu Việt Nam chế biến trên chảo xèo xèo gồm thịt bò, trứng ốp la, xíu mại, ăn kèm bánh mì giòn."
+      }
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Yến sào Khánh Hòa",
+        "mo_ta": "Sản vật quý giá khai thác từ các đảo yến tự nhiên, chất lượng đỉnh cao giàu dinh dưỡng."
+      },
+      "Bánh tráng xoài Cam Lâm",
+      "Chả cá Nha Trang"
+    ]
+  },
+  {
+    "stt": 33,
+    "tinh_thanh": "Kiên Giang",
+    "mon_an_dac_san": [
+      "Bún cá Rạch Giá",
+      "Gỏi cá trích Phú Quốc",
+      "Lẩu mắm U Minh Phú Quốc"
+    ],
+    "dac_san_qua_tang": [
+      "Rượu sim Phú Quốc",
+      "Tiêu đỏ Hà Tiên",
+      {
+        "ten": "Nước mắm Phú Quốc",
+        "mo_ta": "Ủ chượp từ cá cơm than tươi trên đảo Phú Quốc, màu cánh gián tự nhiên, độ đạm cao và hương vị đậm đà."
+      }
+    ]
+  },
+  {
+    "stt": 34,
+    "tinh_thanh": "Kon Tum",
+    "mon_an_dac_san": [
+      "Cá gỏi kiến vàng",
+      "Dế chiên Kon Tum",
+      "Gỏi lá Kon Tum",
+      "Xôi măng"
+    ],
+    "dac_san_qua_tang": [
+      "Măng le khô",
+      "Trà sâm dây Ngọc Linh",
+      {
+        "ten": "Sâm Ngọc Linh (Rượu sâm Ngọc Linh)",
+        "mo_ta": "Loại sâm quý hiếm bậc nhất thế giới với hàm lượng saponin cực cao, mang lại giá trị sức khỏe to lớn."
+      }
+    ]
+  },
+  {
+    "stt": 35,
+    "tinh_thanh": "Lai Châu",
+    "mon_an_dac_san": ["Cá bống vùi tro", "Xôi tím Lai Châu", "Xôi ngũ sắc"],
+    "dac_san_qua_tang": [
+      "Quả óc chó nếp Sìn Hồ",
+      "Rượu ngô Sùng Phài",
+      {
+        "ten": "Thịt lợn cắp nách (Thịt lợn gác bếp)",
+        "mo_ta": "Lợn thả rông trên núi, thịt săn chắc, ít mỡ, thơm ngon khi nướng nguyên con hoặc làm các món xào, hấp."
+      }
+    ]
+  },
+  {
+    "stt": 36,
+    "tinh_thanh": "Lâm Đồng",
+    "mon_an_dac_san": [
+      "Lẩu rau Đà Lạt",
+      "Bánh tráng nướng Đà Lạt",
+      "Bánh mì xíu mại",
+      "Giò heo hầm Atiso Đà Lạt",
+      {
+        "ten": "Gỏi cuốn",
+        "mo_ta": "Cuốn tươi thanh mát từ bánh tráng mềm, tôm luộc, thịt lợn, bún và rau thơm, chấm mắm nêm hoặc xốt tương đậu phụng."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Trái cây sấy khô",
+      "Dâu tây Đà Lạt",
+      {
+        "ten": "Hồng treo gió Đà Lạt",
+        "mo_ta": "Chế biến theo công nghệ Nhật Bản, quả hồng bên ngoài dẻo thơm, bên trong mật ngọt lịm tự nhiên."
+      },
+      "Trà Atiso"
+    ]
+  },
+  {
+    "stt": 37,
+    "tinh_thanh": "Lạng Sơn",
+    "mon_an_dac_san": [
+      {
+        "ten": "Vịt quay lá mắc mật (Lợn quay lá mắc mật Lạng Sơn, Vịt nướng mắc mật)",
+        "mo_ta": "Vịt béo ngậy được nhồi lá mắc mật rồi quay vàng giòn, lớp da giòn rụm và thịt thơm lừng hương thảo mộc."
+      },
+      "Khâu nhục (thịt kho rục)",
+      "Phở chua Lạng Sơn"
+    ],
+    "dac_san_qua_tang": ["Thạch đen Tràng Định", "Rượu Mẫu Sơn", "Na Chi Lăng"]
+  },
+  {
+    "stt": 38,
+    "tinh_thanh": "Lào Cai",
+    "mon_an_dac_san": [
+      "Cá hồi Sapa",
+      "Thịt gừng Nùng Dín",
+      {
+        "ten": "Thắng cố Sa Pa",
+        "mo_ta": "Món ăn truyền thống của người H'Mông làm từ nội tạng và thịt ngựa cùng 12 loại gia vị vùng cao đậm đà."
+      },
+      "Phở chua",
+      {
+        "ten": "Cơm lam",
+        "mo_ta": "Gạo nếp nương cho vào ống nứa/tre cùng ít nước rồi nướng trên than hồng, có vị thơm đặc trưng của mành nứa cháy."
+      },
+      {
+        "ten": "Thịt trâu gác bếp",
+        "mo_ta": "Đặc sản vùng cao làm từ thịt trâu tươi ướp gia vị mắc khén, hạt dổi rồi treo gác bếp hun khói cho khô dần."
+      }
+    ],
+    "dac_san_qua_tang": ["Mận Tam Hoa Bac Ha", "Rượu táo mèo", "Rượu San Lùng"]
+  },
+  {
+    "stt": 39,
+    "tinh_thanh": "Long An",
+    "mon_an_dac_san": ["Bún Xiêm Lo Mộc Hóa", "Canh chua cá chốt"],
+    "dac_san_qua_tang": [
+      "Gạo nàng thơm Chợ Đào",
+      "Mắm còng Cần Giuộc",
+      {
+        "ten": "Lạp xưởng tươi Cần Đước (Lạp xưởng Cần Đước)",
+        "mo_ta": "Làm thủ công phơi nắng tự nhiên, vị chua ngọt hài hòa, thơm nồng gia vị truyền thống."
+      }
+    ]
+  },
+  {
+    "stt": 40,
+    "tinh_thanh": "Nam Định",
+    "mon_an_dac_san": [
+      "Nem nắm Giao Thủy",
+      "Bánh cuốn Làng Kênh",
+      {
+        "ten": "Phở bò Nam Định",
+        "mo_ta": "Nổi tiếng với nước dùng béo ngậy ninh từ xương ống, bánh phở mềm dẻo và thịt bò tươi ngon."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Nước mắm Sa Châu",
+      "Gạo tám xoan Hải Hậu",
+      "Bánh xíu báo"
+    ]
+  },
+  {
+    "stt": 41,
+    "tinh_thanh": "Nghệ An",
+    "mon_an_dac_san": [
+      {
+        "ten": "Súp lươn Nghệ An (Súp lươn bánh mì)",
+        "mo_ta": "Món ăn đậm đà vị cay nồng của ớt, hành, nghệ cùng thịt lươn đồng săn chắc, ăn kèm bánh mì hoặc bánh mướt."
+      },
+      "Bánh mướt Vinh",
+      "Cháo lươn Nghệ An"
+    ],
+    "dac_san_qua_tang": ["Nhút Thanh Chương", "Nước mắm Cửa Lò", "Cam Xã Đoài"]
+  },
+  {
+    "stt": 42,
+    "tinh_thanh": "Ninh Bình",
+    "mon_an_dac_san": [
+      "Gỏi cá nhệch Kim Sơn",
+      "Cá chuối nướng đầm Vân Long",
+      {
+        "ten": "Cơm cháy dê núi",
+        "mo_ta": "Sự kết hợp giữa cơm cháy giòn rụm và nước sốt thịt dê núi đậm đà, béo ngậy thơm ngon."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Nem chua Yên Mạc",
+      "Rượu Kim Sơn",
+      "Cơm cháy Ninh Bình"
+    ]
+  },
+  {
+    "stt": 43,
+    "tinh_thanh": "Ninh Thuận",
+    "mon_an_dac_san": [
+      "Bánh xèo Ninh Thuận",
+      "Gỏi Dông",
+      "Bánh căn Ninh Thuận"
+    ],
+    "dac_san_qua_tang": [
+      "Nha đam và các sản phẩm từ Nha đam",
+      "Táo gió Ninh Thuận",
+      {
+        "ten": "Nho Ninh Thuận",
+        "mo_ta": "Trồng trên vùng đất nắng gió, quả nho mọng nước, vị ngọt chua hài hòa, làm nên các sản phẩm mật nho và rượu nho nổi tiếng."
+      },
+      "Mật nho"
+    ]
+  },
+  {
+    "stt": 44,
+    "tinh_thanh": "Phú Thọ",
+    "mon_an_dac_san": [
+      "Trám om kho cá",
+      {
+        "ten": "Thịt chua Thanh Sơn",
+        "mo_ta": "Món ăn của người Mường làm từ thịt lợn lửng ướp thính gạo lên men tự nhiên, ăn kèm lá đinh lăng, lá lốt."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Bánh tẻ mật Phú Thọ",
+      "Kẹo lạc Việt Trì",
+      "Bưởi Đoan Hùng"
+    ]
+  },
+  {
+    "stt": 45,
+    "tinh_thanh": "Quảng Bình",
+    "mon_an_dac_san": ["Cháo canh cá lóc", "Cháo hàu Quán Hàu", "Cháo canh"],
+    "dac_san_qua_tang": [
+      "Sâm Bố Chính",
+      {
+        "ten": "Khoai deo",
+        "mo_ta": "Chế biến từ khoai lang đỏ phơi nắng nhiều ngày, dẻo ngọt tự nhiên, thơm mùi khoai đặc trưng."
+      },
+      "Mực khô Quảng Bình"
+    ]
+  },
+  {
+    "stt": 46,
+    "tinh_thanh": "Quảng Nam",
+    "mon_an_dac_san": [
+      "Bánh mì Hội An",
+      {
+        "ten": "Mì Quảng (Mì Quảng ếch)",
+        "mo_ta": "Sợi mì dẹt đậm đà, dùng ít nước lèo sánh đậm, ăn kèm tôm, thịt heo, trứng cút, đậu phụng rang và bánh tráng nướng giòn."
+      },
+      {
+        "ten": "Cao Lầu Hội An",
+        "mo_ta": "Món mì đặc sản chỉ có ở Hội An, sợi mì dai ngâm nước tro ngói, ăn cùng thịt xá xíu, rau sống Trà Quế và miếng bột chiên giòn."
+      },
+      "Cơm gà Hội An",
+      "Phở sắn Quế Sơn"
+    ],
+    "dac_san_qua_tang": ["Rượu Hồng Đào", "Nấm Lim xanh", "Bánh tổ Quảng Nam"]
+  },
+  {
+    "stt": 47,
+    "tinh_thanh": "Quảng Ngãi",
+    "mon_an_dac_san": [
+      "Xu xoa rong biển",
+      "Rau bồng bồng (cum cúm) trộn",
+      "Don Quảng Ngãi",
+      "Cá bống Sông Trà"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Tỏi Lý Sơn",
+        "mo_ta": "Được trồng trên đất nham thạch ngọn núi lửa cổ, củ tỏi nhỏ, thơm nồng, không cay xé và giàu giá trị dược liệu."
+      },
+      "Chả ốc Cừ Lý Sơn",
+      "Kẹo mạch nha",
+      "Bánh tráng nướng Quảng Ngãi"
+    ]
+  },
+  {
+    "stt": 48,
+    "tinh_thanh": "Quảng Ninh",
+    "mon_an_dac_san": [
+      "Cà sáy luộc Tiên Yên",
+      "Xôi chả mực Hạ Long",
+      "Bún bề bề Hạ Long"
+    ],
+    "dac_san_qua_tang": [
+      "Chả rươi Đông Triều",
+      "Rượu mơ Yên Tử",
+      {
+        "ten": "Chả mực Hạ Long",
+        "mo_ta": "Làm từ mực mai tươi giã tay truyền thống, chả chiên vàng ruộm, giòn sần sật và ngọt đậm vị biển."
+      },
+      "Sá sùng Vân Đồn"
+    ]
+  },
+  {
+    "stt": 49,
+    "tinh_thanh": "Quảng Trị",
+    "mon_an_dac_san": [
+      "Gỏi tép nhảy Bàu Trạng Vĩnh Linh",
+      "Cháo bột vịt Đông Hà",
+      "Bánh lọc Mỹ Chánh",
+      "Gà kho củ nén và xôi",
+      {
+        "ten": "Thịt trâu lá trơảng",
+        "mo_ta": "Sự kết hợp hoàn hảo giữa thịt trâu mềm ngọt và lá trơảng cay nồng, tạo nên hương vị ấn tượng khó quên."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Dầu lạc Cam Lộ",
+      "Ớt dầm Câu Nhi",
+      "Cao lá vằng Cam Lộ"
+    ]
+  },
+  {
+    "stt": 50,
+    "tinh_thanh": "Sóc Trăng",
+    "mon_an_dac_san": [
+      "Bún gỏi dà Mỹ Xuyên",
+      "Cháo cá lóc rau đắng",
+      "Bún nước lèo Sóc Trăng"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Bánh pía Sóc Trăng",
+        "mo_ta": "Món bánh ngọt ngào với vỏ nhiều lớp dẻo mềm, nhân sầu riêng, đậu xanh và trứng muối béo ngậy."
+      },
+      "Bánh in Sóc Trăng",
+      "Lạp xưởng Vũng Thơm"
+    ]
+  },
+  {
+    "stt": 51,
+    "tinh_thanh": "Sơn La",
+    "mon_an_dac_san": [
+      "Pa giàng (Cá hun khói)",
+      "Bê chao Mộc Châu",
+      "Thịt lợn gác bếp",
+      "Bánh lá ngải"
+    ],
+    "dac_san_qua_tang": [
+      "Xoài tròn Yên Châu",
+      "Tỏi cô đơn Phù Yên",
+      {
+        "ten": "Sữa tươi Mộc Châu",
+        "mo_ta": "Nguồn sữa nguyên chất từ thảo nguyên Mộc Châu, béo ngậy, giàu dinh dưỡng."
+      },
+      "Chè Tà Xùa"
+    ]
+  },
+  {
+    "stt": 52,
+    "tinh_thanh": "Tây Ninh",
+    "mon_an_dac_san": [
+      "Bò tơ Tây Ninh",
+      "Nem bưởi Tây Ninh",
+      "Bánh tráng phơi sương rau rừng"
+    ],
+    "dac_san_qua_tang": [
+      "Na dai Tây Ninh",
+      "Bánh tráng trộn Tây Ninh",
+      {
+        "ten": "Muối tôm Tây Ninh",
+        "mo_ta": "Gia vị nổi tiếng làm từ muối, tôm khô, ớt và tỏi, vị mặn cay đậm đà chuyên dùng chấm trái cây."
+      }
+    ]
+  },
+  {
+    "stt": 53,
+    "tinh_thanh": "Thái Bình",
+    "mon_an_dac_san": [
+      "Bún bung hoa chuối",
+      "Nem chạo Vị Thủy",
+      "Bánh cáy Thái Bình"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh gai Đại Đồng",
+      "Bánh nghệ Tiền Hải",
+      {
+        "ten": "Bánh cáy làng Nguyễn",
+        "mo_ta": "Món bánh truyền thống dẻo bùi làm từ gạo nếp, mứt dừa, mỡ lợn, vừng, lạc và gừng tươi."
+      }
+    ]
+  },
+  {
+    "stt": 54,
+    "tinh_thanh": "Thái Nguyên",
+    "mon_an_dac_san": [
+      "Bánh trứng kiến Định Hóa",
+      "Cơm lam Định Hóa",
+      "Bánh chưng Bờ Đậu"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Trà Tân Cương (Chè Thái Nguyên)",
+        "mo_ta": "Được mệnh danh là 'Đệ nhất danh trà' với cánh trà xoăn nhỏ, nước trà vàng xanh, vị chát dịu hậu ngọt sâu."
+      },
+      "Tương nếp Úc Kỳ"
+    ]
+  },
+  {
+    "stt": 55,
+    "tinh_thanh": "Thanh Hóa",
+    "mon_an_dac_san": [
+      "Chả tôm Sầm Sơn (Chả tôm)",
+      "Cháo Phi cầu Sài Hậu Lộc",
+      "Bánh cuốn Thanh Hóa"
+    ],
+    "dac_san_qua_tang": [
+      {
+        "ten": "Nem chua Thanh Hóa",
+        "mo_ta": "Thịt lợn nạc giã mịn trộn bì lợn, tỏi, ớt và lá đinh lăng lên men, vị chua thanh giòn sần sật."
+      },
+      "Bánh gai Tứ Trụ",
+      "Mắm tôm Hậu Lộc"
+    ]
+  },
+  {
+    "stt": 56,
+    "tinh_thanh": "Thừa Thiên - Huế",
+    "mon_an_dac_san": [
+      "Bánh Huế thập cẩm",
+      "Bún cua Huế",
+      {
+        "ten": "Bún bò Huế",
+        "mo_ta": "Món ăn Cố đô nổi tiếng với nước dùng đậm đà vị sả, ớt cay và mắm ruốc đặc trưng, ăn kèm nạm bò, huyết, giò heo và chả cua."
+      },
+      "Cơm hến",
+      "Cơm âm phủ",
+      {
+        "ten": "Nem lụi",
+        "mo_ta": "Thịt heo giã nhuyễn quết quanh cọng sả rồi nướng than, cuốn bánh tráng rau sống chấm nước lèo béo ngậy."
+      },
+      {
+        "ten": "Bánh bèo",
+        "mo_ta": "Món bánh đúc hấp trong từng chén nhỏ, phủ tôm cháy, mỡ hành và tóp mỡ giòn rụm."
+      },
+      {
+        "ten": "Bánh khoai (Hue Pancake)",
+        "mo_ta": "Bánh xèo kiểu Huế đậm đà, vỏ dày giòn rụm, nhân tôm thịt giá đỗ, chấm nước lèo từ gan heo và đậu phụng."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Mè xửng Huế",
+      "Kẹo cau",
+      "Trà tôm trĩu",
+      "Tôm chua Huế"
+    ]
+  },
+  {
+    "stt": 57,
+    "tinh_thanh": "Tiền Giang",
+    "mon_an_dac_san": [
+      "Cá tai tượng chiên xù",
+      "Chả nướng chợ Gạo",
+      {
+        "ten": "Hủ tiếu Mỹ Tho",
+        "mo_ta": "Sợi hủ tiếu dai dai, nước dùng ngọt thanh ninh từ xương, ăn kèm tôm, thịt, gan và xà lách."
+      },
+      "Mắm tôm chà Gò Công"
+    ],
+    "dac_san_qua_tang": [
+      "Vú sữa Lò Rèn",
+      "Lạp xưởng tươi Cai Lậy",
+      "Mắm tôm chà Gò Công"
+    ]
+  },
+  {
+    "stt": 58,
+    "tinh_thanh": "Trà Vinh",
+    "mon_an_dac_san": [
+      "Chù ụ rang me",
+      "Bún suông tôm",
+      "Bún nước lèo Trà Vinh",
+      {
+        "ten": "Canh chua cá",
+        "mo_ta": "Món canh đặc trưng miền Tây kết hợp vị chua của me, ngọt từ cá tươi cùng các loại rau dân dã như bông điên điển, bạc hà, giá, thơm."
+      },
+      {
+        "ten": "Bún mắm",
+        "mo_ta": "Món bún đặc sản nấu từ mắm cá linh hoặc mắm cá sặc đậm đà, ăn kèm tôm, mực, thịt quay, cà tím và đa dạng rau sống Miền Tây."
+      }
+    ],
+    "dac_san_qua_tang": [
+      "Bánh tét Trà Cuôn",
+      {
+        "ten": "Dừa sáp Cầu Kè",
+        "mo_ta": "Loại dừa đặc biệt có cơm dừa dầy, xốp dẻo béo ngậy và nước dừa đặc sánh như sương sa."
+      },
+      {
+        "ten": "Bánh tét",
+        "mo_ta": "Bánh nếp dẻo gói lá chuối hình trụ tròn, nhân đậu xanh thịt lợn (hoặc nhân chuối ngọt), món ăn không thể thiếu dịp Tết."
+      }
+    ]
+  },
+  {
+    "stt": 59,
+    "tinh_thanh": "Tuyên Quang",
+    "mon_an_dac_san": [
+      "Hoa kè nhồi thịt",
+      "Thịt lợn đen Lăng Can nướng riềng mẻ",
+      "Thịt lợn đùm hoa chuối"
+    ],
+    "dac_san_qua_tang": [
+      "Thịt trâu gác bếp Tuyên Quang",
+      "Bánh dày nhân vừng đen Na Hang",
+      {
+        "ten": "Cam sành Hàm Yên",
+        "mo_ta": "Quả to, vỏ xù xì vàng óng, cùi cam mọng nước vị ngọt chua thanh đậm đà."
+      }
+    ]
+  },
+  {
+    "stt": 60,
+    "tinh_thanh": "Vĩnh Long",
+    "mon_an_dac_san": [
+      "Cá bông lau nấu canh chua",
+      "Bánh xèo hến Cù Lao Dài",
+      "Cháo gà bồ ngót"
+    ],
+    "dac_san_qua_tang": [
+      "Nấm mối",
+      "Thanh trà Vĩnh Long",
+      {
+        "ten": "Bưởi Năm Roi Bình Minh",
+        "mo_ta": "Giống bưởi không hạt, múi bưởi mọng nước, tép bưởi róc khô vị ngọt dịu thanh mát."
+      }
+    ]
+  },
+  {
+    "stt": 61,
+    "tinh_thanh": "Vĩnh Phúc",
+    "mon_an_dac_san": [
+      "Bò tái kiến đốt",
+      {
+        "ten": "Su su Tam Đảo (Su su Tam Đảo xào thịt bò)",
+        "mo_ta": "Được trồng trên núi cao khí hậu mát mẻ, ngọn su su giòn ngọt tự nhiên thích hợp làm món xào hoặc luộc."
+      },
+      "Cá thính Lập Thạch"
+    ],
+    "dac_san_qua_tang": [
+      "Bánh trùng mật mía Vĩnh Tường",
+      "Tép dầu Đầm Vạc",
+      "Rượu chít Tam Đảo"
+    ]
+  },
+  {
+    "stt": 62,
+    "tinh_thanh": "Yên Bái",
+    "mon_an_dac_san": [
+      "Măng vầu cuốn thịt",
+      "Gà đen nướng lá mắc mật",
+      {
+        "ten": "Nếp Tú Lệ",
+        "mo_ta": "Hạt nếp tròn mẩy, dẻo thơm nức tiếng vùng thung lũng Mù Cang Chải, chuyên dùng đồ xôi hoặc làm bánh chưng."
+      },
+      "Gà H'mông nướng hạt dổi"
+    ],
+    "dac_san_qua_tang": [
+      "Khoai tím Lục Yên",
+      "Bánh chưng đen Mường Lò",
+      "Sơn tra Nghĩa Lộ"
+    ]
+  },
+  {
+    "stt": 63,
+    "tinh_thanh": "Phú Yên",
+    "mon_an_dac_san": [
+      "Tôm hùm bông Phú Yên",
+      "Lẩu cá ngừ nấu mẳn",
+      {
+        "ten": "Mắt cá ngừ đại dương",
+        "mo_ta": "Món ăn độc đáo, bổ dưỡng được hầm cùng các vị thuốc bắc và gia vị cay ấm."
+      },
+      "Gà nướng Sông Cầu"
+    ],
+    "dac_san_qua_tang": [
+      "Chả ram tôm đất",
+      "Nước mắm Gành Đỏ Sông Cầu",
+      "Bò một nắng muối kiến vàng"
+    ]
+  }
+];
+
+function formatFoodList(list: any[]): string {
+  if (!list || list.length === 0) return 'Chưa có thông tin cập nhật.';
+  return list.map(item => {
+    if (typeof item === 'string') return `- ${item}`;
+    if (typeof item === 'object' && item.ten) {
+      return `- ${item.ten}${item.mo_ta ? `: ${item.mo_ta}` : ''}`;
+    }
+    return '';
+  }).filter(Boolean).join('\n');
+}
+
+async function seedFoodData() {
+  console.log('🚀 Bắt đầu nạp dữ liệu Ẩm thực Đặc sản & Quà tặng 63 Tỉnh Thành...');
+
+  // 1. Lưu file JSON backend
+  const backendJsonPath = path.resolve(__dirname, '../data/vietnam_food_specialties_63_provinces.json');
+  fs.mkdirSync(path.dirname(backendJsonPath), { recursive: true });
+  fs.writeFileSync(backendJsonPath, JSON.stringify(rawFoodData, null, 2), 'utf-8');
+  console.log(`✅ Đã lưu file JSON backend: ${backendJsonPath}`);
+
+  // 2. Lưu file Chunk RAG Knowledge Engine
+  const chunks = rawFoodData.map(item => {
+    const provUpper = item.tinh_thanh.toUpperCase();
+    const monAnFormatted = formatFoodList(item.mon_an_dac_san);
+    const quaTangFormatted = formatFoodList(item.dac_san_qua_tang);
+
+    const bodyContent = `ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ${provUpper}\n\n` +
+      `📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n${monAnFormatted}\n\n` +
+      `🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n${quaTangFormatted}`;
+
+    return {
+      id: `food_${item.stt}`,
+      title: `${provUpper} - Ẩm thực đặc sản & Quà tặng`,
+      category: "food",
+      province: provUpper,
+      subCategory: "ẨM THỰC",
+      content: bodyContent,
+      metadata: item
+    };
+  });
+
+  const knowledgeChunkPath = path.resolve(__dirname, '../../../knowledge-builder/chunks/019_AM_THUC_DAC_SAN_63_TINH.json');
+  if (fs.existsSync(path.dirname(knowledgeChunkPath))) {
+    fs.writeFileSync(knowledgeChunkPath, JSON.stringify(chunks, null, 2), 'utf-8');
+    console.log(`✅ Đã lưu file Chunk RAG: ${knowledgeChunkPath}`);
+  }
+
+  // 3. Upsert dữ liệu vào PostgreSQL KnowledgeContent DB
+  let countSuccess = 0;
+  for (const chunk of chunks) {
+    try {
+      const existing = await withDbRetry(() => prisma.knowledgeContent.findFirst({
+        where: { title: chunk.title }
+      }));
+
+      let contentId = existing?.id;
+      if (existing) {
+        await withDbRetry(() => prisma.knowledgeContent.update({
+          where: { id: existing.id },
+          data: {
+            body: chunk.content,
+            category: 'food'
+          }
+        }));
+      } else {
+        const newDoc = await withDbRetry(() => prisma.knowledgeContent.create({
+          data: {
+            title: chunk.title,
+            body: chunk.content,
+            category: 'food'
+          }
+        }));
+        contentId = newDoc.id;
+      }
+
+      if (contentId) {
+        const questionText = `Đặc sản và món ăn ngon nổi tiếng của ${chunk.province} là gì? Nên mua gì làm quà?`;
+        const existingQ = await withDbRetry(() => prisma.knowledgeQuestion.findFirst({
+          where: { contentId, questionText }
+        }));
+        if (!existingQ) {
+          await withDbRetry(() => prisma.knowledgeQuestion.create({
+            data: {
+              contentId,
+              questionText
+            }
+          }));
+        }
+
+        const existingA = await withDbRetry(() => prisma.knowledgeAnswer.findFirst({
+          where: { contentId }
+        }));
+        if (!existingA) {
+          await withDbRetry(() => prisma.knowledgeAnswer.create({
+            data: {
+              contentId,
+              answerText: chunk.content
+            }
+          }));
+        }
+      }
+      countSuccess++;
+    } catch (err: any) {
+      console.warn(`⚠️ Bỏ qua ghi DB cho ${chunk.title}:`, err.message);
+    }
+  }
+
+  console.log(`🎉 Nạp thành công ẩm thực đặc sản 63 tỉnh thành (${countSuccess} bản ghi CSDL đã cập nhật).`);
+}
+
+seedFoodData()
+  .catch(e => {
+    console.error('❌ Nạp data ẩm thực thất bại:', e);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

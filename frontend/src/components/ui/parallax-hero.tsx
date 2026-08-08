@@ -96,18 +96,30 @@ export const ParallaxHero: React.FC<ParallaxHeroProps> = ({
     <div
       ref={containerRef}
       className={cn(
-        'relative h-full min-h-[480px] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#5594a7] via-[#2d697d] to-[#1b4353]',
+        'relative h-full min-h-[480px] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#2c5364] via-[#203a43] to-[#0f2027] shadow-xl',
         className
       )}
     >
-      {/* Full-Cover Base Sky & Forest Layer (Guarantees top rounded corners & border are touched seamlessly without gaps) */}
+      {/* Instant CSS Mountain Landscape Backdrop (Guarantees immediate zero-delay display) */}
+      <div 
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-cover bg-center transition-opacity duration-700"
+        style={{
+          backgroundImage: 'radial-gradient(ellipse at 50% 30%, rgba(56, 189, 248, 0.25) 0%, rgba(15, 32, 39, 0) 70%), linear-gradient(180deg, rgba(32, 58, 67, 0.8) 0%, rgba(15, 32, 39, 0.95) 100%)',
+        }}
+      />
+
+      {/* Full-Cover Base Sky & Forest Layer */}
       <img
         src="https://i.ibb.co/9mHk68Gj/background.png"
         alt="full-cover-sky-forest"
+        loading="eager"
+        onError={(e) => {
+          (e.target as HTMLElement).style.display = 'none';
+        }}
         className="absolute inset-0 w-full h-full object-cover object-top scale-105 pointer-events-none z-0 opacity-95"
       />
 
-      {/* Render các Layer Ảnh Parallax (Giữ nguyên mảng layers) */}
+      {/* Render các Layer Ảnh Parallax (With lazy loading & error recovery) */}
       {layers.map((layer, index) => (
         <img
           key={index}
@@ -116,9 +128,12 @@ export const ParallaxHero: React.FC<ParallaxHeroProps> = ({
           }}
           src={layer.src}
           alt={layer.alt}
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          loading="lazy"
+          onError={(e) => {
+            (e.target as HTMLElement).style.display = 'none';
+          }}
           className={cn(
-            'absolute pointer-events-none transition-transform duration-[300ms] ease-out select-none',
+            'absolute pointer-events-none transition-all duration-[300ms] ease-out select-none',
             layer.className
           )}
           style={{

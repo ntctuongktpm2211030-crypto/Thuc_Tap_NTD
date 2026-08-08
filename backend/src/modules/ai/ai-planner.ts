@@ -1,4 +1,5 @@
 import { AddressService } from '../ai-agents/services/address-service';
+import { callNativeGemini, getLLMConfig } from '../ai-agents/utils/agent.utils';
 import { getCuratedProvince, RealPlace } from '../../config/vietnam_destinations';
 import { calculateHaversineDistance } from '../map/gis-helper';
 
@@ -385,10 +386,10 @@ export function deduplicateItinerary(itinerary: AIItineraryResponse, destination
  * Includes fallback mocks to ensure runtime availability without active keys.
  */
 export async function generateAIItinerary(params: PlannerParams): Promise<AIItineraryResponse> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const { apiKey, modelName } = getLLMConfig();
 
-  if (!apiKey || apiKey === 'your_openai_key_here') {
-    console.warn('⚠️ OpenAI API Key is missing. Returning structured mock itinerary.');
+  if (!apiKey) {
+    console.warn('⚠️ GEMINI_API_KEY is missing. Returning structured mock itinerary.');
     const rawMock = await generateFallbackMock(params);
     const deduplicatedMock = deduplicateItinerary(rawMock, params.destination);
     return calculateItineraryCosts(deduplicatedMock, params.travelStyle, params.currency || 'USD', params.totalBudget);
@@ -419,40 +420,18 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
   }
 
   try {
-    const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-    const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+    const systemPrompt = buildSystemPrompt(params.currency || 'USD', params.totalBudget, params.durationDays) +
+      '\nTUYỆT ĐỐI CHỈ TRẢ VỀ DẠNG JSON HỢP LỆ, KHÔNG KÈM THEO VĂN BẢN KHÁC HOẶC MARKDOWN BLOCK.';
+    const userPrompt = buildUserPrompt(params, centerCoords);
 
-    const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: [
-          { role: 'system', content: buildSystemPrompt(params.currency || 'USD', params.totalBudget, params.durationDays) },
-          { role: 'user', content: buildUserPrompt(params, centerCoords) },
-        ],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-        max_tokens: 4500,
-      }),
-    });
-
-    if (!response.ok) {
-      const errBody = await response.text().catch(() => 'No error body');
-      console.error(`❌ OpenAI/Groq API Error: Status ${response.status}, Body: ${errBody}`);
-      throw new Error(`OpenAI API responded with status ${response.status}: ${errBody}`);
-    }
-
-    const data = await response.json();
-    const resultJson = JSON.parse(data.choices[0].message.content) as AIItineraryResponse;
+    const rawText = await callNativeGemini(apiKey, modelName, systemPrompt, userPrompt);
+    const cleanContent = rawText.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+    const resultJson = JSON.parse(cleanContent) as AIItineraryResponse;
     const refined = await refineItineraryCoordinates(resultJson, params.destination);
     const deduplicated = deduplicateItinerary(refined, params.destination);
     return calculateItineraryCosts(deduplicated, params.travelStyle, params.currency || 'USD', params.totalBudget);
   } catch (error) {
-    console.error('❌ Failed to retrieve AI itinerary from OpenAI:', error);
+    console.error('❌ Failed to retrieve AI itinerary from Gemini:', error);
     const mock = await generateFallbackMock(params);
     const deduplicatedMock = deduplicateItinerary(mock, params.destination);
     return calculateItineraryCosts(deduplicatedMock, params.travelStyle, params.currency || 'USD', params.totalBudget);
@@ -463,10 +442,10 @@ export async function generateAIItinerary(params: PlannerParams): Promise<AIItin
  * Regenerates a specific part of an itinerary (a whole day or a single session).
  */
 export async function regenerateItineraryPart(params: AIRegeneratePartParams): Promise<AIItineraryResponse> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const { apiKey, modelName } = getLLMConfig();
 
-  if (!apiKey || apiKey === 'your_openai_key_here') {
-    console.warn('⚠️ OpenAI API Key is missing. Returning updated itinerary from fallback.');
+  if (!apiKey) {
+    console.warn('⚠️ GEMINI_API_KEY is missing. Returning updated itinerary from fallback.');
     return generateFallbackRegenerate(params);
   }
 
@@ -605,33 +584,9 @@ export async function regenerateItineraryPart(params: AIRegeneratePartParams): P
   `;
 
   try {
-    const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-    const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
-
-    const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-        max_tokens: 3000,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`OpenAI API responded with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    const resultJson = JSON.parse(data.choices[0].message.content);
+    const rawText = await callNativeGemini(apiKey, modelName, systemPrompt + '\nTUYỆT ĐỐI CHỈ TRẢ VỀ DẠNG JSON HỢP LỆ, KHÔNG KÈM THEO VĂN BẢN KHÁC HOẶC MARKDOWN BLOCK.', userPrompt);
+    const cleanContent = rawText.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+    const resultJson = JSON.parse(cleanContent);
     
     const updatedItinerary = { ...params.currentItinerary };
     

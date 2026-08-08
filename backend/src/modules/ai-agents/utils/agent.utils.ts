@@ -201,32 +201,15 @@ export async function callNativeGemini(
 }
 
 /**
- * Lấy cấu hình LLM hợp nhất, ưu tiên Groq/OpenAI, fallback sang Gemini
- * Now also returns the LLM provider name for logging.
+ * Lấy cấu hình LLM hợp nhất, ưu tiên Gemini API làm provider chính
  */
 export function getLLMConfig() {
-  let apiKey = process.env.OPENAI_API_KEY;
-  let baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-  let modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
-  let provider = 'openai';
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+  const apiKey = (geminiKey && geminiKey !== 'your_gemini_key_here' && geminiKey !== 'your_openai_key_here') ? geminiKey : '';
+  const modelName = process.env.GEMINI_MODEL_NAME || 'gemini-2.0-flash';
+  const provider = 'gemini';
 
-  const geminiKey = process.env.GEMINI_API_KEY;
-  const useGeminiInitially = !!(geminiKey && (!apiKey || apiKey === 'your_openai_key_here' || apiKey.startsWith('AIzaSy') || process.env.USE_GEMINI === 'true'));
-
-  if (useGeminiInitially) {
-    apiKey = geminiKey;
-    baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
-    modelName = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-    provider = 'gemini';
-  } else if (apiKey && apiKey.startsWith('AIzaSy')) {
-    baseURL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
-    modelName = 'gemini-1.5-flash';
-    provider = 'gemini';
-  } else if (baseURL.includes('groq')) {
-    provider = 'groq';
-  }
-
-  return { apiKey, baseURL, modelName, useGeminiInitially, geminiKey, provider };
+  return { apiKey, modelName, provider };
 }
 
 /**
@@ -234,104 +217,33 @@ export function getLLMConfig() {
  * Returns IntentResult with confidence score (0.0–1.0).
  */
 export async function classifyIntentWithLLM(input: string): Promise<IntentResult> {
-  const { apiKey, baseURL, modelName, useGeminiInitially, geminiKey, provider } = getLLMConfig();
-  if (!apiKey || apiKey === 'your_openai_key_here') {
+  const { apiKey, modelName, provider } = getLLMConfig();
+  if (!apiKey) {
     return { intent: 'travel', destination: null, confidence: 0.3 };
   }
 
   const normalizedInput = normalizeSlang(input);
 
-  const makeRequest = async (key: string, base: string, model: string): Promise<IntentResult> => {  const response = await fetch(`${base.replace(/\/$/, '')}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${key}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: 'system',
-          content: `Bạn là một trợ lý thông minh phân tích ngữ nghĩa câu hỏi du lịch Việt Nam.\n\nNhiệm vụ: Đọc câu hỏi của người dùng và trả về DUY NHẤT một JSON hợp lệ.\n\n1. Phân loại ý định (intent) thành 1 trong 5 nhãn:\n- \"food\": hỏi về ăn uống, món đặc sản, quán ăn, ẩm thực\n- \"culture\": hỏi về lịch sử, văn hóa, lễ hội, đền chùa, di tích, phong tục\n- \"recommendation\": xin gợi ý địa điểm, đề xuất chỗ chơi phù hợp sở thích\n- \"travel\": hỏi về thời tiết, bản đồ, phương tiện, lịch trình tham khảo\n- \"unknown\": tin nhắn rác vô nghĩa, chào mờ nhạt không rõ mục đích\n\n2. Trích xuất địa danh (destination) nếu có. TUYỆT ĐỐI KHÔNG tự sửa tên địa danh.\n\n3. Đánh giá độ tin cậy (confidence: 0.0–1.0):\n- 0.9–1.0: Rất rõ ràng, từ khóa mạnh\n- 0.7–0.89: Khá rõ ràng\n- 0.5–0.69: Có thể đúng nhưng còn mơ hồ\n- 0.0–0.49: Không rõ ràng, suy đoán\n\n4. Giải thích ngắn (reasoning): 1 câu tại sao chọn intent này.\n\n{\n  \"intent\": \"food\"|\"culture\"|\"recommendation\"|\"travel\"|\"unknown\",\n  \"destination\": string|null,\n  \"confidence\": 0.95,\n  \"reasoning\": \"Câu hỏi chứa từ khóa 'món ăn' và 'đặc sản'\"\n}`
-          },
-          { role: 'user', content: normalizedInput }
-        ],
-        temperature: 0.1,
-        max_tokens: 200,
-      }),
-      signal: createAbortSignal(),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Intent Classifier API responded with status ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Log token usage if available
-    if (data?.usage) {
-      logger.debug('classifyIntentWithLLM', 'Token usage',
-        { prompt: data.usage.prompt_tokens, completion: data.usage.completion_tokens, total: data.usage.total_tokens, model }
-      );
-    }
-
-    const content = data.choices[0].message.content.trim();
-    const cleanContent = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  try {
+    logger.debug('classifyIntentWithLLM', 'Using Gemini for intent classification', { model: modelName, provider });
+    const prompt = `Phân loại ý định, trích xuất địa danh và đánh giá độ tin cậy. Trả về DUY NHẤT một JSON hợp lệ:\n{\n  \"intent\": \"food\"|\"culture\"|\"recommendation\"|\"travel\"|\"unknown\",\n  \"destination\": string|null,\n  \"confidence\": 0.0-1.0,\n  \"reasoning\": \"lý do ngắn\"\n}\nCâu hỏi: ${normalizedInput}`;
+    const rawResponse = await callNativeGemini(apiKey, modelName, '', prompt);
+    const cleanContent = rawResponse.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
     const result = JSON.parse(cleanContent);
-    
     return {
       intent: result.intent || 'unknown',
       destination: result.destination || null,
       confidence: typeof result.confidence === 'number' ? Math.max(0, Math.min(1, result.confidence)) : 0.5,
       reasoning: result.reasoning || undefined,
     };
-  };
-
-  try {
-    if (useGeminiInitially) {
-      const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-      logger.debug('classifyIntentWithLLM', 'Using native Gemini for classification', { model: geminiModel, provider: 'gemini' });
-      const prompt = `Phân loại ý định, trích xuất địa danh và đánh giá độ tin cậy. Trả về JSON:\n{\n  \"intent\": \"food\"|\"culture\"|\"recommendation\"|\"travel\"|\"unknown\",\n  \"destination\": string|null,\n  \"confidence\": 0.0-1.0,\n  \"reasoning\": \"lý do ngắn\"\n}\nCâu hỏi: ${normalizedInput}`;
-      const rawResponse = await callNativeGemini(apiKey, geminiModel, '', prompt);
-      const cleanContent = rawResponse.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-      const result = JSON.parse(cleanContent);
-      return {
-        intent: result.intent || 'unknown',
-        destination: result.destination || null,
-        confidence: typeof result.confidence === 'number' ? Math.max(0, Math.min(1, result.confidence)) : 0.5,
-        reasoning: result.reasoning || undefined,
-      };
-    }
-    logger.debug('classifyIntentWithLLM', 'Using OpenAI-compatible API for classification', { model: modelName, provider });
-    return await makeRequest(apiKey, baseURL, modelName);
   } catch (err: any) {
-    logger.warn('classifyIntentWithLLM', 'Primary intent classification failed', { error: err.message, provider, retryAttempt: 1 });
-    if (!useGeminiInitially && geminiKey && geminiKey !== 'your_gemini_key_here') {
-      logger.info('classifyIntentWithLLM', 'Attempting failover to native Gemini', { geminiModel: process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash' });
-      try {
-        const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-        const failoverPrompt = `Phân loại ý định, trích xuất địa danh và đánh giá độ tin cậy. Trả về JSON:\n{\n  \"intent\": \"food\"|\"culture\"|\"recommendation\"|\"travel\"|\"unknown\",\n  \"destination\": string|null,\n  \"confidence\": 0.0-1.0,\n  \"reasoning\": \"lý do ngắn\"\n}\nCâu hỏi: ${normalizedInput}`;
-        const rawResponse = await callNativeGemini(geminiKey, geminiModel, '', failoverPrompt);
-        const cleanContent = rawResponse.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-        const result = JSON.parse(cleanContent);
-        logger.info('classifyIntentWithLLM', 'Failover Gemini classification succeeded');
-        return {
-          intent: result.intent || 'unknown',
-          destination: result.destination || null,
-          confidence: typeof result.confidence === 'number' ? Math.max(0, Math.min(1, result.confidence)) : 0.5,
-          reasoning: result.reasoning || undefined,
-        };
-      } catch (geminiErr: any) {
-        logger.error('classifyIntentWithLLM', 'Failover to native Gemini also failed', { error: geminiErr.message });
-      }
-    }
+    logger.warn('classifyIntentWithLLM', 'Gemini intent classification failed', { error: err.message, provider });
+    return { intent: 'unknown', destination: null, confidence: 0.1, reasoning: 'Classification failed' };
   }
-
-  return { intent: 'unknown', destination: null, confidence: 0.1, reasoning: 'Classification failed entirely' };
 }
 
 /**
- * Calls the configured LLM (OpenAI/Groq) with a system prompt, user prompt, and conversation history.
+ * Calls Gemini API with a system prompt, user prompt, and conversation history.
  */
 export async function callAgentLLM(
   systemPrompt: string,
@@ -339,105 +251,16 @@ export async function callAgentLLM(
   history: { role: string; content: string }[] = [],
   requestId?: string
 ): Promise<string> {
-  const { apiKey, baseURL, modelName, useGeminiInitially, geminiKey, provider } = getLLMConfig();
-  if (!apiKey || apiKey === 'your_openai_key_here') {
-    throw new Error('Chưa cấu hình API Key cho LLM. Vui lòng kiểm tra file .env.');
+  const { apiKey, modelName, provider } = getLLMConfig();
+  if (!apiKey) {
+    throw new Error('Chưa cấu hình GEMINI_API_KEY cho hệ thống. Vui lòng kiểm tra file .env.');
   }
 
-  const recentHistory = history.slice(-6);
-  let retryAttempts = 0;
-
-  const makeRequest = async (key: string, base: string, model: string) => {
-    const messages = [
-      { role: 'system', content: systemPrompt },
-      ...recentHistory.map((m) => ({
-        role: m.role === 'assistant' ? 'assistant' : m.role === 'system' ? 'system' : 'user',
-        content: m.content,
-      })),
-      { role: 'user', content: userPrompt },
-    ];
-
-    logger.debug('callAgentLLM', 'Preparing LLM request', { model, provider, baseURL: base, historyCount: recentHistory.length }, requestId);
-    const response = await fetch(`${base.replace(/\/$/, '')}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${key}`,
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.7,
-        max_tokens: 2000,
-      }),
-      signal: createAbortSignal(),
-    });
-
-    if (!response.ok) {
-      throw new Error(`LLM API responded with status ${response.status}`);
-    }
-
-    const data = await response.json() as any;
-
-    // Log token usage if available (OpenAI/Groq style)
-    if (data?.usage) {
-      logger.info('callAgentLLM', 'Token usage',
-        {
-          model,
-          provider,
-          promptTokens: data.usage.prompt_tokens,
-          completionTokens: data.usage.completion_tokens,
-          totalTokens: data.usage.total_tokens,
-        },
-        requestId
-      );
-    }
-
-    if (data && data.choices && data.choices[0] && data.choices[0].message) {
-      return data.choices[0].message.content.trim();
-    }
-    throw new Error('LLM response format is invalid.');
-  };
-
+  logger.debug('callAgentLLM', 'Executing Gemini LLM request', { model: modelName, provider }, requestId);
   try {
-    if (useGeminiInitially) {
-      const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-      logger.debug('callAgentLLM', 'Using native Gemini', { model: geminiModel, provider: 'gemini' }, requestId);
-      return await callNativeGemini(apiKey, geminiModel, systemPrompt, userPrompt, history, requestId);
-    }
-    logger.debug('callAgentLLM', 'Using OpenAI-compatible API', { model: modelName, provider }, requestId);
-    return await makeRequest(apiKey, baseURL, modelName);
+    return await callNativeGemini(apiKey, modelName, systemPrompt, userPrompt, history, requestId);
   } catch (err: any) {
-    retryAttempts++;
-    logger.warn('callAgentLLM', 'Primary request failed',
-      { error: err.message, provider, retryAttempts, model: modelName },
-      requestId
-    );
-
-    if (!useGeminiInitially && geminiKey && geminiKey !== 'your_gemini_key_here') {
-      logger.info('callAgentLLM', 'Attempting automatic failover to native Gemini', {}, requestId);
-      try {
-        const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-        const result = await callNativeGemini(geminiKey, geminiModel, systemPrompt, userPrompt, history, requestId);
-        logger.info('callAgentLLM', 'Failover to Gemini succeeded',
-          { retryAttempts, originalProvider: provider, failoverProvider: 'gemini' },
-          requestId
-        );
-        return result;
-      } catch (geminiErr: any) {
-        retryAttempts++;
-        logger.error('callAgentLLM', 'Failover to native Gemini also failed',
-          { error: geminiErr.message, retryAttempts },
-          requestId
-        );
-      }
-    }
-
-    logger.error('callAgentLLM', 'All LLM attempts exhausted',
-      { retryAttempts, provider, model: modelName },
-      requestId
-    );
-
+    logger.error('callAgentLLM', 'Gemini LLM request failed', { error: err.message }, requestId);
     try {
       const fs = require('fs');
       fs.writeFileSync('d:/Thuc_Tap_NDT/backend/llm_error.log', `${new Date().toISOString()} - ERROR: ${err.message || err}\n${err.stack || ''}`);

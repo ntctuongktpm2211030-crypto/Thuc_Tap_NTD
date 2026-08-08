@@ -8,13 +8,13 @@ const BACKUP_PATH = path.resolve(__dirname, 'migration_backup.json');
 async function backup() {
   console.log('📦 Starting backup of old tables...');
   try {
-    const itineraries = await prisma.$queryRawUnsafe('SELECT * FROM "Itinerary"').catch(() => []);
-    const itineraryDays = await prisma.$queryRawUnsafe('SELECT * FROM "ItineraryDay"').catch(() => []);
-    const itineraryActivities = await prisma.$queryRawUnsafe('SELECT * FROM "ItineraryActivity"').catch(() => []);
+    const itineraries = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "Itinerary"').catch(() => []);
+    const itineraryDays = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "ItineraryDay"').catch(() => []);
+    const itineraryActivities = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "ItineraryActivity"').catch(() => []);
     
-    const placeCaches = await prisma.$queryRawUnsafe('SELECT * FROM "PlaceCache"').catch(() => []);
-    const foodCaches = await prisma.$queryRawUnsafe('SELECT * FROM "FoodCache"').catch(() => []);
-    const blogCaches = await prisma.$queryRawUnsafe('SELECT * FROM "BlogCache"').catch(() => []);
+    const placeCaches = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "PlaceCache"').catch(() => []);
+    const foodCaches = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "FoodCache"').catch(() => []);
+    const blogCaches = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM "BlogCache"').catch(() => []);
 
     const backupData = {
       itineraries,

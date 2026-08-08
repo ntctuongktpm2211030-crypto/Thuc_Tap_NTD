@@ -9,6 +9,7 @@ const translations = {
   en: {
     // Navigation
     'nav.feed':       'Feed',
+    'nav.aiAssistant': 'AI Assistant',
     'nav.explore':    'Explore',
     'nav.map':        'Map',
     'nav.aiPlanner':  'AI Planner',
@@ -188,6 +189,7 @@ const translations = {
   vi: {
     // Navigation
     'nav.feed':       'Trang chủ',
+    'nav.aiAssistant': 'Trợ lí ảo',
     'nav.explore':    'Khám phá',
     'nav.map':        'Bản đồ',
     'nav.aiPlanner':  'Quản lí kế hoạch',

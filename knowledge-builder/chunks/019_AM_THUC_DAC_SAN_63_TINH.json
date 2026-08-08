@@ -1,0 +1,1692 @@
+[
+  {
+    "id": "food_1",
+    "title": "AN GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "AN GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH AN GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bò leo núi Tân Châu\n- Gỏi sầu đâu\n- Bún cá An Giang\n- Cá lóc nướng trui\n- Lẩu mắm\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Mắm Châu Đốc: Được mệnh danh là 'vương quốc mắm' với hàng chục loại mắm đậm đà như mắm thái, mắm cá lóc, mắm cá linh.\n- Khô nhái\n- Bánh bò thốt nốt",
+    "metadata": {
+      "stt": 1,
+      "tinh_thanh": "An Giang",
+      "mon_an_dac_san": [
+        "Bò leo núi Tân Châu",
+        "Gỏi sầu đâu",
+        "Bún cá An Giang",
+        "Cá lóc nướng trui",
+        "Lẩu mắm"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Mắm Châu Đốc",
+          "mo_ta": "Được mệnh danh là 'vương quốc mắm' với hàng chục loại mắm đậm đà như mắm thái, mắm cá lóc, mắm cá linh."
+        },
+        "Khô nhái",
+        "Bánh bò thốt nốt"
+      ]
+    }
+  },
+  {
+    "id": "food_2",
+    "title": "BÀ RỊA - VŨNG TÀU - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BÀ RỊA - VŨNG TÀU",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BÀ RỊA - VŨNG TÀU\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi cá mai\n- Lẩu cá đuối\n- Bánh khọt Vũng Tàu: Món bánh chiên khuôn nhỏ giòn tan từ bột gạo, phủ nhân tôm tươi, mỡ hành và tôm khô chiên, cuốn rau sống chấm nước mắm chua ngọt.\n- Cá súng - cá nấu tương me\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh bông lan trứng muối\n- Mắm Trí Hải",
+    "metadata": {
+      "stt": 2,
+      "tinh_thanh": "Bà Rịa - Vũng Tàu",
+      "mon_an_dac_san": [
+        "Gỏi cá mai",
+        "Lẩu cá đuối",
+        {
+          "ten": "Bánh khọt Vũng Tàu",
+          "mo_ta": "Món bánh chiên khuôn nhỏ giòn tan từ bột gạo, phủ nhân tôm tươi, mỡ hành và tôm khô chiên, cuốn rau sống chấm nước mắm chua ngọt."
+        },
+        "Cá súng - cá nấu tương me"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh bông lan trứng muối",
+        "Mắm Trí Hải"
+      ]
+    }
+  },
+  {
+    "id": "food_3",
+    "title": "BẮC GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BẮC GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BẮC GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gà đồi Yên Thế\n- Bánh đúc Đồng Quan\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Cam Bố Hạ\n- Chè bát tiên\n- Vải thiều Lục Ngạn: Nổi tiếng khắp cả nước và xuất khẩu ra thế giới nhờ vỏ mỏng, hạt nhỏ, thịt dày, ngọt sắc và hương thơm đặc trưng.",
+    "metadata": {
+      "stt": 3,
+      "tinh_thanh": "Bắc Giang",
+      "mon_an_dac_san": [
+        "Gà đồi Yên Thế",
+        "Bánh đúc Đồng Quan"
+      ],
+      "dac_san_qua_tang": [
+        "Cam Bố Hạ",
+        "Chè bát tiên",
+        {
+          "ten": "Vải thiều Lục Ngạn",
+          "mo_ta": "Nổi tiếng khắp cả nước và xuất khẩu ra thế giới nhờ vỏ mỏng, hạt nhỏ, thịt dày, ngọt sắc và hương thơm đặc trưng."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_4",
+    "title": "BẮC KẠN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BẮC KẠN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BẮC KẠN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh coóc mò (bánh sừng bò)\n- Bánh pẻng phạ (bánh trời)\n- Lạp sườn hun khói\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Miến dong Côn Minh - Na Rì (Miến dong Na Rì): Sản xuất từ bột củ dong riềng đỏ nguyên chất, sợi miến giòn, dai, không bị trương nở khi nấu lâu.\n- Bánh ngải",
+    "metadata": {
+      "stt": 4,
+      "tinh_thanh": "Bắc Kạn",
+      "mon_an_dac_san": [
+        "Bánh coóc mò (bánh sừng bò)",
+        "Bánh pẻng phạ (bánh trời)",
+        "Lạp sườn hun khói"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Miến dong Côn Minh - Na Rì (Miến dong Na Rì)",
+          "mo_ta": "Sản xuất từ bột củ dong riềng đỏ nguyên chất, sợi miến giòn, dai, không bị trương nở khi nấu lâu."
+        },
+        "Bánh ngải"
+      ]
+    }
+  },
+  {
+    "id": "food_5",
+    "title": "BẠC LIÊU - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BẠC LIÊU",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BẠC LIÊU\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh củ cải Bạc Liêu: Món ăn mộc mạc mang hương vị đậm đà của miền Tây sông nước. Bánh có lớp vỏ mềm dẻo từ bột gạo kết hợp củ cải trắng, nhân gồm tôm, thịt lợn và đậu xanh.\n- Cà ri vịt\n- Bún bò cay\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Mắm cá chốt\n- Tôm khô đất Đa Giàu",
+    "metadata": {
+      "stt": 5,
+      "tinh_thanh": "Bạc Liêu",
+      "mon_an_dac_san": [
+        {
+          "ten": "Bánh củ cải Bạc Liêu",
+          "mo_ta": "Món ăn mộc mạc mang hương vị đậm đà của miền Tây sông nước. Bánh có lớp vỏ mềm dẻo từ bột gạo kết hợp củ cải trắng, nhân gồm tôm, thịt lợn và đậu xanh."
+        },
+        "Cà ri vịt",
+        "Bún bò cay"
+      ],
+      "dac_san_qua_tang": [
+        "Mắm cá chốt",
+        "Tôm khô đất Đa Giàu"
+      ]
+    }
+  },
+  {
+    "id": "food_6",
+    "title": "BẮC NINH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BẮC NINH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BẮC NINH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cháo cá Tích Nghi\n- Phở gan cháy Đáp Cầu\n- Nem chua rán Bắc Ninh\n- Bánh khúc làng Diềm\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Rượu nếp làng Cẩm\n- Tương Đình Tổ\n- Bánh phu thê Đình Bảng: Biểu tượng văn hóa ẩm thực truyền thống Kinh Bắc, thường xuất hiện trong các dịp lễ tết, cưới hỏi với ý nghĩa tượng trưng cho sự gắn kết vợ chồng.",
+    "metadata": {
+      "stt": 6,
+      "tinh_thanh": "Bắc Ninh",
+      "mon_an_dac_san": [
+        "Cháo cá Tích Nghi",
+        "Phở gan cháy Đáp Cầu",
+        "Nem chua rán Bắc Ninh",
+        "Bánh khúc làng Diềm"
+      ],
+      "dac_san_qua_tang": [
+        "Rượu nếp làng Cẩm",
+        "Tương Đình Tổ",
+        {
+          "ten": "Bánh phu thê Đình Bảng",
+          "mo_ta": "Biểu tượng văn hóa ẩm thực truyền thống Kinh Bắc, thường xuất hiện trong các dịp lễ tết, cưới hỏi với ý nghĩa tượng trưng cho sự gắn kết vợ chồng."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_7",
+    "title": "BẾN TRE - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BẾN TRE",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BẾN TRE\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá bống kho nước dừa\n- Củ hủ dừa xào tép nhảy\n- Cơm trái dừa\n- Tép rang dừa\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Rượu dừa\n- Bánh tráng Mỹ Lồng\n- Kẹo dừa Bến Tre: Đặc sản truyền thống nổi tiếng làm từ nước cốt dừa, đường và mạch nha. Kẹo có hương vị béo ngậy, ngọt thanh đặc trưng của xứ dừa.",
+    "metadata": {
+      "stt": 7,
+      "tinh_thanh": "Bến Tre",
+      "mon_an_dac_san": [
+        "Cá bống kho nước dừa",
+        "Củ hủ dừa xào tép nhảy",
+        "Cơm trái dừa",
+        "Tép rang dừa"
+      ],
+      "dac_san_qua_tang": [
+        "Rượu dừa",
+        "Bánh tráng Mỹ Lồng",
+        {
+          "ten": "Kẹo dừa Bến Tre",
+          "mo_ta": "Đặc sản truyền thống nổi tiếng làm từ nước cốt dừa, đường và mạch nha. Kẹo có hương vị béo ngậy, ngọt thanh đặc trưng của xứ dừa."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_8",
+    "title": "BÌNH ĐỊNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BÌNH ĐỊNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BÌNH ĐỊNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi cá chình\n- Gié bò Tây Sơn\n- Bún chả cá Quy Nhơn\n- Nem chua\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh hồng Tam Quan\n- Chả cá Quy Nhơn\n- Bánh ít lá gai: Món bánh truyền thống có vỏ màu đen dẻo thơm từ lá gai, nhân đậu xanh hoặc dừa ngọt bùi, gói cẩn thận trong lá chuối hình tháp.\n- Rượu Bầu Đá",
+    "metadata": {
+      "stt": 8,
+      "tinh_thanh": "Bình Định",
+      "mon_an_dac_san": [
+        "Gỏi cá chình",
+        "Gié bò Tây Sơn",
+        "Bún chả cá Quy Nhơn",
+        "Nem chua"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh hồng Tam Quan",
+        "Chả cá Quy Nhơn",
+        {
+          "ten": "Bánh ít lá gai",
+          "mo_ta": "Món bánh truyền thống có vỏ màu đen dẻo thơm từ lá gai, nhân đậu xanh hoặc dừa ngọt bùi, gói cẩn thận trong lá chuối hình tháp."
+        },
+        "Rượu Bầu Đá"
+      ]
+    }
+  },
+  {
+    "id": "food_9",
+    "title": "BÌNH DƯƠNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BÌNH DƯƠNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BÌNH DƯƠNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi gà măng cụt Lái Thiêu (Gỏi măng cụt): Gỏi gà kết hợp cùng măng cụt Lái Thiêu nổi tiếng có vỏ mỏng, mọng nước, vị ngọt thanh chua dịu tạo nên món ăn độc đáo.\n- Lẩu bò nhúng mắm ruốc\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nem Lái Thiêu\n- Mứt gừng Bình Nhâm\n- Măng cụt Lái Thiêu: Nổi tiếng với vỏ mỏng, mọng nước, vị ngọt thanh chua dịu. Thường được thưởng thức trực tiếp hoặc làm món gỏi gà măng cụt độc đáo.",
+    "metadata": {
+      "stt": 9,
+      "tinh_thanh": "Bình Dương",
+      "mon_an_dac_san": [
+        {
+          "ten": "Gỏi gà măng cụt Lái Thiêu (Gỏi măng cụt)",
+          "mo_ta": "Gỏi gà kết hợp cùng măng cụt Lái Thiêu nổi tiếng có vỏ mỏng, mọng nước, vị ngọt thanh chua dịu tạo nên món ăn độc đáo."
+        },
+        "Lẩu bò nhúng mắm ruốc"
+      ],
+      "dac_san_qua_tang": [
+        "Nem Lái Thiêu",
+        "Mứt gừng Bình Nhâm",
+        {
+          "ten": "Măng cụt Lái Thiêu",
+          "mo_ta": "Nổi tiếng với vỏ mỏng, mọng nước, vị ngọt thanh chua dịu. Thường được thưởng thức trực tiếp hoặc làm món gỏi gà măng cụt độc đáo."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_10",
+    "title": "BÌNH PHƯỚC - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BÌNH PHƯỚC",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BÌNH PHƯỚC\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi hạt điều\n- Heo mẹt Đồng Xoài\n- Bánh tét hột điều\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Hạt điều Bình Phước (Hạt điều rang muối): Đã được Cục Sở hữu trí tuệ cấp giấy chứng nhận đăng ký chỉ dẫn địa lý. Hạt điều ở đây có hạt chắc, mẩy, giòn và vị béo ngậy đặc trưng.\n- Rượu cần S'tiêng",
+    "metadata": {
+      "stt": 10,
+      "tinh_thanh": "Bình Phước",
+      "mon_an_dac_san": [
+        "Gỏi hạt điều",
+        "Heo mẹt Đồng Xoài",
+        "Bánh tét hột điều"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Hạt điều Bình Phước (Hạt điều rang muối)",
+          "mo_ta": "Đã được Cục Sở hữu trí tuệ cấp giấy chứng nhận đăng ký chỉ dẫn địa lý. Hạt điều ở đây có hạt chắc, mẩy, giòn và vị béo ngậy đặc trưng."
+        },
+        "Rượu cần S'tiêng"
+      ]
+    }
+  },
+  {
+    "id": "food_11",
+    "title": "BÌNH THUẬN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "BÌNH THUẬN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH BÌNH THUẬN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi cá Phan Thiết\n- Lẩu cá bớp\n- Bánh mì quê Phan Thiết\n- Lẩu thả\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Cá bống ăn liền\n- Nước mắm Cá Đen\n- Nước mắm Phan Thiết: Sản xuất theo phương pháp ủ chượp truyền thống từ cá cơm tươi, tạo nên hương vị đậm đà, độ đạm cao và màu gián sóng sánh.\n- Thanh long Bình Thuận\n- Mực một nắng: Mực ống tươi vừa đánh bắt được phơi qua đúng một cái nắng gắt, thịt bên ngoài khô ráo nhưng bên trong vẫn ngọt mềm, dẻo dai.",
+    "metadata": {
+      "stt": 11,
+      "tinh_thanh": "Bình Thuận",
+      "mon_an_dac_san": [
+        "Gỏi cá Phan Thiết",
+        "Lẩu cá bớp",
+        "Bánh mì quê Phan Thiết",
+        "Lẩu thả"
+      ],
+      "dac_san_qua_tang": [
+        "Cá bống ăn liền",
+        "Nước mắm Cá Đen",
+        {
+          "ten": "Nước mắm Phan Thiết",
+          "mo_ta": "Sản xuất theo phương pháp ủ chượp truyền thống từ cá cơm tươi, tạo nên hương vị đậm đà, độ đạm cao và màu gián sóng sánh."
+        },
+        "Thanh long Bình Thuận",
+        {
+          "ten": "Mực một nắng",
+          "mo_ta": "Mực ống tươi vừa đánh bắt được phơi qua đúng một cái nắng gắt, thịt bên ngoài khô ráo nhưng bên trong vẫn ngọt mềm, dẻo dai."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_12",
+    "title": "CÀ MAU - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "CÀ MAU",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH CÀ MAU\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Lẩu mắm U Minh\n- Cá lóc nướng trui\n- Cá nâu kho trái giác\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Khô cá sặc U Minh\n- Ba khía Rạch Gốc\n- Cua Cà Mau: Nổi tiếng thịt chắc, ngọt thơm và gạch béo ngậy nhờ sống trong môi trường sinh thái tự nhiên vùng ngập mặn.",
+    "metadata": {
+      "stt": 12,
+      "tinh_thanh": "Cà Mau",
+      "mon_an_dac_san": [
+        "Lẩu mắm U Minh",
+        "Cá lóc nướng trui",
+        "Cá nâu kho trái giác"
+      ],
+      "dac_san_qua_tang": [
+        "Khô cá sặc U Minh",
+        "Ba khía Rạch Gốc",
+        {
+          "ten": "Cua Cà Mau",
+          "mo_ta": "Nổi tiếng thịt chắc, ngọt thơm và gạch béo ngậy nhờ sống trong môi trường sinh thái tự nhiên vùng ngập mặn."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_13",
+    "title": "CAO BẰNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "CAO BẰNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH CAO BẰNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh cuốn Cao Bằng\n- Bánh áp chao\n- Vịt nấu hạt dẻ Trùng Khánh\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh chè lam\n- Miến dong đen Phia Đén\n- Hạt dẻ Trùng Khánh: Loại hạt to gấp 4-5 lần hạt dẻ thông thường, vỏ cứng, nhân màu vàng bùi ngậy và rất thơm khi rang hoặc hấp.",
+    "metadata": {
+      "stt": 13,
+      "tinh_thanh": "Cao Bằng",
+      "mon_an_dac_san": [
+        "Bánh cuốn Cao Bằng",
+        "Bánh áp chao",
+        "Vịt nấu hạt dẻ Trùng Khánh"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh chè lam",
+        "Miến dong đen Phia Đén",
+        {
+          "ten": "Hạt dẻ Trùng Khánh",
+          "mo_ta": "Loại hạt to gấp 4-5 lần hạt dẻ thông thường, vỏ cứng, nhân màu vàng bùi ngậy và rất thơm khi rang hoặc hấp."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_14",
+    "title": "CẦN THƠ - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "CẦN THƠ",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH CẦN THƠ\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Ốc bươu xanh nướng tiêu\n- Gà um dâu Hạ Châu\n- Chả giò rế\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Dâu Hạ Châu\n- Rượu mận 6 Tia\n- Bánh tét lá cẩm: Có màu tím đẹp mắt từ nước lá cẩm, nhân gồm nếp dẻo, đậu xanh, thịt mỡ, trứng muối thơm ngon đậm đà.",
+    "metadata": {
+      "stt": 14,
+      "tinh_thanh": "Cần Thơ",
+      "mon_an_dac_san": [
+        "Ốc bươu xanh nướng tiêu",
+        "Gà um dâu Hạ Châu",
+        "Chả giò rế"
+      ],
+      "dac_san_qua_tang": [
+        "Dâu Hạ Châu",
+        "Rượu mận 6 Tia",
+        {
+          "ten": "Bánh tét lá cẩm",
+          "mo_ta": "Có màu tím đẹp mắt từ nước lá cẩm, nhân gồm nếp dẻo, đậu xanh, thịt mỡ, trứng muối thơm ngon đậm đà."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_15",
+    "title": "ĐÀ NẴNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐÀ NẴNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐÀ NẴNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún mắm nêm thịt luộc lỗ tai heo\n- Nghêu hoa hấp sả\n- Mì Quảng Đà Nẵng\n- Thịt luộc Khuê Trung\n- Bún chả cá Đà Nẵng: Món bún nước dùng ninh từ xương cá ngọt thanh, kết hợp chả cá chiên hoặc hấp giòn dai cùng bí đỏ, su su, bắp cải.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Cá bò lát rim\n- Mực cán cay\n- Tré Đà Nẵng: Đặc sản lên men làm từ thịt đầu lợn, tai lợn, riềng, tỏi và thính gạo, mang hương vị chua nhẹ, giòn sần sật và thơm nồng.",
+    "metadata": {
+      "stt": 15,
+      "tinh_thanh": "Đà Nẵng",
+      "mon_an_dac_san": [
+        "Bún mắm nêm thịt luộc lỗ tai heo",
+        "Nghêu hoa hấp sả",
+        "Mì Quảng Đà Nẵng",
+        "Thịt luộc Khuê Trung",
+        {
+          "ten": "Bún chả cá Đà Nẵng",
+          "mo_ta": "Món bún nước dùng ninh từ xương cá ngọt thanh, kết hợp chả cá chiên hoặc hấp giòn dai cùng bí đỏ, su su, bắp cải."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Cá bò lát rim",
+        "Mực cán cay",
+        {
+          "ten": "Tré Đà Nẵng",
+          "mo_ta": "Đặc sản lên men làm từ thịt đầu lợn, tai lợn, riềng, tỏi và thính gạo, mang hương vị chua nhẹ, giòn sần sật và thơm nồng."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_16",
+    "title": "ĐẮC LẮK - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐẮC LẮK",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐẮC LẮK\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gà nướng Bản Đôn\n- Thịt nai nướng\n- Cá lăng nấu măng Buôn Ma Thuột\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Sáp - mật ong nuôi trong hũ thủy tinh\n- Macca sấy\n- Cà phê Buôn Ma Thuột: Thương hiệu nổi tiếng toàn cầu với hương vị đậm đà, thơm nồng đặc trưng của vùng đất đỏ Bazan.",
+    "metadata": {
+      "stt": 16,
+      "tinh_thanh": "Đắc Lắk",
+      "mon_an_dac_san": [
+        "Gà nướng Bản Đôn",
+        "Thịt nai nướng",
+        "Cá lăng nấu măng Buôn Ma Thuột"
+      ],
+      "dac_san_qua_tang": [
+        "Sáp - mật ong nuôi trong hũ thủy tinh",
+        "Macca sấy",
+        {
+          "ten": "Cà phê Buôn Ma Thuột",
+          "mo_ta": "Thương hiệu nổi tiếng toàn cầu với hương vị đậm đà, thơm nồng đặc trưng của vùng đất đỏ Bazan."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_17",
+    "title": "ĐẮK NÔNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐẮK NÔNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐẮK NÔNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Lẩu lá rừng\n- Cá kìm hồ Tà Đùng\n- Gà nướng sa lửa - cơm lam\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Gạo Buôn Choáh\n- Rễ cây Sâm cau trắng\n- Pơ-lang (Hạt tiêu Đắk Nông): Hạt tiêu cay nồng, thơm phức, chất lượng cao nhờ thổ nhưỡng và khí hậu Tây Nguyên.",
+    "metadata": {
+      "stt": 17,
+      "tinh_thanh": "Đắk Nông",
+      "mon_an_dac_san": [
+        "Lẩu lá rừng",
+        "Cá kìm hồ Tà Đùng",
+        "Gà nướng sa lửa - cơm lam"
+      ],
+      "dac_san_qua_tang": [
+        "Gạo Buôn Choáh",
+        "Rễ cây Sâm cau trắng",
+        {
+          "ten": "Pơ-lang (Hạt tiêu Đắk Nông)",
+          "mo_ta": "Hạt tiêu cay nồng, thơm phức, chất lượng cao nhờ thổ nhưỡng và khí hậu Tây Nguyên."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_18",
+    "title": "ĐIỆN BIÊN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐIỆN BIÊN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐIỆN BIÊN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Pa pỉnh tộp (cá suối nướng)\n- Gà nướng mắc khén\n- Cá nướng ba pinh tập Điện Biên\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh khẩu xén Mường Lay\n- Chẳm chéo\n- Thịt trâu gác bếp: Món ăn đặc sản của người Thái đen, thịt trâu tươi được ướp mắc khén, hạt dổi rồi hun khói củi Tây Bắc, vị đậm đà cay nồng.",
+    "metadata": {
+      "stt": 18,
+      "tinh_thanh": "Điện Biên",
+      "mon_an_dac_san": [
+        "Pa pỉnh tộp (cá suối nướng)",
+        "Gà nướng mắc khén",
+        "Cá nướng ba pinh tập Điện Biên"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh khẩu xén Mường Lay",
+        "Chẳm chéo",
+        {
+          "ten": "Thịt trâu gác bếp",
+          "mo_ta": "Món ăn đặc sản của người Thái đen, thịt trâu tươi được ướp mắc khén, hạt dổi rồi hun khói củi Tây Bắc, vị đậm đà cay nồng."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_19",
+    "title": "ĐỒNG NAI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐỒNG NAI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐỒNG NAI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Lẩu tôm sông\n- Gà hấp bưởi Tân Triều\n- Xôi chiên phồng\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bưởi Tân Triều: Giống bưởi đường lá cam mọng nước, ngọt thanh, vỏ mỏng, được chế biến thành nhiều món ăn và rượu bưởi độc đáo.\n- Mít tố nữ Long Khánh",
+    "metadata": {
+      "stt": 19,
+      "tinh_thanh": "Đồng Nai",
+      "mon_an_dac_san": [
+        "Lẩu tôm sông",
+        "Gà hấp bưởi Tân Triều",
+        "Xôi chiên phồng"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Bưởi Tân Triều",
+          "mo_ta": "Giống bưởi đường lá cam mọng nước, ngọt thanh, vỏ mỏng, được chế biến thành nhiều món ăn và rượu bưởi độc đáo."
+        },
+        "Mít tố nữ Long Khánh"
+      ]
+    }
+  },
+  {
+    "id": "food_20",
+    "title": "ĐỒNG THÁP - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "ĐỒNG THÁP",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH ĐỒNG THÁP\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá lóc nướng cuốn lá sen non\n- Chuột đồng quay lu\n- Chả giò sen\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Khô cá lóc Đồng Tháp Mười\n- Rượu sen hồng\n- Nem Lai Vung: Sự kết hợp hài hòa giữa vị chua của thịt lên men, vị cay của tiêu ớt và độ giòn của bì lợn, gói trong lá chuối xanh.",
+    "metadata": {
+      "stt": 20,
+      "tinh_thanh": "Đồng Tháp",
+      "mon_an_dac_san": [
+        "Cá lóc nướng cuốn lá sen non",
+        "Chuột đồng quay lu",
+        "Chả giò sen"
+      ],
+      "dac_san_qua_tang": [
+        "Khô cá lóc Đồng Tháp Mười",
+        "Rượu sen hồng",
+        {
+          "ten": "Nem Lai Vung",
+          "mo_ta": "Sự kết hợp hài hòa giữa vị chua của thịt lên men, vị cay của tiêu ớt và độ giòn của bì lợn, gói trong lá chuối xanh."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_21",
+    "title": "GIA LAI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "GIA LAI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH GIA LAI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bò nướng ống tre Pleiku\n- Bún mắmcua\n- Phở khô Pleiku (Phở hai bát): Món ăn độc đáo gồm một bát bánh phở trộn sệt và một bát nước dùng đậm đà ăn kèm rau sống.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Cà phê Pleiku\n- Bò một nắng muối kiến vàng",
+    "metadata": {
+      "stt": 21,
+      "tinh_thanh": "Gia Lai",
+      "mon_an_dac_san": [
+        "Bò nướng ống tre Pleiku",
+        "Bún mắmcua",
+        {
+          "ten": "Phở khô Pleiku (Phở hai bát)",
+          "mo_ta": "Món ăn độc đáo gồm một bát bánh phở trộn sệt và một bát nước dùng đậm đà ăn kèm rau sống."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Cà phê Pleiku",
+        "Bò một nắng muối kiến vàng"
+      ]
+    }
+  },
+  {
+    "id": "food_22",
+    "title": "HÀ GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HÀ GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HÀ GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Thắng cố\n- Thịt lợn cắp nách\n- Thịt trâu gác bếp Hà Giang\n- Trâu gác bếp Mèo Vạc\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh tam giác mạch Hà Giang\n- Hồng không hạt Quản Bạ\n- Chè shan tuyết Hoàng Su Tì\n- Mật ong bạc hà: Khai thác từ hoa bạc hà dại vùng núi đá cao, có màu vàng xanh tự nhiên, vị ngọt mát và mùi thơm thảo mộc đặc trưng.\n- Rượu ngô Hà Giang",
+    "metadata": {
+      "stt": 22,
+      "tinh_thanh": "Hà Giang",
+      "mon_an_dac_san": [
+        "Thắng cố",
+        "Thịt lợn cắp nách",
+        "Thịt trâu gác bếp Hà Giang",
+        "Trâu gác bếp Mèo Vạc"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh tam giác mạch Hà Giang",
+        "Hồng không hạt Quản Bạ",
+        "Chè shan tuyết Hoàng Su Tì",
+        {
+          "ten": "Mật ong bạc hà",
+          "mo_ta": "Khai thác từ hoa bạc hà dại vùng núi đá cao, có màu vàng xanh tự nhiên, vị ngọt mát và mùi thơm thảo mộc đặc trưng."
+        },
+        "Rượu ngô Hà Giang"
+      ]
+    }
+  },
+  {
+    "id": "food_23",
+    "title": "HÀ NAM - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HÀ NAM",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HÀ NAM\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh cuốn chả Phủ Lý\n- Bún sốt vang\n- Bánh cuốn\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh chưng làng Đầm\n- Rau sắng Ba Sao\n- Cá kho Vũ Đại: Món cá trắm đen kho niêu đất theo phương pháp truyền thống suốt 12-16 tiếng, thịt cá chắc ngọt, xương mềm nhừ.",
+    "metadata": {
+      "stt": 23,
+      "tinh_thanh": "Hà Nam",
+      "mon_an_dac_san": [
+        "Bánh cuốn chả Phủ Lý",
+        "Bún sốt vang",
+        "Bánh cuốn"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh chưng làng Đầm",
+        "Rau sắng Ba Sao",
+        {
+          "ten": "Cá kho Vũ Đại",
+          "mo_ta": "Món cá trắm đen kho niêu đất theo phương pháp truyền thống suốt 12-16 tiếng, thịt cá chắc ngọt, xương mềm nhừ."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_24",
+    "title": "HÀ NỘI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HÀ NỘI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HÀ NỘI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún đậu mắm tôm: Món ăn bình dân gồm bún lá, đậu phụ rán giòn, thịt chân giò, chả cốm ăn kèm mắm tôm dậy vị pha chanh, ớt và đường.\n- Bánh tôm Hồ Tây\n- Bún thang\n- Chả cá Lã Vọng: Món ướp cá tẩm nghệ chiên trên chảo tại bàn, ăn kèm thì là, hành lá, bún, đậu phụng rán và mắm tôm.\n- Bún chả quạt\n- Phở bò (Beef Pho): Món súp mì truyền thống gồm nước dùng ninh từ xương bò giàu hương vị thơm mùi thảo mộc (quế, hồi, thảo quả), ăn kèm bánh phở tươi và các loại thịt bò.\n- Bún chả: Món ăn gồm chả thịt heo nướng than hoa thơm lừng, dùng kèm bún tươi, rau sống và nước chấm pha chua ngọt đặc trưng.\n- Cà phê trứng (Egg Coffee): Đồ uống sáng tạo độc đáo từ cà phê phin đậm đà kết hợp lớp kem lòng đỏ trứng gà đánh bông mịn cùng sữa đặc.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Cốm làng Vòng (Cốm dẹp xanh): Thức quà mùa thu Hà Nội từ lúa nếp non, hạt cốm dẻo thơm, xanh mướt, gói trong lá sen phảng phất hương vị tinh tế.\n- Trà sen Tây Hồ\n- Kem Tràng Tiền\n- Ô mai Hàng Đường",
+    "metadata": {
+      "stt": 24,
+      "tinh_thanh": "Hà Nội",
+      "mon_an_dac_san": [
+        {
+          "ten": "Bún đậu mắm tôm",
+          "mo_ta": "Món ăn bình dân gồm bún lá, đậu phụ rán giòn, thịt chân giò, chả cốm ăn kèm mắm tôm dậy vị pha chanh, ớt và đường."
+        },
+        "Bánh tôm Hồ Tây",
+        "Bún thang",
+        {
+          "ten": "Chả cá Lã Vọng",
+          "mo_ta": "Món ướp cá tẩm nghệ chiên trên chảo tại bàn, ăn kèm thì là, hành lá, bún, đậu phụng rán và mắm tôm."
+        },
+        "Bún chả quạt",
+        {
+          "ten": "Phở bò (Beef Pho)",
+          "mo_ta": "Món súp mì truyền thống gồm nước dùng ninh từ xương bò giàu hương vị thơm mùi thảo mộc (quế, hồi, thảo quả), ăn kèm bánh phở tươi và các loại thịt bò."
+        },
+        {
+          "ten": "Bún chả",
+          "mo_ta": "Món ăn gồm chả thịt heo nướng than hoa thơm lừng, dùng kèm bún tươi, rau sống và nước chấm pha chua ngọt đặc trưng."
+        },
+        {
+          "ten": "Cà phê trứng (Egg Coffee)",
+          "mo_ta": "Đồ uống sáng tạo độc đáo từ cà phê phin đậm đà kết hợp lớp kem lòng đỏ trứng gà đánh bông mịn cùng sữa đặc."
+        }
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Cốm làng Vòng (Cốm dẹp xanh)",
+          "mo_ta": "Thức quà mùa thu Hà Nội từ lúa nếp non, hạt cốm dẻo thơm, xanh mướt, gói trong lá sen phảng phất hương vị tinh tế."
+        },
+        "Trà sen Tây Hồ",
+        "Kem Tràng Tiền",
+        "Ô mai Hàng Đường"
+      ]
+    }
+  },
+  {
+    "id": "food_25",
+    "title": "HÀ TĨNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HÀ TĨNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HÀ TĨNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Nhút mít Hương Sơn\n- Mực nháy Vũng Áng\n- Kẹo cu đơ: Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Rượu nếp Can Lộc\n- Ram dẻo\n- Kẹo cu đơ: Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm.",
+    "metadata": {
+      "stt": 25,
+      "tinh_thanh": "Hà Tĩnh",
+      "mon_an_dac_san": [
+        "Nhút mít Hương Sơn",
+        "Mực nháy Vũng Áng",
+        {
+          "ten": "Kẹo cu đơ",
+          "mo_ta": "Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Rượu nếp Can Lộc",
+        "Ram dẻo",
+        {
+          "ten": "Kẹo cu đơ",
+          "mo_ta": "Làm từ mật mía, đậu rang giòn và gừng tươi kẹp giữa hai miếng bánh tráng nướng, tạo vị ngọt bùi, cay ấm."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_26",
+    "title": "HẢI DƯƠNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HẢI DƯƠNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HẢI DƯƠNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh dày Gia Lộc\n- Gà Mạnh Hoạch\n- Bún cá rô đồng\n- Chả rươi\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh gai Ninh Giang\n- Bánh đa gấc Kẻ Sặt\n- Bánh đậu xanh Hải Dương: Được làm từ bột đậu xanh nguyên chất, đường và dầu ăn, bánh tơi mịn, tan ngay trong miệng với vị ngọt bùi.",
+    "metadata": {
+      "stt": 26,
+      "tinh_thanh": "Hải Dương",
+      "mon_an_dac_san": [
+        "Bánh dày Gia Lộc",
+        "Gà Mạnh Hoạch",
+        "Bún cá rô đồng",
+        "Chả rươi"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh gai Ninh Giang",
+        "Bánh đa gấc Kẻ Sặt",
+        {
+          "ten": "Bánh đậu xanh Hải Dương",
+          "mo_ta": "Được làm từ bột đậu xanh nguyên chất, đường và dầu ăn, bánh tơi mịn, tan ngay trong miệng với vị ngọt bùi."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_27",
+    "title": "HẢI PHÒNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HẢI PHÒNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HẢI PHÒNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh mì que cay\n- Dừa dầm\n- Bánh đa cua (Red Noodle Soup with Crab): Món ăn đặc trưng đất Cảng với sợi bánh đa đỏ dẻo giòn, nước dùng ngọt đậm đà từ gạch cua đồng, ăn kèm chả lá lốt, chả cá và rau muống.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Ruốc tôm Hải Phòng\n- Táo muối Bàng La\n- Nước mắm Cát Hải",
+    "metadata": {
+      "stt": 27,
+      "tinh_thanh": "Hải Phòng",
+      "mon_an_dac_san": [
+        "Bánh mì que cay",
+        "Dừa dầm",
+        {
+          "ten": "Bánh đa cua (Red Noodle Soup with Crab)",
+          "mo_ta": "Món ăn đặc trưng đất Cảng với sợi bánh đa đỏ dẻo giòn, nước dùng ngọt đậm đà từ gạch cua đồng, ăn kèm chả lá lốt, chả cá và rau muống."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Ruốc tôm Hải Phòng",
+        "Táo muối Bàng La",
+        "Nước mắm Cát Hải"
+      ]
+    }
+  },
+  {
+    "id": "food_28",
+    "title": "HẬU GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HẬU GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HẬU GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh xèo củ hủ khóm\n- Lẩu cá thát lát khổ qua\n- Cháo lòng Cái Tắc\n- Chả cá thát lát Hậu Giang: Cá thát lát tươi quết dai tự nhiên, thịt ngọt thơm, thường được chiên giòn hoặc hấp chín.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Trà mãng cầu xiêm\n- Snack da cá thát lát\n- Khóm Cầu Đúc",
+    "metadata": {
+      "stt": 28,
+      "tinh_thanh": "Hậu Giang",
+      "mon_an_dac_san": [
+        "Bánh xèo củ hủ khóm",
+        "Lẩu cá thát lát khổ qua",
+        "Cháo lòng Cái Tắc",
+        {
+          "ten": "Chả cá thát lát Hậu Giang",
+          "mo_ta": "Cá thát lát tươi quết dai tự nhiên, thịt ngọt thơm, thường được chiên giòn hoặc hấp chín."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Trà mãng cầu xiêm",
+        "Snack da cá thát lát",
+        "Khóm Cầu Đúc"
+      ]
+    }
+  },
+  {
+    "id": "food_29",
+    "title": "HÒA BÌNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HÒA BÌNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HÒA BÌNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá suối nướng Mai Châu\n- Cơm lam - thịt lợn rừng xiên nướng\n- Thịt trâu lá lồm\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Tỏi tía Mai Châu\n- Cam Cao Phong: Mọng nước, vị ngọt đậm thanh mát, vỏ mỏng màu vàng óng, nổi tiếng miền Bắc.",
+    "metadata": {
+      "stt": 29,
+      "tinh_thanh": "Hòa Bình",
+      "mon_an_dac_san": [
+        "Cá suối nướng Mai Châu",
+        "Cơm lam - thịt lợn rừng xiên nướng",
+        "Thịt trâu lá lồm"
+      ],
+      "dac_san_qua_tang": [
+        "Tỏi tía Mai Châu",
+        {
+          "ten": "Cam Cao Phong",
+          "mo_ta": "Mọng nước, vị ngọt đậm thanh mát, vỏ mỏng màu vàng óng, nổi tiếng miền Bắc."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_30",
+    "title": "TP. HỒ CHÍ MINH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "TP. HỒ CHÍ MINH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH TP. HỒ CHÍ MINH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cơm tấm Sài Gòn (Cơm tấm sườn - bì - chả): Món ăn bình dân quen thuộc gồm hạt cơm tấm nở xốp, sườn nướng mỡ hành thơm lừng, bì, chả trứng và nước mắm chua ngọt.\n- Bánh mì Sài Gòn (Bánh mì thịt): Bánh mì vỏ giòn kẹp nhân pate, bơ, các loại thịt nguội, chả lụa, dưa chua, ngò rí và nước xốt đậm đà.\n- Bún riêu cua Sài Gòn\n- Chả giò (Vietnamese Fried Spring Rolls): Cuốn bánh tráng nhân thịt băm, tôm, mộc nhĩ, khoai môn chiên ngập dầu giòn rụm.\n- Bò kho: Món bò hầm nhừ với hoa hồi, quế, cà rốt và gia vị cari, ăn kèm bánh mì hoặc hủ tiếu.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Khô cá dứa Cần Giờ\n- Khô bò Củ Chi",
+    "metadata": {
+      "stt": 30,
+      "tinh_thanh": "TP. Hồ Chí Minh",
+      "mon_an_dac_san": [
+        {
+          "ten": "Cơm tấm Sài Gòn (Cơm tấm sườn - bì - chả)",
+          "mo_ta": "Món ăn bình dân quen thuộc gồm hạt cơm tấm nở xốp, sườn nướng mỡ hành thơm lừng, bì, chả trứng và nước mắm chua ngọt."
+        },
+        {
+          "ten": "Bánh mì Sài Gòn (Bánh mì thịt)",
+          "mo_ta": "Bánh mì vỏ giòn kẹp nhân pate, bơ, các loại thịt nguội, chả lụa, dưa chua, ngò rí và nước xốt đậm đà."
+        },
+        "Bún riêu cua Sài Gòn",
+        {
+          "ten": "Chả giò (Vietnamese Fried Spring Rolls)",
+          "mo_ta": "Cuốn bánh tráng nhân thịt băm, tôm, mộc nhĩ, khoai môn chiên ngập dầu giòn rụm."
+        },
+        {
+          "ten": "Bò kho",
+          "mo_ta": "Món bò hầm nhừ với hoa hồi, quế, cà rốt và gia vị cari, ăn kèm bánh mì hoặc hủ tiếu."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Khô cá dứa Cần Giờ",
+        "Khô bò Củ Chi"
+      ]
+    }
+  },
+  {
+    "id": "food_31",
+    "title": "HƯNG YÊN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "HƯNG YÊN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH HƯNG YÊN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Chả gà Tiểu Quan\n- Ếch om Phượng Tường\n- Bún thang lươn Phố Hiến (Bún thang lươn)\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Chè sen long nhãn Phố Hiến\n- Mật ong hoa nhãn\n- Nhãn lồng Hưng Yên: Nổi tiếng từ xưa với cùi dày, hạt nhỏ, nước mọng và vị ngọt lịm kèm hương thơm dịu mát.",
+    "metadata": {
+      "stt": 31,
+      "tinh_thanh": "Hưng Yên",
+      "mon_an_dac_san": [
+        "Chả gà Tiểu Quan",
+        "Ếch om Phượng Tường",
+        "Bún thang lươn Phố Hiến (Bún thang lươn)"
+      ],
+      "dac_san_qua_tang": [
+        "Chè sen long nhãn Phố Hiến",
+        "Mật ong hoa nhãn",
+        {
+          "ten": "Nhãn lồng Hưng Yên",
+          "mo_ta": "Nổi tiếng từ xưa với cùi dày, hạt nhỏ, nước mọng và vị ngọt lịm kèm hương thơm dịu mát."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_32",
+    "title": "KHÁNH HÒA - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "KHÁNH HÒA",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH KHÁNH HÒA\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún sứa Nha Trang\n- Bún mực Vạn Ninh\n- Bánh canh chả cá Nha Trang\n- Bún cá dầm\n- Nem nướng Nha Trang: Thịt lợn nướng xiên que thơm phức, cuốn cùng bánh tráng chiên giòn, rau sống và chấm nước xốt nếp gan heo thơm bùi.\n- Bò né: Món bò bít tết kiểu Việt Nam chế biến trên chảo xèo xèo gồm thịt bò, trứng ốp la, xíu mại, ăn kèm bánh mì giòn.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Yến sào Khánh Hòa: Sản vật quý giá khai thác từ các đảo yến tự nhiên, chất lượng đỉnh cao giàu dinh dưỡng.\n- Bánh tráng xoài Cam Lâm\n- Chả cá Nha Trang",
+    "metadata": {
+      "stt": 32,
+      "tinh_thanh": "Khánh Hòa",
+      "mon_an_dac_san": [
+        "Bún sứa Nha Trang",
+        "Bún mực Vạn Ninh",
+        "Bánh canh chả cá Nha Trang",
+        "Bún cá dầm",
+        {
+          "ten": "Nem nướng Nha Trang",
+          "mo_ta": "Thịt lợn nướng xiên que thơm phức, cuốn cùng bánh tráng chiên giòn, rau sống và chấm nước xốt nếp gan heo thơm bùi."
+        },
+        {
+          "ten": "Bò né",
+          "mo_ta": "Món bò bít tết kiểu Việt Nam chế biến trên chảo xèo xèo gồm thịt bò, trứng ốp la, xíu mại, ăn kèm bánh mì giòn."
+        }
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Yến sào Khánh Hòa",
+          "mo_ta": "Sản vật quý giá khai thác từ các đảo yến tự nhiên, chất lượng đỉnh cao giàu dinh dưỡng."
+        },
+        "Bánh tráng xoài Cam Lâm",
+        "Chả cá Nha Trang"
+      ]
+    }
+  },
+  {
+    "id": "food_33",
+    "title": "KIÊN GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "KIÊN GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH KIÊN GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún cá Rạch Giá\n- Gỏi cá trích Phú Quốc\n- Lẩu mắm U Minh Phú Quốc\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Rượu sim Phú Quốc\n- Tiêu đỏ Hà Tiên\n- Nước mắm Phú Quốc: Ủ chượp từ cá cơm than tươi trên đảo Phú Quốc, màu cánh gián tự nhiên, độ đạm cao và hương vị đậm đà.",
+    "metadata": {
+      "stt": 33,
+      "tinh_thanh": "Kiên Giang",
+      "mon_an_dac_san": [
+        "Bún cá Rạch Giá",
+        "Gỏi cá trích Phú Quốc",
+        "Lẩu mắm U Minh Phú Quốc"
+      ],
+      "dac_san_qua_tang": [
+        "Rượu sim Phú Quốc",
+        "Tiêu đỏ Hà Tiên",
+        {
+          "ten": "Nước mắm Phú Quốc",
+          "mo_ta": "Ủ chượp từ cá cơm than tươi trên đảo Phú Quốc, màu cánh gián tự nhiên, độ đạm cao và hương vị đậm đà."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_34",
+    "title": "KON TUM - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "KON TUM",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH KON TUM\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá gỏi kiến vàng\n- Dế chiên Kon Tum\n- Gỏi lá Kon Tum\n- Xôi măng\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Măng le khô\n- Trà sâm dây Ngọc Linh\n- Sâm Ngọc Linh (Rượu sâm Ngọc Linh): Loại sâm quý hiếm bậc nhất thế giới với hàm lượng saponin cực cao, mang lại giá trị sức khỏe to lớn.",
+    "metadata": {
+      "stt": 34,
+      "tinh_thanh": "Kon Tum",
+      "mon_an_dac_san": [
+        "Cá gỏi kiến vàng",
+        "Dế chiên Kon Tum",
+        "Gỏi lá Kon Tum",
+        "Xôi măng"
+      ],
+      "dac_san_qua_tang": [
+        "Măng le khô",
+        "Trà sâm dây Ngọc Linh",
+        {
+          "ten": "Sâm Ngọc Linh (Rượu sâm Ngọc Linh)",
+          "mo_ta": "Loại sâm quý hiếm bậc nhất thế giới với hàm lượng saponin cực cao, mang lại giá trị sức khỏe to lớn."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_35",
+    "title": "LAI CHÂU - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "LAI CHÂU",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH LAI CHÂU\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá bống vùi tro\n- Xôi tím Lai Châu\n- Xôi ngũ sắc\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Quả óc chó nếp Sìn Hồ\n- Rượu ngô Sùng Phài\n- Thịt lợn cắp nách (Thịt lợn gác bếp): Lợn thả rông trên núi, thịt săn chắc, ít mỡ, thơm ngon khi nướng nguyên con hoặc làm các món xào, hấp.",
+    "metadata": {
+      "stt": 35,
+      "tinh_thanh": "Lai Châu",
+      "mon_an_dac_san": [
+        "Cá bống vùi tro",
+        "Xôi tím Lai Châu",
+        "Xôi ngũ sắc"
+      ],
+      "dac_san_qua_tang": [
+        "Quả óc chó nếp Sìn Hồ",
+        "Rượu ngô Sùng Phài",
+        {
+          "ten": "Thịt lợn cắp nách (Thịt lợn gác bếp)",
+          "mo_ta": "Lợn thả rông trên núi, thịt săn chắc, ít mỡ, thơm ngon khi nướng nguyên con hoặc làm các món xào, hấp."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_36",
+    "title": "LÂM ĐỒNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "LÂM ĐỒNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH LÂM ĐỒNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Lẩu rau Đà Lạt\n- Bánh tráng nướng Đà Lạt\n- Bánh mì xíu mại\n- Giò heo hầm Atiso Đà Lạt\n- Gỏi cuốn: Cuốn tươi thanh mát từ bánh tráng mềm, tôm luộc, thịt lợn, bún và rau thơm, chấm mắm nêm hoặc xốt tương đậu phụng.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Trái cây sấy khô\n- Dâu tây Đà Lạt\n- Hồng treo gió Đà Lạt: Chế biến theo công nghệ Nhật Bản, quả hồng bên ngoài dẻo thơm, bên trong mật ngọt lịm tự nhiên.\n- Trà Atiso",
+    "metadata": {
+      "stt": 36,
+      "tinh_thanh": "Lâm Đồng",
+      "mon_an_dac_san": [
+        "Lẩu rau Đà Lạt",
+        "Bánh tráng nướng Đà Lạt",
+        "Bánh mì xíu mại",
+        "Giò heo hầm Atiso Đà Lạt",
+        {
+          "ten": "Gỏi cuốn",
+          "mo_ta": "Cuốn tươi thanh mát từ bánh tráng mềm, tôm luộc, thịt lợn, bún và rau thơm, chấm mắm nêm hoặc xốt tương đậu phụng."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Trái cây sấy khô",
+        "Dâu tây Đà Lạt",
+        {
+          "ten": "Hồng treo gió Đà Lạt",
+          "mo_ta": "Chế biến theo công nghệ Nhật Bản, quả hồng bên ngoài dẻo thơm, bên trong mật ngọt lịm tự nhiên."
+        },
+        "Trà Atiso"
+      ]
+    }
+  },
+  {
+    "id": "food_37",
+    "title": "LẠNG SƠN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "LẠNG SƠN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH LẠNG SƠN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Vịt quay lá mắc mật (Lợn quay lá mắc mật Lạng Sơn, Vịt nướng mắc mật): Vịt béo ngậy được nhồi lá mắc mật rồi quay vàng giòn, lớp da giòn rụm và thịt thơm lừng hương thảo mộc.\n- Khâu nhục (thịt kho rục)\n- Phở chua Lạng Sơn\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Thạch đen Tràng Định\n- Rượu Mẫu Sơn\n- Na Chi Lăng",
+    "metadata": {
+      "stt": 37,
+      "tinh_thanh": "Lạng Sơn",
+      "mon_an_dac_san": [
+        {
+          "ten": "Vịt quay lá mắc mật (Lợn quay lá mắc mật Lạng Sơn, Vịt nướng mắc mật)",
+          "mo_ta": "Vịt béo ngậy được nhồi lá mắc mật rồi quay vàng giòn, lớp da giòn rụm và thịt thơm lừng hương thảo mộc."
+        },
+        "Khâu nhục (thịt kho rục)",
+        "Phở chua Lạng Sơn"
+      ],
+      "dac_san_qua_tang": [
+        "Thạch đen Tràng Định",
+        "Rượu Mẫu Sơn",
+        "Na Chi Lăng"
+      ]
+    }
+  },
+  {
+    "id": "food_38",
+    "title": "LÀO CAI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "LÀO CAI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH LÀO CAI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá hồi Sapa\n- Thịt gừng Nùng Dín\n- Thắng cố Sa Pa: Món ăn truyền thống của người H'Mông làm từ nội tạng và thịt ngựa cùng 12 loại gia vị vùng cao đậm đà.\n- Phở chua\n- Cơm lam: Gạo nếp nương cho vào ống nứa/tre cùng ít nước rồi nướng trên than hồng, có vị thơm đặc trưng của mành nứa cháy.\n- Thịt trâu gác bếp: Đặc sản vùng cao làm từ thịt trâu tươi ướp gia vị mắc khén, hạt dổi rồi treo gác bếp hun khói cho khô dần.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Mận Tam Hoa Bac Ha\n- Rượu táo mèo\n- Rượu San Lùng",
+    "metadata": {
+      "stt": 38,
+      "tinh_thanh": "Lào Cai",
+      "mon_an_dac_san": [
+        "Cá hồi Sapa",
+        "Thịt gừng Nùng Dín",
+        {
+          "ten": "Thắng cố Sa Pa",
+          "mo_ta": "Món ăn truyền thống của người H'Mông làm từ nội tạng và thịt ngựa cùng 12 loại gia vị vùng cao đậm đà."
+        },
+        "Phở chua",
+        {
+          "ten": "Cơm lam",
+          "mo_ta": "Gạo nếp nương cho vào ống nứa/tre cùng ít nước rồi nướng trên than hồng, có vị thơm đặc trưng của mành nứa cháy."
+        },
+        {
+          "ten": "Thịt trâu gác bếp",
+          "mo_ta": "Đặc sản vùng cao làm từ thịt trâu tươi ướp gia vị mắc khén, hạt dổi rồi treo gác bếp hun khói cho khô dần."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Mận Tam Hoa Bac Ha",
+        "Rượu táo mèo",
+        "Rượu San Lùng"
+      ]
+    }
+  },
+  {
+    "id": "food_39",
+    "title": "LONG AN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "LONG AN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH LONG AN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún Xiêm Lo Mộc Hóa\n- Canh chua cá chốt\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Gạo nàng thơm Chợ Đào\n- Mắm còng Cần Giuộc\n- Lạp xưởng tươi Cần Đước (Lạp xưởng Cần Đước): Làm thủ công phơi nắng tự nhiên, vị chua ngọt hài hòa, thơm nồng gia vị truyền thống.",
+    "metadata": {
+      "stt": 39,
+      "tinh_thanh": "Long An",
+      "mon_an_dac_san": [
+        "Bún Xiêm Lo Mộc Hóa",
+        "Canh chua cá chốt"
+      ],
+      "dac_san_qua_tang": [
+        "Gạo nàng thơm Chợ Đào",
+        "Mắm còng Cần Giuộc",
+        {
+          "ten": "Lạp xưởng tươi Cần Đước (Lạp xưởng Cần Đước)",
+          "mo_ta": "Làm thủ công phơi nắng tự nhiên, vị chua ngọt hài hòa, thơm nồng gia vị truyền thống."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_40",
+    "title": "NAM ĐỊNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "NAM ĐỊNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH NAM ĐỊNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Nem nắm Giao Thủy\n- Bánh cuốn Làng Kênh\n- Phở bò Nam Định: Nổi tiếng với nước dùng béo ngậy ninh từ xương ống, bánh phở mềm dẻo và thịt bò tươi ngon.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nước mắm Sa Châu\n- Gạo tám xoan Hải Hậu\n- Bánh xíu báo",
+    "metadata": {
+      "stt": 40,
+      "tinh_thanh": "Nam Định",
+      "mon_an_dac_san": [
+        "Nem nắm Giao Thủy",
+        "Bánh cuốn Làng Kênh",
+        {
+          "ten": "Phở bò Nam Định",
+          "mo_ta": "Nổi tiếng với nước dùng béo ngậy ninh từ xương ống, bánh phở mềm dẻo và thịt bò tươi ngon."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Nước mắm Sa Châu",
+        "Gạo tám xoan Hải Hậu",
+        "Bánh xíu báo"
+      ]
+    }
+  },
+  {
+    "id": "food_41",
+    "title": "NGHỆ AN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "NGHỆ AN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH NGHỆ AN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Súp lươn Nghệ An (Súp lươn bánh mì): Món ăn đậm đà vị cay nồng của ớt, hành, nghệ cùng thịt lươn đồng săn chắc, ăn kèm bánh mì hoặc bánh mướt.\n- Bánh mướt Vinh\n- Cháo lươn Nghệ An\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nhút Thanh Chương\n- Nước mắm Cửa Lò\n- Cam Xã Đoài",
+    "metadata": {
+      "stt": 41,
+      "tinh_thanh": "Nghệ An",
+      "mon_an_dac_san": [
+        {
+          "ten": "Súp lươn Nghệ An (Súp lươn bánh mì)",
+          "mo_ta": "Món ăn đậm đà vị cay nồng của ớt, hành, nghệ cùng thịt lươn đồng săn chắc, ăn kèm bánh mì hoặc bánh mướt."
+        },
+        "Bánh mướt Vinh",
+        "Cháo lươn Nghệ An"
+      ],
+      "dac_san_qua_tang": [
+        "Nhút Thanh Chương",
+        "Nước mắm Cửa Lò",
+        "Cam Xã Đoài"
+      ]
+    }
+  },
+  {
+    "id": "food_42",
+    "title": "NINH BÌNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "NINH BÌNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH NINH BÌNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi cá nhệch Kim Sơn\n- Cá chuối nướng đầm Vân Long\n- Cơm cháy dê núi: Sự kết hợp giữa cơm cháy giòn rụm và nước sốt thịt dê núi đậm đà, béo ngậy thơm ngon.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nem chua Yên Mạc\n- Rượu Kim Sơn\n- Cơm cháy Ninh Bình",
+    "metadata": {
+      "stt": 42,
+      "tinh_thanh": "Ninh Bình",
+      "mon_an_dac_san": [
+        "Gỏi cá nhệch Kim Sơn",
+        "Cá chuối nướng đầm Vân Long",
+        {
+          "ten": "Cơm cháy dê núi",
+          "mo_ta": "Sự kết hợp giữa cơm cháy giòn rụm và nước sốt thịt dê núi đậm đà, béo ngậy thơm ngon."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Nem chua Yên Mạc",
+        "Rượu Kim Sơn",
+        "Cơm cháy Ninh Bình"
+      ]
+    }
+  },
+  {
+    "id": "food_43",
+    "title": "NINH THUẬN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "NINH THUẬN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH NINH THUẬN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh xèo Ninh Thuận\n- Gỏi Dông\n- Bánh căn Ninh Thuận\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nha đam và các sản phẩm từ Nha đam\n- Táo gió Ninh Thuận\n- Nho Ninh Thuận: Trồng trên vùng đất nắng gió, quả nho mọng nước, vị ngọt chua hài hòa, làm nên các sản phẩm mật nho và rượu nho nổi tiếng.\n- Mật nho",
+    "metadata": {
+      "stt": 43,
+      "tinh_thanh": "Ninh Thuận",
+      "mon_an_dac_san": [
+        "Bánh xèo Ninh Thuận",
+        "Gỏi Dông",
+        "Bánh căn Ninh Thuận"
+      ],
+      "dac_san_qua_tang": [
+        "Nha đam và các sản phẩm từ Nha đam",
+        "Táo gió Ninh Thuận",
+        {
+          "ten": "Nho Ninh Thuận",
+          "mo_ta": "Trồng trên vùng đất nắng gió, quả nho mọng nước, vị ngọt chua hài hòa, làm nên các sản phẩm mật nho và rượu nho nổi tiếng."
+        },
+        "Mật nho"
+      ]
+    }
+  },
+  {
+    "id": "food_44",
+    "title": "PHÚ THỌ - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "PHÚ THỌ",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH PHÚ THỌ\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Trám om kho cá\n- Thịt chua Thanh Sơn: Món ăn của người Mường làm từ thịt lợn lửng ướp thính gạo lên men tự nhiên, ăn kèm lá đinh lăng, lá lốt.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh tẻ mật Phú Thọ\n- Kẹo lạc Việt Trì\n- Bưởi Đoan Hùng",
+    "metadata": {
+      "stt": 44,
+      "tinh_thanh": "Phú Thọ",
+      "mon_an_dac_san": [
+        "Trám om kho cá",
+        {
+          "ten": "Thịt chua Thanh Sơn",
+          "mo_ta": "Món ăn của người Mường làm từ thịt lợn lửng ướp thính gạo lên men tự nhiên, ăn kèm lá đinh lăng, lá lốt."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Bánh tẻ mật Phú Thọ",
+        "Kẹo lạc Việt Trì",
+        "Bưởi Đoan Hùng"
+      ]
+    }
+  },
+  {
+    "id": "food_45",
+    "title": "QUẢNG BÌNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "QUẢNG BÌNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH QUẢNG BÌNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cháo canh cá lóc\n- Cháo hàu Quán Hàu\n- Cháo canh\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Sâm Bố Chính\n- Khoai deo: Chế biến từ khoai lang đỏ phơi nắng nhiều ngày, dẻo ngọt tự nhiên, thơm mùi khoai đặc trưng.\n- Mực khô Quảng Bình",
+    "metadata": {
+      "stt": 45,
+      "tinh_thanh": "Quảng Bình",
+      "mon_an_dac_san": [
+        "Cháo canh cá lóc",
+        "Cháo hàu Quán Hàu",
+        "Cháo canh"
+      ],
+      "dac_san_qua_tang": [
+        "Sâm Bố Chính",
+        {
+          "ten": "Khoai deo",
+          "mo_ta": "Chế biến từ khoai lang đỏ phơi nắng nhiều ngày, dẻo ngọt tự nhiên, thơm mùi khoai đặc trưng."
+        },
+        "Mực khô Quảng Bình"
+      ]
+    }
+  },
+  {
+    "id": "food_46",
+    "title": "QUẢNG NAM - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "QUẢNG NAM",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH QUẢNG NAM\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh mì Hội An\n- Mì Quảng (Mì Quảng ếch): Sợi mì dẹt đậm đà, dùng ít nước lèo sánh đậm, ăn kèm tôm, thịt heo, trứng cút, đậu phụng rang và bánh tráng nướng giòn.\n- Cao Lầu Hội An: Món mì đặc sản chỉ có ở Hội An, sợi mì dai ngâm nước tro ngói, ăn cùng thịt xá xíu, rau sống Trà Quế và miếng bột chiên giòn.\n- Cơm gà Hội An\n- Phở sắn Quế Sơn\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Rượu Hồng Đào\n- Nấm Lim xanh\n- Bánh tổ Quảng Nam",
+    "metadata": {
+      "stt": 46,
+      "tinh_thanh": "Quảng Nam",
+      "mon_an_dac_san": [
+        "Bánh mì Hội An",
+        {
+          "ten": "Mì Quảng (Mì Quảng ếch)",
+          "mo_ta": "Sợi mì dẹt đậm đà, dùng ít nước lèo sánh đậm, ăn kèm tôm, thịt heo, trứng cút, đậu phụng rang và bánh tráng nướng giòn."
+        },
+        {
+          "ten": "Cao Lầu Hội An",
+          "mo_ta": "Món mì đặc sản chỉ có ở Hội An, sợi mì dai ngâm nước tro ngói, ăn cùng thịt xá xíu, rau sống Trà Quế và miếng bột chiên giòn."
+        },
+        "Cơm gà Hội An",
+        "Phở sắn Quế Sơn"
+      ],
+      "dac_san_qua_tang": [
+        "Rượu Hồng Đào",
+        "Nấm Lim xanh",
+        "Bánh tổ Quảng Nam"
+      ]
+    }
+  },
+  {
+    "id": "food_47",
+    "title": "QUẢNG NGÃI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "QUẢNG NGÃI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH QUẢNG NGÃI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Xu xoa rong biển\n- Rau bồng bồng (cum cúm) trộn\n- Don Quảng Ngãi\n- Cá bống Sông Trà\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Tỏi Lý Sơn: Được trồng trên đất nham thạch ngọn núi lửa cổ, củ tỏi nhỏ, thơm nồng, không cay xé và giàu giá trị dược liệu.\n- Chả ốc Cừ Lý Sơn\n- Kẹo mạch nha\n- Bánh tráng nướng Quảng Ngãi",
+    "metadata": {
+      "stt": 47,
+      "tinh_thanh": "Quảng Ngãi",
+      "mon_an_dac_san": [
+        "Xu xoa rong biển",
+        "Rau bồng bồng (cum cúm) trộn",
+        "Don Quảng Ngãi",
+        "Cá bống Sông Trà"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Tỏi Lý Sơn",
+          "mo_ta": "Được trồng trên đất nham thạch ngọn núi lửa cổ, củ tỏi nhỏ, thơm nồng, không cay xé và giàu giá trị dược liệu."
+        },
+        "Chả ốc Cừ Lý Sơn",
+        "Kẹo mạch nha",
+        "Bánh tráng nướng Quảng Ngãi"
+      ]
+    }
+  },
+  {
+    "id": "food_48",
+    "title": "QUẢNG NINH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "QUẢNG NINH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH QUẢNG NINH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cà sáy luộc Tiên Yên\n- Xôi chả mực Hạ Long\n- Bún bề bề Hạ Long\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Chả rươi Đông Triều\n- Rượu mơ Yên Tử\n- Chả mực Hạ Long: Làm từ mực mai tươi giã tay truyền thống, chả chiên vàng ruộm, giòn sần sật và ngọt đậm vị biển.\n- Sá sùng Vân Đồn",
+    "metadata": {
+      "stt": 48,
+      "tinh_thanh": "Quảng Ninh",
+      "mon_an_dac_san": [
+        "Cà sáy luộc Tiên Yên",
+        "Xôi chả mực Hạ Long",
+        "Bún bề bề Hạ Long"
+      ],
+      "dac_san_qua_tang": [
+        "Chả rươi Đông Triều",
+        "Rượu mơ Yên Tử",
+        {
+          "ten": "Chả mực Hạ Long",
+          "mo_ta": "Làm từ mực mai tươi giã tay truyền thống, chả chiên vàng ruộm, giòn sần sật và ngọt đậm vị biển."
+        },
+        "Sá sùng Vân Đồn"
+      ]
+    }
+  },
+  {
+    "id": "food_49",
+    "title": "QUẢNG TRỊ - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "QUẢNG TRỊ",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH QUẢNG TRỊ\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Gỏi tép nhảy Bàu Trạng Vĩnh Linh\n- Cháo bột vịt Đông Hà\n- Bánh lọc Mỹ Chánh\n- Gà kho củ nén và xôi\n- Thịt trâu lá trơảng: Sự kết hợp hoàn hảo giữa thịt trâu mềm ngọt và lá trơảng cay nồng, tạo nên hương vị ấn tượng khó quên.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Dầu lạc Cam Lộ\n- Ớt dầm Câu Nhi\n- Cao lá vằng Cam Lộ",
+    "metadata": {
+      "stt": 49,
+      "tinh_thanh": "Quảng Trị",
+      "mon_an_dac_san": [
+        "Gỏi tép nhảy Bàu Trạng Vĩnh Linh",
+        "Cháo bột vịt Đông Hà",
+        "Bánh lọc Mỹ Chánh",
+        "Gà kho củ nén và xôi",
+        {
+          "ten": "Thịt trâu lá trơảng",
+          "mo_ta": "Sự kết hợp hoàn hảo giữa thịt trâu mềm ngọt và lá trơảng cay nồng, tạo nên hương vị ấn tượng khó quên."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Dầu lạc Cam Lộ",
+        "Ớt dầm Câu Nhi",
+        "Cao lá vằng Cam Lộ"
+      ]
+    }
+  },
+  {
+    "id": "food_50",
+    "title": "SÓC TRĂNG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "SÓC TRĂNG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH SÓC TRĂNG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún gỏi dà Mỹ Xuyên\n- Cháo cá lóc rau đắng\n- Bún nước lèo Sóc Trăng\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh pía Sóc Trăng: Món bánh ngọt ngào với vỏ nhiều lớp dẻo mềm, nhân sầu riêng, đậu xanh và trứng muối béo ngậy.\n- Bánh in Sóc Trăng\n- Lạp xưởng Vũng Thơm",
+    "metadata": {
+      "stt": 50,
+      "tinh_thanh": "Sóc Trăng",
+      "mon_an_dac_san": [
+        "Bún gỏi dà Mỹ Xuyên",
+        "Cháo cá lóc rau đắng",
+        "Bún nước lèo Sóc Trăng"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Bánh pía Sóc Trăng",
+          "mo_ta": "Món bánh ngọt ngào với vỏ nhiều lớp dẻo mềm, nhân sầu riêng, đậu xanh và trứng muối béo ngậy."
+        },
+        "Bánh in Sóc Trăng",
+        "Lạp xưởng Vũng Thơm"
+      ]
+    }
+  },
+  {
+    "id": "food_51",
+    "title": "SƠN LA - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "SƠN LA",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH SƠN LA\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Pa giàng (Cá hun khói)\n- Bê chao Mộc Châu\n- Thịt lợn gác bếp\n- Bánh lá ngải\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Xoài tròn Yên Châu\n- Tỏi cô đơn Phù Yên\n- Sữa tươi Mộc Châu: Nguồn sữa nguyên chất từ thảo nguyên Mộc Châu, béo ngậy, giàu dinh dưỡng.\n- Chè Tà Xùa",
+    "metadata": {
+      "stt": 51,
+      "tinh_thanh": "Sơn La",
+      "mon_an_dac_san": [
+        "Pa giàng (Cá hun khói)",
+        "Bê chao Mộc Châu",
+        "Thịt lợn gác bếp",
+        "Bánh lá ngải"
+      ],
+      "dac_san_qua_tang": [
+        "Xoài tròn Yên Châu",
+        "Tỏi cô đơn Phù Yên",
+        {
+          "ten": "Sữa tươi Mộc Châu",
+          "mo_ta": "Nguồn sữa nguyên chất từ thảo nguyên Mộc Châu, béo ngậy, giàu dinh dưỡng."
+        },
+        "Chè Tà Xùa"
+      ]
+    }
+  },
+  {
+    "id": "food_52",
+    "title": "TÂY NINH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "TÂY NINH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH TÂY NINH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bò tơ Tây Ninh\n- Nem bưởi Tây Ninh\n- Bánh tráng phơi sương rau rừng\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Na dai Tây Ninh\n- Bánh tráng trộn Tây Ninh\n- Muối tôm Tây Ninh: Gia vị nổi tiếng làm từ muối, tôm khô, ớt và tỏi, vị mặn cay đậm đà chuyên dùng chấm trái cây.",
+    "metadata": {
+      "stt": 52,
+      "tinh_thanh": "Tây Ninh",
+      "mon_an_dac_san": [
+        "Bò tơ Tây Ninh",
+        "Nem bưởi Tây Ninh",
+        "Bánh tráng phơi sương rau rừng"
+      ],
+      "dac_san_qua_tang": [
+        "Na dai Tây Ninh",
+        "Bánh tráng trộn Tây Ninh",
+        {
+          "ten": "Muối tôm Tây Ninh",
+          "mo_ta": "Gia vị nổi tiếng làm từ muối, tôm khô, ớt và tỏi, vị mặn cay đậm đà chuyên dùng chấm trái cây."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_53",
+    "title": "THÁI BÌNH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "THÁI BÌNH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH THÁI BÌNH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bún bung hoa chuối\n- Nem chạo Vị Thủy\n- Bánh cáy Thái Bình\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh gai Đại Đồng\n- Bánh nghệ Tiền Hải\n- Bánh cáy làng Nguyễn: Món bánh truyền thống dẻo bùi làm từ gạo nếp, mứt dừa, mỡ lợn, vừng, lạc và gừng tươi.",
+    "metadata": {
+      "stt": 53,
+      "tinh_thanh": "Thái Bình",
+      "mon_an_dac_san": [
+        "Bún bung hoa chuối",
+        "Nem chạo Vị Thủy",
+        "Bánh cáy Thái Bình"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh gai Đại Đồng",
+        "Bánh nghệ Tiền Hải",
+        {
+          "ten": "Bánh cáy làng Nguyễn",
+          "mo_ta": "Món bánh truyền thống dẻo bùi làm từ gạo nếp, mứt dừa, mỡ lợn, vừng, lạc và gừng tươi."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_54",
+    "title": "THÁI NGUYÊN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "THÁI NGUYÊN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH THÁI NGUYÊN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh trứng kiến Định Hóa\n- Cơm lam Định Hóa\n- Bánh chưng Bờ Đậu\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Trà Tân Cương (Chè Thái Nguyên): Được mệnh danh là 'Đệ nhất danh trà' với cánh trà xoăn nhỏ, nước trà vàng xanh, vị chát dịu hậu ngọt sâu.\n- Tương nếp Úc Kỳ",
+    "metadata": {
+      "stt": 54,
+      "tinh_thanh": "Thái Nguyên",
+      "mon_an_dac_san": [
+        "Bánh trứng kiến Định Hóa",
+        "Cơm lam Định Hóa",
+        "Bánh chưng Bờ Đậu"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Trà Tân Cương (Chè Thái Nguyên)",
+          "mo_ta": "Được mệnh danh là 'Đệ nhất danh trà' với cánh trà xoăn nhỏ, nước trà vàng xanh, vị chát dịu hậu ngọt sâu."
+        },
+        "Tương nếp Úc Kỳ"
+      ]
+    }
+  },
+  {
+    "id": "food_55",
+    "title": "THANH HÓA - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "THANH HÓA",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH THANH HÓA\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Chả tôm Sầm Sơn (Chả tôm)\n- Cháo Phi cầu Sài Hậu Lộc\n- Bánh cuốn Thanh Hóa\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nem chua Thanh Hóa: Thịt lợn nạc giã mịn trộn bì lợn, tỏi, ớt và lá đinh lăng lên men, vị chua thanh giòn sần sật.\n- Bánh gai Tứ Trụ\n- Mắm tôm Hậu Lộc",
+    "metadata": {
+      "stt": 55,
+      "tinh_thanh": "Thanh Hóa",
+      "mon_an_dac_san": [
+        "Chả tôm Sầm Sơn (Chả tôm)",
+        "Cháo Phi cầu Sài Hậu Lộc",
+        "Bánh cuốn Thanh Hóa"
+      ],
+      "dac_san_qua_tang": [
+        {
+          "ten": "Nem chua Thanh Hóa",
+          "mo_ta": "Thịt lợn nạc giã mịn trộn bì lợn, tỏi, ớt và lá đinh lăng lên men, vị chua thanh giòn sần sật."
+        },
+        "Bánh gai Tứ Trụ",
+        "Mắm tôm Hậu Lộc"
+      ]
+    }
+  },
+  {
+    "id": "food_56",
+    "title": "THỪA THIÊN - HUẾ - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "THỪA THIÊN - HUẾ",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH THỪA THIÊN - HUẾ\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bánh Huế thập cẩm\n- Bún cua Huế\n- Bún bò Huế: Món ăn Cố đô nổi tiếng với nước dùng đậm đà vị sả, ớt cay và mắm ruốc đặc trưng, ăn kèm nạm bò, huyết, giò heo và chả cua.\n- Cơm hến\n- Cơm âm phủ\n- Nem lụi: Thịt heo giã nhuyễn quết quanh cọng sả rồi nướng than, cuốn bánh tráng rau sống chấm nước lèo béo ngậy.\n- Bánh bèo: Món bánh đúc hấp trong từng chén nhỏ, phủ tôm cháy, mỡ hành và tóp mỡ giòn rụm.\n- Bánh khoai (Hue Pancake): Bánh xèo kiểu Huế đậm đà, vỏ dày giòn rụm, nhân tôm thịt giá đỗ, chấm nước lèo từ gan heo và đậu phụng.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Mè xửng Huế\n- Kẹo cau\n- Trà tôm trĩu\n- Tôm chua Huế",
+    "metadata": {
+      "stt": 56,
+      "tinh_thanh": "Thừa Thiên - Huế",
+      "mon_an_dac_san": [
+        "Bánh Huế thập cẩm",
+        "Bún cua Huế",
+        {
+          "ten": "Bún bò Huế",
+          "mo_ta": "Món ăn Cố đô nổi tiếng với nước dùng đậm đà vị sả, ớt cay và mắm ruốc đặc trưng, ăn kèm nạm bò, huyết, giò heo và chả cua."
+        },
+        "Cơm hến",
+        "Cơm âm phủ",
+        {
+          "ten": "Nem lụi",
+          "mo_ta": "Thịt heo giã nhuyễn quết quanh cọng sả rồi nướng than, cuốn bánh tráng rau sống chấm nước lèo béo ngậy."
+        },
+        {
+          "ten": "Bánh bèo",
+          "mo_ta": "Món bánh đúc hấp trong từng chén nhỏ, phủ tôm cháy, mỡ hành và tóp mỡ giòn rụm."
+        },
+        {
+          "ten": "Bánh khoai (Hue Pancake)",
+          "mo_ta": "Bánh xèo kiểu Huế đậm đà, vỏ dày giòn rụm, nhân tôm thịt giá đỗ, chấm nước lèo từ gan heo và đậu phụng."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Mè xửng Huế",
+        "Kẹo cau",
+        "Trà tôm trĩu",
+        "Tôm chua Huế"
+      ]
+    }
+  },
+  {
+    "id": "food_57",
+    "title": "TIỀN GIANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "TIỀN GIANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH TIỀN GIANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá tai tượng chiên xù\n- Chả nướng chợ Gạo\n- Hủ tiếu Mỹ Tho: Sợi hủ tiếu dai dai, nước dùng ngọt thanh ninh từ xương, ăn kèm tôm, thịt, gan và xà lách.\n- Mắm tôm chà Gò Công\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Vú sữa Lò Rèn\n- Lạp xưởng tươi Cai Lậy\n- Mắm tôm chà Gò Công",
+    "metadata": {
+      "stt": 57,
+      "tinh_thanh": "Tiền Giang",
+      "mon_an_dac_san": [
+        "Cá tai tượng chiên xù",
+        "Chả nướng chợ Gạo",
+        {
+          "ten": "Hủ tiếu Mỹ Tho",
+          "mo_ta": "Sợi hủ tiếu dai dai, nước dùng ngọt thanh ninh từ xương, ăn kèm tôm, thịt, gan và xà lách."
+        },
+        "Mắm tôm chà Gò Công"
+      ],
+      "dac_san_qua_tang": [
+        "Vú sữa Lò Rèn",
+        "Lạp xưởng tươi Cai Lậy",
+        "Mắm tôm chà Gò Công"
+      ]
+    }
+  },
+  {
+    "id": "food_58",
+    "title": "TRÀ VINH - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "TRÀ VINH",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH TRÀ VINH\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Chù ụ rang me\n- Bún suông tôm\n- Bún nước lèo Trà Vinh\n- Canh chua cá: Món canh đặc trưng miền Tây kết hợp vị chua của me, ngọt từ cá tươi cùng các loại rau dân dã như bông điên điển, bạc hà, giá, thơm.\n- Bún mắm: Món bún đặc sản nấu từ mắm cá linh hoặc mắm cá sặc đậm đà, ăn kèm tôm, mực, thịt quay, cà tím và đa dạng rau sống Miền Tây.\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh tét Trà Cuôn\n- Dừa sáp Cầu Kè: Loại dừa đặc biệt có cơm dừa dầy, xốp dẻo béo ngậy và nước dừa đặc sánh như sương sa.\n- Bánh tét: Bánh nếp dẻo gói lá chuối hình trụ tròn, nhân đậu xanh thịt lợn (hoặc nhân chuối ngọt), món ăn không thể thiếu dịp Tết.",
+    "metadata": {
+      "stt": 58,
+      "tinh_thanh": "Trà Vinh",
+      "mon_an_dac_san": [
+        "Chù ụ rang me",
+        "Bún suông tôm",
+        "Bún nước lèo Trà Vinh",
+        {
+          "ten": "Canh chua cá",
+          "mo_ta": "Món canh đặc trưng miền Tây kết hợp vị chua của me, ngọt từ cá tươi cùng các loại rau dân dã như bông điên điển, bạc hà, giá, thơm."
+        },
+        {
+          "ten": "Bún mắm",
+          "mo_ta": "Món bún đặc sản nấu từ mắm cá linh hoặc mắm cá sặc đậm đà, ăn kèm tôm, mực, thịt quay, cà tím và đa dạng rau sống Miền Tây."
+        }
+      ],
+      "dac_san_qua_tang": [
+        "Bánh tét Trà Cuôn",
+        {
+          "ten": "Dừa sáp Cầu Kè",
+          "mo_ta": "Loại dừa đặc biệt có cơm dừa dầy, xốp dẻo béo ngậy và nước dừa đặc sánh như sương sa."
+        },
+        {
+          "ten": "Bánh tét",
+          "mo_ta": "Bánh nếp dẻo gói lá chuối hình trụ tròn, nhân đậu xanh thịt lợn (hoặc nhân chuối ngọt), món ăn không thể thiếu dịp Tết."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_59",
+    "title": "TUYÊN QUANG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "TUYÊN QUANG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH TUYÊN QUANG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Hoa kè nhồi thịt\n- Thịt lợn đen Lăng Can nướng riềng mẻ\n- Thịt lợn đùm hoa chuối\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Thịt trâu gác bếp Tuyên Quang\n- Bánh dày nhân vừng đen Na Hang\n- Cam sành Hàm Yên: Quả to, vỏ xù xì vàng óng, cùi cam mọng nước vị ngọt chua thanh đậm đà.",
+    "metadata": {
+      "stt": 59,
+      "tinh_thanh": "Tuyên Quang",
+      "mon_an_dac_san": [
+        "Hoa kè nhồi thịt",
+        "Thịt lợn đen Lăng Can nướng riềng mẻ",
+        "Thịt lợn đùm hoa chuối"
+      ],
+      "dac_san_qua_tang": [
+        "Thịt trâu gác bếp Tuyên Quang",
+        "Bánh dày nhân vừng đen Na Hang",
+        {
+          "ten": "Cam sành Hàm Yên",
+          "mo_ta": "Quả to, vỏ xù xì vàng óng, cùi cam mọng nước vị ngọt chua thanh đậm đà."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_60",
+    "title": "VĨNH LONG - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "VĨNH LONG",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH VĨNH LONG\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Cá bông lau nấu canh chua\n- Bánh xèo hến Cù Lao Dài\n- Cháo gà bồ ngót\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Nấm mối\n- Thanh trà Vĩnh Long\n- Bưởi Năm Roi Bình Minh: Giống bưởi không hạt, múi bưởi mọng nước, tép bưởi róc khô vị ngọt dịu thanh mát.",
+    "metadata": {
+      "stt": 60,
+      "tinh_thanh": "Vĩnh Long",
+      "mon_an_dac_san": [
+        "Cá bông lau nấu canh chua",
+        "Bánh xèo hến Cù Lao Dài",
+        "Cháo gà bồ ngót"
+      ],
+      "dac_san_qua_tang": [
+        "Nấm mối",
+        "Thanh trà Vĩnh Long",
+        {
+          "ten": "Bưởi Năm Roi Bình Minh",
+          "mo_ta": "Giống bưởi không hạt, múi bưởi mọng nước, tép bưởi róc khô vị ngọt dịu thanh mát."
+        }
+      ]
+    }
+  },
+  {
+    "id": "food_61",
+    "title": "VĨNH PHÚC - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "VĨNH PHÚC",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH VĨNH PHÚC\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Bò tái kiến đốt\n- Su su Tam Đảo (Su su Tam Đảo xào thịt bò): Được trồng trên núi cao khí hậu mát mẻ, ngọn su su giòn ngọt tự nhiên thích hợp làm món xào hoặc luộc.\n- Cá thính Lập Thạch\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Bánh trùng mật mía Vĩnh Tường\n- Tép dầu Đầm Vạc\n- Rượu chít Tam Đảo",
+    "metadata": {
+      "stt": 61,
+      "tinh_thanh": "Vĩnh Phúc",
+      "mon_an_dac_san": [
+        "Bò tái kiến đốt",
+        {
+          "ten": "Su su Tam Đảo (Su su Tam Đảo xào thịt bò)",
+          "mo_ta": "Được trồng trên núi cao khí hậu mát mẻ, ngọn su su giòn ngọt tự nhiên thích hợp làm món xào hoặc luộc."
+        },
+        "Cá thính Lập Thạch"
+      ],
+      "dac_san_qua_tang": [
+        "Bánh trùng mật mía Vĩnh Tường",
+        "Tép dầu Đầm Vạc",
+        "Rượu chít Tam Đảo"
+      ]
+    }
+  },
+  {
+    "id": "food_62",
+    "title": "YÊN BÁI - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "YÊN BÁI",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH YÊN BÁI\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Măng vầu cuốn thịt\n- Gà đen nướng lá mắc mật\n- Nếp Tú Lệ: Hạt nếp tròn mẩy, dẻo thơm nức tiếng vùng thung lũng Mù Cang Chải, chuyên dùng đồ xôi hoặc làm bánh chưng.\n- Gà H'mông nướng hạt dổi\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Khoai tím Lục Yên\n- Bánh chưng đen Mường Lò\n- Sơn tra Nghĩa Lộ",
+    "metadata": {
+      "stt": 62,
+      "tinh_thanh": "Yên Bái",
+      "mon_an_dac_san": [
+        "Măng vầu cuốn thịt",
+        "Gà đen nướng lá mắc mật",
+        {
+          "ten": "Nếp Tú Lệ",
+          "mo_ta": "Hạt nếp tròn mẩy, dẻo thơm nức tiếng vùng thung lũng Mù Cang Chải, chuyên dùng đồ xôi hoặc làm bánh chưng."
+        },
+        "Gà H'mông nướng hạt dổi"
+      ],
+      "dac_san_qua_tang": [
+        "Khoai tím Lục Yên",
+        "Bánh chưng đen Mường Lò",
+        "Sơn tra Nghĩa Lộ"
+      ]
+    }
+  },
+  {
+    "id": "food_63",
+    "title": "PHÚ YÊN - Ẩm thực đặc sản & Quà tặng",
+    "category": "food",
+    "province": "PHÚ YÊN",
+    "subCategory": "ẨM THỰC",
+    "content": "ẨM THỰC ĐẶC SẢN & QUÀ TẶNG TỈNH PHÚ YÊN\n\n📌 MÓN ĂN ĐẶC SẢN ĐỊA PHƯƠNG:\n- Tôm hùm bông Phú Yên\n- Lẩu cá ngừ nấu mẳn\n- Mắt cá ngừ đại dương: Món ăn độc đáo, bổ dưỡng được hầm cùng các vị thuốc bắc và gia vị cay ấm.\n- Gà nướng Sông Cầu\n\n🎁 ĐẶC SẢN LÀM QUÀ TẶNG NỔI TIẾNG:\n- Chả ram tôm đất\n- Nước mắm Gành Đỏ Sông Cầu\n- Bò một nắng muối kiến vàng",
+    "metadata": {
+      "stt": 63,
+      "tinh_thanh": "Phú Yên",
+      "mon_an_dac_san": [
+        "Tôm hùm bông Phú Yên",
+        "Lẩu cá ngừ nấu mẳn",
+        {
+          "ten": "Mắt cá ngừ đại dương",
+          "mo_ta": "Món ăn độc đáo, bổ dưỡng được hầm cùng các vị thuốc bắc và gia vị cay ấm."
+        },
+        "Gà nướng Sông Cầu"
+      ],
+      "dac_san_qua_tang": [
+        "Chả ram tôm đất",
+        "Nước mắm Gành Đỏ Sông Cầu",
+        "Bò một nắng muối kiến vàng"
+      ]
+    }
+  }
+]

@@ -1,10 +1,11 @@
 import { AIMemory } from '@prisma/client';
+import { callAgentLLM, getLLMConfig } from '../../ai-agents/utils/agent.utils';
 
 export async function generateChatbotResponse(
   history: { role: string; content: string }[],
   memory: AIMemory | null
 ): Promise<string> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const { apiKey } = getLLMConfig();
 
   let systemPrompt = `Bạn là trợ lý ảo cao cấp của ứng dụng SmartTravel, chuyên giúp người dùng lên kế hoạch hành trình, tìm khách sạn, điểm đến và chia sẻ văn hóa ẩm thực địa phương. Hãy trả lời thân thiện, hữu ích bằng tiếng Việt.`;
   
@@ -17,44 +18,16 @@ export async function generateChatbotResponse(
 - Địa điểm yêu thích: ${memory.favoriteLocations.join(', ') || 'Chưa rõ'}`;
   }
 
-  if (!apiKey || apiKey === 'your_openai_key_here') {
+  if (!apiKey) {
     return generateFallbackChatbotResponse(history, memory);
   }
 
   try {
-    const formattedMessages = [
-      { role: 'system', content: systemPrompt },
-      ...history.map((m) => ({
-        role: m.role === 'assistant' ? 'assistant' : m.role === 'system' ? 'system' : 'user',
-        content: m.content,
-      })),
-    ];
-
-    const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-    const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
-
-    const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: formattedMessages,
-        temperature: 0.7,
-        max_tokens: 2000,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`OpenAI API responded with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content.trim();
+    const lastUserMsg = history.slice().reverse().find(m => m.role === 'user')?.content || 'Xin chào';
+    const recentHistory = history.slice(0, history.length - 1);
+    return await callAgentLLM(systemPrompt, lastUserMsg, recentHistory);
   } catch (error) {
-    console.error('❌ Lỗi kết nối OpenAI:', error);
+    console.error('❌ Lỗi kết nối Gemini LLM:', error);
     return generateFallbackChatbotResponse(history, memory);
   }
 }
