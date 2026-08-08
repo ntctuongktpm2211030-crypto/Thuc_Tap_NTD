@@ -616,15 +616,33 @@ router.post('/reset-password', async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(newPassword, 12);
 
     // Update the password and clear the reset token
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
         passwordHash,
-        resetPasswordToken: null
-      }
+        resetPasswordToken: null,
+        isVerified: true
+      },
+      include: { profile: true }
     });
 
-    return res.status(200).json({ message: 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới.' });
+    const accessToken = signAccessToken(updatedUser.id, updatedUser.role);
+    const refreshToken = signRefreshToken(updatedUser.id);
+
+    return res.status(200).json({
+      message: '🎉 Đổi mật khẩu thành công! Đang tự động đăng nhập vào hệ thống...',
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        fullName: updatedUser.profile?.fullName,
+        avatarUrl: updatedUser.profile?.avatarUrl,
+        coverUrl: updatedUser.profile?.coverUrl,
+        role: updatedUser.role,
+        isVerified: true
+      },
+      accessToken,
+      refreshToken
+    });
   } catch (err: any) {
     console.error('[auth/reset-password]', err);
     return res.status(500).json({ error: 'Internal server error.' });

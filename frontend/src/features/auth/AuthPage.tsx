@@ -392,17 +392,18 @@ export default function AuthPage() {
     setForgotStatus(null);
     setForgotLoadingState(true);
     try {
-      await authService.resetPassword(forgotEmail, resetToken, resetPwdVal.value);
-      setForgotStatus({ text: 'Đổi mật khẩu thành công. Đang quay lại trang đăng nhập...', isError: false });
+      const res: any = await authService.resetPassword(forgotEmail, resetToken, resetPwdVal.value);
+      if (res?.accessToken) {
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('st-token', res.accessToken);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('st-user', JSON.stringify(res.user));
+        localStorage.removeItem('st-admin-token');
+      }
+      setForgotStatus({ text: '🎉 Đổi mật khẩu thành công! Đang chuyển tiếp sang trang chủ...', isError: false });
       setTimeout(() => {
-        setForgotStatus(null);
-        setMode('login');
-        setForgotEmail('');
-        setOtpCode('');
-        setResetToken('');
-        setResetPwdVal(field());
-        setResetConfirmVal(field());
-      }, 2000);
+        window.location.href = redirectTo || '/';
+      }, 1000);
     } catch (err: any) {
       console.error('Reset password error:', err);
       const msg = err.response?.data?.error || 'Đổi mật khẩu thất bại. Vui lòng thử lại.';
