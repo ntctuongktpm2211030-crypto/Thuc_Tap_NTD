@@ -637,7 +637,7 @@ router.post('/reset-password', async (req: Request, res: Response) => {
 router.post('/change-password', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
-    const userId = req.user?.id;
+    const userId = req.user?.sub || (req.user as any)?.id;
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({ error: 'Vui lòng nhập đầy đủ Mật khẩu hiện tại, Mật khẩu mới và Xác nhận mật khẩu mới.' });
