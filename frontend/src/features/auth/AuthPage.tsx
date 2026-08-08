@@ -456,12 +456,8 @@ export default function AuthPage() {
     setRegOtpMsg('');
     try {
       const res = await api.post('/auth/send-register-otp', { email: regEmail.value.trim() });
-      const msg = res.data?.message || `Mã OTP 6 số đã được gửi tới email ${regEmail.value}`;
-      const demoStr = res.data?.otpDemo ? ` (Mã thử nghiệm: ${res.data.otpDemo})` : '';
-      setRegOtpMsg(`📧 ${msg}${demoStr}`);
-      if (res.data?.otpDemo) {
-        setRegOtpCode(p => ({ ...p, value: res.data.otpDemo, touched: true }));
-      }
+      const msg = res.data?.message || `Mã OTP 6 số đã được gửi tới email ${regEmail.value}. Vui lòng kiểm tra hòm thư của bạn.`;
+      setRegOtpMsg(`📧 ${msg}`);
       setRegResendTimer(180);
     } catch (err: any) {
       console.error('Send register OTP error:', err);
