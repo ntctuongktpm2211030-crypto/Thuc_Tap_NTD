@@ -117,11 +117,20 @@ export class ChatbotService {
     // 7. Tạo phiên bản nội dung tin nhắn Assistant
     const assistantVersion = await this.repo.createMessageVersion(assistantMsg.id, aiResponseContent, 1, true);
 
-    // Cập nhật lại thời gian của cuộc hội thoại
-    await prisma.chatConversation.update({
-      where: { id: conversationId },
-      data: { updatedAt: new Date() },
-    });
+    // Cập nhật lại thời gian và tiêu đề của cuộc hội thoại nếu đang là tiêu đề mặc định
+    const firstMsgTitle = content.trim().substring(0, 40) + (content.trim().length > 40 ? '...' : '');
+    const currentTitle = conversation.title?.trim() || '';
+    if (!currentTitle || currentTitle === 'Hội thoại mới' || currentTitle === 'New Chat' || currentTitle.includes('Hội thoại')) {
+      await prisma.chatConversation.update({
+        where: { id: conversationId },
+        data: { title: firstMsgTitle, updatedAt: new Date() },
+      });
+    } else {
+      await prisma.chatConversation.update({
+        where: { id: conversationId },
+        data: { updatedAt: new Date() },
+      });
+    }
 
     // 8. Tự động trích xuất sở thích du lịch từ hội thoại (fire-and-forget, không block response)
     this.autoExtractMemory(userId, conversationId, memory as any, requestId).catch(err =>
@@ -131,11 +140,13 @@ export class ChatbotService {
     return {
       userMessage: {
         ...userMsg,
+        role: userMsg.role as any,
         versions: [userVersion],
         citations: [],
       },
       assistantMessage: {
         ...assistantMsg,
+        role: assistantMsg.role as any,
         versions: [assistantVersion],
         citations,
         places,
@@ -301,11 +312,6 @@ export class ChatbotService {
   async deleteMemory(userId: string) {
     await this.repo.deleteMemory(userId);
     return { success: true, message: 'Đã xóa toàn bộ bộ nhớ của người dùng.' };
-  }
-
-  async deleteConversation(id: string, userId: string) {
-    await this.repo.deleteConversation(id, userId);
-    return { success: true, message: 'Đã xóa cuộc hội thoại thành công.' };
   }
 }
 

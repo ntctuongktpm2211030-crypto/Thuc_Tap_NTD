@@ -5,11 +5,10 @@ from ..config import settings
 
 class LlmGeneratorService:
     def __init__(self):
-        self.api_key = settings.OPENAI_API_KEY if settings.OPENAI_API_KEY else None
-        self.base_url = settings.OPENAI_API_BASE_URL if settings.OPENAI_API_BASE_URL else None
+        self.api_key = settings.GEMINI_API_KEY if settings.GEMINI_API_KEY else None
         self.client = OpenAI(
             api_key=self.api_key, 
-            base_url=self.base_url if self.base_url else None
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
         ) if self.api_key else None
 
     def generate_q2q_q2a(self, raw_text: str, title_hint: str, category: str) -> Dict[str, Any]:

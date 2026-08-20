@@ -34,6 +34,10 @@ export interface ChatMessageResponse {
   updatedAt: Date;
   versions: ChatMessageVersionResponse[];
   citations?: Citation[];
+  places?: any[];
+  suggestions?: string[];
+  followUpQuestion?: string | null;
+  metadata?: any;
   toolCalls?: any[];
 }
 

@@ -2,13 +2,318 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Send, User, Plus, Brain, Star, RefreshCw,
-  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare, BookOpen, ExternalLink, Trash2
+  Loader2, CheckCircle2, XCircle, ChevronRight, MessageSquare, BookOpen, ExternalLink, Trash2, Sparkles, Compass, UtensilsCrossed, MapPin, Award
 } from 'lucide-react';
 import { chatbotService, feedbackService, ChatConversation, ChatMessage, AIMemory } from '../../services/smartTravel.service';
 import { useLang } from '../../contexts/LanguageContext';
 import chatbotImg from '../../assets/chatbot.jpg';
 import loadingVideo from '../../../4278555227519042772.mp4';
 import MemoryManager from './MemoryManager';
+
+function cleanMarkdownForUI(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^---+$/gm, '')
+    .replace(/^\*\*\*+$/gm, '')
+    .replace(/\*\*/g, '')
+    .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
+    .replace(/[\u2600-\u27BF]/g, '')
+    .replace(/(\n\s*){3,}/g, '\n\n')
+    .trim();
+}
+
+interface ContentBlock {
+  type: 'intro' | 'card' | 'callout';
+  title?: string;
+  items?: string[];
+  content?: string;
+}
+
+function parseStructuredContent(rawText: string): ContentBlock[] {
+  if (!rawText) return [];
+  const text = cleanMarkdownForUI(rawText);
+  const lines = text.split('\n');
+  const blocks: ContentBlock[] = [];
+
+  let currentCard: { title: string; items: string[] } | null = null;
+  let introLines: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    // Callout detection
+    if (line.includes('Hôm nay bạn') || line.includes('Bạn muốn') || line.startsWith('👉') || (line.startsWith('💡') && i > lines.length - 4)) {
+      if (currentCard) {
+        blocks.push({ type: 'card', title: currentCard.title, items: currentCard.items });
+        currentCard = null;
+      }
+      blocks.push({ type: 'callout', content: line.replace(/^[💡👉]\s*/, '') });
+      continue;
+    }
+
+    // Header detection: Line starts with digit or keyword
+    const isHeader = /^(\d+[\.\:\)]|[\u2600-\u27BF])/i.test(line) ||
+      /^(Gợi Ý|Tra Cứu|Tư Vấn|Thiết Kế|Đặc sản|Quán ăn|Di tích|Lễ hội)/i.test(line);
+
+    if (isHeader) {
+      if (introLines.length > 0) {
+        blocks.push({ type: 'intro', content: introLines.join('\n') });
+        introLines = [];
+      }
+      if (currentCard) {
+        blocks.push({ type: 'card', title: currentCard.title, items: currentCard.items });
+      }
+      currentCard = { title: line, items: [] };
+    } else if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*')) {
+      const cleanItem = line.replace(/^[•\-\*]\s*/, '').trim();
+      if (currentCard) {
+        currentCard.items.push(cleanItem);
+      } else {
+        introLines.push(line);
+      }
+    } else {
+      if (currentCard) {
+        currentCard.items.push(line);
+      } else {
+        introLines.push(line);
+      }
+    }
+  }
+
+  if (introLines.length > 0) {
+    blocks.push({ type: 'intro', content: introLines.join('\n') });
+  }
+  if (currentCard) {
+    blocks.push({ type: 'card', title: currentCard.title, items: currentCard.items });
+  }
+
+  // Smart Fallback Parser: Tự động phân tách chính xác các đoạn văn dính liền từ DB thành Thẻ Card 2 cột hoàn chỉnh
+  if (blocks.filter(b => b.type === 'card').length === 0 && rawText && /Đánh giá:|Mô tả:|\(Chi phí/i.test(rawText)) {
+    const textToParse = cleanMarkdownForUI(rawText);
+    const firstItemIdx = textToParse.search(/(?:Nhà hàng|Bún|Bánh|Phở|Lẩu|Hải sản|Gỏi|Cơm|Quán)\s+[A-ZĐÀÁẢẠÃĂẰẮẲẶẴÂẦẤẨẬẪÊỀẾỂỆỄÔỒỐỔỘỖƠỜỚỞỢỠƯỪỨỬỰỮYỲÝỶẠỸ]/u);
+    
+    let introText = textToParse;
+    let itemsText = '';
+    
+    if (firstItemIdx > 0) {
+      introText = textToParse.substring(0, firstItemIdx).trim();
+      itemsText = textToParse.substring(firstItemIdx).trim();
+    } else {
+      itemsText = textToParse;
+    }
+
+    const segments = itemsText.split(/(?=(?:Nhà hàng|Bún|Bánh|Phở|Lẩu|Hải sản|Gỏi|Cơm|Quán)\s+[A-ZĐÀÁẢẠÃĂẰẮẲẶẴÂẦẤẨẬẪÊỀẾỂỆỄÔỒỐỔỘỖƠỜỚỞỢỠƯỪỨỬỰỮYỲÝỶẠỸ])/u);
+
+    if (segments.length > 0) {
+      const smartBlocks: ContentBlock[] = [];
+      if (introText) {
+        smartBlocks.push({ type: 'intro', content: introText });
+      }
+
+      let cardCount = 1;
+      segments.forEach((seg) => {
+        const trimmed = seg.trim();
+        if (!trimmed) return;
+
+        const nameMatch = trimmed.match(/^((?:Nhà hàng|Bún|Bánh|Phở|Lẩu|Hải sản|Gỏi|Cơm|Quán)\s+[^:\n\(\.]{2,40})/u);
+        const name = nameMatch ? nameMatch[1].trim() : null;
+
+        if (name && name.length > 3) {
+          const items: string[] = [];
+          const ratingMatch = trimmed.match(/Đánh giá:\s*[\d\.\/]+\s*sao/i);
+          if (ratingMatch) items.push(ratingMatch[0]);
+
+          const priceMatch = trimmed.match(/\(Chi phí dự kiến:\s*[^)]+\)/i);
+          if (priceMatch) items.push(`Chi phí: ${priceMatch[0].replace(/[\(\)]/g, '')}`);
+
+          const descMatch = trimmed.match(/Mô tả:\s*([^(\n]+?)(?=\s*\(Chi phí|\s*(?:Nhà hàng|Bún|Bánh|Phở|Lẩu|Hải sản|Gỏi|Cơm|Quán)\s+|$)/i);
+          if (descMatch && descMatch[1].trim()) {
+            items.push(`Mô tả: ${descMatch[1].trim()}`);
+          }
+
+          smartBlocks.push({
+            type: 'card',
+            title: `${cardCount}. ${name}`,
+            items: items.length > 0 ? items : ['Đặc sản địa phương trứ danh']
+          });
+          cardCount++;
+        }
+      });
+
+      if (smartBlocks.filter(b => b.type === 'card').length > 0) {
+        return smartBlocks;
+      }
+    }
+  }
+
+  return blocks;
+}
+
+function renderFormattedText(text: string) {
+  if (!text) return null;
+  
+  // Split text by [ref:ID] citation tags
+  const refParts = text.split(/(\[ref:\s*[^\]]+\])/i);
+  return refParts.map((part, pIdx) => {
+    const match = part.match(/^\[ref:\s*([^\]]+)\]$/i);
+    if (match) {
+      const refId = match[1];
+      return (
+        <span
+          key={`ref-${pIdx}`}
+          className="inline-flex items-center gap-0.5 mx-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/15 text-amber-700 dark:bg-amber-400/20 dark:text-amber-300 border border-amber-500/30 cursor-pointer hover:bg-amber-500/25 transition-all shadow-2xs"
+          title={`Thông tin đã qua kiểm duyệt thực tế [ref:${refId}]`}
+          onClick={() => {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(refId)}`, '_blank');
+          }}
+        >
+          <MapPin size={9} className="text-amber-500" />
+          <span>Xác thực #{refId}</span>
+        </span>
+      );
+    }
+
+    const parts = part.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((subPart, idx) => {
+      if (subPart.startsWith('**') && subPart.endsWith('**')) {
+        return (
+          <strong key={idx} className="font-bold text-amber-600 dark:text-amber-300">
+            {subPart.slice(2, -2)}
+          </strong>
+        );
+      }
+      return subPart;
+    });
+  });
+}
+
+function getModernHeaderBadge(title: string) {
+  const cleanTitle = title
+    .replace(/^[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
+    .replace(/^[\u2600-\u27BF]/g, '')
+    .replace(/^\d+[\.\:\s]*/, '')
+    .trim();
+
+  const lower = cleanTitle.toLowerCase();
+
+  if (lower.includes('đặc sản') || lower.includes('món') || lower.includes('ẩm thực')) {
+    return {
+      title: cleanTitle,
+      icon: <UtensilsCrossed size={14} className="text-amber-500" />,
+      badgeBg: 'bg-gradient-to-r from-amber-500/15 to-orange-500/15 border-amber-500/30 text-amber-700 dark:text-amber-300',
+      ribbon: 'from-amber-500 via-orange-500 to-amber-400',
+    };
+  }
+  if (lower.includes('quán') || lower.includes('địa chỉ') || lower.includes('nhà hàng') || lower.includes('bản đồ')) {
+    return {
+      title: cleanTitle,
+      icon: <MapPin size={14} className="text-emerald-500" />,
+      badgeBg: 'bg-gradient-to-r from-emerald-500/15 to-teal-500/15 border-emerald-500/30 text-emerald-700 dark:text-emerald-300',
+      ribbon: 'from-emerald-500 via-teal-500 to-emerald-400',
+    };
+  }
+  if (lower.includes('khẩu vị') || lower.includes('nhu cầu') || lower.includes('cá nhân') || lower.includes('sở thích')) {
+    return {
+      title: cleanTitle,
+      icon: <Sparkles size={14} className="text-purple-500" />,
+      badgeBg: 'bg-gradient-to-r from-purple-500/15 to-indigo-500/15 border-purple-500/30 text-purple-700 dark:text-purple-300',
+      ribbon: 'from-purple-500 via-indigo-500 to-purple-400',
+    };
+  }
+  if (lower.includes('tour') || lower.includes('lịch trình') || lower.includes('thiết kế')) {
+    return {
+      title: cleanTitle,
+      icon: <Compass size={14} className="text-sky-500" />,
+      badgeBg: 'bg-gradient-to-r from-sky-500/15 to-blue-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300',
+      ribbon: 'from-sky-500 via-blue-500 to-sky-400',
+    };
+  }
+
+  return {
+    title: cleanTitle,
+    icon: <Award size={14} className="text-amber-500" />,
+    badgeBg: 'bg-gradient-to-r from-amber-500/15 to-orange-500/15 border-amber-500/30 text-amber-700 dark:text-amber-300',
+    ribbon: 'from-amber-500 via-orange-500 to-amber-400',
+  };
+}
+
+function AssistantMessageCard({ content }: { content: string }) {
+  const blocks = parseStructuredContent(content);
+
+  if (blocks.length === 0) return null;
+
+  const cardBlocks = blocks.filter(b => b.type === 'card');
+  const introBlocks = blocks.filter(b => b.type === 'intro');
+  const calloutBlocks = blocks.filter(b => b.type === 'callout');
+
+  return (
+    <div className="space-y-3.5 my-1 w-full">
+      {/* Intro Quote Header */}
+      {introBlocks.map((block, index) => (
+        <div key={index} className="relative pl-3.5 border-l-2 border-amber-500/80 text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200 font-medium">
+          {renderFormattedText(block.content || '')}
+        </div>
+      ))}
+
+      {/* Full-Width Horizontal List of Feature / Destination Cards */}
+      {cardBlocks.length > 0 && (
+        <div className="space-y-3 my-2 w-full">
+          {cardBlocks.map((block, index) => {
+            const badgeMeta = getModernHeaderBadge(block.title || '');
+            return (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/95 via-amber-50/20 to-orange-50/10 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-amber-950/20 border border-slate-200/90 dark:border-slate-800/90 hover:border-amber-500/60 p-4 shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md flex flex-col gap-2.5 w-full"
+              >
+                {/* Left Vertical Gradient Accent Line */}
+                <div className={`absolute top-0 bottom-0 left-0 w-1.5 bg-gradient-to-b ${badgeMeta.ribbon} group-hover:w-2 transition-all`} />
+
+                {/* Header Row */}
+                {block.title && (
+                  <div className="flex items-center justify-between gap-2 pl-2">
+                    <div className={`px-3 py-1 rounded-xl ${badgeMeta.badgeBg} font-bold text-xs sm:text-[13px] border shadow-sm flex items-center gap-2`}>
+                      {badgeMeta.icon}
+                      <span>{badgeMeta.title}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Content Items List */}
+                {block.items && block.items.length > 0 && (
+                  <ul className="space-y-2 pl-2 mt-0.5">
+                    {block.items.map((item, itemIdx) => (
+                      <li key={itemIdx} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                        <CheckCircle2 size={14} className="text-amber-500 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                        <span className="flex-1">{renderFormattedText(item)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Interactive Callout Banner at Bottom */}
+      {calloutBlocks.map((block, index) => (
+        <div
+          key={index}
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/12 to-amber-500/15 border-2 border-amber-500/40 p-4 shadow-md text-xs sm:text-sm text-amber-950 dark:text-amber-100 flex items-center gap-3.5 backdrop-blur-md transition-all hover:scale-[1.005]"
+        >
+          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white shrink-0 shadow-md shadow-amber-500/30">
+            <Sparkles size={18} className="animate-spin-slow" />
+          </div>
+          <div className="flex-1 font-semibold leading-relaxed">
+            {renderFormattedText(block.content || '')}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function ChatbotPage() {
   const { lang } = useLang();
@@ -461,7 +766,11 @@ export default function ChatbotPage() {
                         : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-2xl rounded-tl-sm shadow-sm'
                     }`}>
                       {/* Message Content */}
-                      <p className="whitespace-pre-line leading-relaxed">{activeVersion?.content || ''}</p>
+                      {isUser ? (
+                        <p className="whitespace-pre-line leading-relaxed text-white font-medium">{activeVersion?.content || ''}</p>
+                      ) : (
+                        <AssistantMessageCard content={activeVersion?.content || ''} />
+                      )}
 
                       {/* Tool Calls Log */}
                       {!isUser && msg.toolCalls && msg.toolCalls.length > 0 && (

@@ -291,14 +291,68 @@ def convert_address_endpoint(req: ConvertRequest):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+@app.post("/api/v1/optimize-itinerary")
+def optimize_itinerary_endpoint(payload: dict):
+    try:
+        waypoints = payload.get("waypoints", [])
+        start_time = payload.get("start_time_minutes", 480)
+        max_day = payload.get("max_day_minutes", 720)
+        solver = ORToolsItinerarySolver(waypoints, start_time_minutes=start_time, max_day_minutes=max_day)
+        res = solver.solve()
+        return {"status": "success", "data": res}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/v1/graph-rag")
+def graph_rag_endpoint(payload: dict):
+    try:
+        query = payload.get("query", "Đà Lạt 3N2Đ")
+        pipeline = GraphRAGPipeline()
+        res = pipeline.run_pipeline(query)
+        return {"status": "success", "data": res}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/v1/context-recommendations")
+def context_recommendations_endpoint(payload: dict):
+    try:
+        user_context = payload.get("user_context", {})
+        items = payload.get("items", [])
+        engine = ContextAwareRecSysEngine()
+        res = engine.score_and_rank_items(user_context, items)
+        return {"status": "success", "data": res}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/v1/verify-crag-nli")
+def verify_crag_nli_endpoint(payload: dict):
+    try:
+        query = payload.get("query", "")
+        generated_text = payload.get("generated_text", "")
+        docs = payload.get("documents", [])
+        verifier = CorrectiveRAGVerifier()
+        eval_res = verifier.evaluate_retrieval_relevance(query, docs)
+        nli_res = verifier.verify_nli_grounding(generated_text, docs)
+        return {
+            "status": "success",
+            "data": {
+                "crag_evaluation": eval_res,
+                "nli_verification": nli_res
+            }
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 @app.get("/health")
 def health_check():
     return {
         "status": "OK",
         "service": "SmartTravel AI Service",
-        "version": "1.0.1"
+        "version": "1.1.0",
+        "modules": ["OR-Tools VRP", "GraphRAG", "Context RecSys", "Self-RAG/CRAG"]
     }
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+
 

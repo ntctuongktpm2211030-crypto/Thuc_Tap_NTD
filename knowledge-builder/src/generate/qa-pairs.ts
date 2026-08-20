@@ -17,7 +17,7 @@ export async function generateQaPairsBatch(
   count: number,
   batchIndex: number
 ): Promise<QaPair[]> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
   if (apiKey) {
     try {
       const openai = createOpenAIClient(apiKey);
@@ -53,7 +53,7 @@ Hãy trả về duy nhất chuỗi JSON là một đối tượng chứa thuộc
 }`;
 
       const response = await callOpenAIWithRetry(openai, {
-        model: process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini',
+        model: process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.4,
         max_tokens: 3000,

@@ -85,6 +85,55 @@ export class ChatbotController {
     }
   };
 
+  GuiTinNhanStream = async (req: AuthRequest, res: Response) => {
+    const requestId = randomUUID();
+    const userId = req.user!.sub;
+    const conversationId = req.params.id;
+    const content = (req.query.content as string) || req.body?.content;
+
+    if (!content) {
+      return res.status(400).json({ error: 'Nội dung tin nhắn không được để trống.' });
+    }
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    if ((res as any).flushHeaders) (res as any).flushHeaders();
+
+    try {
+      const { getLLMConfig, callNativeGeminiStream } = require('../../ai-agents/utils/agent.utils');
+      const { apiKey, modelName } = getLLMConfig();
+
+      if (!apiKey) {
+        res.write(`data: ${JSON.stringify({ error: 'Chưa cấu hình API Key cho hệ thống.' })}\n\n`);
+        return res.end();
+      }
+
+      const systemPrompt = `Bạn là trợ lý du lịch AI thông minh của SmartTravel Vietnam. 
+Hãy phản hồi bằng tiếng Việt tự nhiên, thân thiện và chính xác. Trích xuất thông tin hữu ích và gắn thẻ [ref:ID] cho các thông tin thực tế.`;
+
+      let fullResponse = '';
+      await callNativeGeminiStream(
+        apiKey,
+        modelName,
+        systemPrompt,
+        content,
+        [],
+        (chunk: string) => {
+          fullResponse += chunk;
+          res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+        }
+      );
+
+      res.write(`data: ${JSON.stringify({ done: true, fullResponse })}\n\n`);
+      res.end();
+    } catch (err: any) {
+      logger.error('ChatbotController', 'GuiTinNhanStream failed', { error: err.message }, requestId);
+      res.write(`data: ${JSON.stringify({ error: err.message || 'Lỗi phát dữ liệu hội thoại.' })}\n\n`);
+      res.end();
+    }
+  };
+
   TaoLaiPhanHoi = async (req: AuthRequest, res: Response) => {
     const requestId = randomUUID();
     try {

@@ -227,8 +227,22 @@ export class AgentExecutorService {
           action: cimResult.responsePolicy.actionType,
         }, requestId);
 
-        // Ánh xạ Intent của CIM sang Agent xử lý tương ứng
-        if (
+        // Kiểm tra ưu tiên từ khóa Ẩm thực / Văn hóa từ câu hỏi người dùng
+        const cleanLower = removeDiacritics(originalInput.toLowerCase());
+        const hasFoodKeyword = /am thuc|an uong|mon an|quan an|dac san|hox tro.*am thuc|ho tro.*am thuc/i.test(cleanLower);
+        const hasCultureKeyword = /van hoa|lich su|le hoi|di tich|lang nghe|ho tro.*van hoa/i.test(cleanLower);
+
+        if (hasFoodKeyword) {
+          selectedType = 'food';
+          confidence = 0.95;
+          reasoning = 'Prioritized FoodAgent based on explicit food query';
+          llmProvider = 'Food-Priority';
+        } else if (hasCultureKeyword) {
+          selectedType = 'culture';
+          confidence = 0.95;
+          reasoning = 'Prioritized CultureAgent based on explicit culture query';
+          llmProvider = 'Culture-Priority';
+        } else if (
           cimResult.intent.intent === 'RECOMMENDATION' ||
           cimResult.intent.intent === 'RECOMMENDATION_MORE' ||
           cimResult.intent.intent === 'RECOMMENDATION_REPLACE'

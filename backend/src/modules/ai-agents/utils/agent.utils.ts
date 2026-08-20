@@ -167,6 +167,7 @@ export async function callNativeGemini(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-goog-api-key': key,
     },
     body: JSON.stringify(bodyPayload),
     signal: createAbortSignal(),
@@ -201,15 +202,298 @@ export async function callNativeGemini(
 }
 
 /**
- * Lấy cấu hình LLM hợp nhất, ưu tiên Gemini API làm provider chính
+ * Interface cho kết quả phân rã truy vấn (Step 1 Query Decomposition)
  */
-export function getLLMConfig() {
-  const geminiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
-  const apiKey = (geminiKey && geminiKey !== 'your_gemini_key_here' && geminiKey !== 'your_openai_key_here') ? geminiKey : '';
-  const modelName = process.env.GEMINI_MODEL_NAME || 'gemini-2.0-flash';
-  const provider = 'gemini';
+export interface QueryDecompositionResult {
+  intent: string;
+  destination: string | null;
+  filters: {
+    weather?: string;
+    time_slot?: string;
+    max_price?: number;
+    category?: string;
+  };
+  dense_queries: string[];
+  graph_entities: string[];
+}
 
-  return { apiKey, modelName, provider };
+/**
+ * Bước 1: Query Decomposition - Dùng Gemini 1.5 Flash (JSON Mode) phân rã câu hỏi thô thành các query con & filters
+ */
+export async function decomposeQueryWithLLM(query: string, requestId?: string): Promise<QueryDecompositionResult> {
+  const { apiKey, modelName } = getLLMConfig();
+  if (!apiKey) {
+    return {
+      intent: 'general',
+      destination: null,
+      filters: {},
+      dense_queries: [query],
+      graph_entities: [],
+    };
+  }
+
+  const systemPrompt = `Bạn là hệ thống Query Decomposition Engine chuyên nghiệp cho SmartTravel Vietnam.
+Hãy đọc câu hỏi thô của người dùng và trích xuất cấu trúc dữ liệu JSON để phục vụ cho truy xuất đa tầng (Hybrid Vector Search & Knowledge Graph).
+
+Nhiệm vụ:
+1. "intent": Ý định chính ("culinary_recommendation", "attraction_search", "culture_info", "itinerary_planning", "weather_advice", "general").
+2. "destination": Tên Tỉnh/Thành phố/Địa danh ở Việt Nam được nhắc đến (hoặc null).
+3. "filters": Các ràng buộc mở rộng như weather (rainy, sunny...), time_slot (morning, evening, night...), max_price (số VND nếu có), category.
+4. "dense_queries": Mảng 2-3 câu truy vấn tìm kiếm ngắn gọn, súc tích để tìm trong Vector DB bài viết review/cẩm nang (ví dụ: ["quán ăn tối ấm cúng đà lạt", "bánh căn lẩu bò đà lạt"]).
+5. "graph_entities": Mảng các thực thể văn hóa, ẩm thực, địa danh chính (ví dụ: ["Đà Lạt", "Món nóng", "Quán ăn gia đình"]).
+
+Hãy trả về DUY NHẤT đối tượng JSON khớp chính xác với cấu trúc trên. Không thêm markdown formatting.`;
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: query }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.0,
+        },
+      }),
+    });
+
+    if (response.ok) {
+      const data = (await response.json()) as any;
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
+        const parsed = JSON.parse(text.trim());
+        return {
+          intent: parsed.intent || 'general',
+          destination: parsed.destination || null,
+          filters: parsed.filters || {},
+          dense_queries: Array.isArray(parsed.dense_queries) && parsed.dense_queries.length > 0 ? parsed.dense_queries : [query],
+          graph_entities: Array.isArray(parsed.graph_entities) ? parsed.graph_entities : [],
+        };
+      }
+    }
+  } catch (err: any) {
+    logger.warn('decomposeQueryWithLLM', 'Query decomposition failed, fallback to raw query', { error: err.message }, requestId);
+  }
+
+  return {
+    intent: 'general',
+    destination: null,
+    filters: {},
+    dense_queries: [query],
+    graph_entities: [],
+  };
+}
+
+/**
+ * Trình gọi Gemini Stream API (SSE) cho phản hồi trực tiếp thời gian thực
+ */
+export async function callNativeGeminiStream(
+  apiKey: string,
+  model: string,
+  systemPrompt: string,
+  userPrompt: string,
+  history: { role: string; content: string }[] = [],
+  onChunk: (chunk: string) => void
+): Promise<string> {
+  const contents: any[] = [];
+  for (const item of history) {
+    contents.push({
+      role: item.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: item.content }]
+    });
+  }
+  contents.push({
+    role: 'user',
+    parts: [{ text: userPrompt }]
+  });
+
+  const bodyPayload: any = { contents };
+  if (systemPrompt) {
+    bodyPayload.systemInstruction = { parts: [{ text: systemPrompt }] };
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': apiKey,
+    },
+    body: JSON.stringify(bodyPayload),
+  });
+
+  if (!response.ok || !response.body) {
+    throw new Error(`Gemini Stream error (${response.status})`);
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let fullText = '';
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const jsonStr = line.substring(6).trim();
+        if (!jsonStr || jsonStr === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const chunk = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (chunk) {
+            fullText += chunk;
+            onChunk(chunk);
+          }
+        } catch (_) {}
+      }
+    }
+  }
+
+  return fullText;
+}
+
+/**
+ * Trình gọi OpenAI/Groq API theo chuẩn REST OpenAPI chat completions
+ */
+export async function callOpenAICompatibleAPI(
+  apiKey: string,
+  modelName: string,
+  baseURL: string,
+  systemPrompt: string,
+  userPrompt: string,
+  history: { role: string; content: string }[] = [],
+  requestId?: string
+): Promise<string> {
+  const LLM_TIMEOUT_MS = parseInt(process.env.LLM_TIMEOUT_MS || '30000', 10);
+  const messages: any[] = [];
+  if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
+  for (const h of history) {
+    messages.push({ role: h.role === 'assistant' ? 'assistant' : 'user', content: h.content });
+  }
+  messages.push({ role: 'user', content: userPrompt });
+
+  const url = `${baseURL.replace(/\/$/, '')}/chat/completions`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: modelName,
+      messages,
+      temperature: 0.2,
+      max_tokens: 2500,
+    }),
+    signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+  });
+
+  if (!res.ok) {
+    throw new Error(`OpenAI-compatible API responded with HTTP status ${res.status}`);
+  }
+  const data = (await res.json()) as any;
+  if (data?.choices?.[0]?.message?.content) {
+    return data.choices[0].message.content.trim();
+  }
+  throw new Error('OpenAI-compatible API returned empty response.');
+}
+
+/**
+ * Lấy cấu hình LLM hợp nhất, hỗ trợ Hybrid Routing giữa Gemini & OpenAI
+ */
+export function getLLMConfig(taskType: 'complex_planning' | 'chat_rag' | 'general' = 'general') {
+  const geminiKey = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_key_here' ? process.env.GEMINI_API_KEY : '';
+  const openaiKey = process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_key_here' ? process.env.OPENAI_API_KEY : '';
+
+  // Ưu tiên OpenAI GPT-4o cho các tác vụ lập kế hoạch phức tạp nếu có cài đặt key
+  if (taskType === 'complex_planning' && openaiKey) {
+    return {
+      apiKey: openaiKey,
+      modelName: process.env.OPENAI_MODEL_NAME || 'gpt-4o',
+      baseURL: process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
+      provider: 'openai',
+    };
+  }
+
+  // Mặc định ưu tiên Gemini 1.5 Flash (Tối ưu token & tốc độ)
+  if (geminiKey) {
+    return {
+      apiKey: geminiKey,
+      modelName: process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash',
+      baseURL: '',
+      provider: 'gemini',
+    };
+  }
+
+  // Fallback sang OpenAI GPT-4o-mini nếu Gemini key chưa được cấu hình
+  if (openaiKey) {
+    return {
+      apiKey: openaiKey,
+      modelName: process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini',
+      baseURL: process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
+      provider: 'openai',
+    };
+  }
+
+  return { apiKey: '', modelName: 'gemini-1.5-flash', baseURL: '', provider: 'gemini' };
+}
+
+/**
+ * Điều phối gọi AI linh hoạt giữa Gemini & OpenAI với cơ chế Auto-Fallback kép
+ */
+export async function callAgentLLM(
+  systemPrompt: string,
+  userPrompt: string,
+  history: { role: string; content: string }[] = [],
+  requestId?: string,
+  taskType: 'complex_planning' | 'chat_rag' | 'general' = 'general'
+): Promise<string> {
+  const config = getLLMConfig(taskType);
+  const geminiKey = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_key_here' ? process.env.GEMINI_API_KEY : '';
+  const openaiKey = process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_key_here' ? process.env.OPENAI_API_KEY : '';
+
+  if (!config.apiKey && !geminiKey && !openaiKey) {
+    throw new Error('Chưa cấu hình GEMINI_API_KEY hoặc OPENAI_API_KEY cho hệ thống. Vui lòng kiểm tra file .env.');
+  }
+
+  if (config.provider === 'gemini' && config.apiKey) {
+    try {
+      logger.debug('callAgentLLM', 'Executing Gemini LLM request', { model: config.modelName }, requestId);
+      return await callNativeGemini(config.apiKey, config.modelName, systemPrompt, userPrompt, history, requestId);
+    } catch (geminiErr: any) {
+      logger.warn('callAgentLLM', 'Gemini failed, trying OpenAI fallback', { error: geminiErr.message }, requestId);
+      if (openaiKey) {
+        const openaiModel = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+        const openaiBaseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
+        return await callOpenAICompatibleAPI(openaiKey, openaiModel, openaiBaseURL, systemPrompt, userPrompt, history, requestId);
+      }
+      throw geminiErr;
+    }
+  } else if (config.provider === 'openai' && config.apiKey) {
+    try {
+      logger.debug('callAgentLLM', 'Executing OpenAI LLM request', { model: config.modelName }, requestId);
+      return await callOpenAICompatibleAPI(config.apiKey, config.modelName, config.baseURL, systemPrompt, userPrompt, history, requestId);
+    } catch (openaiErr: any) {
+      logger.warn('callAgentLLM', 'OpenAI failed, trying Gemini fallback', { error: openaiErr.message }, requestId);
+      if (geminiKey) {
+        const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
+        return await callNativeGemini(geminiKey, geminiModel, systemPrompt, userPrompt, history, requestId);
+      }
+      throw openaiErr;
+    }
+  }
+
+  throw new Error('Hệ thống không tìm thấy Provider AI khả dụng.');
 }
 
 /**
@@ -243,32 +527,6 @@ export async function classifyIntentWithLLM(input: string): Promise<IntentResult
 }
 
 /**
- * Calls Gemini API with a system prompt, user prompt, and conversation history.
- */
-export async function callAgentLLM(
-  systemPrompt: string,
-  userPrompt: string,
-  history: { role: string; content: string }[] = [],
-  requestId?: string
-): Promise<string> {
-  const { apiKey, modelName, provider } = getLLMConfig();
-  if (!apiKey) {
-    throw new Error('Chưa cấu hình GEMINI_API_KEY cho hệ thống. Vui lòng kiểm tra file .env.');
-  }
-
-  logger.debug('callAgentLLM', 'Executing Gemini LLM request', { model: modelName, provider }, requestId);
-  try {
-    return await callNativeGemini(apiKey, modelName, systemPrompt, userPrompt, history, requestId);
-  } catch (err: any) {
-    logger.error('callAgentLLM', 'Gemini LLM request failed', { error: err.message }, requestId);
-    try {
-      const fs = require('fs');
-      fs.writeFileSync('d:/Thuc_Tap_NDT/backend/llm_error.log', `${new Date().toISOString()} - ERROR: ${err.message || err}\n${err.stack || ''}`);
-    } catch (_) {}
-    throw err;
-  }
-}
-
 /**
  * Chuẩn hóa và xóa các tiền tố địa lý phổ biến ở Việt Nam để so khớp chính xác hơn
  */

@@ -27,6 +27,40 @@ export class FoodAgent implements AgentStrategy {
   ): Promise<AgentResponse> {
     console.log(`[FoodAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
+    const cleanRawInput = removeDiacritics(input.toLowerCase().trim());
+    // Chuẩn hóa lỗi gõ Telex: "trwoj", "troj", "trôj", "hox", "ho"
+    const normalizedInput = cleanRawInput.replace(/tr[w]*o[j]*/g, 'tro').replace(/hox/g, 'ho');
+    
+    // Nếu hỏi về ẩm thực/ăn uống mà không có địa danh cụ thể trong câu hiện tại (hoặc có từ khóa hỗ trợ/tư vấn/làm được gì)
+    const isGeneralCapabilityQuery = /am thuc|an uong/i.test(normalizedInput) && 
+      (!extractedDestination || normalizedInput.includes('ho tro') || normalizedInput.includes('giup') || normalizedInput.includes('lam duoc') || normalizedInput.includes('tu van') || normalizedInput.includes('co the'));
+
+    if (isGeneralCapabilityQuery) {
+      return {
+        response: `Xin chào! Tôi là FoodAgent - Chuyên gia Ẩm thực Địa phương của Terraholic AI 🍜✨
+
+Tôi có thể đồng hành và hỗ trợ bạn khám phá thế giới ẩm thực Việt Nam qua các tính năng chuyên sâu:
+
+🍱 1. Gợi Ý Đặc Sản 63 Tỉnh Thành
+• Tìm kiếm các món ăn đặc trưng chuẩn vị theo từng vùng miền (Bắc - Trung - Nam).
+• Giải thích nguồn gốc, hương vị đặc trưng, nguyên liệu và lịch sử văn hóa món ăn.
+
+📍 2. Tra Cứu Quán Ăn & Địa Chỉ Uy Tín
+• Gợi ý danh sách nhà hàng, quán ăn bản địa chất lượng cao có đánh giá tốt.
+• Cung cấp thông tin chi tiết địa chỉ, khoảng giá ($ - $$$) và giờ mở cửa.
+
+💡 3. Tư Vấn Khẩu Vị & Nhu Cầu Cá Nhân
+• Lọc món ăn theo yêu cầu (Ăn sáng, Ăn trưa, Ăn tối, Ăn vặt chiều).
+• Hỗ trợ chế độ ăn riêng (Ăn chay, kiêng cay, món ăn gia đình, cặp đôi hoặc món lẩu/nướng).
+
+🗺️ 4. Thiết Kế Tour Ẩm Thực (Food Tour)
+• Gợi ý lịch trình Food Tour 1 ngày hoặc nửa ngày tại các thủ phủ ẩm thực (Hà Nội, Huế, Sài Gòn, Đà Nẵng, Đà Lạt...).
+
+💡 Hôm nay bạn muốn khám phá ẩm thực ở tỉnh/thành phố nào? Hãy cho tôi biết địa điểm (ví dụ: Đà Lạt, Hà Nội, Huế, Sài Gòn...) hoặc món ăn bạn đang thèm nhé! 😋`,
+        citations: []
+      };
+    }
+
     // 1. Phân tích vùng miền sử dụng Fuzzy Match để chống lỗi gõ sai chữ/thiếu dấu
     let regions = ['Hà Nội', 'Sài Gòn', 'Đà Nẵng', 'Huế', 'Hà Giang'];
     try {
@@ -154,16 +188,20 @@ Câu hỏi/Yêu cầu của người dùng: "${input}"`;
       console.warn('[FoodAgent] LLM call failed, falling back to static template response:', err);
     }
 
-    // Fallback: Xây dựng câu trả lời của FoodAgent chi tiết hơn theo template cũ
-    let response = `Chào bạn, văn hóa ẩm thực tại **${region}** luôn nổi tiếng với sự tinh tế, phong phú và mang đậm dấu ấn bản địa độc đáo. Dưới đây là danh sách những món ăn đặc sản tiêu biểu bạn nhất định phải thử khi đến đây:\n\n`;
+    // Fallback: Xây dựng câu trả lời của FoodAgent theo cấu trúc Thẻ Card UI chuẩn
+    let response = `Chào bạn, văn hóa ẩm thực tại ${region} luôn nổi tiếng với sự tinh tế, phong phú và mang đậm dấu ấn bản địa độc đáo. Dưới đây là danh sách những món ăn đặc sản tiêu biểu bạn nhất định phải thử khi đến đây:\n\n`;
     
-    foodData.results.forEach((item: any) => {
-      response += `🍜 **${item.name}**\n`;
-      response += `Đánh giá: ${item.rating}/5 sao\n`;
-      response += `Mô tả: ${item.description}\n\n`;
-    });
+    if (foodData && foodData.results && foodData.results.length > 0) {
+      foodData.results.slice(0, 6).forEach((item: any, idx: number) => {
+        response += `${idx + 1}. ${item.name}\n`;
+        if (item.rating) response += `• Đánh giá: ${item.rating}/5 sao\n`;
+        if (item.description) response += `• Mô tả: ${item.description}\n`;
+        response += `\n`;
+      });
+    }
 
-    response += `💡 *Mách nhỏ dành cho bạn:* Bạn có thể ấn nút lưu các món đặc sản này vào danh sách ẩm thực yêu thích trên ứng dụng để dễ dàng mở ra tra cứu địa điểm quán ăn ngon khi đi thực tế nhé!`;
+    response += `👉 Mách nhỏ dành cho bạn: Bạn có thể ấn lưu các món đặc sản này vào danh sách yêu thích trên ứng dụng để dễ dàng tra cứu địa điểm quán ăn ngon khi đi thực tế nhé!`;
+    return { response, citations: [] };
 
     return { response, citations: [] };
   }

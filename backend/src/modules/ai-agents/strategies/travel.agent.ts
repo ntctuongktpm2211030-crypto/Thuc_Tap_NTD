@@ -21,45 +21,17 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 async function extractStartLocationWithLLM(input: string): Promise<string | null> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey || apiKey === 'your_openai_key_here') return null;
-
-  const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-  const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+  const systemPrompt = `Bạn là trợ lý trích xuất địa danh. Hãy đọc tin nhắn của người dùng và xác định xem họ có đang khai báo vị trí xuất phát hiện tại của họ hay không (Ví dụ: "Tôi ở Cần Thơ", "Mình ở Hà Nội", "Khởi hành từ Sài Gòn",...). 
+Nếu có, hãy trả về DUY NHẤT tên Tỉnh/Thành phố đó (Ví dụ: "Cần Thơ", "Hà Nội", "Hồ Chí Minh"). Nếu không khai báo vị trí, trả về chữ "null". Không thêm bất kỳ từ ngữ nào khác.`;
 
   try {
-    const LLM_TIMEOUT_MS = parseInt(process.env.LLM_TIMEOUT_MS || '30000', 10);
-    const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: [
-          {
-            role: 'system',
-            content: `Bạn là trợ lý trích xuất địa danh. Hãy đọc tin nhắn của người dùng và xác định xem họ có đang khai báo vị trí xuất phát hiện tại của họ hay không (Ví dụ: "Tôi ở Cần Thơ", "Mình ở Hà Nội", "Khởi hành từ Sài Gòn",...). 
-Nếu có, hãy trả về DUY NHẤT tên Tỉnh/Thành phố đó (Ví dụ: "Cần Thơ", "Hà Nội", "Hồ Chí Minh"). Nếu không khai báo vị trí, trả về chữ "null". Không thêm bất kỳ từ ngữ nào khác.`
-          },
-          { role: 'user', content: input }
-        ],
-        temperature: 0.1,
-        max_tokens: 50,
-      }),
-      signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const result = data.choices[0].message.content.trim();
-      return result === 'null' ? null : result;
-    }
+    const text = await callAgentLLM(systemPrompt, input);
+    if (!text || text.trim() === 'null') return null;
+    return text.trim();
   } catch (err) {
     console.error('[extractStartLocationWithLLM] Error extracting location:', err);
+    return null;
   }
-  return null;
 }
 
 export class TravelAgent implements AgentStrategy {

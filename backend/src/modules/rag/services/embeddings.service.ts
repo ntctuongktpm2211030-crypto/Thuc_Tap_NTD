@@ -2,8 +2,8 @@ export class EmbeddingsService {
   private apiKey: string | null = null;
 
   constructor() {
-    const key = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
-    if (key && key !== 'your_gemini_key_here' && key !== 'your_openai_key_here') {
+    const key = process.env.GEMINI_API_KEY;
+    if (key && key !== 'your_gemini_key_here') {
       this.apiKey = key;
     }
   }

@@ -130,3 +130,71 @@ export function optimizeRoute(waypoints: Waypoint[]): OptimizedRoute {
   // Otherwise, use greedy nearest-neighbor approximation
   return solveTSPGreedy(waypoints, matrix);
 }
+
+/**
+ * Advanced TD-VRP Solver: Calls Python AI-Service (OR-Tools Constraint Programming)
+ * with automatic fallback to local heuristic solver.
+ */
+export async function optimizeRouteWithORTools(
+  waypoints: Waypoint[],
+  options?: { startTimeMinutes?: number; maxDayMinutes?: number }
+): Promise<OptimizedRoute & { solverUsed?: string }> {
+  if (waypoints.length <= 1) {
+    return { orderedWaypoints: waypoints, totalDistanceKm: 0, solverUsed: 'local_trivial' };
+  }
+
+  const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+  try {
+    const formattedWaypoints = waypoints.map(w => ({
+      id: w.id,
+      name: w.name,
+      latitude: w.latitude,
+      longitude: w.longitude,
+      visit_duration_min: (w as any).visitDurationMin || 60,
+      open_time_min: (w as any).openTimeMin || 480,
+      close_time_min: (w as any).closeTimeMin || 1200,
+    }));
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+    const response = await fetch(`${aiServiceUrl}/api/v1/optimize-itinerary`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        waypoints: formattedWaypoints,
+        start_time_minutes: options?.startTimeMinutes || 480,
+        max_day_minutes: options?.maxDayMinutes || 720,
+      }),
+    });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const result = await response.json() as any;
+      if (result.status === 'success' && result.data?.ordered_waypoints) {
+        return {
+          orderedWaypoints: result.data.ordered_waypoints.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            latitude: item.latitude,
+            longitude: item.longitude,
+          })),
+          totalDistanceKm: result.data.total_distance_km || 0,
+          solverUsed: result.data.solver || 'ortools_cp',
+        };
+      }
+    }
+  } catch (err: any) {
+    console.warn('[RouteOptimizer Warning] AI-service request timed out (>3000ms) or failed, falling back to local Heuristic solver:', err.message);
+  }
+
+
+  // Fallback to local TypeScript solver
+  const localRes = optimizeRoute(waypoints);
+  return {
+    ...localRes,
+    solverUsed: 'local_ts_fallback',
+  };
+}
+

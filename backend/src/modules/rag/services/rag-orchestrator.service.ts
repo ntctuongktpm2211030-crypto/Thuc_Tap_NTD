@@ -7,6 +7,7 @@ import { RagAuditRepository } from '../repositories/rag-audit.repository';
 import { EmbeddingsService } from './embeddings.service';
 import { EnterpriseRagResult, RetrievedDoc, ConfidenceEvaluation } from '../types/rag-enterprise.types';
 import { logger } from '../../../utils/logger';
+import { callNativeGemini, decomposeQueryWithLLM } from '../../ai-agents/utils/agent.utils';
 
 // Circuit Breaker simple state machine
 let circuitState: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
@@ -45,16 +46,15 @@ export class RagOrchestratorService {
     requestId?: string;
   }): Promise<EnterpriseRagResult> {
     const pipelineStart = Date.now();
-    const { messageId, query, category, topK = 4, requestId } = options;
+    const { messageId, query, category, topK = 6, requestId } = options;
 
     logger.info('RagOrchestrator', 'Enterprise pipeline starting', { queryLength: query.length, category, topK }, requestId);
 
-    // ── Step 1: Input Guardrails ──
+    // ── Step 1: Input Guardrails & Query Decomposition ──
     const inputGuard = this.guardrails.validateInput(query);
     if (inputGuard.blocked) {
       logger.warn('RagOrchestrator', 'Input guardrails blocked request', { threatType: inputGuard.threatType, reason: inputGuard.violationReason }, requestId);
       
-      // Save Guardrail Event
       await this.auditRepo.saveGuardrailEvent(
         inputGuard.threatType,
         'HIGH',
@@ -65,6 +65,10 @@ export class RagOrchestratorService {
 
       return this.buildRefusalResponse('Yêu cầu của bạn bị chặn do vi phạm chính sách bảo mật nội dung.');
     }
+
+    // Step 1.2: Query Decomposition (Gemini Flash JSON Output)
+    const decomposition = await decomposeQueryWithLLM(query, requestId);
+    logger.info('RagOrchestrator', 'Query decomposed', { intent: decomposition.intent, destination: decomposition.destination, subQueries: decomposition.dense_queries.length }, requestId);
 
     // ── Step 2: Semantic Cache Lookup ──
     try {
@@ -77,47 +81,62 @@ export class RagOrchestratorService {
       logger.warn('RagOrchestrator', 'Cache lookup error, continuing pipeline', { error: (err as Error).message }, requestId);
     }
 
-    // ── Step 3: Embeddings Generation ──
-    const embeddingStart = Date.now();
-    let queryEmbedding: number[] = [];
-    try {
-      queryEmbedding = await this.embeddingsService.generate(query);
-    } catch (err) {
-      logger.error('RagOrchestrator', 'Failed to generate embedding', { error: (err as Error).message }, requestId);
-      // Fallback: generate a dummy or local hashed embedding to continue, or fail gracefully
-      queryEmbedding = new Array(1536).fill(0).map(() => Math.random() * 0.1);
-    }
-    const embeddingLatency = Date.now() - embeddingStart;
-
-    // ── Step 4: Hybrid Search (pgvector + BM25) ──
+    // ── Step 3 & 4: Multi-query Vector Search & RRF Re-ranking ──
     const retrieveStart = Date.now();
-    let docs: RetrievedDoc[] = [];
-    try {
-      docs = await this.knowledgeRepo.searchHybrid(query, queryEmbedding, category, topK);
-    } catch (err) {
-      logger.error('RagOrchestrator', 'Hybrid retrieval failed', { error: (err as Error).message }, requestId);
-      docs = [];
+    const docMap = new Map<string, { doc: RetrievedDoc; rrfScore: number }>();
+    const RRF_K = 60;
+
+    const queriesToSearch = decomposition.dense_queries.slice(0, 3);
+    for (let qIdx = 0; qIdx < queriesToSearch.length; qIdx++) {
+      const subQ = queriesToSearch[qIdx];
+      let subEmb: number[] = [];
+      try {
+        subEmb = await this.embeddingsService.generate(subQ);
+      } catch (_) {}
+
+      try {
+        const subDocs = await this.knowledgeRepo.searchHybrid(subQ, subEmb, category || decomposition.intent, topK);
+        subDocs.forEach((doc, rank) => {
+          const key = doc.id || doc.title;
+          const score = 1 / (RRF_K + rank + 1);
+          if (docMap.has(key)) {
+            docMap.get(key)!.rrfScore += score;
+          } else {
+            docMap.set(key, { doc, rrfScore: score });
+          }
+        });
+      } catch (err: any) {
+        logger.error('RagOrchestrator', `Sub-query retrieval failed for "${subQ}"`, { error: err.message }, requestId);
+      }
     }
+
+    let docs: RetrievedDoc[] = Array.from(docMap.values())
+      .sort((a, b) => b.rrfScore - a.rrfScore)
+      .map(item => item.doc);
+
     const retrieveLatency = Date.now() - retrieveStart;
 
-    // ── Step 5: Adaptive Top-K / Re-ranking ──
-    // Standardize score thresholding to prevent noisy retrieval documents
-    const threshold = 0.45;
-    docs = docs.filter(d => (d.similarity || 0) >= threshold);
-    
-    // Sort descending by score
-    docs.sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
+    // ── Step 5: Adaptive Filtering ──
+    const threshold = 0.35;
+    docs = docs.filter(d => (d.similarity || 0) >= threshold).slice(0, topK);
 
-    // ── Step 6: LLM Generation with Circuit Breaker and Retry ──
-    const promptVersionHash = 'pv-v1-rag-default';
-    const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
-    const promptTemplateText = `Bạn là trợ lý du lịch AI thông minh. Hãy sử dụng bối cảnh dưới đây để trả lời câu hỏi.`;
+    // ── Step 6: Grounded Generation with Long-Context & Anti-hallucination Prompt ──
+    const promptVersionHash = 'pv-v2-advanced-rag';
+    const promptTemplateText = 'pv-v2-advanced-rag-template';
+    const modelName = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
 
-    const systemPrompt = `Bạn là trợ lý du lịch AI thông minh của SmartTravel. Hãy sử dụng bối cảnh dưới đây để trả lời câu hỏi chính xác và đầy đủ nhất.
-Bối cảnh:
-${docs.map((d, i) => `[${i + 1}] (${d.title}): ${d.content}`).join('\n\n')}`;
+    const systemPrompt = `Bạn là trợ lý du lịch AI thông minh của SmartTravel Vietnam.
+Hãy đọc bối cảnh tri thức bên dưới và trả lời câu hỏi của người dùng một cách tự nhiên, hấp dẫn, chuẩn xác.
 
-    const userPrompt = `Câu hỏi: ${query}`;
+[QUY TẮC BẮT BUỘC - KIỂM SOÁT THỰC TẾ & CHỐNG ẢO GIÁC]:
+1. CHỈ sử dụng thông tin có trong phần Bối cảnh bên dưới. Không tự bịa đặt các địa danh, giá tiền hay địa chỉ không xuất hiện trong bối cảnh.
+2. Ngay sau mỗi thông tin thực tế về địa chỉ, giá vé, giờ mở cửa hoặc đánh giá, bạn BẮT BUỘC gán thẻ trích dẫn [ref:ID] tương ứng (Ví dụ: "Quán nằm tại đường Phan Đình Phùng [ref:1] với mức giá khoảng 50.000 VNĐ [ref:1]").
+3. Nếu bối cảnh không có thông tin được hỏi, hãy phản hồi lịch sự rằng hệ thống chưa có dữ liệu xác thực cho chi tiết đó.
+
+BỐI CẢNH TRI THỨC DU LỊCH:
+${docs.map((d, i) => `[ref:${i + 1}] (${d.title}): ${d.content}`).join('\n\n')}`;
+
+    const userPrompt = `Câu hỏi người dùng: ${query}`;
 
     let llmResponse = '';
     let promptTokens = 0;
@@ -330,51 +349,29 @@ ${docs.map((d, i) => `[${i + 1}] (${d.title}): ${d.content}`).join('\n\n')}`;
     userPrompt: string,
     maxRetries: number = 3
   ): Promise<{ text: string; usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number } }> {
-    const apiKey = process.env.OPENAI_API_KEY;
-    const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-    const model = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+    const apiKey = process.env.GEMINI_API_KEY || '';
+    const model = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
 
     let attempt = 0;
     let delay = 1000; // start with 1s delay
 
     while (attempt < maxRetries) {
       try {
-        const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userPrompt },
-            ],
-            temperature: 0.3,
-            max_tokens: 1500,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`LLM Error Status ${response.status}`);
-        }
-
-        const data = (await response.json()) as any;
+        const text = await callNativeGemini(apiKey, model, systemPrompt, userPrompt);
         return {
-          text: data.choices[0].message.content,
-          usage: data.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+          text,
+          usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
         };
       } catch (err) {
         attempt++;
         if (attempt >= maxRetries) throw err;
         
-        logger.warn('RagOrchestrator', `LLM call attempt ${attempt} failed, retrying in ${delay}ms`, { error: (err as Error).message });
+        logger.warn('RagOrchestrator', `Gemini LLM call attempt ${attempt} failed, retrying in ${delay}ms`, { error: (err as Error).message });
         await new Promise((resolve) => setTimeout(resolve, delay));
         delay *= 2; // exponential backoff
       }
     }
-    throw new Error('LLM Call failed');
+    throw new Error('Gemini LLM Call failed');
   }
 
   /**

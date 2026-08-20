@@ -1,20 +1,52 @@
-import { OpenAI } from 'openai';
+declare const process: {
+  env: {
+    [key: string]: string | undefined;
+  };
+};
+declare const fetch: any;
 
-export function createOpenAIClient(apiKey: string): OpenAI {
-  const baseURL = process.env.OPENAI_API_BASE_URL;
-  
-  // Nếu là Google Gemini API, tự động gắn key vào URL query parameter
-  // và bổ sung header đặc thù của Google để tránh lỗi xác thực 400/401/404.
-  const isGoogle = baseURL && baseURL.includes('googleapis.com');
+export interface OpenAIClient {
+  chat: {
+    completions: {
+      create: (params: {
+        model: string;
+        messages: { role: string; content: string }[];
+        temperature?: number;
+        max_tokens?: number;
+        response_format?: { type: string };
+      }) => Promise<any>;
+    };
+  };
+}
 
-  return new OpenAI({
-    apiKey,
-    baseURL: baseURL || undefined,
-    defaultHeaders: isGoogle
-      ? { 'x-goog-api-key': apiKey }
-      : undefined,
-    defaultQuery: isGoogle
-      ? { key: apiKey }
-      : undefined,
-  });
+export function createOpenAIClient(apiKey: string): OpenAIClient {
+  const baseURL = process.env.GEMINI_API_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/';
+
+  return {
+    chat: {
+      completions: {
+        create: async (params) => {
+          const url = `${baseURL.replace(/\/$/, '')}/chat/completions`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`,
+              'x-goog-api-key': apiKey,
+            },
+            body: JSON.stringify(params),
+          });
+
+          if (!res.ok) {
+            const errText = await res.text();
+            const err: any = new Error(`API error (${res.status}): ${errText}`);
+            err.status = res.status;
+            throw err;
+          }
+
+          return await res.json();
+        },
+      },
+    },
+  };
 }

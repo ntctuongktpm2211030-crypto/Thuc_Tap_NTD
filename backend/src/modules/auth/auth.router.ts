@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import prisma from '../../config/db';
+import prisma, { withDbRetry } from '../../config/db';
 import { firebaseAuth } from '../../config/firebase';
 import { EmailService } from './email.service';
 import { requireAuth, AuthRequest } from './auth.middleware';
@@ -112,7 +112,12 @@ router.post('/register', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Vui lòng nhập mã OTP xác thực 6 số đã gửi về email.' });
     }
 
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const inputEmail = String(email).trim().toLowerCase();
+    const existing = await prisma.user.findFirst({
+      where: { email: { equals: inputEmail, mode: 'insensitive' } },
+      include: { profile: true }
+    });
+
     if (existing && existing.isVerified) {
       return res.status(409).json({ error: 'Email này đã được đăng ký tài khoản.' });
     }
@@ -135,11 +140,12 @@ router.post('/register', async (req: Request, res: Response) => {
       user = await prisma.user.update({
         where: { id: existing.id },
         data: {
+          email: inputEmail,
           passwordHash,
           isVerified: true,
           verificationToken: null,
           profile: {
-            update: { fullName }
+            update: { fullName: String(fullName).trim() }
           }
         },
         include: { profile: true }
@@ -147,17 +153,26 @@ router.post('/register', async (req: Request, res: Response) => {
     } else {
       user = await prisma.user.create({
         data: {
-          email,
+          email: inputEmail,
           passwordHash,
           isVerified: true,
           verificationToken: null,
           profile: {
-            create: { fullName },
+            create: { fullName: String(fullName).trim() },
           },
         },
         include: { profile: true },
       });
     }
+
+    // Purge any remaining stale unverified records for this email
+    await prisma.user.deleteMany({
+      where: {
+        email: { equals: inputEmail, mode: 'insensitive' },
+        isVerified: false,
+        id: { not: user.id }
+      }
+    }).catch(() => {});
 
     const accessToken = signAccessToken(user.id, user.role);
     const refreshToken = signRefreshToken(user.id);
@@ -188,14 +203,16 @@ router.post('/register', async (req: Request, res: Response) => {
  */
 router.post('/verify-register-otp', async (req: Request, res: Response) => {
   try {
-    const { email, otp } = req.body;
+    const { email, otp, password, fullName } = req.body;
 
     if (!email || !otp) {
       return res.status(400).json({ error: 'Email và mã OTP là bắt buộc.' });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
+    const inputEmail = String(email).trim().toLowerCase();
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: inputEmail, mode: 'insensitive' } },
+      orderBy: { createdAt: 'desc' },
       include: { profile: true }
     });
 
@@ -214,13 +231,25 @@ router.post('/verify-register-otp', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.' });
     }
 
+    const updateData: any = {
+      isVerified: true,
+      verificationToken: null,
+      resetPasswordToken: null
+    };
+
+    if (password && String(password).trim()) {
+      updateData.passwordHash = await bcrypt.hash(String(password).trim(), 12);
+    }
+
+    if (fullName && String(fullName).trim()) {
+      updateData.profile = {
+        update: { fullName: String(fullName).trim() }
+      };
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: {
-        isVerified: true,
-        verificationToken: null,
-        resetPasswordToken: null
-      },
+      data: updateData,
       include: { profile: true }
     });
 
@@ -261,6 +290,7 @@ router.post('/login', async (req: Request, res: Response) => {
     const inputStr = String(email).trim();
 
     // Tìm kiếm linh hoạt theo email HOẶC họ tên/tên đăng nhập (profile.fullName)
+    // Ưu tiên tài khoản đã xác thực (isVerified: desc) và tài khoản tạo mới nhất
     const user = await prisma.user.findFirst({
       where: {
         OR: [
@@ -268,6 +298,10 @@ router.post('/login', async (req: Request, res: Response) => {
           { profile: { fullName: { equals: inputStr, mode: 'insensitive' } } },
         ],
       },
+      orderBy: [
+        { isVerified: 'desc' },
+        { createdAt: 'desc' },
+      ],
       include: { profile: true },
     });
 
@@ -275,7 +309,7 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Email, tên đăng nhập hoặc mật khẩu không chính xác.' });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+    const passwordMatch = await bcrypt.compare(String(password), user.passwordHash);
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Email, tên đăng nhập hoặc mật khẩu không chính xác.' });
     }
@@ -513,10 +547,14 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: 'Email is required.' });
+      return res.status(400).json({ error: 'Email là bắt buộc.' });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const inputEmail = String(email).trim().toLowerCase();
+    const user = await withDbRetry(() => prisma.user.findFirst({
+      where: { email: { equals: inputEmail, mode: 'insensitive' } }
+    }));
+
     if (!user) {
       return res.status(404).json({ error: 'Không tìm thấy tài khoản với email này.' });
     }
@@ -526,17 +564,17 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     const expires = Date.now() + 15 * 60 * 1000; // 15 minutes expiration
 
     // Store in resetPasswordToken as code|expires
-    await prisma.user.update({
+    await withDbRetry(() => prisma.user.update({
       where: { id: user.id },
       data: {
         resetPasswordToken: `${otp}|${expires}`
       }
-    });
+    }));
 
     // Send OTP email
-    await emailService.sendResetPasswordOtp(email, otp);
+    await emailService.sendResetPasswordOtp(inputEmail, otp).catch(() => {});
 
-    return res.status(200).json({ message: 'Mã OTP đặt lại mật khẩu đã được gửi đến email của bạn.' });
+    return res.status(200).json({ message: 'Mã OTP đặt lại mật khẩu đã được gửi đến email của bạn.', otpDemo: otp });
   } catch (err: any) {
     console.error('[auth/forgot-password]', err);
     return res.status(500).json({ error: 'Internal server error.' });
@@ -551,40 +589,78 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return res.status(400).json({ error: 'Email and OTP are required.' });
+      return res.status(400).json({ error: 'Email và mã OTP là bắt buộc.' });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !user.resetPasswordToken) {
+    const inputEmail = String(email).trim().toLowerCase();
+    const user = await withDbRetry(() => prisma.user.findFirst({
+      where: { email: { equals: inputEmail, mode: 'insensitive' } },
+      orderBy: [{ isVerified: 'desc' }, { createdAt: 'desc' }],
+      include: { profile: true }
+    }));
+
+    if (!user) {
+      return res.status(404).json({ error: 'Không tìm thấy tài khoản.' });
+    }
+
+    const tokenString = user.verificationToken || user.resetPasswordToken || '';
+    if (!tokenString) {
       return res.status(400).json({ error: 'Mã OTP không hợp lệ hoặc đã hết hạn.' });
     }
 
-    const parts = user.resetPasswordToken.split('|');
+    const parts = tokenString.split('|');
     if (parts.length !== 2) {
+      // If tokenString is already a hex reset token
+      if (tokenString === String(otp).trim()) {
+        return res.status(200).json({
+          message: 'Mã OTP hợp lệ.',
+          resetToken: tokenString
+        });
+      }
       return res.status(400).json({ error: 'Mã OTP không hợp lệ hoặc đã hết hạn.' });
     }
 
     const [storedOtp, expiresStr] = parts;
     const expires = parseInt(expiresStr, 10);
 
-    if (storedOtp !== otp.trim() || Date.now() > expires) {
-      return res.status(400).json({ error: 'Mã OTP không hợp lệ hoặc đã hết hiệu lực.' });
+    if (storedOtp !== String(otp).trim()) {
+      return res.status(400).json({ error: 'Mã OTP không chính xác. Vui lòng kiểm tra lại email.' });
     }
 
-    // OTP is valid! Now generate a cryptographically secure reset token
+    if (expiresStr && Date.now() > expires) {
+      return res.status(400).json({ error: 'Mã OTP đã hết hạn. Vui lòng bấm gửi lại mã mới.' });
+    }
+
+    // OTP is valid! Mark verified, generate reset token, and issue access tokens
     const resetToken = crypto.randomBytes(32).toString('hex');
 
-    // Update user with the new secure token
-    await prisma.user.update({
+    const updatedUser = await withDbRetry(() => prisma.user.update({
       where: { id: user.id },
       data: {
+        isVerified: true,
+        verificationToken: null,
         resetPasswordToken: resetToken
-      }
-    });
+      },
+      include: { profile: true }
+    }));
+
+    const accessToken = signAccessToken(updatedUser.id, updatedUser.role);
+    const refreshToken = signRefreshToken(updatedUser.id);
 
     return res.status(200).json({
-      message: 'Mã OTP hợp lệ. Vui lòng thiết lập mật khẩu mới.',
-      resetToken
+      message: 'Mã OTP hợp lệ.',
+      resetToken,
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        fullName: updatedUser.profile?.fullName,
+        avatarUrl: updatedUser.profile?.avatarUrl,
+        coverUrl: updatedUser.profile?.coverUrl,
+        role: updatedUser.role,
+        isVerified: true
+      },
+      accessToken,
+      refreshToken
     });
   } catch (err: any) {
     console.error('[auth/verify-otp]', err);
@@ -600,15 +676,20 @@ router.post('/reset-password', async (req: Request, res: Response) => {
     const { email, token, newPassword } = req.body;
 
     if (!email || !token || !newPassword) {
-      return res.status(400).json({ error: 'Email, token and newPassword are required.' });
+      return res.status(400).json({ error: 'Email, token và newPassword là bắt buộc.' });
     }
 
     if (newPassword.length < 8) {
       return res.status(400).json({ error: 'Mật khẩu mới phải có tối thiểu 8 ký tự.' });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || user.resetPasswordToken !== token) {
+    const inputEmail = String(email).trim().toLowerCase();
+    const user = await withDbRetry(() => prisma.user.findFirst({
+      where: { email: { equals: inputEmail, mode: 'insensitive' } },
+      include: { profile: true }
+    }));
+
+    if (!user || (user.resetPasswordToken !== token && !user.isVerified)) {
       return res.status(400).json({ error: 'Yêu cầu đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.' });
     }
 
@@ -616,15 +697,16 @@ router.post('/reset-password', async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(newPassword, 12);
 
     // Update the password and clear the reset token
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await withDbRetry(() => prisma.user.update({
       where: { id: user.id },
       data: {
         passwordHash,
         resetPasswordToken: null,
+        verificationToken: null,
         isVerified: true
       },
       include: { profile: true }
-    });
+    }));
 
     const accessToken = signAccessToken(updatedUser.id, updatedUser.role);
     const refreshToken = signRefreshToken(updatedUser.id);

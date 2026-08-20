@@ -18,6 +18,8 @@ router.delete('/conversations/:id', requireAuth, controller.XoaCuocHoiThoai);
 
 // ─── Gửi tin nhắn & Tái tạo phản hồi ──────────────────────────
 router.post('/conversations/:id/messages', requireAuth, validateSendMessage, controller.GuiTinNhan);
+router.get('/conversations/:id/stream', requireAuth, controller.GuiTinNhanStream);
+router.post('/conversations/:id/stream', requireAuth, controller.GuiTinNhanStream);
 router.post('/messages/:messageId/regenerate', requireAuth, controller.TaoLaiPhanHoi);
 
 // ─── Bộ nhớ sở thích AI (AI Memory) ──────────────────────────

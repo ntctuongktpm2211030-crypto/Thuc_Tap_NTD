@@ -93,9 +93,8 @@ interface Destination {
 }
 
 const DEST_DIR = path.resolve(__dirname, '../config/destinations');
-const GROQ_API_KEY = process.env.OPENAI_API_KEY || '';
-const GROQ_API_URL = process.env.OPENAI_API_BASE_URL || 'https://api.groq.com/openai/v1';
-const GROQ_MODEL = process.env.OPENAI_MODEL_NAME || 'llama-3.1-8b-instant';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+const GEMINI_MODEL = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
 
 // Helper: Normalize string to create clean ID
 function generateSlug(title: string, province: string): string {
@@ -141,10 +140,10 @@ async function fetchOSMData(title: string, province: string): Promise<any | null
   }
   return null;
 }
-// Helper: Fetch Google Places & Wiki details via Groq LLM API
+// Helper: Fetch Google Places & Wiki details via Gemini LLM API
 async function fetchLLMEnrichment(item: Destination, osmData: any, provinceName: string): Promise<any | null> {
-  if (!GROQ_API_KEY) {
-    console.warn('⚠️ OPENAI_API_KEY is not defined. Skipping LLM enrichment.');
+  if (!GEMINI_API_KEY) {
+    console.warn('⚠️ GEMINI_API_KEY is not defined. Skipping LLM enrichment.');
     return null;
   }
 
@@ -259,30 +258,30 @@ Schema:
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const response = await fetch(`${GROQ_API_URL}/chat/completions`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: GROQ_MODEL,
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.1,
-          response_format: { type: "json_object" }
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.1
+          }
         })
       });
 
       if (response.ok) {
         const resData = await response.json() as any;
-        const text = resData.choices[0].message.content.trim();
+        const text = resData.candidates[0].content.parts[0].text.trim();
         return JSON.parse(text);
       } else if (response.status === 429) {
-        console.warn(`[Groq LLM] Rate limit (429) hit for "${item.title}". Retrying in ${retryDelay}ms... (Attempt ${attempt}/${maxRetries})`);
+        console.warn(`[Gemini LLM] Rate limit (429) hit for "${item.title}". Retrying in ${retryDelay}ms... (Attempt ${attempt}/${maxRetries})`);
         await sleep(retryDelay);
         retryDelay *= 2; // Exponential backoff
       } else {
-        console.warn(`[Groq LLM] Failed: status ${response.status} on attempt ${attempt}`);
+        console.warn(`[Gemini LLM] Failed: status ${response.status} on attempt ${attempt}`);
         if (response.status !== 500 && response.status !== 502 && response.status !== 503 && response.status !== 504) {
           break; // Non-transient error
         }

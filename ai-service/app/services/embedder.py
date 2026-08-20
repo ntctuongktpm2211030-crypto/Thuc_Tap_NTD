@@ -6,11 +6,10 @@ from ..config import settings
 
 class EmbedderService:
     def __init__(self):
-        self.api_key = settings.OPENAI_API_KEY if settings.OPENAI_API_KEY else None
-        self.base_url = settings.OPENAI_API_BASE_URL if settings.OPENAI_API_BASE_URL else None
+        self.api_key = settings.GEMINI_API_KEY if settings.GEMINI_API_KEY else None
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url=self.base_url if self.base_url else None
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
         ) if self.api_key else None
 
     def generate(self, text: str) -> List[float]:

@@ -27,6 +27,34 @@ export class CultureAgent implements AgentStrategy {
   ): Promise<AgentResponse> {
     console.log(`[CultureAgent] Đang xử lý yêu cầu cho user ${userId}: "${input}" (Extracted: "${extractedDestination}")`);
 
+    const cleanRawInput = removeDiacritics(input.toLowerCase().trim());
+    const normalizedInput = cleanRawInput.replace(/tr[w]*o[j]*/g, 'tro').replace(/hox/g, 'ho');
+    
+    const isGeneralCapabilityQuery = /van hoa/i.test(normalizedInput) && 
+      (!extractedDestination || normalizedInput.includes('ho tro') || normalizedInput.includes('giup') || normalizedInput.includes('lam duoc') || normalizedInput.includes('tu van') || normalizedInput.includes('co the'));
+
+    if (isGeneralCapabilityQuery) {
+      return {
+        response: `Xin chào! Tôi là CultureAgent - Chuyên gia Văn hóa & Di sản của Terraholic AI 🏛️✨
+
+Tôi có thể đồng hành và hỗ trợ bạn tìm hiểu chiều sâu văn hóa Việt Nam qua các tính năng:
+
+🏛️ 1. Tra Cứu Di Tích Lịch Sử & Danh Thắng
+• Khám phá thông tin các di tích cấp quốc gia, di sản thế giới UNESCO (Cố đô Huế, Phố cổ Hội An, Hoàng thành Thăng Long...).
+• Lịch sử hình thành, kiến trúc độc đáo và ý nghĩa văn hóa.
+
+🎭 2. Lễ Hội & Phong Tục Vùng Miền
+• Thông tin chi tiết các lễ hội truyền thống, thời gian diễn ra và nghi thức bản địa.
+• Tìm hiểu phong tục tập quán, lối sống và con người từng vùng miền.
+
+🎨 3. Làng Nghề Truyền Thống
+• Khám phá các làng nghề lâu đời (gốm Bát Tràng, lụa Vạn Phúc, mây tre đan...).
+
+💡 Bạn muốn tìm hiểu văn hóa/di tích ở địa phương nào? Hãy cho tôi biết tên tỉnh/thành phố nhé! 😊`,
+        citations: []
+      };
+    }
+
     // 1. Phân tích khu vực sử dụng Fuzzy Match chống lỗi gõ sai chữ/thiếu dấu
     let regions = ['Hà Nội', 'Sài Gòn', 'Đà Nẵng', 'Huế', 'Hà Giang'];
     try {

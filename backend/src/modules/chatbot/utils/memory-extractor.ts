@@ -204,14 +204,10 @@ function extractByKeywords(history: { role: string; content: string }[]): Extrac
  * Extract preferences using LLM for better accuracy.
  */
 async function extractByLLM(history: { role: string; content: string }[]): Promise<ExtractedMemory> {
-  const { apiKey, useGeminiInitially, geminiKey } = getLLMConfig();
+  const { apiKey, modelName } = getLLMConfig();
   
-  // Only proceed if we have an LLM key
-  if (!apiKey || apiKey === 'your_openai_key_here' || apiKey === '') {
-    // Still try gemini if available
-    if (!geminiKey || geminiKey === 'your_gemini_key_here') {
-      return extractByKeywords(history);
-    }
+  if (!apiKey || apiKey === 'your_gemini_key_here') {
+    return extractByKeywords(history);
   }
 
   // Build context: only user messages, last 10 messages max
@@ -242,42 +238,7 @@ Trả về DUY NHẤT một JSON object hợp lệ theo cấu trúc sau (không 
 }`;
 
   try {
-    let rawResponse: string;
-
-    if (useGeminiInitially && geminiKey) {
-      const geminiModel = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
-      rawResponse = await callNativeGemini(geminiKey, geminiModel, systemPrompt, userMessagesOnly);
-    } else if (apiKey && apiKey !== 'your_openai_key_here') {
-      const baseURL = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-      const modelName = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
-      
-      const response = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessagesOnly },
-          ],
-          temperature: 0.1,
-          max_tokens: 500,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`LLM API responded with status ${response.status}`);
-      }
-
-      const data = await response.json() as any;
-      rawResponse = data.choices[0].message.content.trim();
-    } else {
-      return extractByKeywords(history);
-    }
-
+    const rawResponse = await callNativeGemini(apiKey, modelName, systemPrompt, userMessagesOnly);
     const cleanContent = rawResponse.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
     const parsed = JSON.parse(cleanContent);
 
@@ -292,8 +253,8 @@ Trả về DUY NHẤT một JSON object hợp lệ theo cấu trúc sau (không 
       confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.7,
       hasNewData: true,
     };
-  } catch (err) {
-    console.warn('[MemoryExtractor] LLM extraction failed, falling back to keyword method:', err);
+  } catch (err: any) {
+    console.warn('[MemoryExtractor] Gemini extraction failed, falling back to keyword method:', err?.message || err);
     return extractByKeywords(history);
   }
 }

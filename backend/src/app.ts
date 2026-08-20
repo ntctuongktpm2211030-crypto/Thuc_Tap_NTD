@@ -140,9 +140,8 @@ app.get('/enrich-file', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'File content must be an array' });
     }
 
-    const GROQ_API_KEY = process.env.OPENAI_API_KEY || '';
-    const GROQ_API_URL = process.env.OPENAI_API_BASE_URL || 'https://api.groq.com/openai/v1';
-    const GROQ_MODEL = process.env.OPENAI_MODEL_NAME || 'llama-3.1-8b-instant';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+    const GEMINI_MODEL = process.env.GEMINI_MODEL_NAME || 'gemini-1.5-flash';
 
     const provinceName = fileName.replace('tinh-', '').replace('thanh-pho-', '').replace('.json', '').replace(/-/g, ' ');
 
@@ -218,9 +217,9 @@ app.get('/enrich-file', async (req: Request, res: Response) => {
         };
       }
 
-      // 2. Fetch Google Places & Specific Fields via LLM
+      // 2. Fetch Google Places & Specific Fields via Gemini LLM
       let llmData: any = null;
-      if (GROQ_API_KEY) {
+      if (GEMINI_API_KEY) {
         const osmDetails = osmData ? {
           display_name: osmData.display_name,
           osm_id: `${osmData.osm_type}/${osmData.osm_id}`,
@@ -332,38 +331,38 @@ Schema:
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
           try {
-            const groqRes = await fetch(`${GROQ_API_URL}/chat/completions`, {
+            const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GROQ_API_KEY}`
               },
               body: JSON.stringify({
-                model: GROQ_MODEL,
-                messages: [{ role: 'user', content: prompt }],
-                temperature: 0.1,
-                response_format: { type: "json_object" }
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  responseMimeType: "application/json",
+                  temperature: 0.1
+                }
               })
             });
 
-            if (groqRes.ok) {
-              const resBody = await groqRes.json() as any;
-              const text = resBody.choices[0].message.content.trim();
+            if (geminiRes.ok) {
+              const resBody = await geminiRes.json() as any;
+              const text = resBody.candidates[0].content.parts[0].text.trim();
               llmData = JSON.parse(text);
               break; // Success
-            } else if (groqRes.status === 429) {
-              console.warn(`[Groq LLM] Rate limit (429) hit for "${item.title}". Retrying in ${retryDelay}ms... (Attempt ${attempt}/${maxRetries})`);
+            } else if (geminiRes.status === 429) {
+              console.warn(`[Gemini LLM] Rate limit (429) hit for "${item.title}". Retrying in ${retryDelay}ms... (Attempt ${attempt}/${maxRetries})`);
               await new Promise(resolve => setTimeout(resolve, retryDelay));
               retryDelay *= 2; // Exponential backoff
             } else {
-              console.warn(`[Groq LLM] Failed: status ${groqRes.status} on attempt ${attempt}`);
-              if (groqRes.status !== 500 && groqRes.status !== 502 && groqRes.status !== 503 && groqRes.status !== 504) {
+              console.warn(`[Gemini LLM] Failed: status ${geminiRes.status} on attempt ${attempt}`);
+              if (geminiRes.status !== 500 && geminiRes.status !== 502 && geminiRes.status !== 503 && geminiRes.status !== 504) {
                 break; // Non-transient error
               }
               await new Promise(resolve => setTimeout(resolve, 2000));
             }
           } catch (err: any) {
-            console.error(`[Groq LLM] Error fetching (attempt ${attempt}):`, err.message);
+            console.error(`[Gemini LLM] Error fetching (attempt ${attempt}):`, err.message);
             await new Promise(resolve => setTimeout(resolve, 2000));
           }
         }
