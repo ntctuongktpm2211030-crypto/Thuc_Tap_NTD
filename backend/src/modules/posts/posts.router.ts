@@ -19,7 +19,7 @@ function setCachedFeed(_key: string, _data: any) {
   // No-op
 }
 
-function invalidateFeedCache() {
+export function invalidateFeedCache() {
   feedCache.clear();
 }
 

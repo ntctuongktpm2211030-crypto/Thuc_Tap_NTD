@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '../../config/db';
 import { requireAuth, requireAdmin, optionalAuth } from '../auth/auth.middleware';
 import { EmailService } from '../auth/email.service';
+import { invalidateFeedCache } from '../posts/posts.router';
 
 import { getRequiredEnv } from '../../config/env';
 
@@ -560,6 +561,9 @@ router.get('/posts', optionalAuth, async (_req: Request, res: Response) => {
           author: {
             include: { profile: true }
           },
+          destination: {
+            select: { name: true, address: true }
+          },
           _count: { select: { likes: true, comments: true } }
         },
         orderBy: { createdAt: 'desc' },
@@ -573,6 +577,9 @@ router.get('/posts', optionalAuth, async (_req: Request, res: Response) => {
           include: {
             author: {
               include: { profile: true }
+            },
+            destination: {
+              select: { name: true, address: true }
             },
             _count: { select: { likes: true, comments: true } }
           },
@@ -662,6 +669,7 @@ router.delete('/posts/:id', optionalAuth, async (req: Request, res: Response) =>
     
     // 1. Remove from reportedPostsStore
     reportedPostsStore.removeReport(id);
+    invalidateFeedCache();
 
     // 2. Perform database Hard Delete (cascade child records + post)
     try {

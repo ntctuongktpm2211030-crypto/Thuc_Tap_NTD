@@ -133,17 +133,13 @@ export const AdminPostsTab: React.FC = () => {
     setLoading(true);
     let rawList: any[] = [];
     try {
-      // Execute Admin API & Feed API in parallel using authenticated api client with multi-endpoint fallback
+      // Execute Admin API & Feed API in parallel using authenticated api client
       const [adminRes, feedRes] = await Promise.allSettled([
         api.get('/admin/posts', { timeout: 8000 }).catch(async () => {
-          return await axios.get('/api/v1/admin/posts', { timeout: 8000 }).catch(async () => {
-            return await axios.get('http://localhost:5000/api/v1/admin/posts', { timeout: 8000 }).catch(() => null);
-          });
+          return await api.get('/admin/posts', { timeout: 8000 }).catch(() => null);
         }),
         api.get('/posts?limit=100', { timeout: 8000 }).catch(async () => {
-          return await axios.get('/api/v1/posts?limit=100', { timeout: 8000 }).catch(async () => {
-            return await axios.get('http://localhost:5000/api/v1/posts?limit=100', { timeout: 8000 }).catch(() => null);
-          });
+          return await api.get('/posts?limit=100', { timeout: 8000 }).catch(() => null);
         })
       ]);
 
@@ -216,9 +212,11 @@ export const AdminPostsTab: React.FC = () => {
     const postId = String(deleteModalPost.id);
     setDeletingId(postId);
     try {
-      // 1. Call Backend API to delete post
-      await axios.delete(`/api/v1/admin/posts/${postId}`).catch(async () => {
-        await api.delete(`/admin/posts/${postId}`).catch(() => {});
+      // 1. Call Backend API using authenticated api client to delete post
+      await api.delete(`/admin/posts/${postId}`).catch(async () => {
+        await api.delete(`/posts/${postId}`).catch(async () => {
+          await axios.delete(`/api/v1/admin/posts/${postId}`).catch(() => {});
+        });
       });
 
       // 2. Remove from localStorage cache so it never re-appears

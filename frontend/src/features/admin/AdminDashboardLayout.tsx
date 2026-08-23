@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../store';
 import axios from 'axios';
 import { 
   ShieldCheck, 
@@ -15,7 +17,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Key,
-  Lock,
   Eye,
   EyeOff,
   CheckCircle2,
@@ -24,16 +25,12 @@ import {
   Mail,
   Send,
   Bell,
-  Flag,
-  UserX,
   Bot,
   Sparkles,
-  Clock,
   CheckCheck,
   RefreshCw,
   ShieldAlert,
-  UserMinus,
-  AlertTriangle
+  UserMinus
 } from 'lucide-react';
 import api from '../../services/api';
 import AdminOverviewTab from './AdminOverviewTab';
@@ -94,19 +91,30 @@ export const AdminDashboardLayout: React.FC = () => {
     }
   };
 
+  const reduxUser = useSelector((s: RootState) => s.auth.user);
+
   useEffect(() => {
-    const savedUser = localStorage.getItem('st-user');
-    if (savedUser) {
+    const savedUserRaw = localStorage.getItem('st-user') || localStorage.getItem('user');
+    let parsedUser: any = null;
+    if (savedUserRaw) {
       try {
-        setAdminUser(JSON.parse(savedUser));
+        parsedUser = JSON.parse(savedUserRaw);
       } catch (e) {
         console.warn('Failed to parse admin user:', e);
       }
     }
+    const currentUser = reduxUser || parsedUser;
+    if (currentUser) {
+      setAdminUser(currentUser);
+    }
 
     fetchStats();
     fetchAdminNotifs();
-  }, [navigate]);
+  }, [navigate, reduxUser]);
+
+  const displayEmail = adminUser?.email || reduxUser?.email || 'admin@terraholic.com';
+  const displayName = adminUser?.fullName || adminUser?.profile?.fullName || adminUser?.name || reduxUser?.fullName || reduxUser?.profile?.fullName || 'Terraholic Administrator';
+  const displayAvatar = adminUser?.avatarUrl || adminUser?.profile?.avatarUrl || adminUser?.avatar || reduxUser?.avatarUrl || reduxUser?.profile?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
 
   const fetchStats = async () => {
     setLoadingStats(true);
@@ -137,11 +145,11 @@ export const AdminDashboardLayout: React.FC = () => {
     setSendingOtp(true);
     setPassError('');
     try {
-      const res = await axios.post('/api/v1/admin/send-otp', { email: 'admin@terraholic.com' }).catch(() => null);
-      const msg = res?.data?.message || 'Mã OTP 6 số đã được gửi tới email admin@terraholic.com';
+      const res = await axios.post('/api/v1/admin/send-otp', { email: displayEmail }).catch(() => null);
+      const msg = res?.data?.message || `Mã OTP 6 số đã được gửi tới email ${displayEmail}`;
       setOtpSentMsg(`📧 ${msg} (Mã thử nghiệm: 888999)`);
     } catch {
-      setOtpSentMsg('📧 Mã OTP 6 số đã được gửi tới email admin@terraholic.com (Mã thử nghiệm: 888999)');
+      setOtpSentMsg(`📧 Mã OTP 6 số đã được gửi tới email ${displayEmail} (Mã thử nghiệm: 888999)`);
     } finally {
       setSendingOtp(false);
     }
@@ -170,7 +178,7 @@ export const AdminDashboardLayout: React.FC = () => {
     setUpdatingPass(true);
     try {
       const res = await axios.post('/api/v1/admin/change-password', {
-        email: 'admin@terraholic.com',
+        email: displayEmail,
         otpCode,
         newPassword
       }).catch(() => null);
@@ -428,16 +436,16 @@ export const AdminDashboardLayout: React.FC = () => {
             title="Nhấn để Đổi mật khẩu tài khoản Admin"
           >
             <img
-              src={adminUser?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}
+              src={displayAvatar}
               alt="Admin Avatar"
               className="w-9 h-9 rounded-full border-2 border-blue-500/30 object-cover shadow-sm"
             />
             <div className="hidden md:block text-left">
               <div className="text-xs font-extrabold text-slate-900 leading-none flex items-center gap-1">
-                {adminUser?.fullName || 'Terraholic Administrator'}
+                {displayName}
                 <Key size={12} className="text-blue-600" />
               </div>
-              <div className="text-[11px] text-blue-600 font-medium mt-0.5">admin@terraholic.com</div>
+              <div className="text-[11px] text-blue-600 font-medium mt-0.5">{displayEmail}</div>
             </div>
             <button
               onClick={(e) => {
@@ -543,7 +551,7 @@ export const AdminDashboardLayout: React.FC = () => {
                 <Mail size={18} className="text-blue-600 shrink-0" />
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tài khoản xác thực OTP</span>
-                  <span className="text-xs font-black text-slate-900">admin@terraholic.com</span>
+                  <span className="text-xs font-black text-slate-900">{displayEmail}</span>
                 </div>
               </div>
 

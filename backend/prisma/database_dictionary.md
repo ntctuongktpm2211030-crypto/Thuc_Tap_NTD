@@ -1,6 +1,6 @@
 # BẢNG TỪ ĐIỂN DỮ LIỆU CÁC BẢNG CỐT LÕI (DATABASE DICTIONARY)
 
-Tài liệu từ điển dữ liệu chuẩn hóa cho 21 bảng cốt lõi của ứng dụng SmartTravel dựa trên file `schema.dbml` đã tinh giản.
+Tài liệu từ điển dữ liệu chuẩn hóa cho 25 bảng cốt lõi của ứng dụng SmartTravel dựa trên file `schema.dbml` đã tinh giản.
 
 Cấu trúc cột tuân thủ chính xác theo mẫu:
 | STT | Thuộc tính | Kiểu dữ liệu | Null | Khóa | Mô tả |
@@ -312,3 +312,58 @@ Cấu trúc cột tuân thủ chính xác theo mẫu:
 | 4 | responseJson | TEXT | | | Kết quả phản hồi dạng JSON |
 | 5 | type | VARCHAR(50) | | | Loại tác vụ AI (itinerary, route_optimization...) |
 | 6 | createdAt | TIMESTAMP | | | Thời điểm tạo |
+
+---
+
+### 22. Bảng Notification (Thông báo hệ thống)
+
+| STT | Thuộc tính | Kiểu dữ liệu | Null | Khóa | Mô tả |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| 1 | id | VARCHAR(36) | | PK | Mã định danh thông báo (UUID) |
+| 2 | recipientId | VARCHAR(36) | | FK | Khóa ngoại trỏ đến User(id) người nhận |
+| 3 | type | VARCHAR(50) | | | Loại thông báo (like, comment, friend_request, invitation...) |
+| 4 | content | TEXT | | | Nội dung chi tiết của thông báo |
+| 5 | isRead | BOOLEAN | | | Trạng thái đã đọc thông báo (true/false) |
+| 6 | targetId | VARCHAR(36) | x | | Mã định danh đối tượng mục tiêu liên quan (Post, Comment...) |
+| 7 | createdAt | TIMESTAMP | | | Thời điểm tạo thông báo |
+
+---
+
+### 23. Bảng Recommendation (Gợi ý điểm đến chuyến đi)
+
+| STT | Thuộc tính | Kiểu dữ liệu | Null | Khóa | Mô tả |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| 1 | id | VARCHAR(36) | | PK | Mã định danh gợi ý (UUID) |
+| 2 | tripId | VARCHAR(36) | | FK | Khóa ngoại trỏ đến Trip(id) chuyến đi |
+| 3 | destinationId | VARCHAR(36) | | FK | Khóa ngoại trỏ đến Destination(id) địa điểm |
+| 4 | score | FLOAT | | | Điểm độ tin cậy / độ phù hợp gợi ý (0.0 - 1.0) |
+| 5 | recommendationReason | TEXT | x | | Lý do hệ thống gợi ý địa điểm này |
+
+---
+
+### 24. Bảng EventAttendee (Thành viên tham gia sự kiện)
+
+| STT | Thuộc tính | Kiểu dữ liệu | Null | Khóa | Mô tả |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| 1 | id | VARCHAR(36) | | PK | Mã đăng ký tham gia sự kiện (UUID) |
+| 2 | eventId | VARCHAR(36) | | FK | Khóa ngoại trỏ đến Event(id) sự kiện |
+| 3 | userId | VARCHAR(36) | | FK | Khóa ngoại trỏ đến User(id) người tham gia |
+| 4 | status | VARCHAR(20) | | | Trạng thái tham gia (going, interested, maybe) |
+| 5 | createdAt | TIMESTAMP | | | Thời điểm đăng ký tham gia |
+
+---
+
+### 25. Bảng HandbookDocument (Tài liệu cẩm nang quản trị Admin)
+
+| STT | Thuộc tính | Kiểu dữ liệu | Null | Khóa | Mô tả |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| 1 | id | VARCHAR(36) | | PK | Mã định danh tài liệu cẩm nang (UUID) |
+| 2 | title | VARCHAR(255) | | | Tiêu đề bài viết / cẩm nang quản trị |
+| 3 | category | VARCHAR(50) | | | Phân loại danh mục (Handbook, Culture, Festival...) |
+| 4 | fileType | VARCHAR(20) | | | Định dạng tệp tin (txt, pdf, docx, json) |
+| 5 | fileName | VARCHAR(255) | x | | Tên tệp tin gốc được tải lên |
+| 6 | fileSize | VARCHAR(50) | x | | Dung lượng tệp tin đính kèm |
+| 7 | content | TEXT | | | Nội dung văn bản tài liệu chi tiết |
+| 8 | updatedAtStr | VARCHAR(50) | | | Chuỗi thời gian cập nhật dạng hiển thị |
+| 9 | createdAt | TIMESTAMP | | | Thời điểm tải lên tài liệu |
+| 10 | updatedAt | TIMESTAMP | | | Thời điểm cập nhật gần nhất |
